@@ -195,10 +195,6 @@ class PruningDaemon:
 
         return candidates
 
-    def scan_unused(self) -> list[PruningCandidate]:
-        """Alias for scan_unused_tools()."""
-        return self.scan_unused_tools()
-
     def scan_duplicate_patterns(self) -> list[PruningCandidate]:
         """Return modules whose SPEC.md content is near-identical to another module.
 
@@ -244,10 +240,6 @@ class PruningDaemon:
                     )
 
         return candidates
-
-    def scan_duplicate(self) -> list[PruningCandidate]:
-        """Alias for scan_duplicate_patterns() used by report()."""
-        return self.scan_duplicate_patterns()
 
     def scan_stale_docs(self) -> list[PruningCandidate]:
         """Return modules whose documentation has not been updated recently.

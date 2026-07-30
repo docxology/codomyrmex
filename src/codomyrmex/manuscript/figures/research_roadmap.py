@@ -58,102 +58,123 @@ def _roadmap_stages() -> list[dict[str, str]]:
 def fig_research_roadmap() -> None:
     """Draw the configured milestone sequence without implying completed evidence."""
     stages = _roadmap_stages()
-    figure_width = max(12.0, 2.15 * len(stages))
-    fig, ax = plt.subplots(figsize=(figure_width, 5.3))
+    fig, ax = plt.subplots(figsize=(8.5, 10.2))
     background = "#F7F9FC"
     fig.patch.set_facecolor(background)
     ax.set_facecolor(background)
     ax.axis("off")
-    ax.set_xlim(-0.55, len(stages) - 0.45)
-    ax.set_ylim(-0.2, 1.25)
-
-    # The connecting line communicates dependency order; it is not a timeline.
-    ax.annotate(
-        "",
-        xy=(len(stages) - 0.72, 0.55),
-        xytext=(-0.28, 0.55),
-        arrowprops={
-            "arrowstyle": "-|>",
-            "color": "#8CA0B8",
-            "linewidth": 2.0,
-            "mutation_scale": 16,
-        },
-    )
+    ax.set_xlim(0.0, 1.0)
+    ax.set_ylim(0.0, len(stages) + 1.2)
 
     for index, stage in enumerate(stages):
         status = stage["status"].lower()
         color = _STATUS_COLORS.get(status, _OI["grey"])
+        y = len(stages) - index - 0.05
+        if index < len(stages) - 1:
+            ax.annotate(
+                "",
+                xy=(0.075, y - 0.78),
+                xytext=(0.075, y - 0.28),
+                arrowprops={
+                    "arrowstyle": "-|>",
+                    "color": "#8CA0B8",
+                    "linewidth": 1.8,
+                    "mutation_scale": 14,
+                },
+                zorder=1,
+            )
         ax.scatter(
-            [index],
-            [0.55],
-            s=360,
+            [0.075],
+            [y],
+            s=520,
             color=color,
             edgecolors="white",
-            linewidths=2.2,
+            linewidths=2.0,
             zorder=4,
         )
         ax.text(
-            index,
-            0.55,
+            0.075,
+            y,
             stage["id"],
             ha="center",
             va="center",
             color="white",
-            fontsize=9,
+            fontsize=9.5,
             fontweight="bold",
             zorder=5,
         )
         ax.text(
-            index,
-            0.80,
-            textwrap.fill(stage["name"], width=22),
-            ha="center",
-            va="bottom",
-            fontsize=8.2,
+            0.14,
+            y + 0.19,
+            stage["name"],
+            ha="left",
+            va="center",
+            fontsize=10.2,
             fontweight="bold",
             color="#172033",
-            wrap=True,
         )
         ax.text(
-            index,
-            0.12,
-            status.capitalize(),
-            ha="center",
-            va="top",
+            0.14,
+            y - 0.08,
+            status.upper(),
+            ha="left",
+            va="center",
             fontsize=8.2,
-            color=color,
+            color="white",
             fontweight="bold",
+            bbox={
+                "boxstyle": "round,pad=0.25",
+                "facecolor": color,
+                "edgecolor": color,
+            },
+        )
+        artifact = "Required evidence: " + stage["artifact"]
+        ax.text(
+            0.30,
+            y - 0.08,
+            textwrap.fill(artifact, width=62),
+            ha="left",
+            va="center",
+            fontsize=7.5,
+            color="#374151",
+            linespacing=1.08,
+            bbox={
+                "boxstyle": "round,pad=0.28",
+                "facecolor": "white",
+                "edgecolor": "#D8E0EA",
+                "linewidth": 0.9,
+            },
         )
 
     ax.text(
-        -0.48,
-        1.17,
+        0.0,
+        len(stages) + 1.02,
         "Evidence-bound research sequence (dependency order, not a delivery timeline)",
         ha="left",
         va="top",
-        fontsize=12,
+        fontsize=12.2,
         fontweight="bold",
         color="#172033",
     )
     ax.text(
-        -0.48,
-        1.05,
-        "Every milestone requires a retained artifact, decisive metric, falsifier, and exit criterion.",
+        0.0,
+        len(stages) + 0.72,
+        "Printed status and required-evidence text are authoritative; colour is redundant.",
         ha="left",
         va="top",
-        fontsize=8.8,
+        fontsize=9.0,
         color="#526176",
     )
     ax.text(
-        len(stages) - 0.48,
-        -0.11,
-        "Planning artifact — future statuses are not results",
+        1.0,
+        0.12,
+        "Each stage also has a metric, falsifier, and exit criterion in the searchable roadmap table.",
         ha="right",
-        va="top",
-        fontsize=8.0,
+        va="bottom",
+        fontsize=8.1,
         color="#526176",
         style="italic",
     )
     _add_provenance_note(fig)
-    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    fig.tight_layout(rect=(0.02, 0.05, 0.98, 0.99))
     _save(fig, "research_roadmap.png")

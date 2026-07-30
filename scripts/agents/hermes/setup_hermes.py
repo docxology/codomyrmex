@@ -12,6 +12,7 @@ Usage:
 import shutil
 import sys
 from pathlib import Path
+from typing import Any
 
 # Bootstrap path only — avoids polluting sys.path when already installed
 try:
@@ -35,15 +36,15 @@ _REPO_ROOT: Path = Path(__file__).resolve().parent.parent.parent.parent
 _HERMES_CONFIG_PATH: Path = _REPO_ROOT / "config" / "agents" / "hermes.yaml"
 
 
-def _resolve_hermes_config() -> dict:
+def _resolve_hermes_config() -> dict[str, Any]:
     """Load hermes-specific config from the agent config system.
 
     Returns:
         Hermes config dict, or empty dict on error.
     """
     try:
-        config = get_config()
-        return config.get("hermes", {}) if isinstance(config, dict) else {}
+        hermes_cfg = get_config().to_dict().get("hermes", {})
+        return hermes_cfg if isinstance(hermes_cfg, dict) else {}
     except (OSError, ImportError):
         return {}
 
@@ -114,8 +115,9 @@ def _get_hermes_session_db_path() -> Path:
         Absolute Path to the session database file.
     """
     try:
-        config = get_config()
-        hermes_config = config.get("hermes", {}) if isinstance(config, dict) else {}
+        hermes_config = get_config().to_dict().get("hermes", {})
+        if not isinstance(hermes_config, dict):
+            hermes_config = {}
         db_path_str = hermes_config.get("hermes_session_db")
         if db_path_str:
             return Path(db_path_str).expanduser().resolve()
@@ -136,7 +138,7 @@ def _check_hermes_version(hermes_client: object) -> str | None:
         Version string if detected, None otherwise.
     """
     print_info("\n  Checking Hermes CLI Version...")
-    version = hermes_client.get_version()  # type: ignore[attr-defined]
+    version = hermes_client.get_version()
     if version:
         print_success(f"  ✓ Hermes CLI version: {version}")
         # Check for v0.2.0+ features
@@ -169,7 +171,7 @@ def _check_hermes_doctor(hermes_client: object) -> bool:
         True if doctor reports healthy, False otherwise.
     """
     print_info("\n  Running Hermes Doctor...")
-    result: dict = hermes_client.run_doctor()  # type: ignore[attr-defined]
+    result: dict = hermes_client.run_doctor()
     if result.get("success"):
         output = result.get("output", "")
         # Print first 10 lines of doctor output
@@ -254,7 +256,7 @@ def _check_skills(hermes_client: object) -> bool:
         True if skills are accessible or CLI is not available.
     """
     print_info("\n  Checking Skills Inventory...")
-    result: dict = hermes_client.list_skills()  # type: ignore[attr-defined]
+    result: dict = hermes_client.list_skills()
     if result.get("success"):
         output = result.get("output", "")
         skill_count = len(

@@ -32,10 +32,3 @@ class SimulatedSensor:
             data={"value": self.default_value},
             metadata={"type": "simulated"},
         )
-
-
-class MockSensor(SimulatedSensor):
-    def read(self) -> SensorData:
-        reading = super().read()
-        reading.metadata["type"] = "mock"
-        return reading

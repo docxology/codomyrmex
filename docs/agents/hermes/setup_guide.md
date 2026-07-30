@@ -154,8 +154,8 @@ OPENROUTER_API_KEY=sk-or-v1-your-key-here
 # Telegram (from @BotFather)
 TELEGRAM_BOT_TOKEN=1234567890:AAxxxxxxxxxxxxxxxxx
 # Authorization: prefer the pairing system (hermes pairing create / telegram-approved.json).
-# TELEGRAM_ALLOWED_USERS is legacy and supported for backwards compatibility only.
-# TELEGRAM_ALLOWED_USERS=YourUsername  # legacy
+# Optional static allow-list; pairing is preferred for dynamic authorization.
+# TELEGRAM_ALLOWED_USERS=YourUsername
 TELEGRAM_HOME_CHANNEL=YourUsername
 
 # Optional tool enhancements

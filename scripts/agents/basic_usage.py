@@ -13,7 +13,7 @@ from pathlib import Path
 # Ensure codomyrmex is in path
 try:
     import codomyrmex
-except ImportError:
+except ImportError as exc:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
@@ -36,7 +36,7 @@ except ImportError:
     # Handle missing optional dependencies (e.g., aiohttp)
     def main():
         setup_logging()
-        print_info(f"Agents module dependencies not available: {e}")
+        print_info(f"Agents module dependencies not available: {exc}")
         print_info("Install with: pip install aiohttp")
         print_info("Skipping agents examples - success.")
         return 0
@@ -55,7 +55,9 @@ class DemoAgent(BaseAgent):
     def __init__(self, name="demo_agent"):
         super().__init__(name=name, capabilities=[AgentCapabilities.TEXT_COMPLETION])
 
-    def _execute_impl(self, request: AgentRequest) -> AgentResponse:
+    def _execute_impl(
+        self, request: AgentRequest, max_tokens: int | None = None
+    ) -> AgentResponse:
         self.logger.info(
             f"Agent {self.name} processing prompt: {request.prompt[:20]}..."
         )

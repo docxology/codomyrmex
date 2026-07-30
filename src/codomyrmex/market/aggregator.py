@@ -77,11 +77,6 @@ class DemandAggregator:
         self._thresholds: dict[str, int] = {}
         self._triggered_auctions: list[str] = []
 
-    @property
-    def _pending_demands(self) -> dict[str, list[DemandEntry]]:
-        """Backward-compatible alias for ``_demands``."""
-        return self._demands
-
     # ── Registration ────────────────────────────────────────────────
 
     def register_interest(

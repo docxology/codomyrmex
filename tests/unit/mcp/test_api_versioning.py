@@ -1,12 +1,10 @@
-"""Tests for Sprint 35: API Versioning & Compatibility.
+"""Tests for API versioning and migration metadata.
 
-Covers APIVersion, @versioned/@deprecated decorators, VersionRegistry,
-and CompatShimGenerator.
+Covers APIVersion, @versioned/@deprecated decorators, and VersionRegistry.
 """
 
 import warnings
 
-from codomyrmex.model_context_protocol.compat import CompatShimGenerator, ShimMapping
 from codomyrmex.model_context_protocol.versioning import (
     APIVersion,
     deprecated,
@@ -107,46 +105,3 @@ class TestVersionRegistry:
         reg.register("search", version="1.0.0")
         md = reg.to_markdown()
         assert "search" in md
-
-
-# ─── CompatShimGenerator ────────────────────────────────────────────
-
-
-class TestCompatShimGenerator:
-    """Test suite for CompatShimGenerator."""
-
-    def test_shim_forwards_call(self):
-        def new_fn(query: str) -> str:
-            return f"result:{query}"
-
-        gen = CompatShimGenerator()
-        gen.add_mapping(ShimMapping(old_name="search", new_name="search_v2"))
-        shim = gen.create_shim("search", target_fn=new_fn)
-        assert shim(query="test") == "result:test"
-
-    def test_param_rename(self):
-        def new_fn(query: str) -> str:
-            return query.upper()
-
-        gen = CompatShimGenerator()
-        gen.add_mapping(
-            ShimMapping(
-                old_name="find",
-                new_name="search",
-                param_renames={"q": "query"},
-            )
-        )
-        shim = gen.create_shim("find", target_fn=new_fn)
-        assert shim(q="hello") == "HELLO"
-
-    def test_translate_params(self):
-        gen = CompatShimGenerator()
-        gen.add_mapping(
-            ShimMapping(
-                old_name="old",
-                new_name="new",
-                param_renames={"x": "y"},
-            )
-        )
-        result = gen.translate_params("old", {"x": 1, "z": 2})
-        assert result == {"y": 1, "z": 2}

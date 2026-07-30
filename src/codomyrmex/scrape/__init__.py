@@ -31,9 +31,9 @@ from .core import (
 from .exceptions import (
     FirecrawlError,
     ScrapeConnectionError,
-    ScrapeError,
     ScrapeTimeoutError,
     ScrapeValidationError,
+    ScrapingError,
 )
 from .extractors.scraper import Scraper
 
@@ -71,8 +71,6 @@ __all__ = [
     "MapResult",
     "ScrapeConfig",
     "ScrapeConnectionError",
-    # Exceptions
-    "ScrapeError",
     "ScrapeFormat",
     "ScrapeOptions",
     # Core types
@@ -81,6 +79,8 @@ __all__ = [
     "ScrapeValidationError",
     # Main classes
     "Scraper",
+    # Exceptions
+    "ScrapingError",
     "SearchResult",
     # CLI integration
     "cli_commands",

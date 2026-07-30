@@ -51,7 +51,10 @@ pytest tests/unit/test_vector_store.py -v
 
 ## 6. Future Considerations
 
-- Chroma integration
+- Re-enable a supported Chroma dependency after its server-side
+  pre-authentication code-injection advisory has an upstream fixed release.
+  The existing adapter remains capability-detected and fails closed when
+  `chromadb` is absent.
 - Pinecone client
 - FAISS backend for large-scale
 - Persistent SQLite storage

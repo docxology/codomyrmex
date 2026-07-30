@@ -28,9 +28,7 @@ class RateLimiter(ABC):
     def reset(self, key: str) -> None:
         """Reset quota for a key."""
 
-    def consume(
-        self, key: str, cost: int = 1, *, tokens: int | None = None
-    ) -> RateLimitResult:
+    def consume(self, key: str, cost: int = 1) -> RateLimitResult:
         """Consume quota, returning a result instead of raising.
 
         This is a convenience wrapper around acquire() that catches
@@ -39,17 +37,14 @@ class RateLimiter(ABC):
         Args:
             key: Rate limit key.
             cost: Number of units to consume.
-            tokens: Alias for cost (for token bucket style usage).
-
         Returns:
             RateLimitResult with allowed=True if successful, or
             allowed=False if the limit was exceeded.
         """
-        effective_cost = tokens if tokens is not None else cost
         try:
-            return self.acquire(key, effective_cost)
+            return self.acquire(key, cost)
         except RateLimitExceeded as e:
-            check_result = self.check(key, effective_cost)
+            check_result = self.check(key, cost)
             return RateLimitResult(
                 allowed=False,
                 remaining=check_result.remaining,

@@ -16,7 +16,6 @@ Module implementation, resources, and local coordination for Core..
 - `config.py` – File
 - `core.py` – File
 - `decision.py` – File
-- `exceptions.py` – File
 - `memory.py` – File
 - `models.py` – File
 - `py.typed` – File

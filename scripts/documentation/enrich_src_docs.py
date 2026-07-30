@@ -13,6 +13,9 @@ import ast
 import logging
 import os
 import sys
+from typing import Any
+
+logger = logging.getLogger(__name__)
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SRC = os.path.join(REPO, "src", "codomyrmex")
@@ -21,7 +24,7 @@ SRC = os.path.join(REPO, "src", "codomyrmex")
 def get_module_info(mod_name):
     """Extract module info from __init__.py."""
     init = os.path.join(SRC, mod_name, "__init__.py")
-    info = {
+    info: dict[str, Any] = {
         "classes": [],
         "functions": [],
         "submodules": [],
@@ -42,7 +45,7 @@ def get_module_info(mod_name):
         and isinstance(tree.body[0], ast.Expr)
         and isinstance(tree.body[0].value, ast.Constant)
     ):
-        info["desc"] = tree.body[0].value.value.strip().split("\n")[0]
+        info["desc"] = str(tree.body[0].value.value).strip().split("\n")[0]
 
     # Top-level classes and functions only
     seen_c, seen_f = set(), set()

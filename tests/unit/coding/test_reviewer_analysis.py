@@ -56,11 +56,9 @@ def _make_reviewer(project_root, config=None):
     }
     reviewer.tools_available = {
         "pylint": False,
-        "flake8": False,
-        "mypy": False,
+        "ruff": False,
+        "ty": False,
         "bandit": False,
-        "black": False,
-        "isort": False,
         "pytest": False,
         "coverage": False,
         "radon": False,

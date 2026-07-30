@@ -31,10 +31,8 @@ class DeploymentStatus(Enum):
 class PipelineStatus(Enum):
     """Canonical pipeline status — single source of truth for ci_cd_automation and orchestrator.
 
-    Values cover all three historical namespaces to avoid breaking existing callers:
-    - ci_cd_automation: SUCCESS, FAILURE, PENDING, SKIPPED
-    - orchestrator.pipelines: CREATED, SUCCESS, FAILED
-    - validation (original): QUEUED, SUCCEEDED, FAILED, CANCELLED
+    Values cover the pipeline-state vocabularies used by ci_cd_automation,
+    orchestrator.pipelines, and validation workflows.
     """
 
     # Pending / queued states

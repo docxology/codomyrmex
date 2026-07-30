@@ -249,7 +249,7 @@ stages:
         language: python
         commands:
           - uv sync --all-extras
-          - uv run black --check src/
+          - uv run ruff format --check src/
           - uv run ruff check src/
 
   - name: test

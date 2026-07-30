@@ -16,6 +16,7 @@ import json
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 # Bootstrap path only — not needed when package is already installed
 try:
@@ -37,7 +38,7 @@ try:
     from prompt_context import _EXEMPLAR_SCRIPTS, build_project_context
 except ImportError:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
-    from prompt_context import (  # type: ignore[no-redef]
+    from prompt_context import (
         _EXEMPLAR_SCRIPTS,
         build_project_context,
     )
@@ -58,12 +59,13 @@ _MAX_SOURCE_CHARS: int = (
 )
 
 
-def _resolve_dispatch_config() -> dict:
+def _resolve_dispatch_config() -> dict[str, Any]:
     """Load hermes.yaml dispatch section, returning sensible defaults on any error."""
     try:
         config = get_config()
-        hermes_cfg: dict = config.get("hermes", {}) if isinstance(config, dict) else {}
-        return hermes_cfg.get("dispatch", {})
+        config_data = config.to_dict()
+        hermes_cfg = config_data.get("hermes", {})
+        return hermes_cfg.get("dispatch", {}) if isinstance(hermes_cfg, dict) else {}
     except Exception:
         return {}
 
@@ -76,7 +78,9 @@ def _resolve_ollama_timeout() -> int:
     """
     try:
         config = get_config()
-        hermes_cfg: dict = config.get("hermes", {}) if isinstance(config, dict) else {}
+        hermes_cfg = config.to_dict().get("hermes", {})
+        if not isinstance(hermes_cfg, dict):
+            return _DEFAULT_TIMEOUT_S
         return int(
             hermes_cfg.get(
                 "dispatch_timeout", hermes_cfg.get("timeout", _DEFAULT_TIMEOUT_S)
@@ -93,10 +97,10 @@ try:
 except ImportError:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from _dispatch_helpers import (
-        create_checkpoint as _create_checkpoint,  # type: ignore[no-redef]
+        create_checkpoint as _create_checkpoint,
     )
     from _dispatch_helpers import (
-        rollback_checkpoint as _rollback_checkpoint,  # type: ignore[no-redef]
+        rollback_checkpoint as _rollback_checkpoint,
     )
 
 
@@ -408,7 +412,7 @@ def _dispatch_hermes(
 
     print_info(f"  Dispatching to Hermes for {script_name}...")
     try:
-        response = client.chat_session(prompt=prompt)  # type: ignore[attr-defined]
+        response = client.chat_session(prompt=prompt)
         if response.is_success():
             stem = script_name.replace(".py", "")
             # Always save guidance markdown so the improvement is visible
@@ -574,12 +578,12 @@ def _boot_hermes_client(effective_timeout: int) -> tuple[object | None, int]:
         return None, 1
 
     # Always apply the dispatch-specific (generous) timeout
-    client.timeout = effective_timeout  # type: ignore[attr-defined]
+    client.timeout = effective_timeout
     print_info(
         f"  Hermes timeout set to {effective_timeout}s for full-source dispatch prompts."
     )
 
-    if client.active_backend == "none":  # type: ignore[attr-defined]
+    if client.active_backend == "none":
         print_error("No Hermes backend available. Install 'hermes' CLI or 'ollama'.")
         return None, 1
 

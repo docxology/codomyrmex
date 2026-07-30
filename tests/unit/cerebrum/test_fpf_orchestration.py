@@ -99,7 +99,8 @@ class TestCreatePatternCases:
     """Tests for create_pattern_cases method."""
 
     @pytest.fixture(scope="class")
-    def cases(self, orchestrator):
+    @classmethod
+    def cases(cls, orchestrator):
         return orchestrator.create_pattern_cases()
 
     def test_returns_list(self, cases):
@@ -160,7 +161,8 @@ class TestBuildBayesianNetworkFromFPF:
     """Tests for build_bayesian_network_from_fpf method."""
 
     @pytest.fixture(scope="class")
-    def network(self, orchestrator):
+    @classmethod
+    def network(cls, orchestrator):
         return orchestrator.build_bayesian_network_from_fpf()
 
     def test_returns_bayesian_network(self, network):
@@ -200,7 +202,8 @@ class TestAnalyzeWithCaseBasedReasoning:
     """Tests for analyze_with_case_based_reasoning method."""
 
     @pytest.fixture(scope="class")
-    def cbr_result(self, orchestrator):
+    @classmethod
+    def cbr_result(cls, orchestrator):
         return orchestrator.analyze_with_case_based_reasoning()
 
     def test_returns_dict(self, cbr_result):
@@ -238,7 +241,8 @@ class TestAnalyzeWithBayesianInference:
     """Tests for analyze_with_bayesian_inference method."""
 
     @pytest.fixture(scope="class")
-    def bayesian_result(self, orchestrator):
+    @classmethod
+    def bayesian_result(cls, orchestrator):
         return orchestrator.analyze_with_bayesian_inference()
 
     def test_returns_dict(self, bayesian_result):
@@ -285,7 +289,8 @@ class TestAnalyzeWithActiveInference:
     """Tests for analyze_with_active_inference method."""
 
     @pytest.fixture(scope="class")
-    def ai_result(self, orchestrator):
+    @classmethod
+    def ai_result(cls, orchestrator):
         return orchestrator.analyze_with_active_inference()
 
     def test_returns_dict(self, ai_result):
@@ -337,7 +342,8 @@ class TestGenerateComprehensiveAnalysis:
     """Tests for generate_comprehensive_analysis method."""
 
     @pytest.fixture(scope="class")
-    def comprehensive_result(self, orchestrator):
+    @classmethod
+    def comprehensive_result(cls, orchestrator):
         return orchestrator.generate_comprehensive_analysis()
 
     def test_returns_dict(self, comprehensive_result):
@@ -383,7 +389,8 @@ class TestExportResults:
     """Tests for export_results method."""
 
     @pytest.fixture(scope="class")
-    def exported(self, orchestrator):
+    @classmethod
+    def exported(cls, orchestrator):
         results = {
             "fpf_statistics": {
                 "total_patterns": 10,
@@ -586,7 +593,8 @@ class TestRunComprehensiveAnalysis:
     """Tests for run_comprehensive_analysis end-to-end method."""
 
     @pytest.fixture(scope="class")
-    def full_result(self, orchestrator):
+    @classmethod
+    def full_result(cls, orchestrator):
         return orchestrator.run_comprehensive_analysis()
 
     def test_returns_dict(self, full_result):
@@ -687,7 +695,8 @@ class TestVisualizationsWithRealData:
     """Tests for generate_visualizations using real analysis results."""
 
     @pytest.fixture(scope="class")
-    def real_results(self, orchestrator):
+    @classmethod
+    def real_results(cls, orchestrator):
         return orchestrator.generate_comprehensive_analysis()
 
     def test_generate_visualizations_with_real_results(
@@ -891,7 +900,7 @@ class TestMarkdownReportPopulated:
                     ("architecture", 8, ["P1", "P2", "P3"]),
                     ("design", 5, ["P1", "P4"]),
                 ],
-                "important_terms": [("architecture", 0.9, 8)],
+                "important_terms": [("architecture", 8, 0.9)],
             },
         }
         orchestrator._generate_markdown_report(results, output_path)

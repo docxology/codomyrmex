@@ -122,7 +122,7 @@ class Z3Backend(SolverBackend):
         solver.set("unsat_core", True)
         namespace["solver"] = solver
 
-        # Also provide an optimizer alias
+        # Provide an optimizer engine for optimization-oriented models.
         optimizer = z3.Optimize()
         optimizer.set("timeout", timeout_ms)
         namespace["optimizer"] = optimizer

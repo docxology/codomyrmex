@@ -1,142 +1,59 @@
-# scripts
+<!-- readme: curated -->
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+# Repository scripts
 
-## Overview
+This tree contains repository maintenance, validation, release, manuscript,
+agent, security, and module-specific commands. A script is not safe to run
+merely because it is versioned: inspect its CLI defaults, write scope,
+submodule exclusions, and tests first.
 
-Maintenance and automation utilities for project management.
+## Authoritative entry points
 
-## Code review and SARIF
-
-- [`review/`](review/) — `pr_analyzer.py`, `code_quality_checker.py`, `review_report_generator.py`, `sarif_merge.py`, `bandit_json_to_sarif.py`, and `sarif_utils.py` for local diff heuristics, Python structural checks, Bandit JSON→SARIF, and SARIF merge/summary. See [review/README.md](review/README.md), [review/AGENTS.md](review/AGENTS.md), and [docs/development/code-review-and-sarif.md](../docs/development/code-review-and-sarif.md).
-
-## Directory Contents
-- `PAI.md` – File
-- `README.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `agentic_memory/` – Subdirectory
-- `agents/` – Subdirectory
-- `api/` – Subdirectory
-- `audio/` – Subdirectory
-- `audits/` – Subdirectory
-- `auth/` – Subdirectory
-- `bio_simulation/` – Subdirectory
-- `build_synthesis/` – Subdirectory
-- `cache/` – Subdirectory
-- `cerebrum/` – Subdirectory
-- `ci_cd_automation/` – Subdirectory
-- `cli/` – Subdirectory
-- `cloud/` – Subdirectory
-- `coding/` – Subdirectory
-- `collaboration/` – Subdirectory
-- `compression/` – Subdirectory
-- `concurrency/` – Subdirectory
-- `config.yaml` – File
-- `config_audits/` – Subdirectory
-- `config_management/` – Subdirectory
-- `config_monitoring/` – Subdirectory
-- `container_optimization/` – Subdirectory
-- `containerization/` – Subdirectory
-- `cost_management/` – Subdirectory
-- `dark/` – Subdirectory
-- `data_lineage/` – Subdirectory
-- `data_visualization/` – Subdirectory
-- `database_management/` – Subdirectory
-- `defense/` – Subdirectory
-- `demos/` – Subdirectory
-- `dependency_injection/` – Subdirectory
-- `deployment/` – Subdirectory
-- `docs/` – Subdirectory
-- `docs_gen/` – Subdirectory
-- `documentation/` – Subdirectory
-- `documents/` – Subdirectory
-- `edge_computing/` – Subdirectory
-- `email/` – Subdirectory
-- `embodiment/` – Subdirectory
-- `encryption/` – Subdirectory
-- `environment_setup/` – Subdirectory
-- `events/` – Subdirectory
-- `evolutionary_ai/` – Subdirectory
-- `examples/` – Subdirectory
-- `exceptions/` – Subdirectory
-- `exploration/` – Subdirectory
-- `feature_flags/` – Subdirectory
-- `feature_store/` – Subdirectory
-- `file_system/` – Subdirectory
-- `finance/` – Subdirectory
-- `fix_ty_ast.py` – File
-- `fix_ty_imports.py` – File
-- `fix_ty_stubborn.py` – File
-- `formal_verification/` – Subdirectory
-- `fpf/` – Subdirectory
-- `git_analysis/` – Subdirectory
-- `git_operations/` – Subdirectory
-- `graph_rag/` – Subdirectory
-- `ide/` – Subdirectory
-- `identity/` – Subdirectory
-- `index.html` – File
-- `inference_optimization/` – Subdirectory
-- `llm/` – Subdirectory
-- `logging_monitoring/` – Subdirectory
-- `logistics/` – Subdirectory
-- `maintenance/` – Subdirectory
-- `metrics/` – Subdirectory
-- `migration/` – Subdirectory
-- `model_context_protocol/` – Subdirectory
-- `model_ops/` – Subdirectory
-- `model_registry/` – Subdirectory
-- `module_template/` – Subdirectory
-- `multimodal/` – Subdirectory
-- `networking/` – Subdirectory
-- `notification/` – Subdirectory
-- `observability_dashboard/` – Subdirectory
-- `orchestrator/` – Subdirectory
-- `pai/` – Subdirectory
-- `pattern_matching/` – Subdirectory
-- `performance/` – Subdirectory
-- `physical_management/` – Subdirectory
-- `plugin_system/` – Subdirectory
-- `prompt_testing/` – Subdirectory
-- `reports/` – Subdirectory
-- `review/` – Subdirectory (PR/SARIF helpers)
-- `rna/` – Subdirectory
-- `run_all_scripts.py` – File
-- `scrape/` – Subdirectory
-- `security/` – Subdirectory
-- `serialization/` – Subdirectory
-- `setup_submodules.sh` – File
-- `skills/` – Subdirectory
-- `spatial/` – Subdirectory
-- `src_structure_audit.py` – File
-- `static_analysis/` – Subdirectory
-- `system_discovery/` – Subdirectory
-- `telemetry/` – Subdirectory
-- `templating/` – Subdirectory
-- `terminal_interface/` – Subdirectory
-- `tools/` – Subdirectory
-- `tree_sitter/` – Subdirectory
-- `utils/` – Subdirectory
-- `validation/` – Subdirectory
-- `verification/` – Subdirectory
-- `video/` – Subdirectory
-- `website/` – Subdirectory
-- `workflow_execution/` – Subdirectory
-- `workflow_testing/` – Subdirectory
-- `sair/` – SAIR Mathematics Distillation submodule (Equational Theories)
-
-## Documentation (Mermaid)
-
-| Script | Purpose |
+| Command or path | Role |
 | :--- | :--- |
-| `strip_mermaid_style_lines.py` | Remove `style … fill:…` lines from fenced `mermaid` blocks under `docs/` |
-| `normalize_mermaid_subgraphs.py` | Rewrite `subgraph "Label"` → `subgraph sg_<hash> [Label]` in `docs/` |
-| `doc_inventory.py` | Print module / `mcp_tools.py` / `@mcp_tool` counts; optional `--pytest`, `--manifest` (`get_skill_manifest` tool count). Canonical definitions: [docs/reference/inventory.md](../docs/reference/inventory.md) |
-| `mcp_spec_gap.py` | List `mcp_tools.py` paths missing sibling `MCP_TOOL_SPECIFICATION.md`; see [docs/reference/mcp-tool-spec-coverage.md](../docs/reference/mcp-tool-spec-coverage.md) |
-| `validate_manuscript_integrity.py` | Validate the generated manuscript variable snapshot, figure registry and hashes, claim ledger, hydrated Markdown, and optional HTML/PDF render integrity |
-| `src_structure_audit.py` | Run the read-only source module structure gate (`--json` available); checks runtime module docs/API/MCP/test parity, PEP 561 `py.typed` markers, docs/modules counterparts, stale docs/modules directories, support-surface docs, and retired module names |
+| `doc_inventory.py` | Shared volatile package/documentation counts |
+| `src_structure_audit.py` | Runtime module docs/API/MCP/test parity |
+| `rasp_gap_report.py` | Scoped README/AGENTS pair receipt and read-only check |
+| `documentation/` | Documentation gates, MkDocs hook, and reviewed maintenance |
+| `validate_manuscript_integrity.py` | Manuscript citations, cross-references, claims, figures, and artifacts |
+| `compile_manuscript.py` | Technical-report rendering and bookend inputs |
+| `release/` and `codomyrmex.release` | Release validation and publication bundle workflow |
+| `security/` | Locked dependency and security audit helpers |
+| `audits/` | Source, export, RASP, and policy audits |
+| `review/` | Diff review and SARIF utilities |
+| `agents/` | Agent-specific launch and maintenance commands |
+| `sair/` | Separate SAIR submodule worktree |
 
-See [docs/development/documentation.md](../docs/development/documentation.md).
+## Common validation
+
+Run from the repository root:
+
+```bash
+uv run --locked python scripts/doc_inventory.py
+uv run --locked python scripts/src_structure_audit.py --json
+uv run --locked python scripts/rasp_gap_report.py --repo-root . --check
+make docs-check
+make manuscript-check
+```
+
+Use each script's `--help` only after confirming that help parsing is
+side-effect free. Maintained mutators should require explicit dry-run or apply
+modes.
+
+## Mutation boundary
+
+- Preserve the dirty worktree and inspect the complete target path set.
+- Never run broad documentation generation during the active hand-pass freeze.
+- Do not rewrite Git submodules, vendored code, caches, or generated build
+  trees as part of a package-wide pass.
+- Avoid no-argument “fix all” or “run all” scripts unless their implementation,
+  tests, and current scope have been reviewed.
+- Keep output receipts portable and free of credentials and absolute home
+  paths.
 
 ## Navigation
-- **Project Root**: ../README.md
+
+- [Agent guidance](AGENTS.md)
+- [Documentation tooling](documentation/README.md)
+- [Documentation maintenance guide](../docs/development/documentation.md)
+- [Repository root](../README.md)

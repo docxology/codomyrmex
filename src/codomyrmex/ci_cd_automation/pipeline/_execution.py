@@ -10,11 +10,10 @@ from typing import Any
 from codomyrmex.logging_monitoring import get_logger
 
 from .models import (
-    JobStatus,
     Pipeline,
     PipelineJob,
     PipelineStage,
-    StageStatus,
+    PipelineStatus,
 )
 
 logger = get_logger(__name__)
@@ -34,7 +33,7 @@ class PipelineExecutionMixin:
                 logger.warning(
                     "Skipping stage %s due to unsatisfied dependencies", stage.name
                 )
-                stage.status = StageStatus.SKIPPED
+                stage.status = PipelineStatus.SKIPPED
                 continue
 
             # Execute stage
@@ -43,7 +42,7 @@ class PipelineExecutionMixin:
 
     async def _execute_stage(self, stage: PipelineStage, global_vars: dict[str, str]):
         """Execute a pipeline stage."""
-        stage.status = StageStatus.RUNNING
+        stage.status = PipelineStatus.RUNNING
         stage.start_time = datetime.now(UTC)
 
         logger.info("Executing stage: %s", stage.name)
@@ -60,14 +59,16 @@ class PipelineExecutionMixin:
                     await self._execute_job(job, {**global_vars, **stage.environment})
 
             # Determine stage status
-            failed_jobs = [job for job in stage.jobs if job.status == JobStatus.FAILURE]
+            failed_jobs = [
+                job for job in stage.jobs if job.status == PipelineStatus.FAILURE
+            ]
             if failed_jobs and not stage.allow_failure:
-                stage.status = StageStatus.FAILURE
+                stage.status = PipelineStatus.FAILURE
             else:
-                stage.status = StageStatus.SUCCESS
+                stage.status = PipelineStatus.SUCCESS
 
         except Exception as e:
-            stage.status = StageStatus.FAILURE
+            stage.status = PipelineStatus.FAILURE
             logger.error("Stage %s failed: %s", stage.name, e)
 
         stage.end_time = datetime.now(UTC)
@@ -85,7 +86,7 @@ class PipelineExecutionMixin:
 
     async def _execute_job(self, job: PipelineJob, env_vars: dict[str, str]):
         """Execute a single job."""
-        job.status = JobStatus.RUNNING
+        job.status = PipelineStatus.RUNNING
         job.start_time = datetime.now(UTC)
 
         logger.info("Executing job: %s", job.name)
@@ -112,10 +113,10 @@ class PipelineExecutionMixin:
                         continue
                     raise Exception(f"Command failed: {resolved_cmd}")
 
-            job.status = JobStatus.SUCCESS
+            job.status = PipelineStatus.SUCCESS
 
         except Exception as e:
-            job.status = JobStatus.FAILURE
+            job.status = PipelineStatus.FAILURE
             job.error += str(e)
             logger.error("Job %s failed: %s", job.name, e)
 

@@ -353,7 +353,7 @@ class APIHandler:
         Runs tests in a background thread so the HTTP server stays
         responsive. Returns 202 Accepted immediately. Poll
         GET /api/tests/status to retrieve results. A request with
-        ``validate_only`` (or its ``dry_run`` alias) set to ``true`` validates
+        ``validate_only`` set to ``true`` validates
         the route and provider without starting a worker.
         """
         # Import the server class to access class-level state
@@ -372,9 +372,7 @@ class APIHandler:
                 if not isinstance(data, dict):
                     raise TypeError("JSON body must be an object")
                 module = data.get("module")
-                validate_only_value = data.get(
-                    "validate_only", data.get("dry_run", False)
-                )
+                validate_only_value = data.get("validate_only", False)
                 if not isinstance(validate_only_value, bool):
                     raise TypeError("validate_only must be a boolean")
                 validate_only = validate_only_value
@@ -718,14 +716,18 @@ class APIHandler:
                         agents=cast("Any", agents or default_agents),
                     )
 
-                def run_orch():
+                orchestrator = WebsiteServer._dispatch_orch
+
+                def run_orch() -> None:
                     try:
-                        WebsiteServer._dispatch_orch.run(rounds=3)
+                        orchestrator.run(rounds=3)
                     except Exception as e:
                         logger.error("Dispatch error: %s", e)
 
                 WebsiteServer._dispatch_thread = threading.Thread(
-                    target=run_orch, daemon=True
+                    target=run_orch,
+                    daemon=True,
+                    name=f"AgentDispatch-{orchestrator.channel_id}",
                 )
                 WebsiteServer._dispatch_thread.start()
 
@@ -744,8 +746,11 @@ class APIHandler:
         from codomyrmex.website.server import WebsiteServer
 
         with self._dispatch_lock:
-            if WebsiteServer._dispatch_orch:
-                # Stop logic if supported by orchestrator
+            orchestrator = WebsiteServer._dispatch_orch
+            if orchestrator:
+                stop = getattr(orchestrator, "stop", None)
+                if callable(stop):
+                    stop()
                 WebsiteServer._dispatch_orch = None
             self.send_json_response({"success": True, "message": "Stop signal sent"})
 

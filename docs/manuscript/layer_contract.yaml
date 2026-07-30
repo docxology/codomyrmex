@@ -1,7 +1,9 @@
 # Codomyrmex exemplar: infrastructure adapters limited to the integration boundary.
 #
-# The colony_kernel/ modules are the main scientific layer and MUST remain
-# infrastructure-free.  They import only stdlib and internal codomyrmex
+# The colony_kernel/ modules (kernel.py, actuation_gate.py, falsification/worker.py,
+# pheromone_store.py, pruning_daemon.py, consequence_memory.py, resource_ledger.py,
+# role_adapter.py, models.py, config_loader.py) are the main scientific layer and
+# MUST remain infrastructure-free.  They import only stdlib and internal codomyrmex
 # packages so the colony control-plane is forkable as a standalone package.
 #
 # Top-level modules: kernel.py, actuation_gate.py, attestation.py,

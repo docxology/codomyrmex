@@ -284,7 +284,7 @@ uv run ruff check src/codomyrmex/
 uv run ruff format --check .
 
 # Type checking (if configured)
-uv run ty check src/codomyrmex/
+uv run ty check --output-format concise src/ scripts/ tests/
 ```
 
 ## 🐛 Troubleshooting Guide

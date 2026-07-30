@@ -4,35 +4,24 @@
 
 ## Overview
 
-Deployment orchestration and management. Two classes serve different use cases: `DeploymentOrchestrator` provides a plan-execute-verify lifecycle with health check integration, while `DeploymentManager` provides a simpler deploy/rollback interface with history tracking.
+Deployment management with target-based execution, history tracking, and rollback.
 
 ## Architecture
 
-`DeploymentOrchestrator` follows a plan-execute-verify pipeline using target-based strategies (`DeploymentStrategy.deploy(targets, version, deploy_fn)`). `DeploymentManager` uses service-name-based strategies (`DeploymentStrategy.execute(service_name, version)`) and maintains a history list and active-deployment map.
+`DeploymentManager` delegates to `DeploymentStrategy.deploy(targets, version, deploy_fn)` and `DeploymentStrategy.rollback(targets, previous_version, deploy_fn)`, then records results and active versions.
 
 ## Key Classes
-
-### `DeploymentOrchestrator`
-
-| Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
-| `plan_deployment` | `version, targets, strategy, metadata` | `DeploymentPlan` | Creates plan in DRAFT state |
-| `execute_deployment` | `plan: DeploymentPlan` | `DeploymentResult` | Executes plan; transitions state through EXECUTING to COMPLETED/FAILED |
-| `verify_deployment` | -- | `HealthStatus` | Runs health checks; returns HEALTHY if no checker configured |
-| `get_deployment_status` | -- | `DeploymentStatus` | Returns current status snapshot |
-
-Constructor: `(health_checker: HealthChecker | None, deploy_fn: Callable | None)`
 
 ### `DeploymentManager`
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `deploy` | `service_name, version, strategy` | `DeploymentState` | Executes deployment; appends to history; tracks active deployment |
-| `rollback` | `service_name, strategy` | `DeploymentState \ | None` Rolls back active deployment; returns None if no active deployment |
-| `get_active` | `service_name` | `DeploymentState \ | None` Returns current active deployment for a service |
+| `deploy` | `service_name, version, strategy, targets` | `DeploymentResult` | Executes deployment; appends the result to history; tracks the active version |
+| `rollback` | `service_name, previous_version, strategy, targets` | `DeploymentResult` | Rolls back targets and records the result |
+| `get_active_version` | `service_name` | `str \ | None` | Returns the current active version for a service |
 | `summary` | -- | `dict` | Returns counts: total_deployments, active_services, completed, failed, rolled_back |
 
-Properties: `history` (list of all DeploymentState), `active_deployments` (dict of service name to DeploymentState)
+Property: `history` (copy of the recorded `DeploymentResult` list)
 
 ## Dependencies
 
@@ -41,16 +30,12 @@ Properties: `history` (list of all DeploymentState), `active_deployments` (dict 
 
 ## Constraints
 
-- `execute_deployment` raises `RuntimeError` for plans not in DRAFT or APPROVED state.
 - `_default_deploy` is a no-op that always succeeds (sets target version and returns True).
-- `DeploymentManager.deploy()` catches all exceptions from strategy execution and returns a failed state.
-- `DeploymentManager.rollback()` removes the service from `_active` after rollback.
+- `DeploymentManager.deploy()` catches strategy exceptions and returns a failed result.
 
 ## Error Handling
 
-- `DeploymentOrchestrator.execute_deployment` raises `RuntimeError` for invalid plan states.
-- `DeploymentManager.deploy` catches all exceptions, creates a failed `DeploymentState`, and logs the error.
-- `DeploymentManager.rollback` logs a warning and returns `None` when no active deployment exists.
+- `DeploymentManager.deploy` catches all exceptions, creates a failed `DeploymentResult`, and logs the error.
 
 ## Navigation
 

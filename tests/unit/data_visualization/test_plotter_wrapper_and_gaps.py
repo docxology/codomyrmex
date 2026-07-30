@@ -8,7 +8,7 @@ Covers:
 - AdvancedPlotter._iter_axes iterator (single and multi-subplot)
 - AdvancedPlotter._plot_dataset method (LINE/SCATTER/BAR/HISTOGRAM dispatch)
 - _scatter.apply_scatter standalone function
-- _compat.py PERFORMANCE_MONITORING_AVAILABLE and monitor_performance passthrough
+- _instrumentation.py PERFORMANCE_MONITORING_AVAILABLE and monitor_performance passthrough
 - PlotConfig field mutations and non-default values
 - DataPoint and Dataset edge cases (None color, size)
 """
@@ -454,27 +454,27 @@ class TestApplyScatterStandalone:
 
 
 # ---------------------------------------------------------------------------
-# _compat.py PERFORMANCE_MONITORING_AVAILABLE and stubs
+# _instrumentation.py PERFORMANCE_MONITORING_AVAILABLE and stubs
 # ---------------------------------------------------------------------------
 
 
-class TestCompatModule:
-    """_compat exports the correct interface regardless of performance install state."""
+class TestInstrumentationModule:
+    """_instrumentation exports the interface regardless of performance install state."""
 
     def test_performance_monitoring_available_is_bool(self):
-        from codomyrmex.data_visualization._compat import (
+        from codomyrmex.data_visualization._instrumentation import (
             PERFORMANCE_MONITORING_AVAILABLE,
         )
 
         assert isinstance(PERFORMANCE_MONITORING_AVAILABLE, bool)
 
     def test_monitor_performance_is_callable(self):
-        from codomyrmex.data_visualization._compat import monitor_performance
+        from codomyrmex.data_visualization._instrumentation import monitor_performance
 
         assert callable(monitor_performance)
 
     def test_monitor_performance_decorator_passes_return_value(self):
-        from codomyrmex.data_visualization._compat import monitor_performance
+        from codomyrmex.data_visualization._instrumentation import monitor_performance
 
         @monitor_performance("test_op")
         def compute(x):
@@ -484,7 +484,7 @@ class TestCompatModule:
         assert result == 14
 
     def test_monitor_performance_decorator_passes_multiple_args(self):
-        from codomyrmex.data_visualization._compat import monitor_performance
+        from codomyrmex.data_visualization._instrumentation import monitor_performance
 
         @monitor_performance("add")
         def add(a, b):
@@ -493,34 +493,34 @@ class TestCompatModule:
         assert add(3, 4) == 7
 
     def test_performance_context_is_callable(self):
-        from codomyrmex.data_visualization._compat import performance_context
+        from codomyrmex.data_visualization._instrumentation import performance_context
 
         assert callable(performance_context)
 
     def test_performance_context_enters_and_exits(self):
-        from codomyrmex.data_visualization._compat import performance_context
+        from codomyrmex.data_visualization._instrumentation import performance_context
 
         with performance_context("my_op"):
             pass  # must not raise
 
     def test_performance_context_as_context_manager(self):
         """performance_context works as a context manager without raising."""
-        from codomyrmex.data_visualization._compat import performance_context
+        from codomyrmex.data_visualization._instrumentation import performance_context
 
         entered = False
         with performance_context("op"):
             entered = True
         assert entered
 
-    def test_compat_all_exports(self):
-        import codomyrmex.data_visualization._compat as compat
+    def test_instrumentation_all_exports(self):
+        import codomyrmex.data_visualization._instrumentation as instrumentation
 
         for name in [
             "PERFORMANCE_MONITORING_AVAILABLE",
             "monitor_performance",
             "performance_context",
         ]:
-            assert hasattr(compat, name)
+            assert hasattr(instrumentation, name)
 
 
 # ---------------------------------------------------------------------------

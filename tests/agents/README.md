@@ -8,7 +8,7 @@
 
 Validation coverage, fixtures, and regression checks for Agents.
 
-Agent-oriented inventory and contracts: [../../../../AGENTS.md](../../../../AGENTS.md).
+Agent-oriented inventory and contracts: [../../AGENTS.md](../../AGENTS.md).
 
 ## Directory Contents
 - `README.md` – File

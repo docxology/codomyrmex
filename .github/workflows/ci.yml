@@ -64,12 +64,14 @@ jobs:
 
       - name: Run ty type checking
         run: |
-          uv run ty check --exclude src/codomyrmex/physical_management/object_manager.py src/
+          uv run ty check --output-format concise --exclude src/codomyrmex/physical_management/object_manager.py src/ scripts/ tests/
 
       - name: Enforce architectural layering (LP5)
         continue-on-error: false
         run: |
           uv run lint-imports --config pyproject.toml
+          uv run python scripts/audits/audit_imports.py --root .
+          uv run python scripts/audits/audit_exports.py --root .
 
       - name: Verify package build
         run: |

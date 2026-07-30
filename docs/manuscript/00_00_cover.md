@@ -25,7 +25,8 @@
 
 ```{=html}
 <section id="cover" class="manuscript-cover">
-  <img src="figures/cover.png" alt="{{CONFIG_PROJECT_SHORT_NAME}} cover art: a colony control plane with a bright kernel hub, {{CONFIG_OPERATIONAL_SUBSYSTEM_COUNT}} subsystem nodes, and consequence trails." />
+  <img src="figures/{{FIGURE_FILENAME_COVER}}" alt="{{FIGURE_ALT_COVER}}" aria-describedby="{{FIGURE_LABEL_COVER}}-description" />
+  <div id="{{FIGURE_LABEL_COVER}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_COVER}}</div>
   <div class="cover-copy">
     <h1>{{CONFIG_TITLE}}</h1>
     <p class="cover-subtitle">{{CONFIG_SUBTITLE}}</p>

@@ -32,7 +32,7 @@ async def test_mcp_discovery_scale() -> None:
             except Exception:
                 pass
 
-    # We guarantee we have broken past the legacy "33" or "48" tool count
+    # The registry must remain above the historical "33" and "48" baselines.
     assert valid_tools_registered > 500, (
         f"CRITICAL ERROR: The dynamic loading registry regression failed. "
         f"Only discovered {valid_tools_registered} tools, expected > 500."

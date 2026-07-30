@@ -18,7 +18,7 @@ sys.path.insert(0, str(project_root / "src"))
 from codomyrmex.file_system import create_file_system_manager
 
 
-def format_size(bytes: int) -> str:
+def format_size(bytes: float) -> str:
     """Format bytes as human readable."""
     for unit in ["B", "KB", "MB", "GB"]:
         if bytes < 1024:

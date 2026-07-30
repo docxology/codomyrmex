@@ -198,6 +198,21 @@ class TestAuditRasp:
         result = audit_rasp(base)
         assert result == 1
 
+    def test_gap_receipt_counts_each_missing_file(self, tmp_path: Path):
+        from codomyrmex.documentation.quality.audit import find_rasp_gaps
+
+        base = tmp_path / "base"
+        module = base / "incomplete"
+        module.mkdir(parents=True)
+        (module / "__init__.py").write_text('"""Incomplete."""\n')
+        (module / "README.md").write_text("# README\n", encoding="utf-8")
+
+        gaps = find_rasp_gaps(base)
+
+        assert gaps == {
+            "base/incomplete": ["AGENTS.md", "PAI.md", "SPEC.md"],
+        }
+
     def test_non_package_dirs_ignored(self, tmp_path: Path):
         from codomyrmex.documentation.quality.audit import audit_rasp
 

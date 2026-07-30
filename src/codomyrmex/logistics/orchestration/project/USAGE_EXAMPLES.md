@@ -91,9 +91,9 @@ analysis_task = Task(
 )
 
 # Add tasks and execute
-task_orchestrator.add_task(setup_task)
-task_orchestrator.add_task(analysis_task)
-task_orchestrator.start_execution()
+task_orchestrator.submit_task(setup_task)
+task_orchestrator.submit_task(analysis_task)
+task_orchestrator.start_processing()
 ```
 
 ## 🤖 AI Integration with MCP Tools

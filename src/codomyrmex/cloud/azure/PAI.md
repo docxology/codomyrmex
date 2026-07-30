@@ -25,7 +25,7 @@ account_url = os.environ.get("AZURE_STORAGE_ACCOUNT_URL")
 if account_url:
     client = AzureBlobClient(account_url=account_url)
     if client.client:  # Check internal client initialized
-        client.upload_blob("container", "remote.txt", "local.txt")
+        client.upload_file("container", "remote.txt", "local.txt")
 ```
 
 ## Navigation

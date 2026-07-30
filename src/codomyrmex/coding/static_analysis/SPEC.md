@@ -32,8 +32,8 @@ Layered delegation pattern:
 | Method | Tool | Language |
 |--------|------|----------|
 | `run_pylint` | pylint | Python |
-| `run_flake8` | flake8 | Python |
-| `run_mypy` | mypy | Python |
+| `run_ruff` | ruff | Python |
+| `run_ty` | ty | Python |
 | `run_bandit` | bandit | Python |
 | `run_radon` | radon | Python |
 | `run_vulture` | vulture | Python |
@@ -73,7 +73,7 @@ All methods: `(file_path: str) -> list[AnalysisResult]`. Missing tools return em
 ## Dependencies
 
 - **Internal**: `logging_monitoring`, `complexity/`, `linting/`
-- **External**: pylint, flake8, mypy, bandit, radon, vulture, safety, pyrefly, eslint, tsc, spotbugs (all optional; detected at runtime)
+- **External**: pylint, ruff, ty, bandit, radon, vulture, safety, pyrefly, eslint, tsc, spotbugs (all optional; detected at runtime)
 
 ## Constraints
 

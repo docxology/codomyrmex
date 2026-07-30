@@ -1,43 +1,39 @@
 # Abstract {#sec:abstract .unnumbered}
 
-Agentic software systems can preserve task state while still forgetting the consequences
-of prior actions. Codomyrmex addresses that gap with a testable control-plane claim:
-after a failed action, a materially similar proposal at the affected location should
-become measurably harder to pass through the proposal-evaluation gate. The framework records
-reported outcomes in consequence memory and converts them into changes in local
-pheromone pressure, agent trust, role labels, and resource accounting. This environmental
-feedback is stigmergic within a running kernel process: later agents encounter the
-shared field even when the model or agent identity changes. Consequence records can be
-made restart-persistent with file-backed SQLite; the default MCP kernel and pheromone
-field are process-local.
+Agentic software can preserve task state while still forgetting the consequences of
+prior actions. Codomyrmex studies a narrow control-plane question: after a caller reports
+a failed action at one software location, can the system deterministically increase
+friction for a materially similar proposal at that location without changing an
+unrelated target? Its Colony Control Plane records consequence reports and couples them
+to target-indexed signal pressure, agent trust, role labels, resource accounting,
+adversarial checks, and an explicit EXECUTE/HOLD/REFUSE gate.
 
-The Colony Control Plane comprises {{CONFIG_COLONY_KERNEL_SUBSYSTEMS}} cooperating
-subsystems for pheromone storage, resource accounting, actuation gating, consequence
-memory, role adaptation, pruning nomination, adversarial falsification, and lifecycle
-coordination. A weighted gate combines budget headroom, local hazard pressure, earned
-trust, and proposal completeness, subject to hard overrides; EXECUTE begins at
-{{CONFIG_GATE_EXECUTE_THRESHOLD}}, while new agents remain confined to the `SANDBOX`
-role until their recorded history satisfies the configured promotion contract. The
-pruning daemon nominates stale or duplicate module locations for review but does not
-remove them autonomously.
-{{CONFIG_MCP_TOOL_COUNT}} Model Context Protocol tools expose this control plane to
-external orchestrators without collapsing governance into execution.
+The implementation comprises {{CONFIG_COLONY_KERNEL_SUBSYSTEMS}} cooperating subsystems.
+The ordinary Model Context Protocol path remains caller-reported and unattested.
+Optional and required `ColonyKernel` attestation modes instead bind proposal, verdict,
+authorization, execution receipt, and outcome in a signed, hash-linked local ledger.
+That ledger protects lifecycle linkage but does not independently observe external
+actuation or establish deployment safety. Consequence records can use file-backed
+SQLite; the default MCP kernel and signal field remain process-local.
 
-Evaluation is deliberately bounded to implementation contracts and controlled fixtures.
-At composition time, the colony-kernel surface contains {{RESULT_TEST_COUNT}} passing
-tests with {{RESULT_COVERAGE_PCT}}% branch coverage, {{RESULT_RUFF_ERRORS}} Ruff errors,
-and {{RESULT_TY_ERRORS}} ty diagnostics. A paired deterministic contract test shows
-that a failed outcome lowers the next complete proposal at the same target from
-EXECUTE to HOLD while leaving an unrelated target unchanged; a separate all-success
-fixture reaches its first non-sandbox role after {{RESULT_PROPOSALS_TO_PROMOTION}} recorded outcomes. These results validate internal
-mechanics, not production safety or ecological optimality. The paper therefore pairs
-the implementation evidence with explicit falsification criteria, a fixed-input replay
-artifact, and deployment limitations. Within that bounded surface, process-local
-failure memory raises friction for repeated same-location proposals; external workloads,
-outcome attestation, and restart-persistent field storage remain necessary to establish
-generality. Numeric claims are injected from generated
-artifacts so the rendered manuscript remains tied to the evaluated code and
-configuration.
+Evaluation is limited to implementation properties and controlled fixtures. At
+composition time, the scoped Colony Kernel surface contains {{RESULT_TEST_COUNT}}
+passing tests with {{RESULT_COVERAGE_PCT}}% branch coverage,
+{{RESULT_RUFF_ERRORS}} Ruff errors, and {{RESULT_TY_ERRORS}} ty diagnostics. A paired
+deterministic replay moves the same-target proposal from
+{{RESULT_PAIRED_CLEAR_SCORE}}/EXECUTE to
+{{RESULT_PAIRED_FAILURE_SCORE}}/HOLD after a reported failure while leaving an unrelated
+target unchanged. Separate fixtures exercise trust promotion, bounded arithmetic,
+linear signal decay, local attestation integrity, and interface behavior. These results
+support reproducible software contracts, not ecological optimality, calibrated risk,
+production harm reduction, or generalization to external workloads.
+
+The report contributes the typed control plane, transparent gate, coupled local
+feedback, authenticated local lifecycle option, and source-bound publication workflow.
+Generated variables, figures, citations, claim boundaries, and release receipts tie the
+rendered report to the evaluated checkout. End-to-end external-actuation attestation,
+restart-persistent field storage, representative benchmarks, and independent deployment
+validation remain open.
 
 **Keywords:** {{CONFIG_KEYWORDS}}
 

@@ -1,6 +1,6 @@
 # General Cursor Rules
 
-This document outlines the general coding standards and rules for the Codomyrmex project, migrated from the legacy `.cursorrules` configuration.
+This document outlines the general coding standards and rules for the Codomyrmex project, consolidated from the former `.cursorrules` configuration.
 
 ## Core Directives
 

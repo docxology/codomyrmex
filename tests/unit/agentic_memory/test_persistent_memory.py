@@ -3,7 +3,7 @@
 import os
 import tempfile
 
-from codomyrmex.agentic_memory.memory import AgentMemory
+from codomyrmex.agentic_memory.core.memory import AgentMemory
 from codomyrmex.agentic_memory.sqlite_store import SQLiteStore
 
 

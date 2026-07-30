@@ -22,7 +22,7 @@ All shared types are defined in `models.py`. Canonical subsystem implementations
 
 ### 1. PheromoneStore
 
-**File**: `pheromone_store.py` — class `PheromoneStore` (`kernel.py` re-exports it for compatibility)
+**File**: `pheromone_store.py` — class `PheromoneStore`
 
 **Purpose**: Pheromone (stigmergy) layer with colony semantics. Wraps `TraceField` from `agentic_memory.stigmergy`.
 
@@ -60,7 +60,7 @@ biological pheromone concentration.
 
 ### 2. ResourceLedger
 
-**File**: `resource_ledger.py` — class `ResourceLedger` (`kernel.py` re-exports it for compatibility)
+**File**: `resource_ledger.py` — class `ResourceLedger`
 
 **Purpose**: Period-scoped multi-dimensional budget tracker. Checks that accumulated cost plus the proposed estimate will not breach any budget ceiling.
 
@@ -89,7 +89,7 @@ biological pheromone concentration.
 
 ### 3. ActuationGate
 
-**File**: `actuation_gate.py` — class `ActuationGate` (`kernel.py` re-exports it for compatibility)
+**File**: `actuation_gate.py` — class `ActuationGate`
 
 **Purpose**: Computes a weighted additive gate score from four components, applies hard overrides, and routes to EXECUTE / HOLD / REFUSE.
 
@@ -146,9 +146,9 @@ risk_ok = 0.0 if effective_hazard >= 6.0
 
 ### 4. ConsequenceMemory
 
-**File**: `consequence_memory.py` — class `ConsequenceMemory` (`kernel.py` re-exports it)
+**File**: `consequence_memory.py` — class `ConsequenceMemory`
 
-**Purpose**: SQLite-backed storage for reported consequence records and per-agent trust profiles. Records are caller-supplied and are not attested against prior EXECUTE authorizations. The default `:memory:` database lasts only for one process.
+**Purpose**: SQLite-backed storage for accepted consequence records and per-agent trust profiles. The ordinary path is caller-supplied and unlinked. Optional/required kernel attestation can validate the local lifecycle before a record reaches this store, but `ConsequenceMemory` itself is not an execution witness. The default `:memory:` database lasts only for one process.
 
 **Schema**:
 - `consequences` — one row per `ConsequenceRecord`
@@ -199,7 +199,7 @@ Resulting delta is applied to `trust_score` via `AgentTrustProfile.apply_delta`,
 
 ### 6. PruningDaemon
 
-**File**: `pruning_daemon.py` — class `PruningDaemon` (`kernel.py` re-exports it)
+**File**: `pruning_daemon.py` — class `PruningDaemon`
 
 **Purpose**: Nominates registry entries for operator review. The kernel/MCP report path
 is read-only; the separate `archive(candidate, dry_run=False)` method can move an
@@ -229,7 +229,7 @@ strength ≥ 2.0 are not nominated.
 
 ### 7. FalsificationWorker
 
-**File**: `falsification_worker.py` — class `FalsificationWorker` (shared by kernel gate checks and MCP pre-flight plan checks)
+**File**: `falsification/worker.py` — class `FalsificationWorker` (shared by kernel gate checks and MCP pre-flight plan checks)
 
 **Purpose**: Adversarial claim validation. Returns `FalsificationFinding` lists. All checks are deterministic and do not call any LLM.
 
@@ -261,12 +261,13 @@ strength ≥ 2.0 are not nominated.
 
 **File**: `kernel.py` — class `ColonyKernel`
 
-**Purpose**: Top-level integration class. Owns subsystem lifecycle; exposes four public methods.
+**Purpose**: Top-level integration class. Owns subsystem lifecycle; exposes five core public methods plus optional attestation, pruning, and emergency-reset controls.
 
 | Method | Pipeline | Output |
 |--------|----------|--------|
-| `propose_action(proposal)` | FalsificationWorker → ResourceLedger → ConsequenceMemory (profile) → RoleAdapter → ActuationGate → deposit FAILURE if REFUSE | `GateResult` |
-| `record_outcome(proposal, outcome, tests_passed, human_feedback)` | Parse human_feedback → build ConsequenceRecord → ConsequenceMemory.record → ResourceLedger.consume → pheromone update | `ConsequenceRecord` |
+| `propose_action(proposal)` | FalsificationWorker → ResourceLedger → ConsequenceMemory (profile) → RoleAdapter → ActuationGate → optional proposal/verdict ledger events → deposit FAILURE if REFUSE | `GateResult` |
+| `record_outcome(proposal, outcome, tests_passed, human_feedback)` | Ordinary caller-report path; rejected in required mode → state update | `ConsequenceRecord` |
+| `record_attested_outcome(proposal, outcome, tests_passed, human_feedback, actor_id)` | Require prior EXECUTE authorization and receipt → append outcome event → state update | `ConsequenceRecord` |
 | `agent_profile(agent_id)` | ConsequenceMemory.get_profile | `AgentTrustProfile` |
 | `colony_status()` | PheromoneStore.top_signals + ResourceLedger.usage_summary + ConsequenceMemory.role_distribution + ConsequenceMemory.recent_consequences | `dict` |
 | `tick()` | PheromoneStore.tick + ResourceLedger._maybe_reset | `None` |
@@ -282,7 +283,8 @@ The colony runs a continuous cycle. Each phase feeds the next:
 2. PROPOSAL    — agent submits ActionProposal with target, rationale, budget, rollback
 3. GATE        — falsification → budget → trust → ActuationGate → GateResult
 4. ACTION      — agent executes (only on EXECUTE decision)
-5. CONSEQUENCE — agent calls record_outcome; outcome dict describes what happened
+5. CONSEQUENCE — ordinary mode accepts `record_outcome`; required mode accepts
+   only `record_attested_outcome` after authorization and a receipt
 6. MEMORY      — ConsequenceMemory persists record; computes trust delta
 7. ROLE        — RoleAdapter recomputes role from updated trust profile
 8. TICK        — pheromone traces decay; old signals fade; recent signals dominate
@@ -331,7 +333,7 @@ The `ResourceLedger` enforces seven independent ceilings. In the integrated `Col
 
 **Enforcement invariants**:
 - `check_budget` is non-consuming; it only projects and checks.
-- `consume` is called after `record_outcome`; callers may pass actual cost via `outcome["cost"]`.
+- `consume` is called after either accepted outcome path; callers may pass actual cost via `outcome["cost"]`.
 - `risk_level`, `merge_risk`, and `security_exposure` are additive but capped at 1.0 per `ResourceCost.__add__`.
 - Budget HOLD does not deposit any pheromone signal.
 

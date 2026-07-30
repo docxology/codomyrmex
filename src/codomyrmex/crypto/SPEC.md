@@ -28,7 +28,7 @@
 | SHA-3-256 | 256 bits | Recommended | Alternative to SHA-2 |
 | SHA-512 | 512 bits | Recommended | High-security hashing |
 | BLAKE2b | Up to 512 bits | Recommended | High-performance hashing |
-| MD5 | 128 bits | **Deprecated** | Legacy compatibility only |
+| MD5 | 128 bits | **Deprecated** | Existing checksum compatibility only |
 
 **Note**: SHA-1 is intentionally excluded. It is cryptographically broken for collision resistance and should not be used.
 
@@ -44,7 +44,7 @@
 
 | Algorithm | Parameters | Recommended Use |
 |---|---|---|
-| PBKDF2-HMAC-SHA256 | iterations=600000, key_length=32 | Legacy password hashing |
+| PBKDF2-HMAC-SHA256 | iterations=600000, key_length=32 | Existing password-hash verification |
 | scrypt | N=2^20, r=8, p=1 | Memory-hard password hashing |
 | Argon2id | time=3, memory=65536KB, parallelism=4 | **Recommended** password hashing |
 | HKDF-SHA256 | Variable length, optional salt/info | Key expansion from existing key material |
@@ -103,7 +103,7 @@ Argon2id parameters follow OWASP 2024 recommendations.
 
 All algorithms provide a minimum of 128-bit security level, with the exception of:
 
-- MD5 (deprecated, collision-broken, included for legacy compatibility only)
+- MD5 (deprecated, collision-broken, included only for existing checksum verification)
 - RSA-4096 provides approximately 140-bit security
 
 ## Dependencies

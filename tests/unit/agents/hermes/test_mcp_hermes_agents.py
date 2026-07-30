@@ -119,7 +119,7 @@ class TestHermesExecutionTools:
         self, monkeypatch: pytest.MonkeyPatch
     ) -> None:
         # Prevent the actual CLI loop from running infinitely
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         monkeypatch.setattr(
             HermesClient,
@@ -134,7 +134,7 @@ class TestHermesExecutionTools:
         assert result["status"] in ("success", "error")
 
     def test_hermes_doctor(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         monkeypatch.setattr(
             HermesClient, "run_doctor", lambda self: {"success": True, "output": "ok"}
@@ -147,7 +147,7 @@ class TestHermesRegistryTools:
     """Test tools that query the skills registry and knowledge items."""
 
     def test_hermes_skills_list(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         monkeypatch.setattr(
             HermesClient,
@@ -167,7 +167,7 @@ class TestHermesRegistryTools:
     def test_hermes_skills_validate_registry(
         self, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         monkeypatch.setattr(
             HermesClient, "list_skills", lambda self: {"success": True, "output": "ok"}
@@ -206,7 +206,7 @@ class TestHermesSubagentTools:
             assert result["status"] in ("success", "error")
 
     def test_hermes_spawn_agent(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         monkeypatch.setattr(
             HermesClient,

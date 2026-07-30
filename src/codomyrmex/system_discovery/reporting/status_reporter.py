@@ -86,16 +86,6 @@ class StatusReporter:
 
         return status
 
-    def _in_virtual_env(self) -> bool:
-        """Check if running in virtual environment.
-
-        Deprecated: use check_python_environment()['virtual_env'] instead.
-        Keep for backward compatibility with existing tests.
-        """
-        from codomyrmex.system_discovery.reporting.profilers import EnvironmentProfiler
-
-        return EnvironmentProfiler.is_virtual_env()
-
     def check_project_structure(self) -> dict[str, Any]:
         """Verify expected project directory structure exists.
 
@@ -151,7 +141,7 @@ class StatusReporter:
         dependencies = {
             # Core dependencies
             "python-dotenv": self._check_import("dotenv"),
-            "cased-kit": self._check_import("kit"),
+            "pydantic": self._check_import("pydantic"),
             # LLM providers
             "openai": self._check_import("openai"),
             "anthropic": self._check_import("anthropic"),
@@ -163,8 +153,8 @@ class StatusReporter:
             # Development tools
             "pytest": self._check_import("pytest"),
             "pylint": self._check_import("pylint"),
-            "black": self._check_import("black"),
-            "mypy": self._check_import("mypy"),
+            "ruff": self._check_import("ruff"),
+            "ty": self._check_import("ty"),
             # Web framework
             "fastapi": self._check_import("fastapi"),
             "uvicorn": self._check_import("uvicorn"),
@@ -463,10 +453,10 @@ class StatusReporter:
         )
 
         # Group dependencies
-        core_deps = ["python-dotenv", "cased-kit"]
+        core_deps = ["python-dotenv", "pydantic"]
         llm_deps = ["openai", "anthropic", "google-genai"]
         data_deps = ["numpy", "matplotlib", "pandas"]
-        dev_deps = ["pytest", "pylint", "black", "mypy"]
+        dev_deps = ["pytest", "pylint", "ruff", "ty"]
         web_deps = ["fastapi", "uvicorn"]
 
         groups = [

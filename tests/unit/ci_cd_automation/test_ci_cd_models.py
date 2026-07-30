@@ -6,12 +6,10 @@ import pytest
 
 from codomyrmex.ci_cd_automation.pipeline import (
     AsyncPipelineResult,
-    JobStatus,
     Pipeline,
     PipelineJob,
     PipelineStage,
     PipelineStatus,
-    StageStatus,
 )
 
 
@@ -32,7 +30,7 @@ class TestPipelineJob:
         assert len(job.commands) == 2
         assert job.environment["TEST_VAR"] == "test_value"
         assert job.timeout == 300
-        assert job.status == JobStatus.PENDING
+        assert job.status == PipelineStatus.PENDING
 
     def test_pipeline_job_defaults(self):
         """Test PipelineJob default values."""
@@ -44,14 +42,14 @@ class TestPipelineJob:
         assert job.timeout == 3600  # 1 hour
         assert job.retry_count == 0
         assert job.allow_failure is False
-        assert job.status == JobStatus.PENDING
+        assert job.status == PipelineStatus.PENDING
 
     def test_pipeline_job_to_dict(self):
         """Test PipelineJob to_dict conversion."""
         job = PipelineJob(
             name="test_job",
             commands=["echo test"],
-            status=JobStatus.RUNNING,
+            status=PipelineStatus.RUNNING,
             start_time=datetime.now(UTC),
         )
 
@@ -81,12 +79,14 @@ class TestPipelineStage:
         assert len(stage.jobs) == 1
         assert stage.dependencies == ["previous_stage"]
         assert stage.parallel is False
-        assert stage.status == StageStatus.PENDING
+        assert stage.status == PipelineStatus.PENDING
 
     def test_pipeline_stage_to_dict(self):
         """Test PipelineStage to_dict conversion."""
         stage = PipelineStage(
-            name="test_stage", status=StageStatus.RUNNING, start_time=datetime.now(UTC)
+            name="test_stage",
+            status=PipelineStatus.RUNNING,
+            start_time=datetime.now(UTC),
         )
 
         stage_dict = stage.to_dict()
@@ -215,11 +215,14 @@ class TestPipelineModels:
     """Tests for pipeline data models."""
 
     def test_pipeline_job(self):
-        from codomyrmex.ci_cd_automation.pipeline.models import JobStatus, PipelineJob
+        from codomyrmex.ci_cd_automation.pipeline.models import (
+            PipelineJob,
+            PipelineStatus,
+        )
 
         job = PipelineJob(name="lint", commands=["flake8 ."])
         assert job.name == "lint"
-        assert job.status == JobStatus.PENDING
+        assert job.status == PipelineStatus.PENDING
         d = job.to_dict()
         assert d["name"] == "lint"
         assert d["status"] == "pending"
@@ -228,14 +231,14 @@ class TestPipelineModels:
         from codomyrmex.ci_cd_automation.pipeline.models import (
             PipelineJob,
             PipelineStage,
-            StageStatus,
+            PipelineStatus,
         )
 
         stage = PipelineStage(
             name="test",
             jobs=[PipelineJob(name="unit", commands=["pytest"])],
         )
-        assert stage.status == StageStatus.PENDING
+        assert stage.status == PipelineStatus.PENDING
         d = stage.to_dict()
         assert len(d["jobs"]) == 1
 

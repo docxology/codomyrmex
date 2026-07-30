@@ -1,12 +1,13 @@
 # File System — MCP Tool Specification
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Overview
 
 This document defines the MCP tools exposed by the `file_system` module.
-These tools are auto-discovered by the PAI MCP bridge via the `@mcp_tool` decorator
-in `mcp_tools.py` and surfaced as part of the ~303 dynamic tools available to Claude.
+These tools are auto-discovered by the PAI MCP bridge via the `@mcp_tool`
+decorator in `mcp_tools.py`. Package-wide totals are measured by the
+authoritative inventory command rather than duplicated here.
 
 The file system module provides safe file reading and directory listing capabilities
 for AI agents to inspect the local filesystem.
@@ -40,7 +41,7 @@ for AI agents to inspect the local filesystem.
 ```python
 from codomyrmex.file_system.mcp_tools import file_system_read
 
-result = file_system_read(path="/Users/mini/Documents/GitHub/codomyrmex/pyproject.toml")
+result = file_system_read(path="pyproject.toml")
 ```
 
 **Notes**: Returns an error status with message if the file is not found or cannot be read.
@@ -66,7 +67,7 @@ result = file_system_read(path="/Users/mini/Documents/GitHub/codomyrmex/pyprojec
 ```python
 from codomyrmex.file_system.mcp_tools import file_system_list_directory
 
-result = file_system_list_directory(path="/Users/mini/Documents/GitHub/codomyrmex/src", recursive=False)
+result = file_system_list_directory(path="src", recursive=False)
 ```
 
 **Notes**: Returns an error status with message if the directory is not found.

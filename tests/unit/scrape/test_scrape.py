@@ -22,12 +22,12 @@ from codomyrmex.scrape import (
     MapResult,
     ScrapeConfig,
     ScrapeConnectionError,
-    ScrapeError,
     ScrapeFormat,
     ScrapeOptions,
     ScrapeResult,
     ScrapeTimeoutError,
     ScrapeValidationError,
+    ScrapingError,
     SearchResult,
 )
 
@@ -209,10 +209,10 @@ def test_extract_result_defaults():
 @pytest.mark.unit
 def test_exception_hierarchy():
     """Scrape exceptions follow expected hierarchy."""
-    assert issubclass(ScrapeConnectionError, ScrapeError)
-    assert issubclass(ScrapeTimeoutError, ScrapeError)
-    assert issubclass(ScrapeValidationError, ScrapeError)
-    assert issubclass(FirecrawlError, ScrapeError)
+    assert issubclass(ScrapeConnectionError, ScrapingError)
+    assert issubclass(ScrapeTimeoutError, ScrapingError)
+    assert issubclass(ScrapeValidationError, ScrapingError)
+    assert issubclass(FirecrawlError, ScrapingError)
 
 
 @pytest.mark.unit

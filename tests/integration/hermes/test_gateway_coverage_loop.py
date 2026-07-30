@@ -16,7 +16,7 @@ from pathlib import Path
 import pytest
 
 from codomyrmex.agents.core import AgentRequest, AgentResponse
-from codomyrmex.agents.hermes.hermes_client import HermesClient
+from codomyrmex.agents.hermes.client_pkg import HermesClient
 
 
 @pytest.fixture

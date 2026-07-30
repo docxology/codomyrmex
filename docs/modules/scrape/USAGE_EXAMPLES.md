@@ -263,7 +263,7 @@ from codomyrmex.scrape.exceptions import (
     ScrapeConnectionError,
     ScrapeTimeoutError,
     FirecrawlError,
-    ScrapeError,
+    ScrapingError,
 )
 
 scraper = Scraper()
@@ -278,7 +278,7 @@ except ScrapeTimeoutError as e:
     print(f"Timeout after {e.context.get('timeout')}s")
 except FirecrawlError as e:
     print(f"Firecrawl error: {e}")
-except ScrapeError as e:
+except ScrapingError as e:
     print(f"Scraping error: {e}")
 ```
 

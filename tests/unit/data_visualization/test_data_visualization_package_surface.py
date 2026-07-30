@@ -19,7 +19,6 @@ class TestDataVizImports:
         [
             "AreaChart",
             "BarChart",
-            "BarPlot",
             "BoxPlot",
             "Card",
             "Dashboard",
@@ -67,7 +66,6 @@ class TestChartClasses:
         [
             "AreaChart",
             "BarChart",
-            "BarPlot",
             "BoxPlot",
             "Heatmap",
             "Histogram",

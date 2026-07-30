@@ -18,14 +18,15 @@ except ImportError:
 import argparse
 import csv
 import json
+from typing import Any
 
 
-def load_json(path: Path) -> any:
+def load_json(path: Path) -> Any:
     with open(path) as f:
         return json.load(f)
 
 
-def save_json(data: any, path: Path):
+def save_json(data: Any, path: Path) -> None:
     with open(path, "w") as f:
         json.dump(data, f, indent=2)
 
@@ -44,7 +45,7 @@ def save_csv(data: list, path: Path):
         writer.writerows(data)
 
 
-def load_yaml(path: Path) -> any:
+def load_yaml(path: Path) -> Any:
     try:
         import yaml
 
@@ -54,7 +55,7 @@ def load_yaml(path: Path) -> any:
         raise ImportError("PyYAML not installed")
 
 
-def save_yaml(data: any, path: Path):
+def save_yaml(data: Any, path: Path) -> None:
     try:
         import yaml
 

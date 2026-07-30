@@ -15,6 +15,8 @@ import logging
 import os
 import sys
 
+logger = logging.getLogger(__name__)
+
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SRC = os.path.join(REPO, "src", "codomyrmex")
 

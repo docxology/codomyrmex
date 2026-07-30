@@ -17,7 +17,7 @@ import codomyrmex.collaboration as collab
 
 
 class TestCollaborationImports:
-    """All 48 exports are importable."""
+    """All current collaboration exports are importable."""
 
     @pytest.mark.parametrize(
         "name",
@@ -29,7 +29,6 @@ class TestCollaborationImports:
             "AgentMessage",
             "AgentCoordinator",
             "AgentPool",
-            "AgentProxy",
             "BaseAgent",
             "MessageBus",
             "MessageType",

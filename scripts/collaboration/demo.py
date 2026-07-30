@@ -23,7 +23,7 @@ from codomyrmex.collaboration import (
     SwarmManager,
     SwarmMessage,
     SwarmMessageType,
-    Vote,
+    SwarmVote,
 )
 
 
@@ -106,9 +106,9 @@ async def run_demo():
     # 4. Request consensus on the final output
     print("\n[4] Requesting consensus on deployment...")
     votes = [
-        Vote("architect-01", True, reason="Architecture is sound"),
-        Vote("coder-01", True, reason="Implementation matches spec"),
-        Vote("tester-01", False, reason="Security audit still pending"),
+        SwarmVote("architect-01", True, reason="Architecture is sound"),
+        SwarmVote("coder-01", True, reason="Implementation matches spec"),
+        SwarmVote("tester-01", False, reason="Security audit still pending"),
     ]
 
     consensus = await manager.request_consensus(

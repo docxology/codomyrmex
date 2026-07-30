@@ -54,9 +54,7 @@ def main():
         akm = auth.api_key_manager
 
         # 1. Generate key
-        key = akm.generate_api_key(
-            user_id="dev_user", permissions=["read", "data_access"]
-        )
+        key = akm.generate(user_id="dev_user", permissions=["read", "data_access"])
         print_success(f"  Generated API Key: {key[:15]}...")
 
         # 2. Authenticate with key

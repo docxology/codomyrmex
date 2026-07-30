@@ -21,7 +21,6 @@ Provides a unified, safe, and observable interface for database operations, incl
 - `columns: list[str]`: Column names.
 - `row_count: int`: Number of affected rows or returned rows.
 - `to_dict_list()`: Converts rows to a list of dictionaries.
-- `valid: bool`: Alias for `success` for Unified Streamline compatibility.
 
 ### `MigrationManager`
 - `apply_pending_migrations()`: Runs all unapplied migrations.

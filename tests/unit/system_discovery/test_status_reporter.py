@@ -180,20 +180,6 @@ class TestCheckPythonEnvironment:
 
 
 @pytest.mark.unit
-class TestInVirtualEnv:
-    """Tests for _in_virtual_env."""
-
-    def test_returns_bool(self):
-        from codomyrmex.system_discovery.reporting.status_reporter import (
-            StatusReporter,
-        )
-
-        reporter = StatusReporter()
-        result = reporter._in_virtual_env()
-        assert isinstance(result, bool)
-
-
-@pytest.mark.unit
 class TestCheckProjectStructure:
     """Tests for check_project_structure."""
 
@@ -771,8 +757,8 @@ class TestDisplayHelpers:
                 "pandas": True,
                 "pytest": True,
                 "pylint": False,
-                "black": True,
-                "mypy": False,
+                "ruff": True,
+                "ty": False,
                 "fastapi": True,
                 "uvicorn": True,
             },

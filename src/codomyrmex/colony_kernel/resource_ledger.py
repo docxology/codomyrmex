@@ -30,9 +30,6 @@ class ResourceBudget:
     Set a cap to ``float("inf")`` to disable enforcement for that dimension.
     ``period_seconds`` controls when the ledger auto-resets (0 = never reset).
 
-    Alias fields accepted at construction time:
-      ``max_llm_calls_per_hour``  → stored as ``max_llm_calls``
-      ``total_doc_debt_allowed``  → stored as ``max_doc_debt``
     """
 
     max_llm_calls: int = 500
@@ -43,15 +40,6 @@ class ResourceBudget:
     max_doc_debt: float = 1000.0
     max_security_exposure: float = 0.5
     period_seconds: float = 86400.0  # 24 hours
-    # Alias keyword arguments — resolved in __post_init__; not stored as fields.
-    max_llm_calls_per_hour: int | None = field(default=None, repr=False)
-    total_doc_debt_allowed: float | None = field(default=None, repr=False)
-
-    def __post_init__(self) -> None:
-        if self.max_llm_calls_per_hour is not None:
-            self.max_llm_calls = self.max_llm_calls_per_hour
-        if self.total_doc_debt_allowed is not None:
-            self.max_doc_debt = self.total_doc_debt_allowed
 
 
 # ---------------------------------------------------------------------------

@@ -415,7 +415,9 @@ class TestAPIIntegration:
 
     def test_full_openapi_generation_workflow(self):
         """Test complete OpenAPI generation workflow."""
-        from codomyrmex.api.openapi_generator import StandardizationOpenAPIGenerator
+        from codomyrmex.api.openapi_standardization_generator import (
+            StandardizationOpenAPIGenerator,
+        )
         from codomyrmex.api.standardization.rest_api import (
             RESTAPI,
             APIRequest,

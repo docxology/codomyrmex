@@ -13,9 +13,7 @@ Usage:
     python openrouter_free_example.py
 """
 
-logger = logging.getLogger(__name__)
-
-
+import logging
 import os
 import re
 import sys
@@ -25,9 +23,9 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-import logging
-
 from codomyrmex.llm.providers import Message, ProviderConfig, ProviderType, get_provider
+
+logger = logging.getLogger(__name__)
 
 # Config file locations
 CONFIG_PATHS = [

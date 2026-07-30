@@ -8,6 +8,7 @@ Usage:
 
 import sys
 from pathlib import Path
+from typing import Any
 
 try:
     import codomyrmex
@@ -50,9 +51,9 @@ def get_model_info(path: Path) -> dict:
     }
 
 
-def list_model_registries() -> dict:
+def list_model_registries() -> dict[str, dict[str, Any]]:
     """Check for common model registries."""
-    registries = {
+    registries: dict[str, dict[str, Any]] = {
         "huggingface": {"installed": False, "cache": None},
         "ollama": {"installed": False, "models": []},
         "mlflow": {"installed": False},

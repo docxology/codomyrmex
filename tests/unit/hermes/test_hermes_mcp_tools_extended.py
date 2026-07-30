@@ -110,7 +110,7 @@ class TestHermesSessionSearch:
     def test_search_with_monkeypatched_store(self, monkeypatch, tmp_path) -> None:
         """Test search with an injected DB containing named sessions."""
         from codomyrmex.agents.hermes import mcp_tools
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
         from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 
         db_path = tmp_path / "search_test.db"
@@ -201,14 +201,14 @@ class TestHermesClientCLIFlags:
     """Verify new CLI flag arg building."""
 
     def test_yolo_flag(self) -> None:
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         client = HermesClient(config={"yolo": True})
         args = client._build_hermes_args("test", {})
         assert "--yolo" in args
 
     def test_continue_session_flag(self) -> None:
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         client = HermesClient(config={"continue_session": "my-project"})
         args = client._build_hermes_args("test", {})
@@ -217,14 +217,14 @@ class TestHermesClientCLIFlags:
         assert args[idx + 1] == "my-project"
 
     def test_pass_session_id_flag(self) -> None:
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         client = HermesClient(config={"pass_session_id": True})
         args = client._build_hermes_args("test", {})
         assert "--pass-session-id" in args
 
     def test_no_flags_by_default(self) -> None:
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         client = HermesClient()
         args = client._build_hermes_args("test", {})
@@ -233,7 +233,7 @@ class TestHermesClientCLIFlags:
         assert "--pass-session-id" not in args
 
     def test_all_flags_combined(self) -> None:
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         client = HermesClient(
             config={
@@ -443,7 +443,7 @@ class TestHermesCreateTask:
 
     def test_returns_dict_with_status(self, monkeypatch, tmp_path) -> None:
         from codomyrmex.agents.hermes import mcp_tools
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
         from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 
         db_path = tmp_path / "task_test.db"
@@ -467,7 +467,7 @@ class TestHermesCreateTask:
 
     def test_create_task_success(self, monkeypatch, tmp_path) -> None:
         from codomyrmex.agents.hermes import mcp_tools
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
         from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 
         db_path = tmp_path / "task_test2.db"
@@ -497,7 +497,7 @@ class TestHermesCreateTask:
 
     def test_create_duplicate_task(self, monkeypatch, tmp_path) -> None:
         from codomyrmex.agents.hermes import mcp_tools
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
         from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 
         db_path = tmp_path / "task_test3.db"
@@ -522,7 +522,7 @@ class TestHermesCreateTask:
 
     def test_create_task_missing_session(self, monkeypatch, tmp_path) -> None:
         from codomyrmex.agents.hermes import mcp_tools
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         db_path = tmp_path / "task_test4.db"
 
@@ -545,7 +545,7 @@ class TestHermesUpdateTaskStatus:
 
     def test_returns_dict_with_status(self, monkeypatch, tmp_path) -> None:
         from codomyrmex.agents.hermes import mcp_tools
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
         from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 
         db_path = tmp_path / "update_test.db"
@@ -582,7 +582,7 @@ class TestHermesUpdateTaskStatus:
 
     def test_update_with_result_and_error(self, monkeypatch, tmp_path) -> None:
         from codomyrmex.agents.hermes import mcp_tools
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
         from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 
         db_path = tmp_path / "update_test2.db"
@@ -622,7 +622,7 @@ class TestHermesUpdateTaskStatus:
 
     def test_update_nonexistent_task(self, monkeypatch, tmp_path) -> None:
         from codomyrmex.agents.hermes import mcp_tools
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
         from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 
         db_path = tmp_path / "update_test3.db"

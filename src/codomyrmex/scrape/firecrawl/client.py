@@ -4,7 +4,9 @@ This module wraps the firecrawl-py SDK, providing typed interfaces
 and error translation to module exceptions.
 """
 
-from typing import Any
+from typing import Any, cast
+
+from pydantic import BaseModel
 
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.scrape.config import ScrapeConfig
@@ -15,6 +17,17 @@ from codomyrmex.scrape.exceptions import (
 )
 
 logger = get_logger(__name__)
+
+
+def _normalize_sdk_result(result: Any) -> dict[str, Any]:
+    """Normalize Firecrawl v1 dictionaries and v2 Pydantic response models."""
+    if isinstance(result, dict):
+        return cast("dict[str, Any]", result)
+    if isinstance(result, BaseModel):
+        return result.model_dump()
+    raise TypeError(
+        f"Firecrawl SDK returned an unsupported response type: {type(result).__name__}"
+    )
 
 
 class FirecrawlClient:
@@ -96,7 +109,7 @@ class FirecrawlClient:
         try:
             result = self._client.scrape(url, formats=formats)
             logger.debug("Successfully scraped %s", url)
-            return result
+            return _normalize_sdk_result(result)
         except Exception as e:
             error_msg = str(e).lower()
             if "timeout" in error_msg or "timed out" in error_msg:
@@ -162,7 +175,7 @@ class FirecrawlClient:
                 scrape_options=scrape_options or {},
             )
             logger.debug("Crawl job started for %s", url)
-            return result
+            return _normalize_sdk_result(result)
         except Exception as e:
             error_msg = str(e).lower()
             if "connection" in error_msg or "network" in error_msg:
@@ -211,7 +224,7 @@ class FirecrawlClient:
                 else self._client.map(url)
             )
             logger.debug("Successfully mapped %s", url)
-            return result
+            return _normalize_sdk_result(result)
         except Exception as e:
             error_msg = str(e).lower()
             if "connection" in error_msg or "network" in error_msg:
@@ -262,7 +275,7 @@ class FirecrawlClient:
                 query, limit=limit, scrape_options=scrape_options
             )
             logger.debug("Search completed for: %s", query)
-            return result
+            return _normalize_sdk_result(result)
         except Exception as e:
             error_msg = str(e).lower()
             if "connection" in error_msg or "network" in error_msg:

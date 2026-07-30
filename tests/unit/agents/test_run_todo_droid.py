@@ -244,19 +244,6 @@ class TestListTodos:
         assert "Outcomes: done A" in captured.out
         assert "task_b" in captured.out
 
-    def test_list_todos_with_handler_path(self, capsys):
-        items = [
-            TodoItem(
-                task_name="op1",
-                description="desc",
-                outcomes="",
-                handler_path="droid:some_handler",
-            ),
-        ]
-        _list_todos(items, [])
-        captured = capsys.readouterr()
-        assert "Handler: droid:some_handler" in captured.out
-
     def test_list_todos_with_completed(self, capsys):
         completed = [
             TodoItem(task_name="done_task", description="Was done", outcomes="result"),
@@ -357,17 +344,17 @@ class TestRunTodos:
     def test_run_todos_with_valid_handler(self, tmp_path):
         """Process a TODO that uses the real verify_real_methods handler."""
         todo_lines = [
-            "verify_methods | droid:verify_real_methods | Check droid methods exist"
+            "verify_real_methods | Check droid methods exist | Methods verified"
         ]
         controller, manager = self._setup(tmp_path, todo_lines=todo_lines)
         result = list(run_todos(controller, manager, 1))
         assert len(result) == 1
-        assert result[0].task_name == "verify_methods"
+        assert result[0].task_name == "verify_real_methods"
 
     def test_run_todos_with_documentation_handler(self, tmp_path):
         """Process a TODO that uses ensure_documentation_exists handler."""
         todo_lines = [
-            "check_docs | droid:ensure_documentation_exists | Verify documentation"
+            "ensure_documentation_exists | Verify documentation | Documentation verified"
         ]
         controller, manager = self._setup(tmp_path, todo_lines=todo_lines)
         result = list(run_todos(controller, manager, 1))
@@ -376,7 +363,7 @@ class TestRunTodos:
     def test_run_todos_with_logging_handler(self, tmp_path):
         """Process a TODO that uses confirm_logging_integrations handler."""
         todo_lines = [
-            "check_logging | droid:confirm_logging_integrations | Verify logging"
+            "confirm_logging_integrations | Verify logging | Logging verified"
         ]
         controller, manager = self._setup(tmp_path, todo_lines=todo_lines)
         result = list(run_todos(controller, manager, 1))
@@ -385,25 +372,17 @@ class TestRunTodos:
     def test_run_todos_count_limits_processing(self, tmp_path):
         """When count < len(todo_items), only count items are processed."""
         todo_lines = [
-            "task_1 | droid:verify_real_methods | First",
-            "task_2 | droid:verify_real_methods | Second",
-            "task_3 | droid:verify_real_methods | Third",
+            "verify_real_methods | First | Verified",
+            "verify_real_methods | Second | Verified",
+            "verify_real_methods | Third | Verified",
         ]
         controller, manager = self._setup(tmp_path, todo_lines=todo_lines)
         result = list(run_todos(controller, manager, 2))
         assert len(result) == 2
 
-    def test_run_todos_invalid_handler_raises_import_error(self, tmp_path):
-        """An invalid handler with a nonexistent module raises ImportError (not caught by run_todos)."""
-        todo_lines = ["bad_task | nonexistent.module:no_func | Will fail"]
-        controller, manager = self._setup(tmp_path, todo_lines=todo_lines)
-        # ImportError is NOT in run_todos' except clause, so it propagates
-        with pytest.raises(ImportError):
-            list(run_todos(controller, manager, 1))
-
-    def test_run_todos_invalid_function_caught(self, tmp_path, capsys):
-        """A valid module but nonexistent function raises AttributeError, which IS caught."""
-        todo_lines = ["bad_task | droid:nonexistent_handler_xyz | Will fail gracefully"]
+    def test_run_todos_unknown_task_fails_gracefully(self, tmp_path, capsys):
+        """A task without a built-in handler is reported and skipped."""
+        todo_lines = ["nonexistent_handler_xyz | Will fail gracefully | "]
         controller, manager = self._setup(tmp_path, todo_lines=todo_lines)
         result = list(run_todos(controller, manager, 1))
         assert len(result) == 0
@@ -413,22 +392,15 @@ class TestRunTodos:
     def test_run_todos_no_handler_no_inference(self, tmp_path, capsys):
         """A 3-column TODO with no handler and no inferrable handler should fail gracefully.
 
-        The handler inference loop tries droid:, tasks:, ai_code_editing: prefixes.
-        - droid: raises AttributeError (caught)
-        - tasks: raises ImportError (NOT in the inner try/except of the inference loop,
-          which only catches ValueError, RuntimeError, AttributeError, OSError, TypeError)
-        So this actually raises ModuleNotFoundError for 'tasks' module.
+        The handler inference loop checks the built-in task namespaces.
         """
         todo_lines = ["unknown_task_xyz | Do something unknown | Expected outcomes"]
         controller, manager = self._setup(tmp_path, todo_lines=todo_lines)
-        # The inference loop's inner try/except doesn't catch ImportError,
-        # so this propagates out of run_todos
-        with pytest.raises((ImportError, ValueError)):
-            list(run_todos(controller, manager, 1))
+        assert list(run_todos(controller, manager, 1)) == []
 
     def test_run_todos_rotates_completed(self, tmp_path):
         """After successful processing, completed items are rotated via manager."""
-        todo_lines = ["verify_methods | droid:verify_real_methods | Check methods"]
+        todo_lines = ["verify_real_methods | Check methods | Methods verified"]
         content = _sample_todo_content(todo_lines)
         todo_file = _make_todo_file(tmp_path, content)
         controller = create_default_controller()
@@ -441,14 +413,14 @@ class TestRunTodos:
         remaining, completed = manager.load()
         assert len(remaining) == 0
         assert len(completed) == 1
-        assert completed[0].task_name == "verify_methods"
+        assert completed[0].task_name == "verify_real_methods"
 
     def test_run_todos_mixed_success_with_attribute_error(self, tmp_path, capsys):
         """Mix of valid handler and one with bad function name (AttributeError, caught)."""
         todo_lines = [
-            "good_task | droid:verify_real_methods | Works",
-            "bad_task | droid:nonexistent_handler_xyz | Fails with AttributeError",
-            "good_task_2 | droid:confirm_logging_integrations | Also works",
+            "verify_real_methods | Works | Methods verified",
+            "nonexistent_handler_xyz | Fails with no inferred handler | ",
+            "confirm_logging_integrations | Also works | Logging verified",
         ]
         controller, manager = self._setup(tmp_path, todo_lines=todo_lines)
         result = list(run_todos(controller, manager, 3))
@@ -459,14 +431,14 @@ class TestRunTodos:
 
     def test_run_todos_zero_count(self, tmp_path):
         """run_todos with count=0 should process nothing."""
-        todo_lines = ["task_a | droid:verify_real_methods | Something"]
+        todo_lines = ["verify_real_methods | Something | Verified"]
         controller, manager = self._setup(tmp_path, todo_lines=todo_lines)
         result = list(run_todos(controller, manager, 0))
         assert result == []
 
     def test_run_todos_with_verify_readiness_handler(self, tmp_path):
         """The verify_readiness handler checks for project directories."""
-        todo_lines = ["readiness | droid:verify_readiness | Check readiness"]
+        todo_lines = ["verify_readiness | Check readiness | Readiness verified"]
         controller, manager = self._setup(tmp_path, todo_lines=todo_lines)
         result = list(run_todos(controller, manager, 1))
         assert len(result) == 1
@@ -480,31 +452,9 @@ class TestRunTodos:
 class TestTodoIntegration:
     """Verify TodoItem and TodoManager work correctly in run_todo_droid scenarios."""
 
-    def test_todo_item_with_handler_path(self):
-        item = TodoItem(
-            task_name="op1",
-            description="Do X",
-            outcomes="done",
-            handler_path="droid:some_handler",
-        )
-        assert item.handler_path == "droid:some_handler"
-        assert item.task_name == "op1"
-
-    def test_todo_item_without_handler_path(self):
-        item = TodoItem(task_name="t", description="d", outcomes="o")
-        assert item.handler_path is None
-
-    def test_parse_legacy_format(self):
-        raw = "op1 | droid:my_handler | description text"
-        item = TodoItem.parse(raw)
-        assert item.handler_path == "droid:my_handler"
-        assert item.task_name == "op1"
-        assert item.description == "description text"
-
     def test_parse_new_format(self):
         raw = "my_task | This is the description | Expected outcomes"
         item = TodoItem.parse(raw)
-        assert item.handler_path is None
         assert item.task_name == "my_task"
         assert item.outcomes == "Expected outcomes"
 
@@ -611,7 +561,7 @@ class TestProcessTodos:
         from codomyrmex.agents.droid.run_todo_droid import _process_todos
 
         content = _sample_todo_content(
-            todo_lines=["verify_methods | droid:verify_real_methods | Check"]
+            todo_lines=["verify_real_methods | Check | Verified"]
         )
         todo_file = _make_todo_file(tmp_path, content)
         controller = create_default_controller()
@@ -633,9 +583,7 @@ class TestEdgeCases:
 
     def test_run_todos_count_exceeds_available(self, tmp_path):
         """Requesting more items than available should not crash."""
-        content = _sample_todo_content(
-            todo_lines=["t1 | droid:verify_real_methods | one"]
-        )
+        content = _sample_todo_content(todo_lines=["verify_real_methods | Check | one"])
         todo_file = _make_todo_file(tmp_path, content)
         controller = create_default_controller()
         manager = TodoManager(str(todo_file))
@@ -656,7 +604,7 @@ class TestEdgeCases:
     def test_controller_metrics_after_todos(self, tmp_path):
         """Controller metrics should be updated after processing todos."""
         content = _sample_todo_content(
-            todo_lines=["t1 | droid:verify_real_methods | Check"]
+            todo_lines=["verify_real_methods | Check | Verified"]
         )
         todo_file = _make_todo_file(tmp_path, content)
         controller = create_default_controller()

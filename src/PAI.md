@@ -27,7 +27,7 @@ This is the main source directory containing the `codomyrmex` Python package org
 ### Key Patterns
 
 - **Imports**: Always use `from codomyrmex.<module> import <class>`
-- **Testing**: The authoritative repository test tree is `tests/`; any module-local fixtures or legacy test files are non-authoritative and must not be used as the active test contract.
+- **Testing**: The authoritative repository test tree is `tests/`; module-local fixtures and historical test files are non-authoritative and must not be used as the active test contract.
 - **Documentation**: Every module has README, AGENTS, SPEC, PAI
 
 ### MCP Integration

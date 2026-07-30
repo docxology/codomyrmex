@@ -232,7 +232,7 @@ class TestComputeInstanceOps:
         )
 
     def test_terminate_instance_delegates_to_delete(self, stub_openstack_connection):
-        """terminate_instance is an alias that calls delete_instance with force=True."""
+        """terminate_instance deletes the instance with force=True."""
         client = InfomaniakComputeClient(stub_openstack_connection)
         result = client.terminate_instance("srv-term")
 

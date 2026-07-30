@@ -10,7 +10,7 @@
 
 ## Purpose
 
-Provide deterministic constraint solving capabilities via Z3 SMT solver, implementing the mcp-solver 6-tool interface for interactive model building. Primary integration point: PAI Algorithm ISC verification.
+Provide deterministic constraint solving capabilities via an optional Z3 SMT solver, implementing a mcp-solver-compatible 9-tool interface for interactive model building. The bridge checks supplied constraints; it does not automatically translate arbitrary Python runtime behavior into SMT. Primary integration point: PAI Algorithm ISC verification.
 
 ## Dependencies
 
@@ -40,6 +40,9 @@ Provide deterministic constraint solving capabilities via Z3 SMT solver, impleme
 - `replace_item(index, new_item)` — MCP tool
 - `get_model()` — MCP tool
 - `solve_model(timeout_ms)` — MCP tool
+- `push()` — MCP tool
+- `pop(n)` — MCP tool
+- `verify_code_change(file_path, original_source, modified_source)` — MCP tool
 
 ### Exceptions
 - `SolverError` — Base

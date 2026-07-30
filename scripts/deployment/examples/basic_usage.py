@@ -88,8 +88,8 @@ class DeploymentScript(ScriptBase):
 
         # Import deployment module (after dry_run check)
         from codomyrmex.deployment import (
-            BlueGreenStrategy,
-            CanaryStrategy,
+            BlueGreenDeployment,
+            CanaryDeployment,
             DeploymentManager,
         )
 
@@ -101,8 +101,12 @@ class DeploymentScript(ScriptBase):
                 f"\n1. Testing Canary Strategy ({args.canary_percentage}% initial)"
             )
             try:
-                canary = CanaryStrategy(
-                    percentage=args.canary_percentage, step=args.canary_step
+                canary = CanaryDeployment(
+                    stages=[
+                        float(args.canary_percentage),
+                        float(args.canary_percentage + args.canary_step),
+                        100.0,
+                    ]
                 )
                 start_time = time.perf_counter()
                 success = manager.deploy(args.service_name, args.deploy_version, canary)
@@ -134,7 +138,7 @@ class DeploymentScript(ScriptBase):
         if args.strategy in ["blue-green", "all"]:
             self.log_info("\n2. Testing Blue-Green Strategy")
             try:
-                blue_green = BlueGreenStrategy()
+                blue_green = BlueGreenDeployment()
                 start_time = time.perf_counter()
                 success = manager.deploy(
                     args.service_name, f"{args.deploy_version}-bg", blue_green

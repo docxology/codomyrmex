@@ -110,7 +110,7 @@ def main() -> int:
 
     # Execute
     try:
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         client = HermesClient(
             config={

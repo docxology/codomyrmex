@@ -32,14 +32,10 @@ from .update import (
     update_submodule,
 )
 
-# Alias for agent registry compatibility
-OpenFangClient = OpenFangRunner
-
 __all__ = [
     "HAS_OPENFANG",
     "HandsManager",
     "OpenFangBuildError",
-    "OpenFangClient",
     "OpenFangConfig",
     "OpenFangConfigError",
     "OpenFangError",

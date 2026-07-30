@@ -73,7 +73,7 @@ recommended colony workflow applies adversarial review via
 a plan and then attack it—not an assertion that the two systems are formally
 equivalent.
 
-**Subsystem**: `falsification_worker.FalsificationWorker`
+**Subsystem**: `falsification.worker.FalsificationWorker`
 
 `FalsificationWorker.evaluate_plan` applies ten attack vectors to any plan
 dict. A plan that clears all ten attack vectors with a `severity_score < 0.4`
@@ -188,17 +188,22 @@ additional context for the next cycle via a new OBSERVE run.
 
 ### VERIFY → Consequence Memory
 
-The VERIFY phase submits a caller's report of what happened after an action.
-This is the colony's trust feedback loop: each accepted report updates the
-agent profile, resource ledger, and pheromone field. The current MCP surface
-does not attest the report or link it to a consumed prior EXECUTE authorization.
+The VERIFY phase submits a report of what happened after an action. This is the
+colony's trust feedback loop: each accepted report updates the agent profile,
+resource ledger, and pheromone field. The current MCP surface uses the ordinary
+caller-reported path and does not link the report to a consumed prior EXECUTE
+authorization. A directly constructed kernel may instead use optional or
+required local attestation.
 
 **Subsystem**: `consequence_memory.ConsequenceMemory` + `role_adapter.RoleAdapter`
 
-The recommended workflow pairs every acted-upon EXECUTE verdict with one
-`colony_record_outcome` call. This pairing is a caller responsibility, not a
-kernel invariant. Without submitted reports, the kernel cannot account for
-costs, update trust, or derive later role labels from those actions.
+For the MCP surface, pairing every acted-upon EXECUTE verdict with one
+`colony_record_outcome` call remains a caller responsibility. For stronger
+local linkage, use `attestation_mode="required"` and the direct-kernel
+`authorize_execution` → `record_execution_receipt` →
+`record_attested_outcome` sequence. Required mode rejects the ordinary method.
+Neither sequence independently observes an external tool, so an external
+outcome oracle remains necessary for calibrated effectiveness claims.
 
 **Trust delta formula** (applied by `ConsequenceMemory._compute_delta`):
 
@@ -283,11 +288,11 @@ effort-tier standards or fixed production limits.
 
 | PAI effort tier | Typical task scope | Suggested `ResourceBudget` profile |
 |---|---|---|
-| E1 Standard | Single file, fast path | `max_llm_calls_per_hour=10`, `max_risk_level=0.3`, `max_merge_risk=0.2` |
-| E2 Extended | Multi-file, one pass | `max_llm_calls_per_hour=30`, `max_risk_level=0.5`, `max_merge_risk=0.4` |
-| E3 Advanced | Feature or module-level | `max_llm_calls_per_hour=60`, `max_risk_level=0.6`, `max_merge_risk=0.6` |
-| E4 Deep | Cross-module refactor | `max_llm_calls_per_hour=100`, `max_risk_level=0.7`, `max_merge_risk=0.7` |
-| E5 Comprehensive | Whole-system migration | `max_llm_calls_per_hour=200`, `max_security_exposure=0.4` |
+| E1 Standard | Single file, fast path | `max_llm_calls=10`, `max_risk_level=0.3`, `max_merge_risk=0.2` |
+| E2 Extended | Multi-file, one pass | `max_llm_calls=30`, `max_risk_level=0.5`, `max_merge_risk=0.4` |
+| E3 Advanced | Feature or module-level | `max_llm_calls=60`, `max_risk_level=0.6`, `max_merge_risk=0.6` |
+| E4 Deep | Cross-module refactor | `max_llm_calls=100`, `max_risk_level=0.7`, `max_merge_risk=0.7` |
+| E5 Comprehensive | Whole-system migration | `max_llm_calls=200`, `max_security_exposure=0.4` |
 
 The default `ResourceBudget` (100 LLM calls/hour, risk cap 0.8, merge risk 0.7,
 security exposure 0.5) corresponds to a permissive E4/E5 profile. For E1/E2
@@ -452,9 +457,10 @@ colony_tick()
 | ISC-003: rollback paths documented | MEMORY_ANT `doc_write` action → SUCCESS at `git_operations.core` docs |
 
 After enough explicit ticks, the next Algorithm run may see lower FAILURE,
-persisting DEPENDENCY, and a recent SUCCESS trace. This represents the submitted
-report history; without independent attestation it does not establish that the
-module was repaired or is healthy.
+persisting DEPENDENCY, and a recent SUCCESS trace. This represents accepted
+report history. Even a valid local attestation chain authenticates lifecycle
+linkage rather than independently observing the target, so it does not
+establish that the module was repaired or is healthy.
 
 ---
 

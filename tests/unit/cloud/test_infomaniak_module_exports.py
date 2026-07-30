@@ -190,17 +190,17 @@ class TestInfomaniakModuleExports:
         assert callable(InfomaniakComputeClient.terminate_instance)
 
     # -----------------------------------------------------------------
-    # 7. S3Client implements ABC: has delete_file
+    # 7. S3Client implements ABC: has delete_object
     # -----------------------------------------------------------------
 
-    def test_s3_client_has_delete_file(self):
-        """InfomaniakS3Client implements the StorageClient ABC delete_file method."""
+    def test_s3_client_has_delete_object(self):
+        """InfomaniakS3Client implements the StorageClient ABC delete_object method."""
         from codomyrmex.cloud.common import StorageClient
         from codomyrmex.cloud.infomaniak.object_storage import InfomaniakS3Client
 
         assert issubclass(InfomaniakS3Client, StorageClient)
-        assert hasattr(InfomaniakS3Client, "delete_file")
-        assert callable(InfomaniakS3Client.delete_file)
+        assert hasattr(InfomaniakS3Client, "delete_object")
+        assert callable(InfomaniakS3Client.delete_object)
 
     # -----------------------------------------------------------------
     # 8. OpenStackBase from_env and from_credentials classmethods

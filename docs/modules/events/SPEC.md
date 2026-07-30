@@ -22,7 +22,7 @@ Provides an asynchronous event bus for decoupling system components. Implements 
 - **Event**: Dataclass with `event_id`, `event_type`, `source`, `timestamp`, and `priority`.
 - **Event Bus**: Central routing hub with sync/async support.
 - **Event Emitter**: Standard interface for emitting events (`emit()`, `emit_sync()`).
-- **Event Listener**: Consistent API for subscriptions (`on()`, `off()`, `once()`). Legacy aliases like `unregister` and `listeners` property have been removed.
+- **Event Listener**: Consistent API for subscriptions (`on()`, `off()`, `once()`). The canonical API does not expose `unregister` or a `listeners` property.
 - **Event Priority**: Supports `DEBUG` through `CRITICAL`.
 
 ## Navigation

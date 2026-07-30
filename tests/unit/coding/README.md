@@ -12,7 +12,6 @@ Validation coverage, fixtures, and regression checks for Coding.
 - `SPEC.md` – File
 - `execution/` – Subdirectory
 - `monitoring/` – Subdirectory
-- `parsers/` – Subdirectory
 - `review/` – Subdirectory
 - `sandbox/` – Subdirectory
 - `test_coding_exceptions.py` – File

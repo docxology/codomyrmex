@@ -78,11 +78,11 @@ def check_python_version() -> dict[str, Any]:
 def check_dependencies() -> dict[str, Any]:
     """Check if main dependencies can be imported."""
     deps = {
-        "core": ["cased_kit", "python_dotenv"],
+        "core": ["python_dotenv", "pydantic"],
         "llm": ["openai", "anthropic", "google.genai"],
-        "analysis": ["pylint", "flake8", "bandit"],
+        "analysis": ["pylint", "ruff", "bandit"],
         "data": ["matplotlib", "seaborn", "numpy"],
-        "dev": ["pytest", "black", "mypy"],
+        "dev": ["pytest", "ruff", "ty"],
     }
 
     results = {}

@@ -336,11 +336,9 @@ class TestStaticAnalyzerInit:
     def test_tools_available_has_expected_keys(self, analyzer):
         expected_keys = {
             "pylint",
-            "flake8",
-            "mypy",
+            "ruff",
+            "ty",
             "bandit",
-            "black",
-            "isort",
             "pytest",
             "coverage",
             "radon",
@@ -843,7 +841,7 @@ class TestResultFiltering:
     def _populate_results(self, analyzer):
         analyzer.results = [
             AnalysisResult("a.py", 1, 0, SeverityLevel.ERROR, "m1", "R1", "pylint"),
-            AnalysisResult("a.py", 2, 0, SeverityLevel.WARNING, "m2", "R2", "flake8"),
+            AnalysisResult("a.py", 2, 0, SeverityLevel.WARNING, "m2", "R2", "ruff"),
             AnalysisResult("b.py", 1, 0, SeverityLevel.ERROR, "m3", "R3", "pylint"),
             AnalysisResult("b.py", 5, 0, SeverityLevel.INFO, "m4", "R4", "security"),
         ]
@@ -1065,7 +1063,7 @@ class TestConvenienceFunctions:
         tools = get_available_tools()
         assert isinstance(tools, dict)
         assert "pylint" in tools
-        assert "mypy" in tools
+        assert "ty" in tools
 
 
 # ===========================================================================
@@ -1102,7 +1100,7 @@ class TestAnalyzePythonFileDispatch:
         )
         assert results == []
 
-    def test_style_without_flake8(self, analyzer, simple_python_file):
+    def test_style_without_ruff(self, analyzer, simple_python_file):
         for tool in analyzer.tools_available:
             analyzer.tools_available[tool] = False
         results = analyzer._analyze_python_file(

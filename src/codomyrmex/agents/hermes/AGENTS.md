@@ -19,11 +19,11 @@ Universal protocols specific to this module:
 
 ## Key Sub-components
 
-- **Client Engine** (`hermes_client.py`): Auto-backend detection, prompt formulation, CLI flag support (`--yolo`, `--continue`, `--pass-session-id`), context compression integration, batch execution.
-- **Provider Router** (`_provider_router.py`): Unified `call_llm()` abstraction across 6 providers, with automatic credential resolution and fallback.
-- **Context Compressor** (`_provider_router.py`): Progressive conversation compression triggered at configurable token thresholds.
-- **User Model** (`_provider_router.py`): Cross-session user context persistence — preferences, observations, session summaries backed by JSON.
-- **MCP Bridge** (`mcp_tools_pkg/`): **55** `@mcp_tool` entries split across category modules (`memory`, `skills`, `execution`, `sessions`, `tasks`, `status`); `mcp_tools.py` is a thin re-export shim. Skill-interop tools carry `tags` for PAI manifest indexing (`skills`, `cli_preload`, `interop`).
+- **Client Engine** (`client_pkg/`): Auto-backend detection, prompt formulation, CLI flag support (`--yolo`, `--continue`, `--pass-session-id`), context compression integration, batch execution.
+- **Provider Router** (`provider_router_pkg/`): Unified `call_llm()` abstraction across 6 providers, with automatic credential resolution and fallback.
+- **Context Compressor** (`provider_router_pkg/`): Progressive conversation compression triggered at configurable token thresholds.
+- **User Model** (`provider_router_pkg/`): Cross-session user context persistence — preferences, observations, session summaries backed by JSON.
+- **MCP Bridge** (`mcp_tools_pkg/`): **55** `@mcp_tool` entries split across category modules (`memory`, `skills`, `execution`, `sessions`, `tasks`, `status`); `mcp_tools.py` is the public registration facade. Skill-interop tools carry `tags` for PAI manifest indexing (`skills`, `cli_preload`, `interop`).
 - **Godmode Skill** (`skills/red-teaming/godmode/SKILL.md`): Native red-teaming tool operating at the API/Prompt level to bypass safety filters across closed-source LLMs. Uses Parseltongue input obfuscation (33 techniques), classic framework inversion, and Ultraplinian multi-model racing for capability extraction.
 - **Plugin Manager** (`hermes_cli/plugins_cmd.py`, v2.5.0): `hermes plugins install/update/remove/list` manages Git-sourced plugins in `~/.hermes/plugins/`. Reads `plugin.yaml` manifest, validates `manifest_version`, copies `.example` files, renders `after-install.md` via Rich. Path traversal protection enforced.
 - **@ Context References** (`agent/context_references.py`, v2.5.0): Parses `@file:`, `@folder:`, `@diff`, `@staged`, `@git:N`, `@url:` tokens from messages and expands them to attached context blocks. Token budget enforced (50% hard, 25% soft). Async-safe (sync wrapper for CLI, thread pool for gateway).

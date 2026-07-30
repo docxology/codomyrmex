@@ -153,7 +153,7 @@ The `HermesClient` exposes rich session management methods available directly fr
 Sessions can be independently forked to create parallel conversation threads:
 
 ```python
-from codomyrmex.agents.hermes.hermes_client import HermesClient
+from codomyrmex.agents.hermes.client_pkg import HermesClient
 
 client = HermesClient()
 child = client.fork_session("parent_session_id", new_name="experiment-branch")

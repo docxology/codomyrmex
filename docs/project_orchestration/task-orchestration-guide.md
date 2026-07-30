@@ -21,7 +21,7 @@ from codomyrmex.project_orchestration import (
 orchestrator = get_task_orchestrator()
 
 # Start execution engine
-orchestrator.start_execution()
+orchestrator.start_processing()
 
 # Create and execute tasks
 # ... (see examples below)
@@ -43,7 +43,7 @@ task = Task(
 )
 
 # Add task to orchestrator
-task_id = orchestrator.add_task(task)
+task_id = orchestrator.submit_task(task)
 ```
 
 ### Task with Dependencies
@@ -168,7 +168,7 @@ task = Task(
 
 ```python
 # Start the execution engine (must be called before tasks execute)
-orchestrator.start_execution()
+orchestrator.start_processing()
 
 # Tasks are now processed automatically in the background
 ```
@@ -247,7 +247,7 @@ for task in failed_tasks:
             # Reset task and retry
             task.status = TaskStatus.PENDING
             task.retry_count = 0
-            orchestrator.add_task(task)
+            orchestrator.submit_task(task)
 ```
 
 ### Cancel Tasks
@@ -330,7 +330,7 @@ from codomyrmex.project_orchestration import (
 
 # Initialize orchestrator
 orchestrator = get_task_orchestrator(max_workers=4)
-orchestrator.start_execution()
+orchestrator.start_processing()
 
 # Create task chain
 setup_task = orchestrator.create_task(
@@ -394,7 +394,7 @@ else:
 
 ### Tasks Not Executing
 
-- Ensure `start_execution()` has been called
+- Ensure `start_processing()` has been called
 - Check that dependencies are satisfied
 - Verify resources are available
 - Check task status with `orchestrator.get_task(task_id)`

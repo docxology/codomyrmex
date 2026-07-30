@@ -251,7 +251,7 @@ The `content_hash` field (SHA-256 of concatenated paragraph text) provides a sta
 | Scraper Facade | `extractors/scraper.py` | Unified interface delegating to provider adapters |
 | Core Abstractions | `core.py` | `BaseScraper` ABC, result dataclasses, format enums |
 | Configuration | `config.py` | `ScrapeConfig` dataclass, env var loading, validation |
-| Exceptions | `exceptions.py` | `ScrapeError` hierarchy with context metadata |
+| Exceptions | `exceptions.py` | `ScrapingError` hierarchy with context metadata |
 | MCP Tools | `mcp_tools.py` | `@mcp_tool`-decorated functions for PAI bridge |
 | Firecrawl Adapter | `firecrawl/` | Provider-specific implementation for JS-rendered pages |
 

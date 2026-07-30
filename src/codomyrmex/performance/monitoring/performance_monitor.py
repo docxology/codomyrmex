@@ -302,9 +302,6 @@ def monitor_performance(
     return decorator
 
 
-profile_function = monitor_performance
-
-
 def profile_memory_usage(func: Callable) -> Callable:
     """
     Decorator to profile memory usage of a function.

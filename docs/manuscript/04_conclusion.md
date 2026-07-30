@@ -15,9 +15,10 @@ for the cases they cover. They do not establish production safety, robustness at
 resistance to a strategic adversary, or improved task performance relative to another
 agent runtime.
 
-{{CONFIG_PARAMETER_STATUS_NOTE}} The current figures and fixtures should therefore be
-changed only through a declared tuning or calibration protocol with regenerated tests,
-tables, figures, and provenance—not silently treated as universal constants.
+{{CONFIG_PARAMETER_STATUS_NOTE}} The policy parameters and fixture inputs should
+therefore be changed only through a declared tuning or calibration protocol with
+regenerated tests, tables, figures, and provenance—not silently treated as universal
+constants.
 
 Several boundaries are especially important. The default MCP server owns one kernel
 instance for the lifetime of its process. Its consequence database defaults to SQLite
@@ -38,9 +39,11 @@ the gate: local hazard is the maximum of the two sensed pressures. The paired co
 test records a failed outcome, observes the resulting FAILURE pressure, and changes a
 complete same-target proposal from EXECUTE to HOLD while leaving an unrelated target
 unchanged. Passive tick decay later restores the original decision. This verifies a
-process-local locality invariant. It does not verify the truth of the outcome report:
-the MCP outcome endpoint still accepts caller-supplied data without binding it to a
-prior EXECUTE authorization or independently observed actuation.
+process-local locality invariant. It does not verify the truth of the outcome report.
+The ordinary MCP endpoint still accepts caller-supplied data without binding it to a
+prior EXECUTE authorization. Optional and required kernel modes provide a signed,
+hash-linked local lifecycle path, with required mode making that path mandatory, but
+the ledger does not independently observe actuation or establish that it was safe.
 
 ## Falsification Criteria and Evaluation Agenda {#sec:falsification-criteria}
 
@@ -54,8 +57,10 @@ The checked-in paired test submits identical proposals under identical agent, bu
 completeness, and falsification state, varying only whether the target location has a
 reported failed outcome. The failed-location proposal receives a strictly lower score
 and a stricter decision; an unrelated location does not. The remaining falsification
-criterion is end-to-end attestation: the same result must hold when FAILURE can only be
-created from a prior authorized action and an independently observed adverse outcome.
+criterion is end-to-end external-actuation attestation: the same result must hold when
+FAILURE can only be created from a prior authorized action and an independently
+observed adverse outcome. The implemented local ledger is necessary lifecycle evidence,
+not completion of this criterion.
 
 ### F2: Deterministic gate evaluation
 
@@ -92,6 +97,7 @@ unit tests cannot settle.
 |:---|:---|:---|
 | Is gate arithmetic deterministic for covered fixtures? | Checked-in unit and contract tests | Supported within the tested state space |
 | Does reported FAILURE tighten same-target local gating? | Paired contract test over `max(RISK, FAILURE)` | Supported within one kernel process |
+| Can the kernel authenticate a complete local lifecycle? | Signed and hash-linked proposal, verdict, authorization, receipt, and outcome fixture | Supported for local ledger integrity, not external truth |
 | Do role labels enforce per-action permissions? | SANDBOX override; no general role/action matrix | Not implemented |
 | Does colony state survive a default MCP process restart? | In-memory default database and field | No |
 | Does the kernel reduce unsafe actuation on external workloads? | Proposed protocol; no released trial traces | Not yet evaluated |
@@ -116,10 +122,11 @@ or production repair cost. The falsification worker is also a deterministic prop
 checker, not a proof of semantic safety: only CRITICAL findings independently force a
 gate refusal, and syntactically complete but misleading evidence may evade its checks.
 
-Four implementation priorities follow directly from these limits. First, bind outcome
-records to prior EXECUTE authorizations, observed effects, and authenticated agent
-identities. Second, persist and reconcile the entire field and budget state when
-cross-session behavior is required. Third, define and enforce
+Four implementation priorities follow directly from these limits. First, extend the
+implemented local authorization/receipt chain with deployment-specific, independently
+verifiable observation of external effects and actor identity. Second, persist and
+reconcile the entire field and budget state when cross-session behavior is required.
+Third, define and enforce
 an action-by-role authorization policy if role names are to carry security meaning.
 Fourth, run the proposed paired and external benchmarks with released traces, explicit
 baselines, and predeclared outcome measures before making effectiveness or scale claims.

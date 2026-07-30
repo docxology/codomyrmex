@@ -1,6 +1,6 @@
 """Core encryption engine.
 
-Provides the main Encryptor class that supports AES-256-CBC (legacy) and
+Provides the main Encryptor class that supports AES-256-CBC and
 RSA encryption with OAEP padding, as well as key generation, digital
 signatures, and file encryption utilities.
 """
@@ -431,16 +431,6 @@ class Encryptor:
 
 
 # --- Convenience Functions ---
-
-
-def encrypt_data(data: bytes, key: bytes, algorithm: str = "AES") -> bytes:
-    """Encrypt data using specified algorithm."""
-    return Encryptor(algorithm).encrypt(data, key)
-
-
-def decrypt_data(data: bytes, key: bytes, algorithm: str = "AES") -> bytes:
-    """Decrypt data using specified algorithm."""
-    return Encryptor(algorithm).decrypt(data, key)
 
 
 def generate_aes_key() -> bytes:

@@ -12,7 +12,7 @@
 | Run the CLI | `codomyrmex --help` → [cli/](src/codomyrmex/cli/) |
 | Understand PAI integration | [PAI.md](PAI.md) — algorithm phase ↔ module mapping |
 | Browse all 130 top-level modules | [src/codomyrmex/INDEX.md](src/codomyrmex/INDEX.md) — full module catalog by layer |
-| MCP tool reference | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) — **623** production `@mcp_tool` lines; **608** merged runtime tools ([inventory](docs/reference/inventory.md)) |
+| MCP tool reference | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) — **623** production `@mcp_tool` lines; **604** merged runtime tools ([inventory](docs/reference/inventory.md)) |
 | Check system health | `codomyrmex status` or `codomyrmex check` |
 | Run tests | `uv run pytest` |
 | Install dependencies | `uv sync` |
@@ -27,7 +27,7 @@
 | `mcp_tools.py` files (non-test) | 150 | [docs/reference/inventory.md](docs/reference/inventory.md) |
 | MCP resources | 3 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
 | MCP prompts | 10 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
-| Tests collected | 35,444 | `uv run python scripts/doc_inventory.py --pytest` ([inventory](docs/reference/inventory.md)) |
+| Tests collected | 35,780 | Complete locked dependency profile; `uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest` ([inventory](docs/reference/inventory.md)) |
 | GitHub Actions workflows | 37 | `.github/workflows/*.yml` (see `uv run python scripts/doc_inventory.py`) |
 | RASP gap report | `uv run python scripts/rasp_gap_report.py` | [AGENTS.md](AGENTS.md) |
 | Version | v1.3.0 | [pyproject.toml](pyproject.toml) |

@@ -1,6 +1,6 @@
 # Static Analysis Module API Specification
 
-**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: February 2026
+**Version**: v1.3.0 | **Status**: Stable | **Last Updated**: July 2026
 
 ## 1. Overview
 
@@ -13,10 +13,13 @@ This module exposes only a Python import API — it has no MCP tools. See `MCP_T
 ### 2.1 Import Analysis (`imports.py`)
 
 **Layer Constants**: Four sets define the architectural hierarchy (from `SPEC.md`):
-- `FOUNDATION`: `config_management`, `environment_setup`, `logging_monitoring`, `model_context_protocol`, `telemetry`, `terminal_interface`
+- `FOUNDATION`: `config_management`, `environment_setup`, `exceptions`,
+  `logging_monitoring`, `model_context_protocol`, `telemetry`,
+  `terminal_interface`, `validation`
 - `CORE`: `cache`, `coding`, `git_operations`, `llm`, `performance`, `search`, `static_analysis`, and others
 - `SERVICE`: `api`, `auth`, `ci_cd_automation`, `cloud`, `orchestrator`, and others
-- `SPECIALIZED`: `agentic_memory`, `agents`, `cerebrum`, `cli`, `events`, and all remaining modules
+- `SPECIALIZED`: `agentic_memory`, `agents`, `cerebrum`, `cli`, `events`,
+  `utils`, and all remaining modules
 
 **Functions**:
 
@@ -26,11 +29,19 @@ This module exposes only a Python import API — it has no MCP tools. See `MCP_T
 | `extract_imports_ast` | `(filepath: Path) -> List[str]` | `List[str]` | Extract imported codomyrmex module names from a single file using AST |
 | `scan_imports` | `(src_dir: Path) -> List[Dict[str, Any]]` | `List[edge dicts]` | Scan all `.py` files; each edge has `src`, `dst`, `file`, `src_layer`, `dst_layer` |
 | `check_layer_violations` | `(edges: List[Dict]) -> List[Dict]` | `List[violation dicts]` | Apply layer rules; violations add a `reason` field |
+| `get_upward_interface_contract` | `(edge: Mapping[str, Any]) -> str \| None` | Optional rationale | Resolve an exact file-scoped upward-import contract |
+| `audit_upward_interface_contracts` | `(edges, contracts=UPWARD_INTERFACE_CONTRACTS) -> dict` | `{"used": [...], "stale": [...]}` | Verify that every declared exception still matches an upward edge |
 
 **Layer violation rules** (lower-ranked layers cannot import higher-ranked):
 - Foundation (0) must not import Core (1), Service (2), or Specialized (3)
 - Core (1) must not import Service (2) or Specialized (3)
 - Service (2) must not import Specialized (3)
+
+`UPWARD_INTERFACE_CONTRACTS` is an immutable registry keyed by exact source
+module, destination module, and repository-relative file. A matching entry
+exempts only that adapter; another file with the same module pair remains a
+violation. The repository audit also fails when a registry entry becomes
+stale.
 
 ### 2.2 Export Analysis (`exports.py`)
 

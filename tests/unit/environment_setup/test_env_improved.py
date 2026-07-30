@@ -93,7 +93,8 @@ class TestEnvironmentImproved:
         assert "Python Version" in report
         assert "Core Dependencies" in report
         assert "python-dotenv" in report
-        assert "cased-kit" in report
+        assert "pydantic" in report
+        assert "jsonschema" in report
 
     def test_validate_environment_details(self, code_dir):
         """Test validate_environment returns details."""

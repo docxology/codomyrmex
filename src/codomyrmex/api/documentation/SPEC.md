@@ -58,7 +58,7 @@ documentation/
 ## Dependencies
 
 - `ast`, `json` (stdlib)
-- Parent module `openapi_generator.py` for `OpenAPISpecification` and `StandardizationOpenAPIGenerator`
+- Parent module `openapi_generator.py` for `OpenAPISpecification`; documentation generation lives in `openapi_documentation_generator.py`
 
 ## Navigation
 

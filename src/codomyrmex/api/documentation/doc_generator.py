@@ -275,16 +275,10 @@ class APIDocumentationGenerator:
         """Parse decorator information."""
         info = {}
 
-        # Extract path (first argument)
-        if decorator.args:
-            # Check for modern ast.Constant first (Python 3.8+)
-            if hasattr(decorator.args[0], "value") and isinstance(
-                getattr(decorator.args[0], "value", None), str
-            ):
+        # Extract path (first argument).
+        if decorator.args and isinstance(decorator.args[0], ast.Constant):
+            if isinstance(decorator.args[0].value, str):
                 info["path"] = decorator.args[0].value
-            # Python 3.8 compatibility: ast.Str was removed in 3.12, use ast.Constant instead.
-            elif hasattr(decorator.args[0], "s"):
-                info["path"] = decorator.args[0].s
 
         # Extract method from decorator name or keyword arguments
         decorator_name = self._get_decorator_name(decorator)
@@ -306,14 +300,9 @@ class APIDocumentationGenerator:
         for kwarg in decorator.keywords:
             if kwarg.arg == "methods" and hasattr(kwarg.value, "elts"):
                 if kwarg.value.elts:
-                    # Check for modern ast.Constant first (Python 3.8+)
-                    if hasattr(kwarg.value.elts[0], "value") and isinstance(
-                        getattr(kwarg.value.elts[0], "value", None), str
-                    ):
-                        info["method"] = kwarg.value.elts[0].value.upper()
-                    # Python 3.8 compatibility: ast.Str was removed in 3.12, use ast.Constant instead.
-                    elif hasattr(kwarg.value.elts[0], "s"):
-                        info["method"] = kwarg.value.elts[0].s.upper()
+                    value = kwarg.value.elts[0]
+                    if isinstance(value, ast.Constant) and isinstance(value.value, str):
+                        info["method"] = value.value.upper()
 
         return info
 

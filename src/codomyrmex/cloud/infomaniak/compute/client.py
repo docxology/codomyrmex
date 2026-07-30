@@ -210,7 +210,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
 
     def terminate_instance(self, instance_id: str) -> bool:
         """
-        Terminate (delete) an instance. ABC-compatible alias for delete_instance.
+        Implement the abstract compute-client termination operation.
 
         Args:
             instance_id: Instance UUID

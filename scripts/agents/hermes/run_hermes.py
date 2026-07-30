@@ -13,6 +13,7 @@ Usage:
 import argparse
 import sys
 from pathlib import Path
+from typing import Any
 
 # Bootstrap path only — not needed when package is already installed
 try:
@@ -35,15 +36,15 @@ _DEFAULT_PROMPT = "Explain what Hermes Agent is in one sentence."
 _DEFAULT_SESSION: str | None = None
 
 
-def _resolve_config() -> dict:
+def _resolve_config() -> dict[str, Any]:
     """Load agent config and extract Hermes-specific settings.
 
     Returns:
         Flat dict of effective hermes config values.
     """
     try:
-        config = get_config()
-        return config.get("hermes", {}) if isinstance(config, dict) else {}
+        hermes_cfg = get_config().to_dict().get("hermes", {})
+        return hermes_cfg if isinstance(hermes_cfg, dict) else {}
     except (OSError, ImportError):
         return {}
 
@@ -73,13 +74,13 @@ def _print_client_info(hermes_client: object) -> None:
         hermes_client: An initialized HermesClient instance.
     """
     print_info("─" * 60)
-    print_info(f"  Backend:   {hermes_client.active_backend}")  # type: ignore[attr-defined]
-    print_info(f"  Model:     {hermes_client.ollama_model}")  # type: ignore[attr-defined]
-    print_info(f"  CLI found: {hermes_client._cli_available}")  # type: ignore[attr-defined]
-    print_info(f"  Ollama:    {hermes_client._ollama_available}")  # type: ignore[attr-defined]
-    print_info(f"  DB Path:   {hermes_client._session_db_path}")  # type: ignore[attr-defined]
+    print_info(f"  Backend:   {hermes_client.active_backend}")
+    print_info(f"  Model:     {hermes_client.ollama_model}")
+    print_info(f"  CLI found: {hermes_client._cli_available}")
+    print_info(f"  Ollama:    {hermes_client._ollama_available}")
+    print_info(f"  DB Path:   {hermes_client._session_db_path}")
     try:
-        status: dict = hermes_client.get_hermes_status()  # type: ignore[attr-defined]
+        status: dict = hermes_client.get_hermes_status()
         print_info(f"  Status:    {status}")
     except Exception as exc:
         print_info(f"  Status:    (unavailable — {exc})")
@@ -103,14 +104,14 @@ def _format_response(response: object, quiet: bool = False) -> int:
         return 0
 
     print_success("  Hermes Response:")
-    for line in response.content.split("\n"):  # type: ignore[attr-defined]
+    for line in response.content.split("\n"):
         print_info(f"    {line}")
 
     print_info("─" * 60)
-    print_info(f"  Session ID:     {response.metadata.get('session_id')}")  # type: ignore[attr-defined]
-    print_info(f"  Execution time: {response.execution_time:.2f}s")  # type: ignore[attr-defined]
-    print_info(f"  Backend used:   {response.metadata.get('backend', 'N/A')}")  # type: ignore[attr-defined]
-    session_name = response.metadata.get("session_name")  # type: ignore[attr-defined]
+    print_info(f"  Session ID:     {response.metadata.get('session_id')}")
+    print_info(f"  Execution time: {response.execution_time:.2f}s")
+    print_info(f"  Backend used:   {response.metadata.get('backend', 'N/A')}")
+    session_name = response.metadata.get("session_name")
     if session_name:
         print_info(f"  Session name:   {session_name}")
     return 0
@@ -151,7 +152,7 @@ def _execute_prompt(
             prompt=prompt,
             session_id=session_id,
             session_name=session_name,
-        )  # type: ignore[attr-defined]
+        )
 
         if response.is_success():
             return _format_response(response, quiet=quiet)
@@ -163,7 +164,7 @@ def _execute_prompt(
         return 1
     except TypeError:
         # Fallback if chat_session doesn't accept session_name yet
-        response = hermes_client.chat_session(prompt=prompt, session_id=session_id)  # type: ignore[attr-defined]
+        response = hermes_client.chat_session(prompt=prompt, session_id=session_id)
         if response.is_success():
             return _format_response(response, quiet=quiet)
         print_error(f"  Error: {response.error}")
@@ -235,7 +236,7 @@ def main() -> int:
     if not args.quiet:
         _print_client_info(hermes_client)
 
-    if hermes_client.active_backend == "none":  # type: ignore[attr-defined]
+    if hermes_client.active_backend == "none":
         print_error("No backend available. Install 'hermes' CLI or 'ollama'.")
         return 1
 
@@ -243,7 +244,7 @@ def main() -> int:
     worktree_path = None
     session_id_for_worktree = args.session or args.name
     if args.worktree and session_id_for_worktree:
-        worktree_path = hermes_client.create_worktree(session_id_for_worktree)  # type: ignore[attr-defined]
+        worktree_path = hermes_client.create_worktree(session_id_for_worktree)
         if worktree_path:
             if not args.quiet:
                 print_info(f"  Worktree: {worktree_path}")
@@ -260,7 +261,7 @@ def main() -> int:
 
     # Cleanup worktree if auto_cleanup is enabled
     if worktree_path and session_id_for_worktree:
-        hermes_client.cleanup_worktree(session_id_for_worktree)  # type: ignore[attr-defined]
+        hermes_client.cleanup_worktree(session_id_for_worktree)
 
     if result != 0:
         return result

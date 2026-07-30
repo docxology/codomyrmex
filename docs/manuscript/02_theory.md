@@ -20,27 +20,29 @@ universal or empirically calibrated.
 
 Let $J_t \subseteq \mathcal L \times \mathcal K$ be the finite set of compound
 location–signal keys present at tick $t$, where $\mathcal K$ contains `FAILURE`,
-`SUCCESS`, `RISK`, `NEED`, `DEPENDENCY`, and `HUMAN_PRIORITY`. For a fixed finite key
-set $J$, the field state is
+`SUCCESS`, `RISK`, `NEED`, `DEPENDENCY`, and `HUMAN_PRIORITY`. Over any finite
+analysis horizon, choose a finite universe $J$ containing the keys that appear and
+represent an absent or deleted key by zero. The projected field state is then
 
 $$
 x_t \in [{{CONFIG_SCORE_MIN}},M]^J,\qquad M={{CONFIG_FIELD_MAX_STRENGTH}} .
 $$ {#eq:field-state}
 
-This capped non-negative cube is a complete metric lattice under the supremum metric.
-It is not a vector space: negative scaling and unrestricted addition leave the state
-space.
+This capped non-negative cube is a complete metric space under the supremum metric
+and a complete lattice under the coordinate-wise order. It is not a vector space:
+negative scaling and unrestricted addition leave the state space.
 
-For key $j$, let $\epsilon_j>0$ be its fixed per-tick evaporation amount and let
-$d_{j,t}\geq 0$ be the effective deposits applied during step $t$, after source and
-trust multipliers. With the convention “evaporate, then deposit,” the implemented update
-can be represented as
+For key $j$, let $\epsilon_{j,t}>0$ be the evaporation amount stored for that key
+during step $t$, and let $d_{j,t}\geq 0$ be the effective deposits applied during
+the step, after source and trust multipliers. A redeposit may replace the stored decay
+class; when it does not, write the constant amount as $\epsilon_j$. With the convention
+“evaporate, then deposit,” the implemented update can be represented as
 
 $$
 x_{j,t+1}
 =
 \min\!\left(M,\,
-\max({{CONFIG_SCORE_MIN}},x_{j,t}-\epsilon_j)+d_{j,t}
+\max({{CONFIG_SCORE_MIN}},x_{j,t}-\epsilon_{j,t})+d_{j,t}
 \right).
 $$ {#eq:field-recurrence}
 
@@ -57,7 +59,8 @@ $x_{j,t}\in[{{CONFIG_SCORE_MIN}},M]$ for every finite sequence of non-negative d
 *Proof.* The inner maximum is non-negative and the outer minimum is at most $M$.
 Induction over $t$ completes the argument. $\square$
 
-**Lemma 2 (passive linear decay).** With no deposits for $n$ ticks,
+**Lemma 2 (passive linear decay).** With no deposits and a fixed stored decay
+amount $\epsilon_j$ for $n$ ticks,
 
 $$
 x_{j,t+n}=\max({{CONFIG_SCORE_MIN}},x_{j,t}-n\epsilon_j).
@@ -80,7 +83,8 @@ For a unit trace, FAST, NORMAL, and SLOW disappear after
 {{RESULT_UNIT_EXTINCTION_SLOW_TICKS}} discrete ticks,
 respectively (the ceiling matters when $s/\epsilon_j$ is not integral).
 
-![{{FIGURE_CAPTION_PHEROMONE_DECAY}}](figures/{{FIGURE_FILENAME_PHEROMONE_DECAY}}){#{{FIGURE_LABEL_PHEROMONE_DECAY}} width={{FIGURE_WIDTH_PHEROMONE_DECAY}}}
+![{{FIGURE_CAPTION_PHEROMONE_DECAY}}](figures/{{FIGURE_FILENAME_PHEROMONE_DECAY}}){#{{FIGURE_LABEL_PHEROMONE_DECAY}} width={{FIGURE_WIDTH_PHEROMONE_DECAY}} alt="{{FIGURE_ALT_PHEROMONE_DECAY}}" aria-describedby="{{FIGURE_LABEL_PHEROMONE_DECAY}}-description"}
+<div id="{{FIGURE_LABEL_PHEROMONE_DECAY}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_PHEROMONE_DECAY}}</div>
 
 ## From reported failure to local gate pressure {#sec:theory-local-pressure}
 
@@ -131,7 +135,8 @@ g_{\mathrm{failed}}={{CONFIG_GATE_WEIGHT_BUDGET}}+{{CONFIG_GATE_WEIGHT_RISK}}({{
 $$ {#eq:paired-failure-score}
 
 Thus the same-target decision changes from EXECUTE to HOLD, while an otherwise identical
-proposal at another target remains at {{RESULT_PAIRED_UNRELATED_SCORE}}. A real integration test checks all three
+proposal at another target remains at {{RESULT_PAIRED_UNRELATED_SCORE}}. An executed
+integration test checks all three
 claims. Passive decay eventually restores the clear-field score. This is the precise
 implemented meaning of “harder to pass after local failure”; it is neither permanent nor
 a proof that deception is prevented.
@@ -163,7 +168,7 @@ Otherwise $g\geq{{CONFIG_GATE_EXECUTE_THRESHOLD}}$ yields EXECUTE,
 ${{CONFIG_GATE_HOLD_THRESHOLD}}\leq g<{{CONFIG_GATE_EXECUTE_THRESHOLD}}$ yields HOLD,
 and $g<{{CONFIG_GATE_HOLD_THRESHOLD}}$ yields REFUSE.
 
-**Theorem 1 (score boundedness).** Every ordinary score is in
+**Proposition 2 (score boundedness).** Every ordinary score is in
 $[{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]$.
 
 *Proof.* Every component is in $[{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]$, every coefficient is non-negative, and the
@@ -171,19 +176,21 @@ coefficients sum to {{CONFIG_GATE_WEIGHT_SUM}}. The implementation additionally 
 $[{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]$.
 $\square$
 
-**Proposition 2 (component monotonicity).** On the ordinary path, improving budget
+**Proposition 3 (component monotonicity).** On the ordinary path, improving budget
 approval, risk clearance, trust credit, or completeness while holding the other
 components fixed cannot reduce $g$. Increasing local hazard or activating the
 recent-failure penalty cannot increase $g$.
 
 These are arithmetic monotonicity statements. They do not imply that $g$ is calibrated
 to real-world harm. Such calibration would require linked proposals, independently
-attested outcomes, representative workloads, and held-out evaluation.
+observed and externally attested outcomes, representative workloads, and held-out
+evaluation.
 
 [@fig:gate_score_3d] visualizes the exact score tiers and the continuous completeness
 envelope used only to make the discontinuities legible.
 
-![{{FIGURE_CAPTION_GATE_SCORE_3D}}](figures/{{FIGURE_FILENAME_GATE_SCORE_3D}}){#{{FIGURE_LABEL_GATE_SCORE_3D}} width={{FIGURE_WIDTH_GATE_SCORE_3D}}}
+![{{FIGURE_CAPTION_GATE_SCORE_3D}}](figures/{{FIGURE_FILENAME_GATE_SCORE_3D}}){#{{FIGURE_LABEL_GATE_SCORE_3D}} width={{FIGURE_WIDTH_GATE_SCORE_3D}} alt="{{FIGURE_ALT_GATE_SCORE_3D}}" aria-describedby="{{FIGURE_LABEL_GATE_SCORE_3D}}-description"}
+<div id="{{FIGURE_LABEL_GATE_SCORE_3D}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_GATE_SCORE_3D}}</div>
 
 ### What HOLD can and cannot establish {#sec:theory-hold}
 
@@ -213,12 +220,16 @@ $$ {#eq:trust-update}
 with
 
 $$
-\Delta_n=
+d_{\mathrm{test}}(n)=
 \begin{cases}
 +{{CONFIG_TRUST_DELTA_PASS}}, & \text{tests pass},\\
 {{CONFIG_TRUST_DELTA_FAIL}}, & \text{tests fail}
-\end{cases}
-{{CONFIG_TRUST_DELTA_REPAIR}}\,\mathbf 1_{\mathrm{repair}}
+\end{cases},
+\qquad
+r_{\mathrm{repair}}={{CONFIG_TRUST_DELTA_REPAIR}},
+\qquad
+\Delta_n=d_{\mathrm{test}}(n)
++r_{\mathrm{repair}}\,\mathbf 1_{\mathrm{repair}}
 +{{CONFIG_TRUST_DELTA_HUMAN_WEIGHT}}h_n,\qquad h_n\in[{{CONFIG_HUMAN_FEEDBACK_MIN}},{{CONFIG_HUMAN_FEEDBACK_MAX}}].
 $$ {#eq:trust-delta}
 
@@ -241,8 +252,10 @@ Starting from $\tau_0={{CONFIG_TRUST_SANDBOX_SCORE}}$, an all-success path adds
 {{CONFIG_TRUST_DELTA_PASS}} per outcome until clipping. The first
 {{RESULT_PROPOSALS_TO_PROMOTION}} recorded successes satisfy the generated promotion
 contract for `REPAIR_ANT`. This is a deterministic path claim,
-not an expected hitting time for an imperfect agent. Moreover, the current MCP surface
-accepts caller-reported outcomes without linking them to a prior EXECUTE decision; the
+not an expected hitting time for an imperfect agent. Moreover, the ordinary MCP path
+accepts caller-reported outcomes without linking them to a prior EXECUTE decision.
+Optional and required local attestation modes can enforce lifecycle linkage, but they do
+not make a submitted outcome an independent observation of competence. The
 three-record bootstrap must therefore be treated as supervised evidence, not autonomous
 proof of competence.
 
@@ -266,11 +279,15 @@ global bound. Any future noisy release would also need an explicit adjacency rel
 composition accounting across repeated queries, and a utility analysis
 [@dwork2014algorithmic].
 
-The more immediate integrity issue is attestation: `colony_record_outcome` currently
-constructs a proposal from caller input and does not require an outstanding, matching,
-previously EXECUTEd proposal identifier. Trust and local pressure therefore express
-*recorded reports*, not independently verified ground truth. This limitation bounds
-every causal and security claim in the manuscript.
+The more immediate integrity issue is the boundary between ledger authentication and
+external observation. The ordinary `colony_record_outcome` path constructs a proposal
+from caller input and requires no outstanding, matching, previously EXECUTEd proposal.
+Optional or required kernel attestation instead binds and consumes a local
+authorization/receipt chain. Even there, the ledger authenticates submitted lifecycle
+events; it does not independently observe the external action or establish that the
+action was safe. Trust and local pressure therefore remain evidence about recorded
+events, not independently verified ground truth. This limitation bounds every causal
+and security claim in the manuscript.
 
 ## Verified claims and open hypotheses {#sec:theory-summary}
 
@@ -285,7 +302,7 @@ contract cases, open empirical hypotheses, and claims that are false for this re
 | One canonical failed outcome moves the paired lower-tier case from {{RESULT_PAIRED_CLEAR_SCORE}}/EXECUTE to {{RESULT_PAIRED_FAILURE_SCORE}}/HOLD | Verified deterministic case | Real subsystem integration test |
 | Gate score lies in $[{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]$ | Proved arithmetic invariant | Component ranges and clip |
 | Trust lies in $[{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]$ | Proved implementation invariant | Clipped update |
-| The gate lowers production harm | Open empirical hypothesis | Linked, attested, representative trials |
+| The gate lowers production harm | Open empirical hypothesis | Linked, externally attested, representative trials |
 | HOLD improves decisions | Open value-of-information hypothesis | Revision-cost and outcome study |
 | The ecology converges or is optimal | Not established | A specified stochastic model and external validation |
 | Published trust is differentially private | False for the current release | A randomized mechanism and privacy accounting |

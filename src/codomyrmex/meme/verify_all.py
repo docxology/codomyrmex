@@ -2,9 +2,10 @@
 """Verification script for the new meme module."""
 
 import sys
+from pathlib import Path
 
-# Ensure src is in path
-sys.path.insert(0, "/Users/mini/Documents/GitHub/codomyrmex/src")
+# Support direct execution from a checkout or an installed wheel.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 
 def info(msg):

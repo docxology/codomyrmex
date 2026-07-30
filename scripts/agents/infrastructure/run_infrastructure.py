@@ -44,7 +44,7 @@ def main() -> int:
     )
 
     factory = CloudToolFactory()
-    _tools = factory.list_tools() if hasattr(factory, "list_tools") else dir(factory)
+    _tools = dir(factory)
     print_info(
         f"  CloudToolFactory methods: {[m for m in dir(factory) if not m.startswith('_')][:10]}"
     )

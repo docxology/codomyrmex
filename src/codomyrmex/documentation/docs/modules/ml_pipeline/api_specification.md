@@ -1,14 +1,23 @@
 # ML Pipeline — API Specification
 
-**Version**: v1.3.0 | **Status**: Stub | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Experimental | **Last Updated**: July 2026
 
 ## 1. Overview
 
-The `ml_pipeline` module is a reserved namespace for ML pipeline orchestration. Currently provides two MCP tools for pipeline definition and execution as pass-through stubs. For production workflow orchestration, see the `orchestrator` module.
+The `ml_pipeline` module provides two stateless receipt-producing functions
+that are available through both the Python package root and MCP discovery.
+Despite the historical `execute` name, the current implementation echoes
+inputs and does not run an ML workload. For executable workflow orchestration,
+see the `orchestrator` module.
 
 ## 2. Current State
 
-This module has **no public Python exports** (`__init__.py` is empty). All functionality is exposed exclusively via MCP tools.
+`codomyrmex.ml_pipeline.__all__` explicitly exports:
+
+- `ml_pipeline_create`
+- `ml_pipeline_execute`
+
+The same function objects carry `@mcp_tool()` metadata in `mcp_tools.py`.
 
 ## 3. MCP Tools
 
@@ -51,13 +60,14 @@ ml_pipeline_execute(name: str, inputs: dict[str, Any]) → dict[str, Any]
 ```
 
 > [!NOTE]
-> Both tools are currently pass-through stubs that echo inputs. They do not perform actual ML operations or persist state.
+> Both functions are pass-through adapters. They do not validate steps,
+> persist pipeline state, or perform ML operations.
 
 ## 4. Usage Example
 
 ```python
 # Via MCP tool invocation
-from codomyrmex.ml_pipeline.mcp_tools import ml_pipeline_create, ml_pipeline_execute
+from codomyrmex.ml_pipeline import ml_pipeline_create, ml_pipeline_execute
 
 # Define a pipeline
 result = ml_pipeline_create(
@@ -81,7 +91,6 @@ output = ml_pipeline_execute(
 | Module | Relationship |
 | :--- | :--- |
 | `orchestrator` | General workflow orchestration (production-ready) |
-| `feature_store` | Feature management and serving |
 | `eval_harness` | Model evaluation pipeline |
 
 ## 6. Navigation

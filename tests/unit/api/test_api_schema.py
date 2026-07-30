@@ -124,7 +124,9 @@ class TestDocumentationOpenAPIGenerator:
 
     def test_generate_spec(self):
         """Test generating OpenAPI specification."""
-        from codomyrmex.api.openapi_generator import DocumentationOpenAPIGenerator
+        from codomyrmex.api.openapi_documentation_generator import (
+            DocumentationOpenAPIGenerator,
+        )
 
         generator = DocumentationOpenAPIGenerator()
 
@@ -147,7 +149,9 @@ class TestDocumentationOpenAPIGenerator:
 
     def test_validate_spec_valid(self):
         """Test validating a valid specification."""
-        from codomyrmex.api.openapi_generator import DocumentationOpenAPIGenerator
+        from codomyrmex.api.openapi_documentation_generator import (
+            DocumentationOpenAPIGenerator,
+        )
 
         generator = DocumentationOpenAPIGenerator()
 
@@ -163,7 +167,9 @@ class TestDocumentationOpenAPIGenerator:
 
     def test_validate_spec_missing_fields(self):
         """Test validating specification with missing fields."""
-        from codomyrmex.api.openapi_generator import DocumentationOpenAPIGenerator
+        from codomyrmex.api.openapi_documentation_generator import (
+            DocumentationOpenAPIGenerator,
+        )
 
         generator = DocumentationOpenAPIGenerator()
 
@@ -176,7 +182,9 @@ class TestDocumentationOpenAPIGenerator:
 
     def test_get_default_schemas(self):
         """Test getting default schemas."""
-        from codomyrmex.api.openapi_generator import DocumentationOpenAPIGenerator
+        from codomyrmex.api.openapi_documentation_generator import (
+            DocumentationOpenAPIGenerator,
+        )
 
         generator = DocumentationOpenAPIGenerator()
 
@@ -187,7 +195,9 @@ class TestDocumentationOpenAPIGenerator:
 
     def test_get_default_security_schemes(self):
         """Test getting default security schemes."""
-        from codomyrmex.api.openapi_generator import DocumentationOpenAPIGenerator
+        from codomyrmex.api.openapi_documentation_generator import (
+            DocumentationOpenAPIGenerator,
+        )
 
         generator = DocumentationOpenAPIGenerator()
 
@@ -198,7 +208,9 @@ class TestDocumentationOpenAPIGenerator:
 
     def test_export_spec_json(self):
         """Test exporting specification to JSON file."""
-        from codomyrmex.api.openapi_generator import DocumentationOpenAPIGenerator
+        from codomyrmex.api.openapi_documentation_generator import (
+            DocumentationOpenAPIGenerator,
+        )
 
         generator = DocumentationOpenAPIGenerator()
         spec = generator.generate_spec("Test API", "1.0.0", [])
@@ -216,7 +228,9 @@ class TestStandardizationOpenAPIGenerator:
 
     def test_create_generator(self):
         """Test creating a standardization OpenAPI generator."""
-        from codomyrmex.api.openapi_generator import StandardizationOpenAPIGenerator
+        from codomyrmex.api.openapi_standardization_generator import (
+            StandardizationOpenAPIGenerator,
+        )
 
         generator = StandardizationOpenAPIGenerator(
             title="Test API", version="1.0.0", description="Test description"
@@ -227,7 +241,9 @@ class TestStandardizationOpenAPIGenerator:
 
     def test_add_security_schemes(self):
         """Test adding security schemes."""
-        from codomyrmex.api.openapi_generator import StandardizationOpenAPIGenerator
+        from codomyrmex.api.openapi_standardization_generator import (
+            StandardizationOpenAPIGenerator,
+        )
 
         generator = StandardizationOpenAPIGenerator()
 
@@ -239,7 +255,9 @@ class TestStandardizationOpenAPIGenerator:
 
     def test_add_tags(self):
         """Test adding tags."""
-        from codomyrmex.api.openapi_generator import StandardizationOpenAPIGenerator
+        from codomyrmex.api.openapi_standardization_generator import (
+            StandardizationOpenAPIGenerator,
+        )
 
         generator = StandardizationOpenAPIGenerator()
 
@@ -249,7 +267,9 @@ class TestStandardizationOpenAPIGenerator:
 
     def test_set_external_docs(self):
         """Test setting external documentation."""
-        from codomyrmex.api.openapi_generator import StandardizationOpenAPIGenerator
+        from codomyrmex.api.openapi_standardization_generator import (
+            StandardizationOpenAPIGenerator,
+        )
 
         generator = StandardizationOpenAPIGenerator()
 
@@ -260,7 +280,9 @@ class TestStandardizationOpenAPIGenerator:
 
     def test_validate_spec(self):
         """Test spec validation."""
-        from codomyrmex.api.openapi_generator import StandardizationOpenAPIGenerator
+        from codomyrmex.api.openapi_standardization_generator import (
+            StandardizationOpenAPIGenerator,
+        )
 
         generator = StandardizationOpenAPIGenerator()
 
@@ -271,7 +293,9 @@ class TestStandardizationOpenAPIGenerator:
 
     def test_generate_spec(self):
         """Test generating final specification."""
-        from codomyrmex.api.openapi_generator import StandardizationOpenAPIGenerator
+        from codomyrmex.api.openapi_standardization_generator import (
+            StandardizationOpenAPIGenerator,
+        )
 
         generator = StandardizationOpenAPIGenerator(title="Final API", version="2.0.0")
 
@@ -306,7 +330,9 @@ class TestOpenAPISpecificationEdgeCases:
 
     def test_validate_spec_invalid_path_format(self):
         """Test validation with invalid path format."""
-        from codomyrmex.api.openapi_generator import DocumentationOpenAPIGenerator
+        from codomyrmex.api.openapi_documentation_generator import (
+            DocumentationOpenAPIGenerator,
+        )
 
         generator = DocumentationOpenAPIGenerator()
 
@@ -325,7 +351,9 @@ class TestOpenAPISpecificationEdgeCases:
 
     def test_validate_spec_missing_responses(self):
         """Test validation with missing responses."""
-        from codomyrmex.api.openapi_generator import DocumentationOpenAPIGenerator
+        from codomyrmex.api.openapi_documentation_generator import (
+            DocumentationOpenAPIGenerator,
+        )
 
         generator = DocumentationOpenAPIGenerator()
 
@@ -348,7 +376,9 @@ class TestOpenAPIGeneratorFromAPIs:
 
     def test_add_rest_api_to_generator(self):
         """Test adding REST API to OpenAPI generator."""
-        from codomyrmex.api.openapi_generator import StandardizationOpenAPIGenerator
+        from codomyrmex.api.openapi_standardization_generator import (
+            StandardizationOpenAPIGenerator,
+        )
         from codomyrmex.api.standardization.rest_api import (
             RESTAPI,
             APIEndpoint,
@@ -376,7 +406,9 @@ class TestOpenAPIGeneratorFromAPIs:
 
     def test_add_graphql_api_to_generator(self):
         """Test adding GraphQL API to OpenAPI generator."""
-        from codomyrmex.api.openapi_generator import StandardizationOpenAPIGenerator
+        from codomyrmex.api.openapi_standardization_generator import (
+            StandardizationOpenAPIGenerator,
+        )
         from codomyrmex.api.standardization.graphql_api import GraphQLAPI, GraphQLSchema
 
         schema = GraphQLSchema()
@@ -398,7 +430,9 @@ class TestOpenAPIGeneratorFromAPIs:
 
     def test_add_version_manager_to_generator(self):
         """Test adding version manager to OpenAPI generator."""
-        from codomyrmex.api.openapi_generator import StandardizationOpenAPIGenerator
+        from codomyrmex.api.openapi_standardization_generator import (
+            StandardizationOpenAPIGenerator,
+        )
         from codomyrmex.api.standardization.api_versioning import APIVersionManager
 
         manager = APIVersionManager(default_version="1.0.0")
@@ -418,7 +452,9 @@ class TestOpenAPIGeneratorFromAPIs:
 
     def test_add_global_responses(self):
         """Test adding global responses to generator."""
-        from codomyrmex.api.openapi_generator import StandardizationOpenAPIGenerator
+        from codomyrmex.api.openapi_standardization_generator import (
+            StandardizationOpenAPIGenerator,
+        )
 
         generator = StandardizationOpenAPIGenerator()
 
@@ -473,7 +509,9 @@ class TestHTMLDocGeneration:
 
     def test_generate_html_docs(self):
         """Test HTML documentation generation."""
-        from codomyrmex.api.openapi_generator import DocumentationOpenAPIGenerator
+        from codomyrmex.api.openapi_documentation_generator import (
+            DocumentationOpenAPIGenerator,
+        )
 
         generator = DocumentationOpenAPIGenerator()
 
@@ -517,7 +555,9 @@ class TestHTMLDocGeneration:
 
     def test_generate_html_empty_spec(self):
         """Test HTML generation with minimal spec."""
-        from codomyrmex.api.openapi_generator import DocumentationOpenAPIGenerator
+        from codomyrmex.api.openapi_documentation_generator import (
+            DocumentationOpenAPIGenerator,
+        )
 
         generator = DocumentationOpenAPIGenerator()
 

@@ -55,7 +55,6 @@ class DocumentationBootstrapper:
         "dist",
         "build",
         ".pytest_cache",
-        ".mypy_cache",
     }
 
     # Files to exclude from inventories (but include README.md if it exists)

@@ -1,27 +1,20 @@
 #!/usr/bin/env python3
-"""Compile the codomyrmex manuscript from output/manuscript/ to HTML and PDF.
+"""Compile the resolved Codomyrmex manuscript to semantic HTML and PDF.
 
 Usage:
-    uv run python scripts/compile_manuscript.py           # HTML only (fast)
-    uv run python scripts/compile_manuscript.py --pdf     # HTML + PDF
-    uv run python scripts/compile_manuscript.py --check   # verify tokens resolved
-    uv run python scripts/compile_manuscript.py --bookends  # include transmission bookends (PDF only)
+    uv run --locked --group docs python scripts/compile_manuscript.py
+    uv run --locked --group docs python scripts/compile_manuscript.py --pdf
+    uv run --locked --group docs python scripts/compile_manuscript.py --check
+    uv run --locked --group docs python scripts/compile_manuscript.py --pdf --bookends
 
 Workflow:
     1. Run z_generate_manuscript_variables.py to inject tokens
     2. Generate output/manuscript/00_01_contents.md after the cover page
     3. Verify no {{TOKEN}} remain in output/manuscript/*.md
-    4. Collect sections in the declared scientific narrative order
-       (skips 00_00_transmission_begin.md and 99_zz_transmission_end.md by default —
-       those are PDF-only bookends with pending DOI/QR placeholders)
-    5. Run pandoc with pandoc-crossref and citeproc to produce output/paper.html
-       (always) and output/paper.pdf (--pdf flag)
-
-Bookend files (00_00 / 99_zz) contain:
-    - LaTeX raw blocks (```{=latex} ... ```)
-    - References to ../figures/transmission_*.png that may not exist
-    - Pending DOI / SHA-256 placeholders
-    They are excluded by default and only included when --bookends is passed.
+    4. Render semantic HTML from the unbookended report
+    5. With ``--pdf --bookends``, render and hash the content PDF, generate
+       visible QR/text bookends, then render the final PDF in one Pandoc pass
+    6. Require qpdf structural validation and record pdfinfo/veraPDF evidence
 """
 
 # SIZE_OK: Renderer orchestration stays single-file for artifact auditability.
@@ -29,6 +22,7 @@ Bookend files (00_00 / 99_zz) contain:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html as html_lib
 import json
 import re
@@ -232,6 +226,24 @@ def _sections_with_generated_contents(
     return with_contents
 
 
+def _sections_with_contents_at(
+    sections: list[Path],
+    contents_path: Path,
+) -> list[Path]:
+    contents_path.parent.mkdir(parents=True, exist_ok=True)
+    _write_generated_contents_section(contents_path, _toc_entries(sections))
+    with_contents: list[Path] = []
+    inserted = False
+    for section in sections:
+        with_contents.append(section)
+        if section.name == COVER_NAME:
+            with_contents.append(contents_path)
+            inserted = True
+    if not inserted:
+        with_contents.insert(0, contents_path)
+    return with_contents
+
+
 def _check_unresolved_tokens(sections: list[Path]) -> list[tuple[Path, list[str]]]:
     """Return list of (file, [token, ...]) for any unresolved {{TOKEN}} patterns.
 
@@ -254,6 +266,273 @@ def _strip_trailing_whitespace(path: Path) -> None:
     if text.endswith("\n"):
         cleaned += "\n"
     path.write_text(cleaned, encoding="utf-8")
+
+
+def _hash_file(path: Path, algorithm: str = "sha256") -> str:
+    digest = hashlib.new(algorithm)
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _display_path(path: Path, project_root: Path) -> str:
+    try:
+        return path.resolve().relative_to(project_root.resolve()).as_posix()
+    except ValueError:
+        return str(path.resolve())
+
+
+def _repository_url(value: str) -> str:
+    repository = value.strip()
+    if repository and not repository.startswith(("http://", "https://")):
+        return f"https://github.com/{repository}"
+    return repository
+
+
+def _write_release_bookends(
+    *,
+    output_dir: Path,
+    variables: dict[str, str],
+    content_sha256: str,
+) -> tuple[Path, Path] | None:
+    """Generate visible bookend Markdown and a QR code from verified inputs."""
+    required = {
+        "CONFIG_TITLE": variables.get("CONFIG_TITLE", ""),
+        "CONFIG_VERSION": variables.get("CONFIG_VERSION", ""),
+        "CONFIG_FIRST_AUTHOR": variables.get("CONFIG_FIRST_AUTHOR", ""),
+        "CONFIG_GITHUB_REPOSITORY": variables.get("CONFIG_GITHUB_REPOSITORY", ""),
+    }
+    missing = [name for name, value in required.items() if not value]
+    if missing:
+        print(
+            f"ERROR: bookend metadata is missing: {', '.join(missing)}",
+            file=sys.stderr,
+        )
+        return None
+    try:
+        import qrcode
+    except ImportError:
+        print(
+            "ERROR: qrcode is required for --bookends; "
+            "run with `uv run --locked --group docs`.",
+            file=sys.stderr,
+        )
+        return None
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    repository_url = _repository_url(required["CONFIG_GITHUB_REPOSITORY"])
+    release_url = (
+        f"{repository_url}/releases/tag/v{required['CONFIG_VERSION']}"
+        if repository_url
+        else ""
+    )
+    qr_target = f"{release_url}#content-sha256={content_sha256}"
+    qr_path = output_dir / "release-identity-qr.png"
+    qr = qrcode.make(qr_target)
+    qr.save(qr_path)
+
+    doi = variables.get("CONFIG_DOI", "").strip()
+    doi_line = doi if doi and doi.lower() != "not assigned" else "not assigned"
+    commit = variables.get("REPRO_GIT_COMMIT", "not recorded")
+    dirty = variables.get("REPRO_WORKTREE_DIRTY", "not recorded")
+    identity_lines = [
+        f"**Report:** {required['CONFIG_TITLE']}",
+        f"**Release:** {required['CONFIG_VERSION']}",
+        f"**Author:** {required['CONFIG_FIRST_AUTHOR']}",
+        f"**DOI:** {doi_line}",
+        f"**Source commit:** `{commit}`",
+        f"**Source worktree dirty:** `{dirty}`",
+        f"**Content SHA-256:** `{content_sha256}`",
+        f"**Repository release link:** [{release_url}]({release_url})",
+    ]
+    qr_markdown = (
+        f"![QR code for the visible repository release link]({qr_path.as_posix()})"
+        "{width=1.25in}"
+    )
+    front = output_dir / "00_00_transmission_begin.md"
+    back = output_dir / "99_zz_transmission_end.md"
+    front.write_text(
+        "\n".join(
+            [
+                "```{=latex}",
+                "\\clearpage",
+                "\\thispagestyle{empty}",
+                "```",
+                "",
+                "# Release identity {.unnumbered}",
+                "",
+                *identity_lines,
+                "",
+                qr_markdown,
+                "",
+                (
+                    "This visible page identifies the unbookended report content. "
+                    "The final distribution PDF has its own detached hashes in "
+                    "`publication_manifest.json`, `SHA256SUMS`, and `SHA512SUMS`."
+                ),
+                "",
+                "```{=latex}",
+                "\\clearpage",
+                "```",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+    back.write_text(
+        "\n".join(
+            [
+                "```{=latex}",
+                "\\clearpage",
+                "\\thispagestyle{empty}",
+                "```",
+                "",
+                "# End of distribution copy {.unnumbered}",
+                "",
+                *identity_lines,
+                "",
+                qr_markdown,
+                "",
+                (
+                    "Verification boundary: this hash identifies the locally rendered "
+                    "content PDF. It does not attest external actuation, deployment "
+                    "safety, or remote publication."
+                ),
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+    return front, back
+
+
+def _validate_pdf(
+    pdf_path: Path,
+    *,
+    receipt_dir: Path,
+) -> bool:
+    """Require qpdf structural validity and record optional conformance evidence."""
+    receipt_dir.mkdir(parents=True, exist_ok=True)
+    qpdf = shutil.which("qpdf")
+    if qpdf is None:
+        print("ERROR: qpdf is required for PDF validation.", file=sys.stderr)
+        return False
+    qpdf_result = subprocess.run(
+        [qpdf, "--check", pdf_path.name],
+        cwd=pdf_path.parent,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    receipt: dict[str, object] = {
+        "schema_version": "1",
+        "artifact": pdf_path.name,
+        "qpdf": {
+            "command": ["qpdf", "--check", pdf_path.name],
+            "exit_code": qpdf_result.returncode,
+            "passed": qpdf_result.returncode == 0,
+            "stdout": qpdf_result.stdout,
+            "stderr": qpdf_result.stderr,
+        },
+    }
+
+    pdfinfo = shutil.which("pdfinfo")
+    if pdfinfo:
+        info_result = subprocess.run(
+            [pdfinfo, pdf_path.name],
+            cwd=pdf_path.parent,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        receipt["pdfinfo"] = {
+            "exit_code": info_result.returncode,
+            "output": info_result.stdout,
+        }
+    else:
+        receipt["pdfinfo"] = {"status": "not-installed"}
+
+    verapdf = shutil.which("verapdf")
+    if verapdf:
+        vera_result = subprocess.run(
+            [verapdf, "--format", "json", pdf_path.name],
+            cwd=pdf_path.parent,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        receipt["verapdf"] = {
+            "exit_code": vera_result.returncode,
+            "passed": vera_result.returncode == 0,
+            "stdout": vera_result.stdout,
+            "stderr": vera_result.stderr,
+        }
+    else:
+        receipt["verapdf"] = {
+            "status": "not-installed",
+            "conformance": "not-claimed",
+        }
+
+    receipt_path = receipt_dir / f"{pdf_path.stem}-pdf-validation.json"
+    receipt_path.write_text(
+        json.dumps(receipt, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    if qpdf_result.returncode != 0:
+        print(
+            f"ERROR: qpdf rejected {_display_path(pdf_path, pdf_path.parent)}",
+            file=sys.stderr,
+        )
+        return False
+    return True
+
+
+def _validate_bookend_placement(pdf_path: Path, content_sha256: str) -> bool:
+    """Require the content hash on both the first and last PDF pages."""
+    pdftotext = shutil.which("pdftotext")
+    pdfinfo = shutil.which("pdfinfo")
+    if pdftotext is None or pdfinfo is None:
+        print(
+            "ERROR: pdftotext and pdfinfo are required to verify bookend placement.",
+            file=sys.stderr,
+        )
+        return False
+    info = subprocess.run(
+        [pdfinfo, str(pdf_path)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    match = re.search(r"^Pages:\s+(\d+)\s*$", info.stdout, re.MULTILINE)
+    if info.returncode != 0 or match is None:
+        print("ERROR: could not determine PDF page count.", file=sys.stderr)
+        return False
+    page_count = int(match.group(1))
+    for page in (1, page_count):
+        result = subprocess.run(
+            [
+                pdftotext,
+                "-f",
+                str(page),
+                "-l",
+                str(page),
+                str(pdf_path),
+                "-",
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode != 0 or content_sha256 not in "".join(
+            result.stdout.split()
+        ):
+            print(
+                f"ERROR: content SHA-256 is absent from bookend page {page}.",
+                file=sys.stderr,
+            )
+            return False
+    return True
 
 
 def _build_pandoc_metadata_args(
@@ -336,7 +615,7 @@ def _run_pandoc_html(
     if not _require_executable("pandoc") or not _require_executable("pandoc-crossref"):
         return False
 
-    print(f"Compiling HTML → {output_path.relative_to(project_root)} ...")
+    print(f"Compiling HTML → {_display_path(output_path, project_root)} ...")
 
     cmd: list[str] = ["pandoc"]
     cmd += [str(s) for s in sections]
@@ -366,7 +645,7 @@ def _run_pandoc_html(
         )
         return False
     _strip_trailing_whitespace(output_path)
-    print(f"  HTML written: {output_path.relative_to(project_root)}")
+    print(f"  HTML written: {_display_path(output_path, project_root)}")
     return True
 
 
@@ -377,12 +656,21 @@ def _run_pandoc_pdf(
     preamble: Path | None,
     variables: dict[str, str],
     project_root: Path,
+    pdf_engine: str,
+    pdf_standard: str,
 ) -> bool:
     """Run pandoc to produce PDF output; return True on success."""
     if not _require_executable("pandoc") or not _require_executable("pandoc-crossref"):
         return False
 
-    print(f"Compiling PDF → {output_path.relative_to(project_root)} ...")
+    if pdf_standard != "none" and pdf_engine != "lualatex":
+        print(
+            "ERROR: PDF standards require --pdf-engine lualatex.",
+            file=sys.stderr,
+        )
+        return False
+
+    print(f"Compiling PDF → {_display_path(output_path, project_root)} ...")
 
     cmd: list[str] = ["pandoc"]
     cmd += [str(s) for s in sections]
@@ -394,7 +682,7 @@ def _run_pandoc_pdf(
         "markdown+yaml_metadata_block",
         "--bibliography",
         str(bibliography),
-        "--pdf-engine=xelatex",
+        f"--pdf-engine={pdf_engine}",
         "--resource-path",
         f"{project_root / 'output'}:{project_root / 'output' / 'manuscript'}:{project_root}",
         "-V",
@@ -410,6 +698,9 @@ def _run_pandoc_pdf(
         "-V",
         "toccolor=red",
     ]
+    if pdf_standard != "none":
+        cmd += ["-V", f"pdfstandard={pdf_standard}"]
+    temp_header: Path | None = None
     if preamble and preamble.exists():
         latex_src = _extract_latex_from_preamble(preamble)
         if latex_src:
@@ -418,20 +709,26 @@ def _run_pandoc_pdf(
             )
             tmp.write(latex_src)
             tmp.flush()
+            tmp.close()
+            temp_header = Path(tmp.name)
             cmd += ["-H", tmp.name]
         else:
             cmd += ["-H", str(preamble)]
     cmd += _build_pandoc_metadata_args(variables, project_root)
     cmd += ["-o", str(output_path)]
 
-    result = subprocess.run(cmd, cwd=str(project_root), capture_output=False)
+    try:
+        result = subprocess.run(cmd, cwd=str(project_root), capture_output=False)
+    finally:
+        if temp_header is not None:
+            temp_header.unlink(missing_ok=True)
     if result.returncode != 0:
         print(
             f"ERROR: pandoc PDF compilation failed (exit {result.returncode})",
             file=sys.stderr,
         )
         return False
-    print(f"  PDF written: {output_path.relative_to(project_root)}")
+    print(f"  PDF written: {_display_path(output_path, project_root)}")
     return True
 
 
@@ -447,7 +744,7 @@ def main() -> int:
     parser.add_argument(
         "--pdf",
         action="store_true",
-        help="Also produce output/paper.pdf via xelatex",
+        help="Also produce a structurally validated PDF.",
     )
     parser.add_argument(
         "--check",
@@ -458,19 +755,43 @@ def main() -> int:
         "--bookends",
         action="store_true",
         help=(
-            "Include transmission bookend pages (00_00 / 99_zz). "
-            "These contain LaTeX-only content and pending DOI placeholders — "
-            "only useful for a full PDF production run."
+            "Run the two-pass release render: hash the content PDF, generate "
+            "visible bookends, and render the final distribution PDF."
         ),
     )
     parser.add_argument(
         "--skip-generate",
         action="store_true",
-        help="Skip running z_generate_manuscript_variables.py (use existing output/manuscript/)",
+        help="Use existing resolved manuscript files.",
+    )
+    parser.add_argument(
+        "--manuscript-dir",
+        type=Path,
+        help="Resolved manuscript input directory (default: output/manuscript).",
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        help="Artifact destination directory (default: output).",
+    )
+    parser.add_argument(
+        "--pdf-engine",
+        choices=("lualatex", "xelatex"),
+        default="lualatex",
+        help="Pandoc PDF engine (default: lualatex).",
+    )
+    parser.add_argument(
+        "--pdf-standard",
+        choices=("none", "ua-1", "ua-2", "a-2b", "a-3b", "a-4f"),
+        default="ua-2",
+        help="Requested Pandoc PDF standard (default: ua-2; use none explicitly).",
     )
     args = parser.parse_args()
 
     project_root = _find_project_root()
+    if args.bookends and not args.pdf:
+        print("ERROR: --bookends requires --pdf.", file=sys.stderr)
+        return 1
 
     # Step 1: Regenerate tokens unless skipped
     if not args.skip_generate:
@@ -480,10 +801,14 @@ def main() -> int:
         print("Skipping variable generation (--skip-generate).")
 
     # Step 2: Locate manuscript files
-    manuscript_dir = project_root / "output" / "manuscript"
+    manuscript_dir = (
+        args.manuscript_dir.resolve()
+        if args.manuscript_dir is not None
+        else project_root / "output" / "manuscript"
+    )
     if not manuscript_dir.exists():
         print(
-            f"ERROR: output/manuscript/ does not exist: {manuscript_dir}",
+            f"ERROR: manuscript input directory does not exist: {manuscript_dir}",
             file=sys.stderr,
         )
         print(
@@ -492,11 +817,20 @@ def main() -> int:
         )
         return 1
 
-    sections = _collect_sections(manuscript_dir, include_bookends=args.bookends)
+    output_dir = (
+        args.output_dir.resolve()
+        if args.output_dir is not None
+        else project_root / "output"
+    )
+    output_dir.mkdir(parents=True, exist_ok=True)
+    sections = _collect_sections(manuscript_dir, include_bookends=False)
     if not sections:
-        print("ERROR: no section files found in output/manuscript/", file=sys.stderr)
+        print(f"ERROR: no section files found in {manuscript_dir}", file=sys.stderr)
         return 1
-    sections = _sections_with_generated_contents(sections, manuscript_dir)
+    sections = _sections_with_contents_at(
+        sections,
+        output_dir / "generated-manuscript" / GENERATED_CONTENTS_NAME,
+    )
 
     print(f"Sections ({len(sections)}):")
     for s in sections:
@@ -509,11 +843,8 @@ def main() -> int:
         print("UNRESOLVED TOKENS FOUND:", file=sys.stderr)
         for path, tokens in token_findings:
             print(f"  {path.name}: {', '.join(sorted(set(tokens)))}", file=sys.stderr)
-        if args.check:
-            return 1
-        print("  WARNING: proceeding with unresolved tokens in output.")
-    else:
-        print("  No unresolved tokens found.")
+        return 1
+    print("  No unresolved tokens found.")
 
     if args.check:
         print("--check passed: no unresolved tokens.")
@@ -525,11 +856,7 @@ def main() -> int:
         print(f"ERROR: references.bib not found at {bibliography}", file=sys.stderr)
         return 1
 
-    preamble = manuscript_dir / "preamble.md"  # LaTeX header inclusions
-
-    # Ensure output directory exists
-    output_dir = project_root / "output"
-    output_dir.mkdir(parents=True, exist_ok=True)
+    preamble = manuscript_dir / "preamble.md"
 
     # Load variables for metadata
     variables = _load_variables(project_root)
@@ -548,17 +875,82 @@ def main() -> int:
 
     # Step 5: Optionally compile PDF
     if args.pdf:
-        pdf_out = output_dir / "paper.pdf"
-        pdf_ok = _run_pandoc_pdf(
-            sections=sections,
-            output_path=pdf_out,
-            bibliography=bibliography,
-            preamble=preamble,
-            variables=variables,
-            project_root=project_root,
-        )
-        if not pdf_ok:
-            return 1
+        validation_dir = output_dir / "validation"
+        if args.bookends:
+            content_out = output_dir / "paper-content.pdf"
+            content_ok = _run_pandoc_pdf(
+                sections=sections,
+                output_path=content_out,
+                bibliography=bibliography,
+                preamble=preamble,
+                variables=variables,
+                project_root=project_root,
+                pdf_engine=args.pdf_engine,
+                pdf_standard=args.pdf_standard,
+            )
+            if not content_ok or not content_out.is_file():
+                print(
+                    "ERROR: required content PDF was not generated.",
+                    file=sys.stderr,
+                )
+                return 1
+            if not _validate_pdf(content_out, receipt_dir=validation_dir):
+                return 1
+            content_sha256 = _hash_file(content_out)
+            content_receipt = {
+                "schema_version": "1",
+                "artifact": content_out.name,
+                "role": "unbookended-content",
+                "sha256": content_sha256,
+                "sha512": _hash_file(content_out, "sha512"),
+                "size_bytes": content_out.stat().st_size,
+            }
+            (validation_dir / "content-identity.json").write_text(
+                json.dumps(content_receipt, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+            bookends = _write_release_bookends(
+                output_dir=output_dir / "generated-bookends",
+                variables=variables,
+                content_sha256=content_sha256,
+            )
+            if bookends is None:
+                return 1
+            front, back = bookends
+            distribution_out = output_dir / "paper.pdf"
+            distribution_ok = _run_pandoc_pdf(
+                sections=[front, *sections, back],
+                output_path=distribution_out,
+                bibliography=bibliography,
+                preamble=preamble,
+                variables=variables,
+                project_root=project_root,
+                pdf_engine=args.pdf_engine,
+                pdf_standard=args.pdf_standard,
+            )
+            if not distribution_ok or not distribution_out.is_file():
+                return 1
+            if not _validate_pdf(distribution_out, receipt_dir=validation_dir):
+                return 1
+            if not _validate_bookend_placement(distribution_out, content_sha256):
+                return 1
+        else:
+            pdf_out = output_dir / "paper.pdf"
+            pdf_ok = _run_pandoc_pdf(
+                sections=sections,
+                output_path=pdf_out,
+                bibliography=bibliography,
+                preamble=preamble,
+                variables=variables,
+                project_root=project_root,
+                pdf_engine=args.pdf_engine,
+                pdf_standard=args.pdf_standard,
+            )
+            if not pdf_ok or not _validate_pdf(
+                pdf_out,
+                receipt_dir=validation_dir,
+            ):
+                return 1
 
     print("Done.")
     return 0

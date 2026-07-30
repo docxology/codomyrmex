@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 
-from codomyrmex.cerebrum.core.exceptions import ActiveInferenceError
+from codomyrmex.exceptions.cerebrum import ActiveInferenceError
 from codomyrmex.logging_monitoring import get_logger
 
 if TYPE_CHECKING:

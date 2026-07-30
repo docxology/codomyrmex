@@ -57,7 +57,7 @@ the consolidated configuration.
 | `parse_pyproject_dependencies(content)` | `dict` | Parse deps from pyproject.toml content |
 | `check_version_constraints(deps)` | `list[str]` | Find deps missing version constraints |
 | `check_duplicates(deps)` | `list[str]` | Find duplicate packages across sections |
-| `check_requirements_txt_deprecated(root)` | `list[str]` | Check for deprecation notices |
+| `check_retired_requirements_markers(root)` | `list[str]` | Check that retired requirement files carry their marker |
 
 ## Dependencies
 

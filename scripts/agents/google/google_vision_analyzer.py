@@ -75,7 +75,7 @@ def main():
                         role="user",
                         parts=[
                             types.Part.from_text(
-                                f"Analyze {file.name}. Tasks: {args.tasks}"
+                                text=f"Analyze {file.name}. Tasks: {args.tasks}"
                             ),
                             types.Part.from_uri(
                                 file_uri=file_uri.uri,

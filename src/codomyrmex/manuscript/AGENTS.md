@@ -16,10 +16,10 @@ Manuscript token computation and publication figure generation.
 | `figures/research_roadmap.py` | Config-driven evidence-roadmap visual |
 | `figures/replay_contract.py` | Fixed-input paired-locality evidence visual |
 
-Figure metadata and captions are configured under `docs/manuscript/config.yaml` in the
-`figures:` mapping. The generator resolves those captions into `FIGURE_*` variables and
-the figure registry records the resolved caption, label, width, evidence class, and
-artifact hash together.
+Figure metadata, captions, concise alternatives, and extended descriptions are
+configured under `docs/manuscript/config.yaml` in the `figures:` mapping. The generator
+resolves those strings into `FIGURE_*` variables, and the figure registry records the
+resolved text, label, width, evidence class, and artifact hash together.
 
 ## Dependencies
 
@@ -33,3 +33,5 @@ Orchestrators (thin):
 - Keep `figures/*.py` one-generator-per-file; shared styling lives in `figures/_common.py` only.
 - Preserve the `variables.py` / `figures.main()` public entry points used by the local generation scripts.
 - Regenerate variables and figures together (`compute_variables()` then `figures.main()`) so tokens and figures stay in sync.
+- Preserve non-colour encodings and keep the palette contrast checks green when
+  changing shared figure styling.

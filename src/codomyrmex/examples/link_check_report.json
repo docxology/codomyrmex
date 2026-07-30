@@ -1,31 +1,57 @@
 {
-  "total_files_checked": 4,
-  "total_links_found": 12,
+  "scope": "src/codomyrmex/examples/*.md",
+  "path_base": "repository-root",
+  "total_files_checked": 6,
+  "total_links_found": 26,
   "broken_internal_links": [],
   "broken_external_links": [],
-  "valid_links": 12,
+  "valid_links": 26,
   "skipped_external": 0,
   "file_results": {
-    "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/examples/README.md": {
-      "file": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/examples/README.md",
-      "total_links": 2,
-      "valid_links": 2,
+    "src/codomyrmex/examples/AGENTS.md": {
+      "file": "src/codomyrmex/examples/AGENTS.md",
+      "total_links": 1,
+      "valid_links": 1,
       "broken_internal": [],
       "broken_external": [],
       "skipped_external": 0
     },
-    "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/examples/SPEC.md": {
-      "file": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/examples/SPEC.md",
+    "src/codomyrmex/examples/API_SPECIFICATION.md": {
+      "file": "src/codomyrmex/examples/API_SPECIFICATION.md",
+      "total_links": 5,
+      "valid_links": 5,
+      "broken_internal": [],
+      "broken_external": [],
+      "skipped_external": 0
+    },
+    "src/codomyrmex/examples/MCP_TOOL_SPECIFICATION.md": {
+      "file": "src/codomyrmex/examples/MCP_TOOL_SPECIFICATION.md",
+      "total_links": 4,
+      "valid_links": 4,
+      "broken_internal": [],
+      "broken_external": [],
+      "skipped_external": 0
+    },
+    "src/codomyrmex/examples/PAI.md": {
+      "file": "src/codomyrmex/examples/PAI.md",
+      "total_links": 7,
+      "valid_links": 7,
+      "broken_internal": [],
+      "broken_external": [],
+      "skipped_external": 0
+    },
+    "src/codomyrmex/examples/README.md": {
+      "file": "src/codomyrmex/examples/README.md",
+      "total_links": 3,
+      "valid_links": 3,
+      "broken_internal": [],
+      "broken_external": [],
+      "skipped_external": 0
+    },
+    "src/codomyrmex/examples/SPEC.md": {
+      "file": "src/codomyrmex/examples/SPEC.md",
       "total_links": 6,
       "valid_links": 6,
-      "broken_internal": [],
-      "broken_external": [],
-      "skipped_external": 0
-    },
-    "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/examples/AGENTS.md": {
-      "file": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/examples/AGENTS.md",
-      "total_links": 2,
-      "valid_links": 2,
       "broken_internal": [],
       "broken_external": [],
       "skipped_external": 0

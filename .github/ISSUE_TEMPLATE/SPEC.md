@@ -4,7 +4,7 @@
 
 ## Overview
 
-GitHub issue forms using the `yml` format (not legacy Markdown templates). Forms provide
+GitHub issue forms using the `yml` format (not Markdown templates). Forms provide
 structured input with validation, dropdowns, and checkboxes.
 
 ## Template Structure

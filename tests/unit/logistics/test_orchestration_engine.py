@@ -586,7 +586,7 @@ class TestOrchestrationEngineExecuteTask:
         assert "not found" in result["error"]
 
     def test_execute_task_with_dict_succeeds(self, engine):
-        """execute_task accepts dict task definitions via the add_task compatibility API."""
+        """execute_task accepts dictionary task definitions."""
         task_dict = {
             "name": "t1",
             "module": "m",

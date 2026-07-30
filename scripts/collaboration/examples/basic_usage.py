@@ -63,8 +63,8 @@ class CollaborationScript(ScriptBase):
         group.add_argument(
             "--roles",
             nargs="+",
-            default=["researcher", "coder", "reviewer"],
-            help="Agent roles (default: researcher coder reviewer)",
+            default=["architect", "coder", "reviewer"],
+            help="Agent roles (default: architect coder reviewer)",
         )
 
     def run(self, args, config: ScriptConfig) -> dict[str, Any]:
@@ -84,8 +84,9 @@ class CollaborationScript(ScriptBase):
 
         # Import collaboration module (after dry_run check)
         from codomyrmex.collaboration import (
-            AgentProxy,
+            AgentRole,
             Decision,
+            SwarmAgent,
             SwarmManager,
             SwarmVote,
             TaskDecomposer,
@@ -97,10 +98,14 @@ class CollaborationScript(ScriptBase):
             swarm = SwarmManager()
             agents = []
             for i in range(args.agents):
-                role = args.roles[i % len(args.roles)]
-                agent = AgentProxy(name=f"agent_{i + 1}", role=role)
-                swarm.add_agent(agent)
-                agents.append({"name": agent.name, "role": agent.role})
+                role_value = args.roles[i % len(args.roles)].lower()
+                try:
+                    role = AgentRole(role_value)
+                except ValueError:
+                    role = AgentRole.CODER
+                agent = SwarmAgent(agent_id=f"agent_{i + 1}", role=role)
+                swarm.register_agent(agent)
+                agents.append({"name": agent.agent_id, "role": agent.role.value})
 
             results["swarm_stats"]["agents"] = agents
             results["swarm_stats"]["total"] = swarm.pool.size
@@ -151,7 +156,7 @@ class CollaborationScript(ScriptBase):
 
             for i in range(args.missions):
                 mission = mission_templates[i % len(mission_templates)]
-                mission_results = swarm.execute(mission)
+                mission_results = swarm.queue_mission(mission)
                 results["mission_results"].append(
                     {
                         "mission": mission,

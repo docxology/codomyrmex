@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Maintain the local ROS-style pub/sub compatibility surface used by the
+Maintain the local ROS-style pub/sub bridge used by the
 embodiment package. It intentionally has no external ROS dependency.
 
 ## Key Files

@@ -26,7 +26,7 @@ input_validation:
       description: "Prevent path traversal attacks"
       enabled: true
       patterns:
-        - "(\.\./|\.\.\\\\)"
+        - '(\.\./|\.\.\\)'
       action: "reject"
     
     - name: "command_injection_prevention"
@@ -233,5 +233,4 @@ incident_response:
         channels: ["slack"]
       - delay: 600
         channels: ["pager_duty"]
-
 

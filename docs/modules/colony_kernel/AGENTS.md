@@ -24,7 +24,8 @@ Documentation tooling, generated references, and publishing assets for the Colon
 | ConsequenceMemory | `consequence_memory.py` | SQLite-backed consequence log + trust profiles |
 | RoleAdapter | `role_adapter.py` | Deterministic role inference from trust + proposals |
 | PruningDaemon | `pruning_daemon.py` | Identifies stale/duplicate modules via pheromone analysis |
-| FalsificationWorker | `falsification_worker.py` | 10-vector adversarial plan validator shared by kernel and MCP pre-flight flows |
+| FalsificationWorker | `falsification/worker.py` | 10-vector adversarial plan validator shared by kernel and MCP pre-flight flows |
+| AttestationLedger | `attestation.py` | Signed, hash-linked local lifecycle evidence; not an external execution oracle |
 | Config Loader | `config_loader.py` | YAML config from config/colony_kernel/ |
 | Resource Ledger | `resource_ledger.py` | Standalone ResourceLedger/ResourceBudget |
 | Actuation Gate | `actuation_gate.py` | Protocol-based ActuationGate with pheromone queries |
@@ -35,9 +36,9 @@ Documentation tooling, generated references, and publishing assets for the Colon
 | Tool | Category | Description |
 |------|----------|-------------|
 | `colony_propose_action` | colony_kernel | Submit action proposal; returns GateResult |
-| `colony_record_outcome` | colony_kernel | Record consequence; updates trust + pheromones |
+| `colony_record_outcome` | colony_kernel | Record an ordinary caller report; updates trust + pheromones without attestation |
 | `colony_agent_profile` | colony_kernel | Read agent trust profile and role |
-| `colony_status` | colony_kernel | Dashboard: pheromone_summary, budget_usage, role_distribution |
+| `colony_status` | colony_kernel | Dashboard: tick_count, pheromone_summary, budget_usage, role_distribution, recent_consequences, pruning_candidates_count |
 | `colony_pheromone_query` | colony_kernel | Sense pheromone at location/signal_type |
 | `colony_falsify_plan` | colony_kernel | Adversarial plan evaluation (10 vectors) |
 | `colony_pruning_report` | colony_kernel | Stale module candidates from PruningDaemon |
@@ -49,13 +50,17 @@ Documentation tooling, generated references, and publishing assets for the Colon
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 - **Zero-Mock Policy**: all tests use real ColonyKernel instances with `:memory:` DB.
 - **Canonical key format**: `"{location}:{signal_type.value}"` (location first).
+- **Attestation modes**: optional permits ordinary and linked paths; required
+  rejects direct `record_outcome()` and requires the complete linked lifecycle.
+- **Evidence boundary**: local ledger validity is not independent observation
+  of external actuation or deployment safety.
 
 ## Key Files
 - `AGENTS.md` — Agent coordination and navigation
 - `README.md` — Module overview, quick-start, architecture diagram
 - `SPEC.md` — Formal specification with API contracts and invariants
 - `../../../src/codomyrmex/colony_kernel/MCP_TOOL_SPECIFICATION.md` — Full JSON schema for each MCP tool
-- `kernel.py` — ColonyKernel integration class plus compatibility re-exports for subsystem classes
+- `kernel.py` — ColonyKernel integration class plus the public subsystem imports
 - `mcp_tools.py` — 8 @mcp_tool-decorated functions; thin wrappers over kernel singleton
 - `models.py` — Shared value-object and enum contract (star topology centre)
 - `config_loader.py` — YAML config loading from config/colony_kernel/

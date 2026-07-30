@@ -11,7 +11,7 @@ Module implementation, resources, and local coordination for Review..
 - `README.md` – File
 - `SPEC.md` – File
 - `__init__.py` – File
-- `_compat.py` – File
+- `_instrumentation.py` – Optional performance instrumentation
 - `analyzer.py` – File
 - `api.py` – File
 - `demo_review.py` – File

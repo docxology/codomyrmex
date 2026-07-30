@@ -23,7 +23,6 @@ Code generation, review, debugging, refactoring, pattern matching, and sandbox e
 - `generator.py` – Generator implementation
 - `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
 - `monitoring/` – monitoring module implementation
-- `parsers/` – parsers module implementation
 - `pattern_matching/` – pattern matching module implementation
 - `py.typed` – PEP 561 marker for typed package
 - `refactoring/` – refactoring module implementation

@@ -10,11 +10,10 @@ Usage:
     python metrics_viewer.py [--source SOURCE]
 """
 
-logger = logging.getLogger(__name__)
-
-
+import logging
 import sys
 from pathlib import Path
+from typing import Any
 
 try:
     import codomyrmex
@@ -24,13 +23,14 @@ except ImportError:
 
 import argparse
 import json
-import logging
 from datetime import datetime
 
+logger = logging.getLogger(__name__)
 
-def collect_system_metrics() -> dict:
+
+def collect_system_metrics() -> dict[str, Any]:
     """Collect basic system metrics."""
-    metrics = {
+    metrics: dict[str, Any] = {
         "timestamp": datetime.now().isoformat(),
         "python_version": sys.version.split()[0],
     }

@@ -16,7 +16,6 @@ MCP server and client implementation for tool discovery, registration, and invoc
 - `USAGE_EXAMPLES.md` – Usage Examples implementation
 - `__init__.py` – Python package entry point — exports and initialization
 - `adapters/` – adapters module implementation
-- `compat.py` – Compat implementation
 - `decorators.py` – Decorators implementation
 - `discovery/` – discovery module implementation
 - `errors.py` – Errors implementation
@@ -55,7 +54,6 @@ MCP server and client implementation for tool discovery, registration, and invoc
 - `SPEC.md`
 - `USAGE_EXAMPLES.md`
 - `__init__.py`
-- `compat.py`
 - `decorators.py`
 - `errors.py`
 - `mcp_deprecation.py`

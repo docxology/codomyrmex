@@ -13,29 +13,22 @@ from .gitops.gitops import GitOpsSynchronizer
 from .manager.manager import DeploymentManager
 from .strategies import (
     BlueGreenDeployment,
-    BlueGreenStrategy,
     CanaryDeployment,
-    CanaryStrategy,
     DeploymentResult,
     DeploymentState,
     DeploymentStrategy,
     DeploymentTarget,
     RollingDeployment,
-    RollingStrategy,
-    StrategyProgress,
     create_strategy,
 )
 
 __all__ = [
     "BlueGreenDeployment",
-    "BlueGreenStrategy",
     # Canary analysis
     "CanaryAnalyzer",
     "CanaryDecision",
     "CanaryDeployment",
     "CanaryReport",
-    # Aliases for convenience
-    "CanaryStrategy",
     # Manager classes
     "DeploymentManager",
     "DeploymentResult",
@@ -46,8 +39,6 @@ __all__ = [
     "GitOpsSynchronizer",
     "MetricComparison",
     "RollingDeployment",
-    "RollingStrategy",
-    "StrategyProgress",
     "create_strategy",
     # Submodules
     "health_checks",

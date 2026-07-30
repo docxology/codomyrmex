@@ -9,7 +9,7 @@ import time
 
 import pytest
 
-from codomyrmex.agentic_memory.memory import _recency_score, _relevance
+from codomyrmex.agentic_memory.core.memory import _recency_score, _relevance
 
 
 class TestRelevance:

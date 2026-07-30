@@ -181,8 +181,8 @@ Start pytest for a specific module or all modules in a background worker.
       "validate_only": false
     }
     ```
-    Omit `module` to run all tests. Set `validate_only` (or the `dry_run`
-    alias) to `true` to validate the route and data-provider configuration
+    Omit `module` to run all tests. Set `validate_only` to `true` to validate
+    the route and data-provider configuration
     without starting pytest.
 - **Response (202)**:
     ```json

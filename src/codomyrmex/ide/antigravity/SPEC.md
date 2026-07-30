@@ -110,7 +110,7 @@ graph TD
     end
 
     subgraph "Remote Process"
-        CC[ClaudeCodeEndpoint]
+        CC[RelayEndpoint]
         CCClient[ClaudeClient]
         CC --> CCClient
         CC <--> JSONL

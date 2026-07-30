@@ -1,49 +1,36 @@
-# Codomyrmex Agents — docs/modules/documentation
+<!-- agents: curated -->
 
-**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
+# Agent guidance for the documentation module mirror
 
 ## Purpose
-Documentation tooling, generated references, and publishing assets for Documentation.
 
-## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `bug_taxonomy.md` – Project file
-- `coverage_assessment.md` – Project file
-
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
-
-## Key Files
-- `AGENTS.md` - Agent coordination and navigation
-- `README.md` - Directory overview
-- `API_SPECIFICATION.md`
-- `CHANGELOG.md`
-- `MCP_TOOL_SPECIFICATION.md`
-- `PAI.md`
-- `README.md`
-- `SECURITY.md`
-- `SPEC.md`
-- `USAGE_EXAMPLES.md`
-- `bug_taxonomy.md`
-- `coverage_assessment.md`
-
-## Dependencies
-- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+This directory is a reader-facing mirror. Normative behavior and public
+signatures live under
+[`src/codomyrmex/documentation/`](../../../src/codomyrmex/documentation/).
 
 ## Development Guidelines
-- Follow the universal agent protocols defined in the root `AGENTS.md`.
-- Adhere to the Python PEP 8 style guide and project-specific linting rules.
-- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- Update this mirror when source API, MCP, PAI, security, or behavior changes.
+- Do not run the module enricher over this directory during the hand-pass
+  freeze; make reviewed targeted edits.
+- Keep examples executable and use exact public signatures.
+- Distinguish package-local Docusaurus helpers from the canonical MkDocs gate.
+- Treat MCP generation as dry-run by default and disclose its PAI-only scope.
+- Preserve limitations: heuristic scores and RASP presence do not prove
+  correctness.
+- Validate links and commands with `make docs-check`.
+
+## Key Files
+
+- [README.md](README.md) — reader entry point
+- [API_SPECIFICATION.md](API_SPECIFICATION.md) — public export summary
+- [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) — current MCP tools
+- [SPEC.md](SPEC.md) — reader-facing contract
+- [SECURITY.md](SECURITY.md) — source-linked threat boundary
+
+## Navigation
+
+- [Human overview](README.md)
+- [Source agent guidance](../../../src/codomyrmex/documentation/AGENTS.md)
+- [Module index](../AGENTS.md)
+- [Repository agent contract](../../../AGENTS.md)

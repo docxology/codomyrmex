@@ -13,7 +13,6 @@ Module implementation, resources, and local coordination for Strategies..
 - `base.py` – Project file
 - `implementations.py` – Project file
 - `py.typed` – Project file
-- `strategies.py` – Project file
 - `types.py` – Project file
 
 ## Operating Contracts
@@ -31,7 +30,6 @@ Module implementation, resources, and local coordination for Strategies..
 - `base.py`
 - `implementations.py`
 - `py.typed`
-- `strategies.py`
 - `types.py`
 
 ## Dependencies

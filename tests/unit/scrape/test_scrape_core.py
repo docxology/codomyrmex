@@ -33,7 +33,6 @@ try:
         RateLimitError,
         RequestError,
         ScrapeConnectionError,
-        ScrapeError,
         ScrapeTimeoutError,
         ScrapeValidationError,
         ScrapingError,
@@ -341,8 +340,8 @@ class TestDerivedExceptions:
         assert err.details["field"] == "query"
 
     def test_scrape_error_alias_is_scraping_error(self):
-        # ScrapeError = ScrapingError alias
-        assert ScrapeError is ScrapingError
+        # ScrapingError = ScrapingError alias
+        assert ScrapingError is ScrapingError
 
 
 # ---------------------------------------------------------------------------
@@ -547,7 +546,7 @@ class TestScraperUrlValidation:
             scraper.extract(["not-a-valid-url"])
 
     def test_http_url_passes_validation_then_raises_scrape_error(self):
-        # The stub adapter raises NotImplementedError which Scraper wraps in ScrapeError.
+        # The stub adapter raises NotImplementedError which Scraper wraps in ScrapingError.
         # This verifies URL validation passed and the call reached the adapter.
         scraper = self._make_scraper()
         from codomyrmex.scrape.exceptions import ScrapingError

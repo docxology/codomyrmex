@@ -1,472 +1,245 @@
-# Documentation Guidelines
+# Documentation maintenance
 
-This guide provides standards and best practices for maintaining and contributing to Codomyrmex documentation.
+Codomyrmex documentation is maintained as a source-linked package surface, not
+as an independent prose tree. Commands, interfaces, counts, and publication
+claims must be verified against current source or generated receipts.
 
-## 📋 Documentation Philosophy
+## Source ownership
 
-### **Core Principles**
+| Surface | Owner and purpose |
+| :--- | :--- |
+| `README.md`, `AGENTS.md`, `SPEC.md` | Repository entry points and governing contracts |
+| `docs/` | Canonical reader-facing guides and MkDocs sources |
+| `src/codomyrmex/<module>/` | Module-local API, MCP, PAI, security, and usage documentation |
+| `docs/modules/<module>/` | Reader-oriented mirrors; refresh only through the reviewed module-doc workflow |
+| `scripts/documentation/` | Repository maintenance, auditing, and MkDocs hooks |
+| `src/codomyrmex/documentation/` | Distributable documentation package and legacy Docusaurus assets |
+| `output/` and `site/` | Generated receipts and builds; never edit as source |
+| Git submodules | Upstream-owned worktrees with their own instructions and history |
 
-1. **User-Centric**: Documentation is organized by user intent, not code structure
-2. **Show, Don't Tell**: Provide working examples rather than abstract descriptions
-3. **Progressive Complexity**: Start simple, build to advanced topics
-4. **Maintenance-First**: Easy to maintain and keep up-to-date
-5. **Accessible**: Clear language, good structure, searchable content
+Raw manuscript sections under `docs/manuscript/sections/` are Pandoc sources.
+They are excluded from direct MkDocs rendering. The publication pipeline
+produces the semantic HTML report consumed by the documentation build.
 
-### **Documentation Types**
+## Authoritative validation
 
-| Type | Location | Purpose | Audience |
-|------|----------|---------|----------|
-| **Project Documentation** | `docs/` | Information about Codomyrmex | Users, Contributors |
-| **Module Documentation** | `src/codomyrmex/[module]/` | Module-specific information | Module users |
-| **Documentation Tools** | `src/codomyrmex/documentation/` | Website generation tools | Other projects |
-| **API References** | `*/API_SPECIFICATION.md` | Technical API details | Developers |
-
-## Mermaid diagrams (`docs/`)
-
-Diagrams use fenced code blocks with the `mermaid` language tag. Conventions:
-
-1. **No hard-coded theme styling** — Do not use `style … fill:…`, `classDef`, or `:::class` on nodes. Diagrams must render legibly in light and dark themes (see Cursor Mermaid rules).
-2. **Subgraphs** — Prefer `subgraph graphId [Human-readable label]` so the graph id has no spaces and labels with punctuation stay in brackets.
-3. **Edges and nodes** — Use quoted edge labels when they contain parentheses or slashes. Avoid node ids that are Mermaid reserved words (`end`, `graph`, …).
-4. **Edges only between real nodes** — Do not point an edge at a subgraph name unless your renderer supports it; connect to an explicit node inside the subgraph instead.
-5. **Maintenance scripts** (repo root): `uv run python scripts/strip_mermaid_style_lines.py` removes legacy `style` lines; `uv run python scripts/normalize_mermaid_subgraphs.py` converts `subgraph "Title"` to `subgraph sg_… [Title]`.
-
-## Documentation metrics (inventory)
-
-Counts for modules, MCP tools, and tests drift quickly. **Do not hand-edit** broad statistics across the tree — refresh from one place:
-
-- [docs/reference/inventory.md](../reference/inventory.md) — definitions, dated table, reproduce commands
-- `uv run python scripts/doc_inventory.py` — print current counts (`--pytest` includes collected test total, ~30s)
-- `uv run python scripts/src_structure_audit.py --json` — run the read-only source module structure gate for docs/API/MCP/test parity, stale docs/modules directories, and PEP 561 markers
-
-Hermes-specific examples and agent-doc rules: [docs/agents/hermes/AGENTS.md](../agents/hermes/AGENTS.md) (Diagram conventions).
-
-## Generated site output (Docusaurus)
-
-Paths such as `src/codomyrmex/documentation/.docusaurus/` are **build output** from the site generator, not editorial sources. Do not treat files there (including any `AGENTS.md` copies) as maintained RASP contracts. Edit hand-written docs under `docs/` and per-module files under `src/codomyrmex/<module>/` instead.
-
-## 🏗️ Documentation Structure
-
-### **Main Documentation (`docs/`)**
-
-```
-docs/
-├── README.md                     # Documentation overview
-├── getting-started/              # User onboarding
-│   ├── installation.md           # Installation guide
-│   ├── quickstart.md             # Quick start guide
-│   └── tutorials/                # Step-by-step tutorials
-├── project/                      # Project-level documentation
-│   ├── architecture.md           # System architecture
-│   └── contributing.md           # Contributing guidelines
-├── modules/                      # Module system documentation
-│   ├── overview.md               # Module system overview
-│   └── relationships.md          # Inter-module dependencies
-├── development/                  # Developer documentation
-│   ├── environment-setup.md      # Development environment
-│   └── documentation.md          # This file
-└── reference/                    # Reference materials
-    ├── troubleshooting.md        # Troubleshooting guide
-    ├── cli.md                    # CLI reference
-    ├── api.md                    # API reference index
-    └── changelog.md              # Version history (redirects to root)
-```
-
-### **Module Documentation Pattern**
-
-Each module follows this standardized documentation structure:
-
-```
-src/codomyrmex/[module]/
-├── README.md                     # ✅ REQUIRED: Module overview
-├── AGENTS.md                     # ✅ REQUIRED: Agent configuration
-├── SECURITY.md                   # ✅ REQUIRED: Security considerations
-├── API_SPECIFICATION.md          # ⚠️ Required if referenced in docs/index.md
-├── MCP_TOOL_SPECIFICATION.md     # ⚠️ Required if referenced in docs/index.md
-├── USAGE_EXAMPLES.md             # ⚠️ Required if referenced in docs/index.md
-├── CHANGELOG.md                  # Optional: Module version history
-├── pyproject.toml              # Project dependencies
-├── docs/                         # Extended documentation
-│   ├── index.md                  # ✅ REQUIRED if docs/ exists
-│   ├── technical_overview.md     # Optional: Architecture details
-│   └── tutorials/                # Optional: Module-specific tutorials
-│       └── example_tutorial.md   # ⚠️ Required if referenced in docs/index.md
-└── tests/
-    └── README.md                 # Optional: Testing documentation
-```
-
-#### **Required Files**
-
-All modules **MUST** have:
-
-- **README.md**: Module overview, features, quick start, and usage examples
-- **AGENTS.md**: Agent configuration, operating contracts, and navigation links
-- **SPEC.md**: Functional specification and design principles
-- **PAI.md**: Personal AI Infrastructure integration notes
-- **SECURITY.md**: Security considerations and vulnerability reporting process
-
-#### **Conditionally Required Files**
-
-These files are required **if referenced** in documentation:
-
-- **API_SPECIFICATION.md**: Required if `docs/index.md` references it
-- **MCP_TOOL_SPECIFICATION.md**: Required if `docs/index.md` references it
-- **USAGE_EXAMPLES.md**: Required if `docs/index.md` references it
-- **docs/tutorials/example_tutorial.md**: Required if `docs/index.md` references it
-
-#### **Link Standards**
-
-All internal links must follow these conventions:
-
-- **Contributing Guidelines**: Always link to `../../docs/project/contributing.md` (from module root) or `../../../docs/project/contributing.md` (from `docs/` directory)
-- **Module Documentation**: Use relative paths from current file location
-- **Cross-Module References**: Use paths relative to repository root
-
-#### **Validation**
-
-Module documentation is automatically validated using:
-
-- `scripts/documentation/module_docs_auditor.py` - Comprehensive audit tool
-- `scripts/documentation/validate_module_docs.py` - CI/CD validation tool
-
-Run validation before committing:
+Run the locked package target from the repository root:
 
 ```bash
-python3 scripts/documentation/validate_module_docs.py
+make docs-check
 ```
 
-#### **RASP folder gap scan**
+It performs, in order:
 
-After large doc-tree changes, regenerate the scoped `AGENTS.md` / `README.md` presence report:
+1. scoped RASP README/AGENTS pair checking;
+2. package-wide README/AGENTS command, skill, and relative-link auditing;
+3. comprehensive repository link validation;
+4. content-quality and agent-structure validation;
+5. the documentation quality gate and triple-check;
+6. a strict MkDocs build.
+
+The equivalent `just docs-check` recipe is kept in parity. Validation may write
+receipts beneath `output/` and the MkDocs build beneath `site/`; it does not
+rewrite editorial source files.
+
+Run the manuscript integrity check separately when manuscript inputs or
+publication artifacts change:
 
 ```bash
-uv run python scripts/rasp_gap_report.py
+make manuscript-check
 ```
 
-Output: [docs/plans/agents-readme-gap-report.md](../plans/agents-readme-gap-report.md). Inclusion roots and path excludes are defined in `scripts/rasp_gap_report.py`.
+## README and AGENTS contracts
 
-## ✍️ Writing Standards
+The RASP pair check governs live directories under `src/codomyrmex/`, `docs/`,
+`projects/`, `scripts/`, `config/`, and `.github/`. The broader auditor adds the
+repository root and documented test directories, while respecting the same
+submodule, vendor, cache, and generated-tree exclusions.
 
-### **Markdown Style**
+```bash
+# Read-only presence check; nonzero when a governed directory has a gap
+uv run --locked python scripts/rasp_gap_report.py --repo-root . --check
 
-```markdown
-# Document Title
+# Generate the durable gap report intentionally
+uv run --locked python scripts/rasp_gap_report.py --repo-root .
 
-Brief description of what this document covers.
+# Validate pairs, headings, local links, documented Python paths, and skills
+uv run --locked python scripts/documentation/audit_readme_agents.py \
+  --repo-root . --strict
+```
 
-## 🎯 Section with Emoji
+The last command writes portable JSON and Markdown receipts to
+`output/readme_agents_audit.{json,md}`. Legacy version labels, generic leaf
+copy, and duplicated generated punctuation are inventoried separately from
+blocking integrity errors. A generic phrase can be unhelpful without being
+factually wrong; review those files in bounded hand-pass batches.
 
-Use descriptive emojis to make sections scannable.
+README and AGENTS files have distinct roles:
 
-### **Bold Subsection Headers**
+- `README.md` explains what a directory contains, who uses it, and how to run
+  or navigate it.
+- `AGENTS.md` defines scope, ownership, constraints, validation, and safe
+  mutation boundaries for automated contributors.
+- `SPEC.md` records normative behavior where that directory owns a functional
+  contract.
 
-Use bold for important subsections.
+Do not duplicate long inventories in both README and AGENTS. Prefer links to an
+authoritative specification or generated inventory.
 
-#### Regular Subsection
+## Hand-pass freeze and generation safety
 
-Use regular headers for detailed breakdowns.
+A repository-wide README/AGENTS hand pass is active. Do not run broad bootstrap,
+enrichment, placeholder-repair, or missing-file generators in apply mode while
+the tree is frozen.
 
-### **Code Examples**
+Protection markers must appear near the beginning of a reviewed file:
+
+```html
+<!-- readme: curated -->
+<!-- agents: curated -->
+```
+
+Preview module mirror changes one module at a time:
+
+```bash
+uv run --locked python scripts/documentation/enrich_module_docs.py \
+  --repo-root . --dry-run --module <module>
+```
+
+Applying is deliberately explicit:
+
+```bash
+uv run --locked python scripts/documentation/enrich_module_docs.py \
+  --repo-root . --apply --module <module>
+```
+
+Existing unmarked files are preserved unless the matching
+`--force-readmes`, `--force-agents`, or `--force-specs` flag is supplied.
+Curated README/AGENTS files remain protected under force. Review the dry-run
+diff and current Git status before applying.
+
+The broad bootstrap also supports `--dry-run`, but its output is discovery
+evidence during the freeze:
+
+```bash
+uv run --locked python \
+  -m codomyrmex.documentation.scripts.bootstrap_agents_readmes \
+  --repo-root . --dry-run
+```
+
+The placeholder checker is likewise fail-closed:
+
+```bash
+uv run --locked python \
+  -m codomyrmex.documentation.scripts.placeholder_check \
+  --repo-root . --dry-run
+```
+
+Use `--apply` only after the freeze is lifted and the complete proposed path
+set has been reviewed. It skips configured submodules by default.
+
+## Counts and evidence
+
+Volatile counts must come from shared producers:
+
+```bash
+uv run --locked python scripts/doc_inventory.py
+uv run --locked python scripts/doc_inventory.py --pytest
+uv run --locked python scripts/src_structure_audit.py --json
+```
+
+Record current definitions and results in
+[`docs/reference/inventory.md`](../reference/inventory.md). Do not copy old MCP
+tool, test, workflow, module, bibliography, or figure totals into unrelated
+glossaries and citation files.
+
+For technical-report claims, distinguish:
+
+- formal properties established by code structure or proof;
+- deterministic fixtures and contract tests;
+- observed empirical measurements;
+- hypotheses and roadmap work;
+- external or best-effort validation boundaries.
+
+Local ledger integrity is not evidence that an external action occurred or was
+safe. Publication, DOI assignment, deployment, and independent accessibility
+conformance remain separate status layers.
+
+## Links and commands
+
+- Use relative Markdown links for repository files.
+- Link to the actual source file when a local mirror does not contain the
+  target.
+- Link directories to a real `README.md` or index surface when the destination
+  is ambiguous.
+- Write repository-root commands unless a different working directory is
+  stated immediately before the command.
+- Use `uv run --locked` and the appropriate dependency group for reproducible
+  contributor commands.
+- Never document a Python file, shell script, skill, or console command without
+  confirming that it exists in the current checkout.
+- Do not put absolute home paths, tokens, or credentials in examples or
+  generated receipts.
+
+The MkDocs hook in `scripts/documentation/mkdocs_hooks.py` rewrites valid
+repository-file links outside `docs/`, canonicalizes supported directory links,
+and resolves README/index collisions. Missing targets remain unresolved so
+strict mode fails.
+
+## Examples
+
+Examples should use public, explicit imports and real signatures:
 
 ```python
-# Always include complete, working examples
-from codomyrmex.module import function
+from codomyrmex.logging_monitoring import get_logger
 
-result = function("example", param="value")
-print(f"Result: {result}")
-```
-
-### **Tables for Reference Information**
-
-| Column 1 | Column 2 | Column 3 |
-|----------|----------|----------|
-| Data     | Data     | Data     |
-
-### **Callout Boxes**
-
-> **⚠️ Important**: Critical information users must know.
-
-> **💡 Tip**: Helpful suggestions for better experience.
-
-> **🔍 Note**: Additional context or clarification.
-
-```
-
-### **Link Conventions**
-
-```markdown
-# Internal links (relative to current file)
-[Architecture Guide](../project/architecture.md)
-[Module Template](../../src/codomyrmex/module_template/README.md)
-
-# External links
-[GitHub Repository](https://github.com/docxology/codomyrmex)
-
-# Anchor links within document
-[See Installation Section](#installation)
-```
-
-### **Code Example Standards**
-
-1. **Complete Examples**: Always provide full, runnable code
-2. **Real Implementations**: No placeholder or pseudo-code
-3. **Error Handling**: Show proper error handling patterns
-4. **Context**: Provide necessary imports and setup
-
-```python
-# ✅ Good example
-from codomyrmex.logging_monitoring import setup_logging, get_logger
-from codomyrmex.data_visualization import create_line_plot
-import numpy as np
-
-# Initialize logging (required)
-setup_logging()
 logger = get_logger(__name__)
-
-try:
-    # Generate sample data
-    x = np.linspace(0, 10, 100)
-    y = np.sin(x)
-    
-    # Create visualization
-    create_line_plot(
-        x_data=x, 
-        y_data=y, 
-        title="Sine Wave",
-        output_path="sine_wave.png"
-    )
-    logger.info("Plot created successfully")
-    
-except Exception as e:
-    logger.error(f"Failed to create plot: {e}")
-    raise
-
-# ❌ Bad example
-result = some_function()
-print(result)
+logger.info("documentation example")
 ```
 
-## 🔍 Quality Assurance
+Avoid wildcard imports, invented result shapes, placeholder secrets, and APIs
+that exist only in prose. Test executable examples when practical; otherwise
+label them as illustrative and keep them outside copy-paste command blocks.
 
-### **Documentation Review Checklist**
+## Mermaid diagrams
 
-- [ ] **Accuracy**: All code examples work
-- [ ] **Completeness**: Covers all necessary information
-- [ ] **Clarity**: Clear, concise writing
-- [ ] **Structure**: Logical organization and flow
-- [ ] **Links**: All internal links work correctly
-- [ ] **Consistency**: Follows established patterns
-- [ ] **User-Focused**: Addresses user needs and questions
-- [ ] **Examples**: Includes practical, working examples
-- [ ] **Maintenance**: Easy to keep up-to-date
+Use fenced `mermaid` blocks with theme-neutral syntax:
 
-### **Module Documentation Validation**
+- avoid hard-coded `style`, `classDef`, and theme colors;
+- use `subgraph graph_id [Human-readable label]`;
+- quote labels containing punctuation;
+- avoid reserved identifiers such as `end` and `graph`;
+- connect edges to real nodes, not renderer-dependent subgraph identifiers.
 
-All module documentation is validated for consistency and completeness:
-
-#### **Automated Validation Tools**
-
-- **`scripts/documentation/module_docs_auditor.py`**: Comprehensive audit of all modules
-  - Scans for missing required files
-  - Identifies broken references
-  - Checks documentation structure
-  - Generates detailed reports
-
-- **`scripts/documentation/validate_module_docs.py`**: Fast validation for CI/CD
-  - Validates required files exist
-  - Checks for broken references
-  - Ensures link consistency
-  - Returns exit code for automation
-
-#### **Running Validation**
+Repository maintenance helpers:
 
 ```bash
-# Comprehensive audit (generates detailed report)
-python3 scripts/documentation/module_docs_auditor.py
-
-# Quick validation (for CI/CD)
-python3 scripts/documentation/validate_module_docs.py
-
-# Fix common issues
-python3 scripts/documentation/fix_contributing_refs.py
-python3 scripts/documentation/create_example_tutorials.py
-python3 scripts/documentation/create_missing_doc_files.py
+uv run --locked python scripts/strip_mermaid_style_lines.py
+uv run --locked python scripts/normalize_mermaid_subgraphs.py
 ```
 
-### **Link Validation**
+Review their diffs before retaining changes.
 
-Regular link checking is essential:
+## Review checklist
 
-```bash
-# Manual link checking
-find docs/ -name "*.md" -exec grep -l "](.*\.md)" {} \; | while read file; do
-    echo "Checking links in $file"
-    grep -o "](.*\.md)" "$file" | sed 's/](\(.*\))/\1/' | while read link; do
-        if [[ ! -f "$(dirname "$file")/$link" ]] && [[ ! -f "$link" ]]; then
-            echo "❌ Broken link: $link in $file"
-        fi
-    done
-done
+- The reader-facing purpose and working directory are clear.
+- Commands and code examples execute against current source.
+- README, AGENTS, SPEC, API, MCP, PAI, security, tests, and changelog surfaces
+  agree where the change affects them.
+- Counts are generated and dated, not independently hard-coded.
+- Internal links, headings, anchors, and directory destinations resolve.
+- Figures have captions, concise alternatives, long descriptions when needed,
+  evidence classes, and redundant encodings.
+- Claims preserve negative results, limitations, and external validation
+  boundaries.
+- Generated output was refreshed in producer order and is not being mistaken
+  for editable source.
+- `make docs-check` and relevant manuscript/package tests pass.
 
-# Check external links (requires network)
-# Use tools like markdown-link-check or similar
-```
+## Navigation
 
-### **Content Maintenance**
-
-1. **Regular Reviews**: Schedule quarterly documentation reviews
-2. **Version Sync**: Update documentation with code changes
-3. **Link Maintenance**: Check for broken links after file moves
-4. **Example Validation**: Test all code examples regularly
-5. **User Feedback**: Incorporate user feedback and questions
-
-### **Automated Maintenance**
-
-The documentation system includes automated tools for maintenance:
-
-#### **Pre-Commit Validation**
-
-```bash
-# Add to .git/hooks/pre-commit
-python3 scripts/documentation/validate_module_docs.py
-```
-
-#### **CI/CD Integration**
-
-See `.github/workflows/documentation-validation.yml` for automated validation in CI/CD pipelines.
-
-#### **Regular Audits**
-
-Run comprehensive audits periodically:
-
-```bash
-# Full repository audit
-python3 scripts/documentation/comprehensive_audit.py
-
-# Module-specific audit
-python3 scripts/documentation/module_docs_auditor.py
-```
-
-## 🚀 Contributing Documentation
-
-### **Quick Contribution Process**
-
-1. **Identify Gap**: Find missing or outdated documentation
-2. **Check Structure**: Determine correct location in documentation structure
-3. **Write Content**: Follow the writing standards above
-4. **Test Examples**: Ensure all code examples work
-5. **Check Links**: Verify all links work correctly
-6. **Submit PR**: Create pull request with clear description
-
-### **Major Documentation Changes**
-
-1. **Discuss First**: Open issue to discuss major structural changes
-2. **Plan Migration**: Consider impact on existing links and bookmarks
-3. **Update References**: Update all referring documentation
-4. **Provide Redirects**: Add redirect notices for moved content
-5. **Announce Changes**: Communicate changes to community
-
-### **Documentation Tools**
-
-```bash
-# Local documentation development
-cd src/codomyrmex/documentation/
-npm install
-npm run start  # Start development server
-
-# Build documentation website
-npm run build
-
-# Check for broken links (if using link checker)
-npm run check-links
-```
-
-## 🔧 Maintenance Tasks
-
-### **Regular Maintenance Schedule**
-
-#### **Weekly**
-
-- Check for new issues asking documentation questions
-- Review and merge documentation pull requests
-- Update example code if APIs change
-
-#### **Monthly**
-
-- Run comprehensive link checking
-- Review analytics for most-viewed documentation
-- Update getting-started guides for new features
-
-#### **Quarterly**
-
-- Complete documentation structure review
-- User experience testing with new contributors
-- Performance review of documentation website
-- Cleanup of outdated or redundant content
-
-### **Documentation Metrics**
-
-Track these metrics for documentation health:
-
-1. **Coverage**: Percentage of modules with complete documentation
-2. **Freshness**: Age of documentation vs. last code changes
-3. **Usage**: Most and least viewed documentation pages
-4. **Issues**: Number of documentation-related issues opened
-5. **Contribution**: Community contributions to documentation
-
-### **Common Issues and Solutions**
-
-#### **Outdated Examples**
-
-- **Problem**: Code examples break with API changes
-- **Solution**: Automated testing of documentation examples
-- **Prevention**: Include documentation in code review process
-
-#### **Broken Links**
-
-- **Problem**: Links break when files are moved or reorganized
-- **Solution**: Regular link checking and relative link preferences
-- **Prevention**: Use consistent link patterns and automation
-
-#### **Structure Confusion**
-
-- **Problem**: Users can't find information they need
-- **Solution**: User testing and feedback collection
-- **Prevention**: User-centric organization and clear navigation
-
-#### **Duplicate Content**
-
-- **Problem**: Information exists in multiple places, creating maintenance burden
-- **Solution**: Single source of truth principle
-- **Prevention**: Clear content ownership and regular audits
-
-## 🎯 Success Metrics
-
-Good documentation should achieve:
-
-1. **Discoverability**: Users can quickly find what they need
-2. **Usability**: Information is clear and actionable
-3. **Completeness**: All necessary information is available
-4. **Maintainability**: Easy to keep up-to-date
-5. **Community**: Encourages contributions and engagement
-
-### **User Success Indicators**
-
-- Decreased "documentation" issues in GitHub
-- Increased successful first-time installations
-- More community contributions
-- Positive feedback on documentation quality
-- Reduced support requests for covered topics
-
----
-
-**Last Updated**: Auto-generated from documentation review  
-**Maintainers**: Documentation team and community contributors  
-**Feedback**: [Open an issue](https://github.com/docxology/codomyrmex/issues) for documentation improvements
-
-## Navigation Links
-
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
-- **Home**: [Repository Root](../../README.md)
+- [Developer documentation index](README.md)
+- [Testing strategy](testing-strategy.md)
+- [Inventory](../reference/inventory.md)
+- [README/AGENTS hand-pass tracker](../plans/readme_agents_hand_pass.md)
+- [Repository agent contract](../../AGENTS.md)

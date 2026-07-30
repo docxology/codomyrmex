@@ -19,7 +19,7 @@ The formal_verification module provides constraint solving capabilities that dir
 
 ### MCP Tools for Agents
 
-Agents can use 6 MCP tools to interactively build and solve constraint models:
+Agents can use 9 MCP tools to interactively build, scope, solve, and verify constraint models:
 
 1. **`clear_model`** — Reset between verification runs
 2. **`add_item`** — Add ISC-derived constraints incrementally
@@ -27,6 +27,9 @@ Agents can use 6 MCP tools to interactively build and solve constraint models:
 4. **`replace_item`** — Modify constraints during THINK phase
 5. **`get_model`** — Inspect current constraint set
 6. **`solve_model`** — Execute solver and get SAT/UNSAT verdict
+7. **`push`** — Start an incremental solver scope
+8. **`pop`** — End one or more incremental solver scopes
+9. **`verify_code_change`** — Check AST-level public API preservation rules
 
 ### ISC Verification Bridge
 

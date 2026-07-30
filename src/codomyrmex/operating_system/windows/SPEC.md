@@ -11,8 +11,8 @@ The Windows provider (`WindowsProvider`) is a concrete implementation of `OSProv
 
 ## Design Principles
 
-1. **PowerShell-first** -- most system queries use PowerShell one-liners via `_powershell()`, providing structured output that is easier to parse than legacy command output.
-2. **Legacy fallbacks** -- `wmic` is used for memory information where PowerShell alternatives may not be available on older systems.
+1. **PowerShell-first** -- most system queries use PowerShell one-liners via `_powershell()`, providing structured output that is easier to parse than older command output.
+2. **Older-system fallbacks** -- `wmic` is used for memory information where PowerShell alternatives may not be available on older systems.
 3. **Extended timeouts** -- 15-second default timeout (vs 10 on Unix) to account for PowerShell startup latency.
 4. **Zero external dependencies** -- only `os`, `platform`, `re`, `subprocess` from the standard library.
 

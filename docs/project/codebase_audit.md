@@ -13,8 +13,8 @@
 | Unused imports (I001) | 2 | 2 | 2 | 0 |
 | Missing newline (W292) | 1 | 1 | 1 | 0 |
 | Commented-out code | 1 | 1 | 0 | 1 (confidence <90%) |
-| Backward-compat shims | 0 | 0 | 0 | 0 |
-| Deprecated aliases | 0 | 0 | 0 | 0 |
+| Obsolete internal shims | 0 | 0 | 0 | 0 |
+| Obsolete aliases | 0 | 0 | 0 | 0 |
 | **Total** | **4** | **4** | **3** | **1** |
 
 ---
@@ -46,16 +46,15 @@ Ruff-based scan for unused imports confirmed 3 violations, all fixed.
 
 | File | Pattern Matched | Reason Not Dead |
 |------|----------------|-----------------|
-| `model_context_protocol/compat.py` | "compat" in name | Active shim *generator* utility; consumed by MCP layer |
 | `api/standardization/api_versioning.py` | `_deprecated_version` attr | Marks API endpoints as deprecated — active feature |
 | `api/rate_limiting/distributed.py` | `_clean_old_requests` method | Cleans expired rate-limit buckets — active logic |
 
 ---
 
-## Backward-Compat & Legacy Section (ln-626)
+## Internal obsolete-surface section (ln-626)
 
-No deprecated aliases or backward-compat wrapper functions found in production code.
-`model_context_protocol/compat.py` generates shims on-demand but is not itself a legacy shim.
+No obsolete aliases or internal compatibility wrappers remain in the reviewed production surfaces.
+The versioning registry remains because it records and reports the lifecycle of externally visible API changes.
 
 ---
 

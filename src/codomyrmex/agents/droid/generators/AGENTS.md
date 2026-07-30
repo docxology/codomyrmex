@@ -10,7 +10,6 @@ Module implementation, resources, and local coordination for Generators..
 - `SPEC.md` – Project file
 - `__init__.py` – Project file
 - `documentation.py` – Project file
-- `physical.py` – Project file
 - `physical_generators/` – Directory containing physical_generators components
 - `spatial.py` – Project file
 
@@ -26,7 +25,6 @@ Module implementation, resources, and local coordination for Generators..
 - `SPEC.md`
 - `__init__.py`
 - `documentation.py`
-- `physical.py`
 - `spatial.py`
 
 ## Dependencies

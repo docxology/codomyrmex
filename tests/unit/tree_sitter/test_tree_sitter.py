@@ -38,7 +38,7 @@ def _get_parser(lang=None):
     """Create a TreeSitterParser with Python language."""
     if lang is None:
         lang = _get_python_lang()
-    from codomyrmex.coding.parsers.tree_sitter import TreeSitterParser
+    from codomyrmex.tree_sitter import TreeSitterParser
 
     return TreeSitterParser(lang)
 
@@ -51,7 +51,7 @@ def _get_parser(lang=None):
 @pytest.mark.unit
 def test_module_importable():
     """Test that the tree_sitter package can be imported."""
-    from codomyrmex.coding.parsers import tree_sitter as ts_mod
+    import codomyrmex.tree_sitter as ts_mod
 
     assert ts_mod is not None
 
@@ -59,7 +59,7 @@ def test_module_importable():
 @pytest.mark.unit
 def test_submodules_importable():
     """Test that submodule namespaces exist."""
-    from codomyrmex.coding.parsers.tree_sitter import (
+    from codomyrmex.tree_sitter import (
         languages,
         parsers,
         queries,
@@ -80,7 +80,7 @@ def test_submodules_importable():
 @pytest.mark.unit
 def test_language_manager_get_unknown():
     """Test retrieving an unknown language returns None."""
-    from codomyrmex.coding.parsers.tree_sitter import LanguageManager
+    from codomyrmex.tree_sitter import LanguageManager
 
     LanguageManager._languages = {}
     result = LanguageManager.get_language("nonexistent_xyz")
@@ -90,7 +90,7 @@ def test_language_manager_get_unknown():
 @pytest.mark.unit
 def test_language_manager_registration_manual():
     """Test manually registering a language object."""
-    from codomyrmex.coding.parsers.tree_sitter import LanguageManager
+    from codomyrmex.tree_sitter import LanguageManager
 
     LanguageManager._languages = {}
     sentinel = object()
@@ -103,7 +103,7 @@ def test_language_manager_registration_manual():
 @pytest.mark.unit
 def test_language_manager_discover_nonexistent_path():
     """Test discover_languages with a path that does not exist."""
-    from codomyrmex.coding.parsers.tree_sitter import LanguageManager
+    from codomyrmex.tree_sitter import LanguageManager
 
     LanguageManager._languages = {}
     LanguageManager.discover_languages("/nonexistent/path/abc123")
@@ -113,7 +113,7 @@ def test_language_manager_discover_nonexistent_path():
 @pytest.mark.unit
 def test_language_manager_discover_empty_directory(tmp_path):
     """Test discover_languages with an empty directory."""
-    from codomyrmex.coding.parsers.tree_sitter import LanguageManager
+    from codomyrmex.tree_sitter import LanguageManager
 
     LanguageManager._languages = {}
     LanguageManager.discover_languages(str(tmp_path))
@@ -123,7 +123,7 @@ def test_language_manager_discover_empty_directory(tmp_path):
 @pytest.mark.unit
 def test_language_manager_multiple_registrations():
     """Test registering multiple languages."""
-    from codomyrmex.coding.parsers.tree_sitter import LanguageManager
+    from codomyrmex.tree_sitter import LanguageManager
 
     LanguageManager._languages = {}
     LanguageManager._languages["lang_a"] = "a"
@@ -143,7 +143,7 @@ def test_language_manager_multiple_registrations():
 def test_language_manager_real_registration():
     """Test registering a real tree-sitter language."""
     lang = _get_python_lang()
-    from codomyrmex.coding.parsers.tree_sitter import LanguageManager
+    from codomyrmex.tree_sitter import LanguageManager
 
     LanguageManager._languages = {}
     LanguageManager._languages["python"] = lang

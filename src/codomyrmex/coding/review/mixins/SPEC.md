@@ -38,7 +38,7 @@ mixins/
 ### TraditionalMixin
 
 - `_run_traditional_analysis(file_path: str, analysis_types: list[str]) -> list[AnalysisResult]` -- Route to individual tool runners based on `analysis_types` (quality, style, security). Each runner parses tool output into `AnalysisResult` items.
-- Tool runners: `_run_pylint`, `_run_flake8`, `_run_mypy`, `_run_bandit`, `_run_vulture`
+- Tool runners: `_run_pylint`, `_run_ruff`, `_run_ty`, `_run_bandit`, `_run_vulture`
 
 ### ComplexityMixin
 
@@ -85,7 +85,7 @@ Optional `codomyrmex.performance.monitor_performance` decorator applied where av
 ## Dependencies
 
 - **Internal**: `coding.review.models` (all dataclasses and enums), `logging_monitoring`
-- **External (optional)**: pylint, flake8, mypy, bandit, vulture (via subprocess)
+- **External (optional)**: pylint, ruff, ty, bandit, vulture (via subprocess)
 - **External (optional)**: `codomyrmex.performance` for `@monitor_performance` decorator
 
 ## Constraints

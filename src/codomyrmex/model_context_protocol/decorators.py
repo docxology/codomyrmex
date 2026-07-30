@@ -214,7 +214,7 @@ def _annotation_to_json_schema(annotation: Any) -> dict[str, Any]:
     if annotation is type(None):
         return {"type": "null"}
 
-    # Legacy single-string fallback (bytes, custom classes, etc.)
+    # General single-string fallback (bytes, custom classes, etc.)
     return {"type": _map_python_type_to_json_string(annotation)}
 
 

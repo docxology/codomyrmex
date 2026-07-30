@@ -4,7 +4,7 @@
 
 ## Overview
 
-The video module provides video processing, extraction, and analysis capabilities through a clean, modular API backed by moviepy and OpenCV.
+The video module provides video processing, extraction, and analysis capabilities through a clean, modular API. The supported `video` extra installs OpenCV and Pillow. The legacy MoviePy adapter remains capability-detected and fails closed when MoviePy is absent; it is not installed by the extra because MoviePy 2.2.1 constrains Pillow below the repository's security-patched baseline. Availability probes do not import OpenCV or MoviePy; native backends load only when an operation selects them, so package discovery remains free of native-media side effects.
 
 ## Architecture
 
@@ -28,7 +28,7 @@ video/
 
 Handles video manipulation operations.
 
-**Backend**: moviepy (primary), OpenCV (fallback)
+**Backend**: OpenCV for supported operations; the capability-detected MoviePy adapter is optional and not installed by the `video` extra.
 
 **Operations**:
 | Method | Description | Codec Support |
@@ -45,7 +45,7 @@ Handles video manipulation operations.
 
 Handles frame and audio extraction.
 
-**Backend**: OpenCV (frames), moviepy (audio)
+**Backend**: OpenCV (frames); audio extraction requires a separately managed compatible MoviePy installation.
 
 **Capabilities**:
 - Single frame extraction at timestamp
@@ -57,7 +57,7 @@ Handles frame and audio extraction.
 
 Handles video metadata extraction.
 
-**Backend**: OpenCV (primary), moviepy (fallback)
+**Backend**: OpenCV (primary); MoviePy is a separately managed optional fallback.
 
 **Metadata Extracted**:
 - Duration, width, height, FPS
@@ -153,11 +153,15 @@ CodomyrmexError
 ```toml
 [project.optional-dependencies]
 video = [
-    "moviepy>=1.0.3",
     "opencv-python>=4.8.0",
-    "pillow>=10.0.0",
+    "pillow>=12.3.0",
 ]
 ```
+
+MoviePy is intentionally not part of this extra. Upstream MoviePy 2.2.1
+requires Pillow below 12, while Codomyrmex requires the security-patched
+Pillow 12.3 baseline. MoviePy-only operations therefore fail closed unless an
+operator supplies and validates a compatible backend.
 
 ## Configuration
 
@@ -210,7 +214,7 @@ class VideoConfig:
 
 ### Recommendations
 1. Use OpenCV for frame extraction (faster)
-2. Use moviepy for processing (more features)
+2. Treat MoviePy-only operations as unavailable unless a compatible backend has been separately validated
 3. Process in smaller chunks for large files
 4. Enable codec hardware acceleration when available
 

@@ -6,6 +6,7 @@ temporary project structures. No unittest.mock is used.
 """
 
 import pytest
+from jinja2 import ChoiceLoader, DictLoader
 
 from codomyrmex.website.generator import WebsiteGenerator
 
@@ -281,9 +282,15 @@ class TestGeneratorErrorHandling:
             root_dir=str(minimal_project),
         )
 
-        # Inject a broken template (undefined variable reference)
-        broken = gen.templates_dir / "_broken_test.html"
-        broken.write_text("{{ undefined_var.method() }}")
+        # Prepend a real in-memory loader so the error case cannot mutate the
+        # package template tree or race source inspection during coverage runs.
+        assert gen.env.loader is not None
+        gen.env.loader = ChoiceLoader(
+            [
+                DictLoader({"_broken_test.html": "{{ undefined_var.method() }}"}),
+                gen.env.loader,
+            ]
+        )
 
         # Monkey-patch the pages list to include the broken template
 
@@ -323,9 +330,6 @@ class TestGeneratorErrorHandling:
         # Other pages should still be rendered
         assert (output_dir / "index.html").exists()
         assert (output_dir / "health.html").exists()
-
-        # Clean up injected template
-        broken.unlink()
 
     def test_missing_template_is_skipped(self, minimal_project):
         """Test that a non-existent template name is skipped gracefully."""

@@ -4,6 +4,37 @@ repo_url: https://github.com/docxology/codomyrmex
 repo_name: docxology/codomyrmex
 site_description: A Modular, Extensible Coding Workspace — Documentation
 
+hooks:
+  - scripts/documentation/mkdocs_hooks.py
+
+# Canonicalize directories that contain both README.md and index.md by keeping
+# index.md in the site. Raw Pandoc report sections are compiled separately and
+# linked through the generated semantic HTML artifact.
+exclude_docs: |
+  /README.md
+  /security/README.md
+  /skills/README.md
+  /modules/agents/README.md
+  /modules/data_visualization/README.md
+  /modules/defense/README.md
+  /modules/embodiment/README.md
+  /modules/environment_setup/README.md
+  /modules/git_operations/README.md
+  /modules/logging_monitoring/README.md
+  /modules/model_context_protocol/README.md
+  /modules/module_template/README.md
+  /modules/physical_management/README.md
+  /modules/security/README.md
+  /modules/spatial/README.md
+  /modules/website/README.md
+  /manuscript/[0-9]*.md
+  /manuscript/preamble.md
+
+# The repository contains a broad reference corpus. Navigation is curated
+# below; unlisted pages remain searchable and linkable without warning.
+not_in_nav: |
+  **
+
 theme:
   name: material
   palette:
@@ -70,6 +101,7 @@ markdown_extensions:
 
 nav:
   - Home: index.md
+  - Technical Report: manuscript/technical-report.html
   - Getting Started:
       - Overview: getting-started/README.md
       - Tutorials:
@@ -80,13 +112,15 @@ nav:
           - Running Tests: getting-started/tutorials/running-tests.md
       - Agent Operations: getting-started/GETTING_STARTED_WITH_AGENTS.md
   - Architecture:
-      - Overview: architecture/README.md
+      - Overview: project/architecture.md
   - API Reference:
-      - Overview: api/README.md
-  - Contributing: CONTRIBUTING.md
-  - Changelog: CHANGELOG.md
+      - Overview: reference/api.md
+  - Contributing: project/contributing.md
+  - Changelog: reference/changelog.md
 
 extra:
+  source_branch: main
+  technical_report_source: output/paper.html
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/docxology/codomyrmex

@@ -30,7 +30,7 @@ Provide comprehensive onboarding documentation for Codomyrmex users, covering in
 | Setup Guide | `setup.md` | Active |
 | Agent Operations | `GETTING_STARTED_WITH_AGENTS.md` | Active (v1.3.0) |
 | Tutorial Index | `tutorials/README.md` | Active (8 tutorials) |
-| Installation Redirect | `installation.md` | Legacy redirect → `setup.md` |
+| Installation Redirect | `installation.md` | Redirect → `setup.md` |
 | Full Setup | `full-setup.md` | Active |
 
 ## Success Criteria

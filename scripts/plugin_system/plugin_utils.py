@@ -16,6 +16,7 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
+from typing import Any
 
 
 def find_plugins(search_paths: list | None = None) -> list:
@@ -35,9 +36,9 @@ def find_plugins(search_paths: list | None = None) -> list:
     return found
 
 
-def analyze_plugin(path: Path) -> dict:
+def analyze_plugin(path: Path) -> dict[str, Any]:
     """Analyze a plugin file."""
-    info = {"path": str(path), "valid": False}
+    info: dict[str, Any] = {"path": str(path), "valid": False}
 
     try:
         with open(path) as f:

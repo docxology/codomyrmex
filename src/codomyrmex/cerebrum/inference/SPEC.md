@@ -96,7 +96,7 @@ Constructor: `ActiveInferenceAgent(states, observations, actions, precision, pol
 
 ## 5. Dependencies
 
-- **Internal**: `cerebrum.core.exceptions` (InferenceError, NetworkStructureError, ActiveInferenceError), `cerebrum.core.utils` (softmax), `logging_monitoring`
+- **Internal**: `codomyrmex.exceptions.cerebrum` (InferenceError, NetworkStructureError, ActiveInferenceError), `cerebrum.core.utils` (softmax), `logging_monitoring`
 - **External**: `numpy`, `math`
 
 ## 6. Constraints

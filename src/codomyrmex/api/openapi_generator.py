@@ -12,9 +12,9 @@ The generator classes have been split into dedicated modules:
 - openapi_documentation_generator.py: DocumentationOpenAPIGenerator
 - openapi_standardization_generator.py: StandardizationOpenAPIGenerator
 
-This module retains the shared data classes (APISchema, OpenAPISpecification)
-and convenience functions, and re-exports the generator classes for backward
-compatibility.
+This module owns the shared data classes (APISchema, OpenAPISpecification) and
+the cross-source convenience functions. Generator implementations live in
+their dedicated modules.
 """
 
 import json
@@ -107,21 +107,6 @@ class OpenAPISpecification:
             raise ValueError(f"Unsupported format: {format}")
 
 
-# Re-export generator classes from their dedicated modules for backward compatibility
-from .openapi_documentation_generator import DocumentationOpenAPIGenerator
-
-
-def __getattr__(name: str):
-    # Lazy import breaks the import cycle:
-    # openapi_standardization_generator imports OpenAPISpecification from here;
-    # importing it eagerly would create a circular dependency.
-    if name == "StandardizationOpenAPIGenerator":
-        from .openapi_standardization_generator import StandardizationOpenAPIGenerator
-
-        return StandardizationOpenAPIGenerator
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
-
-
 # Convenience functions for documentation module
 def generate_openapi_spec(
     title: str,
@@ -142,6 +127,8 @@ def generate_openapi_spec(
         dict containing OpenAPI specification
     """
     base_url = base_url or os.getenv("API_BASE_URL", DEFAULT_API_BASE_URL)
+    from .openapi_documentation_generator import DocumentationOpenAPIGenerator
+
     generator = DocumentationOpenAPIGenerator()
     return generator.generate_spec(title, version, endpoints, base_url)
 
@@ -156,6 +143,8 @@ def validate_openapi_spec(spec: dict[str, Any]) -> list[str]:
     Returns:
         list of validation errors (empty if valid)
     """
+    from .openapi_documentation_generator import DocumentationOpenAPIGenerator
+
     generator = DocumentationOpenAPIGenerator()
     return generator.validate_spec(spec)
 

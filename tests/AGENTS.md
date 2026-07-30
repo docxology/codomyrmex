@@ -1,54 +1,39 @@
-# Codomyrmex Agents — tests
+<!-- agents: curated -->
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+# Agent guidance for tests
 
-## Purpose
-Validation coverage, fixtures, and regression checks for Tests.
+## Operating contract
 
-## Active Components
-- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
-- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
-- `PAI.md` – Public API Interface — integration patterns and usage guidelines
-- `README.md` – Module overview — quick start, features, and usage examples
-- `RUNNING_TESTS.md` – Running Tests implementation
-- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
-- `__init__.py` – Python package entry point — exports and initialization
-- `conftest.py` – Pytest configuration and shared fixtures
-- `fixtures/` – fixtures module implementation
-- `integration/` – integration module implementation
-- `languages/` – languages module implementation
-- `orchestrator/` – orchestrator module implementation
-- `performance/` – performance module implementation
-- `py.typed` – PEP 561 marker for typed package
-- `unit/` – unit module implementation
-- `utils/` – Utility functions and helpers
+- Follow the repository zero-mock policy. Use real classes, files, subprocesses,
+  temporary directories, and local services.
+- Narrow environment, cwd, and temporary-path isolation is permitted as
+  described in [SPEC.md](SPEC.md).
+- Test public behavior and failure receipts, not implementation trivia.
+- Add negative controls for path traversal, tampering, absent evidence,
+  no-mode execution, dry-run byte preservation, and optional dependencies when
+  relevant.
+- Never write to real user configuration, credentials, home directories,
+  external services, or publication targets.
+- Keep tests deterministic under the fixed-epoch or seeded contracts used by
+  the owning module.
+- Do not weaken or delete a failing test merely to make a gate green; establish
+  whether implementation, expectation, or environment is wrong.
+- Update the nearest README/SPEC when test scope or invocation changes.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Validation
 
-## Key Files
-- `AGENTS.md` - Agent coordination and navigation
-- `README.md` - Directory overview
-- `API_SPECIFICATION.md`
-- `MCP_TOOL_SPECIFICATION.md`
-- `PAI.md`
-- `README.md`
-- `RUNNING_TESTS.md`
-- `SPEC.md`
-- `__init__.py`
-- `conftest.py`
-- `py.typed`
+Run the narrowest relevant test first:
 
-## Dependencies
-- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+```bash
+uv run --locked pytest -q tests/unit/<module>
+```
 
-## Development Guidelines
-- Follow the universal agent protocols defined in the root `AGENTS.md`.
-- Adhere to the Python PEP 8 style guide and project-specific linting rules.
-- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+Then run formatting, lint, typing, and the full coverage gate appropriate to the
+change. `make test` is the authoritative 60% coverage invocation.
 
-## Navigation Links
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+## Navigation
+
+- [Human overview](README.md)
+- [Testing specification](SPEC.md)
+- [Running tests](RUNNING_TESTS.md)
+- [Repository agent contract](../AGENTS.md)

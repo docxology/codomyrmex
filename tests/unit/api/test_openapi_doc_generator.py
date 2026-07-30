@@ -11,7 +11,7 @@ import tempfile
 import pytest
 
 try:
-    from codomyrmex.api.openapi_generator import (
+    from codomyrmex.api.openapi_documentation_generator import (
         DocumentationOpenAPIGenerator,
     )
 except ImportError:

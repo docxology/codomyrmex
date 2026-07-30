@@ -92,8 +92,6 @@ class KeyManager:
 | `encrypt_file` | `(input_path, output_path, key, algorithm="AES") -> bool` | File encrypt |
 | `decrypt_file` | `(input_path, output_path, key, algorithm="AES") -> bool` | File decrypt |
 | `hash_data` | `(data: bytes, algorithm: str = "sha256") -> str` | Hash data |
-| `encrypt_data` | `(data: bytes, key: bytes, algorithm: str = "AES") -> bytes` | Legacy encrypt helper |
-| `decrypt_data` | `(data: bytes, key: bytes, algorithm: str = "AES") -> bytes` | Legacy decrypt helper |
 | `generate_aes_key` | `() -> bytes` | Generate 32-byte AES key |
 
 ### 3.2 HMAC (from `hmac_utils.py`)

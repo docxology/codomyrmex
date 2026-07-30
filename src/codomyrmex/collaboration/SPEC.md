@@ -10,7 +10,7 @@ To multiply the effectiveness of individual Codomyrmex agents by enabling them t
 
 - **Consolidation**: Unified swarm management through a robust `SwarmManager`.
 - **Asynchronous Orchestration**: Non-blocking task distribution and result aggregation using `asyncio`.
-- **Interoperability**: Modern and legacy interfaces supported for cross-module compatibility.
+- **Interoperability**: Typed interfaces shared by the swarm, protocol, and attestation layers.
 - **Transparency**: Every step of the collaboration is traceable through the `MessageBus`.
 
 ## Architecture
@@ -48,7 +48,7 @@ class SwarmManager:
     def register_agent(agent: SwarmAgent) -> None
     async def execute_task(description: str, role: AgentRole, timeout: float) -> dict[str, Any]
     async def execute_mission(mission: str) -> list[dict[str, Any]]
-    async def request_consensus(proposal: str, votes: list[Vote], strategy: str) -> ConsensusResult
+    async def request_consensus(proposal: str, votes: list[SwarmVote], strategy: str) -> ConsensusResult
 ```
 
 ### Communication (`collaboration.swarm.message_bus`)

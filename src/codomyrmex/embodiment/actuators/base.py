@@ -45,7 +45,3 @@ class SimulatedActuator:
         if not self.is_connected:
             return ActuatorStatus(self.actuator_id, "disconnected", {})
         return ActuatorStatus(self.actuator_id, "ok", {"position": self._position})
-
-
-class MockActuator(SimulatedActuator):
-    pass

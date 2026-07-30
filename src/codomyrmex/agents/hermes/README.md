@@ -67,8 +67,8 @@ hermes skills enable bioinformatics
 
 ## Directory Structure
 
-- `hermes_client.py`: `HermesClient` — dual-backend, sessions, worktrees, CLI flags, batch.
-- `_provider_router.py`: `ProviderRouter`, `UserModel`, `ContextCompressor`, `MCPBridgeManager`.
+- `client_pkg/`: `HermesClient` — dual-backend, sessions, worktrees, CLI flags, batch.
+- `provider_router_pkg/`: `ProviderRouter`, `UserModel`, `ContextCompressor`, `MCPBridgeManager`.
 - `session.py`: `SQLiteSessionStore` with FTS5, archiving, and lifecycle hooks.
 - `mcp_tools.py`: 55 MCP tools (see `MCP_TOOL_SPECIFICATION.md`).
 - `optional-skills/mcp/fastmcp/scaffold_fastmcp.py`: Built-in scaffold generator for FastMCP server packages.

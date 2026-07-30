@@ -5,10 +5,6 @@ Core module for executing Git operations.
 import os
 
 from codomyrmex.logging_monitoring import get_logger, setup_logging
-from codomyrmex.performance import PERFORMANCE_MONITOR_AVAILABLE
-
-if PERFORMANCE_MONITOR_AVAILABLE:
-    pass
 
 from .commands.branching import (
     create_branch,
@@ -53,9 +49,6 @@ from .commands.sync import fetch_changes, pull_changes, push_changes
 from .commands.tags import create_tag, list_tags
 
 logger = get_logger(__name__)
-# PERFORMANCE_MONITORING_AVAILABLE reflects actual psutil availability at import time.
-# monitor_performance and performance_context are only defined when this is True.
-PERFORMANCE_MONITORING_AVAILABLE = PERFORMANCE_MONITOR_AVAILABLE
 
 __all__ = [
     "add_files",

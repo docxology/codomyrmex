@@ -6,7 +6,7 @@
 
 This module exposes the following capabilities for AI agent use:
 
-- **Symmetric encryption/decryption** -- Encrypt and decrypt arbitrary byte data or strings using AES-256-CBC with a 32-byte key via `encrypt_data()` / `decrypt_data()` or `Encryptor.encrypt()` / `Encryptor.decrypt()`
+- **Symmetric encryption/decryption** -- Encrypt and decrypt arbitrary byte data or strings using AES-256-CBC with a 32-byte key via `Encryptor.encrypt()` / `Encryptor.decrypt()`
 - **Asymmetric encryption/decryption** -- Encrypt small payloads with RSA-OAEP (2048-bit) using `Encryptor(algorithm="RSA")`
 - **Key generation** -- Generate random AES-256 keys with `generate_aes_key()`, RSA keypairs with `Encryptor.generate_key_pair()`, or password-derived keys with `Encryptor.derive_key()`
 - **Digital signatures** -- Sign data with RSA-PSS via `Encryptor.sign()` and verify with `Encryptor.verify()`

@@ -60,26 +60,38 @@ def _crosswalk_entries() -> list[dict[str, object]]:
     return normalized
 
 
-def _cell_text(value: object, width: int) -> str:
-    return "\n".join(textwrap.wrap(str(value), width=width, break_long_words=False))
+def _cell_text(value: object, width: int, *, limit: int) -> str:
+    """Wrap a source-backed, deliberately abbreviated cell for print legibility."""
+
+    compact = textwrap.shorten(
+        " ".join(str(value).split()),
+        width=limit,
+        placeholder="…",
+    )
+    return "\n".join(
+        textwrap.wrap(
+            compact,
+            width=width,
+            break_long_words=False,
+            break_on_hyphens=False,
+        )
+    )
 
 
 def fig_formalism_code_crosswalk() -> None:
-    """Draw the configured translation chain without implying proof equivalence."""
+    """Draw an abbreviated, redundantly encoded translation inventory."""
     entries = _crosswalk_entries()
     columns = [
-        "Formal object",
-        "Typed code anchor",
-        "Translation",
-        "Evidence",
-        "Claim limit",
+        "Formalism and status",
+        "Code anchor and translation",
+        "Evidence and claim limit",
     ]
-    widths = [0.19, 0.19, 0.21, 0.18, 0.23]
-    left = 0.08
-    top = 0.84
-    row_height = min(0.095, 0.74 / max(len(entries), 1))
-    figure_height = max(7.5, 1.0 + len(entries) * 0.86)
-    fig, ax = plt.subplots(figsize=(14.0, figure_height))
+    widths = [0.28, 0.31, 0.35]
+    left = 0.035
+    header_y = 0.825
+    rows_top = 0.785
+    rows_bottom = 0.105
+    fig, ax = plt.subplots(figsize=(8.0, 9.0))
     background = "#F7F9FC"
     fig.patch.set_facecolor(background)
     ax.set_facecolor(background)
@@ -90,20 +102,20 @@ def fig_formalism_code_crosswalk() -> None:
     ax.text(
         left,
         0.965,
-        "Formal objects → code anchors → translation → evidence → claim boundary",
+        "Formalism → code translation → evidence and claim boundary",
         ha="left",
         va="top",
-        fontsize=13,
+        fontsize=13.2,
         fontweight="bold",
         color="#172033",
     )
     ax.text(
         left,
         0.925,
-        "A correspondence inventory with explicit missing links; not a proof graph or equivalence claim",
+        "Abbreviated navigation view; full searchable text follows in the manuscript tables",
         ha="left",
         va="top",
-        fontsize=9,
+        fontsize=9.2,
         color="#526176",
     )
 
@@ -115,7 +127,7 @@ def fig_formalism_code_crosswalk() -> None:
     for column, (header, width) in enumerate(zip(columns, widths, strict=True)):
         ax.add_patch(
             FancyBboxPatch(
-                (x_positions[column], top),
+                (x_positions[column], header_y),
                 width - 0.006,
                 0.055,
                 boxstyle="round,pad=0.004,rounding_size=0.008",
@@ -126,33 +138,67 @@ def fig_formalism_code_crosswalk() -> None:
         )
         ax.text(
             x_positions[column] + (width - 0.006) / 2,
-            top + 0.027,
+            header_y + 0.027,
             header,
             ha="center",
             va="center",
-            fontsize=8.6,
+            fontsize=9.0,
             fontweight="bold",
             color="white",
         )
 
-    for row_index, entry in enumerate(entries):
-        y = top - (row_index + 1) * row_height
+    row_texts: list[list[str]] = []
+    row_weights: list[int] = []
+    for entry in entries:
+        status = str(entry["status"]).replace("_", " ").upper()
+        code_symbols = "; ".join(
+            part.strip()
+            for part in str(entry["code_symbols"]).split(";")[:2]
+            if part.strip()
+        )
+        if str(entry["code_symbols"]).count(";") >= 2:
+            code_symbols += "; …"
+        name_label = f"{entry['id']} · {entry['name']}"
+        anchor_label = f"Anchor: {code_symbols}"
+        bridge_label = f"Bridge: {entry['bridge']}"
+        evidence_label = f"Evidence: {entry['evidence']}"
+        limit_label = f"Limit: {entry['claim_boundary']}"
+        values = [
+            (
+                f"{_cell_text(name_label, 27, limit=52)}\n"
+                f"STATUS: {status}\n"
+                f"{_cell_text(entry['formalism'], 27, limit=48)}"
+            ),
+            (
+                f"{_cell_text(anchor_label, 30, limit=62)}\n"
+                f"{_cell_text(bridge_label, 30, limit=64)}"
+            ),
+            (
+                f"{_cell_text(evidence_label, 34, limit=68)}\n"
+                f"{_cell_text(limit_label, 34, limit=76)}"
+            ),
+        ]
+        row_texts.append(values)
+        row_weights.append(max(value.count("\n") + 1 for value in values) + 1)
+
+    available_height = rows_top - rows_bottom
+    weight_unit = available_height / sum(row_weights)
+    cursor_y = rows_top
+    for row_index, (entry, row_values, weight) in enumerate(
+        zip(entries, row_texts, row_weights, strict=True)
+    ):
+        row_height = weight * weight_unit
+        y = cursor_y - row_height
+        cursor_y = y
         background_row = "#EAF0F6" if row_index % 2 == 0 else background
         status = str(entry["status"]).lower()
         color = _STATUS_COLORS.get(status, _OI["grey"])
-        row_values = [
-            f"{entry['id']}  {entry['name']}\n{entry['formalism']}\n{entry['formal_object']}",
-            str(entry["code_symbols"]),
-            str(entry["bridge"]),
-            str(entry["evidence"]),
-            str(entry["claim_boundary"]),
-        ]
         for column, (value, width) in enumerate(zip(row_values, widths, strict=True)):
             ax.add_patch(
                 FancyBboxPatch(
-                    (x_positions[column], y),
+                    (x_positions[column], y + 0.004),
                     width - 0.006,
-                    row_height - 0.008,
+                    row_height - 0.006,
                     boxstyle="round,pad=0.004,rounding_size=0.006",
                     facecolor=background_row,
                     edgecolor="white",
@@ -160,34 +206,33 @@ def fig_formalism_code_crosswalk() -> None:
                 )
             )
             ax.text(
-                x_positions[column] + (width - 0.006) / 2,
-                y + (row_height - 0.008) / 2,
-                _cell_text(value, 29 if column in {0, 1} else 34),
-                ha="center",
+                x_positions[column] + 0.012,
+                y + row_height / 2,
+                value,
+                ha="left",
                 va="center",
-                fontsize=7.1 if column else 7.25,
+                fontsize=8.7,
                 color="#172033",
-                linespacing=1.12,
+                linespacing=1.08,
             )
         ax.add_patch(
             FancyBboxPatch(
-                (left - 0.018, y + 0.012),
-                0.012,
-                row_height - 0.032,
+                (left - 0.018, y + 0.014),
+                0.011,
+                max(0.018, row_height - 0.028),
                 boxstyle="round,pad=0.002,rounding_size=0.004",
                 facecolor=color,
                 edgecolor="none",
             )
         )
 
-    bottom = top - (len(entries) + 1) * row_height - 0.01
     ax.text(
         left,
-        max(0.035, bottom),
-        "Status colours: implemented · partial · planned/next · research",
+        0.075,
+        "Every row prints its status; colour is a redundant navigation cue.",
         ha="left",
         va="bottom",
-        fontsize=8.5,
+        fontsize=8.8,
         color="#526176",
         style="italic",
     )

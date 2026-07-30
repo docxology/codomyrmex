@@ -8,6 +8,38 @@ a:focus {
   color: #8f0d18;
 }
 
+a:focus-visible,
+summary:focus-visible {
+  outline: 3px solid #0067a3;
+  outline-offset: 3px;
+}
+
+figure {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+}
+
+/* Associated through aria-describedby. The complete descriptions are also
+   published visibly in the generated figure-accessibility appendix table. */
+.figure-long-description {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: normal;
+  border: 0;
+}
+
 .manuscript-cover {
   min-height: 96vh;
   display: grid;
@@ -60,5 +92,9 @@ a:focus {
     grid-template-columns: 1fr;
     min-height: auto;
     gap: 1.25rem;
+  }
+
+  figure {
+    margin-inline: 0;
   }
 }

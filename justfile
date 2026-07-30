@@ -59,10 +59,16 @@ format-check:
 
 # Type check with ty
 type-check:
-    uv run ty check src/
+    uv run ty check --output-format concise src/ scripts/ tests/
+
+# Enforce package layers, file-scoped exceptions, and explicit exports
+lint-imports:
+    uv run --locked lint-imports --config pyproject.toml
+    uv run --locked python scripts/audits/audit_imports.py --root .
+    uv run --locked python scripts/audits/audit_exports.py --root .
 
 # Run all quality checks
-check: lint format-check type-check
+check: lint lint-imports format-check type-check
 
 # ─── Build ───────────────────────────────────────────────────────
 # Build sdist + wheel
@@ -79,11 +85,11 @@ rebuild: clean build
 # ─── Documentation ───────────────────────────────────────────────
 # Serve docs locally
 docs-serve:
-    uv run mkdocs serve
+    NO_MKDOCS_2_WARNING=1 uv run --locked --group docs mkdocs serve
 
 # Build docs (strict mode)
 docs-build:
-    uv run mkdocs build --strict
+    NO_MKDOCS_2_WARNING=1 uv run --locked --group docs mkdocs build --strict
 
 # ─── CI Pipeline ─────────────────────────────────────────────────
 # Full CI pipeline
@@ -105,39 +111,36 @@ release-patch:
 # ─── Security ────────────────────────────────────────────────────
 # Run security scanning (bandit + pip-audit)
 security:
-    @echo "Running security scanning..."
-    uv run bandit -r src/codomyrmex/ \
-        -x '*/tests/*,*/vendor/*,*/generated/*,src/codomyrmex/agents/open_gauss,src/codomyrmex/documentation/docs' \
-        -lll -iii
-    @echo "Checking for vulnerabilities..."
-    uv run pip-audit
+    make security
 
 # Dependency audit via pip-audit
 audit:
-    @echo "Running dependency audit..."
-    uv run pip-audit
-    @echo "Audit complete."
+    make audit-lock
 
 # ─── Documentation ───────────────────────────────────────────────
 # Check documentation status
 docs-check:
     @echo "Checking documentation status..."
-    uv run python scripts/documentation/validate_links_comprehensive.py --repo-root . --format both --fail-on-broken
-    uv run python scripts/documentation/analyze_content_quality.py --repo-root . --format both --min-score 70 --fail-on-below
-    uv run python scripts/documentation/validate_agents_structure.py --repo-root . --format markdown --fail-on-invalid
-    uv run python scripts/documentation/enforce_quality_gate.py --repo-root . --max-broken-links 10
+    uv run --locked --group docs python scripts/rasp_gap_report.py --repo-root . --check
+    uv run --locked --group docs python scripts/documentation/audit_readme_agents.py --repo-root . --strict
+    uv run --locked --group docs python scripts/documentation/validate_links_comprehensive.py --repo-root . --format both --fail-on-broken
+    uv run --locked --group docs python scripts/documentation/analyze_content_quality.py --repo-root . --format both --min-score 70 --fail-on-below
+    uv run --locked --group docs python scripts/documentation/validate_agents_structure.py --repo-root . --format markdown --fail-on-invalid
+    uv run --locked --group docs python scripts/documentation/enforce_quality_gate.py --repo-root . --max-broken-links 0
+    uv run --locked --group docs python src/codomyrmex/documentation/scripts/triple_check.py --repo-root . --fail-on-issues
+    NO_MKDOCS_2_WARNING=1 uv run --locked --group docs mkdocs build --strict
 
 # Validate generated manuscript, figures, claims, and provenance.
 manuscript-check:
-    uv run python scripts/validate_manuscript_integrity.py
+    uv run --locked --group docs python scripts/validate_manuscript_integrity.py
 
 # Generate missing documentation
 docs-generate:
-    @echo "Generating missing documentation..."
-    uv run python src/codomyrmex/documentation/scripts/generate_missing_readmes.py --repo-root .
+    @echo "Explicitly generating missing documentation (do not run during a hand-pass freeze)..."
+    uv run --locked --group docs python src/codomyrmex/documentation/scripts/generate_missing_readmes.py --repo-root .
 
-# Full docs pipeline: check + generate + build
-docs: docs-check docs-generate docs-build
+# Canonical docs validation (generation remains an explicit maintenance step)
+docs: docs-check
 
 # ─── Benchmarks ──────────────────────────────────────────────────
 # Run MCP performance benchmarks
@@ -157,7 +160,7 @@ info:
     @echo "Tests:   $(find tests -name 'test_*.py' 2>/dev/null | wc -l | tr -d ' ') files"
     @echo "LOC:     $(find src/ -name '*.py' | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}')"
     @uv run ruff check . 2>&1 | tail -1
-    @uv run ty check src/ 2>&1 | tail -1
+    @uv run ty check --output-format concise src/ scripts/ tests/ 2>&1 | tail -1
 
 # Verify all parse errors are fixed
 verify-parse:

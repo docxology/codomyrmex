@@ -15,7 +15,7 @@ This document codifies the absolute, non-negotiable rules for all human and AI a
 ## 3. Pythonic Ecosystem & Tooling
 - Adhere strictly to modern Pythonic style.
 - Use `uv` comprehensively for all Python environment management, dependency resolution, and script setup.
-- Avoid legacy patterns (e.g., standard `pip` or `Poetry`); leverage `uv run`, `pyproject.toml`, and `uv.lock`.
+- Avoid outdated patterns (e.g., standard `pip` or `Poetry`); leverage `uv run`, `pyproject.toml`, and `uv.lock`.
 
 ## 4. Documentation Triangulation
 - You must triple-check all filenames, paths, and signposting.

@@ -52,11 +52,13 @@ contract:
 - an unrelated target remains unchanged; and
 - passive decay eventually removes the added friction.
 
-This does not make the system deception-proof. The current MCP surface accepts
+This does not make the system deception-proof. The ordinary MCP path accepts
 caller-reported outcomes without attesting them against a prior EXECUTE authorization.
-The default field and consequence database are also in-memory and disappear on process
-restart. The verified claim is therefore process-local, report-dependent, and
-reversible.
+Optional and required `ColonyKernel` attestation modes locally bind the lifecycle from
+proposal through outcome, but the ledger does not independently observe external
+actuation or establish deployment safety. The default field and consequence database
+are also in-memory and disappear on process restart. The paired feedback claim is
+therefore process-local, report-dependent, and reversible.
 
 ## Contribution {#sec:intro-contribution}
 
@@ -74,9 +76,9 @@ The paper contributes five concrete artifacts.
 4. **A real contract suite.** Tests use real subsystem instances to establish
    same-target inhibition, cross-target isolation, linear decay recovery, score bounds,
    trust updates, and interface behavior.
-5. **A reproducible manuscript route.** Fail-closed test/lint/type evidence, generated
-   variables, formula-derived figures, cross-reference validation, and the project
-   renderer are orchestrated through the repository's `run.sh` pipeline.
+5. **A source-bound report and release route.** Repository-root commands regenerate
+   variables and figures, render semantic HTML plus content and distribution PDFs,
+   validate claims and citations, and prepare a detached-hash publication bundle.
 
 The contribution is a reference implementation and evidence boundary, not a completed
 production-security system.
@@ -105,10 +107,11 @@ gate does not enforce a complete action-by-role permission matrix.
 
 `record_outcome` is a separate caller operation. It updates the consequence store,
 resource ledger, trust profile, role label, and signal field. A failed test report
-deposits a FAST FAILURE trace; a clean report reinforces/deposits SUCCESS. Because
-proposal and outcome are not linked by a consumed authorization ledger, the word
-“outcome” in this paper means a submitted report unless explicitly qualified as
-attested.
+deposits a FAST FAILURE trace; a clean report reinforces/deposits SUCCESS. On the
+ordinary MCP path, proposal and outcome are not linked by a consumed authorization
+ledger, so “outcome” means a submitted report unless explicitly qualified. In optional
+or required attestation mode, the kernel locally requires and consumes the linked
+authorization/receipt chain; this authenticates ledger linkage, not external execution.
 
 The {{CONFIG_MCP_TOOL_COUNT}} MCP tools expose this stateful kernel through JSON-shaped requests and
 responses. A module-level singleton shares state across calls in one server process.
@@ -143,9 +146,9 @@ The executed evidence is the scoped Colony Kernel quality gate and deterministic
 fixtures. The proposed {{CONFIG_BENCHMARK_CONDITION_COUNT}}-condition,
 {{CONFIG_TRIAL_COUNT}}-run benchmark has not been
 executed. No population refusal rate, throughput advantage, production harm reduction,
-or long-run convergence claim is reported. The paper treats unlinked outcome reporting,
-SANDBOX bootstrap, persistence, role permissions, and external calibration as open
-engineering work.
+or long-run convergence claim is reported. The paper treats ordinary-path unlinked
+outcome reporting, external-actuation attestation, SANDBOX bootstrap, persistence, role
+permissions, and external calibration as open engineering work.
 
 ## Reader's guide {#sec:intro-guide}
 

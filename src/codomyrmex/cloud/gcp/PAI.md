@@ -22,7 +22,7 @@ from codomyrmex.cloud import GCSClient
 
 client = GCSClient(project="my-project")
 
-if client.upload_blob("bucket", "local.csv", "remote.csv"):
+if client.upload_file("bucket", "remote.csv", "local.csv"):
     print("Upload successful")
 ```
 

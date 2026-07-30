@@ -130,7 +130,7 @@ graph TD
 
 - `setup_logging()` - Initialize logging system with support for "TEXT" and "JSON" outputs.
 - `get_logger(name)` - Get logger instance.
-- `JSONFormatter` - Standardized JSON log formatter (legacy `JsonFormatter` alias removed).
+- `JSONFormatter` - Standardized JSON log formatter; use this canonical symbol for JSON output.
 - `log_with_context()` - Log with structured context.
 - `LogContext` - Context manager for correlation IDs.
 

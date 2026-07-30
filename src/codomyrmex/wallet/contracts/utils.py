@@ -112,7 +112,7 @@ def parse_event_log(topics: list[str], data: str) -> dict[str, Any]:
     return result
 
 
-# ── Ether / Wei / Gwei conversion (backward compat) ────────────────
+# ── Ether / Wei / Gwei conversion ─────────────────────────────────
 
 
 def ether_to_wei(ether: float) -> int:

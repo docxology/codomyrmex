@@ -198,7 +198,7 @@ class HermesSkillBridge:
             dict with keys: ``status``, ``content``, ``session_id``, ``error``.
 
         """
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         entry = self.get_skill(name)
         skill_id = entry.hermes_skill_id if entry else name

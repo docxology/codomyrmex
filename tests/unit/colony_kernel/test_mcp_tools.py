@@ -25,6 +25,12 @@ from codomyrmex.colony_kernel.mcp_tools import (
     colony_status,
     colony_tick,
 )
+from codomyrmex.colony_kernel.models import (
+    ColonySignal,
+    DecayRate,
+    SignalSource,
+    SignalType,
+)
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -395,6 +401,43 @@ class TestColonyPheromoneQuery:
         # Either a signal was deposited (list with items) or it wasn't (empty).
         # We only assert the return type to avoid brittleness on scoring details.
         assert isinstance(result, list)
+
+    def test_preserves_stored_signal_metadata(self) -> None:
+        kernel = _mcp_mod._get_kernel()
+        kernel.pheromone_store.deposit_signal(
+            ColonySignal(
+                location="codomyrmex.pheromone.metadata",
+                signal_type=SignalType.RISK,
+                strength=1.0,
+                decay_rate=DecayRate.FAST,
+                source=SignalSource.TEST,
+                evidence={"test_id": "metadata-roundtrip"},
+            )
+        )
+
+        result = colony_pheromone_query("codomyrmex.pheromone.metadata", "risk")
+
+        assert len(result) == 1
+        assert result[0]["decay_rate"] == DecayRate.FAST.value
+        assert result[0]["source"] == SignalSource.TEST.value
+        assert result[0]["evidence"] == {"test_id": "metadata-roundtrip"}
+
+    def test_status_counts_all_live_signals(self) -> None:
+        kernel = _mcp_mod._get_kernel()
+        for index in range(205):
+            kernel.pheromone_store.deposit_signal(
+                ColonySignal(
+                    location=f"codomyrmex.pheromone.count.{index}",
+                    signal_type=SignalType.RISK,
+                    strength=0.1,
+                    decay_rate=DecayRate.NORMAL,
+                    source=SignalSource.TEST,
+                )
+            )
+
+        result = colony_status()
+
+        assert result["pheromone_summary"]["total_signals"] == 205
 
 
 # ---------------------------------------------------------------------------

@@ -62,7 +62,7 @@ def add_deprecation_notice(file_path: Path) -> str:
 # Or install all optional dependencies:
 #   uv sync --all-extras
 #
-# This file is kept temporarily for backward compatibility but should not be modified.
+# This file remains only as a migration marker and should not be modified.
 # See docs/project/contributing.md for the new dependency management strategy.
 #
 # Migration completed: {location}
@@ -86,7 +86,7 @@ def add_deprecation_notice(file_path: Path) -> str:
         else:
             commented_lines.append(line)
 
-    new_content = notice + "\n# --- Legacy content (for reference only) ---\n"
+    new_content = notice + "\n# --- Previous content (for reference only) ---\n"
     if commented_lines:
         new_content += "\n".join(commented_lines) + "\n"
 

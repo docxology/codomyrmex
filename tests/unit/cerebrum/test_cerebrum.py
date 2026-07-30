@@ -32,7 +32,7 @@ from codomyrmex.cerebrum import (
     normalize_features,
     softmax,
 )
-from codomyrmex.cerebrum.core.exceptions import (
+from codomyrmex.exceptions.cerebrum import (
     CaseNotFoundError,
     InvalidCaseError,
     ModelError,

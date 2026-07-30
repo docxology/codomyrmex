@@ -51,7 +51,8 @@ The checked-in kernel has deterministic state variables and thresholds instead. 
 those variables names borrowed from active inference does not supply the missing model or
 inference procedure.
 
-![{{FIGURE_CAPTION_FEP_CORRESPONDENCE}}](figures/{{FIGURE_FILENAME_FEP_CORRESPONDENCE}}){#{{FIGURE_LABEL_FEP_CORRESPONDENCE}} width={{FIGURE_WIDTH_FEP_CORRESPONDENCE}}}
+![{{FIGURE_CAPTION_FEP_CORRESPONDENCE}}](figures/{{FIGURE_FILENAME_FEP_CORRESPONDENCE}}){#{{FIGURE_LABEL_FEP_CORRESPONDENCE}} width={{FIGURE_WIDTH_FEP_CORRESPONDENCE}} alt="{{FIGURE_ALT_FEP_CORRESPONDENCE}}" aria-describedby="{{FIGURE_LABEL_FEP_CORRESPONDENCE}}-description"}
+<div id="{{FIGURE_LABEL_FEP_CORRESPONDENCE}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_FEP_CORRESPONDENCE}}</div>
 
 The crosswalk in [@fig:fep_correspondence] is therefore a reading aid, not a model diagram. The
 crosswalk identifies where a future probabilistic implementation might attach to the

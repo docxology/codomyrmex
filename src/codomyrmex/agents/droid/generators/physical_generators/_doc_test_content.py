@@ -308,10 +308,8 @@ pytest-asyncio>=0.15.0
 pytest-cov>=2.10.0
 
 # Development and linting
-black>=21.0.0
-isort>=5.9.0
-mypy>=0.910
-flake8>=3.9.0
+ruff>=0.11.0
+ty
 
 # Documentation
 mkdocs>=1.2.0

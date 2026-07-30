@@ -1,116 +1,186 @@
 # Release Module API Specification
 
-**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: February 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
-## 1. Overview
+## Overview
 
-The `release` module provides Python-native tools for validating release readiness, building distribution artifacts, and managing publication to distribution targets (PyPI, TestPyPI, GitHub, local). It is designed for use in CI/CD pipelines and release automation scripts.
+`codomyrmex.release` exposes immutable receipts for release evidence, real
+wheel/sdist builds, verified local distribution, and portable technical-report
+publication bundles. Remote operations are deliberately planning-only.
 
-## 2. Core Components
+## Validation API
 
-### 2.1 Release Validation (`release_validator.py`)
+### Immutable types
 
-**`CertificationStatus`** (enum): `PASS`, `FAIL`, `SKIP`, `WARN`
+| Type | Important fields |
+|---|---|
+| `ReleasePolicy` | `strict`, `required_categories`, `coverage_floor`, `tier1_coverage_floor` |
+| `CertificationCheck` | `name`, `category`, `status`, `value`, `threshold`, `message` |
+| `ReleaseCertification` | `version`, `checks`, `certified`, `certified_at`, `blockers`, `policy` |
 
-**`CertificationCheck`** (dataclass):
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | `str` | Check name |
-| `category` | `str` | Category (testing, quality, security, docs) |
-| `status` | `CertificationStatus` | Result |
-| `value` | `str` | Measured value |
-| `threshold` | `str` | Required threshold |
-| `message` | `str` | Human-readable result message |
+`CertificationStatus` values are `PASS`, `FAIL`, `SKIP`, and `WARN`.
 
-**`ReleaseCertification`** (dataclass): Complete certification report.
-| Field/Property | Type | Description |
-|----------------|------|-------------|
-| `version` | `str` | Release version |
-| `checks` | `list[CertificationCheck]` | All checks run |
-| `certified` | `bool` | True if zero FAIL checks |
-| `certified_at` | `float` | Unix timestamp (0 if not certified) |
-| `blockers` | `list[str]` | Names of FAIL checks |
-| `total_checks` | property `int` | Total check count |
-| `passed_checks` | property `int` | PASS check count |
-| `pass_rate` | property `float` | passed/total ratio |
-
-**`ReleaseValidator`** class:
-
-| Method | Signature | Returns | Description |
-|--------|-----------|---------|-------------|
-| `__init__` | `(version="1.0.0")` | — | Initialize with version string |
-| `check_tests` | `(failures, total, max_skips=50)` | `CertificationCheck` | Pass if `failures == 0` |
-| `check_coverage` | `(overall, tier1=0)` | `CertificationCheck` | Pass if `overall >= 60%` and `tier1 >= 80%` when tier-1 coverage is supplied |
-| `check_type_safety` | `(errors: int)` | `CertificationCheck` | WARN (not FAIL) if errors > 0 |
-| `check_security` | `(cve_count, secrets_found)` | `CertificationCheck` | Pass if both are 0 |
-| `check_documentation` | `(complete: bool)` | `CertificationCheck` | WARN (not FAIL) if incomplete |
-| `add_custom_check` | `(check: CertificationCheck)` | `None` | Add a custom check |
-| `certify` | `()` | `ReleaseCertification` | Run certification; certified = zero FAIL checks |
-| `to_markdown` | `(cert: ReleaseCertification)` | `str` | Render report as Markdown table |
-| `check_count` | property `int` | — | Number of checks added |
-
-### 2.2 Package Building (`package_builder.py`)
-
-**`PackageMetadata`** (dataclass): `name`, `version`, `description`, `author`, `license`, `python_requires` (default `">=3.11"`), `dependencies: list[str]`, `entry_points: dict[str, str]`
-
-**`BuildArtifact`** (dataclass): `filename`, `format` (`"wheel"` or `"sdist"`), `size_bytes`, `checksum` (SHA-256 prefix), `built_at: float`
-
-**`BuildReport`** (dataclass): `metadata`, `artifacts: list[BuildArtifact]`, `warnings: list[str]`, `success: bool`
-
-**`PackageBuilder`** class:
-
-| Method | Signature | Returns | Description |
-|--------|-----------|---------|-------------|
-| `__init__` | `(metadata: PackageMetadata \ | None)` | — Initialize with metadata; defaults to `PackageMetadata()` |
-| `validate_metadata` | `()` | `list[str]` | Validate name, version, python_requires; returns errors |
-| `build` | `()` | `BuildReport` | Build sdist + wheel artifacts; fails if metadata invalid |
-| `metadata` | property | `PackageMetadata` | Access current metadata |
-
-### 2.3 Distribution Management (`distribution.py`)
-
-**`DistributionTarget`** (enum): `PYPI`, `TEST_PYPI`, `GITHUB`, `LOCAL`
-
-**`PreflightResult`** (dataclass): `target`, `checks_passed`, `checks_total`, `ready: bool`, `issues: list[str]`
-
-**`PublishResult`** (dataclass): `target`, `artifacts_published`, `url`, `success: bool`, `error: str`
-
-**`DistributionManager`** class:
-
-| Method | Signature | Returns | Description |
-|--------|-----------|---------|-------------|
-| `__init__` | `(build: BuildReport \ | None)` | — Initialize with a build report |
-| `preflight` | `(target: DistributionTarget)` | `PreflightResult` | Check build, artifacts, and metadata (3 checks) |
-| `publish` | `(target: DistributionTarget)` | `PublishResult` | Run preflight; publish if ready; sets URL for PyPI/TestPyPI/GitHub |
-| `publish_history` | `()` | `list[PublishResult]` | All previous publish operations |
-| `has_build` | property `bool` | — | True if build report exists and succeeded |
-
-## 3. Usage Example
+### `ReleaseValidator`
 
 ```python
-from codomyrmex.release import (
-    ReleaseValidator, PackageBuilder, PackageMetadata,
-    DistributionManager, DistributionTarget
+ReleaseValidator(
+    version: str = "1.3.0",
+    *,
+    policy: ReleasePolicy | None = None,
 )
-
-# Validate release
-validator = ReleaseValidator(version="1.2.0")
-validator.check_tests(failures=0, total=9000)
-validator.check_coverage(overall=60.0, tier1=80.0)
-validator.check_security(cve_count=0, secrets_found=0)
-cert = validator.certify()
-print(f"Certified: {cert.certified} ({cert.passed_checks}/{cert.total_checks})")
-
-# Build package
-metadata = PackageMetadata(name="codomyrmex", version="1.2.0",
-                           python_requires=">=3.11")
-builder = PackageBuilder(metadata)
-report = builder.build()
-assert report.success
-
-# Publish
-dm = DistributionManager(report)
-preflight = dm.preflight(DistributionTarget.PYPI)
-if preflight.ready:
-    result = dm.publish(DistributionTarget.PYPI)
-    print(f"Published: {result.url}")
 ```
+
+| Method | Result |
+|---|---|
+| `check_tests(failures, total, max_skips=50)` | requires at least one executed test and zero failures |
+| `check_coverage(overall, tier1=0)` | enforces policy coverage floors |
+| `check_type_safety(errors)` | blocking in strict mode; warning otherwise |
+| `check_security(cve_count, secrets_found)` | blocks any supplied CVE or secret |
+| `check_documentation(complete)` | blocking in strict mode; warning otherwise |
+| `check_artifacts(verified, artifact_count)` | requires at least one verified artifact |
+| `add_custom_check(check)` | appends caller evidence without changing policy |
+| `certify()` | fails for any blocking check or missing required category |
+| `to_markdown(certification)` | renders the receipt |
+
+The default strict policy requires categories `testing`, `coverage`, `typing`,
+`security`, `documentation`, and `artifacts`.
+
+## Package-Build API
+
+### `PackageMetadata`
+
+Frozen expected metadata: `name`, `version`, `description`, `author`,
+`license`, `python_requires`, `dependencies`, and `entry_points`.
+
+### `BuildArtifact`
+
+```python
+BuildArtifact(
+    filename: str,
+    path: pathlib.Path,
+    format: str,
+    media_type: str,
+    size_bytes: int,
+    sha256: str,
+    sha512: str,
+    built_at: float,
+)
+```
+
+`checksum` is a compatibility property returning the full `sha256`.
+
+### `PackageBuilder`
+
+```python
+PackageBuilder(
+    metadata: PackageMetadata | None = None,
+    *,
+    source_dir: str | Path | None = None,
+    output_dir: str | Path | None = None,
+    uv_executable: str = "uv",
+    source_date_epoch: int | None = None,
+)
+```
+
+`build()` executes `uv build --out-dir <isolated-stage> <source_dir>`. Success
+requires exactly one wheel and one sdist, readable embedded metadata matching
+the expected normalized name and version, and safe archive members. Absolute
+or traversing members and private-worktree/cache components such as `.git`,
+`.env`, and `__pycache__`, plus file contents embedding the active source or
+user-home path, fail closed before files are copied to `output_dir`.
+`BuildReport` records artifacts, warnings, success, command, stdout, and stderr.
+
+## Distribution API
+
+`DistributionTarget` values are `PYPI`, `TEST_PYPI`, `GITHUB`, and `LOCAL`.
+
+```python
+DistributionManager(build: BuildReport | None = None)
+```
+
+| Method | Contract |
+|---|---|
+| `preflight(target)` | verifies build success, artifact presence, metadata, file sizes, SHA-256, and SHA-512 |
+| `publish(target, *, dry_run=None, destination=None)` | plans remote publication or executes a verified local copy |
+| `publish_history()` | returns an isolated copy of in-memory results |
+
+`PublishResult` contains `target`, `artifacts_published`, `url`, `success`,
+`executed`, `dry_run`, `receipt`, and `error`. Remote targets default to
+`dry_run=True`; remote `dry_run=False` fails. Local targets default to
+execution, require `destination`, and verify all copied bytes.
+
+## Publication API
+
+All publication records are frozen dataclasses:
+
+- `PublicationMetadata`
+- `PublicationArtifact`
+- `PublicationManifest`
+- `PublicationBundle`
+- `PublicationVerification`
+- `PublicationPlan`
+
+`PublicationMetadata.publication_type` must be `technical-report`; an unassigned
+DOI is `None`.
+
+```python
+prepare_publication_bundle(
+    *,
+    metadata: PublicationMetadata,
+    content_pdf: str | Path,
+    distribution_pdf: str | Path,
+    semantic_html: str | Path,
+    output_dir: str | Path,
+    project_root: str | Path = ".",
+    reproducibility_inputs: Iterable[str | Path] = (),
+    validation_receipts: Iterable[str | Path] = (),
+    validation_outcomes: Iterable[tuple[str, bool, str]] = (),
+    source_date_epoch: int = 0,
+) -> PublicationBundle
+```
+
+The function copies required rendered artifacts, generates shared citation and
+Zenodo metadata, records source state and producers, writes manifest v1 and both
+checksum files, and performs no remote operation.
+
+```python
+verify_publication_bundle(
+    bundle: PublicationBundle | str | Path,
+) -> PublicationVerification
+```
+
+Verification checks schema version, required roles, portable paths, sizes,
+SHA-256, SHA-512, checksum files, and—when `pdftotext` is available—the visible
+content hash in the distribution PDF.
+
+```python
+plan_publication(
+    bundle: PublicationBundle | str | Path,
+    *,
+    target: str,
+    dry_run: bool = True,
+    receipt_path: str | Path | None = None,
+) -> PublicationPlan
+```
+
+Supported targets are `github` and `zenodo-sandbox`. `dry_run=False` raises
+`ValueError`; a plan is written only after bundle verification passes.
+
+## CLI
+
+```text
+python -m codomyrmex.release publication prepare [options]
+python -m codomyrmex.release publication verify BUNDLE
+python -m codomyrmex.release publication plan BUNDLE \
+  --target {github,zenodo-sandbox} [--receipt PATH]
+```
+
+`plan` always calls the API with `dry_run=True`.
+
+## Behavioral Compatibility Changes
+
+- Certification is now evidence-complete and fail closed by default.
+- Build records now identify real files with complete SHA-256 and SHA-512
+  digests; `checksum` remains a SHA-256 alias.
+- Remote distribution no longer reports simulated publication as executed.
+- Publication bundle APIs are additive and never perform remote writes.

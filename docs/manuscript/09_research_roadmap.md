@@ -2,7 +2,8 @@
 
 {{CONFIG_PARAMETER_STATUS_NOTE}} This roadmap is a scoped research program, not a
 catalogue of completed results. The current paper establishes the reproducible kernel
-contract and a fixed-input paired replay artifact; subsequent milestones are conditional on their artifacts, metrics, falsifiers,
+contract, a fixed-input paired replay artifact, and the local authenticated lifecycle
+ledger. Subsequent milestones are conditional on their artifacts, metrics, falsifiers,
 and exit criteria. A status label therefore describes evidence available in the current
 repository, not a promise about delivery or scientific success.
 
@@ -18,7 +19,8 @@ not promote that mechanism into a claim of harm reduction, optimality, collectiv
 intelligence, or Active Inference.
 
 The milestones are ordered by dependency. Replayable artifacts must precede external
-comparisons; authenticated outcome linkage must precede trust calibration; adversarial
+comparisons; local lifecycle authentication must precede deployment-specific external
+observation; externally attested outcomes must precede trust calibration; adversarial
 and held-out evaluation must precede claims about utility; and persistence/concurrency
 evidence must precede deployment-oriented interpretation. This ordering follows
 reproducibility and accountability principles rather than a calendar commitment
@@ -33,7 +35,8 @@ confidence level. These
 metadata bind the displayed fixture to its ordered task cases; they do not turn six
 synthetic pairs into an estimate of population risk or utility.
 
-![{{FIGURE_CAPTION_RESEARCH_ROADMAP}}](figures/{{FIGURE_FILENAME_RESEARCH_ROADMAP}}){#{{FIGURE_LABEL_RESEARCH_ROADMAP}} width={{FIGURE_WIDTH_RESEARCH_ROADMAP}}}
+![{{FIGURE_CAPTION_RESEARCH_ROADMAP}}](figures/{{FIGURE_FILENAME_RESEARCH_ROADMAP}}){#{{FIGURE_LABEL_RESEARCH_ROADMAP}} width={{FIGURE_WIDTH_RESEARCH_ROADMAP}} alt="{{FIGURE_ALT_RESEARCH_ROADMAP}}" aria-describedby="{{FIGURE_LABEL_RESEARCH_ROADMAP}}-description"}
+<div id="{{FIGURE_LABEL_RESEARCH_ROADMAP}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_RESEARCH_ROADMAP}}</div>
 
 The first executable evidence fixtures are separated by what they can and
 cannot establish. The attestation chain binds local lifecycle events, the
@@ -43,13 +46,17 @@ causal estimate, or production security guarantee.
 The figures below are generated artifacts with declared boundaries, not evidence
 that the later research milestones have been completed.
 
-![{{FIGURE_CAPTION_ATTESTATION_EVENT_CHAIN}}](figures/{{FIGURE_FILENAME_ATTESTATION_EVENT_CHAIN}}){#{{FIGURE_LABEL_ATTESTATION_EVENT_CHAIN}} width={{FIGURE_WIDTH_ATTESTATION_EVENT_CHAIN}}}
+![{{FIGURE_CAPTION_ATTESTATION_EVENT_CHAIN}}](figures/{{FIGURE_FILENAME_ATTESTATION_EVENT_CHAIN}}){#{{FIGURE_LABEL_ATTESTATION_EVENT_CHAIN}} width={{FIGURE_WIDTH_ATTESTATION_EVENT_CHAIN}} alt="{{FIGURE_ALT_ATTESTATION_EVENT_CHAIN}}" aria-describedby="{{FIGURE_LABEL_ATTESTATION_EVENT_CHAIN}}-description"}
+<div id="{{FIGURE_LABEL_ATTESTATION_EVENT_CHAIN}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_ATTESTATION_EVENT_CHAIN}}</div>
 
-![{{FIGURE_CAPTION_SAFETY_UTILITY_FRONTIER}}](figures/{{FIGURE_FILENAME_SAFETY_UTILITY_FRONTIER}}){#{{FIGURE_LABEL_SAFETY_UTILITY_FRONTIER}} width={{FIGURE_WIDTH_SAFETY_UTILITY_FRONTIER}}}
+![{{FIGURE_CAPTION_SAFETY_UTILITY_FRONTIER}}](figures/{{FIGURE_FILENAME_SAFETY_UTILITY_FRONTIER}}){#{{FIGURE_LABEL_SAFETY_UTILITY_FRONTIER}} width={{FIGURE_WIDTH_SAFETY_UTILITY_FRONTIER}} alt="{{FIGURE_ALT_SAFETY_UTILITY_FRONTIER}}" aria-describedby="{{FIGURE_LABEL_SAFETY_UTILITY_FRONTIER}}-description"}
+<div id="{{FIGURE_LABEL_SAFETY_UTILITY_FRONTIER}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_SAFETY_UTILITY_FRONTIER}}</div>
 
-![{{FIGURE_CAPTION_CALIBRATION_RELIABILITY}}](figures/{{FIGURE_FILENAME_CALIBRATION_RELIABILITY}}){#{{FIGURE_LABEL_CALIBRATION_RELIABILITY}} width={{FIGURE_WIDTH_CALIBRATION_RELIABILITY}}}
+![{{FIGURE_CAPTION_CALIBRATION_RELIABILITY}}](figures/{{FIGURE_FILENAME_CALIBRATION_RELIABILITY}}){#{{FIGURE_LABEL_CALIBRATION_RELIABILITY}} width={{FIGURE_WIDTH_CALIBRATION_RELIABILITY}} alt="{{FIGURE_ALT_CALIBRATION_RELIABILITY}}" aria-describedby="{{FIGURE_LABEL_CALIBRATION_RELIABILITY}}-description"}
+<div id="{{FIGURE_LABEL_CALIBRATION_RELIABILITY}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_CALIBRATION_RELIABILITY}}</div>
 
-![{{FIGURE_CAPTION_PERSISTENCE_RECOVERY}}](figures/{{FIGURE_FILENAME_PERSISTENCE_RECOVERY}}){#{{FIGURE_LABEL_PERSISTENCE_RECOVERY}} width={{FIGURE_WIDTH_PERSISTENCE_RECOVERY}}}
+![{{FIGURE_CAPTION_PERSISTENCE_RECOVERY}}](figures/{{FIGURE_FILENAME_PERSISTENCE_RECOVERY}}){#{{FIGURE_LABEL_PERSISTENCE_RECOVERY}} width={{FIGURE_WIDTH_PERSISTENCE_RECOVERY}} alt="{{FIGURE_ALT_PERSISTENCE_RECOVERY}}" aria-describedby="{{FIGURE_LABEL_PERSISTENCE_RECOVERY}}-description"}
+<div id="{{FIGURE_LABEL_PERSISTENCE_RECOVERY}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_PERSISTENCE_RECOVERY}}</div>
 
 The roadmap in [@fig:research_roadmap] is a dependency map, not a delivery timeline. Its future
 milestones are planning objects and must not be read as empirical evidence.
@@ -82,7 +89,10 @@ records the exact roadmap configuration, while the figure registry records the r
 planning visual and its hash. R0 additionally retains the replay's semantic and file
 digests shown in [@tbl:reproducibility_identity]. The implemented R0 row is accepted
 only when its configured `artifact_paths` resolve to checked-in source or evidence
-surfaces; future rows remain hypotheses until they acquire equivalent retained paths.
+surfaces. R1 is governed by the same artifact-path requirement for the implemented local
+ledger. R2 is deliberately separate and remains open until a deployment-specific
+external-observation adapter and independent verification evidence exist; later rows
+remain hypotheses until they acquire equivalent retained paths.
 
 ## Execution protocol
 
@@ -90,8 +100,9 @@ Every future study should retain the following minimum evidence bundle:
 
 - the source commit, environment fingerprint, lockfile digest, configuration digest,
   random seed, and input checksums;
-- raw append-only proposal, verdict, execution, and outcome traces, including rejected
-  and failed cases rather than only successful runs;
+- raw append-only proposal, verdict, authorization, receipt, and outcome traces,
+  including the external observation source and rejected or failed cases rather than
+  only successful runs;
 - the baseline policy, the mediated policy, and the exact paired assignment rule;
 - analysis code that computes point estimates, uncertainty intervals, calibration
   diagnostics, and failure stratifications; and
@@ -140,8 +151,9 @@ evidence for the Colony Kernel until the experiment is actually run
 
 ## Scope of this release
 
-The current release documents and validates the first milestone's local contract,
-fixed-input replay, and reproducibility route. It does not claim that the later milestones are complete,
+The current release documents and validates R0's local contract, fixed-input replay, and
+reproducibility route plus R1's authenticated local lifecycle ledger. It does not claim
+that R2's end-to-end external-actuation attestation or any later milestone is complete,
 that the provisional settings are calibrated, or that the control plane is a security
 boundary. The appropriate scholarly contribution at this stage is a composable,
 inspectable research substrate with explicit failure conditions and a machine-readable

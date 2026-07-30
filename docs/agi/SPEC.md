@@ -92,7 +92,7 @@ Every essay follows this canonical structure:
     research hypothesis (e.g., causal reasoning)
 - Every nontrivial mapping should identify the formal object, code anchor, translation
   mechanism, executable evidence, and claim boundary. See the generated
-  [formalism-to-code crosswalk](../manuscript/10_formalism_code_crosswalk.md).
+  [formalism-to-code crosswalk](../manuscript/technical-report.html#sec:formalism-code-crosswalk).
 
 ### Diagram Standards
 

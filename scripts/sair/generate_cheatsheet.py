@@ -111,8 +111,12 @@ def build_cheatsheet(
     for bundle in bundles or []:
         all_keys.extend(STRATEGY_BUNDLES.get(bundle, []))
     # Deduplicate while preserving order
-    seen: set = set()
-    unique_keys = [k for k in all_keys if not (k in seen or seen.add(k))]  # type: ignore[arg-type]
+    seen: set[str] = set()
+    unique_keys: list[str] = []
+    for key in all_keys:
+        if key not in seen:
+            seen.add(key)
+            unique_keys.append(key)
 
     content: list[str] = []
 

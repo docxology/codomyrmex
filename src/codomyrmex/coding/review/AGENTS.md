@@ -10,7 +10,7 @@ Module implementation, resources, and local coordination for Review..
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `__init__.py` – Project file
-- `_compat.py` – Project file
+- `_instrumentation.py` – Optional performance instrumentation
 - `analyzer.py` – Project file
 - `api.py` – Project file
 - `demo_review.py` – Project file
@@ -32,7 +32,7 @@ Module implementation, resources, and local coordination for Review..
 - `README.md`
 - `SPEC.md`
 - `__init__.py`
-- `_compat.py`
+- `_instrumentation.py`
 - `analyzer.py`
 - `api.py`
 - `demo_review.py`

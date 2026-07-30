@@ -224,7 +224,7 @@ class TestClassifyHttpError:
         """Create a requests-like HTTPError with a response object."""
         import requests
 
-        resp = Stub()
+        resp = requests.Response()
         resp.status_code = status_code
         err = requests.exceptions.HTTPError(f"HTTP {status_code}")
         err.response = resp

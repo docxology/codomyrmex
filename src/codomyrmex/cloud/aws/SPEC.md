@@ -21,8 +21,8 @@ S3Client(region_name: Optional[str] = None)
 | `upload_file(file_path, bucket, object_name=None)` | `bool` | Upload local file |
 | `download_file(bucket, object_name, file_path)` | `bool` | Download to local |
 | `list_objects(bucket)` | `list[str]` | List object keys |
-| `get_metadata(bucket, object_name)` | `dict` | Get object metadata |
-| `ensure_bucket(bucket, region=None)` | `bool` | Create if not exists |
+| `get_object_metadata(bucket, object_name)` | `dict` | Get object metadata |
+| `create_bucket(bucket, region=None)` | `bool` | Create a bucket |
 
 ### Error Handling
 

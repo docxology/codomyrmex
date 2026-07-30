@@ -28,7 +28,6 @@ from .env_checker import (
     is_uv_available,
     is_uv_environment,
     validate_environment,
-    validate_environment_completeness,
     validate_python_version,
 )
 
@@ -76,6 +75,5 @@ __all__ = [
     "is_uv_available",
     "is_uv_environment",
     "validate_environment",
-    "validate_environment_completeness",
     "validate_python_version",
 ]

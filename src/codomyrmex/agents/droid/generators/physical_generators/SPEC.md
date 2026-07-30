@@ -14,7 +14,7 @@ Three-file separation of concerns, re-exported via `__init__.py`:
 2. **content_generators.py** -- Pure functions returning Python source strings for core module files
 3. **doc_generators.py** -- Pure functions returning Markdown, test, and requirements strings
 
-The `__init__.py` re-exports all 16 symbols for backward compatibility with the parent `physical.py` module.
+The `__init__.py` exports the public functions for direct use by the generators package.
 
 ## Key Functions
 

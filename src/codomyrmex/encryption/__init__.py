@@ -21,8 +21,6 @@ from .algorithms import AESGCMEncryptor
 from .containers import SecureDataContainer
 from .core import (
     Encryptor,
-    decrypt_data,
-    encrypt_data,
     generate_aes_key,
 )
 from .keys import KeyManager, compute_hmac, derive_key_hkdf, verify_hmac
@@ -43,7 +41,7 @@ def cli_commands():
             "help": "list available encryption algorithms",
             "handler": lambda **kwargs: print(
                 "Encryption Algorithms:\n"
-                "  - AES-256-CBC: Symmetric (legacy, deprecated)\n"
+                "  - AES-256-CBC: Symmetric (unauthenticated, deprecated)\n"
                 "  - AES-256-GCM: Authenticated symmetric (recommended)\n"
                 "  - RSA: Asymmetric encryption\n"
                 "  - PBKDF2: Key derivation from passwords\n"
@@ -81,13 +79,11 @@ __all__ = [
     # HMAC
     "compute_hmac",
     "decrypt",
-    "decrypt_data",
     "decrypt_file",
     # KDF
     "derive_key_hkdf",
     # Convenience functions
     "encrypt",
-    "encrypt_data",
     "encrypt_file",
     "generate_aes_key",
     "generate_key",

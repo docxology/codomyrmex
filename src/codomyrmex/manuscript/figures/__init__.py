@@ -1,6 +1,8 @@
 """Publication figure generators for the Codomyrmex manuscript."""
 
 import os
+from collections.abc import Callable
+from typing import Any
 
 # Load a headless backend before any generator imports pyplot. This keeps local
 # macOS rendering and CI deterministic and avoids creating GUI windows.
@@ -40,7 +42,7 @@ from codomyrmex.manuscript.figures.subsystem_architecture import (
 )
 from codomyrmex.manuscript.figures.trust_trajectory import fig_trust_trajectory
 
-FIGURES: list[tuple[str, object]] = [
+FIGURES: list[tuple[str, Callable[[], Any]]] = [
     ("cover.png", fig_cover_art),
     ("colony_pressure_loop.png", fig_colony_pressure_loop),
     ("pheromone_decay.png", fig_pheromone_decay),

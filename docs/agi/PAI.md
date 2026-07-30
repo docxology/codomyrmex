@@ -119,7 +119,7 @@ The MCP bridge (`agents/pai/mcp_bridge.py`) is an interface adapter for selected
 module-tool registrations. It should not be called a universal morphism or terminal
 object: the repository has not defined a category **Mod**, shown unique morphisms, or
 proved the universal property. The manuscript's
-[formalism-to-code crosswalk](../manuscript/10_formalism_code_crosswalk.md) records this
+[formalism-to-code crosswalk](../manuscript/technical-report.html#sec:formalism-code-crosswalk) records this
 as a code/interface correspondence with an explicit formal gap.
 
 ### PAI Dashboard as Metacognitive Interface

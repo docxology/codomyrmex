@@ -10,6 +10,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from codomyrmex.calendar_integration.exceptions import CalendarAuthError
 from codomyrmex.calendar_integration.generics import CalendarEvent
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
@@ -33,8 +34,8 @@ def _get_provider() -> Any:
     Authentication priority (v1.2.4):
         1. **Env vars** — ``GOOGLE_REFRESH_TOKEN`` + ``GOOGLE_CLIENT_ID`` +
            ``GOOGLE_CLIENT_SECRET`` (same unified OAuth2 pattern as GmailProvider).
-        2. **Token file** — ``~/.codomyrmex/gcal_token.json`` (legacy PAI dashboard
-           auth). Still supported as a backwards-compatible fallback.
+        2. **Token file** — ``~/.codomyrmex/gcal_token.json`` (PAI dashboard OAuth
+           flow).
         3. **ADC** — Application Default Credentials via ``gcloud auth``.
 
     Returns:
@@ -67,7 +68,7 @@ def _get_provider() -> Any:
         logger.debug("calendar: authenticating via GOOGLE_REFRESH_TOKEN env var")
         return GoogleCalendar.from_env()
 
-    # Priority 2: legacy token-file path (PAI dashboard auth)
+    # Priority 2: token-file OAuth path (PAI dashboard auth)
     token_path = Path.home() / ".codomyrmex" / "gcal_token.json"
     if token_path.exists():
         logger.debug("calendar: authenticating via token file %s", token_path)
@@ -97,7 +98,10 @@ def _get_provider() -> Any:
 
     # Priority 3: ADC fallback via from_env() (handles gcloud / Workload Identity)
     logger.debug("calendar: attempting Application Default Credentials")
-    return GoogleCalendar.from_env()
+    try:
+        return GoogleCalendar.from_env()
+    except CalendarAuthError as exc:
+        raise RuntimeError(f"Google Calendar is not authenticated: {exc}") from exc
 
 
 @mcp_tool(

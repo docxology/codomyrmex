@@ -8,17 +8,24 @@ The `security` module must:
 - Provide robust implementations of Security logic.
 - Handle errors gracefully without crashing the host process.
 - Expose a clean, type-hinted API.
+- Audit the complete locked dependency graph, including optional extras,
+  rather than the environment containing the audit tool.
 
 ## 2. API Surface
-See `API_SPECIFICATION.md` (if available) or `__init__.py` for exact signatures.
+`audit_uv_lock.py` exports all groups and extras from `uv.lock` and runs the
+locked `pip-audit` dependency against that explicit requirements set.
 
 ## 3. Dependencies
 - **Internal**: `codomyrmex.logging_monitoring`, `codomyrmex.utils`.
-- **External**: Standard library.
+- **External**: `uv`, `pip-audit`; standard library.
 
 ## 4. Constraints
 - **Performance**: Operations should be non-blocking where possible.
 - **Security**: Validate all inputs; sanity check paths.
+- **Advisory exceptions**: Any exception must be package-version-gated and
+  tied to an authoritative upstream applicability statement. The current
+  Wasmtime exception applies only to 42.0.0; another locked version is audited
+  without suppression.
 
 ## Navigation
 

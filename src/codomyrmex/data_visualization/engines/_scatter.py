@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from codomyrmex.data_visualization._compat import monitor_performance
+from codomyrmex.data_visualization._instrumentation import monitor_performance
 
 if TYPE_CHECKING:
     from datetime import datetime

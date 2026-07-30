@@ -1,4 +1,4 @@
-"""Orchestrator Pipelines — re-export surface for pipeline.py."""
+"""Orchestrator pipeline types exposed from the canonical implementation."""
 
 from .pipeline import (
     ConditionalStage,

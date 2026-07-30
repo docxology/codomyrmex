@@ -29,7 +29,7 @@ Extends `CodomyrmexError`. Raised when authentication encounters an unexpected e
 
 | Key in `credentials` | Strategy |
 |----------------------|----------|
-| `"api_key"` | Validated via `APIKeyManager.validate_api_key()` |
+| `"api_key"` | Validated via `APIKeyManager.validate()` |
 | `"username"` + `"password"` | Validated against internal user store |
 
 **Authorization flow** (checked in order):

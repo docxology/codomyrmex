@@ -12,7 +12,6 @@ Module implementation, resources, and local coordination for Metrics..
 - `SPEC.md` – File
 - `__init__.py` – File
 - `aggregator.py` – File
-- `core.py` – File
 - `prometheus_exporter.py` – File
 - `py.typed` – File
 - `statsd_client.py` – File

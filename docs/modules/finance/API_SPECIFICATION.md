@@ -61,13 +61,13 @@ This document specifies the Application Programming Interface (API) for the Fina
     - `get_balance(account_name: str) -> float`: Returns the current balance of the named account. Raises `LedgerError` if account not found.
     - `trial_balance() -> bool`: Verifies that total debits equal total credits across all recorded transactions. Returns `True` if balanced (within floating-point tolerance of 1e-9).
 
-### Function: `plot_account_balances(ledger: Ledger) -> BarPlot`
+### Function: `plot_account_balances(ledger: Ledger) -> BarChart`
 
 - **Description**: Generates a bar chart of all account balances in the ledger.
 - **Module**: `codomyrmex.finance.visualization`
 - **Parameters/Arguments**:
     - `ledger` (Ledger): The ledger instance to visualize
-- **Returns/Response**: `BarPlot` - A bar chart with account names on the x-axis and balances on the y-axis, titled "Account Balances".
+- **Returns/Response**: `BarChart` - A bar chart with account names on the x-axis and balances on the y-axis, titled "Account Balances".
 
 ### Function: `plot_transaction_volume(ledger: Ledger) -> LinePlot`
 

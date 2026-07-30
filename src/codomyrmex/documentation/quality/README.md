@@ -1,25 +1,42 @@
-# quality
+<!-- readme: curated -->
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+# Documentation quality
 
-## Overview
+This subpackage implements three distinct heuristics:
 
-Documentation tooling, generated references, and publishing assets for Quality.
+- `audit.py` checks package documentation presence, placeholder signals,
+  `py.typed`, and module docstrings;
+- `consistency_checker.py` reports line formatting, local-link, and required
+  section findings;
+- `quality_assessment.py` calculates heuristic 0–100 content scores.
 
-## Directory Contents
-- `PAI.md` – File
-- `README.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `audit.py` – File
-- `consistency_checker.py` – File
-- `py.typed` – File
-- `quality_assessment.py` – File
+These checks provide triage evidence. They do not prove that prose, commands,
+citations, or scientific claims are correct.
+
+## Examples
+
+```python
+from pathlib import Path
+
+from codomyrmex.documentation import (
+    DocumentationConsistencyChecker,
+    DocumentationQualityAnalyzer,
+    audit_rasp,
+)
+
+scores = DocumentationQualityAnalyzer().analyze_file(Path("README.md"))
+consistency = DocumentationConsistencyChecker().check_directory("docs")
+exit_code = audit_rasp(Path("src/codomyrmex/documentation"))
+```
+
+`audit_rasp()` prints a report and returns an exit code. Use
+`scripts/documentation/audit_readme_agents.py` and `make docs-check` for the
+authoritative repository release gate.
 
 ## Navigation
-- **Parent Directory**: [documentation](../README.md)
-- **Project Root**: ../../../../README.md
 
-## Related Documents
-
-- **Agents**: [AGENTS.md](AGENTS.md)
+- [Agent instructions](AGENTS.md)
+- [Functional specification](SPEC.md)
+- [PAI integration](PAI.md)
+- [Parent documentation package](../README.md)
+- [Repository documentation guide](../../../../docs/development/documentation.md)

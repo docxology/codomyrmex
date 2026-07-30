@@ -13,6 +13,16 @@ The Git Operations module handles interactions with Git repositories and the Git
 3. **Credential Storage**: Use environment variables or secure vaults for credential storage.
 4. **Token Rotation**: Implement regular rotation of API tokens and access credentials.
 
+### Runtime State
+
+1. **Writable location**: Repository metadata must live in an explicit or
+   user-state path, never inside installed package files or the source tree.
+2. **Test isolation**: Tests that save metadata must select a temporary file.
+3. **Distribution boundary**: Live `repository_metadata.json` files and
+   `*.backup.*` files are excluded from wheel and sdist artifacts.
+4. **Secrets**: GitHub tokens are request credentials held in memory; they must
+   not be serialized into repository metadata.
+
 ### Command Injection Prevention
 
 1. **Input Sanitization**: Sanitize all user inputs before passing to Git commands.

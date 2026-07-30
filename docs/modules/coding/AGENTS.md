@@ -13,7 +13,6 @@ Documentation tooling, generated references, and publishing assets for Coding.
 - `README.md` – Project file
 - `SECURITY.md` – Project file
 - `SPEC.md` – Project file
-- `parsers/` – Directory containing parsers components
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

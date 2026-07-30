@@ -6,9 +6,7 @@ Usage:
     python pattern_search.py <pattern> [path] [--type TYPE]
 """
 
-logger = logging.getLogger(__name__)
-
-
+import logging
 import sys
 from pathlib import Path
 
@@ -20,8 +18,9 @@ except ImportError:
 
 import argparse
 import ast
-import logging
 import re
+
+logger = logging.getLogger(__name__)
 
 
 def search_regex(pattern: str, path: Path, file_extensions: list | None = None) -> list:

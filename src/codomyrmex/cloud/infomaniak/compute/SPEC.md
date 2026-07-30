@@ -23,7 +23,7 @@ Single-class design. `InfomaniakComputeClient` extends both `InfomaniakOpenStack
 | `stop_instance` | `instance_id: str` | `bool` | Stop running instance |
 | `reboot_instance` | `instance_id: str, reboot_type: str = "SOFT"` | `bool` | SOFT or HARD reboot |
 | `delete_instance` | `instance_id: str, force: bool = False` | `bool` | Delete instance |
-| `terminate_instance` | `instance_id: str` | `bool` | Alias for `delete_instance(force=True)` |
+| `terminate_instance` | `instance_id: str` | `bool` | Implement the compute-client termination operation with forced deletion |
 
 ### Image and Flavor Operations
 

@@ -1,6 +1,5 @@
 from typing import Any
 
-from codomyrmex.cerebrum.core.exceptions import VisualizationError
 from codomyrmex.cerebrum.visualization.base import (
     BaseChartVisualizer,
     BaseHeatmapVisualizer,
@@ -9,6 +8,7 @@ from codomyrmex.cerebrum.visualization.theme import (
     VisualizationTheme,
     get_default_theme,
 )
+from codomyrmex.exceptions.cerebrum import VisualizationError
 from codomyrmex.logging_monitoring import get_logger
 
 """Concordance visualizations for cross-analysis comparisons.

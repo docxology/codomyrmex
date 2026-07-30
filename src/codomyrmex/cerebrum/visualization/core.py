@@ -1,3 +1,4 @@
+import importlib
 from typing import Any
 
 from codomyrmex.cerebrum.core.cases import Case
@@ -30,8 +31,9 @@ except ImportError:
     Figure = Any  # type: ignore
     Patch = Any  # type: ignore
 
+nx: Any
 try:
-    import networkx as nx
+    nx = importlib.import_module("networkx")
 except ImportError:
     nx = None
 

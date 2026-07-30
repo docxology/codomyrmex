@@ -388,7 +388,7 @@ class ResourceManager:
         requirements: dict[str, Any],
         timeout: float | None = None,
     ) -> list[ResourceAllocation] | None:
-        """Legacy wrapper: allocate multiple resources from requirements dictionary."""
+        """Allocate multiple resources described by a requirements dictionary."""
         allocations = []
         with self._lock:
             # First map requirements to known resources
@@ -416,7 +416,7 @@ class ResourceManager:
             return allocations
 
     def deallocate_resources(self, requester_id: str) -> bool:
-        """Legacy wrapper: release all resources allocated to a requester."""
+        """Release all resources currently allocated to a requester."""
         with self._lock:
             released_any = False
             for resource in self.resources.values():

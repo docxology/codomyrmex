@@ -7,6 +7,7 @@ from codomyrmex.manuscript.figures._common import (
     FancyBboxPatch,
     _add_provenance_note,
     _save,
+    _text_color_on,
     math,
     np,
     plt,
@@ -97,9 +98,6 @@ def fig_colony_pressure_loop() -> None:
                 zorder=3,
             )
         )
-        text_color = (
-            "white" if color not in (_OI["yellow"], _OI["orange"]) else "#1a1a1a"
-        )
         ax.text(
             cx[i],
             cy[i] + 0.04,
@@ -108,7 +106,7 @@ def fig_colony_pressure_loop() -> None:
             va="center",
             fontsize=8.5,
             fontweight="bold",
-            color=text_color,
+            color=_text_color_on(color),
             zorder=4,
             linespacing=1.25,
         )

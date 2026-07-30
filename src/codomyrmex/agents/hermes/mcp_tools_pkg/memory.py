@@ -162,7 +162,7 @@ def hermes_extract_ki(
     """Persist a Knowledge Item derived from a Hermes session.
 
     Loads the session messages, concatenates the assistant turns into a body,
-    and stores it via :class:`~codomyrmex.agentic_memory.memory.KnowledgeMemory`.
+    and stores it via :class:`~codomyrmex.agentic_memory.core.memory.KnowledgeMemory`.
 
     Args:
         session_id: The Hermes session to extract from.
@@ -173,7 +173,7 @@ def hermes_extract_ki(
         dict with status, memory_id, title, and body_length.
     """
     try:
-        from codomyrmex.agentic_memory.memory import KnowledgeMemory
+        from codomyrmex.agentic_memory.core.memory import KnowledgeMemory
         from codomyrmex.agents.hermes.hermes_paths import resolve_hermes_session_db
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
 
@@ -238,7 +238,7 @@ def hermes_search_knowledge_items(
         dict with status, count, and results list containing title, body snippet, score.
     """
     try:
-        from codomyrmex.agentic_memory.memory import KnowledgeMemory
+        from codomyrmex.agentic_memory.core.memory import KnowledgeMemory
 
         km = KnowledgeMemory()
         results = km.recall(topic, k=limit)
@@ -292,7 +292,7 @@ def hermes_deduplicate_ki(
         dict with status, merged_count, and message.
     """
     try:
-        from codomyrmex.agentic_memory.memory import KnowledgeMemory
+        from codomyrmex.agentic_memory.core.memory import KnowledgeMemory
 
         km = KnowledgeMemory()
         merged = km.merge_duplicates(threshold=threshold)

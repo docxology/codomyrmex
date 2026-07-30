@@ -47,11 +47,6 @@ class QueryResult:
     execution_time: float
     error_message: str | None = None
 
-    @property
-    def valid(self) -> bool:
-        """Alias for success to match Unified Streamline pattern."""
-        return self.success
-
     def to_dict_list(self) -> list[dict[str, Any]]:
         """Convert rows to list of dictionaries."""
         return [dict(zip(self.columns, row, strict=False)) for row in self.rows]

@@ -13,8 +13,11 @@ from codomyrmex.email.agentmail.models import (
 )
 from codomyrmex.email.exceptions import EmailAPIError
 
+ApiError: type[Exception]
 try:
-    from agentmail.core import ApiError
+    from agentmail.core import ApiError as _AgentMailApiError
+
+    ApiError = _AgentMailApiError
 except ImportError:
     ApiError = Exception
 

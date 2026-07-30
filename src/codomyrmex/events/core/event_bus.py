@@ -81,7 +81,7 @@ class EventBus:
     def __init__(self, max_workers: int = 4, enable_async: bool = False):
         """
         Initialize the event bus.
-        Default to sync processing for backward compatibility with tests.
+        Default to synchronous processing for deterministic local callers.
         """
         self.subscriptions: dict[str, Subscription] = {}
         self.event_schema = EventSchema()

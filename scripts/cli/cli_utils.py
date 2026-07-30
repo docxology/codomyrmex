@@ -82,7 +82,7 @@ def print_progress(current: int, total: int, width: int = 40) -> None:
 
 def colorize(text: str, color: str) -> str:
     """Add ANSI color to text."""
-    colors: Literal["red", "green", "yellow", "blue", "magenta", "cyan", "reset"] = {
+    colors: dict[str, str] = {
         "red": "\033[91m",
         "green": "\033[92m",
         "yellow": "\033[93m",

@@ -10,7 +10,7 @@ import pytest
 import yaml
 from tests.support.repo_paths import PACKAGE_ROOT, REPO_ROOT
 
-from codomyrmex.colony_kernel.falsification_worker import AttackVector
+from codomyrmex.colony_kernel.falsification import AttackVector
 from codomyrmex.colony_kernel.models import (
     AgentRole,
     AgentTrustProfile,
@@ -203,26 +203,23 @@ FORBIDDEN_CLAIMS = {
         r"\b35,183\b"
     ): "full-suite collection count must match the current inventory snapshot",
     re.compile(
-        r"\b35,118\b"
-    ): "full-suite collection count must match the current inventory snapshot",
-    re.compile(
         r"\b35,137\b"
     ): "full-suite collection count must match the current inventory snapshot",
     re.compile(
         r"\b1,191\b"
-    ): "docs inventory is currently 1,205 Markdown files under docs/",
+    ): "docs inventory is currently 1,199 Markdown files under docs/",
     re.compile(
         r"\b1,192\b"
-    ): "docs inventory is currently 1,205 Markdown files under docs/",
+    ): "docs inventory is currently 1,199 Markdown files under docs/",
     re.compile(
         r"\b1,193\b"
-    ): "docs inventory is currently 1,205 Markdown files under docs/",
+    ): "docs inventory is currently 1,199 Markdown files under docs/",
     re.compile(
         r"\b1,194\b"
-    ): "docs inventory is currently 1,205 Markdown files under docs/",
+    ): "docs inventory is currently 1,199 Markdown files under docs/",
     re.compile(
         r"\b1,195\b"
-    ): "docs inventory is currently 1,205 Markdown files under docs/",
+    ): "docs inventory is currently 1,199 Markdown files under docs/",
     re.compile(
         r"\b35,122\b"
     ): "full-suite collection count must match the current inventory snapshot",
@@ -238,7 +235,7 @@ FORBIDDEN_CLAIMS = {
     ): "full-suite collection count must match the current inventory snapshot",
     re.compile(
         r"\b35,130\b"
-    ): "full-suite collection is currently documented as 35,119 tests",
+    ): "full-suite collection must match the current inventory snapshot",
     re.compile(r"35%2C130"): "full-suite collection badge is stale",
     re.compile(
         r"\b35,131\b"
@@ -366,6 +363,10 @@ FORBIDDEN_CLAIMS = {
         r"\b610 decorators\b", re.IGNORECASE
     ): "production @mcp_tool decorator count is now 623, not 610",
     re.compile(
+        r"\b(?:601|604)\s+(?:runtime|merged runtime|PAI-manifest)\s+(?:MCP\s+)?tools?\b",
+        re.IGNORECASE,
+    ): "active runtime tool claims must match the authoritative inventory",
+    re.compile(
         r"\b92\.3%\s+branch\s+coverage\b", re.IGNORECASE
     ): "branch coverage must come from pytest --cov-branch, not statement coverage",
     re.compile(
@@ -398,9 +399,9 @@ REQUIRED_CLAIMS = {
         "caller-reported outcomes",
     ],
     "docs/manuscript/00_abstract.md": [
-        "measurably harder to pass",
-        "failure memory raises friction",
-        "stale or duplicate module locations",
+        "ordinary Model Context Protocol path remains caller-reported and unattested",
+        "signed, hash-linked local ledger",
+        "does not independently observe external actuation",
     ],
     "docs/manuscript/02_methodology.md": [
         "standalone",
@@ -438,8 +439,8 @@ REQUIRED_CLAIMS = {
     "README.md": [
         "608 runtime MCP tools",
         "623 decorators",
-        "1,205",
-        "35,444",
+        "1,199",
+        "35,780",
     ],
 }
 
@@ -513,9 +514,10 @@ def test_public_surfaces_do_not_carry_stale_reviewer_claims() -> None:
 def test_public_surfaces_include_corrected_claims() -> None:
     failures: list[str] = []
     for rel_path, snippets in REQUIRED_CLAIMS.items():
-        text = _read(rel_path)
+        text = " ".join(_read(rel_path).split())
         for snippet in snippets:
-            if snippet not in text:
+            normalized_snippet = " ".join(snippet.split())
+            if normalized_snippet not in text:
                 failures.append(f"{rel_path}: missing {snippet!r}")
 
     assert not failures, "\n".join(failures)
@@ -536,7 +538,7 @@ def test_manuscript_config_matches_kernel_contract() -> None:
         }
     ]
     assert publication["doi"] == ""
-    assert publication["doi_status"] == "forthcoming"
+    assert publication["doi_status"] == "not assigned"
     assert publication["version_doi"] == ""
     assert publication["version_record"] == ""
     assert "placeholder" not in str(publication).lower()
@@ -611,7 +613,7 @@ def test_source_publication_metadata_has_no_placeholders() -> None:
 
     assert source["paper"]["date"] == "auto"
     assert source["authors"][0]["orcid"] == "0000-0001-6232-9096"
-    assert source["publication"]["doi_status"] == "forthcoming"
+    assert source["publication"]["doi_status"] == "not assigned"
     assert "placeholder" not in str(source["publication"]).lower()
 
 
@@ -679,8 +681,11 @@ def test_variable_inventory_matches_syntax_and_source_tokens() -> None:
                 f"FIGURE_WIDTH_{slug}",
                 f"FIGURE_EVIDENCE_{slug}",
                 f"FIGURE_CAPTION_{slug}",
+                f"FIGURE_ALT_{slug}",
+                f"FIGURE_LONG_DESCRIPTION_{slug}",
             }
         )
+    generated_tokens.add("RESULT_FIGURE_ACCESSIBILITY_ROWS")
 
     assert source_tokens <= generated_tokens
     assert {
@@ -697,6 +702,7 @@ def test_variable_inventory_matches_syntax_and_source_tokens() -> None:
         "RESULT_FORMALISM_CROSSWALK_ROWS",
         "RESULT_FORMALISM_CROSSWALK_EVIDENCE_ROWS",
         "RESULT_FORMAL_CROSSWALK_RESEARCH",
+        "RESULT_FIGURE_ACCESSIBILITY_ROWS",
     } <= source_tokens
     assert "CONFIG_FORMALISM_CODE_CROSSWALK" in generated_tokens
     assert "RESULT_GATE_SCORE_PROMOTED" not in generated_tokens | source_tokens
@@ -710,16 +716,24 @@ def test_figure_metadata_is_single_source_for_embedded_captions() -> None:
     )
     for key, spec in figure_config.items():
         slug = re.sub(r"[^A-Z0-9]+", "_", key.upper()).strip("_")
-        if key == "cover":
-            continue
-        for token in (
-            f"{{{{FIGURE_CAPTION_{slug}}}}}",
+        required_tokens = [
             f"{{{{FIGURE_FILENAME_{slug}}}}}",
             f"{{{{FIGURE_LABEL_{slug}}}}}",
-            f"{{{{FIGURE_WIDTH_{slug}}}}}",
-        ):
+            f"{{{{FIGURE_ALT_{slug}}}}}",
+            f"{{{{FIGURE_LONG_DESCRIPTION_{slug}}}}}",
+        ]
+        if key != "cover":
+            required_tokens.extend(
+                [
+                    f"{{{{FIGURE_CAPTION_{slug}}}}}",
+                    f"{{{{FIGURE_WIDTH_{slug}}}}}",
+                ]
+            )
+        for token in required_tokens:
             assert token in body, f"Missing configured figure token {token}"
         assert spec["caption"] not in body
+        assert spec["alt_text"] not in body
+        assert spec["long_description"] not in body
 
 
 def test_analytic_figure_captions_qualify_parameter_status() -> None:
@@ -1140,10 +1154,9 @@ def test_public_inventory_counts_match_live_tree() -> None:
     assert f"**{pytest_count:,}** collected tests" in readme
     assert f"| Pytest tests collected | {pytest_count:,}" in inventory
     assert f"{workflow_count} GitHub Actions workflows" in readme
-    assert (
-        f"| Runtime MCP tools | {runtime_count} (PAI merged manifest; standalone launcher full profile enumerates 605; HTTP defaults to 10 readonly tools) |"
-        in inventory
-    )
+    assert f"| Runtime MCP tools | {runtime_count} " in inventory
+    assert "complete locked dependency profile" in inventory
+    assert "other launcher profiles are enumerated at startup" in inventory
     assert f"| Production `@mcp_tool` decorators | {decorator_count} |" in inventory
     assert f"**{runtime_count}** runtime MCP tools" in readme
     assert f"{decorator_count} decorators" in readme
@@ -1156,9 +1169,9 @@ def test_public_inventory_counts_match_live_tree() -> None:
         "docs/modules/model_context_protocol/PAI.md",
     ):
         text = _read(rel_path)
-        assert "608 PAI-manifest tools" in text
-        assert "605 standalone full-profile tools" in text
-        assert "10 readonly HTTP tools" in text
+        assert f"manifest exposes {runtime_count} runtime entries" in text
+        assert "complete locked dependency profile" in text
+        assert "profiles are enumerated at startup" in text
         assert "33 tools" not in text
         assert "~984 Total" not in text
         assert "tool_count:33" not in text
@@ -1218,37 +1231,30 @@ def test_root_package_scripts_point_to_live_documentation_surface() -> None:
     package_json = json.loads(_read("package.json"))
     scripts = package_json["scripts"]
 
-    assert scripts["serve"] == "uv run python -m http.server 8000 --directory docs"
-    assert scripts["start"] == "uv run python -m http.server 8000 --directory docs"
-    assert scripts["build"] == (
-        "uv run python src/codomyrmex/documentation/scripts/triple_check.py --repo-root . --fail-on-issues"
-    )
-    assert "mkdocs" not in " ".join(scripts.values())
+    expected_serve = "NO_MKDOCS_2_WARNING=1 uv run --locked --group docs mkdocs serve"
+    assert scripts["serve"] == expected_serve
+    assert scripts["start"] == expected_serve
+    assert scripts["build"] == "make docs-check"
+    assert scripts["docs:check"] == "make docs-check"
+    assert "mkdocs" in " ".join(scripts.values())
     assert "documentation &&" not in " ".join(scripts.values())
 
-    http_help = subprocess.run(
-        ["uv", "run", "python", "-m", "http.server", "--help"],
-        cwd=REPO_ROOT,
-        capture_output=True,
-        text=True,
-        timeout=15,
-    )
-    assert http_help.returncode == 0
-
-    triple_check_help = subprocess.run(
+    mkdocs_version = subprocess.run(
         [
             "uv",
             "run",
-            "python",
-            "src/codomyrmex/documentation/scripts/triple_check.py",
-            "--help",
+            "--locked",
+            "--group",
+            "docs",
+            "mkdocs",
+            "--version",
         ],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,
-        timeout=15,
+        timeout=30,
     )
-    assert triple_check_help.returncode == 0
+    assert mkdocs_version.returncode == 0, mkdocs_version.stderr
 
 
 @pytest.mark.parametrize(

@@ -18,7 +18,6 @@ Module implementation, resources, and local coordination for Database Management
 - `backup/` – Subdirectory
 - `connections/` – Subdirectory
 - `db_manager.py` – File
-- `lineage/` – Subdirectory
 - `mcp_tools.py` – File
 - `migration/` – Subdirectory
 - `performance_monitor.py` – File

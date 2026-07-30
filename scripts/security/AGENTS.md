@@ -11,6 +11,7 @@ Automation and utility scripts.
 - `SPEC.md` – Project file
 - `audit/` – Directory containing audit components
 - `audit_secrets.py` – Project file
+- `audit_uv_lock.py` – Audits every locked dependency group and extra
 - `compliance/` – Directory containing compliance components
 - `examples/` – Directory containing examples components
 - `orchestrate.py` – Project file
@@ -30,6 +31,7 @@ Automation and utility scripts.
 - `README.md`
 - `SPEC.md`
 - `audit_secrets.py`
+- `audit_uv_lock.py`
 - `orchestrate.py`
 - `scan_dependencies.py`
 

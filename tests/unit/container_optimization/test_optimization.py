@@ -8,6 +8,7 @@ pytest.importorskip(
     reason="container optimization tests require docker SDK (uv sync --extra containerization)",
 )
 import docker
+from docker import errors as docker_errors
 
 from codomyrmex.container_optimization.optimizer import ContainerOptimizer
 from codomyrmex.container_optimization.resource_tuner import (
@@ -19,7 +20,12 @@ from codomyrmex.container_optimization.resource_tuner import (
 @pytest.fixture(scope="session")
 def docker_client():
     """Provides a Docker client for tests."""
-    return docker.from_env()
+    try:
+        client = docker.from_env()
+        client.ping()
+    except docker_errors.DockerException as exc:
+        pytest.skip(f"Docker daemon unavailable: {exc}")
+    return client
 
 
 @pytest.fixture(scope="module")

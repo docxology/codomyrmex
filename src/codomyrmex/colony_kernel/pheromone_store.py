@@ -2,7 +2,7 @@
 
 Wraps the agentic_memory stigmergy TraceField to give colony semantics:
 each ColonySignal is stored under the compound key
-``f"{signal_type.value}:{location}"`` so signals of different types at the
+``f"{location}:{signal_type.value}"`` so signals of different types at the
 same location remain distinct ledger entries.
 
 Decay rates are realised by constructing per-signal StigmergyConfig instances
@@ -244,7 +244,7 @@ class PheromoneStore:
 
         Uses the internal location index for O(|results|) performance instead
         of iterating all markers (O(N)).  Falls back to a full scan if the
-        index is stale or missing (defensive path for backward compatibility).
+        index is stale or missing (defensive path for index recovery).
 
         Args:
             location: Location prefix to match against.
@@ -441,7 +441,7 @@ class PheromoneStore:
         }
 
     # ------------------------------------------------------------------
-    # Kernel-compatible aliases
+    # Kernel integration methods
     # ------------------------------------------------------------------
 
     def deposit(self, signal: ColonySignal, trust_factor: float = 1.0) -> None:
@@ -463,13 +463,13 @@ class PheromoneStore:
         self.deposit_signal(scaled)
 
     def reinforce(self, location: str, signal_type: SignalType) -> None:
-        """Alias for reinforce_path. Kernel-compatible API."""
+        """Reinforce a path using the canonical storage operation."""
         self.reinforce_path(location, signal_type)
 
     def sense(self, location: str, signal_type: SignalType) -> float:
         """Return pheromone strength at (location, signal_type); 0.0 if absent.
 
-        Kernel-compatible API wrapping query_pressure.
+        Kernel-facing read of the pheromone strength.
         """
         key = _make_key(signal_type, location)
         marker = self._field.sense(key)
@@ -478,7 +478,7 @@ class PheromoneStore:
     def tick(self) -> int:
         """Evaporate all traces using per-signal decay rates; returns removed count.
 
-        Kernel-compatible API wrapping evaporate().
+        Kernel-facing evaporation step.
         """
         count_before = len(self._field)
         self.evaporate()
@@ -498,7 +498,7 @@ class PheromoneStore:
     def top_signals(self, k: int = 10) -> list[dict]:
         """Return the k strongest signals as plain dicts for colony_status.
 
-        Kernel-compatible API wrapping top_pressure().
+        Kernel-facing strongest-signal summary.
         """
         signals = self.top_pressure(k=k)
         results = []

@@ -169,7 +169,7 @@ graph TD
 
 ## colony_record_outcome
 
-**Description**: Record a caller-reported consequence of an action. Updates the agent's trust profile (stored in SQLite), deposits SUCCESS or FAILURE pheromone at the target, and records a DEPENDENCY trace. The tool does not attest the report against a prior EXECUTE authorization.
+**Description**: Record a caller-reported consequence of an action. Updates the agent's trust profile (stored in SQLite), deposits SUCCESS or FAILURE pheromone at the target, and records a DEPENDENCY trace. This MCP tool uses the ordinary, unattested singleton path and does not link the report to a prior EXECUTE authorization. Optional/required local attestation is available only through the direct `ColonyKernel` lifecycle API.
 
 ### Input Schema
 
@@ -361,6 +361,10 @@ graph TD
 {
   "type": "object",
   "properties": {
+    "tick_count": {
+      "type": "integer",
+      "description": "Number of colony ticks elapsed since kernel initialization."
+    },
     "pheromone_summary": {
       "type": "object",
       "description": "Snapshot of the pheromone field.",
@@ -419,6 +423,7 @@ graph TD
       {"key": "codomyrmex.crypto.hmac:failure", "location": "codomyrmex.crypto.hmac", "signal_type": "failure", "strength": 2.1, "updated_at": 1751234400.0}
     ]
   },
+  "tick_count": 0,
   "budget_usage": {
     "llm_calls": {"used": 9, "max": 500},
     "runtime_seconds": {"used": 47.2, "max": 3600.0}
@@ -686,7 +691,7 @@ returns no candidates. This report path is read-only and advisory.
 
 ## colony_tick
 
-**Description**: Advance the Colony one time-step. Evaporates all pheromone traces according to their decay rate and the `StigmergyConfig.evaporation_per_tick` setting. Traces that fall to or below `min_strength` are removed from the field. Returns the post-tick colony status (same shape as `colony_status` output).
+**Description**: Advance the Colony one time-step. Evaporates each pheromone trace using its stored `DecayRate` multiplier; the shared `TraceField` evaporation rate is disabled because rates are managed per signal by `PheromoneStore`. Traces that fall to or below `min_strength` are removed from the field. Returns the post-tick colony status (same shape as `colony_status` output).
 
 ### Input Schema
 
@@ -705,6 +710,7 @@ returns no candidates. This report path is read-only and advisory.
   "type": "object",
   "description": "Colony status dict (same shape as colony_status output).",
   "properties": {
+    "tick_count": {"type": "integer", "description": "Number of colony ticks elapsed since kernel initialization."},
     "pheromone_summary": {"type": "object", "description": "Snapshot of the pheromone field after evaporation."},
     "budget_usage": {"type": "object"},
     "role_distribution": {"type": "object"},
@@ -723,6 +729,7 @@ returns no candidates. This report path is read-only and advisory.
 
 ```json
 {
+  "tick_count": 1,
   "pheromone_summary": {
     "total_signals": 1,
     "top_signals": [

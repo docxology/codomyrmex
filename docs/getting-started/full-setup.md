@@ -260,13 +260,13 @@ uv run pytest tests/integration/
 
 ```bash
 # Format code
-uv run black src/
+uv run ruff format src/
 
 # Lint code
 uv run ruff check src/
 
 # Type checking
-uv run ty check src/
+uv run ty check --output-format concise src/ scripts/ tests/
 ```
 
 ### Module Development

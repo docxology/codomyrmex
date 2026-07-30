@@ -47,7 +47,6 @@ PLAYGROUND_URL = "https://playground.sair.foundation/playground/mathematics-dist
 BENCHMARK_URL = "https://benchmark.sair.foundation/benchmarks/mathematics-distillation-challenge-equational-theories-stage1"
 # Historical competition metadata only; this date is not an active promise.
 HISTORICAL_SUBMISSION_DEADLINE = "2026-04-20"
-SUBMISSION_DEADLINE = HISTORICAL_SUBMISSION_DEADLINE  # compatibility alias
 CHEATSHEET_MAX_BYTES = 10_240  # Official: ≤10KB UTF-8
 DATASET_REPO_ID = "SAIRfoundation/equational-theories-selected-problems"
 
@@ -423,7 +422,7 @@ def run_evaluation(
     logger.info(
         "Run %s complete — accuracy=%.2f%% (%d/%d) | avg_latency=%.2fs | tokens=%d",
         run_id,
-        summary["accuracy"] * 100,
+        float(summary.get("accuracy", 0.0) or 0.0) * 100,
         summary["correct"],
         summary["evaluated"],
         summary["avg_latency_sec"],

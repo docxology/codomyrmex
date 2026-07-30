@@ -36,7 +36,7 @@ class KnowledgeItemIndex:
 
     This is intentionally a lightweight, dependency-free implementation —
     no numpy or scikit-learn required.  When Ollama embeddings are available
-    the :class:`~codomyrmex.agentic_memory.memory.KnowledgeMemory` class will
+    the :class:`~codomyrmex.agentic_memory.core.memory.KnowledgeMemory` class will
     use them for re-ranking on top of these TF-IDF candidate results.
 
     Example::

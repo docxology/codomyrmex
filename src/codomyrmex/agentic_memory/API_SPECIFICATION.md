@@ -77,7 +77,6 @@ Methods: `access() -> None`, `to_dict() -> dict`, `from_dict(data) -> Memory` (c
 | Method | Signature | Returns | Description |
 |--------|-----------|---------|-------------|
 | `remember` | `(content, *, memory_type, importance, metadata)` | `Memory` | Create and persist a memory |
-| `add` | `(content, importance)` | `Memory` | Convenience alias for `remember` |
 | `recall` | `(query, *, k, memory_type, min_importance)` | `list[RetrievalResult]` | Top-k memories matching query |
 | `search` | `(query, k)` | `list[RetrievalResult]` | Public search API |
 | `forget` | `(memory_id: str)` | `bool` | Delete a memory by ID |
@@ -88,7 +87,7 @@ Methods: `access() -> None`, `to_dict() -> dict`, `from_dict(data) -> Memory` (c
 
 | Method | Signature | Returns |
 |--------|-----------|---------|
-| `add` | `(content, importance)` | `Memory` |
+| `remember` | `(content, *, memory_type, importance, metadata)` | `Memory` |
 | `search` | `(query, k)` | `list[RetrievalResult]` |
 
 **`ConversationMemory`**: Specialized for dialogue turn storage.
@@ -106,8 +105,8 @@ Methods: `access() -> None`, `to_dict() -> dict`, `from_dict(data) -> Memory` (c
 ## 3. Usage Example
 
 ```python
-from codomyrmex.agentic_memory.memory import AgentMemory
-from codomyrmex.agentic_memory.models import MemoryType, MemoryImportance
+from codomyrmex.agentic_memory.core.memory import AgentMemory
+from codomyrmex.agentic_memory.core.models import MemoryType, MemoryImportance
 
 # Basic usage
 mem = AgentMemory()
@@ -126,7 +125,7 @@ persistent = AgentMemory(store=store)
 persistent.remember("User prefers dark mode", importance=MemoryImportance.MEDIUM)
 
 # Conversation memory
-from codomyrmex.agentic_memory.memory import ConversationMemory
+from codomyrmex.agentic_memory.core.memory import ConversationMemory
 conv = ConversationMemory()
 conv.add_turn("user", "What is the capital of France?", turn_number=1)
 conv.add_turn("assistant", "Paris.", turn_number=2)

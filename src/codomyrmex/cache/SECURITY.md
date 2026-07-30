@@ -313,7 +313,7 @@ bandit -r src/codomyrmex/cache/
 safety check
 
 # Type checking for security issues
-mypy src/codomyrmex/cache/ --strict
+ty check src/codomyrmex/cache/
 ```
 
 ## Incident Response

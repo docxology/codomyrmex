@@ -14,7 +14,7 @@
 ## Non-Functional Requirements
 
 - Tests use real local objects and WebSocket transport where available.
-- The module is a local compatibility surface and does not claim production ROS2 middleware integration.
+- The module is a local simulation surface and does not claim production ROS2 middleware integration.
 - Runtime behavior should stay deterministic and dependency-light.
 
 ## Navigation

@@ -1,70 +1,52 @@
-# core
+<!-- readme: curated -->
+# Core Git Operations
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Overview
 
-Module implementation, resources, and local coordination for Core..
+This package contains the command facade, repository-library manager, and
+repository-metadata persistence used by `codomyrmex.git_operations`.
 
-## Directory Contents
-- `PAI.md` – File
-- `README.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `commands/` – Subdirectory
-- `git.py` – File
-- `metadata.py` – File
-- `repository.py` – File
-- `repository_metadata.json` – File
-- `repository_metadata.json.backup.20260304_191335` – File
-- `repository_metadata.json.backup.20260304_191336` – File
-- `repository_metadata.json.backup.20260304_191338` – File
-- `repository_metadata.json.backup.20260304_191339` – File
-- `repository_metadata.json.backup.20260304_191340` – File
-- `repository_metadata.json.backup.20260306_145341` – File
-- `repository_metadata.json.backup.20260306_145343` – File
-- `repository_metadata.json.backup.20260306_145344` – File
-- `repository_metadata.json.backup.20260306_145345` – File
-- `repository_metadata.json.backup.20260306_145346` – File
-- `repository_metadata.json.backup.20260307_175359` – File
-- `repository_metadata.json.backup.20260307_175400` – File
-- `repository_metadata.json.backup.20260307_175402` – File
-- `repository_metadata.json.backup.20260307_175403` – File
-- `repository_metadata.json.backup.20260307_175404` – File
-- `repository_metadata.json.backup.20260307_181611` – File
-- `repository_metadata.json.backup.20260307_181613` – File
-- `repository_metadata.json.backup.20260307_181615` – File
-- `repository_metadata.json.backup.20260307_181616` – File
-- `repository_metadata.json.backup.20260307_181617` – File
-- `repository_metadata.json.backup.20260307_181618` – File
-- `repository_metadata.json.backup.20260307_190032` – File
-- `repository_metadata.json.backup.20260307_190034` – File
-- `repository_metadata.json.backup.20260307_190035` – File
-- `repository_metadata.json.backup.20260307_190036` – File
-- `repository_metadata.json.backup.20260307_190037` – File
-- `repository_metadata.json.backup.20260307_190038` – File
-- `repository_metadata.json.backup.20260307_203448` – File
-- `repository_metadata.json.backup.20260307_203449` – File
-- `repository_metadata.json.backup.20260307_203451` – File
-- `repository_metadata.json.backup.20260307_203452` – File
-- `repository_metadata.json.backup.20260307_203453` – File
-- `repository_metadata.json.backup.20260307_203454` – File
-- `repository_metadata.json.backup.20260307_204327` – File
-- `repository_metadata.json.backup.20260307_204329` – File
-- `repository_metadata.json.backup.20260307_204335` – File
-- `repository_metadata.json.backup.20260307_204336` – File
-- `repository_metadata.json.backup.20260307_204337` – File
-- `repository_metadata.json.backup.20260307_204338` – File
-- `repository_metadata.json.backup.20260308_132233` – File
-- `repository_metadata.json.backup.20260308_132235` – File
-- `repository_metadata.json.backup.20260308_132237` – File
-- `repository_metadata.json.backup.20260308_132238` – File
-- `repository_metadata.json.backup.20260308_132239` – File
+Repository metadata is runtime state, not package data. Unless the caller
+passes `metadata_file`, `RepositoryMetadataManager` uses:
+
+1. `CODOMYRMEX_REPOSITORY_METADATA_FILE`, when set;
+2. `$XDG_STATE_HOME/codomyrmex/git_operations/repository_metadata.json`; or
+3. `~/.local/state/codomyrmex/git_operations/repository_metadata.json`.
+
+The parent directory is created only when metadata is saved. Timestamped
+backups may be written beside the selected state file. Neither live metadata
+nor its backups belong in wheel or sdist artifacts.
+
+## Key Files
+
+| Path | Purpose |
+|---|---|
+| `git.py` | Compatibility facade for command modules |
+| `commands/` | Branch, commit, config, history, merge, remote, repository, stash, status, sync, submodule, and tag operations |
+| `repository.py` | Repository library and bulk-operation manager |
+| `metadata.py` | Metadata models, persistence, GitHub enrichment, and reports |
+| `__init__.py` | Public exports |
+| `SPEC.md` | Functional and persistence contracts |
+| `PAI.md` | Agent-facing usage boundary |
+
+`repository_metadata.json` and `repository_metadata.json.backup.*` files found
+in a checkout are mutable local state. Documentation intentionally does not
+inventory individual backup filenames.
+
+## Validation
+
+```bash
+uv run --locked pytest tests/unit/git_operations -q
+uv run --locked ruff check src/codomyrmex/git_operations tests/unit/git_operations
+uv run --locked ty check src/codomyrmex/git_operations
+```
 
 ## Navigation
-- **Parent Directory**: [git_operations](../README.md)
-- **Project Root**: ../../../../README.md
 
-## Related Documents
-
-- **Agents**: [AGENTS.md](AGENTS.md)
+- [Parent module](../README.md)
+- [Specification](SPEC.md)
+- [Agent guide](AGENTS.md)
+- [PAI integration](PAI.md)
+- [Repository root](../../../../README.md)

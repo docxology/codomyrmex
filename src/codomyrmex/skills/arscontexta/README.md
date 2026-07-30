@@ -12,12 +12,9 @@ Module implementation, resources, and local coordination for Arscontexta..
 - `SPEC.md` – File
 - `__init__.py` – File
 - `core.py` – File
-- `exceptions.py` – File
 - `models.py` – File
 - `py.typed` – File
-- `services.py` – File
 - `skills.py` – File
-- `types.py` – File
 
 ## Navigation
 - **Parent Directory**: [skills](../README.md)

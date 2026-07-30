@@ -1,10 +1,16 @@
-# Quality Personal AI Infrastructure
+# PAI mapping — documentation quality
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+| Phase | Contribution | Boundary |
+| :--- | :--- | :--- |
+| OBSERVE | Read package files, headings, links, and structure | Filesystem snapshot only |
+| VERIFY | Report RASP gaps, consistency issues, and heuristic scores | Not proof of semantic accuracy |
+| LEARN | Persist caller-selected Markdown or external validation receipts | No internal durable learning state |
 
-**Status**: Active
-**Last Updated**: February 2026
+Use the package quality functions for focused diagnosis and `make docs-check`
+for the composed repository gate.
 
-## AI Capabilities
+## Navigation
 
-- Provides context and tools for Quality
+- [Quality overview](README.md)
+- [Functional specification](SPEC.md)
+- [Parent PAI mapping](../PAI.md)

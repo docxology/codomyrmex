@@ -60,10 +60,6 @@ def create_bar_chart_from_dict(data: Any, title: str = "Bar Chart") -> Any:
     return chart.render()
 
 
-# Convenience alias
-BarPlot = BarChart
-
-
 def generate_report(
     output_dir: str | Path = ".", report_type: str = "general", **kwargs
 ) -> str:
@@ -103,7 +99,6 @@ __all__ = [
     # Chart Classes
     "AreaChart",
     "BarChart",
-    "BarPlot",
     "BoxPlot",
     "Card",
     # UI

@@ -93,13 +93,11 @@ from .mocking import (
     create_fixture,
     create_mock_server,
 )
+
+# Import the documentation OpenAPI implementation from its canonical module.
+from .openapi_documentation_generator import DocumentationOpenAPIGenerator
 from .openapi_generator import (
     APISchema as SharedAPISchema,
-)
-
-# Import shared OpenAPI components
-from .openapi_generator import (
-    DocumentationOpenAPIGenerator,
 )
 
 # Import from pagination submodule

@@ -90,8 +90,7 @@ class EventEmitter:
         metadata: dict[str, Any] | None = None,
         priority: int = 0,
     ) -> None:
-        """
-        Emit a single event synchronously.
+        """Emit a single event synchronously through the event bus.
 
         Args:
             event_type: Type of event to emit

@@ -133,10 +133,3 @@ class S3Client(StorageClient):
         except ClientError as e:
             logger.error("S3 generate_presigned_url error: %s", e)
             return ""
-
-    # Legacy method for backward compatibility
-    def ensure_bucket(self, bucket: str, region: str | None = None) -> bool:
-        """Ensure an S3 bucket exists (legacy)."""
-        if self.bucket_exists(bucket):
-            return True
-        return self.create_bucket(bucket, region)

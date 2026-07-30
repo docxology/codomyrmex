@@ -5,7 +5,7 @@
 `ROS2Bridge` is an in-process, asynchronous topic bridge for local simulations,
 tests, and examples. It provides topic creation, publication, subscription,
 bounded history, and optional latched-message replay. It is not a ROS2 runtime
-or a claim of wire-level ROS compatibility.
+or a claim of wire-level ROS interoperability.
 
 ## Components
 

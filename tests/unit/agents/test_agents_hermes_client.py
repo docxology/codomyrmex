@@ -211,7 +211,7 @@ class TestHermesSessionMCPTools:
         db_path = tmp_path / "mcp_sessions.db"
         # Patch _get_client to inject our test config
         from codomyrmex.agents.hermes import mcp_tools
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         def mock_get_client(**kwargs):
             return HermesClient(

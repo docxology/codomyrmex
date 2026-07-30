@@ -70,19 +70,20 @@ def main():
 
         for chunk in response:
             if chunk.candidates and chunk.candidates[0].content:
-                for part in chunk.candidates[0].content.parts:
+                for part in chunk.candidates[0].content.parts or []:
+                    text = part.text or ""
                     if getattr(part, "thought", False):
                         if args.show_thoughts:
-                            sys.stderr.write(f"\033[90m{part.text}\033[0m")
+                            sys.stderr.write(f"\033[90m{text}\033[0m")
                             sys.stderr.flush()
-                        all_thoughts += part.text
+                        all_thoughts += text
                     else:
                         if args.show_thoughts:
-                            sys.stdout.write(f"\033[92m{part.text}\033[0m")
+                            sys.stdout.write(f"\033[92m{text}\033[0m")
                         else:
-                            sys.stdout.write(part.text)
+                            sys.stdout.write(text)
                         sys.stdout.flush()
-                        final_answer += part.text
+                        final_answer += text
 
         print("\n\n=== STREAM COMPLETE ===")
 

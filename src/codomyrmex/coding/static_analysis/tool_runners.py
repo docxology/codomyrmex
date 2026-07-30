@@ -67,91 +67,74 @@ class ToolRunner:
 
         return results
 
-    def run_flake8(self, file_path: str) -> list[AnalysisResult]:
-        """Run flake8 analysis on a file."""
+    def run_ruff(self, file_path: str) -> list[AnalysisResult]:
+        """Run the repository Ruff rules on a file."""
         results = []
         try:
-            cmd = [
-                "flake8",
-                "--format=%(path)s:%(row)d:%(col)d: %(code)s %(text)s",
-                file_path,
-            ]
+            cmd = ["ruff", "check", "--output-format", "concise", file_path]
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
 
             if result.stdout:
                 for line in result.stdout.strip().split("\n"):
-                    if ":" in line:
-                        parts = line.split(":", 3)
-                        if len(parts) >= 4:
-                            fp, line_num, col_num, message = parts
-
-                            code_match = re.match(r"^([A-Z]\d{3})", message.strip())
-                            rule_id = code_match.group(1) if code_match else "E999"
-
-                            severity = SeverityLevel.WARNING
-                            if rule_id.startswith("E"):
-                                severity = SeverityLevel.ERROR
-                            elif rule_id.startswith("W"):
-                                severity = SeverityLevel.WARNING
-                            elif rule_id.startswith("F"):
-                                severity = SeverityLevel.ERROR
-
-                            try:
-                                ln = int(line_num)
-                                col = int(col_num)
-                            except ValueError:
-                                logger.debug(
-                                    "flake8: could not parse line/col from: %r", line
-                                )
-                                continue
-
-                            results.append(
-                                AnalysisResult(
-                                    file_path=fp,
-                                    line_number=ln,
-                                    column_number=col,
-                                    severity=severity,
-                                    message=message.strip(),
-                                    rule_id=rule_id,
-                                    category="flake8",
-                                )
+                    match = re.match(r"(.+?):(\d+):(\d+):\s+([A-Z]\d+)\s+(.+)", line)
+                    if match:
+                        fp, line_num, col_num, rule_id, message = match.groups()
+                        severity = (
+                            SeverityLevel.ERROR
+                            if rule_id.startswith(("E", "F", "B", "S"))
+                            else SeverityLevel.WARNING
+                        )
+                        results.append(
+                            AnalysisResult(
+                                file_path=fp,
+                                line_number=int(line_num),
+                                column_number=int(col_num),
+                                severity=severity,
+                                message=message.strip(),
+                                rule_id=rule_id,
+                                category="ruff",
                             )
+                        )
 
         except (subprocess.TimeoutExpired, Exception) as e:
-            logger.error("Error running flake8 on %s: %s", file_path, e)
+            logger.error("Error running ruff on %s: %s", file_path, e)
 
         return results
 
-    def run_mypy(self, file_path: str) -> list[AnalysisResult]:
-        """Run mypy type checking on a file."""
+    def run_ty(self, file_path: str) -> list[AnalysisResult]:
+        """Run repository type checking with Ty on a file."""
         results = []
         try:
-            cmd = ["mypy", "--show-error-codes", "--no-error-summary", file_path]
+            cmd = ["ty", "check", "--output-format", "concise", file_path]
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
 
-            if result.stdout:
-                for line in result.stdout.strip().split("\n"):
-                    if ":" in line and "error:" in line:
-                        match = re.match(
-                            r"([^:]+):(\d+):(\d+): error: (.+) \[([^\]]+)\]", line
+            output = "\n".join(part for part in (result.stdout, result.stderr) if part)
+            for line in output.strip().splitlines():
+                match = re.match(
+                    r"(.+?):(\d+):(\d+):\s+(error|warning|note):\s+(.+?)(?:\s+\[([^\]]+)\])?$",
+                    line,
+                )
+                if match:
+                    fp, line_num, col_num, level, message, error_code = match.groups()
+                    severity = {
+                        "error": SeverityLevel.ERROR,
+                        "warning": SeverityLevel.WARNING,
+                        "note": SeverityLevel.INFO,
+                    }[level]
+                    results.append(
+                        AnalysisResult(
+                            file_path=fp,
+                            line_number=int(line_num),
+                            column_number=int(col_num),
+                            severity=severity,
+                            message=message,
+                            rule_id=error_code or "TY",
+                            category="ty",
                         )
-                        if match:
-                            fp, line_num, col_num, message, error_code = match.groups()
-
-                            results.append(
-                                AnalysisResult(
-                                    file_path=fp,
-                                    line_number=int(line_num),
-                                    column_number=int(col_num),
-                                    severity=SeverityLevel.ERROR,
-                                    message=message,
-                                    rule_id=error_code,
-                                    category="mypy",
-                                )
-                            )
+                    )
 
         except (subprocess.TimeoutExpired, Exception) as e:
-            logger.error("Error running mypy on %s: %s", file_path, e)
+            logger.error("Error running ty on %s: %s", file_path, e)
 
         return results
 

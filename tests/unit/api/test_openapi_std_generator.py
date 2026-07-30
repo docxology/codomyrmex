@@ -11,13 +11,17 @@ import tempfile
 import pytest
 
 try:
-    from codomyrmex.api.openapi_generator import (
+    from codomyrmex.api.openapi_documentation_generator import (
         DocumentationOpenAPIGenerator,
+    )
+    from codomyrmex.api.openapi_generator import (
         OpenAPISpecification,
-        StandardizationOpenAPIGenerator,
         create_openapi_generator,
         generate_openapi_spec,
         validate_openapi_spec,
+    )
+    from codomyrmex.api.openapi_standardization_generator import (
+        StandardizationOpenAPIGenerator,
     )
 except ImportError:
     pytest.skip(

@@ -82,14 +82,14 @@ uv run ruff check src/ --fix
 uv run ruff check src/
 
 # Type checking
-uv run ty check src/
+uv run ty check --output-format concise src/ scripts/ tests/
 ```
 
 ### Rules
 
-- **Line length**: 88 characters (Black default)
+- **Line length**: 88 characters (Ruff default)
 - **Python target**: 3.11+
-- **Import order**: isort-compatible (enforced by Ruff `I` rules)
+- **Import order**: Ruff-compatible (enforced by Ruff `I` rules)
 - **No wildcard imports** in non-`__init__.py` files
 - **Exception chaining**: Use `raise X from Y` (B904 enforced)
 - **No `unittest.mock`**: Zero-Mock Policy enforced by Ruff `TID` rules

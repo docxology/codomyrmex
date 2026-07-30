@@ -15,7 +15,7 @@ Chart generation (bar, line, pie, scatter, sparkline), Mermaid diagrams, and int
 - `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
 - `USAGE_EXAMPLES.md` – Usage Examples implementation
 - `__init__.py` – Python package entry point — exports and initialization
-- `_compat.py` – Internal implementation module
+- `_instrumentation.py` – Optional performance instrumentation
 - `charts/` – charts module implementation
 - `components/` – components module implementation
 - `core/` – Core abstractions and base classes
@@ -50,7 +50,7 @@ Chart generation (bar, line, pie, scatter, sparkline), Mermaid diagrams, and int
 - `SPEC.md`
 - `USAGE_EXAMPLES.md`
 - `__init__.py`
-- `_compat.py`
+- `_instrumentation.py`
 - `dashboard_builder.py`
 - `dashboard_export.py`
 - `exceptions.py`

@@ -25,15 +25,19 @@ def _ensure_generated_manuscript_snapshot() -> None:
 
 
 def test_figure_registry_lists_all_referenced_generators() -> None:
+    import json
+
     import yaml
 
     from codomyrmex.manuscript.figures import FIGURES
 
+    root = Path(__file__).resolve().parents[3]
     configured = yaml.safe_load(
-        (Path(__file__).resolve().parents[3] / "docs/manuscript/config.yaml").read_text(
-            encoding="utf-8"
-        )
+        (root / "docs/manuscript/config.yaml").read_text(encoding="utf-8")
     )["figures"]
+    variables = json.loads(
+        (root / "output/data/manuscript_variables.json").read_text(encoding="utf-8")
+    )
     assert len(FIGURES) == len(configured)
     names = {name for name, _ in FIGURES}
     assert "cover.png" in names
@@ -47,6 +51,42 @@ def test_figure_registry_lists_all_referenced_generators() -> None:
     assert "formalism_coverage.png" in names
     assert "research_status_matrix.png" in names
     assert "formula_comparison.png" not in names
+    assert int(variables["ARTIFACT_FIGURE_COUNT"]) == len(configured)
+    accessibility_rows = variables["RESULT_FIGURE_ACCESSIBILITY_ROWS"]
+    assert "<br" not in accessibility_rows
+    assert accessibility_rows.count("**Short alternative:**") == len(configured)
+    assert accessibility_rows.count("**Extended description:**") == len(configured)
+
+
+def test_configured_figures_have_distinct_text_alternatives() -> None:
+    import yaml
+
+    configured = yaml.safe_load(
+        (Path(__file__).resolve().parents[3] / "docs/manuscript/config.yaml").read_text(
+            encoding="utf-8"
+        )
+    )["figures"]
+    for name, spec in configured.items():
+        caption = " ".join(spec["caption"].split())
+        alt_text = " ".join(spec["alt_text"].split())
+        long_description = " ".join(spec["long_description"].split())
+        assert alt_text, name
+        assert long_description, name
+        assert alt_text != caption, name
+        assert len(long_description.split()) > len(alt_text.split()), name
+
+
+def test_shared_palette_and_in_fill_text_meet_contrast_floor() -> None:
+    from codomyrmex.manuscript.figures._common import (
+        _OI,
+        _contrast_ratio,
+        _text_color_on,
+    )
+
+    background = "#F7F9FC"
+    for role, color in _OI.items():
+        assert _contrast_ratio(color, background) >= 4.5, role
+        assert _contrast_ratio(_text_color_on(color), color) >= 4.5, role
 
 
 def test_all_configured_figure_generators_write_pngs(

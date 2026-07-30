@@ -17,12 +17,10 @@ import yaml
 
 from codomyrmex.ci_cd_automation.pipeline.manager import PipelineManager
 from codomyrmex.ci_cd_automation.pipeline.models import (
-    JobStatus,
     Pipeline,
     PipelineJob,
     PipelineStage,
     PipelineStatus,
-    StageStatus,
 )
 
 # ---------------------------------------------------------------------------
@@ -974,8 +972,8 @@ class TestRunPipelineSync:
         assert result.started_at is not None
         assert result.finished_at is not None
         assert result.duration >= 0
-        assert result.stages[0].status == StageStatus.SUCCESS
-        assert result.stages[0].jobs[0].status == JobStatus.SUCCESS
+        assert result.stages[0].status == PipelineStatus.SUCCESS
+        assert result.stages[0].jobs[0].status == PipelineStatus.SUCCESS
         assert "hello_world" in result.stages[0].jobs[0].output
 
     def test_run_pipeline_with_variables(self, tmp_path):
@@ -1072,7 +1070,7 @@ class TestRunPipelineSync:
         mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
         mgr.create_pipeline(path)
         result = mgr.run_pipeline("skip_test")
-        assert result.stages[0].status == StageStatus.SKIPPED
+        assert result.stages[0].status == PipelineStatus.SKIPPED
 
     def test_run_pipeline_multi_stage_sequential(self, tmp_path):
         """Multi-stage pipeline with sequential jobs executes correctly."""
@@ -1097,8 +1095,8 @@ class TestRunPipelineSync:
         mgr.create_pipeline(path)
         result = mgr.run_pipeline("multi")
         assert result.status == PipelineStatus.SUCCESS
-        assert result.stages[0].status == StageStatus.SUCCESS
-        assert result.stages[1].status == StageStatus.SUCCESS
+        assert result.stages[0].status == PipelineStatus.SUCCESS
+        assert result.stages[1].status == PipelineStatus.SUCCESS
 
     def test_run_pipeline_parallel_jobs(self, tmp_path):
         """Pipeline with parallel jobs in a stage."""
@@ -1122,4 +1120,4 @@ class TestRunPipelineSync:
         result = mgr.run_pipeline("par_test")
         assert result.status == PipelineStatus.SUCCESS
         for job in result.stages[0].jobs:
-            assert job.status == JobStatus.SUCCESS
+            assert job.status == PipelineStatus.SUCCESS

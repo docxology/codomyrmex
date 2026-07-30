@@ -20,9 +20,11 @@ Codomyrmex pai_pm module — PAI Project Manager server wrapper.
 ## Agent Usage Patterns
 
 ```python
-from codomyrmex.pai_pm import *
+from codomyrmex.pai_pm import HAS_BUN, PaiPmServerManager
 
-# Agent uses pai pm capabilities
+if HAS_BUN:
+    manager = PaiPmServerManager()
+    print(manager.is_running())
 ```
 
 ## Operating Contracts

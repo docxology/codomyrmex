@@ -1,134 +1,107 @@
-# Documentation -- MCP Tool Specification
+# Documentation MCP tool specification
 
-This document specifies the MCP-discoverable tools exposed by the `documentation` module. These tools provide documentation generation and RASP compliance auditing for Codomyrmex modules.
+The documentation module exposes two tools through
+`@mcp_tool(category="documentation")`. Their registered names are namespaced
+with `codomyrmex.`.
 
-## General Considerations
+## `codomyrmex.generate_module_docs`
 
-- **Auto-Discovery**: Tools use the `@mcp_tool(category="documentation")` decorator and are auto-discovered via the MCP bridge.
-- **Dependencies**: Requires the `documentation` module's internal `write_pai_md` and `audit_rasp` functions.
-- **Working Directory**: Module paths are resolved relative to `src/codomyrmex/` in the project root.
-- **Error Handling**: All tools return `{"status": "error", "message": "..."}` on failure.
+Plans or generates one top-level module's source-derived `PAI.md`. Despite the
+legacy function name, it does not generate README, AGENTS, or SPEC files.
 
----
+### Input
 
-## Tool: `generate_module_docs`
+| Field | Type | Required | Default | Contract |
+| :--- | :--- | :---: | :---: | :--- |
+| `module_name` | string | yes | — | Lowercase Python package name under `src/codomyrmex`; separators and traversal are rejected |
+| `dry_run` | boolean | no | `true` | When true, generate and hash proposed content without writing |
 
-### 1. Tool Purpose and Description
-
-Generate or update the RASP documentation suite (README.md, AGENTS.md, SPEC.md, PAI.md) for a specific module. Currently focuses on generating the PAI.md file for the target module.
-
-### 2. Invocation Name
-
-`generate_module_docs`
-
-### 3. Input Schema (Parameters)
-
-| Parameter Name | Type | Required | Description | Example Value |
-| :--- | :--- | :--- | :--- | :--- |
-| `module_name` | `string` | Yes | Name of the module to generate documentation for (must exist under `src/codomyrmex/`) | `"cerebrum"` |
-
-### 4. Output Schema (Return Value)
-
-| Field Name | Type | Description | Example Value |
-| :--- | :--- | :--- | :--- |
-| `status` | `string` | `"success"` or `"error"` | `"success"` |
-| `message` | `string` | Confirmation or error description | `"Documentation generated for cerebrum"` |
-| `paths` | `array` | List of file paths that were generated (only on success) | `["src/codomyrmex/cerebrum/PAI.md"]` |
-
-### 5. Error Handling
-
-- If the module directory does not exist at `src/codomyrmex/{module_name}`, returns an error with `"Module {module_name} not found."`.
-- Documentation generation failures (import errors, write errors) return an error with the exception message.
-
-### 6. Idempotency
-
-- **Idempotent**: Yes
-- **Explanation**: Regenerating documentation for the same module overwrites the same files with the same content (assuming the module source has not changed). Safe to call repeatedly.
-
-### 7. Usage Examples
+### Success
 
 ```json
 {
-  "tool_name": "generate_module_docs",
-  "arguments": {
-    "module_name": "crypto"
-  }
+  "status": "success",
+  "message": "PAI documentation planned for documentation",
+  "operation": "generate_pai_md",
+  "paths": ["src/codomyrmex/documentation/PAI.md"],
+  "content_sha256": "<64 lowercase hexadecimal characters>",
+  "executed": false,
+  "dry_run": true
 }
 ```
 
-### 8. Security Considerations
+With `dry_run=false`, `executed` is true only after `PAI.md` is written.
 
-- This tool writes files to the module directory. It should be gated by the trust gateway.
-- The tool only writes to the module's own directory under `src/codomyrmex/`. Path traversal via `module_name` is limited by the `Path(f"src/codomyrmex/{module_name}")` construction, but callers should still validate module names.
-
----
-
-## Tool: `audit_rasp_compliance`
-
-### 1. Tool Purpose and Description
-
-Audit the repository for RASP (README, AGENTS, SPEC, PAI) compliance. Can audit a single module or the entire `src/codomyrmex/` tree. Returns the count of missing documentation files.
-
-### 2. Invocation Name
-
-`audit_rasp_compliance`
-
-### 3. Input Schema (Parameters)
-
-| Parameter Name | Type | Required | Description | Example Value |
-| :--- | :--- | :--- | :--- | :--- |
-| `module_name` | `string \ | null` | No | Module name to audit specifically. If not provided (or null), audits the entire repository. `"agents"` |
-
-### 4. Output Schema (Return Value)
-
-| Field Name | Type | Description | Example Value |
-| :--- | :--- | :--- | :--- |
-| `status` | `string` | `"success"` or `"error"` | `"success"` |
-| `compliant` | `boolean` | Whether the audited scope is fully RASP-compliant (no missing files) | `true` |
-| `missing_count` | `integer` | Number of missing RASP documentation files found | `0` |
-| `message` | `string` | Error description (only on error) | `"Audit function not available"` |
-
-### 5. Error Handling
-
-- Import failures for the `audit_rasp` function return an error status.
-- File system access errors during the audit return an error with the exception message.
-
-### 6. Idempotency
-
-- **Idempotent**: Yes
-- **Explanation**: Auditing is a read-only operation that scans for the presence of documentation files without modifying anything.
-
-### 7. Usage Examples
-
-Audit a single module:
+### Error
 
 ```json
 {
-  "tool_name": "audit_rasp_compliance",
-  "arguments": {
-    "module_name": "cerebrum"
-  }
+  "status": "error",
+  "message": "<bounded error description>",
+  "executed": false,
+  "dry_run": true
 }
 ```
 
-Audit the entire repository:
+### Trust and idempotency
+
+- Default dry-run calls are read-only.
+- `dry_run=false` replaces the target module's `PAI.md` and therefore requires
+  explicit write authority.
+- A repeated dry run is deterministic for unchanged source inputs.
+- A repeated apply is content-idempotent for unchanged inputs, but still
+  performs a filesystem write.
+- The tool must not be invoked in apply mode during the active broad
+  README/AGENTS hand-pass without a reviewed module-specific reason.
+
+## `codomyrmex.audit_rasp_compliance`
+
+Checks Python packages for the package-native RASP quartet: README, AGENTS,
+SPEC, and PAI.
+
+### Input
+
+| Field | Type | Required | Contract |
+| :--- | :--- | :---: | :--- |
+| `module_name` | string or null | no | Omit for `src/codomyrmex`; otherwise use one validated top-level package name |
+
+### Success
 
 ```json
 {
-  "tool_name": "audit_rasp_compliance",
-  "arguments": {}
+  "status": "success",
+  "compliant": false,
+  "missing_count": 3,
+  "modules_with_gaps": 1
 }
 ```
 
-### 8. Security Considerations
+`missing_count` is the number of individual missing RASP files, not the
+underlying `audit_rasp()` exit code. `modules_with_gaps` counts affected
+packages.
 
-- This is a read-only operation that only checks for file existence. No elevated trust level required.
-- Audit results may reveal information about the project's documentation structure.
+### Error
 
----
+```json
+{
+  "status": "error",
+  "message": "<bounded error description>"
+}
+```
 
-## Navigation Links
+The audit is read-only. It does not use the broader repository RASP exclusions
+or replace the strict README/AGENTS and MkDocs gate.
 
-- **Parent**: [Module README](./README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Home**: [Root README](../../../README.md)
+## Compatibility change
+
+The generation tool now defaults to `dry_run=true`, reports execution state and
+a content hash, validates package names, and accurately describes its PAI-only
+scope. The audit tool now returns a real missing-file count plus the number of
+packages with gaps.
+
+## Navigation
+
+- [Package overview](README.md)
+- [API specification](API_SPECIFICATION.md)
+- [Functional specification](SPEC.md)
+- [Security](SECURITY.md)

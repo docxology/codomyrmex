@@ -18,7 +18,7 @@ To provide a structured and scalable framework for LLM operations, enabling repr
 ```mermaid
 graph TD
     Data[Raw Data] --> DS[Dataset]
-    DS --> FS[Feature Store]
+    DS --> FS[Feature Store module]
     FS --> FT[FineTuningJob]
     FT --> Mod[Fine-tuned Model]
     Mod --> OPT[Inference Optimization]
@@ -29,7 +29,7 @@ graph TD
 ## Functional Requirements
 
 - **Dataset Management**: Convert various data formats (JSON, CSV, MD) into LLM-ready training files with PII sanitization.
-- **Feature Store**: Centralized management of reusable features and embeddings for training and inference.
+- **Feature Store integration**: Use the standalone `codomyrmex.feature_store` module for reusable features and embeddings.
 - **Fine-Tuning**: Orchestrate fine-tuning on external providers (e.g., OpenAI API).
 - **Inference Optimization**: Techniques for reducing latency and cost (quantization, caching, batching).
 - **Evaluation**: Run comparison evaluations (A/B testing) between models using standardized metrics.
@@ -52,11 +52,6 @@ graph TD
 - `register_model(name: str, model_path: str, version: str, metadata: dict)`
 - `get_model(name: str, version: str) -> str`
 - `list_versions(name: str) -> List[str]`
-
-### `FeatureStore`
-
-- `push_features(entity: str, features: dict)`
-- `get_features(entity: str) -> dict`
 
 ### `InferenceOptimizer`
 

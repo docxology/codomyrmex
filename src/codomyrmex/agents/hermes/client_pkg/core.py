@@ -130,7 +130,7 @@ class HermesClient(
         )
 
         # Context compression for long conversations
-        from codomyrmex.agents.hermes._provider_router import ContextCompressor
+        from codomyrmex.agents.hermes.provider_router_pkg import ContextCompressor
 
         self._compressor = ContextCompressor(
             max_tokens=self.get_config_value("max_context_tokens", config=cfg)

@@ -1,7 +1,7 @@
 """API Versioning Implementation for Codomyrmex
 
 This module provides API versioning capabilities with version management,
-backward compatibility, and migration support.
+version comparison, and migration support.
 """
 
 import logging
@@ -109,7 +109,7 @@ class APIVersion:
         Check if this version is compatible with another version.
 
         Args:
-            other_version: Version to check compatibility with
+            other_version: Version to compare with
 
         Returns:
             True if compatible
@@ -123,7 +123,7 @@ class APIVersion:
             # Compatible if major version is the same
             return self_ver.is_compatible(other_ver)
 
-        # For date and integer versions, assume backward compatibility
+        # Date and integer versions use their ordered release values.
         return True
 
     def __lt__(self, other: "APIVersion") -> bool:

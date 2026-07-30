@@ -206,7 +206,8 @@ class TestAnalyzePatternPairs:
     """Tests for analyze_pattern_pairs method."""
 
     @pytest.fixture(scope="class")
-    def pairs_result(self, analyzer):
+    @classmethod
+    def pairs_result(cls, analyzer):
         return analyzer.analyze_pattern_pairs()
 
     def test_returns_dict(self, pairs_result):
@@ -259,7 +260,8 @@ class TestAnalyzeDependencyChains:
     """Tests for analyze_dependency_chains method."""
 
     @pytest.fixture(scope="class")
-    def chains_result(self, analyzer):
+    @classmethod
+    def chains_result(cls, analyzer):
         return analyzer.analyze_dependency_chains()
 
     def test_returns_dict(self, chains_result):
@@ -294,7 +296,8 @@ class TestAnalyzeConceptCooccurrence:
     """Tests for analyze_concept_cooccurrence method."""
 
     @pytest.fixture(scope="class")
-    def cooccurrence_result(self, analyzer):
+    @classmethod
+    def cooccurrence_result(cls, analyzer):
         return analyzer.analyze_concept_cooccurrence()
 
     def test_returns_dict(self, cooccurrence_result):
@@ -335,7 +338,8 @@ class TestAnalyzeCrossPartRelationships:
     """Tests for analyze_cross_part_relationships method."""
 
     @pytest.fixture(scope="class")
-    def cross_part_result(self, analyzer):
+    @classmethod
+    def cross_part_result(cls, analyzer):
         return analyzer.analyze_cross_part_relationships()
 
     def test_returns_dict(self, cross_part_result):
@@ -523,7 +527,8 @@ class TestRunComprehensiveCombinatorics:
     """Tests for run_comprehensive_combinatorics method."""
 
     @pytest.fixture(scope="class")
-    def comprehensive_result(self, analyzer):
+    @classmethod
+    def comprehensive_result(cls, analyzer):
         return analyzer.run_comprehensive_combinatorics()
 
     def test_returns_dict(self, comprehensive_result):

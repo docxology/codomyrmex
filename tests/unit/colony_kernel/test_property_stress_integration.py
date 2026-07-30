@@ -886,12 +886,12 @@ class TestResourceLedgerMaxDimensions:
 
     def test_at_every_cap_boundary_is_affordable(self) -> None:
         budget = ResourceBudget(
-            max_llm_calls_per_hour=100,
+            max_llm_calls=100,
             max_runtime_seconds=60.0,
             max_risk_level=0.5,
             max_human_attention_minutes=30.0,
             max_merge_risk=0.4,
-            total_doc_debt_allowed=50.0,
+            max_doc_debt=50.0,
             max_security_exposure=0.3,
         )
         ledger = ResourceLedger(budget=budget)
@@ -908,7 +908,7 @@ class TestResourceLedgerMaxDimensions:
         assert ok is True, f"Expected affordable at cap boundary; got: {reason}"
 
     def test_one_over_llm_cap_rejected(self) -> None:
-        budget = ResourceBudget(max_llm_calls_per_hour=10)
+        budget = ResourceBudget(max_llm_calls=10)
         ledger = ResourceLedger(budget=budget)
         ok, reason = ledger.can_afford(ResourceCost(llm_calls=11))
         assert ok is False
@@ -922,7 +922,7 @@ class TestResourceLedgerMaxDimensions:
         assert "runtime_seconds" in (reason or "")
 
     def test_doc_debt_at_cap_then_one_over(self) -> None:
-        budget = ResourceBudget(total_doc_debt_allowed=5.0)
+        budget = ResourceBudget(max_doc_debt=5.0)
         ledger = ResourceLedger(budget=budget)
         ok_at, _ = ledger.can_afford(ResourceCost(doc_debt=5.0))
         ok_over, reason = ledger.can_afford(ResourceCost(doc_debt=5.001))

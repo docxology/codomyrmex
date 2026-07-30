@@ -78,12 +78,14 @@ def _write_registry() -> None:
                 "width": metadata.get("width", ""),
                 "evidence_class": metadata.get("evidence_class", evidence_class),
                 "caption": metadata.get("caption", ""),
+                "alt_text": metadata.get("alt_text", ""),
+                "long_description": metadata.get("long_description", ""),
                 "bytes": len(payload),
                 "sha256": hashlib.sha256(payload).hexdigest(),
             }
         )
     registry = {
-        "schema_version": 2,
+        "schema_version": 3,
         "config_hash": _var_str("CONFIG_HASH"),
         "count": len(entries),
         "figures": entries,

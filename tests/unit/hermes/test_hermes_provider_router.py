@@ -1,4 +1,4 @@
-"""Tests for agents.hermes._provider_router — ProviderRouter, ContextCompressor, UserModel, MCPBridgeManager.
+"""Tests for agents.hermes.provider_router_pkg — ProviderRouter, ContextCompressor, UserModel, MCPBridgeManager.
 
 Zero-Mock: All tests use real objects with filesystem I/O (tmp_path).
 """
@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from codomyrmex.agents.hermes._provider_router import (
+from codomyrmex.agents.hermes.provider_router_pkg import (
     ContextCompressor,
     MCPBridgeManager,
     ProviderRouter,

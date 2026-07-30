@@ -156,7 +156,7 @@ async def merge_coverage_reports(num_groups: int) -> dict[str, Any]:
         return {"success": True, "coverage": None, "message": "No coverage data"}
 
     # Read and merge coverage
-    total_coverage = {
+    total_coverage: dict[str, Any] = {
         "files_covered": 0,
         "total_lines": 0,
         "covered_lines": 0,

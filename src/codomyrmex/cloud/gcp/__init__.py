@@ -133,27 +133,5 @@ class GCSClient(StorageClient):
             logger.error("GCS generate_presigned_url error: %s", e)
             return ""
 
-    # Legacy methods for backward compatibility
-    def upload_blob(
-        self, bucket_name: str, source_file_name: str, destination_blob_name: str
-    ) -> bool:
-        return self.upload_file(bucket_name, destination_blob_name, source_file_name)
-
-    def list_blobs(self, bucket_name: str) -> list[str]:
-        return self.list_objects(bucket_name)
-
-    def download_blob(
-        self, bucket_name: str, source_blob_name: str, destination_file_name: str
-    ) -> bool:
-        return self.download_file(bucket_name, source_blob_name, destination_file_name)
-
-    def get_metadata(self, bucket_name: str, blob_name: str) -> dict:
-        return self.get_object_metadata(bucket_name, blob_name)
-
-    def ensure_bucket(self, bucket_name: str, location: str = "US") -> bool:
-        if self.bucket_exists(bucket_name):
-            return True
-        return self.create_bucket(bucket_name, region=location)
-
 
 __all__ = ["GCSClient", "VertexAIClient"]

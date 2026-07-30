@@ -1,7 +1,4 @@
-"""Physical management generators — modularized subpackage.
-
-This package re-exports all generator functions for backward compatibility.
-"""
+"""Public physical-management generator functions."""
 
 from .content_generators import (
     generate_physical_init_content,

@@ -104,7 +104,7 @@ def hermes_mcp_reload() -> dict[str, Any]:
 
     """
     try:
-        from codomyrmex.agents.hermes._provider_router import MCPBridgeManager
+        from codomyrmex.agents.hermes.provider_router_pkg import MCPBridgeManager
 
         bridge = MCPBridgeManager()
         result = bridge.reload()
@@ -138,7 +138,7 @@ def hermes_user_context(
 
     """
     try:
-        from codomyrmex.agents.hermes._provider_router import UserModel
+        from codomyrmex.agents.hermes.provider_router_pkg import UserModel
 
         model = UserModel()
 
@@ -309,7 +309,7 @@ def hermes_provider_status() -> dict[str, Any]:
 
     """
     try:
-        from codomyrmex.agents.hermes._provider_router import ProviderRouter
+        from codomyrmex.agents.hermes.provider_router_pkg import ProviderRouter
 
         router = ProviderRouter()
         return {"status": "success", "providers": router.get_provider_status()}

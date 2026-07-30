@@ -55,11 +55,9 @@ from .protocols import (
     RoundRobinProtocol,
 )
 
-# Legacy swarm components (for backward compatibility)
 # Swarm components (modern interface)
 from .swarm import (
     AgentPool,
-    AgentProxy,
     AgentRole,
     ConsensusResult,
     Decision,
@@ -114,7 +112,6 @@ __all__ = [
     "AgentNotFoundError",
     "AgentPool",
     "AgentProtocol",
-    "AgentProxy",  # Legacy
     "AgentRole",
     # Protocol classes
     "AgentState",

@@ -404,11 +404,6 @@ class TestMCPToolRegistry:
         assert result.error.error_type == "ValueError"
         assert "Something went wrong" in (result.error or "").error_message
 
-    def test_get_tool_alias_matches_get(self):
-        registry = MCPToolRegistry()
-        registry.register("aliased", {"name": "aliased"})
-        assert registry.get_tool("aliased") == registry.get("aliased")
-
 
 @pytest.mark.unit
 class TestMCPMessageModel:

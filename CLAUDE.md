@@ -208,7 +208,7 @@ This project follows a strict zero-mock/stub/fallback/hardcoded policy:
 - **No production stubs**: Production code never returns placeholder/fake data. Unimplemented features raise `NotImplementedError`.
 - **No silent fallbacks**: Fallback patterns that silently degrade functionality are prohibited. Failures must be explicit.
 - **No hardcoded values**: URLs, ports, and connection strings use `os.getenv()` with centralized defaults from `config_management.defaults`.
-- **No legacy aliases**: Backward compatibility layers must have documented deprecation timelines or be removed.
+- **No obsolete aliases**: Compatibility layers must have documented deprecation timelines or be removed.
 
 ## Hard-Right Execution Standard
 

@@ -1,37 +1,37 @@
-# Codomyrmex Agents — projects
+<!-- agents: curated -->
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+# Agent guidance for project workspaces
 
 ## Purpose
-Project workspace and templates.
 
-## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `daf-consulting/` – DAF Consulting Paperclip swarm workspace (standalone nested Git repository)
-- `hermes-paperclip-adapter/` – Paperclip adapter project for Hermes agent execution (standalone nested Git repository)
-- `test_project/` – Directory containing test_project components
-
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
-
-## Key Files
-- `AGENTS.md` - Agent coordination and navigation
-- `README.md` - Directory overview
-- `PAI.md`
-- `README.md`
-- `SPEC.md`
-
-## Dependencies
-- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+Preserve ownership and Git boundaries for integration and example workspaces.
 
 ## Development Guidelines
-- Follow the universal agent protocols defined in the root `AGENTS.md`.
-- Adhere to the Python PEP 8 style guide and project-specific linting rules.
-- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation Links
-- **🏠 Project Root**: ../README.md - Main project documentation
+- Detect nested `.git` directories or gitfiles before editing.
+- Treat every nested repository as an independent worktree with its own status,
+  history, remotes, and agent instructions.
+- Never fold nested changes into root formatting, cleanup, documentation
+  generation, or release claims.
+- Run commands from the owning workspace only after reading its README,
+  AGENTS, and package metadata.
+- Keep root documentation limited to workspace ownership and integration
+  boundaries; detailed behavior belongs with the workspace.
+- Do not infer that a historically documented workspace still exists.
+
+## Key Files
+
+- [README.md](README.md) — current workspace inventory and safety boundary
+- [SPEC.md](SPEC.md) — workspace specification
+- `test_project/` — current standalone nested worktree
+
+## Current scope
+
+The current checkout contains `projects/test_project/` as a nested Git
+worktree. Recheck this fact live before acting.
+
+## Navigation
+
+- [Human overview](README.md)
+- [Workspace specification](SPEC.md)
+- [Repository agent contract](../AGENTS.md)

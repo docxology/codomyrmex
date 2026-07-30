@@ -36,7 +36,6 @@ def analyze_project_structure() -> dict[str, Any]:
             ".git",
             "__pycache__",
             ".pytest_cache",
-            ".mypy_cache",
             ".venv",
             "node_modules",
         }

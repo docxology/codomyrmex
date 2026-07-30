@@ -197,7 +197,7 @@ class GeopoliticalMarketPipeline:
         session_label: str = "default",
     ) -> dict[str, Any]:
         """Send *prompt* to the geopolitical skill, managing session state."""
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         session_id = self._session_id or f"geopol_{session_label}"
         client = HermesClient(config={"hermes_timeout": self._timeout})

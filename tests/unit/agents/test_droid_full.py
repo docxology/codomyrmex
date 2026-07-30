@@ -6,7 +6,7 @@ Covers:
 - DroidConfig: validate, from_dict, from_json, from_env, with_overrides, to_dict, allowed/blocked, save/load
 - DroidMetrics: snapshot, reset
 - DroidController: start, stop, heartbeat, execute_task, permissions, update_config, reset_metrics
-- TodoManager: validate, migrate_to_three_columns
+- TodoManager: validate
 - tasks.py: all four handlers called with real keyword arguments
 - generators/documentation.py: pure scoring functions (no file I/O side effects)
 
@@ -676,7 +676,7 @@ class TestDroidControllerUpdateConfig:
 
 
 # ===========================================================================
-# 6. TodoManager advanced: validate and migrate_to_three_columns
+# 6. TodoManager advanced: validate
 # ===========================================================================
 
 
@@ -726,58 +726,6 @@ class TestTodoManagerValidate:
         manager = TodoManager(p)
         is_valid, _ = manager.validate()
         assert is_valid is True
-
-
-class TestTodoManagerMigrate:
-    """TodoManager.migrate_to_three_columns() rewrites legacy format in place."""
-
-    def test_migrate_empty_file_returns_zero(self, tmp_path):
-        p = tmp_path / "todo.txt"
-        _write_todo_file(p, [])
-        manager = TodoManager(p)
-        changed = manager.migrate_to_three_columns()
-        assert changed == 0
-
-    def test_migrate_new_format_unchanged(self, tmp_path):
-        p = tmp_path / "todo.txt"
-        _write_todo_file(p, ["t1 | desc1 | out1"])
-        manager = TodoManager(p)
-        changed = manager.migrate_to_three_columns()
-        assert changed == 0
-
-    def test_migrate_legacy_format_changes_lines(self, tmp_path):
-        """Legacy format: op | droid:handler | desc — becomes: op | desc | (empty outcomes)."""
-        p = tmp_path / "todo.txt"
-        _write_todo_file(p, ["op1 | droid:my_handler | some description"])
-        manager = TodoManager(p)
-        changed = manager.migrate_to_three_columns()
-        # The line is parsed then re-serialised; since handler info is lost in serialise(),
-        # the output differs from input
-        assert isinstance(changed, int)
-        assert changed >= 0  # may be 0 or 1 depending on whether serialise() differs
-
-    def test_migrate_file_is_still_loadable_after_migration(self, tmp_path):
-        p = tmp_path / "todo.txt"
-        _write_todo_file(p, ["t1 | desc1 | out1", "t2 | desc2 | out2"])
-        manager = TodoManager(p)
-        manager.migrate_to_three_columns()
-        items, completed = manager.load()
-        assert len(items) == 2
-
-    def test_migrate_nonexistent_file_returns_zero(self, tmp_path):
-        manager = TodoManager(tmp_path / "nope.txt")
-        changed = manager.migrate_to_three_columns()
-        assert changed == 0
-
-    def test_migrate_drops_comment_lines(self, tmp_path):
-        """Comment lines are dropped during migration per the implementation."""
-        content = f"{TODO_HEADER}\n# a comment\nt1 | desc | out\n\n{COMPLETED_HEADER}\n"
-        p = tmp_path / "todo.txt"
-        p.write_text(content, encoding="utf-8")
-        manager = TodoManager(p)
-        manager.migrate_to_three_columns()
-        new_content = p.read_text(encoding="utf-8")
-        assert "# a comment" not in new_content
 
 
 # ===========================================================================

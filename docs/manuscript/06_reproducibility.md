@@ -21,9 +21,12 @@ require additional evidence.
 | Static checks | Ruff and ty status for `src/codomyrmex/colony_kernel` | Repository-wide lint or type cleanliness |
 | Manuscript variables | Token map computed from current files, configuration, and gate outputs | A signed or independently attested release |
 | Figures | {{ARTIFACT_FIGURE_COUNT}} regenerated visual assets sourced from the variable snapshot and documented constants | Measurements from an external agent population |
+| Figure accessibility | Configured captions, concise alternatives, extended descriptions, redundant encodings, and palette-contrast checks | Usability with every assistive technology, display, print process, or reader |
 | Claim audit | Machine-readable claim classes, evidence paths, citations, and boundaries | A claim ledger does not create evidence missing from the cited paths |
-| Paired replay | Fixed-input semantic replay with repeat-run equality and JSON digest | Outcome attestation, concurrency, restart durability, or external effectiveness |
-| Render | Hydrated Markdown plus HTML/PDF outputs | Byte-identical output across machines and dates |
+| Bibliography audit | Pandoc citations separated from cross-references; cited primary locators resolved and unused records rejected | Registry resolution does not validate every argument made by a source |
+| Paired replay | Fixed-input semantic replay with repeat-run equality and JSON digest | External-actuation attestation, concurrency, restart durability, or external effectiveness |
+| Local attestation | Signed, hash-linked proposal/verdict/authorization/receipt/outcome fixture | Independent observation of external actuation or deployment safety |
+| Render | Hydrated Markdown, semantic HTML, content PDF, and bookended distribution PDF | Byte-identical output across machines and dates or PDF/UA conformance without external validation |
 : Scope of the reproducibility evidence. {#tbl:repro-scope}
 
 The variable generator fails when the scoped pytest process, branch-coverage threshold,
@@ -46,6 +49,14 @@ into this render.
 | Keywords | {{CONFIG_KEYWORDS}} | `keywords` list |
 | Generation time | {{GENERATION_TIMESTAMP}} | UTC time when the variable map was computed |
 : Configuration identity embedded in the rendered manuscript. {#tbl:configuration_provenance}
+
+Protocol compatibility is measured rather than inferred from the MCP name. The
+referenced official line is [revision {{CONFIG_MCP_OFFICIAL_REVISION}}]({{CONFIG_MCP_SPECIFICATION_URL}})
+[@mcp2026spec], while the current client and server sources advertise
+`{{RESULT_MCP_ADVERTISED_REVISION}}`. Equality is
+`{{RESULT_MCP_OFFICIAL_REVISION_MATCH}}`; the resulting status is
+**{{RESULT_MCP_COMPATIBILITY_STATUS}}**. This string-level check is provenance evidence,
+not a protocol conformance or interoperability test.
 
 The configuration digest is a compact change detector for one file. The generated
 snapshot also records the source commit, worktree state, environment fingerprint,
@@ -102,18 +113,23 @@ The project uses the following output conventions:
 - `output/data/colony_kernel_coverage.json` stores the fresh scoped coverage report;
 - `output/data/colony_kernel_replay.json` stores the fixed-input paired replay,
   semantic assertions, provenance, and digests;
+- `output/data/bibliography_audit.json` stores cited/unused/missing inventories,
+  primary locators, registry title checks, and any access-limited resolution;
 - `output/manuscript/` stores token-resolved section copies plus `config.yaml` and the
   bibliography used by the renderer;
 - `output/figures/` stores the {{ARTIFACT_FIGURE_COUNT}} generated PNG figures and
-  `figure_registry.json`, whose entries record evidence class, byte size, and full
-  SHA-256 for each PNG;
+  `figure_registry.json`, whose entries record caption, concise alternative, extended
+  description, evidence class, byte size, and full SHA-256 for each PNG;
 - `docs/manuscript/claim_ledger.yaml` records the active claim audit. The integrity
   validator checks that every listed source/evidence path exists and that cited
   bibliography keys resolve;
-- direct project compilation writes `output/paper.html` and, with `--pdf`,
-  `output/paper.pdf`; and
-- the shared template renderer writes its canonical combined outputs to
-  `output/web/index.html` and `{{ARTIFACT_COMBINED_PDF_PATH}}`.
+- compilation writes `output/paper.html`, the unbookended
+  `output/paper-content.pdf`, the bookended `{{ARTIFACT_COMBINED_PDF_PATH}}`, and PDF
+  validation receipts; and
+- `python -m codomyrmex.release publication prepare` writes the portable
+  `output/release/codomyrmex-{{CONFIG_VERSION}}/` bundle with citation metadata,
+  Zenodo deposit metadata, detached checksums, reproducibility inputs, and
+  `publication_manifest.json`.
 
 PDF presentation layout is configuration-backed. The current initial margin is
 `{{CONFIG_PDF_MARGIN}}`; it is a tunable presentation setting, not a scientific
@@ -154,38 +170,50 @@ production deployment nor validates the truth of caller-reported outcomes.
 
 ## Exact reproduction commands {#sec:repro-commands}
 
-The supported repository-level route, from the public template checkout with the
-ongoing project linked, is:
+The supported route begins at the Codomyrmex repository root:
 
 ```bash
-uv sync --frozen
-./run.sh --pipeline --project ongoing/codomyrmex --core-only
+uv sync --locked --group docs
+uv run --locked python scripts/z_generate_manuscript_variables.py
+uv run --locked python scripts/generate_manuscript_figures.py
+uv run --locked --group docs python scripts/compile_manuscript.py \
+  --manuscript-dir output/manuscript --output-dir output \
+  --check --skip-generate
+uv run --locked --group docs python scripts/compile_manuscript.py \
+  --manuscript-dir output/manuscript --output-dir output \
+  --pdf --bookends --pdf-engine lualatex --pdf-standard ua-2 --skip-generate
+uv run --locked python scripts/validate_manuscript_integrity.py \
+  --require-rendered --online-bibliography
 ```
 
-The project-local evidence and publication route can be run independently:
+The scoped evidence gates and package-wide static gates can be inspected directly:
 
 ```bash
-cd projects/ongoing/codomyrmex
-uv sync --frozen
-
-uv run python scripts/z_generate_manuscript_variables.py
-uv run python scripts/generate_manuscript_figures.py
-uv run python scripts/compile_manuscript.py --check --skip-generate
-uv run python scripts/compile_manuscript.py --pdf --skip-generate
-```
-
-The scoped gates can also be inspected directly:
-
-```bash
-uv run pytest tests/unit/colony_kernel/ \
+uv run --locked pytest tests/unit/colony_kernel/ \
   --cov=src/codomyrmex/colony_kernel \
   --cov-branch \
   --cov-report=json:output/data/colony_kernel_coverage.json \
   --cov-report=term
-uv run ruff check src/codomyrmex/colony_kernel
-uv run ty check src/codomyrmex/colony_kernel
-uv run python scripts/replay_colony_kernel.py
-uv run python scripts/validate_manuscript_integrity.py --require-rendered
+uv run --locked ruff check src scripts tests
+uv run --locked ruff format --check src scripts tests
+uv run --locked ty check
+uv run --locked python scripts/replay_colony_kernel.py
+```
+
+After those files exist, the detached publication bundle and non-mutating remote plans
+are produced and verified with:
+
+```bash
+uv run --locked python -m codomyrmex.release publication prepare \
+  --validation-receipt output/data/bibliography_audit.json \
+  --validation-receipt output/validation/paper-content-pdf-validation.json \
+  --validation-receipt output/validation/paper-pdf-validation.json
+uv run --locked python -m codomyrmex.release publication verify \
+  output/release/codomyrmex-{{CONFIG_VERSION}}
+uv run --locked python -m codomyrmex.release publication plan \
+  output/release/codomyrmex-{{CONFIG_VERSION}} --target github
+uv run --locked python -m codomyrmex.release publication plan \
+  output/release/codomyrmex-{{CONFIG_VERSION}} --target zenodo-sandbox
 ```
 
 `scripts/compile_manuscript.py --check --skip-generate` checks the hydrated section set
@@ -204,11 +232,12 @@ manuscript without inventing cross-platform certification.
 | `uv.lock` | Repository lockfile | Pins Python package resolution |
 | pytest / pytest-cov | Development dependencies | Executes tests and branch coverage |
 | Ruff / ty | Development dependencies | Executes scoped static gates |
-| Pandoc / XeLaTeX | Host tools | Produce HTML/PDF; versions can affect layout |
+| Pandoc / LuaLaTeX | Host tools | Produce semantic HTML and attempt tagged PDF; versions can affect layout |
+| qpdf / veraPDF | Host validators | qpdf is structural; veraPDF findings determine whether conformance may be claimed |
 | SQLite | Python standard-library binding | Exercises consequence storage where configured |
 : Software inputs relevant to reproduction. {#tbl:software_versions}
 
-`uv sync --frozen` prevents dependency re-resolution, but it does not pin host fonts,
+`uv sync --locked` prevents lockfile changes, but it does not pin host fonts,
 Pandoc, TeX packages, operating-system libraries, or the current date. The generation
 timestamp and auto publication date also change across runs. Consequently, the expected
 claim is semantic regeneration with passing gates and resolved references—not universal
@@ -225,6 +254,9 @@ byte-for-byte identity.
 | Policy and taxonomy figures | Regenerated | `output/figures/*.png` |
 | Deterministic contract cases | Executed by the Colony Kernel suite | `tests/unit/colony_kernel/` |
 | Paired replay artifact | Executed twice with fixed identities and compared semantically | `scripts/replay_colony_kernel.py` and `output/data/colony_kernel_replay.json` |
+| Local authenticated lifecycle | Executed with signed/hash-linked events | `tests/unit/colony_kernel/test_kernel_attestation_integration.py` |
+| Citation inventory and locator audit | Executed over every retained record | `output/data/bibliography_audit.json` |
+| Publication bundle | Prepared only after render and detached-hash verification | `output/release/codomyrmex-{{CONFIG_VERSION}}/publication_manifest.json` |
 | Four-condition benchmark | Proposed only | No raw trial artifact in this release |
 | Production deployment | Not evaluated | No production trace artifact |
 : Contents and omissions of the release evaluation snapshot. {#tbl:evaluation_snapshot}
@@ -245,7 +277,7 @@ analysis.
 |---|---|
 | Workload manifest | Stable item IDs, inputs, expected evaluation procedure, licenses, and exclusions |
 | Baseline implementations | Versioned adapters for all four conditions with shared interfaces |
-| Authorization/outcome ledger | Proposal, gate decision, consumed execution authorization, outcome, and attester identity |
+| Authorization/outcome ledger | Proposal, gate decision, consumed execution authorization, receipt, outcome, attester identity, and independent observation source |
 | Raw event trace | Append-only ordered events, costs, decisions, outcomes, ticks, and errors |
 | Run identity | Source commit, submodule revisions, full configuration and lockfile hashes, environment inventory |
 | Analysis package | Script or notebook that regenerates tables, figures, uncertainty intervals, and exclusions |

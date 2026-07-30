@@ -15,7 +15,7 @@
 
 - Tests use real local instances and follow the zero-mock policy.
 - Runtime behavior is in-process and deterministic except for honeytoken IDs and poison phrase sampling.
-- Compatibility imports through `codomyrmex.defense` and `codomyrmex.security.ai_safety` remain supported.
+- Canonical imports are available through `codomyrmex.defense` and `codomyrmex.security.ai_safety`.
 
 ## Navigation
 

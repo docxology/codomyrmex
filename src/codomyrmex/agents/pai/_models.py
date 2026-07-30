@@ -18,7 +18,7 @@ class PAIConfig:
     """Configuration and path layout for the PAI system.
 
     Attributes:
-        pai_root: Root directory of the PAI system (default ``~/.claude/PAI`` for v4+, ``~/.claude/skills/PAI`` for v3 legacy).
+        pai_root: Root directory of the PAI system (default ``~/.claude/PAI`` for v4+, with the v3 installation path detected when needed).
         claude_root: Root of the Claude configuration directory (default ``~/.claude``).
     """
 

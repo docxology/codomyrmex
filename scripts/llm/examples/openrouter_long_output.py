@@ -233,7 +233,10 @@ class GenerationConfig:
         """Get sections for this template."""
         if self.custom_sections:
             return self.custom_sections
-        return TEMPLATES.get(self.template, TEMPLATES["custom"])["sections"]
+        sections = TEMPLATES.get(self.template, TEMPLATES["custom"])["sections"]
+        if isinstance(sections, list):
+            return [str(section) for section in sections]
+        return []
 
 
 class LongOutputGenerator:

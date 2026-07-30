@@ -17,6 +17,7 @@ except ImportError:
 
 import argparse
 import json
+from typing import Any
 
 
 def validate_json_structure(data: dict) -> list:
@@ -53,7 +54,7 @@ def validate_against_schema(data: dict, schema: dict) -> list:
         return ["jsonschema not installed - run: pip install jsonschema"]
 
 
-def infer_types(data: dict, path: str = "") -> dict:
+def infer_types(data: Any, path: str = "") -> Any:
     """Infer type structure from data."""
     if isinstance(data, dict):
         return {k: infer_types(v, f"{path}.{k}") for k, v in data.items()}

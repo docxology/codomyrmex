@@ -4,8 +4,8 @@ from typing import Any
 
 import numpy as np
 
-from codomyrmex.cerebrum.core.exceptions import ActiveInferenceError
 from codomyrmex.cerebrum.core.utils import softmax
+from codomyrmex.exceptions.cerebrum import ActiveInferenceError
 from codomyrmex.logging_monitoring import get_logger
 
 """Active inference implementation based on the free energy principle."""
@@ -234,7 +234,6 @@ class ActiveInferenceAgent:
         self.beliefs = BeliefState()
         self.transition_model: dict[str, dict[str, float]] = {}
         self.observation_model: dict[str, dict[str, float]] = {}
-        self.likelihood: dict[str, dict[str, float]] = {}
 
         self.free_energy_calculator = VariationalFreeEnergy(precision=precision)
         self.policy_selector = PolicySelector(exploration_weight=exploration_weight)
@@ -261,7 +260,6 @@ class ActiveInferenceAgent:
             model: Observation probabilities P(o|s)
         """
         self.observation_model = model
-        self.likelihood = model  # Alias for compatibility
         self.logger.debug("set observation model")
 
     def predict(self, observation: dict[str, Any] | None = None) -> dict[str, float]:
@@ -390,7 +388,7 @@ class ActiveInferenceAgent:
         observations = observations or self.beliefs.observations
 
         return self.free_energy_calculator.compute(
-            beliefs, observations, self.likelihood
+            beliefs, observations, self.observation_model
         )
 
     def get_beliefs(self) -> BeliefState:

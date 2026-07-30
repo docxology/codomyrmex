@@ -48,7 +48,7 @@ The Deployment module provides tools for managing application deployments, inclu
     - `execute(deployment: Deployment) -> DeploymentResult`: Execute the deployment.
     - `validate(deployment: Deployment) -> bool`: Validate deployment before execution.
 
-### Class: `CanaryStrategy`
+### Class: `CanaryDeployment`
 
 - **Description**: Canary deployment strategy with gradual traffic shifting.
 - **Constructor**:
@@ -58,7 +58,7 @@ The Deployment module provides tools for managing application deployments, inclu
     - `health_check_url` (str, optional): Health check endpoint.
 - **Methods**: Inherits from `DeploymentStrategy`.
 
-### Class: `BlueGreenStrategy`
+### Class: `BlueGreenDeployment`
 
 - **Description**: Blue-green deployment with instant traffic switch.
 - **Constructor**:

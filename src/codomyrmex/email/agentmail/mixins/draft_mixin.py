@@ -18,8 +18,11 @@ from codomyrmex.email.exceptions import EmailAPIError
 if TYPE_CHECKING:
     from codomyrmex.email.generics import EmailDraft, EmailMessage
 
+ApiError: type[Exception]
 try:
-    from agentmail.core import ApiError
+    from agentmail.core import ApiError as _AgentMailApiError
+
+    ApiError = _AgentMailApiError
 except ImportError:
     ApiError = Exception
 

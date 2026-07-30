@@ -17,7 +17,6 @@ Database connection pooling, migration management, schema generation, and multi-
 - `backup/` – backup module implementation
 - `connections/` – connections module implementation
 - `db_manager.py` – Internal implementation module
-- `lineage/` – lineage module implementation
 - `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
 - `migration/` – migration module implementation
 - `performance_monitor.py` – Internal implementation module

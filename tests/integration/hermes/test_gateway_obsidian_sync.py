@@ -4,7 +4,7 @@ from pathlib import Path
 
 from codomyrmex.agentic_memory.obsidian import ObsidianVault
 from codomyrmex.agents.core import AgentRequest, AgentResponse
-from codomyrmex.agents.hermes.hermes_client import HermesClient
+from codomyrmex.agents.hermes.client_pkg import HermesClient
 
 
 class StaticHermesClient(HermesClient):

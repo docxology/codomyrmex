@@ -26,7 +26,7 @@ from codomyrmex.maintenance.deps.dependency_consolidator import (
 )
 from codomyrmex.maintenance.deps.validate_dependencies import (
     check_duplicates,
-    check_requirements_txt_deprecated,
+    check_retired_requirements_markers,
     check_version_constraints,
     parse_pyproject_dependencies,
 )
@@ -612,7 +612,7 @@ class TestRequirementsTxtDeprecation:
         mod.mkdir(parents=True)
         (mod / "requirements.txt").write_text("requests>=2.0\n")
 
-        errors = check_requirements_txt_deprecated(tmp_path)
+        errors = check_retired_requirements_markers(tmp_path)
 
         assert len(errors) == 1
         assert (
@@ -629,7 +629,7 @@ class TestRequirementsTxtDeprecation:
             "# DEPRECATED: use pyproject.toml\nrequests>=2.0\n"
         )
 
-        errors = check_requirements_txt_deprecated(tmp_path)
+        errors = check_retired_requirements_markers(tmp_path)
 
         assert errors == []
 
@@ -640,13 +640,13 @@ class TestRequirementsTxtDeprecation:
         mod.mkdir(parents=True)
         (mod / "__init__.py").write_text("")
 
-        errors = check_requirements_txt_deprecated(tmp_path)
+        errors = check_retired_requirements_markers(tmp_path)
 
         assert errors == []
 
     def test_nonexistent_src_dir_no_errors(self, tmp_path):
         """When src/codomyrmex does not exist, returns empty list."""
-        errors = check_requirements_txt_deprecated(tmp_path)
+        errors = check_retired_requirements_markers(tmp_path)
 
         assert errors == []
 

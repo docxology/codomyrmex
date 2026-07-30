@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import Any
 
-from codomyrmex.cerebrum.core.exceptions import VisualizationError
 from codomyrmex.cerebrum.visualization.base import (
     BaseChartVisualizer,
 )
@@ -9,6 +8,7 @@ from codomyrmex.cerebrum.visualization.theme import (
     VisualizationTheme,
     get_default_theme,
 )
+from codomyrmex.exceptions.cerebrum import VisualizationError
 from codomyrmex.logging_monitoring import get_logger
 
 """Composition visualizations: graphical abstracts and multi-panel compositions.

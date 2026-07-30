@@ -3,7 +3,10 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Vector database abstraction with Chroma backend for embedding storage and similarity search.
+Vector database abstraction for embedding storage and similarity search. The
+Chroma adapter is capability-detected but is not installed by a Codomyrmex
+extra while the current Chroma server line has an unresolved pre-authentication
+code-injection advisory.
 
 ## Active Components
 - `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
@@ -13,7 +16,7 @@ Vector database abstraction with Chroma backend for embedding storage and simila
 - `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
 - `__init__.py` – Python package entry point — exports and initialization
 - `_search_mixin.py` – Internal implementation module
-- `chroma.py` – Chroma implementation
+- `chroma.py` – Capability-detected Chroma adapter (operator-supplied dependency)
 - `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
 - `models.py` – Data models and schemas
 - `persistent.py` – Persistent implementation

@@ -4,7 +4,7 @@
 
 ## Purpose
 
-The Colony Kernel is a proposal-evaluation control plane for codomyrmex's artificial ecology thesis: a codebase is treated as a colony in which agents, modules, and human operators interact through a process-local signal field. Subsystems deposit chemical-analogy traces carrying success, failure, risk, and dependency information, and the kernel evaluates proposals against the accumulated field, reported consequence history, budget state, completeness, and agent trust. A proposal touching a location with strong FAILURE or RISK pressure faces a higher gate barrier than an otherwise identical proposal at a clean target. Caller-reported outcomes update the field and trust profile, while pruning scans nominate candidates for review. These mechanics implement environmental feedback; they do not by themselves attest execution, enforce downstream actions, or establish production benefit.
+The Colony Kernel is a proposal-evaluation control plane for codomyrmex's artificial ecology thesis: a codebase is treated as a colony in which agents, modules, and human operators interact through a process-local signal field. Subsystems deposit chemical-analogy traces carrying success, failure, risk, and dependency information, and the kernel evaluates proposals against the accumulated field, reported consequence history, budget state, completeness, and agent trust. A proposal touching a location with strong FAILURE or RISK pressure faces a higher gate barrier than an otherwise identical proposal at a clean target. Caller-reported outcomes update the field and trust profile, while pruning scans nominate candidates for review. The ordinary MCP path remains caller-reported and unattested. Optional and required direct-kernel modes add a signed, hash-linked local proposal→verdict→authorization→receipt→outcome ledger; that ledger still does not observe external actuation, enforce downstream actions, or establish production benefit.
 
 ## Architecture
 
@@ -64,8 +64,8 @@ result = kernel.propose_action(proposal)
 print(result.decision)   # GateDecision.REFUSE for a brand-new SANDBOX agent
 print(result.gate_score) # 0.0 on the SANDBOX hard-override path
 
-# Outcome reporting is a separate, caller-driven operation. This demonstrates the
-# current interface; it does not prove that the action was authorized or executed.
+# Ordinary outcome reporting is a separate, caller-driven operation. It is
+# available when attestation is disabled (the default) or optional.
 record = kernel.record_outcome(
     proposal=proposal,
     outcome={"summary": "patch applied; git rebase succeeded", "repair_needed": False},
@@ -81,6 +81,16 @@ print(status["budget_usage"]["llm_calls"])  # {"used": 3, "max": 500}
 # Advance one tick — evaporates pheromone traces.
 kernel.tick()
 ```
+
+For a locally authenticated lifecycle, construct
+`ColonyKernelConfig(attestation_mode="required", attestation_secret_key=...)`,
+then call `propose_action()`, `authorize_execution()`,
+`record_execution_receipt()`, and `record_attested_outcome()` in order.
+Required mode rejects every direct `record_outcome()` call, including one made
+after a receipt, so the outcome event cannot bypass the ledger. This establishes
+local linkage and tamper detection; receipt content and outcome content are
+still supplied by callers and are not independent observations of an external
+tool or environment.
 
 ## The Core Loop
 
@@ -195,9 +205,13 @@ caller-reported failure; it is not an execution-attestation or external benchmar
 ## Evidence-first research surfaces
 
 The additive `attestation.py`, `reference.py`, `formal.py`, and `research/`
-surfaces extend the replay contract without changing its schema. The ledger can
-require a prior authorization and execution receipt before accepting an outcome;
-HMAC is the local default and Ed25519 is optional and explicit. The reference
+surfaces extend the replay contract without changing its schema. In optional
+mode callers may choose the linked lifecycle while the ordinary outcome path
+remains available. In required mode the kernel accepts state-changing outcomes
+only through `record_attested_outcome()` after an EXECUTE verdict,
+authorization, and execution receipt. HMAC is the local default and Ed25519 is
+optional and explicit. The ledger authenticates local event linkage, not the
+truth of external execution. The reference
 interpreter and formal bridge return structured counterexamples or unavailable
 states rather than implying proof when an optional solver is absent.
 

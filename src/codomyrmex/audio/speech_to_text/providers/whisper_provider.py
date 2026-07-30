@@ -10,6 +10,8 @@ using CTranslate2 for efficient inference. It provides:
 """
 
 import asyncio
+import importlib
+import importlib.util
 import time
 from collections.abc import AsyncIterator
 from pathlib import Path
@@ -31,13 +33,13 @@ from codomyrmex.audio.speech_to_text.models import (
 
 from .base import STTProvider
 
-# Check if faster-whisper is available
-try:
-    from faster_whisper import WhisperModel
+# Probe package metadata without importing PyAV and its bundled FFmpeg libraries.
+FASTER_WHISPER_AVAILABLE = importlib.util.find_spec("faster_whisper") is not None
 
-    FASTER_WHISPER_AVAILABLE = True
-except ImportError:
-    FASTER_WHISPER_AVAILABLE = False
+
+def _load_whisper_model_class() -> Any:
+    """Import ``WhisperModel`` only when transcription is requested."""
+    return importlib.import_module("faster_whisper").WhisperModel
 
 
 # Supported audio formats
@@ -219,7 +221,7 @@ class WhisperProvider(STTProvider):
         self.compute_type = compute_type
         self._download_root = download_root
         self._local_files_only = local_files_only
-        self._model: WhisperModel | None = None
+        self._model: Any | None = None
         self._kwargs = kwargs
 
         # Load model immediately
@@ -228,7 +230,8 @@ class WhisperProvider(STTProvider):
     def _load_model(self) -> None:
         """Load the Whisper model."""
         try:
-            self._model = WhisperModel(
+            whisper_model = _load_whisper_model_class()
+            self._model = whisper_model(
                 self.model_size.value,
                 device=self.device,
                 compute_type=self.compute_type,

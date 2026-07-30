@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from codomyrmex.agents.hermes._provider_router import ContextCompressor
+from codomyrmex.agents.hermes.provider_router_pkg import ContextCompressor
 
 
 def test_context_compressor_deduplicates_and_truncates() -> None:

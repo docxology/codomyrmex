@@ -19,11 +19,13 @@ from codomyrmex.calendar_integration.exceptions import (
 )
 from codomyrmex.calendar_integration.generics import CalendarEvent, CalendarProvider
 
+HttpError: type[Exception]
 try:
     from google.oauth2.credentials import Credentials
     from googleapiclient.discovery import Resource, build
-    from googleapiclient.errors import HttpError
+    from googleapiclient.errors import HttpError as _GoogleHttpError
 
+    HttpError = _GoogleHttpError
     GCAL_AVAILABLE = True
 except ImportError:
     HttpError = Exception
@@ -70,8 +72,8 @@ class GoogleCalendar(CalendarProvider):
         """Create a GoogleCalendar from environment variables.
 
         Tries GOOGLE_REFRESH_TOKEN + GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET first,
-        then token file (~/.codomyrmex/gcal_token.json),
-        then falls back to Application Default Credentials.
+        then the PAI dashboard token file (~/.codomyrmex/gcal_token.json),
+        then Application Default Credentials.
 
         Raises:
             ImportError: If Google Calendar dependencies are not installed.
@@ -184,7 +186,7 @@ class GoogleCalendar(CalendarProvider):
 
         * **Timed events** — ``item["start"]["dateTime"]`` is an ISO 8601
           string with timezone offset (e.g. ``"2026-02-24T10:00:00-08:00"``).
-          The legacy ``Z`` suffix (UTC) is normalized to ``+00:00`` so
+          The RFC3339 ``Z`` suffix (UTC) is normalized to ``+00:00`` so
           ``datetime.fromisoformat`` accepts it on Python < 3.11.
         * **All-day events** — ``item["start"]["date"]`` is a plain date
           string (``"2026-02-24"``); ``fromisoformat`` parses it without

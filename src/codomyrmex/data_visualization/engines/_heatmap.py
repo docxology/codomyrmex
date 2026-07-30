@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
-from codomyrmex.data_visualization._compat import monitor_performance
+from codomyrmex.data_visualization._instrumentation import monitor_performance
 
 if TYPE_CHECKING:
     import matplotlib.pyplot as plt

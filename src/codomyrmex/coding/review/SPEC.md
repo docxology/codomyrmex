@@ -4,13 +4,13 @@
 
 ## Overview
 
-Multi-tool code review system that aggregates results from external linters (pylint, flake8, mypy, bandit, vulture), custom structural analysis (`PyscnAnalyzer`), and quality-gate evaluation into unified reports. The `CodeReviewer` class uses a mixin architecture, delegating to five specialized mixins in `reviewer_impl/`.
+Multi-tool code review system that aggregates results from external linters (pylint, ruff, ty, bandit, vulture), custom structural analysis (`PyscnAnalyzer`), and quality-gate evaluation into unified reports. The `CodeReviewer` class uses a mixin architecture, delegating to five specialized mixins in `reviewer_impl/`.
 
 ## Architecture
 
 ```
 CodeReviewer (facade)
-  ├── LintToolsMixin        -- External tool execution (pylint, flake8, mypy, bandit, vulture)
+  ├── LintToolsMixin        -- External tool execution (pylint, ruff, ty, bandit, vulture)
   ├── AnalysisPatternsMixin -- Complexity, dead code, architecture compliance analysis
   ├── PerformanceOptMixin   -- Performance suggestion generation
   ├── DashboardMixin        -- Quality dashboard computation, code smell detection, tech debt scoring
@@ -63,7 +63,7 @@ CodeReviewer (facade)
 ## Dependencies
 
 - **Internal**: `logging_monitoring`, `reviewer_impl/` (five mixins)
-- **External**: pylint, flake8, mypy, bandit, vulture (all optional; detected at runtime)
+- **External**: pylint, ruff, ty, bandit, vulture (all optional; detected at runtime)
 
 ## Constraints
 

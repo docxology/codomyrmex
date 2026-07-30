@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Hermes client implementation split from the former monolithic `hermes_client.py`.
+Hermes client implementation organized into focused modules.
 
 ## Key Files
 
@@ -19,9 +19,9 @@ Hermes client implementation split from the former monolithic `hermes_client.py`
 
 ## Dependencies
 
-Import via `codomyrmex.agents.hermes.hermes_client` (shim) or `client_pkg` directly.
+Import via `codomyrmex.agents.hermes.client_pkg`.
 
 ## Development Guidelines
 
 - Each mixin owns one responsibility; `core.py`'s `HermesClient` composes them via MRO — new behavior gets its own mixin, not a `core.py` addition.
-- Keep the `hermes_client` shim's public surface (`AUTO_HEAL_ALLOWLIST`, `AutoRetryException`, `HermesClient`, `HermesError`) stable.
+- Keep the package public surface (`AUTO_HEAL_ALLOWLIST`, `AutoRetryException`, `HermesClient`, `HermesError`) stable.

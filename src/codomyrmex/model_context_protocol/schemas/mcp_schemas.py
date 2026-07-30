@@ -194,9 +194,6 @@ class MCPToolRegistry:
         """
         return self._tools.get(tool_name)
 
-    # Alias for API coherence (mcp_bridge uses get_tool)
-    get_tool = get
-
     def list_tools(self) -> list[str]:
         """
         list all registered tool names.

@@ -8,6 +8,7 @@ Usage:
 
 import sys
 from pathlib import Path
+from typing import Any
 
 try:
     import codomyrmex
@@ -31,9 +32,9 @@ def get_cache_dirs() -> list:
     return [p for p in cache_locations if p.exists()]
 
 
-def analyze_cache_dir(cache_path: Path) -> dict:
+def analyze_cache_dir(cache_path: Path) -> dict[str, Any]:
     """Analyze a cache directory."""
-    stats = {
+    stats: dict[str, Any] = {
         "path": str(cache_path),
         "total_size": 0,
         "file_count": 0,
@@ -64,7 +65,7 @@ def analyze_cache_dir(cache_path: Path) -> dict:
     return stats
 
 
-def format_size(size_bytes: int) -> str:
+def format_size(size_bytes: float) -> str:
     """Format bytes as human-readable string."""
     for unit in ["B", "KB", "MB", "GB"]:
         if size_bytes < 1024:

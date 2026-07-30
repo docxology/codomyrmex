@@ -36,6 +36,36 @@ DETAILED_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(fun
 _logging_configured = False
 
 
+class _DynamicStdoutHandler(logging.StreamHandler):
+    """Emit to the current stdout without retaining a replaceable stream."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.stream = None
+
+    def emit(self, record: logging.LogRecord) -> None:
+        """Write one record, dropping it if stdout is unavailable or closed."""
+        try:
+            message = self.format(record)
+        except Exception:
+            self.handleError(record)
+            return
+
+        stream = sys.stdout
+        if stream is None or getattr(stream, "closed", False):
+            return
+        try:
+            stream.write(message + self.terminator)
+            stream.flush()
+        except (OSError, ValueError):
+            # Capture frameworks and interpreter shutdown can close or replace
+            # stdout after logging is configured. Logging must not turn that
+            # normal lifecycle transition into a secondary application error.
+            return
+        except Exception:
+            self.handleError(record)
+
+
 def setup_logging(force: bool = True) -> None:
     """Configure the logging system for the application.
 
@@ -84,7 +114,7 @@ def setup_logging(force: bool = True) -> None:
         formatter = logging.Formatter(log_format_str_text)
 
     handlers: list[logging.Handler] = []
-    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler = _DynamicStdoutHandler()
     console_handler.setFormatter(formatter)
     handlers.append(console_handler)
 
@@ -121,7 +151,7 @@ def enable_structured_json(logger_name: str | None = None) -> None:
         handler.setFormatter(formatter)
     # If logger has no handlers yet, add a JSON-formatted stdout handler
     if not target.handlers:
-        handler = logging.StreamHandler(sys.stdout)
+        handler = _DynamicStdoutHandler()
         handler.setFormatter(formatter)
         target.addHandler(handler)
 

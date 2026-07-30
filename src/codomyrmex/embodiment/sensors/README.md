@@ -7,8 +7,7 @@ tests, and examples. It is intentionally separate from physical sensor drivers.
 
 ## Components
 
-- [`base.py`](base.py) defines `SensorData`, `SimulatedSensor`, and the
-  historical `MockSensor` compatibility surface.
+- [`base.py`](base.py) defines `SensorData` and `SimulatedSensor`.
 
 ## Validation
 

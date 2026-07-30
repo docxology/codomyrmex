@@ -16,7 +16,7 @@ except ImportError:
     ACTIVE_DEFENSE_AVAILABLE = False
 
 try:
-    from codomyrmex.defense.rabbithole import RabbitHole
+    from codomyrmex.defense.active import RabbitHole
 
     RABBITHOLE_AVAILABLE = True
 except ImportError:

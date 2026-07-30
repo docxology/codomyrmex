@@ -2,11 +2,9 @@
 """Code quality workflow.
 
 
-logger = logging.getLogger(__name__)
-
 Comprehensive code quality checks:
 1. Run linting (ruff)
-2. Run type checking (mypy)
+2. Run type checking (ty)
 3. Check code complexity
 4. Run security analysis
 5. Generate quality report
@@ -27,6 +25,8 @@ sys.path.insert(0, str(project_root / "src"))
 
 import contextlib
 import logging
+
+logger = logging.getLogger(__name__)
 
 from codomyrmex.orchestrator import Workflow
 from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
@@ -63,14 +63,17 @@ def run_ruff_lint(
     }
 
 
-def run_mypy_check(
+def run_type_check(
     _task_results: dict | None = None, strict: bool = False
 ) -> dict[str, Any]:
-    """Run mypy type checking."""
-    cmd = ["uv", "run", "mypy", "src/codomyrmex", "--ignore-missing-imports"]
+    """Run the repository-wide ty type check.
+
+    The repository type gate is provided by ty.
+    """
+    cmd = ["uv", "run", "ty", "check", "--output-format", "concise"]
     if strict:
-        cmd.append("--strict")
-    cmd.append("--no-error-summary")
+        cmd.append("--error-on-warning")
+    cmd.extend(["src/", "scripts/", "tests/"])
 
     result = subprocess.run(
         cmd, capture_output=True, text=True, cwd=project_root, timeout=180
@@ -83,7 +86,7 @@ def run_mypy_check(
         "success": result.returncode == 0,
         "errors": errors,
         "warnings": warnings,
-        "tool": "mypy",
+        "tool": "ty",
         "output": result.stdout[:2000] if result.stdout else "",
     }
 
@@ -238,7 +241,7 @@ def generate_quality_report(_task_results: dict | None = None) -> dict[str, Any]
 
     # Type check
     report["checks"]["types"] = {
-        "tool": "mypy",
+        "tool": "ty",
         "errors": type_result.get("errors", 0),
         "warnings": type_result.get("warnings", 0),
         "passed": type_result.get("success", False),
@@ -361,7 +364,7 @@ async def main() -> int:
     )
     workflow.add_task(
         name="typecheck",
-        action=lambda _tr=None: run_mypy_check(strict=args.strict),
+        action=lambda _tr=None: run_type_check(strict=args.strict),
         timeout=180,
     )
     workflow.add_task(name="complexity", action=check_code_complexity, timeout=120)

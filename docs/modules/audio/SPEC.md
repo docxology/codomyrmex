@@ -54,6 +54,11 @@ TTSProvider (ABC)
 - 99+ languages
 
 **Model Loading**:
+
+The package probes `faster-whisper` availability without importing its native
+PyAV dependency. `WhisperModel` is imported and constructed only when a
+`WhisperProvider` instance is created.
+
 ```python
 WhisperModel(
     model_size,

@@ -42,52 +42,6 @@ class FalsificationWorker:
         self._pheromone_store = pheromone_store
         self._consequence_memory = consequence_memory
 
-    # Backward-compatible method wrappers (tests and callers use worker.check_*).
-    def check_no_rollback(self, plan: dict[str, Any]) -> FalsificationFinding | None:
-        return check_no_rollback(plan)
-
-    def check_no_test_value(self, plan: dict[str, Any]) -> FalsificationFinding | None:
-        return check_no_test_value(plan)
-
-    def check_scope_creep(self, plan: dict[str, Any]) -> FalsificationFinding | None:
-        return check_scope_creep(plan)
-
-    def check_missing_metrics(
-        self, plan: dict[str, Any]
-    ) -> FalsificationFinding | None:
-        return check_missing_metrics(plan)
-
-    def check_circular_deps(
-        self, plan: dict[str, Any], repo_root: str | None
-    ) -> FalsificationFinding | None:
-        return check_circular_deps(plan, repo_root)
-
-    def _check_dependency_risk(
-        self, plan: dict[str, Any]
-    ) -> FalsificationFinding | None:
-        return check_dependency_risk(plan)
-
-    def _check_security_risk(self, plan: dict[str, Any]) -> FalsificationFinding | None:
-        return check_security_risk(plan)
-
-    def _check_false_metric(self, plan: dict[str, Any]) -> FalsificationFinding | None:
-        return check_false_metric(plan)
-
-    def _check_over_broad_module(
-        self, plan: dict[str, Any]
-    ) -> FalsificationFinding | None:
-        return check_over_broad_module(plan)
-
-    def _check_hidden_maintenance_cost(
-        self, plan: dict[str, Any]
-    ) -> FalsificationFinding | None:
-        return check_hidden_maintenance_cost(plan)
-
-    def _check_premature_abstraction(
-        self, plan: dict[str, Any]
-    ) -> FalsificationFinding | None:
-        return check_premature_abstraction(plan)
-
     def evaluate_plan(self, plan: dict[str, Any]) -> FalsificationReport:
         """Run heuristic checks across all 10 attack-vector categories.
 
@@ -181,7 +135,7 @@ class FalsificationWorker:
         """Run all falsification checks against *proposal*.
 
         Converts the ActionProposal to a plan dict, calls evaluate_plan,
-        and returns only the findings list for ColonyKernel compatibility.
+        and returns only the findings list for ColonyKernel integration.
         """
         plan = {
             "target": proposal.target,

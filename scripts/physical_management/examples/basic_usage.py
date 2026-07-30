@@ -19,11 +19,10 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.physical_management import (
-    PhysicalObject,
+    ObjectType,
     PhysicalObjectManager,
     PhysicsSimulator,
     SensorManager,
-    Vector3D,
 )
 from codomyrmex.utils.cli_helpers import (
     print_error,
@@ -57,7 +56,14 @@ def main():
     print_info("Testing PhysicalObjectManager...")
     try:
         mgr = PhysicalObjectManager()
-        obj = PhysicalObject(id="obj1", name="Test Object", position=Vector3D(0, 0, 0))
+        obj = mgr.create_object(
+            object_id="obj1",
+            name="Test Object",
+            object_type=ObjectType.DEVICE,
+            x=0.0,
+            y=0.0,
+            z=0.0,
+        )
         mgr.add_object(obj)
         print_success(f"  PhysicalObjectManager initialized. Added object: {obj.name}")
     except Exception as e:

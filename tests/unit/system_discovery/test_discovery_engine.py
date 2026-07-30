@@ -8,15 +8,15 @@ Covers:
 - SystemDiscovery.export_inventory (JSON file writing, success/failure)
 - SystemDiscovery._discover_modules (directory scanning, __init__.py detection)
 - SystemDiscovery._analyze_module (importable vs non-importable paths)
-- SystemDiscovery._static_analysis_capabilities (AST-based scanning)
-- SystemDiscovery._analyze_object (function, class, method, constant, other)
-- SystemDiscovery._get_function_signature_from_ast (args, defaults, *args, **kwargs)
-- SystemDiscovery._get_module_description (README, __init__.py docstring, fallback)
-- SystemDiscovery._get_module_version (__version__ detection, fallback)
-- SystemDiscovery._get_module_dependencies (requirements.txt parsing)
-- SystemDiscovery._has_tests (test file existence check)
-- SystemDiscovery._has_docs (doc indicator detection)
-- SystemDiscovery._get_last_modified (mtime scanning)
+- DependencyAnalyzer.static_analysis_capabilities (AST-based scanning)
+- DependencyAnalyzer.analyze_object (function, class, method, constant, other)
+- DependencyAnalyzer.get_function_signature_from_ast (args, defaults, *args, **kwargs)
+- DependencyAnalyzer.get_module_description (README, __init__.py docstring, fallback)
+- DependencyAnalyzer.get_module_version (__version__ detection, fallback)
+- DependencyAnalyzer.get_module_dependencies (requirements.txt parsing)
+- DependencyAnalyzer.has_tests (test file existence check)
+- DependencyAnalyzer.has_docs (doc indicator detection)
+- DependencyAnalyzer.get_last_modified (mtime scanning)
 - SystemDiscovery._display_discovery_results (stdout output)
 - SystemDiscovery._display_capability_summary (stdout grouping)
 - SystemDiscovery._get_system_status_dict (dictionary structure)
@@ -204,13 +204,13 @@ class TestSystemDiscoveryInit:
 
 
 # ===================================================================
-# SystemDiscovery._get_module_description
+# DependencyAnalyzer.get_module_description
 # ===================================================================
 
 
 @pytest.mark.unit
 class TestGetModuleDescription:
-    """Test _get_module_description with README, __init__.py docstring, and fallback."""
+    """Test get_module_description with README, __init__.py docstring, and fallback."""
 
     def test_from_readme(self, tmp_path):
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
@@ -219,7 +219,7 @@ class TestGetModuleDescription:
         mod_dir.mkdir()
         (mod_dir / "README.md").write_text("# My Module\nThis module does things.\n")
         sd = SystemDiscovery(project_root=tmp_path)
-        desc = sd._get_module_description(mod_dir)
+        desc = sd._analyzer.get_module_description(mod_dir)
         assert desc == "This module does things."
 
     def test_from_init_docstring(self, tmp_path):
@@ -229,7 +229,7 @@ class TestGetModuleDescription:
         mod_dir.mkdir()
         (mod_dir / "__init__.py").write_text('"""A cool module."""\n')
         sd = SystemDiscovery(project_root=tmp_path)
-        desc = sd._get_module_description(mod_dir)
+        desc = sd._analyzer.get_module_description(mod_dir)
         assert desc == "A cool module."
 
     def test_fallback_no_docs(self, tmp_path):
@@ -238,7 +238,7 @@ class TestGetModuleDescription:
         mod_dir = tmp_path / "mymod"
         mod_dir.mkdir()
         sd = SystemDiscovery(project_root=tmp_path)
-        desc = sd._get_module_description(mod_dir)
+        desc = sd._analyzer.get_module_description(mod_dir)
         assert desc == "No description available"
 
     def test_readme_only_header(self, tmp_path):
@@ -249,19 +249,19 @@ class TestGetModuleDescription:
         (mod_dir / "README.md").write_text("# Header Only\n")
         (mod_dir / "__init__.py").write_text('"""Fallback docstring."""\n')
         sd = SystemDiscovery(project_root=tmp_path)
-        desc = sd._get_module_description(mod_dir)
+        desc = sd._analyzer.get_module_description(mod_dir)
         # README has only a header line, so falls through to init docstring
         assert desc == "Fallback docstring."
 
 
 # ===================================================================
-# SystemDiscovery._get_module_version
+# DependencyAnalyzer.get_module_version
 # ===================================================================
 
 
 @pytest.mark.unit
 class TestGetModuleVersion:
-    """Test _get_module_version from __init__.py __version__ and fallback."""
+    """Test get_module_version from __init__.py __version__ and fallback."""
 
     def test_version_found(self, tmp_path):
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
@@ -270,7 +270,7 @@ class TestGetModuleVersion:
         mod_dir.mkdir()
         (mod_dir / "__init__.py").write_text('__version__ = "2.3.4"\n')
         sd = SystemDiscovery(project_root=tmp_path)
-        ver = sd._get_module_version(mod_dir)
+        ver = sd._analyzer.get_module_version(mod_dir)
         assert ver == "2.3.4"
 
     def test_version_unknown(self, tmp_path):
@@ -280,7 +280,7 @@ class TestGetModuleVersion:
         mod_dir.mkdir()
         (mod_dir / "__init__.py").write_text("# no version\n")
         sd = SystemDiscovery(project_root=tmp_path)
-        ver = sd._get_module_version(mod_dir)
+        ver = sd._analyzer.get_module_version(mod_dir)
         assert ver == "unknown"
 
     def test_no_init_file(self, tmp_path):
@@ -289,18 +289,18 @@ class TestGetModuleVersion:
         mod_dir = tmp_path / "mymod"
         mod_dir.mkdir()
         sd = SystemDiscovery(project_root=tmp_path)
-        ver = sd._get_module_version(mod_dir)
+        ver = sd._analyzer.get_module_version(mod_dir)
         assert ver == "unknown"
 
 
 # ===================================================================
-# SystemDiscovery._get_module_dependencies
+# DependencyAnalyzer.get_module_dependencies
 # ===================================================================
 
 
 @pytest.mark.unit
 class TestGetModuleDependencies:
-    """Test _get_module_dependencies from requirements.txt."""
+    """Test get_module_dependencies from requirements.txt."""
 
     def test_parses_requirements(self, tmp_path):
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
@@ -311,7 +311,7 @@ class TestGetModuleDependencies:
             "# A comment\nrequests>=2.28\nnumpy==1.24.0\nflask~=3.0\n"
         )
         sd = SystemDiscovery(project_root=tmp_path)
-        deps = sd._get_module_dependencies(mod_dir)
+        deps = sd._analyzer.get_module_dependencies(mod_dir)
         assert "requests" in deps
         assert "numpy" in deps
         assert "flask" in deps
@@ -323,18 +323,18 @@ class TestGetModuleDependencies:
         mod_dir = tmp_path / "mymod"
         mod_dir.mkdir()
         sd = SystemDiscovery(project_root=tmp_path)
-        deps = sd._get_module_dependencies(mod_dir)
+        deps = sd._analyzer.get_module_dependencies(mod_dir)
         assert deps == []
 
 
 # ===================================================================
-# SystemDiscovery._has_tests
+# DependencyAnalyzer.has_tests
 # ===================================================================
 
 
 @pytest.mark.unit
 class TestHasTests:
-    """Test _has_tests checks for test file existence."""
+    """Test has_tests checks for test file existence."""
 
     def test_has_test_file(self, tmp_path):
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
@@ -343,23 +343,23 @@ class TestHasTests:
         testing_dir.mkdir(parents=True)
         (testing_dir / "test_mymod.py").write_text("# test\n")
         sd = SystemDiscovery(project_root=tmp_path)
-        assert sd._has_tests("mymod") is True
+        assert sd._analyzer.has_tests("mymod") is True
 
     def test_no_test_file(self, tmp_path):
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
 
         sd = SystemDiscovery(project_root=tmp_path)
-        assert sd._has_tests("nonexistent") is False
+        assert sd._analyzer.has_tests("nonexistent") is False
 
 
 # ===================================================================
-# SystemDiscovery._has_docs
+# DependencyAnalyzer.has_docs
 # ===================================================================
 
 
 @pytest.mark.unit
 class TestHasDocs:
-    """Test _has_docs checks for documentation indicators."""
+    """Test has_docs checks for documentation indicators."""
 
     def test_has_readme(self, tmp_path):
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
@@ -368,7 +368,7 @@ class TestHasDocs:
         mod_dir.mkdir()
         (mod_dir / "README.md").write_text("# Docs\n")
         sd = SystemDiscovery(project_root=tmp_path)
-        assert sd._has_docs(mod_dir) is True
+        assert sd._analyzer.has_docs(mod_dir) is True
 
     def test_has_api_spec(self, tmp_path):
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
@@ -377,7 +377,7 @@ class TestHasDocs:
         mod_dir.mkdir()
         (mod_dir / "API_SPECIFICATION.md").write_text("# API\n")
         sd = SystemDiscovery(project_root=tmp_path)
-        assert sd._has_docs(mod_dir) is True
+        assert sd._analyzer.has_docs(mod_dir) is True
 
     def test_has_docs_dir(self, tmp_path):
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
@@ -386,7 +386,7 @@ class TestHasDocs:
         mod_dir.mkdir()
         (mod_dir / "docs").mkdir()
         sd = SystemDiscovery(project_root=tmp_path)
-        assert sd._has_docs(mod_dir) is True
+        assert sd._analyzer.has_docs(mod_dir) is True
 
     def test_no_docs(self, tmp_path):
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
@@ -394,17 +394,17 @@ class TestHasDocs:
         mod_dir = tmp_path / "mymod"
         mod_dir.mkdir()
         sd = SystemDiscovery(project_root=tmp_path)
-        assert sd._has_docs(mod_dir) is False
+        assert sd._analyzer.has_docs(mod_dir) is False
 
 
 # ===================================================================
-# SystemDiscovery._get_last_modified
+# DependencyAnalyzer.get_last_modified
 # ===================================================================
 
 
 @pytest.mark.unit
 class TestGetLastModified:
-    """Test _get_last_modified returns formatted timestamps."""
+    """Test get_last_modified returns formatted timestamps."""
 
     def test_returns_timestamp_string(self, tmp_path):
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
@@ -414,7 +414,7 @@ class TestGetLastModified:
         (mod_dir / "__init__.py").write_text("# init\n")
         (mod_dir / "core.py").write_text("# core\n")
         sd = SystemDiscovery(project_root=tmp_path)
-        result = sd._get_last_modified(mod_dir)
+        result = sd._analyzer.get_last_modified(mod_dir)
         # Should be a date-like string, not "unknown"
         assert result != "unknown"
         assert "-" in result  # YYYY-MM-DD format
@@ -426,12 +426,12 @@ class TestGetLastModified:
         mod_dir.mkdir()
         (mod_dir / "data.txt").write_text("text\n")
         sd = SystemDiscovery(project_root=tmp_path)
-        result = sd._get_last_modified(mod_dir)
+        result = sd._analyzer.get_last_modified(mod_dir)
         assert result == "unknown"
 
 
 # ===================================================================
-# SystemDiscovery._get_function_signature_from_ast
+# DependencyAnalyzer.get_function_signature_from_ast
 # ===================================================================
 
 
@@ -446,7 +446,7 @@ class TestGetFunctionSignatureFromAst:
         tree = ast.parse(code)
         func_node = tree.body[0]
         sd = SystemDiscovery()
-        sig = sd._get_function_signature_from_ast(func_node)
+        sig = sd._analyzer.get_function_signature_from_ast(func_node)
         assert sig == "foo(a, b)"
 
     def test_defaults(self):
@@ -456,7 +456,7 @@ class TestGetFunctionSignatureFromAst:
         tree = ast.parse(code)
         func_node = tree.body[0]
         sd = SystemDiscovery()
-        sig = sd._get_function_signature_from_ast(func_node)
+        sig = sd._analyzer.get_function_signature_from_ast(func_node)
         assert sig == "bar(x, y=10)"
 
     def test_varargs_and_kwargs(self):
@@ -466,7 +466,7 @@ class TestGetFunctionSignatureFromAst:
         tree = ast.parse(code)
         func_node = tree.body[0]
         sd = SystemDiscovery()
-        sig = sd._get_function_signature_from_ast(func_node)
+        sig = sd._analyzer.get_function_signature_from_ast(func_node)
         assert sig == "baz(*args, **kwargs)"
 
     def test_no_args(self):
@@ -476,12 +476,12 @@ class TestGetFunctionSignatureFromAst:
         tree = ast.parse(code)
         func_node = tree.body[0]
         sd = SystemDiscovery()
-        sig = sd._get_function_signature_from_ast(func_node)
+        sig = sd._analyzer.get_function_signature_from_ast(func_node)
         assert sig == "noop()"
 
 
 # ===================================================================
-# SystemDiscovery._static_analysis_capabilities
+# DependencyAnalyzer.static_analysis_capabilities
 # ===================================================================
 
 
@@ -508,7 +508,7 @@ class TestStaticAnalysisCapabilities:
             "    pass\n"
         )
         sd = SystemDiscovery(project_root=tmp_path)
-        caps = sd._static_analysis_capabilities(mod_dir)
+        caps = sd._analyzer.static_analysis_capabilities(mod_dir)
         names = [c.name for c in caps]
         # Public items discovered
         assert "public_func" in names
@@ -525,7 +525,7 @@ class TestStaticAnalysisCapabilities:
         (mod_dir / "test_stuff.py").write_text("def test_something(): pass\n")
         (mod_dir / "real.py").write_text("def real_func(): pass\n")
         sd = SystemDiscovery(project_root=tmp_path)
-        caps = sd._static_analysis_capabilities(mod_dir)
+        caps = sd._analyzer.static_analysis_capabilities(mod_dir)
         names = [c.name for c in caps]
         assert "real_func" in names
         assert "test_something" not in names
@@ -536,7 +536,7 @@ class TestStaticAnalysisCapabilities:
         mod_dir = tmp_path / "mymod"
         mod_dir.mkdir()
         sd = SystemDiscovery(project_root=tmp_path)
-        caps = sd._static_analysis_capabilities(mod_dir)
+        caps = sd._analyzer.static_analysis_capabilities(mod_dir)
         assert caps == []
 
     def test_handles_syntax_error_gracefully(self, tmp_path):
@@ -546,13 +546,13 @@ class TestStaticAnalysisCapabilities:
         mod_dir.mkdir()
         (mod_dir / "bad.py").write_text("def broken(\n")
         sd = SystemDiscovery(project_root=tmp_path)
-        caps = sd._static_analysis_capabilities(mod_dir)
+        caps = sd._analyzer.static_analysis_capabilities(mod_dir)
         # Should not raise, just return empty or partial
         assert isinstance(caps, list)
 
 
 # ===================================================================
-# SystemDiscovery._analyze_object
+# DependencyAnalyzer.analyze_object
 # ===================================================================
 
 
@@ -568,7 +568,7 @@ class TestAnalyzeObject:
             return a + b
 
         sd = SystemDiscovery()
-        cap = sd._analyze_object("sample_func", sample_func, Path("/m"))
+        cap = sd._analyzer.analyze_object("sample_func", sample_func, Path("/m"))
         assert cap is not None
         assert cap.type == "function"
         assert cap.name == "sample_func"
@@ -581,7 +581,7 @@ class TestAnalyzeObject:
             """A sample class."""
 
         sd = SystemDiscovery()
-        cap = sd._analyze_object("SampleClass", SampleClass, Path("/m"))
+        cap = sd._analyzer.analyze_object("SampleClass", SampleClass, Path("/m"))
         assert cap is not None
         assert cap.type == "class"
         assert cap.name == "SampleClass"
@@ -590,7 +590,7 @@ class TestAnalyzeObject:
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
 
         sd = SystemDiscovery()
-        cap = sd._analyze_object("VERSION", "1.0.0", Path("/m"))
+        cap = sd._analyzer.analyze_object("VERSION", "1.0.0", Path("/m"))
         assert cap is not None
         assert cap.type == "constant"
 
@@ -598,7 +598,7 @@ class TestAnalyzeObject:
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
 
         sd = SystemDiscovery()
-        cap = sd._analyze_object("MAX_SIZE", 1024, Path("/m"))
+        cap = sd._analyzer.analyze_object("MAX_SIZE", 1024, Path("/m"))
         assert cap is not None
         assert cap.type == "constant"
 
@@ -608,7 +608,7 @@ class TestAnalyzeObject:
 
         sd = SystemDiscovery()
         # A module object is "other"
-        cap = sd._analyze_object("sys_mod", sys, Path("/m"))
+        cap = sd._analyzer.analyze_object("sys_mod", sys, Path("/m"))
         assert cap is not None
         assert cap.type == "other"
 

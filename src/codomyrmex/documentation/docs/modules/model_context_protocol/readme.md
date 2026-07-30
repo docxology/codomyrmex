@@ -17,7 +17,6 @@ Module implementation, resources, and local coordination for Model Context Proto
 - `USAGE_EXAMPLES.md` – File
 - `__init__.py` – File
 - `adapters/` – Subdirectory
-- `compat.py` – File
 - `decorators.py` – File
 - `discovery/` – Subdirectory
 - `errors.py` – File

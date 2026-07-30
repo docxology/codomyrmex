@@ -30,7 +30,8 @@ class TestDHKeyExchange:
     """Classical Diffie-Hellman key exchange tests."""
 
     @pytest.fixture(scope="class")
-    def dh_params(self):
+    @classmethod
+    def dh_params(cls):
         """Generate DH parameters once for the entire test class (slow)."""
         return dh_generate_parameters(key_size=1024)
 

@@ -45,7 +45,6 @@ def get_folder_context(directory):
             ".venv",
             ".github",
             "node_modules",
-            ".mypy_cache",
         ):
             continue
         if f.is_dir():
@@ -202,7 +201,6 @@ def enrich_docs(start_path):
                 ".venv",
                 ".github",
                 "node_modules",
-                ".mypy_cache",
                 "docs",
                 "documentation",
             )

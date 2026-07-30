@@ -1,11 +1,12 @@
+import importlib
 from abc import ABC
 from typing import TYPE_CHECKING, Any
 
-from codomyrmex.cerebrum.core.exceptions import VisualizationError
 from codomyrmex.cerebrum.visualization.theme import (
     VisualizationTheme,
     get_default_theme,
 )
+from codomyrmex.exceptions.cerebrum import VisualizationError
 from codomyrmex.logging_monitoring import get_logger
 
 try:
@@ -29,8 +30,9 @@ except ImportError:
     Figure = Any  # type: ignore
     Axes = Any  # type: ignore
 
+nx: Any
 try:
-    import networkx as nx
+    nx = importlib.import_module("networkx")
 except ImportError:
     nx = None
 

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from codomyrmex.agentic_memory.memory import KnowledgeMemory
+from codomyrmex.agentic_memory.core.memory import KnowledgeMemory
 from codomyrmex.agentic_memory.stores import InMemoryStore
 from codomyrmex.agents.hermes.session import HermesSession, InMemorySessionStore
 

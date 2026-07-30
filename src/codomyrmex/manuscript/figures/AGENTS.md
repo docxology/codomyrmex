@@ -14,9 +14,10 @@ Figure generator modules and `_common.py` shared styling. See [../AGENTS.md](../
 ## Dependencies
 
 Depends on `codomyrmex.manuscript.variables` for computed token values consumed by
-figure captions and analytical annotations. All figure metadata is sourced from the
+figure captions, text alternatives, and analytical annotations. All figure metadata is sourced from the
 `figures:` registry in `docs/manuscript/config.yaml`; do not duplicate filenames,
-labels, widths, captions, thresholds, or experimental horizons in Markdown.
+labels, widths, captions, alternatives, descriptions, thresholds, or experimental
+horizons in Markdown.
 
 ## Development Guidelines
 
@@ -24,3 +25,5 @@ labels, widths, captions, thresholds, or experimental horizons in Markdown.
 - Scientific thresholds, horizons, score domains, and sampling parameters must come
   from the generated snapshot or the manuscript configuration. Geometry-only styling
   constants may remain local to a generator.
+- Encode categories redundantly through direct labels, position, shape, or line style;
+  shared palette changes must retain the tested contrast floor.

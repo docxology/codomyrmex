@@ -62,11 +62,17 @@ class FPFReportMixin:
         for pattern_id, data in list(
             results["case_based_reasoning"]["similarity_analysis"].items()
         )[:10]:
-            lines.append(f"### Pattern {pattern_id}")
-            lines.append(
-                f"- **Predicted Importance**: {data.get('prediction', 'N/A'):.3f}"
+            prediction = data.get("prediction")
+            prediction_text = (
+                f"{prediction:.3f}" if isinstance(prediction, int | float) else "N/A"
             )
-            lines.append(f"- **Confidence**: {data.get('confidence', 0):.3f}")
+            confidence = data.get("confidence")
+            confidence_text = (
+                f"{confidence:.3f}" if isinstance(confidence, int | float) else "N/A"
+            )
+            lines.append(f"#### Pattern {pattern_id}")
+            lines.append(f"- **Predicted Importance**: {prediction_text}")
+            lines.append(f"- **Confidence**: {confidence_text}")
             lines.append(
                 f"- **Similar Patterns Found**: {data.get('retrieved_count', 0)}"
             )
@@ -88,7 +94,7 @@ class FPFReportMixin:
             results["bayesian_inference"]["inference_results"].items()
         )[:10]:
             if "importance_distribution" in data:
-                lines.append(f"### Pattern {pattern_id}")
+                lines.append(f"#### Pattern {pattern_id}")
                 dist = data["importance_distribution"]
                 lines.append(f"- **High Importance**: {dist.get('high', 0):.3f}")
                 lines.append(f"- **Medium Importance**: {dist.get('medium', 0):.3f}")
@@ -111,6 +117,35 @@ class FPFReportMixin:
                 f"FE={step['free_energy']:.3f}, Importance={step['importance']:.3f}"
             )
 
+        fpf_analysis = results.get("fpf_analysis", {})
+        lines.extend(
+            [
+                "",
+                "## FPF Analysis",
+                "",
+                "### Critical Patterns",
+                "",
+            ]
+        )
+
+        critical_patterns = fpf_analysis.get("critical_patterns", [])
+        if critical_patterns:
+            for pattern_id, score in critical_patterns:
+                lines.append(f"- **Pattern {pattern_id}**: Score={score:.3f}")
+        else:
+            lines.append("- No critical patterns reported.")
+
+        lines.extend(["", "### Part Cohesion", ""])
+        part_cohesion = fpf_analysis.get("part_cohesion", {})
+        if part_cohesion:
+            for part, score in part_cohesion.items():
+                part_label = str(part)
+                if not part_label.lower().startswith("part "):
+                    part_label = f"Part {part_label}"
+                lines.append(f"- **{part_label}**: Cohesion={score:.3f}")
+        else:
+            lines.append("- No part-cohesion results reported.")
+
         lines.extend(
             [
                 "",
@@ -121,8 +156,22 @@ class FPFReportMixin:
             ]
         )
 
-        for term, score, _count in results["term_analysis"]["important_terms"][:15]:
-            lines.append(f"- **{term}**: Score={score:.3f}")
+        term_analysis = results.get("term_analysis", {})
+        important_terms = term_analysis.get("important_terms", [])
+        if important_terms:
+            for term, frequency, score in important_terms[:15]:
+                lines.append(f"- **{term}**: Frequency={frequency}, Score={score:.3f}")
+        else:
+            lines.append("- No ranked terms reported.")
+
+        lines.extend(["", "### Shared Terms", ""])
+        shared_terms = term_analysis.get("shared_terms", [])
+        if shared_terms:
+            for term, occurrence_count, pattern_ids in shared_terms[:15]:
+                patterns = ", ".join(str(pattern_id) for pattern_id in pattern_ids)
+                lines.append(f"- **{term}**: Patterns={occurrence_count} ({patterns})")
+        else:
+            lines.append("- No shared terms reported.")
 
         lines.extend(
             [

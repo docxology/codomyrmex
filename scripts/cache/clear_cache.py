@@ -8,6 +8,7 @@ Usage:
 
 import sys
 from pathlib import Path
+from typing import Any
 
 try:
     import codomyrmex
@@ -35,9 +36,9 @@ def clear_cache(
     older_than_days: int | None = None,
     file_types: list | None = None,
     dry_run: bool = True,
-) -> dict:
+) -> dict[str, Any]:
     """Clear cache entries based on criteria."""
-    stats = {"deleted": 0, "size_freed": 0, "skipped": 0}
+    stats: dict[str, Any] = {"deleted": 0, "size_freed": 0, "skipped": 0}
     cutoff = (
         datetime.now() - timedelta(days=older_than_days) if older_than_days else None
     )
@@ -66,7 +67,7 @@ def clear_cache(
     return stats
 
 
-def format_size(size_bytes: int) -> str:
+def format_size(size_bytes: float) -> str:
     for unit in ["B", "KB", "MB", "GB"]:
         if size_bytes < 1024:
             return f"{size_bytes:.1f} {unit}"

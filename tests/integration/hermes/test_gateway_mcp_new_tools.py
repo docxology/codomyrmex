@@ -51,7 +51,7 @@ def populated_db(tmp_path):
 def client_with_db(populated_db):
     """A HermesClient pointing at the pre-populated DB."""
     db_path, sid1, sid2 = populated_db
-    from codomyrmex.agents.hermes.hermes_client import HermesClient
+    from codomyrmex.agents.hermes.client_pkg import HermesClient
 
     client = HermesClient(
         config={
@@ -91,7 +91,7 @@ class TestHermesSessionStats:
         # Patch _get_client so it uses our pre-populated DB
 
         def patched(*args, **kwargs):
-            from codomyrmex.agents.hermes.hermes_client import HermesClient
+            from codomyrmex.agents.hermes.client_pkg import HermesClient
 
             return HermesClient(config={"hermes_session_db": db_path})
 
@@ -134,7 +134,7 @@ class TestHermesSessionFork:
         from codomyrmex.agents.hermes import mcp_tools
 
         def patched(*a, **kw):
-            from codomyrmex.agents.hermes.hermes_client import HermesClient
+            from codomyrmex.agents.hermes.client_pkg import HermesClient
 
             return HermesClient(config={"hermes_session_db": db_path})
 
@@ -153,7 +153,7 @@ class TestHermesSessionFork:
         from codomyrmex.agents.hermes import mcp_tools
 
         def patched(*a, **kw):
-            from codomyrmex.agents.hermes.hermes_client import HermesClient
+            from codomyrmex.agents.hermes.client_pkg import HermesClient
 
             return HermesClient(config={"hermes_session_db": db_path})
 
@@ -187,7 +187,7 @@ class TestHermesSessionExportMd:
         from codomyrmex.agents.hermes import mcp_tools
 
         def patched(*a, **kw):
-            from codomyrmex.agents.hermes.hermes_client import HermesClient
+            from codomyrmex.agents.hermes.client_pkg import HermesClient
 
             return HermesClient(config={"hermes_session_db": db_path})
 
@@ -231,7 +231,7 @@ class TestHermesSetSystemPrompt:
         from codomyrmex.agents.hermes import mcp_tools
 
         def patched(*a, **kw):
-            from codomyrmex.agents.hermes.hermes_client import HermesClient
+            from codomyrmex.agents.hermes.client_pkg import HermesClient
 
             return HermesClient(config={"hermes_session_db": db_path})
 
@@ -282,7 +282,7 @@ class TestHermesSessionDetail:
         from codomyrmex.agents.hermes import mcp_tools
 
         def patched(*a, **kw):
-            from codomyrmex.agents.hermes.hermes_client import HermesClient
+            from codomyrmex.agents.hermes.client_pkg import HermesClient
 
             return HermesClient(config={"hermes_session_db": db_path})
 
@@ -308,7 +308,7 @@ class TestHermesMinusPruneSessions:
         from codomyrmex.agents.hermes import mcp_tools
 
         def patched(*a, **kw):
-            from codomyrmex.agents.hermes.hermes_client import HermesClient
+            from codomyrmex.agents.hermes.client_pkg import HermesClient
 
             return HermesClient(config={"hermes_session_db": db_path})
 
@@ -333,7 +333,7 @@ class TestHermesMinusPruneSessions:
         from codomyrmex.agents.hermes import mcp_tools
 
         def patched(*a, **kw):
-            from codomyrmex.agents.hermes.hermes_client import HermesClient
+            from codomyrmex.agents.hermes.client_pkg import HermesClient
 
             return HermesClient(config={"hermes_session_db": str(db)})
 

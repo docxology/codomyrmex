@@ -13,7 +13,7 @@ except ImportError as _e:
         "Install with: uv sync --extra visualization"
     ) from _e
 
-from codomyrmex.data_visualization._compat import monitor_performance
+from codomyrmex.data_visualization._instrumentation import monitor_performance
 from codomyrmex.logging_monitoring import get_logger
 
 # Import mixins for class composition
@@ -185,10 +185,11 @@ class AdvancedPlotter(
         dpi: int | None = None,
         bbox_inches: str | None = None,
         transparent: bool | None = None,
-    ) -> None:
-        """Save the current plot to a file."""
+    ) -> bool:
+        """Save the current plot, returning whether the write succeeded."""
         if self.current_figure is None:
-            raise ValueError("No current figure to save")
+            logger.error("No current figure to save")
+            return False
 
         format = format or self.config.save_format
         dpi = dpi or self.config.save_dpi
@@ -205,11 +206,12 @@ class AdvancedPlotter(
                 bbox_inches=bbox_inches,
                 transparent=transparent,
             )
-        except OSError as e:
+        except Exception as e:
             logger.error("Failed to save plot to %s: %s", path, e)
-            raise
+            return False
 
         logger.info("Plot saved to %s", path)
+        return True
 
     def _plot_dataset(self, ax: plt.Axes, dataset: "Dataset") -> None:
         """Render a single Dataset onto *ax* based on its plot_type.

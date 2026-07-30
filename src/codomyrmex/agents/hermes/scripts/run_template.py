@@ -16,7 +16,7 @@ import time
 from typing import Any
 
 from codomyrmex.agents.core import AgentRequest
-from codomyrmex.agents.hermes.hermes_client import HermesClient, HermesError
+from codomyrmex.agents.hermes.client_pkg import HermesClient, HermesError
 from codomyrmex.agents.hermes.templates import TemplateLibrary
 
 

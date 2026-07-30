@@ -31,6 +31,7 @@ design and the live runtime configuration are described.
 | Colony Kernel unit/integration suite | Executed during variable generation | Checked deterministic behavior under test inputs |
 | Ruff and ty checks | Executed; fail closed | No scoped lint/type diagnostics in this snapshot |
 | Formula-derived figures and tables | Regenerated from configuration and constants | Arithmetic consequences of the policy |
+| Local authenticated lifecycle ledger | Executed deterministic fixture | Hash/signature/linkage integrity, not external actuation truth |
 | {{CONFIG_BENCHMARK_CONDITION_COUNT}}-condition benchmark | Proposed, not executed | No comparative conclusion |
 | Production deployment study | Absent | No production safety or performance conclusion |
 : Evidence status for the release and proposed study. {#tbl:evidence-status}
@@ -58,10 +59,10 @@ record rather than infer from gate decisions alone.
 | Variable | Required operational definition |
 |---|---|
 | Decision distribution | EXECUTE/HOLD/REFUSE counts per condition and paired workload item |
-| Attested failure rate | Failed, independently verified outcomes divided by consumed EXECUTE authorizations |
-| Budget efficiency | Consumed resource units per attested successful task |
+| Externally attested failure rate | Failed, independently observed outcomes divided by consumed EXECUTE authorizations |
+| Budget efficiency | Consumed resource units per externally attested successful task |
 | Trust path | Per-agent trust before and after every consumed outcome record |
-| Throughput | Attested completed workload items per run |
+| Throughput | Externally attested completed workload items per run |
 | Recovery latency | Proposals/ticks from first HOLD until EXECUTE, REFUSE, or expiry |
 : Outcomes required for the proposed benchmark. {#tbl:dependent_variables}
 
@@ -69,7 +70,7 @@ record rather than infer from gate decisions alone.
 
 The study should test, rather than assume:
 
-- **H1:** the composite gate lowers attested failure rate relative to always-execute;
+- **H1:** the composite gate lowers externally attested failure rate relative to always-execute;
 - **H2:** same-target failure has a larger subsequent gate effect than failure at an
   unrelated target;
 - **H3:** HOLD provides positive value after accounting for revision cost and delay; and
@@ -106,7 +107,8 @@ reported outcomes. Consequently, a trial cannot bootstrap autonomously from this
 A credible benchmark must choose and document one of two approaches:
 
 1. provide a fixed, supervised calibration history before measurement; or
-2. implement a restricted, attested SANDBOX action path.
+2. implement a restricted SANDBOX action path with local lifecycle authentication and
+   deployment-specific external observation.
 
 The present all-success trajectory is a deterministic contract fixture using submitted
 outcomes. It must not be described as naturally earned autonomous authority.
@@ -114,7 +116,7 @@ outcomes. It must not be described as naturally earned autonomous authority.
 ### Proposed analysis {#sec:analysis-procedure}
 
 For paired workload items, report condition-by-item decisions and outcomes before
-aggregate statistics. Binary attested failure outcomes can be analyzed with paired
+aggregate statistics. Binary externally attested failure outcomes can be analyzed with paired
 methods or a mixed-effects model that accounts for workload and agent. Ternary gate
 decisions require a multinomial or ordinal model appropriate to the design. Pre-register
 exclusions, multiplicity correction, missing-outcome treatment, and stopping rules.
@@ -260,21 +262,31 @@ not from version ranges in prose.
 
 ## Manuscript pipeline {#sec:pipeline-ordering}
 
-The project renderer runs three ordered project steps:
+The authoritative route runs from the repository root. Its locked dependency group and
+explicit paths avoid relying on a template project or an untracked wrapper:
 
-1. `z_generate_manuscript_variables.py` reruns scoped tests, branch coverage, Ruff, and
-   ty; it fails on any non-zero gate and writes the variable/coverage snapshot.
-2. `generate_manuscript_figures.py` reads that snapshot and generates the
-   {{ARTIFACT_FIGURE_COUNT}}
-   referenced cover/body figures with a provenance footer.
-3. `compile_manuscript.py --pdf` hydrates Markdown, checks unresolved tokens, then runs
-   Pandoc with pandoc-crossref and citeproc to produce HTML and PDF.
+```bash
+uv sync --locked --group docs
+uv run --locked python scripts/z_generate_manuscript_variables.py
+uv run --locked python scripts/generate_manuscript_figures.py
+uv run --locked --group docs python scripts/compile_manuscript.py \
+  --manuscript-dir output/manuscript --output-dir output --check --skip-generate
+uv run --locked --group docs python scripts/compile_manuscript.py \
+  --manuscript-dir output/manuscript --output-dir output \
+  --pdf --bookends --pdf-engine lualatex --pdf-standard ua-2 --skip-generate
+uv run --locked python scripts/validate_manuscript_integrity.py \
+  --require-rendered --online-bibliography
+```
 
-The template `run.sh` integration invokes the first two scripts as Stage 02 analysis
-and delegates Stage 03 rendering to the project override. The override normalizes outputs
-to `{{ARTIFACT_COMBINED_PDF_PATH}}` and `output/web/index.html`. Static manuscript
-validation runs against the actual `docs/manuscript` source through the shared source
-resolver.
+Variable generation reruns the scoped tests, branch coverage, Ruff, and ty checks and
+fails on a non-zero gate. Figure generation reads that snapshot and produces the
+{{ARTIFACT_FIGURE_COUNT}} registered images. Compilation hydrates Markdown, resolves
+cross-references and citations, renders semantic HTML, hashes an unbookended content
+PDF, then produces the final distribution PDF with visible first/last bookends in one
+Pandoc/LaTeX pass. The final PDF hash belongs only in the detached publication manifest,
+which avoids circular self-hashing.
 
-This pipeline binds internal evidence to the rendered artifact. It does not prove that
-the proposed external benchmark has been executed.
+This route binds internal evidence to `{{ARTIFACT_COMBINED_PDF_PATH}}`,
+`output/paper-content.pdf`, and `output/paper.html`. It does not prove that the proposed
+external benchmark has been executed or that the requested PDF standard conforms until
+an external validator reports success.

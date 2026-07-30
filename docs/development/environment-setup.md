@@ -69,7 +69,7 @@ bandit             # Scoped security scanning
 # Usage
 uv run ruff check .
 uv run ruff format --check .
-uv run ty check --output-format concise src/codomyrmex
+uv run ty check --output-format concise src/ scripts/ tests/
 uv run bandit -r src/codomyrmex -lll -iii
 ```
 
@@ -104,17 +104,13 @@ Create `.vscode/settings.json`:
 {
     "python.defaultInterpreterPath": "./.venv/bin/python",
     "python.terminal.activateEnvironment": true,
-    "python.formatting.provider": "black",
-    "python.linting.enabled": true,
-    "python.linting.pylintEnabled": true,
-    "python.linting.flake8Enabled": false,
+    "ruff.enable": true,
     "python.testing.pytestEnabled": true,
-    "python.testing.pytestArgs": ["testing"],
+    "python.testing.pytestArgs": ["tests"],
     "files.exclude": {
         "**/__pycache__": true,
         "**/*.pyc": true,
-        ".pytest_cache": true,
-        ".mypy_cache": true
+        ".pytest_cache": true
     },
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
@@ -126,8 +122,8 @@ Create `.vscode/settings.json`:
 ### **PyCharm/IntelliJ**
 1. Set Python interpreter to `.venv/bin/python`
 2. Configure pytest as default test runner
-3. Enable Black as code formatter
-4. Configure pylint and mypy as external tools
+3. Enable Ruff as formatter and import organizer
+4. Configure Ruff and Ty as external tools
 
 ## 📝 Pre-commit Hooks
 
@@ -149,7 +145,7 @@ pre-commit run --all-files
 ```yaml
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -157,21 +153,21 @@ repos:
       - id: check-added-large-files
       - id: check-merge-conflict
 
-  - repo: https://github.com/psf/black
-    rev: 23.1.0
-    hooks:
-      - id: black
-
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.254
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.4
     hooks:
       - id: ruff
+      - id: ruff-format
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.1.9
+  - repo: local
     hooks:
-      - id: mypy
-        additional_dependencies: [types-requests]
+      - id: ty-check
+        name: ty type check
+        entry: uv run ty check src/
+        language: system
+        types: [python]
+        pass_filenames: false
+        stages: [pre-push]
 ```
 
 ## 🧪 Testing Environment
@@ -318,7 +314,7 @@ git checkout -b feature/my-new-feature
 # 3. Make changes and test frequently
 # Edit code...
 pytest tests/unit/test_my_module.py -v  # Test your changes
-black src/ tests/                       # Format code
+ruff format src/ tests/                 # Format code
 
 # 4. Run quality checks
 pre-commit run --all-files  # Check all quality standards

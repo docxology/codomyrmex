@@ -6,9 +6,7 @@ Usage:
     python system_discovery.py <command> [options]
 """
 
-logger = logging.getLogger(__name__)
-
-
+import logging
 import sys
 from pathlib import Path
 
@@ -19,10 +17,11 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import logging
 import os
 import platform
 import subprocess
+
+logger = logging.getLogger(__name__)
 
 
 def get_system_info() -> dict:

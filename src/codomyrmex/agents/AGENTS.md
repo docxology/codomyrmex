@@ -64,10 +64,10 @@ LLM provider integrations and agent implementations for Claude, Codex, Gemini, O
 
 ## Key Interfaces
 
-- `hermes_client.py — Hermes agent client for codomyrmex integration`
+- `hermes/client_pkg/ — Hermes agent client for codomyrmex integration`
 - `mcp_tools.py — MCP tool definitions for agent operations`
 - `session.py — Agent session management and state persistence`
-- `_provider_router.py — Dynamic provider selection and routing`
+- `hermes/provider_router_pkg/ — Dynamic provider selection and routing`
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

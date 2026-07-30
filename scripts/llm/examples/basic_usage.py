@@ -57,7 +57,7 @@ def main():
     print_info("Testing Ollama components...")
     try:
         OllamaManager(auto_start_server=False)
-        ModelRunner(config=config)
+        ModelRunner(ollama_manager=OllamaManager(auto_start_server=False))
         OutputManager()
         print_success("  Ollama components (Manager, Runner, Output) initialized.")
     except Exception as e:

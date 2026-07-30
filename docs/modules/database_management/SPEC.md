@@ -20,7 +20,7 @@ Manages database schemas, migrations, backups, and performance monitoring. It pr
 
 - `DBManager`: Connection handling and query execution.
 - `MigrationManager`: Version tracking and application.
-- `QueryResult`: Query result with `.valid` property for Unified Streamline consistency.
+- `QueryResult`: Query result with execution status, rows, columns, and conversion helpers.
 
 ## Navigation
 

@@ -193,23 +193,3 @@ class AzureBlobClient(StorageClient):
         except Exception as e:
             logger.error("Azure generate_presigned_url error: %s", e)
             return ""
-
-    # Legacy methods for backward compatibility
-    def upload_blob(self, container_name: str, blob_name: str, file_path: str) -> bool:
-        return self.upload_file(container_name, blob_name, file_path)
-
-    def list_blobs(self, container_name: str) -> list[str]:
-        return self.list_objects(container_name)
-
-    def download_blob(
-        self, container_name: str, blob_name: str, file_path: str
-    ) -> bool:
-        return self.download_file(container_name, blob_name, file_path)
-
-    def get_metadata(self, container_name: str, blob_name: str) -> dict:
-        return self.get_object_metadata(container_name, blob_name)
-
-    def ensure_container(self, container_name: str) -> bool:
-        if self.bucket_exists(container_name):
-            return True
-        return self.create_bucket(container_name)

@@ -13,7 +13,7 @@
 
 ## Overview
 
-The Colony Kernel constrains proposal verdicts using reported consequences, a process-local signal field, budget state, trust, completeness, role state, and falsification checks. Its verdict is advisory to downstream callers: the kernel neither executes tools nor attests that submitted outcomes correspond to prior authorized actions.
+The Colony Kernel constrains proposal verdicts using accepted consequences, a process-local signal field, budget state, trust, completeness, role state, and falsification checks. Its verdict is advisory: the kernel does not execute tools. The ordinary MCP outcome tool is caller-reported and unattested. Optional and required direct-kernel modes add a signed, hash-linked local lifecycle; required mode rejects direct `record_outcome()` and accepts state-changing outcomes only through `record_attested_outcome()` after authorization and an execution receipt. The ledger does not independently observe external actuation.
 
 The kernel exposes 8 MCP tools for the propose→gate→record→tick lifecycle and wires 8 internal subsystems: PheromoneStore, ResourceLedger, ActuationGate, ConsequenceMemory, RoleAdapter, PruningDaemon, FalsificationWorker, and the ColonyKernel coordinator. The MCP tool layer is the public surface over those subsystems, not a ninth subsystem.
 
@@ -86,12 +86,17 @@ Via MCP tools:
 # Propose action (returns decision: execute | hold | refuse)
 colony_propose_action agent_id=engineer-1 action_type=patch_file target=codomyrmex.git_operations.core ...
 
-# Record outcome after execution
+# Record an ordinary caller report after execution; this is not attested
 colony_record_outcome agent_id=engineer-1 tests_passed=true ...
 
 # Advance the colony clock (evaporates pheromone traces)
 colony_tick
 ```
+
+For local authenticated linkage, use the direct Python API with
+`ColonyKernelConfig(attestation_mode="required", ...)` and call
+`propose_action()`, `authorize_execution()`, `record_execution_receipt()`, then
+`record_attested_outcome()`.
 
 ## Key Files
 

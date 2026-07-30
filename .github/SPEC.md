@@ -73,7 +73,7 @@ for all 36 GitHub Actions workflows.
 | `ty check` | Blocks pipeline |
 | `lint-imports` | Blocks pipeline |
 | `uv build` | Blocks pipeline |
-| `black`, `mypy`, `pylint`, `flake8` | Not part of the authoritative CI contract |
+| Other optional analyzers | Not part of the authoritative CI contract |
 
 ### Coverage Gates
 

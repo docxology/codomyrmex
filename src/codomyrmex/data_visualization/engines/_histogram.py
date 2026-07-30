@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any
 import pandas as pd
 import seaborn as sns
 
-from codomyrmex.data_visualization._compat import monitor_performance
+from codomyrmex.data_visualization._instrumentation import monitor_performance
 
 if TYPE_CHECKING:
     import matplotlib.pyplot as plt

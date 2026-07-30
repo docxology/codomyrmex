@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Provider routing, context compression, and MCP bridge (split from `_provider_router.py`).
+Provider routing, context compression, and MCP bridge.
 
 ## Key Files
 
@@ -16,7 +16,7 @@ Provider routing, context compression, and MCP bridge (split from `_provider_rou
 
 ## Dependencies
 
-Import via `codomyrmex.agents.hermes._provider_router` (shim).
+Import via `codomyrmex.agents.hermes.provider_router_pkg`.
 
 ## Development Guidelines
 

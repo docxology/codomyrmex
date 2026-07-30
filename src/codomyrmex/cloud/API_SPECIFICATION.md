@@ -31,8 +31,8 @@ S3Client(region_name: Optional[str] = None)
 | `upload_file` | `(file_path: str, bucket: str, object_name: Optional[str] = None) -> bool` | Success flag | Upload local file to S3 |
 | `download_file` | `(bucket: str, object_name: str, file_path: str) -> bool` | Success flag | Download S3 object to local file |
 | `list_objects` | `(bucket: str) -> list[str]` | Object keys | List all objects in bucket |
-| `get_metadata` | `(bucket: str, object_name: str) -> Dict[str, Any]` | Metadata dict | Get object metadata |
-| `ensure_bucket` | `(bucket: str, region: Optional[str] = None) -> bool` | Success flag | Create bucket if not exists |
+| `get_object_metadata` | `(bucket: str, key: str) -> dict[str, Any]` | Metadata dict | Get object metadata |
+| `create_bucket` | `(name: str, region: Optional[str] = None) -> bool` | Success flag | Create a bucket |
 
 ---
 
@@ -54,11 +54,11 @@ GCSClient(project: Optional[str] = None)
 
 | Method | Signature | Returns | Description |
 |--------|-----------|---------|-------------|
-| `upload_blob` | `(bucket_name: str, source_file_name: str, destination_blob_name: str) -> bool` | Success flag | Upload file to GCS |
-| `download_blob` | `(bucket_name: str, source_blob_name: str, destination_file_name: str) -> bool` | Success flag | Download blob to local file |
-| `list_blobs` | `(bucket_name: str) -> list[str]` | Blob names | List all blobs in bucket |
-| `get_metadata` | `(bucket_name: str, blob_name: str) -> dict` | Metadata dict | Get blob metadata |
-| `ensure_bucket` | `(bucket_name: str, location: str = "US") -> bool` | Success flag | Create bucket if not exists |
+| `upload_file` | `(bucket: str, key: str, file_path: str) -> bool` | Success flag | Upload file to GCS |
+| `download_file` | `(bucket: str, key: str, file_path: str) -> bool` | Success flag | Download object to local file |
+| `list_objects` | `(bucket: str, prefix: str | None = None) -> list[str]` | Object keys | List objects in a bucket |
+| `get_object_metadata` | `(bucket: str, key: str) -> dict[str, Any]` | Metadata dict | Get object metadata |
+| `create_bucket` | `(name: str, region: str = "US") -> bool` | Success flag | Create a bucket |
 
 ---
 
@@ -81,11 +81,11 @@ AzureBlobClient(account_url: Optional[str] = None)
 
 | Method | Signature | Returns | Description |
 |--------|-----------|---------|-------------|
-| `upload_blob` | `(container_name: str, blob_name: str, file_path: str) -> bool` | Success flag | Upload file to container |
-| `download_blob` | `(container_name: str, blob_name: str, file_path: str) -> bool` | Success flag | Download blob to local file |
-| `list_blobs` | `(container_name: str) -> list[str]` | Blob names | List blobs in container |
-| `get_metadata` | `(container_name: str, blob_name: str) -> dict` | Metadata dict | Get blob properties/metadata |
-| `ensure_container` | `(container_name: str) -> bool` | Success flag | Create container if not exists |
+| `upload_file` | `(bucket: str, key: str, file_path: str) -> bool` | Success flag | Upload file to a container |
+| `download_file` | `(bucket: str, key: str, file_path: str) -> bool` | Success flag | Download object to local file |
+| `list_objects` | `(bucket: str, prefix: str | None = None) -> list[str]` | Object keys | List objects in a container |
+| `get_object_metadata` | `(bucket: str, key: str) -> dict[str, Any]` | Metadata dict | Get object metadata |
+| `create_bucket` | `(name: str) -> bool` | Success flag | Create a container |
 
 ---
 
@@ -384,7 +384,7 @@ class StorageClient(ABC):
     def download_file(self, bucket: str, key: str) -> bytes: ...
     
     @abstractmethod
-    def delete_file(self, bucket: str, key: str) -> bool: ...
+    def delete_object(self, bucket: str, key: str) -> bool: ...
     
     @abstractmethod
     def generate_presigned_url(self, bucket: str, key: str, 
@@ -409,10 +409,10 @@ if provider == "aws":
     client.upload_file("data.csv", "my-bucket", "uploads/data.csv")
 elif provider == "gcp":
     client = GCSClient()
-    client.upload_blob("my-bucket", "data.csv", "uploads/data.csv")
+    client.upload_file("my-bucket", "uploads/data.csv", "data.csv")
 elif provider == "azure":
     client = AzureBlobClient()
-    client.upload_blob("my-container", "uploads/data.csv", "data.csv")
+    client.upload_file("my-container", "uploads/data.csv", "data.csv")
 ```
 
 ### 7.2 Coda.io Integration

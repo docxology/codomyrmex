@@ -5,7 +5,7 @@ between agent sessions.
 
 Usage::
 
-    # Start Claude Code endpoint
+    # Start the provider-agnostic relay endpoint
     codomyrmex relay start --channel collab-1 --model claude-sonnet-4-20250514
 
     # Send a message (from scripts or another terminal)
@@ -34,11 +34,12 @@ from codomyrmex.ide.antigravity.agent_relay import AgentRelay
 
 
 def cmd_start(args: argparse.Namespace) -> None:
-    """Start a Claude Code endpoint on a relay channel."""
-    from codomyrmex.ide.antigravity.live_bridge import ClaudeCodeEndpoint
+    """Start a provider-agnostic relay endpoint on a channel."""
+    from codomyrmex.ide.antigravity.relay_endpoint import RelayEndpoint
 
-    endpoint = ClaudeCodeEndpoint(
+    endpoint = RelayEndpoint(
         args.channel,
+        identity="claude_code",
         poll_interval=args.poll,
         model=args.model,
         auto_respond=not args.no_auto,
@@ -54,7 +55,7 @@ def cmd_start(args: argparse.Namespace) -> None:
     signal.signal(signal.SIGINT, _shutdown)
     signal.signal(signal.SIGTERM, _shutdown)
 
-    print(f"Starting Claude Code endpoint on channel: {args.channel}")
+    print(f"Starting relay endpoint on channel: {args.channel}")
     print(f"  Model: {args.model or 'default'}")
     print(f"  Poll interval: {args.poll}s")
     print(f"  Auto-respond: {not args.no_auto}")

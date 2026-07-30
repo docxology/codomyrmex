@@ -40,4 +40,4 @@ Full local runs can fail when optional backends (Ollama, Docker, vector DBs, liv
 
 ## Navigation
 
-- [SPEC.md](SPEC.md) · [AGENTS.md](AGENTS.md) · [Parent `tests/`](../README.md) · [Repository root](../../../../README.md)
+- [SPEC.md](SPEC.md) · [AGENTS.md](AGENTS.md) · [Parent `tests/`](../README.md) · [Repository root](../../README.md)

@@ -62,7 +62,11 @@ def validate_pipeline(pipeline: dict) -> list:
     elif not isinstance(pipeline["steps"], list):
         errors.append("'steps' must be a list")
     else:
-        for i, step in enumerate(pipeline["steps"]):
+        steps = pipeline["steps"]
+        for i, step in enumerate(steps):
+            if not isinstance(step, dict):
+                errors.append(f"Step {i} must be an object")
+                continue
             if "name" not in step:
                 errors.append(f"Step {i} missing 'name'")
             if not any(k in step for k in ["script", "command", "parallel"]):

@@ -6,41 +6,21 @@ Used primarily by the standardization submodule.
 """
 
 from datetime import datetime
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
 from .openapi_generator import OpenAPISpecification
+from .standardization.api_versioning import APIVersionManager
+from .standardization.graphql_api import (
+    GraphQLAPI,
+    GraphQLField,
+    GraphQLObjectType,
+    GraphQLSchema,
+)
+from .standardization.rest_api import APIEndpoint as StandardizationAPIEndpoint
 
 logger = get_logger(__name__)
-
-if TYPE_CHECKING:
-    from .standardization.api_versioning import APIVersionManager
-    from .standardization.graphql_api import (
-        GraphQLAPI,
-        GraphQLField,
-        GraphQLObjectType,
-        GraphQLSchema,
-    )
-    from .standardization.rest_api import RESTAPI
-    from .standardization.rest_api import APIEndpoint as StandardizationAPIEndpoint
-else:
-    # Runtime imports - try to import, but handle gracefully if circular import occurs
-    try:
-        from codomyrmex.api.standardization.api_versioning import APIVersionManager
-        from codomyrmex.api.standardization.graphql_api import (
-            GraphQLAPI,
-            GraphQLField,
-            GraphQLObjectType,
-            GraphQLSchema,
-        )
-        from codomyrmex.api.standardization.rest_api import RESTAPI
-        from codomyrmex.api.standardization.rest_api import (
-            APIEndpoint as StandardizationAPIEndpoint,
-        )
-    except (ImportError, AttributeError):
-        # Handle case where standardization module isn't available or circular import
-        pass
 
 
 class StandardizationOpenAPIGenerator:
@@ -91,19 +71,6 @@ class StandardizationOpenAPIGenerator:
         Args:
             api: REST API instance
         """
-        # Check if RESTAPI was successfully imported (not None from failed import)
-        # If RESTAPI is None, try to import it dynamically to avoid circular import issues
-        _restapi_class = RESTAPI
-        if _restapi_class is None:
-            try:
-                from codomyrmex.api.standardization.rest_api import RESTAPI as _RESTAPI
-
-                _restapi_class = _RESTAPI
-            except ImportError:
-                raise ImportError(
-                    "RESTAPI class not available. Ensure standardization module is properly imported."
-                ) from None
-
         # Verify the api object has required methods (don't check isinstance to avoid import issues)
         if not hasattr(api, "get_endpoints"):
             raise TypeError("API object must have get_endpoints method")
@@ -125,20 +92,6 @@ class StandardizationOpenAPIGenerator:
         Args:
             api: GraphQL API instance
         """
-        _GraphQLAPI = GraphQLAPI
-        if _GraphQLAPI is None:
-            # Lazy import to work around circular import at module load time
-            try:
-                from codomyrmex.api.standardization.graphql_api import (
-                    GraphQLAPI as _GQL,
-                )
-
-                _GraphQLAPI = _GQL
-            except ImportError:
-                raise ImportError(
-                    "GraphQLAPI class not available. Ensure standardization module is properly imported."
-                ) from None
-
         # Add GraphQL endpoint
         graphql_path = "/graphql"
         self.spec.spec["paths"][graphql_path] = {
@@ -197,19 +150,6 @@ class StandardizationOpenAPIGenerator:
         Args:
             version_manager: API version manager
         """
-        _AVM = APIVersionManager
-        if _AVM is None:
-            try:
-                from codomyrmex.api.standardization.api_versioning import (
-                    APIVersionManager as _AVM2,
-                )
-
-                _AVM = _AVM2
-            except ImportError:
-                raise ImportError(
-                    "APIVersionManager class not available. Ensure standardization module is properly imported."
-                ) from None
-
         # Add version parameter
         self.spec.spec["components"]["parameters"]["ApiVersion"] = {
             "name": "X-API-Version",

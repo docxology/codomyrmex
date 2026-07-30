@@ -2,7 +2,7 @@ import json
 import os
 import shutil
 
-from codomyrmex.coding.review._compat import monitor_performance
+from codomyrmex.coding.review._instrumentation import monitor_performance
 from codomyrmex.coding.review.models import (
     QualityDashboard,
 )

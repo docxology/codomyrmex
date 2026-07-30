@@ -47,25 +47,25 @@ class TestRateLimitResult:
         assert result.reset_at == reset
         assert result.retry_after is None
 
-    def test_to_headers_without_retry_after(self):
+    def test_headers_without_retry_after(self):
         """Headers should include Limit, Remaining, Reset but not Retry-After."""
         reset = datetime(2026, 1, 1, 0, 0, 0)
         result = RateLimitResult(allowed=True, limit=50, remaining=49, reset_at=reset)
 
-        headers = result.to_headers()
+        headers = result.headers
         assert headers["X-RateLimit-Limit"] == "50"
         assert headers["X-RateLimit-Remaining"] == "49"
         assert "X-RateLimit-Reset" in headers
         assert "Retry-After" not in headers
 
-    def test_to_headers_with_retry_after(self):
+    def test_headers_with_retry_after(self):
         """When retry_after is set, Retry-After header should be present."""
         reset = datetime(2026, 1, 1, 0, 0, 0)
         result = RateLimitResult(
             allowed=False, limit=10, remaining=0, reset_at=reset, retry_after=30.7
         )
 
-        headers = result.to_headers()
+        headers = result.headers
         assert headers["Retry-After"] == "30"
         assert headers["X-RateLimit-Remaining"] == "0"
 
@@ -195,7 +195,7 @@ class TestTokenBucketLimiter:
         """Consuming tokens should reduce the remaining count."""
         limiter = TokenBucketLimiter(capacity=10, refill_rate=1.0)
 
-        result = limiter.consume("key:1", tokens=3)
+        result = limiter.consume("key:1", cost=3)
         assert result.allowed is True
         assert result.remaining == 7
 
@@ -203,11 +203,11 @@ class TestTokenBucketLimiter:
         """All tokens in the bucket can be consumed at once (burst)."""
         limiter = TokenBucketLimiter(capacity=5, refill_rate=1.0)
 
-        result = limiter.consume("key:1", tokens=5)
+        result = limiter.consume("key:1", cost=5)
         assert result.allowed is True
         assert result.remaining == 0
 
-        denied = limiter.consume("key:1", tokens=1)
+        denied = limiter.consume("key:1", cost=1)
         assert denied.allowed is False
         assert denied.retry_after is not None
         assert denied.retry_after > 0
@@ -228,11 +228,11 @@ class TestTokenBucketLimiter:
         """initial_tokens should control the starting token count."""
         limiter = TokenBucketLimiter(capacity=10, refill_rate=1.0, initial_tokens=2)
 
-        result = limiter.consume("key:1", tokens=2)
+        result = limiter.consume("key:1", cost=2)
         assert result.allowed is True
         assert result.remaining == 0
 
-        denied = limiter.consume("key:1", tokens=1)
+        denied = limiter.consume("key:1", cost=1)
         assert denied.allowed is False
 
 

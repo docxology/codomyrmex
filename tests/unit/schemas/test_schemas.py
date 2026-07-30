@@ -468,7 +468,7 @@ class TestAnalysisResult:
 
     def test_to_dict(self):
         ar = AnalysisResult(
-            analyzer="mypy",
+            analyzer="ty",
             target="core.py",
             severity=AnalysisSeverity.HIGH,
             message="Type error",
@@ -479,7 +479,7 @@ class TestAnalysisResult:
             suggestion="Fix the type annotation",
         )
         d = ar.to_dict()
-        assert d["analyzer"] == "mypy"
+        assert d["analyzer"] == "ty"
         assert d["severity"] == "high"
         assert d["line"] == 42
         assert d["rule_id"] == "E501"

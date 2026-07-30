@@ -13,9 +13,7 @@ Usage:
     python openrouter_free_example.py
 """
 
-logger = logging.getLogger(__name__)
-
-
+import logging
 import os
 import sys
 from pathlib import Path
@@ -24,9 +22,9 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-import logging
-
 from codomyrmex.llm.providers import Message, ProviderConfig, ProviderType, get_provider
+
+logger = logging.getLogger(__name__)
 
 # Config file locations
 CONFIG_PATHS = [
@@ -81,7 +79,7 @@ def simple_retrieve(query: str, top_k: int = 2) -> list:
     return [doc for _, doc in scored[:top_k]]
 
 
-def rag_completion(provider, question: str) -> str:
+def rag_completion(provider, question: str) -> tuple[str, list]:
     """Perform RAG: retrieve context, then generate answer."""
     docs = simple_retrieve(question, top_k=2)
     context = "\n\n".join([f"[{doc['source']}]: {doc['content']}" for doc in docs])

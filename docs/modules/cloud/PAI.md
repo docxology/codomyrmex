@@ -36,11 +36,11 @@ All storage clients share common patterns:
 
 | Operation | AWS | GCP | Azure |
 |-----------|-----|-----|-------|
-| Upload | `upload_file()` | `upload_blob()` | `upload_blob()` |
-| Download | `download_file()` | `download_blob()` | `download_blob()` |
-| List | `list_objects()` | `list_blobs()` | `list_blobs()` |
-| Metadata | `get_metadata()` | `get_metadata()` | `get_metadata()` |
-| Ensure | `ensure_bucket()` | `ensure_bucket()` | `ensure_container()` |
+| Upload | `upload_file()` | `upload_file()` | `upload_file()` |
+| Download | `download_file()` | `download_file()` | `download_file()` |
+| List | `list_objects()` | `list_objects()` | `list_objects()` |
+| Metadata | `get_object_metadata()` | `get_object_metadata()` | `get_object_metadata()` |
+| Create | `create_bucket()` | `create_bucket()` | `create_bucket()` |
 
 ### 3. Error Handling Strategy
 

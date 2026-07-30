@@ -22,7 +22,6 @@ from codomyrmex.plugin_system import (
     PluginInfo,
     PluginManager,
     PluginRegistry,
-    PluginState,
 )
 from codomyrmex.utils.cli_helpers import (
     print_error,
@@ -66,11 +65,9 @@ def main():
     # 2. Plugin Info
     print_info("Testing Plugin models...")
     try:
-        info = PluginInfo(
-            name="test_plugin", version="0.1.0", state=PluginState.REGISTERED
-        )
+        info = PluginInfo(name="test_plugin", version="0.1.0")
         print_success(
-            f"  PluginInfo instance created: {info.name} (Status: {info.state.value})"
+            f"  PluginInfo instance created: {info.name} (Version: {info.version})"
         )
     except Exception as e:
         print_error(f"  Models check failed: {e}")

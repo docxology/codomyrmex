@@ -341,7 +341,7 @@ SKILL_DESCRIPTIONS: dict[str, str] = {
     ),
     "Codomyrmex": (
         "Full-spectrum coding workspace skill providing 623 production MCP @mcp_tool lines "
-        "across 130 top-level modules; the current merged runtime manifest exposes 608 "
+        "across 130 top-level modules; the current merged runtime manifest exposes 604 "
         "tools (see docs/reference/inventory.md). "
         "USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', "
         "'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', "

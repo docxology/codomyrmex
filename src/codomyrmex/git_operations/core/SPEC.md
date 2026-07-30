@@ -1,7 +1,7 @@
 # Core - Technical Specification
 
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Overview
 
@@ -12,6 +12,8 @@ Central hub module for git operations. Re-exports 37 functions from `commands/` 
 ```
 git_operations/core/
 ├── git.py              # Hub: re-exports all 37 functions from commands/
+├── repository.py       # Repository library and bulk workflows
+├── metadata.py         # Runtime metadata persistence and enrichment
 └── commands/
     ├── branching.py    # create, delete, get_current, switch
     ├── commit.py       # commit, amend, revert, cherry_pick
@@ -55,6 +57,15 @@ All functions are listed in `__all__` and importable from `codomyrmex.git_operat
 
 - Performance monitoring import failure falls back to no-op decorators -- never blocks operation.
 - All functions delegate to `commands/` subpackage; `git.py` itself contains no business logic.
+- Repository metadata defaults to
+  `CODOMYRMEX_REPOSITORY_METADATA_FILE`, then
+  `$XDG_STATE_HOME/codomyrmex/git_operations/repository_metadata.json`, then
+  `~/.local/state/codomyrmex/git_operations/repository_metadata.json`.
+- An explicit `metadata_file` always takes precedence.
+- Saving creates the selected parent directory. Runtime metadata and timestamped
+  backups are excluded from distribution artifacts.
+- Tests that write metadata select a temporary path and must not mutate package
+  source.
 
 ## Navigation
 

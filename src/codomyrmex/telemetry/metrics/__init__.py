@@ -405,9 +405,8 @@ class MetricsError(CodomyrmexError):
     """Base class for metrics errors."""
 
 
-# Alias for compatibility with older tests/code
 class Metrics(MetricsRegistry):
-    """Alias for MetricsRegistry for compatibility."""
+    """Concrete metrics registry with labeled storage and export helpers."""
 
     def __init__(self, backend="in_memory"):
         super().__init__()

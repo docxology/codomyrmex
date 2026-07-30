@@ -12,6 +12,7 @@ Automation and utility scripts.
 - `SPEC.md` – File
 - `audit/` – Subdirectory
 - `audit_secrets.py` – File
+- `audit_uv_lock.py` – Exports and audits the complete `uv.lock` graph
 - `compliance/` – Subdirectory
 - `examples/` – Subdirectory
 - `orchestrate.py` – File
@@ -26,3 +27,16 @@ Automation and utility scripts.
 ## Related Documents
 
 - **Agents**: [AGENTS.md](AGENTS.md)
+
+## Locked dependency audit
+
+From the repository root:
+
+```bash
+make audit-lock
+```
+
+The command audits all dependency groups and extras from `uv.lock`, not the
+environment containing the audit tool. It applies one version-gated exception:
+`PYSEC-2026-151` is ignored only for `wasmtime==42.0.0`, which the upstream
+RustSec record marks unaffected.

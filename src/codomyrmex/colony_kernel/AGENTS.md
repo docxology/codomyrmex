@@ -4,16 +4,16 @@
 
 ## Purpose
 
-Colony Kernel is a proposal-evaluation control plane for codomyrmex's artificial ecology. It runs adversarial checks, budget evaluation, trust lookup, and a ternary actuation gate; stores caller-reported outcomes in SQLite; and maintains a process-local stigmergic field. The MCP adapter exposes this path, but the kernel does not itself enforce downstream tool execution or attest submitted outcomes.
+Colony Kernel is a proposal-evaluation control plane for codomyrmex's artificial ecology. It runs adversarial checks, budget evaluation, trust lookup, and a ternary actuation gate; stores outcomes in SQLite; and maintains a process-local stigmergic field. The MCP adapter exposes the ordinary caller-reported path. Optional and required direct-kernel modes add a locally authenticated lifecycle ledger, but the kernel does not independently observe downstream tool execution or establish that a submitted receipt is externally true.
 
 ## Active Components
 
 - `models.py` — Shared value-object and enum contract for subsystem exchange
-- `kernel.py` — `ColonyKernel` integration class plus compatibility re-exports for subsystem classes
+- `kernel.py` — `ColonyKernel` integration class and the colony-kernel public exports
 - `mcp_tools.py` — Eight `@mcp_tool`-decorated functions; thin wrappers over the kernel singleton; includes a standalone `FalsificationWorker` for pre-flight plan evaluation
 - `config_loader.py` — YAML config loading from `config/colony_kernel/` (kernel.yaml, roles.yaml, decay_rates.yaml)
 - `resource_ledger.py` — Standalone `ResourceLedger` / `ResourceBudget` (used by kernel.py and independently)
-- `falsification_worker.py` — Full 10-vector `FalsificationWorker` with AST-based circular-dependency analysis
+- `falsification/worker.py` — Full 10-vector `FalsificationWorker` with AST-based circular-dependency analysis
 - `actuation_gate.py` — Protocol-based `ActuationGate` with pheromone pressure queries
 - `pheromone_store.py` — Standalone `PheromoneStore` with per-key evaporation rates
 - `replay.py` — Fixed-input paired-locality replay and machine-readable artifact writer
@@ -31,7 +31,7 @@ Colony Kernel is a proposal-evaluation control plane for codomyrmex's artificial
 | Symbol | Module | Role |
 |--------|--------|------|
 | `ColonyKernel` | `kernel.py` | Top-level integration class; primary entrypoint |
-| `ColonyKernelConfig` | `kernel.py` | Configuration dataclass (db_path, budget, pheromone_config) |
+| `ColonyKernelConfig` | `kernel.py` | Configuration dataclass, including `attestation_mode=disabled|optional|required` |
 | `ResourceBudget` | `resource_ledger.py` | Period-scoped ceiling for seven cost dimensions |
 | `PheromoneStore` | `pheromone_store.py` | Wraps `TraceField`; deposit, reinforce, sense, tick |
 | `ResourceLedger` | `resource_ledger.py` | Accumulates and checks multi-dimensional resource cost |
@@ -39,7 +39,7 @@ Colony Kernel is a proposal-evaluation control plane for codomyrmex's artificial
 | `ConsequenceMemory` | `consequence_memory.py` | SQLite persistence for consequence records and trust profiles |
 | `RoleAdapter` | `role_adapter.py` | Deterministic role inference from trust score and proposal count |
 | `PruningDaemon` | `pruning_daemon.py` | Identifies stale/duplicate module locations via pheromone field |
-| `FalsificationWorker` | `falsification_worker.py` | Ten deterministic adversarial checks against a proposal |
+| `FalsificationWorker` | `falsification/worker.py` | Ten deterministic adversarial checks against a proposal |
 | `ActionProposal` | `models.py` | Atomic unit submitted to the gate |
 | `GateResult` | `models.py` | Gate verdict: decision, score, reason, required_evidence |
 | `ConsequenceRecord` | `models.py` | Full lifecycle record: proposal → action → result |
@@ -49,7 +49,7 @@ Colony Kernel is a proposal-evaluation control plane for codomyrmex's artificial
 | `PruningCandidate` | `models.py` | A module location flagged as stale with confidence score |
 | `FalsificationFinding` | `models.py` | A single adversarial finding with severity and remediation |
 | `run_paired_locality_replay` | `replay.py` | Repeats the caller-reported locality fixture and returns semantic/file-digest inputs |
-| `AttestationLedger` | `attestation.py` | Authenticated lifecycle evidence; required-attestation mode is explicit opt-in |
+| `AttestationLedger` | `attestation.py` | Signed, hash-linked local lifecycle evidence; not an external actuation oracle |
 | `ReferenceGate` | `reference.py` | Independent deterministic semantics used for differential checks |
 | `run_paired_benchmark` | `research/benchmark.py` | Deterministic synthetic baseline/mediated comparison; not an external benchmark |
 
@@ -72,14 +72,14 @@ The listed external dependencies are the expected cross-package imports for colo
 
 ## MCP Tools
 
-All eight tools delegate to a module-level `ColonyKernel` singleton (`_kernel` in `mcp_tools.py`), which is an instance of the integration class re-exported from `kernel.py`. State is therefore persistent for the lifetime of the MCP server process and benefits from the canonical subsystem implementations (ActuationGate, PheromoneStore, ConsequenceMemory, RoleAdapter, PruningDaemon).
+All eight tools delegate to a module-level `ColonyKernel` singleton (`_kernel` in `mcp_tools.py`). State is therefore persistent for the lifetime of the MCP server process and benefits from the canonical subsystem implementations (ActuationGate, PheromoneStore, ConsequenceMemory, RoleAdapter, PruningDaemon).
 
 | Tool | Category | Description |
 |------|----------|-------------|
 | `colony_propose_action` | `colony_kernel` | Submit an action proposal; runs falsification → budget → trust → gate; returns `GateResult` |
 | `colony_record_outcome` | `colony_kernel` | Record a caller-reported consequence; updates trust, deposits SUCCESS/FAILURE + DEPENDENCY pheromones |
 | `colony_agent_profile` | `colony_kernel` | Read an agent's current `AgentTrustProfile` (role, trust_score, history length) |
-| `colony_status` | `colony_kernel` | Dashboard snapshot: pheromone_summary, budget_usage, role_distribution, recent_consequences, pruning_candidates_count |
+| `colony_status` | `colony_kernel` | Dashboard snapshot: tick_count, pheromone_summary, budget_usage, role_distribution, recent_consequences, pruning_candidates_count |
 | `colony_pheromone_query` | `colony_kernel` | Sense pheromone strength at a given location and signal type |
 | `colony_falsify_plan` | `colony_kernel` | Adversarial plan evaluation (10 attack vectors) without running the full gate; returns findings + recommendation |
 | `colony_pruning_report` | `colony_kernel` | Stale or broken module locations identified by `PruningDaemon.scan()` |
@@ -89,11 +89,11 @@ All eight tools delegate to a module-level `ColonyKernel` singleton (`_kernel` i
 
 ### Witness state
 
-`ConsequenceMemory` stores what callers report; it is not an authoritative witness of execution. SQLite WAL mode supports concurrent readers for file-backed databases. The `db_path=":memory:"` default is process-local; a file path persists consequence rows and profiles across restarts, but not the pheromone field, budget accumulator, or complete kernel state.
+`ConsequenceMemory` stores the records accepted by the kernel; it is not an authoritative witness of execution. The ordinary MCP path accepts caller reports directly. Optional/required attestation can prove local proposal→verdict→authorization→receipt→outcome linkage and ledger integrity, but neither the receipt nor outcome is independently observed. SQLite WAL mode supports concurrent readers for file-backed databases. The `db_path=":memory:"` default is process-local; a file path persists consequence rows and profiles across restarts, but not the pheromone field, budget accumulator, or complete kernel state.
 
 ### Consequence loop
 
-`propose_action` does not consume budget — it only checks whether the estimate would exceed the ceiling. Budget consumption happens inside `record_outcome` via `ResourceLedger.consume`. If `record_outcome` is never called for an executed action, the ledger's accumulated cost for that period will be understated. Callers are responsible for always pairing a successful EXECUTE verdict with a downstream `record_outcome` call.
+`propose_action` does not consume budget — it only checks whether the estimate would exceed the ceiling. State mutation and budget consumption happen through ordinary `record_outcome` or linked `record_attested_outcome`. Optional mode permits either path. Required mode rejects every direct `record_outcome` call and requires authorization, an execution receipt, and `record_attested_outcome`. If no accepted outcome is recorded for an executed action, the resource ledger remains understated.
 
 ### Role ladder
 

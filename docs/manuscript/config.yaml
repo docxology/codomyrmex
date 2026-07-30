@@ -30,6 +30,15 @@ figures:
     caption: >-
       Conceptual cover for the Colony Control Plane. The visual identity combines
       the implemented subsystems and signal motifs; it is not quantitative evidence.
+    alt_text: >-
+      {{CONFIG_PROJECT_SHORT_NAME}} cover: dark radial schematic of the Colony Kernel
+      hub connected to
+      {{CONFIG_OPERATIONAL_SUBSYSTEM_COUNT}} labelled control-plane subsystems.
+    long_description: >-
+      A bright Colony Kernel hub sits at the centre of a dark field. Labelled nodes
+      for pheromone storage, resources, gating, consequence memory, roles, pruning,
+      and falsification surround it, joined by luminous spokes and signal trails.
+      The composition is conceptual branding rather than a measured network.
   colony_pressure_loop:
     filename: "colony_pressure_loop.png"
     label: "fig:pressure_loop"
@@ -41,6 +50,15 @@ figures:
       may execute an approved action and report its outcome; recording then changes
       trust, resource usage, and signal traces used on a later proposal. Arrows show
       feedback dependencies rather than exact runtime call order.
+    alt_text: >-
+      Numbered circular flow from proposal submission through review, gate decision,
+      caller actuation, outcome reporting, state update, and pheromone deposit.
+    long_description: >-
+      Eight labelled cards form a clockwise loop. A proposal is falsification-checked,
+      witnessed against state, and evaluated by the gate before a separate caller may
+      actuate it. The caller then reports an outcome, which updates trust, budget, role,
+      and local pheromone pressure for later proposals. Numbers and arrow direction,
+      rather than colour alone, define the sequence.
   pheromone_decay:
     filename: "pheromone_decay.png"
     label: "fig:pheromone_decay"
@@ -52,8 +70,18 @@ figures:
       s(t)=max({{CONFIG_SCORE_MIN}},s0-epsilon t),
       with no deposits, reads, or reinforcement. Vertical markers show continuous
       extinction points; the runtime updates at integer ticks and removes values at
-      or below zero. {{CONFIG_PARAMETER_STATUS_SHORT}} Parameters are generated from
-      the manuscript snapshot.
+      or below zero. Distinct dash patterns and direct endpoint labels identify the
+      decay classes without relying on colour. {{CONFIG_PARAMETER_STATUS_SHORT}}
+      Parameters are generated from the manuscript snapshot.
+    alt_text: >-
+      Three directly labelled descending trajectories show FAST, NORMAL, and SLOW
+      subtractive decay, each ending at its marked extinction tick.
+    long_description: >-
+      All traces begin at strength {{CONFIG_SCORE_MAX}} and decline linearly toward
+      {{CONFIG_SCORE_MIN}}. FAST has the steepest slope and earliest vertical
+      extinction marker, NORMAL is intermediate, and SLOW extends furthest to the
+      right. Line style, endpoint label, and colour redundantly identify each class;
+      the curves are analytical rather than observed time series.
   gate_score_heatmap:
     filename: "gate_score_heatmap.png"
     label: "fig:gate_heatmap"
@@ -65,8 +93,18 @@ figures:
       completeness are fixed at {{CONFIG_UNIT_SCORE}}; configured hazard boundaries
       are {{CONFIG_HAZARD_MEDIUM_THRESHOLD}} and {{CONFIG_HAZARD_HIGH_THRESHOLD}},
       and trust below {{CONFIG_TRUST_HARD_FLOOR}} forces refusal. Colours encode
-      configured decision bands. This is an analytical policy map, not an observed
+      configured decision bands redundantly with in-region decision labels and
+      threshold annotations. This is an analytical policy map, not an observed
       proposal distribution. {{CONFIG_PARAMETER_STATUS_SHORT}}
+    alt_text: >-
+      Heatmap of REFUSE, HOLD, and EXECUTE regions over trust and effective hazard,
+      with decision names and thresholds printed inside the policy map.
+    long_description: >-
+      Trust increases from left to right and effective local hazard increases from
+      bottom to top. A dark left band marks the hard trust-floor refusal region.
+      Beyond it, labelled REFUSE, HOLD, and EXECUTE regions change at the configured
+      hazard and score boundaries. Region position, printed names, and colour all
+      encode the decision; the grid is formula-derived, not an observed distribution.
   trust_trajectory:
     filename: "trust_trajectory.png"
     label: "fig:trust_trajectory"
@@ -80,6 +118,15 @@ figures:
       reachable. Points are analytical applications of the fixed update, not
       population measurements or evidence of stochastic convergence.
       {{CONFIG_PARAMETER_STATUS_SHORT}}
+    alt_text: >-
+      Stepwise trust trajectory crossing labelled role thresholds after clean
+      reports, with the independent gate floor marked separately.
+    long_description: >-
+      A monotone stair-step line starts at sandbox trust and rises after each
+      caller-reported clean outcome. Horizontal threshold lines and directly named
+      background bands show the inferred roles. A separate gate hard-floor line
+      demonstrates that the first role promotion does not itself make ordinary
+      scoring reachable. The path is a deterministic fixture, not a population trend.
   falsification_vectors:
     filename: "falsification_vectors.png"
     label: "fig:falsification_vectors"
@@ -87,10 +134,20 @@ figures:
     evidence_class: "code-taxonomy"
     caption: >-
       Falsification categories ordered by the highest severity emitted by their live
-      heuristic checks. Colour encodes severity class; one category may be served by
-      more than one check. The empty CRITICAL band denotes the only finding class that
-      hard-refuses before ordinary scoring. The chart is a code-taxonomy
-      visualization, not a measured detection-rate comparison.
+      heuristic checks. Horizontal position, a printed severity initial, and colour
+      redundantly encode severity class; one category may be served by more than one
+      check. The empty CRITICAL band denotes the only finding class that hard-refuses
+      before ordinary scoring. The chart is a code-taxonomy visualization, not a
+      measured detection-rate comparison.
+    alt_text: >-
+      Horizontal severity chart placing every falsification category in a labelled
+      LOW, MEDIUM, HIGH, or CRITICAL band with an initial printed on each marker.
+    long_description: >-
+      Each row names one live adversarial vector. A line ends at that vector's
+      highest emitted severity rank, and the marker contains the severity initial.
+      Rows are sorted from highest to lowest severity. The CRITICAL column is
+      explicitly labelled even when empty because that class alone hard-refuses
+      before scoring. The plot shows code taxonomy, not prevalence or detection rate.
   subsystem_architecture:
     filename: "subsystem_architecture.png"
     label: "fig:architecture"
@@ -100,8 +157,18 @@ figures:
       Colony Control Plane topology. ColonyKernel owns subsystem lifecycle and
       sequencing; the live integration object supplies the operational leaf-node
       count, and the nodes exchange typed value objects from the shared models.py
-      contract. Coloured by functional role; the diagram shows ownership and
+      contract. Node labels, radial position, and arrow direction identify each
+      functional role; colour is a secondary cue. The diagram shows ownership and
       information flow, not deployment topology or performance.
+    alt_text: >-
+      Hub-and-spoke diagram with ColonyKernel at the centre and
+      {{CONFIG_OPERATIONAL_SUBSYSTEM_COUNT}} labelled subsystem nodes around it.
+    long_description: >-
+      ColonyKernel occupies the central hub. Radial spokes connect it bidirectionally
+      to the labelled Pheromone Store, Resource Ledger, Actuation Gate, Consequence
+      Memory, Role Adapter, Pruning Daemon, and Falsification Worker nodes. Subtitles
+      state each node's function, and arrowheads show information flow. The topology
+      describes software ownership, not hosts, latency, or throughput.
   gate_score_3d:
     filename: "gate_score_3d.png"
     label: "fig:gate_score_3d"
@@ -114,6 +181,15 @@ figures:
       though runtime completeness is discrete. Threshold planes identify the
       configured HOLD and EXECUTE boundaries. This is formula-derived, not an
       empirical risk surface. {{CONFIG_PARAMETER_STATUS_SHORT}}
+    alt_text: >-
+      Gate-score surface over trust and completeness with labelled HOLD and EXECUTE
+      thresholds plus a projection of distinct trust slices.
+    long_description: >-
+      The main panel rises across completeness and changes in discrete tiers across
+      trust, with horizontal threshold planes marking HOLD and EXECUTE. A companion
+      projection uses distinct line styles, point shapes, direct labels, and colour
+      for selected trust slices. The continuous completeness surface is a visual
+      envelope over a runtime input that is actually discrete.
   fep_correspondence:
     filename: "fep_correspondence.png"
     label: "fig:fep_correspondence"
@@ -125,6 +201,15 @@ figures:
       an analogue, and the intended engineering intuition. The correspondence is
       conceptual: the current kernel does not implement Bayesian inference or formal
       equivalence with expected free energy.
+    alt_text: >-
+      Row-by-row correspondence diagram linking Free Energy Principle terms to named
+      Colony Kernel artifacts and bounded engineering interpretations.
+    long_description: >-
+      Each horizontal row begins with an FEP concept, points to a specific kernel
+      artifact, and ends with an engineering interpretation. The repeated three-part
+      layout and text labels carry the mapping; coloured row accents only aid scanning.
+      A warning beneath the rows states that the current deterministic kernel is not a
+      Bayesian controller and the correspondences are analogies, not equivalences.
   research_roadmap:
     filename: "research_roadmap.png"
     label: "fig:research_roadmap"
@@ -133,22 +218,43 @@ figures:
     caption: >-
       Configured research roadmap for the Colony Kernel. The
       {{CONFIG_RESEARCH_ROADMAP_STAGE_COUNT}} milestones move from the implemented
-      contract and replay record toward attested execution, adversarial evaluation,
-      calibration, persistence, and a probabilistic extension. Status labels describe
-      the current research state, not empirical results or delivery guarantees; each
-      milestone remains conditional on its stated artifact, metric, falsifier, and exit
-      criterion.
+      contract and local authenticated ledger toward external-actuation attestation,
+      adversarial evaluation, calibration, persistence, and a probabilistic extension.
+      Status labels describe the current research state, not empirical results or
+      delivery guarantees; each milestone remains conditional on its stated artifact,
+      metric, falsifier, and exit criterion.
+    alt_text: >-
+      {{CONFIG_RESEARCH_ROADMAP_STAGE_COUNT}} vertically connected milestone cards
+      progress from implemented local contracts to a research-stage probabilistic
+      extension.
+    long_description: >-
+      Milestones run top to bottom through reproducibility, a local authenticated
+      lifecycle ledger, external-actuation attestation, adversarial evaluation,
+      calibration, persistence and concurrency, and a probabilistic extension. Every
+      card prints its current status and an abbreviated required-evidence artifact.
+      Directional arrows, sequence identifiers, and status text define the dependency
+      order; colour is redundant and no milestone promises delivery or success.
   formalism_code_crosswalk:
     filename: "formalism_code_crosswalk.png"
     label: "fig:formalism_code_crosswalk"
     width: "96%"
     evidence_class: "formal-crosswalk"
     caption: >-
-      Evidence-oriented crosswalk from formal objects to typed code anchors, translation
-      mechanisms, executable evidence, and claim boundaries. Green rows are implemented
-      contracts, blue rows are partial bridges, and amber/pink rows are future integration
-      work. The visual records correspondence and missing links; it is not a proof graph
-      or evidence of scientific equivalence.
+      Abbreviated evidence-oriented crosswalk from formal objects to typed code
+      anchors, translation mechanisms, executable evidence, and claim boundaries.
+      Every row prints its status; coloured strips provide a redundant navigation cue.
+      Full, searchable wording follows in the adjacent manuscript tables. The visual
+      records correspondence and missing links; it is not a proof graph or evidence
+      of scientific equivalence.
+    alt_text: >-
+      {{CONFIG_FORMALISM_CROSSWALK_COUNT}}-row, three-column crosswalk linking each
+      formal object and printed status to code translation, evidence, and a claim limit.
+    long_description: >-
+      Each row identifies a formalism and explicitly prints IMPLEMENTED, PARTIAL, or
+      RESEARCH. The middle column abbreviates its typed code anchors and translation
+      bridge; the final column abbreviates executable evidence and the strongest claim
+      the evidence does not support. Alternating row shading and status-colour strips
+      aid navigation, while the full wording remains available in searchable tables.
   replay_contract:
     filename: "replay_contract.png"
     label: "fig:replay_contract"
@@ -163,6 +269,15 @@ figures:
       decay restores {{RESULT_PAIRED_RECOVERED_SCORE}}/EXECUTE. The replay is repeated
       for semantic equality; it is not an attestation, causal estimate, or external
       workload result. {{CONFIG_PARAMETER_STATUS_SHORT}}
+    alt_text: >-
+      Three-stage paired-locality replay showing clear, failed-target, and recovered
+      decisions while an unrelated target remains unchanged.
+    long_description: >-
+      The first stage shows an EXECUTE decision for a clear target. After a
+      caller-reported failure, the same target moves to HOLD while a paired unrelated
+      target stays at EXECUTE. Passive decay then restores the original decision.
+      Stage order, decision words, score labels, and arrows carry the comparison;
+      colours are redundant and the fixture is not causal or externally attested.
   attestation_event_chain:
     filename: "attestation_event_chain.png"
     label: "fig:attestation_event_chain"
@@ -174,6 +289,16 @@ figures:
       chain binds proposal, verdict, authorization, execution receipt, and outcome
       digests under the configured signer; it establishes ledger integrity, not that
       the action was safe, useful, or independently observed.
+    alt_text: >-
+      Top-to-bottom authenticated event chain from proposal through verdict,
+      authorization, execution receipt, and outcome.
+    long_description: >-
+      Five numbered event nodes are connected top to bottom by directional arrows.
+      Each row prints its event type, actor, hash prefix, and signature state. The
+      chain order binds proposal, gate verdict, authorization, caller-supplied
+      execution receipt, and caller-supplied outcome digests under the configured
+      signer. The linked structure establishes fixture-level ledger integrity only;
+      it does not verify external actuation, safety, or usefulness.
   safety_utility_frontier:
     filename: "safety_utility_frontier.png"
     label: "fig:safety_utility_frontier"
@@ -190,7 +315,18 @@ figures:
       at a nominal {{RESULT_BENCHMARK_CI_LEVEL}}% confidence level
       [{{RESULT_BENCHMARK_HARM_CI_LOW}}, {{RESULT_BENCHMARK_HARM_CI_HIGH}}]. The
       interval uses task-case pairs, not a population sample. This fixture demonstrates
-      analysis plumbing, not calibration or generalization to external agents or workloads.
+      analysis plumbing, not calibration or generalization to external agents or
+      workloads. Marker shape, direct labels, and colour redundantly identify the two
+      conditions.
+    alt_text: >-
+      Scatter plot comparing directly labelled baseline and mediated conditions on
+      harmful-action rate and utility, using different marker shapes.
+    long_description: >-
+      Harmful-action rate is on the horizontal axis and utility is on the vertical
+      axis. One labelled point represents the baseline condition and a differently
+      shaped labelled point represents the mediated condition; an arrow links the
+      paired observations. The points come from deterministic synthetic cases, and the
+      descriptive interval does not imply population generalization or calibration.
   calibration_reliability:
     filename: "calibration_reliability.png"
     label: "fig:calibration_reliability"
@@ -202,6 +338,15 @@ figures:
       Gate scores and trust values are not probabilities; a reliability estimate will
       be rendered only after independently observed held-out outcomes and declared
       confidence values are available.
+    alt_text: >-
+      Reliability-diagram placeholder with an ideal diagonal and a prominent
+      {{RESULT_CALIBRATION_STATUS}} status notice instead of invented calibration data.
+    long_description: >-
+      The square plotting area shows only the ideal-reference diagonal. A central
+      status card states that calibration is {{RESULT_CALIBRATION_STATUS}} and that
+      expected calibration error is {{RESULT_CALIBRATION_ECE}}. No bins or empirical
+      points are drawn because gate and trust scores are not probabilities and the
+      required held-out outcomes and declared confidence values are absent.
   persistence_recovery:
     filename: "persistence_recovery.png"
     label: "fig:persistence_recovery"
@@ -213,6 +358,15 @@ figures:
       canonical logical database artifact digest is
       {{RESULT_PERSISTENCE_ARTIFACT_SHA256}}.
       This is a durability check, not a throughput or crash-survival claim.
+    alt_text: >-
+      Restart-fixture bar chart comparing signal strength at deposit, after reopening
+      SQLite storage, and after recovery, with values printed above the bars.
+    long_description: >-
+      Three ordered bars report the signal's strength when deposited, after the store
+      is closed and reopened, and at the fixture's recovery observation. Numeric labels
+      are printed above the bars so height and colour are not the only encodings. The
+      retained record supports a narrow logical durability check, not throughput,
+      arbitrary crash survival, or persistence of all kernel state.
   formalism_coverage:
     filename: "formalism_coverage.png"
     label: "fig:formalism_coverage"
@@ -224,6 +378,16 @@ figures:
       {{RESULT_FORMAL_CROSSWALK_PARTIAL}} partial, with
       {{RESULT_FORMAL_CROSSWALK_RESEARCH}} research. The chart measures documented
       bridge status and evidence anchors, not theorem coverage or semantic equivalence.
+      Segment labels and position redundantly encode the status counts.
+    alt_text: >-
+      Stacked status summary of the formalism inventory with implemented, partial,
+      and research counts printed in their respective segments.
+    long_description: >-
+      One horizontal bar partitions all {{RESULT_FORMAL_CROSSWALK_TOTAL}} configured
+      formalism mappings by current bridge status. Each non-empty segment prints its
+      status and count, while a legend repeats the categories. Segment length, order,
+      text, and colour provide redundant encodings. The inventory counts documented
+      mappings, not proved theorems or semantic equivalences.
   research_status_matrix:
     filename: "research_status_matrix.png"
     label: "fig:research_status_matrix"
@@ -233,9 +397,19 @@ figures:
       Evidence-status matrix for the configured roadmap and formalism crosswalk.
       Status labels are generated from the active configuration and indicate what
       artifacts exist or remain conditional; they are not completion guarantees or
-      measured implementation outcomes.
+      measured implementation outcomes. Each row's marker position and printed status
+      column carry the classification; colour is redundant.
+    alt_text: >-
+      Status dot matrix listing roadmap milestones and formalism mappings by labelled
+      status columns, with one marker and row label per item.
+    long_description: >-
+      Rows name configured roadmap stages and formalism mappings. Each row places a
+      single marker under its printed IMPLEMENTED, PARTIAL, NEXT, PLANNED, or RESEARCH
+      column, so horizontal position and text define the status independently of
+      colour. The matrix is a configuration-backed navigation aid, not evidence that
+      conditional work is complete or empirically successful.
 
-# Consumed by: `infrastructure.publishing.extract_publication_metadata` (in `infrastructure/publishing/metadata.py`)
+# Shared by the manuscript compiler and `python -m codomyrmex.release`.
 authors:
   - name: "Daniel Ari Friedman"
     alias: "docxology"
@@ -249,36 +423,27 @@ acknowledgements:
   - name: "Marek Pawel Bargiel"
     contribution: "conceptual comments on pressure-aware gating / colony-control framing"
 
-# Consumed by: `infrastructure.publishing.publish_to_zenodo` (in `infrastructure/publishing/platforms.py`)
-# Also consumed by: `infrastructure/publishing/transmission_bookends.py` (transmission bookend pages),
-#   `infrastructure/publishing/transmission_figure.py` (QR strip DOI label),
-#   `infrastructure/rendering/_pdf_title_page.py` (cover page DOI display),
-#   `infrastructure/publishing/metadata_from_config.py` (integrity manifest and citation metadata).
+# Publication identity remains a technical report until an actual deposit exists.
+# Remote publication commands in this repository create dry-run plans only.
 publication:
-  # doi: set to empty string until first Zenodo deposit. On deposit, update to the real
-  # concept DOI (e.g. "10.5281/zenodo.XXXXXXX") via publish_project_release.py.
-  # _pdf_title_page.py: if doi is non-empty → renders as hyperlink; else renders doi_status as plain text.
+  type: "technical-report"
   doi: ""
-  doi_status: "forthcoming"  # Displayed on cover page and transmission bookend until real DOI is assigned
+  doi_status: "not assigned"
   version_doi: ""
   version_record: ""
   github_repository: "docxology/codomyrmex"
-  # transmission_bookends: front and back bookend pages injected into the PDF at release time.
-  # Bookend pages are written by `infrastructure/publishing/transmission_bookends.py` →
-  # `write_transmission_bookends()`, invoked via `publish_project_release.py` or `release_workflow.py`.
-  # The QR barcode strip on each bookend is generated by `transmission_barcode_strip.py`.
-  # Steganography summary on the bookend is controlled by `show_steganography` below.
   transmission_bookends:
     enabled: true
-    max_prior_releases: 5
-    show_steganography: true
-  deposit_filename:
-    enabled: true
-    topic: ""  # optional; default = first significant title word
-  journal: "Journal of Agentic Systems"
-  volume: ""
-  pages: ""
   year: "2026"
+  provenance:
+    mode: "transparent"
+    visible_bookends: true
+    qr_links: true
+    hash_algorithms:
+      - "sha256"
+      - "sha512"
+    hidden_payloads: false
+    encryption: false
 
 keywords:
   - "ai-agents"
@@ -298,44 +463,14 @@ metadata:
   license: "MIT"
   language: "en"
 
-# Steganography profile for secure_run.sh and transmission bookend summary.
-# Precedence: infrastructure/config/secure_config.yaml < this block.
-# Consumed by: `infrastructure/steganography/config.py::SteganographyConfig.from_dict()`
-#   → invoked by `secure_run.sh` / `python -m infrastructure.orchestration secure`.
-# Each feature maps to a pipeline step:
-#   overlays_enabled  → infrastructure/steganography/overlays.py     (diagonal watermark on PDF pages)
-#   barcodes_enabled  → infrastructure/steganography/barcodes.py     (QR/Code128 strip; also feeds transmission bookend QR)
-#   metadata_enabled  → infrastructure/steganography/metadata.py     (XMP + PDF Info dictionary injection)
-#   hashing_enabled   → infrastructure/steganography/hashing.py      (SHA-256/SHA-512; feeds integrity manifest sidecar)
-#   encryption_enabled→ infrastructure/steganography/encryption.py   (PDF password protection; requires pdf_password to be set)
-# The transmission bookend summary line reflects this config via `_format_steganography_one_liner()`.
-steganography:
-  enabled: true
-  overlays_enabled: true
-  barcodes_enabled: true
-  metadata_enabled: true
-  hashing_enabled: true
-  # kmyth TPM key-wrapping planned; enable when kmyth binary is available
-  # (build infrastructure/steganography/kmyth/ submodule with `make`, then set encryption_enabled: true
-  #  and configure kmyth_enabled: true in infrastructure/config/secure_config.yaml).
-  encryption_enabled: false
-  overlay_mode: "text"
-  overlay_text: "CODOMYRMEX"
+# Protocol references are external standards, not compatibility assertions.
+protocols:
+  mcp:
+    official_revision: "2026-07-28"
+    specification_url: "https://modelcontextprotocol.io/specification/2026-07-28"
 
-# Render format toggles — gate per-renderer in infrastructure/rendering/pipeline.py,
-# via `RenderManager` (see `RenderingConfig.from_project_config`). NOT consulted for
-# this project: `scripts/_render_pdf_override.py` exists, so
-# `infrastructure/rendering/pipeline.py::_render_pipeline_impl` returns immediately
-# after running the override (before `RenderManager` is ever constructed). The
-# override only produces `output/paper.pdf` and `output/paper.html` via
-# `scripts/compile_manuscript.py --pdf`. slides/docx/epub are therefore never
-# generated regardless of these values — verified empty `output/slides/` and no
-# `output/{docx,epub}/` artifacts in this checkout. Set to `false` to reflect
-# actual behavior; flip to `true` (and extend `_render_pdf_override.py` to call
-# the shared `RenderManager`) only if those formats are actually implemented.
-# Documented in `docs/operational/logging/output-design.md`.
-# PDF rendering pipeline: manuscript/ markdown -> scripts/compile_manuscript.py -> Pandoc/LaTeX -> PDF.
-# The integrity manifest (SHA-256/SHA-512 sidecar JSON) is written alongside the PDF.
+# `scripts/compile_manuscript.py` is the authoritative HTML/PDF renderer.
+# Detached artifact hashes are written by `codomyrmex.release`.
 render:
   formats:
     pdf: true
@@ -391,14 +526,26 @@ research_roadmap:
     falsifier: "Any replay depends on an undocumented input or produces a contradictory contract result."
     exit_criteria: "Fresh generation and focused gates pass with hashes recorded."
   - id: "R1"
-    name: "Attested execution chain"
-    status: "next"
-    hypothesis: "Binding proposal, authorization, execution, and outcome records will reduce untrustworthy feedback."
-    artifact: "Authenticated event ledger with nonce, actor, proposal digest, verdict, and outcome evidence."
-    metric: "Forgery and replay rejection, linkage completeness, and overhead under declared workloads."
-    falsifier: "A caller can submit or relink an outcome without possessing the required execution evidence."
-    exit_criteria: "Adversarial ledger tests pass and the attestation boundary is documented."
+    name: "Local authenticated lifecycle ledger"
+    status: "implemented"
+    artifact_paths:
+      - "src/codomyrmex/colony_kernel/attestation.py"
+      - "tests/unit/colony_kernel/test_attestation.py"
+      - "tests/unit/colony_kernel/test_kernel_attestation_integration.py"
+    hypothesis: "Optional and required kernel modes can bind proposal, verdict, authorization, execution receipt, and outcome records locally."
+    artifact: "Signed, hash-linked local event ledger with nonce, actor, proposal digest, verdict, execution receipt, and outcome."
+    metric: "Forgery, replay, sequence, actor, and linkage rejection in deterministic tests."
+    falsifier: "The local ledger accepts a forged, replayed, reordered, mismatched, or incomplete lifecycle."
+    exit_criteria: "Lifecycle integration tests pass and the external-observation boundary remains explicit."
   - id: "R2"
+    name: "End-to-end external actuation attestation"
+    status: "next"
+    hypothesis: "Independently sourced execution evidence can distinguish actual external actuation from caller-reported lifecycle events."
+    artifact: "Deployment-specific adapter that verifies execution identity, external receipt provenance, and outcome linkage."
+    metric: "Forgery and replay rejection, observation completeness, adapter overhead, and independently replayed traces."
+    falsifier: "A caller can report or relink an action or outcome without verifiable external execution evidence."
+    exit_criteria: "A declared deployment adapter passes adversarial tests and an independent verifier reproduces its evidence chain."
+  - id: "R3"
     name: "Adversarial tool-use benchmark"
     status: "planned"
     hypothesis: "Gate-mediated proposals will change unsafe-action and recovery outcomes under hostile tool inputs."
@@ -406,7 +553,7 @@ research_roadmap:
     metric: "Attack success, harmful-action rate, task utility, refusal cost, and complete trace retention."
     falsifier: "The mediated condition does not improve the preregistered safety-utility frontier."
     exit_criteria: "Independent rerun reproduces paired estimates and failure analyses."
-  - id: "R3"
+  - id: "R4"
     name: "Calibration and utility"
     status: "planned"
     hypothesis: "Gate scores can be calibrated against independently observed downstream consequences."
@@ -414,7 +561,7 @@ research_roadmap:
     metric: "Log loss, calibration error, selective risk, repair cost, utility, and confidence intervals."
     falsifier: "Scores remain miscalibrated or add friction without a defensible utility trade-off."
     exit_criteria: "Held-out analysis and uncertainty intervals are released with raw traces."
-  - id: "R4"
+  - id: "R5"
     name: "Persistence and concurrency"
     status: "planned"
     hypothesis: "Explicit persistence and concurrent access can preserve locality without violating isolation or ordering."
@@ -422,7 +569,7 @@ research_roadmap:
     metric: "Durability, ordering, isolation, throughput, latency, and recovery completeness."
     falsifier: "Restart or concurrency causes silent signal loss, cross-target contamination, or unsafe duplicate actuation."
     exit_criteria: "Scenario matrix passes with retained logs, seeds, environment, and artifact hashes."
-  - id: "R5"
+  - id: "R6"
     name: "Probabilistic and Active Inference extension"
     status: "research"
     hypothesis: "An explicit generative model can improve prediction or policy selection beyond the heuristic projection."

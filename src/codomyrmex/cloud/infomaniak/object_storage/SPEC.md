@@ -58,7 +58,7 @@ Two-class design. `InfomaniakObjectStorageClient` extends `InfomaniakOpenStackBa
 - `delete_objects_batch` auto-chunks in groups of 1000 per S3 API limit; returns `{"deleted": N, "errors": [...]}`.
 - `get_bucket_policy` suppresses `NoSuchBucketPolicy` / HTTP 404 and returns `None` instead.
 - `upload_file` (Swift) reads entire file into memory before uploading.
-- `delete_file` (S3) is an alias for `delete_object` to satisfy `StorageClient` ABC.
+- `delete_object` (S3) satisfies the shared `StorageClient` contract.
 
 ## Error Handling
 

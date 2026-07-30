@@ -4,7 +4,7 @@ Integrates constraint solving capabilities into the Codomyrmex platform,
 inspired by szeider/mcp-solver and proposed in PAI Discussion #707 by Spirotot.
 
 Provides:
-    - Z3 SMT solver backend with mcp-solver 6-tool interface
+    - Z3 SMT solver backend with a mcp-solver-compatible 9-tool interface
     - PAI Algorithm ISC criteria consistency verification
     - MCP tools for Claude Code integration
     - Extensible backend architecture for SAT/MaxSAT/ASP solvers

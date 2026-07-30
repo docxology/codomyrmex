@@ -52,4 +52,4 @@ Pytest suite for production code under `src/codomyrmex/`. See [SPEC.md](SPEC.md)
 - [README.md](README.md) — how to run subsets.
 - [SPEC.md](SPEC.md) — behavioral contract.
 - [Parent `tests/`](../README.md)
-- [Repository root](../../../../README.md)
+- [Repository root](../../README.md)

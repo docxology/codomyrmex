@@ -28,13 +28,13 @@ Data structures:
 - APIChangelog: API change history and versioning
 """
 
+from codomyrmex.api.openapi_documentation_generator import (
+    DocumentationOpenAPIGenerator as OpenAPIGenerator,
+)
 from codomyrmex.api.openapi_generator import (
     APISchema,
     generate_openapi_spec,
     validate_openapi_spec,
-)
-from codomyrmex.api.openapi_generator import (
-    DocumentationOpenAPIGenerator as OpenAPIGenerator,
 )
 
 from .doc_generator import (

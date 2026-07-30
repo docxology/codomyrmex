@@ -375,7 +375,7 @@ class TrustRegistry:
         """Populate the in-memory level map on first semantic access."""
         if getattr(self, "_levels_initialized", False):
             return
-        # Registries constructed with ``__new__`` in compatibility tests may
+        # Registries constructed with ``__new__`` in low-level construction tests may
         # already provide an explicit state map.
         if not hasattr(self, "_levels_initialized") and hasattr(self, "_levels"):
             self._levels_initialized = True

@@ -233,14 +233,14 @@ def ensure_dependencies_installed(dependencies: list[str] | None = None) -> bool
 
     Args:
         dependencies: Optional list of package names to check.
-            If None, checks default ('cased-kit', 'python-dotenv').
+            If None, checks the default ('python-dotenv').
 
     Returns:
         True if all specified dependencies are installed and satisfied, False otherwise.
     """
     if dependencies is None:
         # Using distribution names where possible
-        dependencies = ["cased-kit", "python-dotenv"]
+        dependencies = ["python-dotenv"]
 
     statuses = check_dependencies(dependencies)
     all_satisfied = True
@@ -337,7 +337,7 @@ def validate_environment(min_python: str = "3.10") -> ValidationReport:
         missing_items.append(f"Python >= {min_python}")
 
     # Core dependencies check
-    core_deps = ["dotenv", "cased-kit"]
+    core_deps = ["dotenv"]
     dep_statuses = check_dependencies(core_deps)
     details["dependencies"] = {s.name: s.satisfied for s in dep_statuses}
 
@@ -377,7 +377,7 @@ def generate_environment_report() -> str:
 
     # Add core dependency status
     report.append("\nCore Dependencies:")
-    core_deps = ["python-dotenv", "cased-kit", "pydantic", "jsonschema"]
+    core_deps = ["python-dotenv", "pydantic", "jsonschema"]
     statuses = check_dependencies(core_deps)
     for s in statuses:
         status_str = "✅" if s.satisfied else "❌"
@@ -385,20 +385,6 @@ def generate_environment_report() -> str:
         report.append(f"  {status_str} {s.name} {ver_str}")
 
     return "\n".join(report)
-
-
-def validate_environment_completeness(repo_root: str | None = None) -> bool:
-    """Legacy wrapper for backward compatibility."""
-    if repo_root is None:
-        # Default to repo root (3 levels up from this file)
-        repo_root = os.path.dirname(
-            os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        )
-
-    report = validate_environment()
-    check_and_setup_env_vars(repo_root)
-
-    return report.valid
 
 
 if __name__ == "__main__":

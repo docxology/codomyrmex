@@ -15,6 +15,7 @@ As an AI agent, when working with this module:
 ## Key Files
 - `__init__.py`: Public API export.
 - `SPEC.md`: Technical specification.
+- `audit_uv_lock.py`: Complete lock-graph vulnerability audit.
 
 ## Future Considerations
 - Modularization: Keep dependencies minimal.

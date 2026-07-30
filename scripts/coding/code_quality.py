@@ -32,16 +32,8 @@ def run_tool(cmd: list, cwd: str = ".") -> tuple:
         return False, str(e)
 
 
-def check_black(path: str, fix: bool = False) -> dict:
-    """Run Black formatter."""
-    cmd = ["black", "--check" if not fix else "", path]
-    cmd = [c for c in cmd if c]
-    success, output = run_tool(cmd)
-    return {"tool": "black", "success": success, "output": output}
-
-
 def check_ruff(path: str, fix: bool = False) -> dict:
-    """Run Ruff linter."""
+    """Run Ruff linting and formatting checks."""
     cmd = ["ruff", "check", path]
     if fix:
         cmd.append("--fix")
@@ -49,18 +41,16 @@ def check_ruff(path: str, fix: bool = False) -> dict:
     return {"tool": "ruff", "success": success, "output": output}
 
 
-def check_isort(path: str, fix: bool = False) -> dict:
-    """Run isort import sorter."""
-    cmd = ["isort", "--check-only" if not fix else "", path]
-    cmd = [c for c in cmd if c]
+def check_ty(path: str, fix: bool = False) -> dict:
+    """Run the repository type checker."""
+    cmd = ["ty", "check", "--output-format", "concise", path]
     success, output = run_tool(cmd)
-    return {"tool": "isort", "success": success, "output": output}
+    return {"tool": "ty", "success": success, "output": output}
 
 
 TOOLS = {
-    "black": check_black,
     "ruff": check_ruff,
-    "isort": check_isort,
+    "ty": check_ty,
 }
 
 
@@ -94,8 +84,8 @@ def main():
         print("Usage:")
         print("  python code_quality.py src/")
         print("  python code_quality.py src/ --fix")
-        print("  python code_quality.py script.py --type black")
-        print("\nTools: black (formatting), ruff (linting), isort (imports)")
+        print("  python code_quality.py script.py --type ruff")
+        print("\nTools: ruff (linting/formatting), ty (typing)")
         return 0
 
     target = Path(args.path)

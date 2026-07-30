@@ -78,7 +78,7 @@ The documentation quality is continuously monitored using specialized validation
 
 ### Areas for Improvement
 
-1. **Placeholder Content**: ~12 actionable TODO items remain (down from an inflated legacy count of 554 that included non-actionable Operating Contracts boilerplate)
+1. **Placeholder Content**: ~12 actionable TODO items remain (down from an inflated historical count of 554 that included non-actionable Operating Contracts boilerplate)
 2. **Missing Files**: Some modules lack CHANGELOG.md and docs/ directories
 3. **Usage Examples**: Some modules need more comprehensive examples
 4. **API Documentation**: A few modules have incomplete API specifications

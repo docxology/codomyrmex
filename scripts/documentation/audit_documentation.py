@@ -126,7 +126,7 @@ class DocumentationAudit(ScriptBase):
         results = []
 
         # Directories that are not our code — skip entire subtrees
-        SKIP_DIRS = {"__pycache__", ".mypy_cache", ".git", "gitnexus", "node_modules"}
+        SKIP_DIRS = {"__pycache__", ".git", "gitnexus", "node_modules"}
 
         # Walk through directories
         # We only care about modules (directories with __init__.py) or top-level dirs

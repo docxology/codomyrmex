@@ -7,7 +7,7 @@ The bulk of the implementation lives in focused submodules:
     - :mod:`._cicd_bridge` — ``StageConfig``, ``PipelineConfig``, ``CICDBridge``
     - :mod:`._agent_orchestrator` — ``AgentOrchestrator``
 
-This file re-exports the public surface and provides the thin
+This file assembles the public integration surface and provides the thin
 ``OrchestratorBridge``, convenience functions (``create_pipeline_workflow``,
 ``run_ci_stage``, ``run_agent_task``).
 """

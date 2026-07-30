@@ -94,16 +94,12 @@ print("  ✅ Real parsing — no mocks\n")
 from codomyrmex.agents.llm_client import OllamaClient
 
 client = OllamaClient()
-client.create_session("demo_session")
-
 print("─── OllamaClient Session Management ───")
-print(f"  Sessions: {list(client.session_manager.keys())}")
-assert "demo_session" in client.session_manager
-
-client.close_session("demo_session")
-assert "demo_session" not in client.session_manager
-print("  Created → Closed demo_session ✓")
-print("  ✅ Real state management — no mocks\n")
+print(f"  Model: {client.model}")
+print(f"  Base URL: {client.base_url}")
+assert client.session_manager is None, "Session manager contract changed"
+print("  Session management is intentionally unavailable in this client ✓")
+print("  ✅ Real client contract inspection — no mocks\n")
 
 
 # ── Summary ───────────────────────────────────────────────────────────

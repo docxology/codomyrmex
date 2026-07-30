@@ -67,9 +67,12 @@ from codomyrmex.git_operations import (
     RepositoryMetadataManager, RepositoryMetadata, CloneStatus,
 )
 
-manager = RepositoryManager()
-repo = manager.get_repository("/path/to/repo")
-metadata = RepositoryMetadataManager(repo)
+manager = RepositoryManager(metadata_file="/path/to/state/repositories.json")
+repo = manager.get_repository("owner/repository")
+metadata_manager = RepositoryMetadataManager(
+    metadata_file="/path/to/state/repositories.json"
+)
+metadata = metadata_manager.get_repository_metadata("owner/repository")
 ```
 
 ### Visualization (Optional)

@@ -4,7 +4,10 @@ This module provides the VideoAnalyzer class for extracting information
 and metadata from video files.
 """
 
+import importlib
+import importlib.util
 from pathlib import Path
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.video._validation import SUPPORTED_FORMATS, validate_video_path
@@ -16,21 +19,24 @@ from codomyrmex.video.models import VideoComparison, VideoInfo
 
 logger = get_logger(__name__)
 
-# Check for OpenCV availability
-try:
-    import cv2
+# Probe optional packages without loading their native media libraries. Importing
+# PyAV and OpenCV in the same discovery process can load incompatible bundled
+# FFmpeg libraries on macOS.
+OPENCV_AVAILABLE = importlib.util.find_spec("cv2") is not None
+MOVIEPY_AVAILABLE = importlib.util.find_spec("moviepy") is not None
 
-    OPENCV_AVAILABLE = True
-except ImportError:
-    OPENCV_AVAILABLE = False
 
-# Check for moviepy availability
-try:
-    from moviepy.editor import VideoFileClip
+def _load_cv2() -> Any:
+    """Import OpenCV only when an OpenCV-backed operation runs."""
+    return importlib.import_module("cv2")
 
-    MOVIEPY_AVAILABLE = True
-except ImportError:
-    MOVIEPY_AVAILABLE = False
+
+def _load_video_file_clip() -> Any:
+    """Import MoviePy's ``VideoFileClip`` only when it is needed."""
+    try:
+        return importlib.import_module("moviepy.editor").VideoFileClip
+    except ImportError:
+        return importlib.import_module("moviepy").VideoFileClip
 
 
 class VideoAnalyzer:
@@ -91,6 +97,7 @@ class VideoAnalyzer:
 
     def _get_info_opencv(self, video_path: Path) -> VideoInfo:
         """Get video info using OpenCV."""
+        cv2 = _load_cv2()
         cap = cv2.VideoCapture(str(video_path))
 
         if not cap.isOpened():
@@ -124,8 +131,9 @@ class VideoAnalyzer:
 
     def _get_info_moviepy(self, video_path: Path) -> VideoInfo:
         """Get video info using moviepy."""
+        video_file_clip = _load_video_file_clip()
         try:
-            with VideoFileClip(str(video_path)) as clip:
+            with video_file_clip(str(video_path)) as clip:
                 return VideoInfo(
                     file_path=video_path,
                     duration=clip.duration,
@@ -213,8 +221,9 @@ class VideoAnalyzer:
         path = validate_video_path(video_path)
 
         if MOVIEPY_AVAILABLE:
+            video_file_clip = _load_video_file_clip()
             try:
-                with VideoFileClip(str(path)) as clip:
+                with video_file_clip(str(path)) as clip:
                     return clip.audio is not None
             except Exception as e:
                 logger.warning("Failed to check audio presence in %s: %s", path, e)
@@ -243,6 +252,7 @@ class VideoAnalyzer:
 
             # Try to open and read basic properties
             if OPENCV_AVAILABLE:
+                cv2 = _load_cv2()
                 cap = cv2.VideoCapture(str(path))
                 if not cap.isOpened():
                     return False
@@ -253,7 +263,8 @@ class VideoAnalyzer:
                 return ret
 
             if MOVIEPY_AVAILABLE:
-                with VideoFileClip(str(path)) as clip:
+                video_file_clip = _load_video_file_clip()
+                with video_file_clip(str(path)) as clip:
                     return clip.duration > 0
 
         except Exception as e:

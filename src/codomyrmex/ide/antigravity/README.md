@@ -16,7 +16,7 @@ Module implementation, resources, and local coordination for Antigravity..
 - `antigravity_dispatcher.py` – File
 - `client.py` – File
 - `history_bridge.py` – File
-- `live_bridge.py` – File
+- `live_bridge.py` – Antigravity-side live bridge
 - `message_scheduler.py` – File
 - `models.py` – File
 - `py.typed` – File

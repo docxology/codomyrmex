@@ -1,510 +1,1188 @@
 {
-  "total_files": 45,
-  "valid_files": 0,
-  "invalid_files": 45,
-  "errors": [
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Parse error: while scanning a double-quoted scalar\n  in \"/Users/4d/Documents/GitHub/codomyrmex/config/security/security-policies.yaml\", line 29, column 11\nfound unknown escape character '.'\n  in \"/Users/4d/Documents/GitHub/codomyrmex/config/security/security-policies.yaml\", line 29, column 14",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging",
-    "Missing required sections: output, logging"
-  ],
-  "warnings": [
-    "logging.level '${LOG_LEVEL:INFO}' not in valid levels: ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']"
-  ],
+  "scope": "config/**/*.{json,yaml,yml}",
+  "path_base": "project-root",
+  "total_files": 147,
+  "valid_files": 147,
+  "invalid_files": 0,
+  "errors": [],
+  "warnings": [],
   "file_results": {
-    "/Users/4d/Documents/GitHub/codomyrmex/config/database/backups.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/database/backups.yaml",
+    "config/agentic_memory/config.yaml": {
+      "file": "config/agentic_memory/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/database/connections.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/database/connections.yaml",
+    "config/agents/config.yaml": {
+      "file": "config/agents/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/database/pools.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/database/pools.yaml",
+    "config/agents/hermes.yaml": {
+      "file": "config/agents/hermes.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/database/migrations.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/database/migrations.yaml",
+    "config/api/config.yaml": {
+      "file": "config/api/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/llm/models.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/llm/models.yaml",
+    "config/api/endpoints.yaml": {
+      "file": "config/api/endpoints.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/llm/providers.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/llm/providers.yaml",
+    "config/api/rate-limiting.yaml": {
+      "file": "config/api/rate-limiting.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/llm/inference.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/llm/inference.yaml",
+    "config/api/versions.yaml": {
+      "file": "config/api/versions.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/cache/policies.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/cache/policies.yaml",
+    "config/audio/config.yaml": {
+      "file": "config/audio/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/cache/backends.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/cache/backends.yaml",
+    "config/auth/config.yaml": {
+      "file": "config/auth/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/security/api-keys.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/security/api-keys.yaml",
+    "config/bio_simulation/config.yaml": {
+      "file": "config/bio_simulation/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/security/security-policies.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/security/security-policies.yaml",
+    "config/cache/backends.yaml": {
+      "file": "config/cache/backends.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Parse error: while scanning a double-quoted scalar\n  in \"/Users/4d/Documents/GitHub/codomyrmex/config/security/security-policies.yaml\", line 29, column 11\nfound unknown escape character '.'\n  in \"/Users/4d/Documents/GitHub/codomyrmex/config/security/security-policies.yaml\", line 29, column 14"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/security/authentication.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/security/authentication.yaml",
+    "config/cache/config.yaml": {
+      "file": "config/cache/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/security/authorization.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/security/authorization.yaml",
+    "config/cache/policies.yaml": {
+      "file": "config/cache/policies.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/security/encryption.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/security/encryption.yaml",
+    "config/calendar_integration/config.yaml": {
+      "file": "config/calendar_integration/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/api/versions.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/api/versions.yaml",
+    "config/cerebrum/config.yaml": {
+      "file": "config/cerebrum/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/api/endpoints.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/api/endpoints.yaml",
+    "config/ci_cd_automation/config.yaml": {
+      "file": "config/ci_cd_automation/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/api/rate-limiting.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/api/rate-limiting.yaml",
+    "config/cli/config.yaml": {
+      "file": "config/cli/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/logging.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/logging.yaml",
+    "config/cloud/config.yaml": {
+      "file": "config/cloud/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output"
-      ],
-      "warnings": [
-        "logging.level '${LOG_LEVEL:INFO}' not in valid levels: ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']"
-      ],
-      "fixed": false
-    },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/metrics.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/metrics.yaml",
-      "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/alerts.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/alerts.yaml",
+    "config/coding/config.yaml": {
+      "file": "config/coding/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/telemetry.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/telemetry.yaml",
+    "config/collaboration/config.yaml": {
+      "file": "config/collaboration/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/examples/logging-example.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/monitoring/examples/logging-example.yaml",
+    "config/colony_kernel/decay_rates.yaml": {
+      "file": "config/colony_kernel/decay_rates.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/security/examples/authentication-example.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/security/examples/authentication-example.yaml",
+    "config/colony_kernel/kernel.yaml": {
+      "file": "config/colony_kernel/kernel.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/security/examples/api-keys-example.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/security/examples/api-keys-example.yaml",
+    "config/colony_kernel/roles.yaml": {
+      "file": "config/colony_kernel/roles.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/llm/examples/ollama-example.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/llm/examples/ollama-example.yaml",
+    "config/compression/config.yaml": {
+      "file": "config/compression/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/llm/examples/openai-example.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/llm/examples/openai-example.yaml",
+    "config/concurrency/config.yaml": {
+      "file": "config/concurrency/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/database/examples/redis-example.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/database/examples/redis-example.yaml",
+    "config/config_audits/config.yaml": {
+      "file": "config/config_audits/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/database/examples/sqlite-example.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/database/examples/sqlite-example.yaml",
+    "config/config_management/config.yaml": {
+      "file": "config/config_management/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/database/examples/postgresql-example.yaml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/database/examples/postgresql-example.yaml",
+    "config/config_monitoring/config.yaml": {
+      "file": "config/config_monitoring/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/examples/docker-compose.yml": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/examples/docker-compose.yml",
+    "config/container_optimization/config.yaml": {
+      "file": "config/container_optimization/config.yaml",
       "type": "yaml",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/examples/resources-custom.json": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/examples/resources-custom.json",
+    "config/containerization/config.yaml": {
+      "file": "config/containerization/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/cost_management/config.yaml": {
+      "file": "config/cost_management/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/crypto/config.yaml": {
+      "file": "config/crypto/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/dark/config.yaml": {
+      "file": "config/dark/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/data_lineage/config.yaml": {
+      "file": "config/data_lineage/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/data_visualization/config.yaml": {
+      "file": "config/data_visualization/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/database/backups.yaml": {
+      "file": "config/database/backups.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/database/connections.yaml": {
+      "file": "config/database/connections.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/database/examples/postgresql-example.yaml": {
+      "file": "config/database/examples/postgresql-example.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/database/examples/redis-example.yaml": {
+      "file": "config/database/examples/redis-example.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/database/examples/sqlite-example.yaml": {
+      "file": "config/database/examples/sqlite-example.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/database/migrations.yaml": {
+      "file": "config/database/migrations.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/database/pools.yaml": {
+      "file": "config/database/pools.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/database_management/config.yaml": {
+      "file": "config/database_management/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/default.yaml": {
+      "file": "config/default.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/demos/config.yaml": {
+      "file": "config/demos/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/dependency_injection/config.yaml": {
+      "file": "config/dependency_injection/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/deployment/config.yaml": {
+      "file": "config/deployment/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/docs_gen/config.yaml": {
+      "file": "config/docs_gen/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/documentation/config.yaml": {
+      "file": "config/documentation/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/documents/config.yaml": {
+      "file": "config/documents/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/edge_computing/config.yaml": {
+      "file": "config/edge_computing/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/email/config.yaml": {
+      "file": "config/email/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/encryption/config.yaml": {
+      "file": "config/encryption/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/environment_setup/config.yaml": {
+      "file": "config/environment_setup/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/events/config.yaml": {
+      "file": "config/events/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/evolutionary_ai/config.yaml": {
+      "file": "config/evolutionary_ai/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/exceptions/config.yaml": {
+      "file": "config/exceptions/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/feature_flags/config.yaml": {
+      "file": "config/feature_flags/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/feature_store/config.yaml": {
+      "file": "config/feature_store/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/file_system/config.yaml": {
+      "file": "config/file_system/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/finance/config.yaml": {
+      "file": "config/finance/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/formal_verification/config.yaml": {
+      "file": "config/formal_verification/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/fpf/config.yaml": {
+      "file": "config/fpf/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/git_analysis/config.yaml": {
+      "file": "config/git_analysis/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/git_operations/config.yaml": {
+      "file": "config/git_operations/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/graph_rag/config.yaml": {
+      "file": "config/graph_rag/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/hermes_external_skills.example.yaml": {
+      "file": "config/hermes_external_skills.example.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/hermes_skills_profile.example.yaml": {
+      "file": "config/hermes_skills_profile.example.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/ide/config.yaml": {
+      "file": "config/ide/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/identity/config.yaml": {
+      "file": "config/identity/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/llm/config.yaml": {
+      "file": "config/llm/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/llm/examples/ollama-example.yaml": {
+      "file": "config/llm/examples/ollama-example.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/llm/examples/openai-example.yaml": {
+      "file": "config/llm/examples/openai-example.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/llm/inference.yaml": {
+      "file": "config/llm/inference.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/llm/models.yaml": {
+      "file": "config/llm/models.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/llm/providers.yaml": {
+      "file": "config/llm/providers.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/logging_monitoring/config.yaml": {
+      "file": "config/logging_monitoring/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/logistics/config.yaml": {
+      "file": "config/logistics/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/maintenance/config.yaml": {
+      "file": "config/maintenance/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/market/config.yaml": {
+      "file": "config/market/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/meme/config.yaml": {
+      "file": "config/meme/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/model_context_protocol/config.yaml": {
+      "file": "config/model_context_protocol/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/model_ops/config.yaml": {
+      "file": "config/model_ops/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/module_template/config.yaml": {
+      "file": "config/module_template/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/monitoring/alerts.yaml": {
+      "file": "config/monitoring/alerts.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/monitoring/examples/logging-example.yaml": {
+      "file": "config/monitoring/examples/logging-example.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/monitoring/logging.yaml": {
+      "file": "config/monitoring/logging.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/monitoring/metrics.yaml": {
+      "file": "config/monitoring/metrics.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/monitoring/telemetry.yaml": {
+      "file": "config/monitoring/telemetry.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/multimodal/config.yaml": {
+      "file": "config/multimodal/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/networking/config.yaml": {
+      "file": "config/networking/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/networks/config.yaml": {
+      "file": "config/networks/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/operating_system/config.yaml": {
+      "file": "config/operating_system/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/orchestrator/config.yaml": {
+      "file": "config/orchestrator/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/performance/config.yaml": {
+      "file": "config/performance/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/physical_management/config.yaml": {
+      "file": "config/physical_management/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/plugin_system/config.yaml": {
+      "file": "config/plugin_system/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/privacy/config.yaml": {
+      "file": "config/privacy/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/prompt_engineering/config.yaml": {
+      "file": "config/prompt_engineering/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/quantum/config.yaml": {
+      "file": "config/quantum/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/relations/config.yaml": {
+      "file": "config/relations/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/release/config.yaml": {
+      "file": "config/release/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/scrape/config.yaml": {
+      "file": "config/scrape/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/search/config.yaml": {
+      "file": "config/search/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/security/api-keys.yaml": {
+      "file": "config/security/api-keys.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/security/authentication.yaml": {
+      "file": "config/security/authentication.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/security/authorization.yaml": {
+      "file": "config/security/authorization.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/security/config.yaml": {
+      "file": "config/security/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/security/encryption.yaml": {
+      "file": "config/security/encryption.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/security/examples/api-keys-example.yaml": {
+      "file": "config/security/examples/api-keys-example.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/security/examples/authentication-example.yaml": {
+      "file": "config/security/examples/authentication-example.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/security/security-policies.yaml": {
+      "file": "config/security/security-policies.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/serialization/config.yaml": {
+      "file": "config/serialization/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/simulation/config.yaml": {
+      "file": "config/simulation/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/skills/config.yaml": {
+      "file": "config/skills/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/spatial/config.yaml": {
+      "file": "config/spatial/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/static_analysis/config.yaml": {
+      "file": "config/static_analysis/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/system_discovery/config.yaml": {
+      "file": "config/system_discovery/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/telemetry/config.yaml": {
+      "file": "config/telemetry/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/templating/config.yaml": {
+      "file": "config/templating/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/terminal_interface/config.yaml": {
+      "file": "config/terminal_interface/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/testing/config.yaml": {
+      "file": "config/testing/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/tool_use/config.yaml": {
+      "file": "config/tool_use/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/tree_sitter/config.yaml": {
+      "file": "config/tree_sitter/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/utils/config.yaml": {
+      "file": "config/utils/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/validation/config.yaml": {
+      "file": "config/validation/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/vector_store/config.yaml": {
+      "file": "config/vector_store/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/video/config.yaml": {
+      "file": "config/video/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/wallet/config.yaml": {
+      "file": "config/wallet/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/website/config.yaml": {
+      "file": "config/website/config.yaml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/examples/docker-compose.yml": {
+      "file": "config/examples/docker-compose.yml",
+      "type": "yaml",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/claude_code_mcp.example.json": {
+      "file": "config/claude_code_mcp.example.json",
       "type": "json",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/examples/project-template-custom.json": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/examples/project-template-custom.json",
+    "config/examples/project-template-custom.json": {
+      "file": "config/examples/project-template-custom.json",
       "type": "json",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/examples/workflow-with-dependencies.json": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/examples/workflow-with-dependencies.json",
+    "config/examples/resources-custom.json": {
+      "file": "config/examples/resources-custom.json",
       "type": "json",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/examples/workflow-basic.json": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/examples/workflow-basic.json",
+    "config/examples/workflow-basic.json": {
+      "file": "config/examples/workflow-basic.json",
       "type": "json",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/concurrent_workflow_0.json": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/concurrent_workflow_0.json",
+    "config/examples/workflow-with-dependencies.json": {
+      "file": "config/examples/workflow-with-dependencies.json",
       "type": "json",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/error_test_workflow.json": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/error_test_workflow.json",
+    "config/workflows/examples/basic-analysis.json": {
+      "file": "config/workflows/examples/basic-analysis.json",
       "type": "json",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/concurrent_workflow_1.json": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/concurrent_workflow_1.json",
+    "config/workflows/examples/code-analysis-pipeline.json": {
+      "file": "config/workflows/examples/code-analysis-pipeline.json",
       "type": "json",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/perf_test_workflow.json": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/perf_test_workflow.json",
+    "config/workflows/examples/complex-analysis.json": {
+      "file": "config/workflows/examples/complex-analysis.json",
       "type": "json",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/concurrent_workflow_2.json": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/concurrent_workflow_2.json",
+    "config/workflows/examples/sample_analysis_workflow.json": {
+      "file": "config/workflows/examples/sample_analysis_workflow.json",
       "type": "json",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/test_workflow.json": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/tests/test_workflow.json",
+    "config/workflows/production/test_workflow.json": {
+      "file": "config/workflows/production/test_workflow.json",
       "type": "json",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/examples/basic-analysis.json": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/examples/basic-analysis.json",
+    "config/workflows/tests/concurrent_workflow_0.json": {
+      "file": "config/workflows/tests/concurrent_workflow_0.json",
       "type": "json",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/examples/sample_analysis_workflow.json": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/examples/sample_analysis_workflow.json",
+    "config/workflows/tests/concurrent_workflow_1.json": {
+      "file": "config/workflows/tests/concurrent_workflow_1.json",
       "type": "json",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/examples/complex-analysis.json": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/examples/complex-analysis.json",
+    "config/workflows/tests/concurrent_workflow_2.json": {
+      "file": "config/workflows/tests/concurrent_workflow_2.json",
       "type": "json",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/examples/code-analysis-pipeline.json": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/examples/code-analysis-pipeline.json",
+    "config/workflows/tests/error_test_workflow.json": {
+      "file": "config/workflows/tests/error_test_workflow.json",
       "type": "json",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     },
-    "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/production/test_workflow.json": {
-      "file": "/Users/4d/Documents/GitHub/codomyrmex/config/workflows/production/test_workflow.json",
+    "config/workflows/tests/perf_test_workflow.json": {
+      "file": "config/workflows/tests/perf_test_workflow.json",
       "type": "json",
-      "valid": false,
-      "errors": [
-        "Missing required sections: output, logging"
-      ],
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "fixed": false
+    },
+    "config/workflows/tests/test_workflow.json": {
+      "file": "config/workflows/tests/test_workflow.json",
+      "type": "json",
+      "valid": true,
+      "errors": [],
       "warnings": [],
       "fixed": false
     }
   },
-  "success_rate": 0.0
+  "success_rate": 100.0
 }

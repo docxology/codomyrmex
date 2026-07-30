@@ -11,8 +11,8 @@ from codomyrmex.scrape.config import ScrapeConfig, reset_config
 from codomyrmex.scrape.core import BaseScraper, ScrapeFormat, ScrapeOptions
 from codomyrmex.scrape.exceptions import (
     ScrapeConnectionError,
-    ScrapeError,
     ScrapeValidationError,
+    ScrapingError,
 )
 from codomyrmex.scrape.extractors.scraper import Scraper
 
@@ -68,12 +68,12 @@ class TestScraper:
         """Test initializing Scraper with config only (uses default adapter if available)."""
         config = ScrapeConfig(api_key="test-key")
         # This will try to create FirecrawlAdapter if firecrawl-py is available
-        # Otherwise will raise ScrapeValidationError or ScrapeError
+        # Otherwise will raise ScrapeValidationError or ScrapingError
         try:
             scraper = Scraper(config=config)
             assert scraper.config == config
             assert scraper.adapter is not None
-        except (ScrapeValidationError, ScrapeError):
+        except (ScrapeValidationError, ScrapingError):
             # Expected if firecrawl-py is not installed
             pytest.skip("firecrawl-py not installed, cannot test default adapter")
 
@@ -89,7 +89,7 @@ class TestScraper:
             # If firecrawl-py is available, it will try to initialize
             # This will fail at validation
             pytest.skip("firecrawl-py may be available, cannot test error case")
-        except (ScrapeValidationError, ScrapeError):
+        except (ScrapeValidationError, ScrapingError):
             # Expected when no adapter can be created
             pass
 
@@ -297,14 +297,14 @@ class TestScraper:
 
         adapter = ErrorAdapter()
         scraper = Scraper(adapter=adapter)
-        with pytest.raises(ScrapeError):
+        with pytest.raises(ScrapingError):
             scraper.scrape("https://example.com")
 
     def test_scrape_error_propagation(self):
-        """Test that ScrapeError exceptions are properly propagated."""
+        """Test that ScrapingError exceptions are properly propagated."""
 
-        class ScrapeErrorAdapter(BaseScraper):
-            """Adapter that raises ScrapeError for testing."""
+        class ScrapingErrorAdapter(BaseScraper):
+            """Adapter that raises ScrapingError for testing."""
 
             def scrape(self, url, options=None):
                 from codomyrmex.scrape.exceptions import ScrapeConnectionError
@@ -312,18 +312,18 @@ class TestScraper:
                 raise ScrapeConnectionError("Connection failed", url=url)
 
             def crawl(self, url, options=None):
-                raise ScrapeError("Crawl failed")
+                raise ScrapingError("Crawl failed")
 
             def map(self, url, search=None):
-                raise ScrapeError("Map failed")
+                raise ScrapingError("Map failed")
 
             def search(self, query, options=None):
-                raise ScrapeError("Search failed")
+                raise ScrapingError("Search failed")
 
             def extract(self, urls, schema=None, prompt=None):
-                raise ScrapeError("Extract failed")
+                raise ScrapingError("Extract failed")
 
-        adapter = ScrapeErrorAdapter()
+        adapter = ScrapingErrorAdapter()
         scraper = Scraper(adapter=adapter)
         with pytest.raises(ScrapeConnectionError):
             scraper.scrape("https://example.com")

@@ -6,7 +6,7 @@ from codomyrmex.agentic_memory.consolidation import (
     ConsolidationConfig,
     MemoryConsolidator,
 )
-from codomyrmex.agentic_memory.models import (
+from codomyrmex.agentic_memory.core.models import (
     Memory,
     MemoryImportance,
     MemoryType,

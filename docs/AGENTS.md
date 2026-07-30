@@ -23,7 +23,7 @@ Agent coordination document for the `docs/` directory. Guides AI agents navigati
   - Gate weights: `docs/manuscript/config.yaml` → `experiment.gate_score_weights` (budget: 0.30 / risk: 0.30 / trust: 0.25 / completeness: 0.15)
   - Colony kernel subsystems: 8 — PheromoneStore, ResourceLedger, ActuationGate, ConsequenceMemory, RoleAdapter, PruningDaemon, FalsificationWorker, ColonyKernel (coordinator); sources: standalone modules under `src/codomyrmex/colony_kernel/` plus `kernel.py`
   - MCP tools: 8 exposed by the colony control plane; source: `src/codomyrmex/colony_kernel/mcp_tools.py`
-  - Attack vectors: `CIRCULAR_ARCHITECTURE` (not `CIRCULAR_DEPS`) — see `src/codomyrmex/colony_kernel/falsification_worker.py`
+  - Attack vectors: `CIRCULAR_ARCHITECTURE` (not `CIRCULAR_DEPS`) — see `src/codomyrmex/colony_kernel/falsification/worker.py`
 - **Tooling**: `uv` for scripts (`scripts/doc_inventory.py`, `scripts/documentation/validate_agents_structure.py`); optional site build per `pyproject.toml` / Docusaurus under `src/codomyrmex/documentation/` when publishing.
 
 ## Development Guidelines
@@ -34,7 +34,7 @@ Agent coordination document for the `docs/` directory. Guides AI agents navigati
 
 ## Documentation Architecture
 
-The `docs/` directory is organized into **19 thematic sections** containing **1,205 markdown files** ([reference/inventory.md](reference/inventory.md)):
+The `docs/` directory is organized into **19 thematic sections** containing **1,199 Markdown files** ([reference/inventory.md](reference/inventory.md)):
 
 ### Core references (top level)
 

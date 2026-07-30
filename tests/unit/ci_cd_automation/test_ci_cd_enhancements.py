@@ -6,11 +6,11 @@ from datetime import UTC, datetime
 import pytest
 
 from codomyrmex.ci_cd_automation.pipeline import (
-    JobStatus,
     Pipeline,
     PipelineJob,
     PipelineManager,
     PipelineStage,
+    PipelineStatus,
 )
 
 
@@ -260,27 +260,31 @@ class TestJobStepExecutionTracking:
         """Test job status transitions during execution."""
         job = PipelineJob(name="test_job", commands=["echo test"])
 
-        assert job.status == JobStatus.PENDING
+        assert job.status == PipelineStatus.PENDING
 
-        job.status = JobStatus.RUNNING
+        job.status = PipelineStatus.RUNNING
         job.start_time = datetime.now(UTC)
-        assert job.status == JobStatus.RUNNING
+        assert job.status == PipelineStatus.RUNNING
         assert job.start_time is not None
 
-        job.status = JobStatus.SUCCESS
+        job.status = PipelineStatus.SUCCESS
         job.end_time = datetime.now(UTC)
-        assert job.status == JobStatus.SUCCESS
+        assert job.status == PipelineStatus.SUCCESS
         assert job.end_time is not None
 
     def test_stage_status_based_on_jobs(self):
         """Test stage status determination based on job statuses."""
-        job1 = PipelineJob(name="job1", commands=["echo 1"], status=JobStatus.SUCCESS)
-        job2 = PipelineJob(name="job2", commands=["echo 2"], status=JobStatus.SUCCESS)
+        job1 = PipelineJob(
+            name="job1", commands=["echo 1"], status=PipelineStatus.SUCCESS
+        )
+        job2 = PipelineJob(
+            name="job2", commands=["echo 2"], status=PipelineStatus.SUCCESS
+        )
 
         stage = PipelineStage(name="test_stage", jobs=[job1, job2])
 
         # Manually check all jobs succeeded
-        all_success = all(j.status == JobStatus.SUCCESS for j in stage.jobs)
+        all_success = all(j.status == PipelineStatus.SUCCESS for j in stage.jobs)
         assert all_success
 
     def test_job_with_retry_tracking(self):

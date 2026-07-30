@@ -60,7 +60,7 @@ def run_command(
 ## 3. Constraints
 
 - **Dependency posture**: Prefer minimal imports; avoid pulling in heavy optional stacks from unrelated modules. Logging is a normal dependency here.
-- **Stability**: Public symbols in `__all__` should remain backward compatible; breaking changes require a major version bump.
+- **Stability**: Public symbols in `__all__` form the supported API; breaking changes require a major version bump.
 
 ## Testing
 

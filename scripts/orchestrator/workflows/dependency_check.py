@@ -111,7 +111,7 @@ async def verify_requirements_files(
     req_files = list(project_root.glob("requirements*.txt"))
     pyproject = project_root / "pyproject.toml"
 
-    results = {
+    results: dict[str, Any] = {
         "requirements_files": [str(f.relative_to(project_root)) for f in req_files],
         "has_pyproject": pyproject.exists(),
         "issues": [],

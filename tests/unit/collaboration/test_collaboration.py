@@ -1,33 +1,30 @@
 """Unit tests for collaboration module."""
 
-import warnings
+import asyncio
 
 import pytest
 
-# Import from the new canonical path (not the deprecated protocols.swarm)
-
-# Legacy AgentProxy still lives in the compatibility shim; import with suppression
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", DeprecationWarning)
-    from codomyrmex.collaboration.protocols.swarm import (
-        AgentProxy,
-        SwarmManager,
-        TaskDecomposer,
-    )
+from codomyrmex.collaboration.swarm import (
+    AgentRole,
+    SwarmAgent,
+    SwarmManager,
+    SwarmVote,
+    TaskDecomposer,
+)
 
 
 @pytest.mark.unit
 def test_swarm_execution():
     """Test mission distribution across a swarm of agents."""
     manager = SwarmManager()
-    agent1 = AgentProxy("A1", "Builder")
-    agent2 = AgentProxy("A2", "Reviewer")
+    agent1 = SwarmAgent("A1", AgentRole.CODER)
+    agent2 = SwarmAgent("A2", AgentRole.REVIEWER)
 
-    manager.add_agent(agent1)
-    manager.add_agent(agent2)
+    manager.register_agent(agent1)
+    manager.register_agent(agent2)
     assert manager.pool.size == 2
 
-    results = manager.execute("Build a feature")
+    results = manager.queue_mission("Build a feature")
 
     assert isinstance(results, list)
     assert results
@@ -37,24 +34,22 @@ def test_swarm_execution():
 @pytest.mark.unit
 def test_task_decomposition():
     """Test mission splitting."""
-    # Legacy TaskDecomposer is just a shim
-    tasks = TaskDecomposer.decompose("Design and Build")
+    tasks = TaskDecomposer().decompose("Design and Build")
     assert len(tasks) == 2
-    assert "Design" in tasks[0]
-    assert "Build" in tasks[1]
+    assert "Design" in tasks[0].description
+    assert "Build" in tasks[1].description
 
 
 @pytest.mark.unit
 def test_consensus():
     """Test voting logic."""
     manager = SwarmManager()
-    # AgentProxy uses register_agent through add_agent shim
-    manager.add_agent(AgentProxy("A1", "Voter"))
-    manager.add_agent(AgentProxy("A2", "Voter"))
-    manager.add_agent(AgentProxy("A3", "Voter"))
+    for agent_id in ("A1", "A2", "A3"):
+        manager.register_agent(SwarmAgent(agent_id, AgentRole.CODER))
 
-    # Majority vote
-    assert manager.consensus_vote("Upgrade") is True
+    votes = [SwarmVote(agent_id, True) for agent_id in ("A1", "A2", "A3")]
+    result = asyncio.run(manager.request_consensus("Upgrade", votes))
+    assert result.decision.value == "approved"
 
 
 class TestDependencyGraph:

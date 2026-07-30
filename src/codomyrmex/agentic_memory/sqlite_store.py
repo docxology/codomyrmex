@@ -6,7 +6,7 @@ import json
 import sqlite3
 import threading
 
-from codomyrmex.agentic_memory.models import Memory, MemoryImportance, MemoryType
+from codomyrmex.agentic_memory.core.models import Memory, MemoryImportance, MemoryType
 
 
 class SQLiteStore:

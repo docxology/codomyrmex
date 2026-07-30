@@ -36,9 +36,15 @@ effective local hazard, trust, and completeness inputs. Whether that path improv
 another runtime is an empirical question, not a property established by juxtaposing
 feature lists.
 
-The Model Context Protocol supplies a standard tool-exposure interface
-[@anthropic2024mcp]. The kernel's MCP tools make its operations callable by compatible
-clients, but protocol exposure is not enforcement: a client or tool path that does not
+The Model Context Protocol supplies a standard tool-exposure interface. The referenced
+official line is revision {{CONFIG_MCP_OFFICIAL_REVISION}} [@mcp2026spec], whereas the
+current Codomyrmex client and server advertise
+`{{RESULT_MCP_ADVERTISED_REVISION}}`. The revisions match:
+`{{RESULT_MCP_OFFICIAL_REVISION_MATCH}}`; therefore
+**{{RESULT_MCP_COMPATIBILITY_STATUS}}**. This is a source-level revision measurement,
+not a conformance suite. The kernel tools are callable through Codomyrmex's implemented
+interface, but compatibility with the current official line must be tested rather than
+assumed. Protocol exposure is also not enforcement: a client or tool path that does not
 invoke the gate is outside the protection claimed here.
 
 ## What the Colony Kernel Is—and Is Not {#sec:scope-not}
@@ -63,11 +69,12 @@ count, and SANDBOX is a hard gate condition. The other role labels do not curren
 define or enforce an action-by-role permission matrix.
 
 **Not a security boundary.** Trust scores are mutable state associated with caller-supplied
-agent identifiers, not unforgeable capability tokens. The default compatibility outcome
-path remains caller-reported. An opt-in `AttestationLedger` can authenticate lifecycle
-linkage and required-attestation mode can reject outcomes without a prior authorization
-and receipt, but the ledger does not prove that an external observer saw a safe or useful
-action and is not automatically enabled for every interface.
+agent identifiers, not unforgeable capability tokens. The default outcome path remains
+caller-reported. Optional `AttestationLedger` mode offers a fully linked local route
+while preserving the ordinary method; required mode rejects the ordinary method and
+requires proposal, EXECUTE verdict, authorization, execution receipt, and outcome
+events. The ledger does not prove that an external observer saw a safe or useful action
+and is not automatically enabled for every interface.
 
 **Not production- or scale-validated.** The checked-in tests exercise internal contracts.
 The manuscript does not release the repeated-trial traces, production replays, concurrent
@@ -158,7 +165,8 @@ identifies an engineering direction rather than an inherited guarantee.
 | Does the gate improve repository-task outcomes? | Controlled SWE-bench or SWE-agent integration with a baseline | Not run |
 | Does it reduce unsafe tool use under indirect injection? | AgentDojo or InjecAgent attack-success comparison | Not run |
 | Does it reduce high-impact tool failures? | ToolEmu scenarios with linked proposal, verdict, and outcome traces | Not run |
-| Can clients bypass or forge control state? | Authenticated end-to-end adversarial tests | Not run |
+| Can the local lifecycle chain reject forgery and replay? | Signed/hash-linked deterministic ledger tests | Supported for local ledger mechanics |
+| Can clients bypass mediation or forge external actuation evidence? | Authenticated end-to-end deployment adversarial tests | Not run |
 | Does state survive restart and concurrent access? | Persistence and concurrency tests under a declared deployment configuration | Not established for the default MCP service |
 | Are HOLD and REFUSE calibrated to downstream harm? | Held-out outcomes with calibration and utility analysis | Not evaluated |
 

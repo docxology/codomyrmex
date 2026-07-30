@@ -233,22 +233,15 @@ class HealthChecker:
         result.checks_performed.extend(["dependency_check", "python_version"])
 
         try:
-            from codomyrmex.environment_setup.env_checker import (
-                validate_environment_completeness,
-            )
+            from codomyrmex.environment_setup.env_checker import validate_environment
 
-            project_root = os.path.abspath(
-                os.path.join(os.path.dirname(__file__), "..", "..")
-            )
+            report = validate_environment()
 
-            is_complete, report = validate_environment_completeness(project_root)  # type: ignore
+            result.add_metric("environment_complete", report.valid)
+            result.add_metric("environment_details", report.details)
+            result.add_metric("missing_environment_items", report.missing_items)
 
-            result.add_metric("environment_complete", is_complete)
-            result.add_metric(
-                "python_version_check", report.get("python_version_check", {})
-            )
-
-            if not is_complete:
+            if not report.valid:
                 result.add_issue(
                     "Environment setup incomplete", "Run environment validation"
                 )

@@ -11,9 +11,9 @@ bridging, simulated sensors and actuators, ROS-style pub/sub, and 3D transforms.
 
 - `bridge.py` - WebSocket telemetry ingress and command egress.
 - `telemetry.py` - SensorPayload parsing and TelemetryStream aggregation.
-- `sensors/base.py` - SensorData, SimulatedSensor, and MockSensor.
-- `actuators/base.py` - ActuatorCommand, ActuatorStatus, SimulatedActuator, and MockActuator.
-- `ros/ros_bridge.py` - In-process ROS2Bridge compatibility surface.
+- `sensors/base.py` - SensorData and SimulatedSensor.
+- `actuators/base.py` - ActuatorCommand, ActuatorStatus, and SimulatedActuator.
+- `ros/ros_bridge.py` - In-process ROS-style bridge.
 - `transformation/transformation.py` - Vec3 and Transform3D math.
 - `README.md` - Module overview.
 - `SPEC.md` - Functional and validation contract.
@@ -23,7 +23,7 @@ bridging, simulated sensors and actuators, ROS-style pub/sub, and 3D transforms.
 - Preserve the import paths exercised by `tests/unit/embodiment/`.
 - Keep WebSocket tests real and local; do not replace them with mocks.
 - Keep transform math deterministic and dependency-light.
-- Do not claim production ROS2 integration; this package is an in-process compatibility surface.
+- Do not claim production ROS2 integration; this package is an in-process local bridge.
 
 ## Key Files
 

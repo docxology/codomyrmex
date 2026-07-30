@@ -46,6 +46,7 @@ verification.
 - `solve_model(timeout_ms)` — MCP tool
 - `push()` — MCP tool
 - `pop(n)` — MCP tool
+- `verify_code_change(file_path, original_source, modified_source)` — MCP tool; checks public-function and signature preservation
 
 ### Exceptions
 - `SolverError` — Base

@@ -14,7 +14,6 @@ from codomyrmex.cerebrum.core.cases import Case, CaseBase, CaseRetriever
 from codomyrmex.cerebrum.core.chain import ReasoningChain
 from codomyrmex.cerebrum.core.config import CerebrumConfig
 from codomyrmex.cerebrum.core.decision import Decision, DecisionModule
-from codomyrmex.cerebrum.core.exceptions import ModelError
 from codomyrmex.cerebrum.core.memory import WorkingMemory
 from codomyrmex.cerebrum.core.models import Model, ReasoningResult
 from codomyrmex.cerebrum.core.transformations import (
@@ -22,6 +21,7 @@ from codomyrmex.cerebrum.core.transformations import (
     LearningTransformer,
     TransformationManager,
 )
+from codomyrmex.exceptions.cerebrum import ModelError
 from codomyrmex.logging_monitoring import get_logger
 
 """Main CEREBRUM engine that orchestrates case-based reasoning and Bayesian inference."""

@@ -32,7 +32,7 @@ try:
         extract_api_specs,
         generate_api_docs,
     )
-    from codomyrmex.api.openapi_generator import (
+    from codomyrmex.api.openapi_documentation_generator import (
         DocumentationOpenAPIGenerator as OpenAPIGenerator,
     )
     from codomyrmex.api.openapi_generator import (

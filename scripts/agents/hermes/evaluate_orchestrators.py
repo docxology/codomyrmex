@@ -18,7 +18,7 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 try:
     import yaml as _yaml
@@ -178,7 +178,7 @@ def run_script(
 
 def assess_script(
     client, script_info: dict, source_code: str, target_dir: Optional[Path] = None
-) -> dict:
+) -> dict[str, Any] | None:
     """Use Hermes to assess a script based on stdout, stderr, and source code.
 
     Args:
@@ -334,10 +334,12 @@ def main() -> int:
     output_path.mkdir(parents=True, exist_ok=True)
 
     # Open trace file for appending evaluation events (JSONL)
-    _hermes_cfg: dict = {}
+    _hermes_cfg: dict[str, Any] = {}
     try:
         _cfg = get_config()
-        _hermes_cfg = _cfg.get("hermes", {}) if isinstance(_cfg, dict) else {}
+        _hermes_cfg = _cfg.to_dict().get("hermes", {})
+        if not isinstance(_hermes_cfg, dict):
+            _hermes_cfg = {}
     except Exception:
         pass
     trace_file_rel: Optional[str] = _hermes_cfg.get("observability", {}).get(
@@ -352,14 +354,14 @@ def main() -> int:
     # 1. Boot up Hermes Client
     if not args.dry_run:
         try:
-            from codomyrmex.agents.hermes.hermes_client import HermesClient
+            from codomyrmex.agents.hermes.client_pkg import HermesClient
         except ImportError as e:
             print_error(f"Import failed: {e}")
             return 1
         client = HermesClient()
         # Apply assessment-specific timeout so full-source prompts don't time out
         assessment_timeout = _resolve_assessment_timeout(evaluator_cfg)
-        client.timeout = assessment_timeout  # type: ignore[attr-defined]
+        client.timeout = assessment_timeout
         print_info(
             f"  Assessment timeout: {assessment_timeout}s (full source code included)"
         )

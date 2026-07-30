@@ -13,10 +13,11 @@ The Environment Setup module validates the development environment, ensures depe
 The primary entry point for agents to verify their runtime environment.
 
 ```python
-from codomyrmex.environment_setup import validate_environment_completeness
+from codomyrmex.environment_setup import validate_environment
 
-# Single call to validate Python version, dependencies, and .env
-if validate_environment_completeness():
+# Single call to validate Python version and core dependencies
+report = validate_environment()
+if report.valid:
     print("System ready for PAI execution")
 else:
     print("Environment misconfigured - check logs")
@@ -53,7 +54,7 @@ if not check_and_setup_env_vars("/path/to/repo_root"):
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `validate_environment_completeness` | Function | **Primary entry point**: Runs all checks |
+| `validate_environment` | Function | **Primary entry point**: Returns a structured validation report |
 | `ensure_dependencies_installed` | Function | Verifies `cased/kit` and `python-dotenv` |
 | `check_and_setup_env_vars` | Function | Loads `.env` into `os.environ` |
 | `validate_python_version` | Function | Checks a caller-selected minimum; project setup uses Python 3.11+ |
@@ -63,7 +64,7 @@ if not check_and_setup_env_vars("/path/to/repo_root"):
 
 | Phase | Environment Setup Contribution |
 |-------|-------------------------------|
-| **OBSERVE** | `validate_environment_completeness` — Initial system health check |
+| **OBSERVE** | `validate_environment` — Initial system health check |
 | **PLAN** | `is_uv_available` — Determine available tooling for build steps |
 | **VERIFY** | `ensure_dependencies_installed` — Pre-flight check before complex operations |
 

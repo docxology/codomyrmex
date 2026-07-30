@@ -186,7 +186,7 @@ def s3_create_bucket(client, name: str):
 def s3_get_metadata(client, bucket: str, key: str):
     """Get object metadata."""
     print(f"\n📋 Metadata for s3://{bucket}/{key}\n" + "=" * 50)
-    meta = client.get_metadata(bucket, key)
+    meta = client.get_object_metadata(bucket, key)
 
     if meta:
         for k, v in meta.items():

@@ -38,7 +38,3 @@ class RateLimitResult:
         if self.retry_after:
             headers["Retry-After"] = str(int(self.retry_after))
         return headers
-
-    def to_headers(self) -> dict[str, str]:
-        """Get rate limit headers (method alias for headers property)."""
-        return self.headers

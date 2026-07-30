@@ -131,12 +131,14 @@ class TemplateEngine:
         """Render using Jinja2."""
         try:
             # CWE-79: Enable autoescape to prevent XSS
-            env = Environment(autoescape=self.autoescape)
+            env = Environment(  # nosec B701 - secure default; trusted opt-out is explicit
+                autoescape=self.autoescape
+            )
             # Register custom filters
             for name, func in self._filters.items():
                 env.filters[name] = func
 
-            template_obj = env.from_string(template)  # nosec B701 - opt-out is explicit
+            template_obj = env.from_string(template)
             return template_obj.render(**context)
         except ImportError:
             raise TemplatingError(
@@ -148,7 +150,7 @@ class TemplateEngine:
         try:
             path_obj = Path(path)
             # CWE-79: Use select_autoescape for file-based templates
-            env = Environment(
+            env = Environment(  # nosec B701 - secure default; trusted opt-out is explicit
                 loader=FileSystemLoader(str(path_obj.parent)),
                 autoescape=select_autoescape() if self.autoescape else False,
             )
@@ -156,7 +158,7 @@ class TemplateEngine:
             for name, func in self._filters.items():
                 env.filters[name] = func
 
-            return env.get_template(path_obj.name)  # nosec B701 - opt-out is explicit
+            return env.get_template(path_obj.name)
         except ImportError:
             raise TemplatingError(
                 "jinja2 package not available. Install with: pip install jinja2"

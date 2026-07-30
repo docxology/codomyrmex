@@ -165,7 +165,7 @@ def show_modules():
         },
         "Analysis & Visualization": {
             "data_visualization": "Rich plotting with matplotlib, plotly, and mermaid diagrams",
-            "static_analysis": "Code quality analysis with pylint, flake8, and security scanning",
+            "static_analysis": "Code quality analysis with pylint, ruff, ty, and security scanning",
             "pattern_matching": "Advanced pattern recognition and code structure analysis",
             "git_operations": "Advanced git workflows, GitHub integration, and repository management",
         },

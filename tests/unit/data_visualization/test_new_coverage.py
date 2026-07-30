@@ -1,7 +1,7 @@
 """Comprehensive zero-mock tests for data_visualization module.
 
 Covers: dashboard_builder, dashboard_export, mcp_tools, export (ChartExporter),
-_compat shim, mermaid diagrams, core/ui, core/theme, engines/plotter,
+optional instrumentation, mermaid diagrams, core/ui, core/theme, engines/plotter,
 line_plot edge cases, and pie_chart edge cases.
 
 All tests call real code with real inputs — no mocks, no stubs.
@@ -520,26 +520,26 @@ class TestChartExporter:
 
 
 # =============================================================================
-# TestCompatShim — _compat.py (24% → ~70%)
+# TestInstrumentation — _instrumentation.py
 # =============================================================================
 @pytest.mark.unit
-class TestCompatShim:
-    """Tests for the optional-dependency shim in _compat.py."""
+class TestInstrumentation:
+    """Tests for optional performance instrumentation."""
 
     def test_performance_monitoring_available_is_bool(self):
-        from codomyrmex.data_visualization._compat import (
+        from codomyrmex.data_visualization._instrumentation import (
             PERFORMANCE_MONITORING_AVAILABLE,
         )
 
         assert isinstance(PERFORMANCE_MONITORING_AVAILABLE, bool)
 
     def test_monitor_performance_is_callable(self):
-        from codomyrmex.data_visualization._compat import monitor_performance
+        from codomyrmex.data_visualization._instrumentation import monitor_performance
 
         assert callable(monitor_performance)
 
     def test_monitor_performance_decorator_wraps_function(self):
-        from codomyrmex.data_visualization._compat import monitor_performance
+        from codomyrmex.data_visualization._instrumentation import monitor_performance
 
         decorator = monitor_performance("test_metric")
         assert callable(decorator)
@@ -551,7 +551,7 @@ class TestCompatShim:
         assert callable(wrapped)
 
     def test_performance_context_is_context_manager(self):
-        from codomyrmex.data_visualization._compat import (
+        from codomyrmex.data_visualization._instrumentation import (
             PERFORMANCE_MONITORING_AVAILABLE,
             performance_context,
         )
@@ -559,14 +559,14 @@ class TestCompatShim:
         if not PERFORMANCE_MONITORING_AVAILABLE:
             ctx = performance_context("test_op")
             with ctx:
-                pass  # No-op shim must not raise
+                pass  # Optional instrumentation must not raise
 
-    def test_compat_exports_all_three_names(self):
-        import codomyrmex.data_visualization._compat as compat
+    def test_instrumentation_exports_all_three_names(self):
+        import codomyrmex.data_visualization._instrumentation as instrumentation
 
-        assert hasattr(compat, "monitor_performance")
-        assert hasattr(compat, "performance_context")
-        assert hasattr(compat, "PERFORMANCE_MONITORING_AVAILABLE")
+        assert hasattr(instrumentation, "monitor_performance")
+        assert hasattr(instrumentation, "performance_context")
+        assert hasattr(instrumentation, "PERFORMANCE_MONITORING_AVAILABLE")
 
 
 # =============================================================================

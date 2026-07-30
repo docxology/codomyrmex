@@ -52,11 +52,11 @@ If you use **`CODOMYRMEX_SKILLS_REGISTRY`** or commit **`.codomyrmex/hermes_skil
 
 ### TELEGRAM_ALLOWED_USERS
 
-> **Legacy**: `TELEGRAM_ALLOWED_USERS` remains supported but the current primary mechanism
-> is `$HERMES_HOME/pairing/telegram-approved.json`. Use `hermes pairing create` or edit the
-> file directly. See [telegram.md](telegram.md) for the full pairing workflow.
+`TELEGRAM_ALLOWED_USERS` provides a static allow-list; the primary dynamic mechanism is
+`$HERMES_HOME/pairing/telegram-approved.json`. Use `hermes pairing create` or edit the
+file directly. See [telegram.md](telegram.md) for the full pairing workflow.
 
-The legacy env var:
+The static allow-list:
 
 ```bash
 # .env

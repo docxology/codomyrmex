@@ -12,7 +12,6 @@ To provide a unified, hierarchical, and context-aware error handling system for 
 2. **Context Propagation**: Errors must carry structured data (`context` dict) via domain-specific constructor parameters for debugging, type safety, and logging.
 3. **Serialization**: Errors must be serializable to JSON (`to_dict()`) for API responses and logs.
 4. **Categorization**: Errors must be grouped by domain (IO, AI, Config, etc.) for clean organization.
-5. **Backward Compatibility**: The package must be a drop-in replacement for the old `exceptions.py`.
 
 ## Class Hierarchy (Simplified)
 

@@ -1,21 +1,13 @@
 """Core encryption engine.
 
-Provides the main ``Encryptor`` class that supports AES-256-CBC (legacy),
+Provides the main ``Encryptor`` class that supports AES-256-CBC,
 RSA encryption, key generation, digital signatures, and file encryption
-utilities.  Module-level convenience functions ``encrypt_data``,
-``decrypt_data``, and ``generate_aes_key`` are also re-exported here.
+utilities.  ``generate_aes_key`` is available from this package for key generation.
 """
 
-from .encryptor import (
-    Encryptor,
-    decrypt_data,
-    encrypt_data,
-    generate_aes_key,
-)
+from .encryptor import Encryptor, generate_aes_key
 
 __all__ = [
     "Encryptor",
-    "decrypt_data",
-    "encrypt_data",
     "generate_aes_key",
 ]

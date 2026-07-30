@@ -1,35 +1,35 @@
 # ml_pipeline — PAI Integration
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Experimental | **Last Updated**: July 2026
 
 ## AI Capabilities
 
-The `ml_pipeline` module provides machine learning pipeline orchestration for AI agents. It supports pipeline definition, execution, and monitoring.
+The `ml_pipeline` module exposes two stateless receipt-producing functions to
+Python and MCP callers. It does not orchestrate, execute, persist, monitor, or
+authorize ML workloads.
 
 ## Algorithm Phase Mapping
 
 | PAI Phase | Relevance | Description |
 | :--- | :--- | :--- |
-| **BUILD** (4/7) | Primary | Pipeline construction and configuration |
-| **EXECUTE** (5/7) | Primary | Pipeline execution and data flow management |
-| **VERIFY** (6/7) | Secondary | Pipeline validation and output verification |
-| **LEARN** (7/7) | Secondary | Pipeline metrics and performance tracking |
+| **BUILD** (4/7) | Limited | Echo a caller-supplied pipeline name and step list |
+| **EXECUTE** (5/7) | Naming only | Return an execution-shaped echo receipt; no actuation |
+| **VERIFY** (6/7) | None | No validation or output verification is implemented |
+| **LEARN** (7/7) | None | No metrics, state, or learning loop is implemented |
 
 ## MCP Tools
 
 | Tool | Category | Trust | Description |
 | :--- | :--- | :--- | :--- |
-| `ml_pipeline_list_pipelines` | Discovery | Safe | List available ML pipelines |
-| `ml_pipeline_get_status` | Monitoring | Safe | Get pipeline execution status |
-| `ml_pipeline_run` | Execution | **Destructive** | Execute an ML pipeline |
+| `ml_pipeline_create` | Receipt | Non-actuating | Echo a name and ordered step descriptors |
+| `ml_pipeline_execute` | Receipt | Non-actuating | Echo a name and input mapping as outputs |
 
 ## Agent Role Access
 
 | Agent Role | Access Level | Permitted Operations |
 | :--- | :--- | :--- |
-| Engineer | Full | Pipeline creation, execution, monitoring |
-| Architect | Read | Pipeline inspection and design review |
-| QATester | Execute | Pipeline testing and validation |
+The module implements no role-based access control. Any role restrictions must
+be applied by the caller or an enclosing authorization layer.
 
 ## Signposting
 

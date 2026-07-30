@@ -1,7 +1,7 @@
 """Droid TODO management module.
 
 This module provides structured TODO list management for the droid runner,
-including parsing, validation, and migration between formats.
+including parsing, validation, persistence, and rotation.
 """
 
 from __future__ import annotations
@@ -26,27 +26,17 @@ COMPLETED_HEADER = "[COMPLETED]"
 class TodoItem:
     """Structured TODO item.
 
-    Supports both the new 3-column format and legacy handler-based format.
-    New format columns:
+    The file format is three pipe-delimited columns:
       task_name | task_description | outcomes
-    # Handler-based format support.
-    Legacy format columns:
-      operation_id | handler_path | description
     """
 
     task_name: str
     description: str
     outcomes: str
-    handler_path: str | None = None
 
     @classmethod
     def parse(cls, raw: str) -> TodoItem:
-        """Parse a single TODO line into a TodoItem.
-
-        Accepts either:
-        - New format:   task_name | task_description | outcomes
-        - Legacy format:operation_id | handler_path | description
-        """
+        """Parse a single canonical three-column TODO line."""
         # Allow optional leading list bullets
         if raw.startswith("- "):
             raw = raw[2:].strip()
@@ -54,23 +44,11 @@ class TodoItem:
         if len(parts) != 3:
             raise ValueError(f"Invalid TODO entry: {raw}")
 
-        # Handler-based format detection.
-        if ":" in parts[1] and "/" not in parts[1]:
-            operation_id, handler_path, description = parts
-            return cls(
-                task_name=operation_id,
-                description=description,
-                outcomes="",
-                handler_path=handler_path,
-            )
-
-        # New format
         task_name, description, outcomes = parts
         return cls(
             task_name=task_name,
             description=description,
             outcomes=outcomes,
-            handler_path=None,
         )
 
     def serialise(self) -> str:
@@ -156,7 +134,6 @@ class TodoManager:
         """Validate the todo file; returns (is_valid, list_of_issues).
 
         Issues are tuples of (line_number, line_text, error_message).
-        Accepts both new 3-column and legacy formats.
         """
         issues: list[tuple[int, str, str]] = []
         if not self.todo_path.exists():
@@ -185,49 +162,6 @@ class TodoManager:
                     )
 
         return (len(issues) == 0), issues
-
-    def migrate_to_three_columns(self) -> int:
-        """Migrate legacy entries to the new 3-column format in-place.
-
-        Returns the number of lines changed.
-        """
-        if not self.todo_path.exists():
-            return 0
-
-        original_lines = self.todo_path.read_text(encoding="utf-8").splitlines()
-        changed = 0
-        output_lines: list[str] = []
-
-        for line in original_lines:
-            stripped = line.strip()
-            if not stripped:
-                output_lines.append(line)
-                continue
-            if stripped.upper() == TODO_HEADER:
-                output_lines.append(TODO_HEADER)
-                continue
-            if stripped.upper() == COMPLETED_HEADER:
-                output_lines.append(COMPLETED_HEADER)
-                continue
-            if stripped.startswith("#"):
-                # Drop old format hint comments during migration
-                continue
-
-            # Attempt parse; then always write back in new format
-            try:
-                item = TodoItem.parse(stripped)
-                # For legacy entries (with handler_path), keep outcomes empty in TODO and
-                # copy description into description field
-                new_line = item.serialise()
-                output_lines.append(new_line)
-                if new_line != stripped:
-                    changed += 1
-            except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
-                # Preserve unparseable lines as-is
-                output_lines.append(line)
-
-        self.todo_path.write_text("\n".join(output_lines) + "\n", encoding="utf-8")
-        return changed
 
 
 __all__ = ["COMPLETED_HEADER", "TODO_HEADER", "TodoItem", "TodoManager"]

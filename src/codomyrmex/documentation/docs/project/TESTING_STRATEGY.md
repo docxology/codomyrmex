@@ -58,12 +58,12 @@ Our testing strategy incorporates multiple levels of testing to cover different 
 *   **Scope**: Entire codebase.
 *   **Tools**: 
     *   `pylint` for general Python linting.
-    *   `flake8` for style guide enforcement (PEP 8).
+    *   `ruff` for style, import ordering, and formatting enforcement.
     *   `bandit` for security vulnerability scanning.
     *   `radon` for code complexity metrics.
     *   `lizard` for cyclomatic complexity and token count analysis.
-    *   Potentially type checkers like `mypy` in the future.
-*   **Location**: Configuration files (e.g., `pyproject.toml`, `.pylintrc`, `.flake8`) and integrated into pre-commit hooks and CI pipelines.
+    *   The repository type checker `ty`.
+*   **Location**: Configuration files (e.g., `pyproject.toml`, `.pylintrc`) and integrated into pre-commit hooks and CI pipelines.
 *   **Frequency**: Run on every commit (via hooks) and in CI pipelines.
 
 ## 3. Test Data Management

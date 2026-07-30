@@ -29,16 +29,12 @@ from codomyrmex.colony_kernel.kernel import ColonyKernel
 from codomyrmex.colony_kernel.models import (
     ActionProposal,
     AgentTrustProfile,
-    ColonySignal,
-    DecayRate,
     FalsificationFinding,
     FalsificationSeverity,
     GateResult,
     PruningCandidate,
     ResourceCost,
-    SignalSource,
     SignalType,
-    make_trace_key,
 )
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
@@ -97,7 +93,7 @@ def _dataclass_to_dict(obj: Any) -> Any:
 # ---------------------------------------------------------------------------
 # FalsificationWorker — imported from canonical standalone module
 # ---------------------------------------------------------------------------
-from codomyrmex.colony_kernel.falsification_worker import FalsificationWorker
+from codomyrmex.colony_kernel.falsification import FalsificationWorker
 
 # ---------------------------------------------------------------------------
 # MCP tools
@@ -247,7 +243,7 @@ def colony_status() -> dict[str, Any]:
 
     Returns:
         Dict with ``pheromone_summary``, ``budget_usage``, ``role_distribution``,
-        ``recent_consequences``, and ``pruning_candidates_count``.
+        ``recent_consequences``, ``pruning_candidates_count``, and ``tick_count``.
     """
     try:
         return _get_kernel().colony_status()
@@ -277,20 +273,14 @@ def colony_pheromone_query(location: str, signal_type: str) -> list[dict[str, An
     try:
         sig_enum = SignalType(signal_type.lower())
         kernel = _get_kernel()
-        # Use the kernel's pheromone_store directly for sensing
-        marker = kernel.pheromone_store._field.sense(make_trace_key(location, sig_enum))
-        if marker is not None:
-            signal = ColonySignal(
-                location=location,
-                signal_type=sig_enum,
-                strength=marker.strength,
-                decay_rate=DecayRate.NORMAL,
-                source=SignalSource.AGENT,
-                evidence=dict(marker.metadata),
-                last_reinforced=marker.updated_at,
-            )
-            return [_dataclass_to_dict(signal)]
-        return []
+        # Use the typed store API so decay rate, source, evidence, and
+        # reinforcement time are reconstructed from the canonical metadata.
+        signals = kernel.pheromone_store.query_pressure(location, sig_enum)
+        return [
+            _dataclass_to_dict(signal)
+            for signal in signals
+            if signal.location == location
+        ]
     except ValueError as exc:
         valid = [e.value for e in SignalType]
         return [
@@ -383,8 +373,10 @@ def colony_pruning_report() -> dict[str, Any]:
 def colony_tick() -> dict[str, Any]:
     """Advance the colony by one time-step.
 
-    Pheromone traces evaporate according to ``StigmergyConfig.evaporation_per_tick``.
-    Traces that fall to or below ``min_strength`` are removed.
+    Pheromone traces evaporate according to each signal's ``DecayRate``. The
+    shared ``TraceField`` evaporation is disabled because ``PheromoneStore``
+    applies the per-signal rates itself. Traces that fall to or below
+    ``min_strength`` are removed.
 
     Returns:
         Colony status dict (see :func:`colony_status`).

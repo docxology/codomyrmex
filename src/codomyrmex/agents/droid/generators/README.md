@@ -11,7 +11,6 @@ Module implementation, resources, and local coordination for Generators..
 - `SPEC.md` – File
 - `__init__.py` – File
 - `documentation.py` – File
-- `physical.py` – File
 - `physical_generators/` – Subdirectory
 - `spatial.py` – File
 

@@ -1,5 +1,5 @@
 from __future__ import annotations
 
-from .base import MockSensor, SensorData, SimulatedSensor
+from .base import SensorData, SimulatedSensor
 
-__all__ = ["MockSensor", "SensorData", "SimulatedSensor"]
+__all__ = ["SensorData", "SimulatedSensor"]

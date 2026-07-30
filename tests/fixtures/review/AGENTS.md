@@ -8,7 +8,7 @@
 
 - **Path**: `tests/fixtures/review`
 - **Human overview**: [README.md](README.md)
-- **Agent coordination** (repo root): [../../../../../AGENTS.md](../../../../../AGENTS.md)
+- **Agent coordination** (repo root): [../../../AGENTS.md](../../../AGENTS.md)
 ## Purpose
 Validation coverage, fixtures, and regression checks for Review.
 

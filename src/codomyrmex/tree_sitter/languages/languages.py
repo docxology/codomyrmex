@@ -7,7 +7,7 @@ from typing import Any
 from codomyrmex.logging_monitoring import get_logger
 
 # Import the external tree-sitter package explicitly to avoid shadowing
-# by the local codomyrmex.coding.parsers.tree_sitter package.
+# by the local codomyrmex.tree_sitter package.
 _tree_sitter = importlib.import_module("tree_sitter")
 
 logger = get_logger(__name__)

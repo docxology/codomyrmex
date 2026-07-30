@@ -403,7 +403,7 @@ The project includes comprehensive testing to ensure:
 - Follow project coding standards and `.cursorrules`
 - Implement comprehensive error handling
 - Include proper logging and telemetry
-- Maintain backward compatibility
+- Maintain stable public behavior and document interface changes
 
 ### Testing Requirements
 - Unit tests for all public methods

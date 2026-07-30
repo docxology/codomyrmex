@@ -1,35 +1,52 @@
-# Codomyrmex Agents — docs/modules/release
+# Codomyrmex Agents — `docs/modules/release`
 
-**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Purpose
-Documentation tooling, generated references, and publishing assets for Release.
 
-## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
-
-## Key Files
-- `AGENTS.md` - Agent coordination and navigation
-- `README.md` - Directory overview
-- `PAI.md`
-- `README.md`
-- `SPEC.md`
-
-## Dependencies
-- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+Maintain the reader-facing release contract in parity with
+`src/codomyrmex/release/`.
 
 ## Development Guidelines
-- Follow the universal agent protocols defined in the root `AGENTS.md`.
-- Adhere to the Python PEP 8 style guide and project-specific linting rules.
-- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- Describe only real behavior: strict evidence, real `uv build`, verified local
+  copies, and dry-run remote plans.
+- Keep archive-member safety explicit: traversal, absolute paths, SCM markers,
+  private environment files, caches, and checkout-specific content fail the
+  package build.
+- Never call a dry-run receipt a publication.
+- Keep manifest v1 fields, public immutable types, and CLI commands aligned
+  with the source API specification.
+- Represent an unassigned DOI as absent/`null`; do not promise a forthcoming
+  identifier.
+- Preserve the distinction between internal artifact verification and
+  external archival acceptance.
+- Update README, SPEC, PAI, source API/MCP documentation, and changelog together
+  when public behavior changes.
+- Use targeted edits during the active documentation hand-pass; do not run the
+  broad bootstrap or enrichment generators.
+
+## Key Files
+
+| File | Contract |
+|---|---|
+| `README.md` | Reader-facing release and publication workflow |
+| `SPEC.md` | Behavioral requirements and fail-closed invariants |
+| `PAI.md` | Agent-facing release integration and safety boundary |
+| `../../../src/codomyrmex/release/API_SPECIFICATION.md` | Canonical public Python and CLI API |
+| `../../../src/codomyrmex/release/MCP_TOOL_SPECIFICATION.md` | Canonical MCP release-tool contract |
+| `../../../src/codomyrmex/release/CHANGELOG.md` | Release-module compatibility history |
+
+## Validation
+
+```bash
+uv run --locked pytest tests/unit/release -q
+uv run --locked mkdocs build --strict
+```
+
+## Navigation
+
+- [README](README.md)
+- [Specification](SPEC.md)
+- [PAI integration](PAI.md)
+- [Source module](../../../src/codomyrmex/release/README.md)

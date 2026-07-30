@@ -7,6 +7,7 @@ from codomyrmex.manuscript.figures._common import (
     RegularPolygon,
     _add_provenance_note,
     _save,
+    _text_color_on,
     _var_str,
     math,
     np,
@@ -118,7 +119,7 @@ def fig_subsystem_architecture() -> None:
                 zorder=3,
             )
         )
-        text_color = "white" if color != _OI["yellow"] else "#1a1a1a"
+        text_color = _text_color_on(color)
         ax.text(
             cx[i],
             cy[i] + 0.17,

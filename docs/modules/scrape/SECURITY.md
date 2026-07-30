@@ -120,11 +120,11 @@ def validate_url(url: str) -> bool:
 ```python
 try:
     result = scraper.scrape(url)
-except ScrapeError as e:
+except ScrapingError as e:
     # Log detailed error internally
     logger.error(f"Scraping failed: {e}", exc_info=True)
     # Return generic message to user
-    raise ScrapeError("Failed to scrape URL") from e
+    raise ScrapingError("Failed to scrape URL") from e
 ```
 
 ## Network Security

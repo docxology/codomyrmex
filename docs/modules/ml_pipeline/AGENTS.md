@@ -1,9 +1,9 @@
 # Codomyrmex Agents — docs/modules/ml_pipeline
 
-**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Experimental | **Last Updated**: July 2026
 
 ## Purpose
-Documentation tooling, generated references, and publishing assets for Ml Pipeline.
+Maintain reader-facing documentation for the bounded ML pipeline receipt API.
 
 ## Active Components
 - `README.md` – Project file
@@ -12,6 +12,7 @@ Documentation tooling, generated references, and publishing assets for Ml Pipeli
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
+- State explicitly that the current functions neither persist nor execute ML pipelines.
 
 ## Key Files
 - `AGENTS.md` - Agent coordination and navigation

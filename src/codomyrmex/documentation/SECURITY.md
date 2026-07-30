@@ -1,53 +1,71 @@
-# Security Policy for Documentation
+# Documentation module security
 
-This document outlines security procedures and policies for the Documentation module.
+Report vulnerabilities through the process in the repository
+[SECURITY.md](../../../SECURITY.md). Do not disclose unpatched vulnerabilities
+in public issues.
 
-## Reporting a Vulnerability
+## Threat surface
 
-If you discover a security vulnerability within this module, please report it to us as soon as possible.
-We take all security reports seriously.
+The documentation module processes repository paths and Markdown, launches
+package-manager commands, copies trees, writes generated files, starts local
+servers, and can open a browser. Relevant risks include:
 
-**DO NOT report security vulnerabilities through public GitHub issues.**
+- path traversal or writes outside the intended module;
+- overwriting concurrent or curated documentation;
+- following untrusted symlinks during aggregation;
+- command execution through unvalidated package-manager selection or
+  environment state;
+- malicious Markdown, HTML, JavaScript, or plugin content entering a built
+  site;
+- credentials or absolute home paths leaking into examples and receipts;
+- dependency and supply-chain compromise in Node and Python build tools;
+- serving internal documentation on a network-visible interface.
 
-Instead, please email blanket@activeinference.institute with the subject line: "SECURITY Vulnerability Report: Documentation - Security Issue".
+## Required controls
 
-Please include the following information in your report:
+- Validate module identifiers before path construction and resolve targets
+  beneath an explicit trusted root.
+- Default MCP generation to dry-run and report `executed` and `dry_run`.
+- Review the complete target set before any broad write.
+- Preserve curated markers, dirty-worktree content, and submodule boundaries.
+- Use argument arrays for subprocess execution; do not interpolate untrusted
+  shell text.
+- Bind development servers to loopback unless broader exposure is explicitly
+  required and secured.
+- Treat repository Markdown and copied assets as untrusted input when rendering
+  HTML.
+- Keep credentials in environment or secret stores, never documentation,
+  manifests, QR payloads, logs, or examples.
+- Use locked dependency groups and the repository security audit before release.
 
-- A description of the vulnerability and its potential impact.
-- Steps to reproduce the vulnerability, including any specific configurations or conditions required.
-- Any proof-of-concept code or examples.
-- The version(s) of the module affected.
-- Your name and contact information (optional).
+## Operation classes
 
-We aim to acknowledge receipt of your vulnerability report within 2-3 business days and will work with you to understand and remediate the issue. We may request additional information if needed.
+| Operation | Default classification |
+| :--- | :--- |
+| Quality, consistency, and RASP scans | Read-only, aside from explicitly named report files |
+| `generate_module_docs(..., dry_run=True)` | Read-only proposal |
+| `generate_module_docs(..., dry_run=False)` | Source mutation |
+| `write_pai_md`, maintenance helpers, aggregation | Source or destination mutation |
+| dependency installation, build, start, serve, browser assessment | External process and/or network side effects |
 
-Public disclosure of the vulnerability will be coordinated with you after the vulnerability has been fixed and an update is available, or after a reasonable period if a fix is not immediately possible.
+## Publication boundary
 
-## Security Updates
+Local rendering, checksums, and structural PDF validation do not prove that an
+artifact was published, externally attested, accessible, or safe to deploy.
+Keep release receipts, publication plans, DOI state, and external conformance
+results explicit and separate.
 
-Security patches and updates for this module will be documented in the module changelog and released as part of regular version updates. Critical vulnerabilities may warrant out-of-band releases.
+## Validation
 
-## Scope
+```bash
+uv run --locked bandit -r src/codomyrmex/documentation \
+  -x src/codomyrmex/documentation/docs
+uv run --locked pytest -q tests/unit/documentation tests/integration/documentation
+make docs-check
+```
 
-This security policy applies only to the `Documentation` module within the Codomyrmex project. For project-wide security concerns, please refer to the main project's security policy (if available) or contact the core project maintainers.
+## Navigation
 
-## Best Practices for Using This Module
-
-- Always use the latest stable version of the module and its dependencies (including Docusaurus, Node.js, npm/yarn).
-- **Dependency Security**: Regularly update Docusaurus, Node.js, npm/yarn, and any Docusaurus plugins or themes to their latest secure versions. Monitor for vulnerabilities in these dependencies (e.g., using `npm audit`).
-- **Third-Party Scripts/Plugins**: Be cautious when adding custom JavaScript, CSS, or third-party Docusaurus plugins/themes. Ensure they are from trusted sources and review their code for potential security issues (e.g., XSS vectors, insecure data handling).
-- **Content Security Policy (CSP)**: If your Docusaurus site is hosted, consider implementing a Content Security Policy to mitigate risks like XSS. This can be done via meta tags or HTTP headers.
-- **Cross-Site Scripting (XSS)**: While Docusaurus generates a static site, custom components or improperly handled user-generated content (if any feature were to allow it) could introduce XSS. Sanitize any dynamic data rendered on the site.
-- **Build Environment Security**: Secure the environment where the Docusaurus site is built. Ensure build scripts and tools are trusted.
-- **Deployment Security**: Secure the deployment process and the hosting environment. Use HTTPS for the live documentation site.
-- **Access Control**: If the documentation contains sensitive or internal information and is not intended for public access, ensure appropriate access controls are implemented at the hosting level.
-- Follow the principle of least privilege when configuring access or permissions related to this module (e.g., file system permissions for the build process or server).
-- Regularly review configurations and logs for suspicious activity, especially if the documentation site is publicly hosted.
-
-Thank you for helping keep Codomyrmex and the Documentation module secure. 
-## Navigation Links
-
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- [Repository security policy](../../../SECURITY.md)
+- [Functional specification](SPEC.md)
+- [MCP tool specification](MCP_TOOL_SPECIFICATION.md)

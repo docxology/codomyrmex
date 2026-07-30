@@ -11,11 +11,9 @@
 | `EmbodimentBridge` | Class | WebSocket telemetry and actuator command bridge |
 | `SensorData` | Class | Sensor reading value object |
 | `SimulatedSensor` | Class | Deterministic sensor source |
-| `MockSensor` | Class | Compatibility alias for simulated sensors |
 | `ActuatorCommand` | Class | Actuator command value object |
 | `ActuatorStatus` | Class | Actuator status enum |
 | `SimulatedActuator` | Class | Deterministic actuator sink |
-| `MockActuator` | Class | Compatibility alias for simulated actuators |
 | `ROS2Bridge` | Class | In-process topic bridge |
 | `TopicMessage` | Class | Topic message value object |
 | `TopicInfo` | Class | Topic metadata value object |

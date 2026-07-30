@@ -67,7 +67,7 @@ class TelemetryScript(ScriptBase):
 
     def run(self, args, config: ScriptConfig) -> dict[str, Any]:
         """Execute telemetry demonstrations."""
-        results = {
+        results: dict[str, Any] = {
             "tests_run": 0,
             "tests_passed": 0,
             "spans_created": 0,

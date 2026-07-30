@@ -66,7 +66,7 @@ with contextlib.suppress(ImportError):
     from codomyrmex.agents.openclaw import OpenClawClient
 
 with contextlib.suppress(ImportError):
-    from codomyrmex.agents.openfang import OpenFangClient
+    from codomyrmex.agents.openfang import OpenFangRunner
 
 with contextlib.suppress(ImportError):
     from codomyrmex.agents.opencode import OpenCodeClient

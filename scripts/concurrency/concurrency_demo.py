@@ -11,6 +11,7 @@ import sys
 import threading
 import time
 from pathlib import Path
+from typing import Any
 
 try:
     import codomyrmex
@@ -31,7 +32,7 @@ from codomyrmex.concurrency import (
 try:
     import fakeredis
 except ImportError:
-    fakeredis = None
+    fakeredis: Any = None
 
 
 def section(name: str):

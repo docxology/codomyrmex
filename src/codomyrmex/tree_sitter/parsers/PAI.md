@@ -4,7 +4,7 @@
 
 ## Path
 
-`codomyrmex.coding.parsers.tree_sitter.parsers`
+`codomyrmex.tree_sitter.parsers`
 
 ## Purpose
 

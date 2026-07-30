@@ -3,8 +3,9 @@
 
 This validator is intentionally stricter than a token check.  It verifies that
 the current variable snapshot, figure registry, hydrated Markdown, claim ledger,
-and (when requested) HTML/PDF outputs describe the same source/configuration
-state.  It never regenerates files and never infers missing evidence.
+bibliography audit, and (when requested) HTML/PDF outputs describe the same
+source/configuration state.  It never regenerates files and never infers missing
+evidence.
 
 Examples:
 
@@ -23,12 +24,21 @@ import subprocess
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import yaml
 
+from codomyrmex.manuscript.bibliography import (
+    audit_bibliography,
+    write_bibliography_audit,
+)
+
 TOKEN_PATTERN = re.compile(r"\{\{[A-Z0-9_]+\}\}")
-IMAGE_PATTERN = re.compile(r"!\[(.*?)\]\(figures/([^\)]+\.png)\)")
+IMAGE_PATTERN = re.compile(
+    r"!\[(.*?)\]\(figures/([^\)]+\.png)\)\{([^}]*)\}",
+    re.DOTALL,
+)
+ATTRIBUTE_PATTERN = re.compile(r'([A-Za-z_:][-A-Za-z0-9_:.]*)="([^"]*)"')
 HEX_PATTERN = re.compile(r"[0-9a-fA-F]+")
 NUMERIC_LITERAL_PATTERN = re.compile(r"(?<![A-Za-z_])\d+(?:\.\d+)?%?(?![A-Za-z_])")
 ALLOWED_CLAIM_CLASSES = {
@@ -43,17 +53,148 @@ ALLOWED_CLAIM_STATUSES = {"supported", "conditional", "not_run", "historical"}
 
 
 class _ImageParser(HTMLParser):
-    """Collect HTML image alt attributes without depending on a DOM package."""
+    """Collect HTML image metadata and associated extended descriptions."""
 
     def __init__(self) -> None:
         super().__init__()
         self.images: list[dict[str, str]] = []
+        self.descriptions: dict[str, str] = {}
+        self.duplicate_description_ids: set[str] = set()
+        self._description_id = ""
+        self._description_depth = 0
+        self._description_parts: list[str] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
-        if tag.lower() != "img":
-            return
+        tag_name = tag.lower()
         values = {key.lower(): value or "" for key, value in attrs}
-        self.images.append({"src": values.get("src", ""), "alt": values.get("alt", "")})
+        if self._description_id:
+            self._description_depth += 1
+        if (
+            tag_name == "div"
+            and "figure-long-description" in values.get("class", "").split()
+        ):
+            self._description_id = values.get("id", "")
+            self._description_depth = 1
+            self._description_parts = []
+            return
+        if tag_name != "img":
+            return
+        self.images.append(
+            {
+                "src": values.get("src", ""),
+                "alt": values.get("alt", ""),
+                "aria_describedby": values.get("aria-describedby", ""),
+            }
+        )
+
+    def handle_endtag(self, tag: str) -> None:
+        if not self._description_id:
+            return
+        self._description_depth -= 1
+        if self._description_depth > 0:
+            return
+        description_id = self._description_id
+        if description_id in self.descriptions:
+            self.duplicate_description_ids.add(description_id)
+        self.descriptions[description_id] = " ".join(
+            "".join(self._description_parts).split()
+        )
+        self._description_id = ""
+        self._description_parts = []
+
+    def handle_data(self, data: str) -> None:
+        if self._description_id:
+            self._description_parts.append(data)
+
+
+def _normalise_text(value: object) -> str:
+    """Canonicalise presentation-only typography for semantic comparisons."""
+
+    text = str(value or "").translate(
+        str.maketrans(
+            {
+                "\u00a0": " ",
+                "\u2018": "'",
+                "\u2019": "'",
+                "\u201c": '"',
+                "\u201d": '"',
+            }
+        )
+    )
+    return " ".join(text.split())
+
+
+def _rendered_figure_filename(
+    image: dict[str, str],
+    *,
+    filename_by_description_id: dict[str, str],
+    issues: list[str],
+) -> str:
+    """Resolve a rendered image without logging an embedded binary payload.
+
+    Pandoc may preserve repository-relative figure paths or embed PNGs as data
+    URIs. Embedded images intentionally have no filename, so their explicit
+    ``aria-describedby`` relationship is the stable identity carried from the
+    figure registry into HTML.
+    """
+
+    src = image["src"]
+    if src.startswith("figures/") and src.endswith(".png"):
+        return src.removeprefix("figures/")
+    if src.startswith("data:image/png;base64,"):
+        matching_ids = [
+            description_id
+            for description_id in image["aria_describedby"].split()
+            if description_id in filename_by_description_id
+        ]
+        if len(matching_ids) == 1:
+            return filename_by_description_id[matching_ids[0]]
+        issues.append(
+            "rendered HTML embedded PNG cannot be associated with exactly one "
+            "configured extended-description id"
+        )
+        return ""
+    source_kind = src.split(":", 1)[0] if ":" in src else "relative"
+    issues.append(
+        "rendered HTML contains an unsupported image source "
+        f"(kind={source_kind!r}, characters={len(src)})"
+    )
+    return ""
+
+
+def _validate_figure_reference(
+    *,
+    filename: str,
+    alt_text: str,
+    describedby: str,
+    descriptions: dict[str, str],
+    registry_by_name: dict[str, dict[str, Any]],
+    context: str,
+    issues: list[str],
+) -> str:
+    """Validate one figure's explicit alternative and extended-description link."""
+
+    entry = registry_by_name.get(filename)
+    if entry is None:
+        issues.append(f"{context} references unconfigured figure: {filename}")
+        return ""
+    expected_alt = _normalise_text(entry.get("alt_text"))
+    actual_alt = _normalise_text(alt_text)
+    if not actual_alt:
+        issues.append(f"{context} has empty explicit alt text: {filename}")
+    elif actual_alt != expected_alt:
+        issues.append(f"{context} alt text is stale: {filename}")
+    expected_description_id = f"{entry.get('label', '')}-description"
+    if describedby != expected_description_id:
+        issues.append(f"{context} aria-describedby is stale: {filename}")
+        return ""
+    actual_description = _normalise_text(descriptions.get(describedby, ""))
+    expected_description = _normalise_text(entry.get("long_description"))
+    if not actual_description:
+        issues.append(f"{context} has no linked extended description: {filename}")
+    elif actual_description != expected_description:
+        issues.append(f"{context} extended description is stale: {filename}")
+    return describedby
 
 
 def _hardcoded_numeric_literals(manuscript_dir: Path) -> list[str]:
@@ -177,7 +318,8 @@ def _validate_claim_ledger(
         return 0, {"covered": [], "excluded": [], "unaccounted": []}
     if not isinstance(document, dict) or document.get("schema_version") != "1.0":
         issues.append("claim ledger must declare schema_version 1.0")
-        return 0
+        return 0, {"covered": [], "excluded": [], "unaccounted": []}
+    document = cast("dict[str, Any]", document)
     claims = document.get("claims")
     if not isinstance(claims, list) or not claims:
         issues.append("claim ledger must contain a non-empty claims list")
@@ -192,6 +334,7 @@ def _validate_claim_ledger(
         if not isinstance(claim, dict):
             issues.append(f"{prefix} is not a mapping")
             continue
+        claim = cast("dict[str, Any]", claim)
         claim_id = str(claim.get("id", ""))
         if not claim_id or claim_id in seen:
             issues.append(f"{prefix} has a missing or duplicate id: {claim_id!r}")
@@ -295,7 +438,10 @@ def _validate_claim_ledger(
 
 
 def validate_manuscript_integrity(
-    root: str | Path = ".", *, require_rendered: bool = False
+    root: str | Path = ".",
+    *,
+    require_rendered: bool = False,
+    verify_bibliography_online: bool = False,
 ) -> dict[str, Any]:
     """Return a machine-readable integrity report for the current repository."""
 
@@ -355,8 +501,19 @@ def validate_manuscript_integrity(
         for spec in configured_figures.values()
         if isinstance(spec, dict) and spec.get("filename")
     }
+    try:
+        declared_figure_count = int(str(variables.get("ARTIFACT_FIGURE_COUNT", "")))
+    except ValueError:
+        declared_figure_count = -1
+    if declared_figure_count != len(configured_names):
+        issues.append(
+            "variable snapshot ARTIFACT_FIGURE_COUNT does not match configured figures"
+        )
     registry_names: set[str] = set()
+    registry_by_name: dict[str, dict[str, Any]] = {}
     figure_dir = project_root / "output/figures"
+    if registry.get("schema_version") != 3:
+        issues.append("figure registry must declare schema_version 3")
     for entry in registry_entries:
         if not isinstance(entry, dict):
             issues.append("figure registry contains a non-mapping entry")
@@ -367,6 +524,7 @@ def validate_manuscript_integrity(
                 f"figure registry has missing or duplicate filename: {filename!r}"
             )
         registry_names.add(filename)
+        registry_by_name[filename] = entry
         figure_path = figure_dir / filename
         if not figure_path.is_file():
             issues.append(f"figure registry references missing PNG: {filename}")
@@ -384,12 +542,32 @@ def validate_manuscript_integrity(
             issues.append(f"figure registry contains unconfigured PNG: {filename}")
         else:
             spec = matching_specs[0]
-            for key in ("label", "width", "evidence_class", "caption"):
+            for key in (
+                "label",
+                "width",
+                "evidence_class",
+                "caption",
+                "alt_text",
+                "long_description",
+            ):
                 expected = _resolve_tokens(spec.get(key, ""), variables)
                 if str(entry.get(key, "")) != expected:
                     issues.append(f"figure registry {key} is stale: {filename}")
-            if not str(entry.get("caption", "")).strip():
-                issues.append(f"figure registry has empty caption: {filename}")
+            for key in ("caption", "alt_text", "long_description"):
+                if not str(entry.get(key, "")).strip():
+                    issues.append(f"figure registry has empty {key}: {filename}")
+            if _normalise_text(entry.get("caption")) == _normalise_text(
+                entry.get("alt_text")
+            ):
+                issues.append(
+                    f"figure registry caption and alt text are duplicated: {filename}"
+                )
+            if len(_normalise_text(entry.get("long_description")).split()) <= len(
+                _normalise_text(entry.get("alt_text")).split()
+            ):
+                issues.append(
+                    f"figure registry extended description adds no detail: {filename}"
+                )
     if registry_names != configured_names:
         issues.append("configured figure filenames and registry filenames differ")
 
@@ -398,40 +576,95 @@ def validate_manuscript_integrity(
     if not markdown_files:
         issues.append(f"hydrated manuscript directory is empty: {hydrated_dir}")
     referenced_figures: set[str] = set()
+    referenced_description_ids: set[str] = set()
     for path in markdown_files:
         content = path.read_text(encoding="utf-8")
         if TOKEN_PATTERN.search(content):
             issues.append(f"unresolved token in hydrated manuscript: {path}")
-        for alt, filename in IMAGE_PATTERN.findall(content):
-            referenced_figures.add(filename)
-            if not alt.strip():
-                issues.append(
-                    f"figure has empty Markdown alt text: {path} -> {filename}"
-                )
-            if filename not in configured_names:
-                issues.append(
-                    f"hydrated manuscript references unconfigured figure: {filename}"
-                )
         parser = _ImageParser()
         parser.feed(content)
+        for duplicate_id in sorted(parser.duplicate_description_ids):
+            issues.append(
+                f"duplicate extended-description id in hydrated manuscript: "
+                f"{path} -> {duplicate_id}"
+            )
+        for _caption, filename, attribute_text in IMAGE_PATTERN.findall(content):
+            referenced_figures.add(filename)
+            attributes = dict(ATTRIBUTE_PATTERN.findall(attribute_text))
+            description_id = _validate_figure_reference(
+                filename=filename,
+                alt_text=attributes.get("alt", ""),
+                describedby=attributes.get("aria-describedby", ""),
+                descriptions=parser.descriptions,
+                registry_by_name=registry_by_name,
+                context=f"hydrated Markdown {path}",
+                issues=issues,
+            )
+            if description_id:
+                referenced_description_ids.add(description_id)
         for image in parser.images:
             filename = image["src"].removeprefix("figures/")
             if image["src"].startswith("figures/") and filename.endswith(".png"):
                 referenced_figures.add(filename)
-                if not image["alt"].strip():
-                    issues.append(
-                        f"figure has empty HTML alt text: {path} -> {filename}"
-                    )
-                if filename not in configured_names:
-                    issues.append(
-                        f"hydrated manuscript references unconfigured figure: {filename}"
-                    )
+                description_id = _validate_figure_reference(
+                    filename=filename,
+                    alt_text=image["alt"],
+                    describedby=image["aria_describedby"],
+                    descriptions=parser.descriptions,
+                    registry_by_name=registry_by_name,
+                    context=f"hydrated HTML {path}",
+                    issues=issues,
+                )
+                if description_id:
+                    referenced_description_ids.add(description_id)
     if referenced_figures != configured_names:
         issues.append(
             "hydrated manuscript figure references do not cover the figure registry"
         )
+    expected_description_ids = {
+        f"{entry.get('label', '')}-description"
+        for entry in registry_by_name.values()
+        if entry.get("label")
+    }
+    filename_by_description_id = {
+        f"{entry.get('label', '')}-description": filename
+        for filename, entry in registry_by_name.items()
+        if entry.get("label")
+    }
+    if referenced_description_ids != expected_description_ids:
+        issues.append(
+            "hydrated manuscript extended descriptions do not cover the figure registry"
+        )
 
     claim_count, claim_source_audit = _validate_claim_ledger(project_root, issues)
+    manuscript_sources = sorted((project_root / "docs/manuscript").glob("[0-9]*.md"))
+    bibliography_audit = audit_bibliography(
+        project_root / "docs/manuscript/references.bib",
+        manuscript_sources,
+        verify_online=verify_bibliography_online,
+        workers=2,
+    )
+    write_bibliography_audit(
+        project_root / "output/data/bibliography_audit.json",
+        bibliography_audit,
+    )
+    for field, label in (
+        ("missing_citations", "missing bibliography citations"),
+        ("unused_bibliography_keys", "unused bibliography keys"),
+        ("duplicate_bibliography_keys", "duplicate bibliography keys"),
+        ("unresolved_locators", "bibliography records without primary locators"),
+    ):
+        values = bibliography_audit[field]
+        if values:
+            issues.append(f"{label}: {', '.join(values)}")
+    if verify_bibliography_online:
+        for field, label in (
+            ("online_failures", "unresolved online bibliography records"),
+            ("title_mismatches", "bibliography DOI title mismatches"),
+        ):
+            values = bibliography_audit[field]
+            if values:
+                issues.append(f"{label}: {', '.join(values)}")
     hardcoded_numeric_literals = _hardcoded_numeric_literals(
         project_root / "docs/manuscript"
     )
@@ -445,13 +678,42 @@ def validate_manuscript_integrity(
     html_images = 0
     if html_path.is_file():
         parser = _ImageParser()
-        parser.feed(html_path.read_text(encoding="utf-8"))
+        html_content = html_path.read_text(encoding="utf-8")
+        parser.feed(html_content)
         html_images = len(parser.images)
         if html_images != len(configured_names):
             issues.append("rendered HTML image count does not match configured figures")
-        if any(not image["alt"].strip() for image in parser.images):
-            issues.append("rendered HTML contains an image without non-empty alt text")
-        if TOKEN_PATTERN.search(html_path.read_text(encoding="utf-8")):
+        if parser.duplicate_description_ids:
+            issues.append("rendered HTML contains duplicate extended-description ids")
+        html_description_ids: set[str] = set()
+        html_figure_names: set[str] = set()
+        for image in parser.images:
+            filename = _rendered_figure_filename(
+                image,
+                filename_by_description_id=filename_by_description_id,
+                issues=issues,
+            )
+            if not filename:
+                continue
+            html_figure_names.add(filename)
+            description_id = _validate_figure_reference(
+                filename=filename,
+                alt_text=image["alt"],
+                describedby=image["aria_describedby"],
+                descriptions=parser.descriptions,
+                registry_by_name=registry_by_name,
+                context="rendered HTML",
+                issues=issues,
+            )
+            if description_id:
+                html_description_ids.add(description_id)
+        if html_figure_names != configured_names:
+            issues.append("rendered HTML figures do not cover the figure registry")
+        if html_description_ids != expected_description_ids:
+            issues.append(
+                "rendered HTML extended descriptions do not cover the figure registry"
+            )
+        if TOKEN_PATTERN.search(html_content):
             issues.append("rendered HTML contains unresolved manuscript tokens")
     elif require_rendered:
         issues.append(f"missing rendered HTML: {html_path}")
@@ -494,6 +756,17 @@ def validate_manuscript_integrity(
         "pdf_pages": pdf_pages,
         "claim_count": claim_count,
         "claim_source_audit": claim_source_audit,
+        "bibliography_audit": {
+            "record_count": bibliography_audit["record_count"],
+            "cited_count": bibliography_audit["cited_count"],
+            "cross_reference_count": bibliography_audit["cross_reference_count"],
+            "online_verification": bibliography_audit["online_verification"],
+            "access_limited": [
+                record["key"]
+                for record in bibliography_audit["records"]
+                if record["access_limited"]
+            ],
+        },
         "hardcoded_numeric_literals": hardcoded_numeric_literals,
         "errors": issues,
     }
@@ -507,9 +780,16 @@ def main() -> int:
         action="store_true",
         help="Require and inspect output/paper.html and output/paper.pdf.",
     )
+    parser.add_argument(
+        "--online-bibliography",
+        action="store_true",
+        help="Resolve cited DOI, arXiv, ISBN, and official-URL metadata online.",
+    )
     args = parser.parse_args()
     report = validate_manuscript_integrity(
-        args.repo_root, require_rendered=args.require_rendered
+        args.repo_root,
+        require_rendered=args.require_rendered,
+        verify_bibliography_online=args.online_bibliography,
     )
     print(json.dumps(report, indent=2, sort_keys=True))
     return 0 if report["status"] == "valid" else 1

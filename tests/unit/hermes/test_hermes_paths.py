@@ -54,7 +54,7 @@ def test_session_db_env_prevents_home_database_writes(
     monkeypatch.setenv("HOME", str(fake_home))
     monkeypatch.setenv(hermes_paths.ENV_HERMES_SESSION_DB, str(injected_db))
 
-    from codomyrmex.agents.hermes.hermes_client import HermesClient
+    from codomyrmex.agents.hermes.client_pkg import HermesClient
 
     client = HermesClient(config={"hermes_backend": "none"})
     assert client._session_db_path == str(injected_db)

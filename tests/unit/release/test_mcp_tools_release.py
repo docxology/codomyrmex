@@ -14,9 +14,12 @@ class TestReleaseValidate:
             test_failures=0,
             test_total=100,
             coverage_overall=70.0,
+            type_errors=0,
             cve_count=0,
             secrets_found=0,
             docs_complete=True,
+            artifacts_verified=True,
+            artifact_count=2,
         )
         assert result["status"] == "success"
         assert result["certified"] is True
@@ -32,9 +35,12 @@ class TestReleaseValidate:
             test_failures=5,
             test_total=100,
             coverage_overall=30.0,
+            type_errors=2,
             cve_count=2,
             secrets_found=1,
             docs_complete=False,
+            artifacts_verified=False,
+            artifact_count=2,
         )
         assert result["status"] == "success"
         assert result["certified"] is False
@@ -45,27 +51,37 @@ class TestReleaseValidate:
 
         result = release_validate()
         assert result["status"] == "success"
-        assert "certified" in result
+        assert result["certified"] is False
+        assert any("Missing required evidence" in item for item in result["blockers"])
         assert "checks" in result
 
 
 class TestReleaseBuild:
     """Tests for release_build MCP tool."""
 
-    def test_build_success(self):
+    def test_build_success(self, real_package, tmp_path):
         from codomyrmex.release.mcp_tools import release_build
 
-        result = release_build(name="testpkg", version="1.2.3")
+        result = release_build(
+            name=real_package.metadata.name,
+            version=real_package.metadata.version,
+            source_dir=str(real_package.root),
+            output_dir=str(tmp_path / "dist"),
+        )
         assert result["status"] == "success"
         assert result["success"] is True
         assert len(result["artifacts"]) == 2
-        filenames = [a["filename"] for a in result["artifacts"]]
-        assert any("testpkg-1.2.3" in f for f in filenames)
+        assert all(len(item["sha256"]) == 64 for item in result["artifacts"])
+        assert all(len(item["sha512"]) == 128 for item in result["artifacts"])
 
-    def test_build_missing_name(self):
+    def test_build_missing_name(self, real_package):
         from codomyrmex.release.mcp_tools import release_build
 
-        result = release_build(name="", version="1.0.0")
+        result = release_build(
+            name="",
+            version=real_package.metadata.version,
+            source_dir=str(real_package.root),
+        )
         assert result["status"] == "success"
         assert result["success"] is False
         assert len(result["warnings"]) > 0
@@ -82,6 +98,12 @@ class TestReleaseCertificationReport:
             test_failures=0,
             test_total=500,
             coverage_overall=80.0,
+            type_errors=0,
+            cve_count=0,
+            secrets_found=0,
+            docs_complete=True,
+            artifacts_verified=True,
+            artifact_count=2,
         )
         assert result["status"] == "success"
         assert result["certified"] is True

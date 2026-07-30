@@ -1,119 +1,54 @@
-"""Tests for Sprint 41: Release Certification.
+"""Focused compatibility tests for release certification entry points."""
 
-Covers ReleaseValidator, PackageBuilder, and DistributionManager.
-"""
+from __future__ import annotations
 
-import pytest
-
-from codomyrmex.release.distribution import (
+from codomyrmex.release import (
     DistributionManager,
     DistributionTarget,
-)
-from codomyrmex.release.package_builder import PackageBuilder, PackageMetadata
-from codomyrmex.release.release_validator import (
     ReleaseValidator,
 )
 
-# ─── ReleaseValidator ────────────────────────────────────────────────
+
+def test_strict_certification_passes_with_all_required_evidence(real_package):
+    validator = ReleaseValidator(version=real_package.metadata.version)
+    validator.check_tests(failures=0, total=100)
+    validator.check_coverage(overall=60)
+    validator.check_type_safety(errors=0)
+    validator.check_security(cve_count=0, secrets_found=0)
+    validator.check_documentation(complete=True)
+    validator.check_artifacts(
+        verified=True,
+        artifact_count=len(real_package.report.artifacts),
+    )
+    certification = validator.certify()
+    assert certification.certified
+    assert certification.pass_rate == 1.0
 
 
-class TestReleaseValidator:
-    """Test suite for ReleaseValidator."""
-
-    def test_full_certification_pass(self):
-        v = ReleaseValidator(version="1.0.0")
-        v.check_tests(failures=0, total=9000)
-        v.check_coverage(overall=67, tier1=82)
-        v.check_type_safety(errors=0)
-        v.check_security(cve_count=0, secrets_found=0)
-        v.check_documentation(complete=True)
-        cert = v.certify()
-        assert cert.certified
-        assert cert.pass_rate == pytest.approx(1.0)
-
-    def test_certification_fail_on_tests(self):
-        v = ReleaseValidator()
-        v.check_tests(failures=3, total=100)
-        cert = v.certify()
-        assert not cert.certified
-        assert "Test Suite" in cert.blockers
-
-    def test_certification_fail_on_coverage(self):
-        v = ReleaseValidator()
-        v.check_coverage(overall=50, tier1=60)
-        cert = v.certify()
-        assert not cert.certified
-
-    def test_markdown_output(self):
-        v = ReleaseValidator(version="1.0.0")
-        v.check_tests(failures=0, total=100)
-        cert = v.certify()
-        md = v.to_markdown(cert)
-        assert "v1.0.0" in md
-        assert "CERTIFIED" in md
+def test_certification_fails_when_artifact_evidence_is_absent():
+    validator = ReleaseValidator()
+    validator.check_tests(failures=0, total=100)
+    validator.check_coverage(overall=60)
+    validator.check_type_safety(errors=0)
+    validator.check_security(cve_count=0, secrets_found=0)
+    validator.check_documentation(complete=True)
+    certification = validator.certify()
+    assert not certification.certified
+    assert "Missing required evidence: artifacts" in certification.blockers
 
 
-# ─── PackageBuilder ──────────────────────────────────────────────────
+def test_local_distribution_copies_real_build(real_package, tmp_path):
+    result = DistributionManager(real_package.report).publish(
+        DistributionTarget.LOCAL,
+        destination=tmp_path / "published",
+    )
+    assert result.success
+    assert result.executed
+    assert not result.dry_run
 
 
-class TestPackageBuilder:
-    """Test suite for PackageBuilder."""
-
-    def test_valid_build(self):
-        builder = PackageBuilder(PackageMetadata(name="mypackage", version="1.0.0"))
-        report = builder.build()
-        assert report.success
-        assert len(report.artifacts) == 2
-
-    def test_checksums(self):
-        builder = PackageBuilder(PackageMetadata(name="pkg", version="1.0"))
-        report = builder.build()
-        for artifact in report.artifacts:
-            assert len(artifact.checksum) > 0
-
-    def test_invalid_metadata(self):
-        builder = PackageBuilder(PackageMetadata(name="", version=""))
-        report = builder.build()
-        assert not report.success
-
-    def test_artifact_filenames(self):
-        builder = PackageBuilder(PackageMetadata(name="mylib", version="2.0.0"))
-        report = builder.build()
-        formats = {a.format for a in report.artifacts}
-        assert "sdist" in formats
-        assert "wheel" in formats
-
-
-# ─── DistributionManager ─────────────────────────────────────────────
-
-
-class TestDistributionManager:
-    """Test suite for DistributionManager."""
-
-    def test_preflight_pass(self):
-        builder = PackageBuilder(PackageMetadata(name="pkg", version="1.0"))
-        report = builder.build()
-        dm = DistributionManager(build=report)
-        pf = dm.preflight(DistributionTarget.PYPI)
-        assert pf.ready
-
-    def test_preflight_fail_no_build(self):
-        dm = DistributionManager()
-        pf = dm.preflight(DistributionTarget.PYPI)
-        assert not pf.ready
-
-    def test_publish_pypi(self):
-        builder = PackageBuilder(PackageMetadata(name="codomyrmex", version="1.0.0"))
-        report = builder.build()
-        dm = DistributionManager(build=report)
-        result = dm.publish(DistributionTarget.PYPI)
-        assert result.success
-        assert "pypi.org" in result.url
-
-    def test_publish_github(self):
-        builder = PackageBuilder(PackageMetadata(name="codomyrmex", version="1.0.0"))
-        report = builder.build()
-        dm = DistributionManager(build=report)
-        result = dm.publish(DistributionTarget.GITHUB)
-        assert result.success
-        assert "github.com" in result.url
+def test_github_distribution_is_only_a_plan(real_package):
+    result = DistributionManager(real_package.report).publish(DistributionTarget.GITHUB)
+    assert result.success
+    assert result.dry_run
+    assert not result.executed

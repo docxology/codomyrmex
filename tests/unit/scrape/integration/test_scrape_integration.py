@@ -10,7 +10,7 @@ import os
 import pytest
 
 from codomyrmex.scrape import ScrapeConfig, ScrapeFormat, ScrapeOptions, Scraper
-from codomyrmex.scrape.exceptions import ScrapeError
+from codomyrmex.scrape.exceptions import ScrapingError
 
 
 @pytest.mark.skipif(
@@ -89,7 +89,7 @@ except ImportError:
 
 
 @pytest.mark.skipif(not FIRECRAWL_AVAILABLE, reason="firecrawl-py not installed")
-class TestScrapeErrorHandling:
+class TestScrapingErrorHandling:
     """Test error handling in integration scenarios.
 
     Requires firecrawl-py to be installed.
@@ -104,7 +104,7 @@ class TestScrapeErrorHandling:
     def test_invalid_api_key_handling(self, scraper):
         """Test that invalid API keys are handled gracefully."""
         # This will likely fail, but should raise a proper exception
-        with pytest.raises(ScrapeError):
+        with pytest.raises(ScrapingError):
             scraper.scrape("https://example.com")
 
     def test_invalid_url_handling(self, scraper):

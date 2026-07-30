@@ -24,16 +24,20 @@ from matplotlib.patches import FancyBboxPatch, RegularPolygon
 
 # ── Palettes ───────────────────────────────────────────────────────────────────
 
+# Okabe--Ito-derived hues with luminance adjusted so every non-black role has
+# at least 4.5:1 contrast against the manuscript's light figure background.
+# Shape, position, line style, and direct labels remain the primary encodings;
+# colour is a redundant cue rather than the sole carrier of meaning.
 _OI: dict[str, str] = {
     "black": "#000000",
-    "orange": "#E69F00",
-    "sky": "#56B4E9",
-    "green": "#009E73",
-    "yellow": "#F0E442",
-    "blue": "#0072B2",
-    "vermil": "#D55E00",
-    "pink": "#CC79A7",
-    "grey": "#999999",
+    "orange": "#9C5A00",
+    "sky": "#1B7099",
+    "green": "#007A5A",
+    "yellow": "#806600",
+    "blue": "#0067A3",
+    "vermil": "#B44700",
+    "pink": "#9C4F7C",
+    "grey": "#666666",
 }
 
 _COVER = {
@@ -226,7 +230,7 @@ def _figure_parameter_list(key: str, variable_name: str) -> list[float]:
 
 
 def _figure_metadata(filename: str) -> dict[str, str]:
-    """Return one configured figure record with its caption tokens resolved."""
+    """Return one configured figure record with display tokens resolved."""
     _require_variable("CONFIG_HASH")
     figures = _CONFIG.get("figures", {})
     if not isinstance(figures, dict):
@@ -236,10 +240,11 @@ def _figure_metadata(filename: str) -> dict[str, str]:
             continue
         metadata = {str(key): str(value) for key, value in spec.items()}
         token_pattern = re.compile(r"\{\{([A-Z0-9_]+)\}\}")
-        metadata["caption"] = token_pattern.sub(
-            lambda match: _require_variable(match.group(1)),
-            metadata.get("caption", ""),
-        )
+        for field in ("caption", "alt_text", "long_description"):
+            metadata[field] = token_pattern.sub(
+                lambda match: _require_variable(match.group(1)),
+                metadata.get(field, ""),
+            )
         return metadata
     raise FigureConfigurationError(
         f"Figure {filename!r} is not present in manuscript config metadata"
@@ -289,6 +294,36 @@ def _save(fig: plt.Figure, name: str) -> None:
     fig.savefig(dest, dpi=DPI, bbox_inches="tight", facecolor=fig.get_facecolor())
     plt.close(fig)
     print(f"  saved {dest.relative_to(FIGDIR.parent.parent)}")
+
+
+def _relative_luminance(color: str) -> float:
+    """Return WCAG relative luminance for a six-digit sRGB colour."""
+
+    value = color.removeprefix("#")
+    if not re.fullmatch(r"[0-9A-Fa-f]{6}", value):
+        raise ValueError(f"expected a six-digit sRGB colour, got {color!r}")
+    channels = [int(value[index : index + 2], 16) / 255 for index in (0, 2, 4)]
+    linear = [
+        channel / 12.92 if channel <= 0.04045 else ((channel + 0.055) / 1.055) ** 2.4
+        for channel in channels
+    ]
+    return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2]
+
+
+def _contrast_ratio(first: str, second: str) -> float:
+    """Return the WCAG contrast ratio between two six-digit sRGB colours."""
+
+    lighter, darker = sorted(
+        (_relative_luminance(first), _relative_luminance(second)), reverse=True
+    )
+    return (lighter + 0.05) / (darker + 0.05)
+
+
+def _text_color_on(fill: str) -> str:
+    """Choose white or near-black text with the stronger contrast on ``fill``."""
+
+    candidates = ("#FFFFFF", "#172033")
+    return max(candidates, key=lambda candidate: _contrast_ratio(candidate, fill))
 
 
 def _bezier(
@@ -350,6 +385,7 @@ __all__ = [
     "RegularPolygon",
     "_add_provenance_note",
     "_bezier",
+    "_contrast_ratio",
     "_experiment_float",
     "_experiment_list",
     "_falsification_severity_map",
@@ -363,6 +399,7 @@ __all__ = [
     "_role_min_proposals",
     "_role_threshold",
     "_save",
+    "_text_color_on",
     "_var_float",
     "_var_list",
     "_var_str",

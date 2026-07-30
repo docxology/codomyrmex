@@ -12,7 +12,7 @@
 
 **Pre-P0:** BLOCK — four production files >1k LOC, script-layer figure logic, namespace leak for manuscript tokens, Hermes MCP god-module.
 
-**Post-P0 (this pass):** PARTIAL UNBLOCK — Hermes MCP surface decomposed; figure logic moved to `src/`; manuscript variables namespaced. Remaining BLOCK modules: `hermes_client.py` (1764 LOC), `_provider_router.py` (1138), `falsification_worker.py` (1111), `manuscript/figures/generators.py` (1995 — moved from scripts, per-figure split deferred).
+**Post-P0 (this pass):** PARTIAL UNBLOCK — Hermes MCP surface decomposed; figure logic moved to `src/`; manuscript variables namespaced. Remaining BLOCK surfaces: the Hermes client/provider packages, `falsification/worker.py` (split by attack vector), and `manuscript/figures/generators.py` (1995 — moved from scripts, per-figure split deferred).
 
 **Post-P1 (2026-07-05 continuation):** **UNBLOCK on production >1k LOC** — all four remaining blockers split into subpackages; max production module ~566 LOC (`mcp_tools_pkg/status.py`).
 
@@ -24,9 +24,9 @@
 
 | Target | Before | After |
 | --- | --- | --- |
-| Hermes MCP | `mcp_tools.py` 2327 LOC | Shim 7 LOC + `mcp_tools_pkg/` (max 566 LOC/file) |
+| Hermes MCP | `mcp_tools.py` 2327 LOC | Facade 7 LOC + `mcp_tools_pkg/` (max 566 LOC/file) |
 | Figure script | `scripts/generate_manuscript_figures.py` 1995 LOC | Script 12 LOC; logic in `src/codomyrmex/manuscript/figures/generators.py` |
-| Manuscript variables | `src/manuscript_variables.py` 690 LOC | `src/codomyrmex/manuscript/variables.py` + 9 LOC compat shim |
+| Manuscript variables | `src/manuscript_variables.py` 690 LOC | Canonical implementation in `src/codomyrmex/manuscript/variables.py` |
 | Tests | Monkeypatch `mcp_tools._get_client` | `_client._factory_override` hook |
 
 New packages:
@@ -40,10 +40,10 @@ New packages:
 
 | Target | Before | After |
 | --- | --- | --- |
-| Falsification | `falsification_worker.py` 1111 LOC | Shim 9 LOC + `falsification/` (checks per attack vector, max ~111 LOC/check) |
+| Falsification | `falsification/worker.py` | `falsification/` checks per attack vector |
 | Figure generators | `generators.py` 1995 LOC | `_common.py` + 10 per-figure modules (max ~281 LOC) + `orchestrator.py` |
-| Hermes client | `hermes_client.py` 1764 LOC | Shim 9 LOC + `client_pkg/` mixins (max 334 LOC) |
-| Provider router | `_provider_router.py` 1138 LOC | Shim 18 LOC + `provider_router_pkg/` (max 445 LOC) |
+| Hermes client | `client_pkg/` | Focused mixins (max 334 LOC) |
+| Provider router | `provider_router_pkg/` | Focused provider/context modules (max 445 LOC) |
 
 Verification (targeted):
 
@@ -68,7 +68,7 @@ Verification (targeted):
 
 - Mirror `mcp_tools_pkg/` categories in `hermes/client/` subpackage; MCP tools become one-line delegates.
 - Split `generators.py` into `palette.py`, `loaders.py`, one file per `fig_*()` (~200 LOC each).
-- Split `falsification_worker.py` by `AttackVector` registry (pattern used successfully in `colony_kernel` elsewhere).
+- Keep `falsification/worker.py` and its attack-vector checks separated by concern.
 - **Positive control:** `colony_kernel` — 11 focused files, clear models contract, strong tests.
 
 ### 3. Spaghetti / branching
@@ -88,9 +88,9 @@ Verification (targeted):
 | File | LOC | Status |
 | --- | ---: | --- |
 | `manuscript/figures/generators.py` | 1995 | Moved to src; split P1 |
-| `agents/hermes/hermes_client.py` | 1764 | P1 |
-| `agents/hermes/_provider_router.py` | 1138 | P1 |
-| `colony_kernel/falsification_worker.py` | 1111 | P1 |
+| `agents/hermes/client_pkg/` | focused package | P1 |
+| `agents/hermes/provider_router_pkg/` | focused package | P1 |
+| `colony_kernel/falsification/worker.py` | split implementation | P1 |
 | ~~`agents/hermes/mcp_tools.py`~~ | ~~2327~~ | **Resolved** → `mcp_tools_pkg/` |
 
 ---
@@ -99,8 +99,8 @@ Verification (targeted):
 
 | Priority | Item |
 | --- | --- |
-| P1 | Split `hermes_client.py` + `_provider_router.py` |
-| P1 | Split `falsification_worker.py` by attack vector |
+| P1 | Review the focused Hermes client and provider packages |
+| P1 | Keep falsification checks separated by attack vector |
 | P1 | Split `generators.py` per figure + registry |
 | P2 | Relocate `src/codomyrmex/tests/` → top-level `tests/` | **Done** |
 | P2 | Raise coverage gate 40% → 60% | **Done** (`pyproject.toml`, `Makefile`) |
@@ -147,8 +147,8 @@ Full table: [thermo-nuclear-module-rollup-2026-07-05.md](thermo-nuclear-module-r
 
 BLOCK modules after P0:
 
-- `agents` — max file now `hermes_client.py` (1764), not MCP tools
-- `colony_kernel` — `falsification_worker.py` (1111)
+- `agents` — the Hermes client package remains the largest agent surface, not MCP tools
+- `colony_kernel` — `falsification/worker.py` and per-vector checks
 - `manuscript` — `figures/generators.py` (1995)
 
 ---

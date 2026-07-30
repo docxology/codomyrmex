@@ -9,7 +9,7 @@ import webbrowser
 
 from codomyrmex.logging_monitoring import get_logger, setup_logging
 
-# Standard logging import kept for compatibility with basicConfig structure
+# Standard logging remains available for the fallback basicConfig path.
 
 # --- Determine project structure and add appropriate path to sys.path for package import ---
 
@@ -399,7 +399,7 @@ def aggregate_docs(source_root: str | None = None, dest_root: str | None = None)
     This copies canonical documentation files from each src/codomyrmex/<module>/ directory into
     the destination docs/modules/<module>/ folder so the documentation site can present a unified
     view. The project-root docs/modules/ directory is the canonical location for documentation
-    output; the legacy documentation/docs/modules/ path has been removed.
+    output; the obsolete documentation/docs/modules/ path has been removed.
 
     By default, it scans the project `src/codomyrmex/` directory and copies recognized
     documentation files and the `docs/` subfolder contents.

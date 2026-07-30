@@ -24,10 +24,10 @@ except ImportError:
 from codomyrmex.deployment import (
     CanaryAnalyzer,
     CanaryDecision,
-    CanaryStrategy,
+    CanaryDeployment,
     DeploymentManager,
     DeploymentTarget,
-    RollingStrategy,
+    RollingDeployment,
 )
 
 
@@ -56,7 +56,7 @@ def run_orchestration():
         print(f"   🔍 Health checking {target.id}...")
         return True
 
-    rolling = RollingStrategy(batch_size=1, delay_seconds=0.1, health_check=simple_hc)
+    rolling = RollingDeployment(batch_size=1, delay_seconds=0.1, health_check=simple_hc)
     result = manager.deploy("api-service", "v1.2.0", strategy=rolling, targets=targets)
 
     if result.success:
@@ -70,7 +70,7 @@ def run_orchestration():
     # 4. Canary Rollout
     print("\n🐥 Step 2: Starting Canary Rollout of 'api-service' v1.3.0-rc1")
 
-    canary_strat = CanaryStrategy(
+    canary_strat = CanaryDeployment(
         stages=[33.0, 66.0, 100.0], stage_duration_seconds=0.1, health_check=simple_hc
     )
 
@@ -115,7 +115,7 @@ def run_orchestration():
         rb_result = manager.rollback(
             "api-service",
             "v1.2.0",
-            strategy=RollingStrategy(batch_size=3),
+            strategy=RollingDeployment(batch_size=3),
             targets=targets,
         )
         if rb_result.success:

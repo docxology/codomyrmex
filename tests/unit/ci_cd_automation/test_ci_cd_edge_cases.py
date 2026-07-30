@@ -29,7 +29,6 @@ from codomyrmex.ci_cd_automation.performance_optimizer import (
 )
 from codomyrmex.ci_cd_automation.pipeline import (
     AsyncPipelineManager,
-    JobStatus,
     Pipeline,
     PipelineJob,
     PipelineManager,
@@ -176,11 +175,11 @@ class TestErrorHandlingAndRetries:
         assert job.allow_failure is True
 
         # Simulate failure
-        job.status = JobStatus.FAILURE
+        job.status = PipelineStatus.FAILURE
 
         # Stage should still be able to continue
         assert job.allow_failure
-        assert job.status == JobStatus.FAILURE
+        assert job.status == PipelineStatus.FAILURE
 
     def test_stage_allow_failure_flag(self):
         """Test stage with allow_failure flag."""

@@ -1,12 +1,12 @@
 from dataclasses import dataclass, field
 from typing import Any
 
-from codomyrmex.cerebrum.core.exceptions import CaseNotFoundError, InvalidCaseError
 from codomyrmex.cerebrum.core.utils import (
     compute_cosine_similarity,
     compute_euclidean_distance,
     normalize_features,
 )
+from codomyrmex.exceptions.cerebrum import CaseNotFoundError, InvalidCaseError
 from codomyrmex.logging_monitoring import get_logger
 
 """Case management for case-based reasoning."""

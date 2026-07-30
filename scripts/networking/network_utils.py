@@ -6,9 +6,7 @@ Usage:
     python network_utils.py <command> [options]
 """
 
-logger = logging.getLogger(__name__)
-
-
+import logging
 import sys
 from pathlib import Path
 
@@ -19,11 +17,12 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import logging
 import socket
 import time
 import urllib.error
 import urllib.request
+
+logger = logging.getLogger(__name__)
 
 
 def check_port(host: str, port: int, timeout: float = 2) -> bool:

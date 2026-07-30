@@ -654,7 +654,7 @@ MODULE_META = {
         "desc": "Code quality analysis, linting, and security scanning. Provides AST-based analysis, style checking, and vulnerability detection across Python source files.",
         "env_vars": [],
         "mcp_tools": [],
-        "config_notes": "Analysis rules and severity thresholds are configurable. Linting integrates with ruff and black for formatting checks.",
+        "config_notes": "Analysis rules and severity thresholds are configurable. Linting and formatting integrate with ruff.",
     },
     "system_discovery": {
         "desc": "Module discovery and health monitoring. Provides health_check, list_modules, and dependency_tree tools for understanding system state and module availability.",

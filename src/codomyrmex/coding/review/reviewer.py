@@ -47,7 +47,7 @@ class CodeReviewer(
     """Main code reviewer class with pyscn integration.
 
     Implementation is organized into five mixins for maintainability:
-    - LintToolsMixin: External tool runners (pylint, flake8, mypy, bandit, vulture)
+    - LintToolsMixin: External tool runners (pylint, ruff, ty, bandit, vulture)
     - AnalysisPatternsMixin: Complexity, dead code, architecture analysis
     - PerformanceOptMixin: Performance optimization suggestions
     - DashboardMixin: Quality dashboard and metrics computation
@@ -120,11 +120,9 @@ class CodeReviewer(
         """Check which analysis tools are available."""
         tools = {
             "pylint": False,
-            "flake8": False,
-            "mypy": False,
+            "ruff": False,
+            "ty": False,
             "bandit": False,
-            "black": False,
-            "isort": False,
             "pytest": False,
             "coverage": False,
             "radon": False,

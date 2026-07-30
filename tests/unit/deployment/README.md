@@ -12,7 +12,6 @@ Validation coverage, fixtures, and regression checks for Deployment.
 - `SPEC.md` – File
 - `__init__.py` – File
 - `test_deployment.py` – File
-- `test_deployment_core.py` – File
 - `test_deployment_manager_core.py` – File
 - `test_deployment_mcp_tools.py` – File
 - `test_deployment_pipeline.py` – File

@@ -6,7 +6,7 @@ Counter (basic + dict-labels branch), Gauge (basic + dict-labels branch),
 Histogram (empty/non-empty get_value, bucket counting),
 Summary (empty/non-empty, quantiles), Timer (context manager),
 MetricsRegistry (factory methods, collect, get),
-Metrics alias (counter/gauge/histogram/summary with labels, export,
+Metrics concrete class (counter/gauge/histogram/summary with labels, export,
 export_prometheus plain + labelled), get_metrics helper.
 """
 
@@ -518,7 +518,7 @@ class TestMetricsRegistry:
         assert s.quantiles == [0.5, 0.9]
 
 
-# ── Metrics alias class ────────────────────────────────────────────────
+# ── Metrics concrete class ─────────────────────────────────────────────
 
 
 @pytest.mark.unit

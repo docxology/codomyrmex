@@ -18,7 +18,7 @@ Python decorator from `src/codomyrmex/model_context_protocol/decorators.py` that
 
 ### Dynamic Tools (Auto-Discovered Tools)
 
-Eligible MCP tools discovered at runtime via `@mcp_tool` decorators across the package tree. Discovery and registration filters mean that physical decorator lines are not a one-to-one runtime count: the current source inventory reports 150 non-test `mcp_tools.py` files and 623 production decorators; the merged runtime manifest exposes 608 tools, the standalone full launcher exposes 605, and the HTTP default exposes 10 readonly tools.
+Eligible MCP tools discovered at runtime via `@mcp_tool` decorators across the package tree. Discovery and registration filters mean that physical decorator lines are not a one-to-one runtime count: the current authoritative inventory reports 150 non-test `mcp_tools.py` files, 623 production decorators, and 608 merged runtime-manifest tools in the complete locked dependency profile. Other transport profiles are enumerated at server startup rather than copied here as a second static count.
 
 ### Foundation / Core / Service / Application Layers
 

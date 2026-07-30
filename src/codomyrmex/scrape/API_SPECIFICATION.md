@@ -18,7 +18,7 @@ The `scrape` module provides capabilities for extracting data from web sources. 
 - **`SearchResult`**: Result of a search operation.
 
 ### 2.3 Exceptions
-- **`ScrapeError`**: Base exception.
+- **`ScrapingError`**: Base exception.
 - **`ScrapeConnectionError`**: Network failures.
 - **`ScrapeTimeoutError`**: Operation timeouts.
 - **`FirecrawlError`**: Provider-specific errors.
@@ -34,6 +34,6 @@ options = ScrapeOptions(formats=[ScrapeFormat.MARKDOWN])
 try:
     result = scraper.scrape("https://example.com", options)
     print(result.content)
-except ScrapeError as e:
+except ScrapingError as e:
     print(f"Scrape failed: {e}")
 ```

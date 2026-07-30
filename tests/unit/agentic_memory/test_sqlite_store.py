@@ -5,7 +5,7 @@ import tempfile
 
 import pytest
 
-from codomyrmex.agentic_memory.models import Memory, MemoryImportance, MemoryType
+from codomyrmex.agentic_memory.core.models import Memory, MemoryImportance, MemoryType
 from codomyrmex.agentic_memory.sqlite_store import SQLiteStore
 
 

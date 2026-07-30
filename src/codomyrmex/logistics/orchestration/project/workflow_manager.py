@@ -314,7 +314,7 @@ class WorkflowManager:
         return self.executions.get(execution_id)
 
     def get_performance_summary(self) -> dict[str, Any]:
-        """Legacy wrapper to get performance summary."""
+        """Return aggregate execution counts and duration metrics."""
         return {
             "total_executions": len(self.executions),
             "average_duration": sum(e.duration or 0 for e in self.executions.values())

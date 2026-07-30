@@ -21,7 +21,6 @@ from codomyrmex.performance.monitoring.performance_monitor import (
     get_system_metrics,
     monitor_performance,
     performance_context,
-    profile_function,
     profile_memory_usage,
     track_resource_usage,
 )
@@ -377,10 +376,6 @@ class TestMonitorPerformanceDecorator:
             failing()
         assert len(pm.metrics) == 1
         assert pm.metrics[0].function_name == "failing"
-
-    def test_profile_function_alias(self):
-        """profile_function should be the same as monitor_performance."""
-        assert profile_function is monitor_performance
 
 
 @pytest.mark.unit

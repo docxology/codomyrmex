@@ -67,7 +67,6 @@ def rectify_docs(start_path):
                 ".venv",
                 ".github",
                 "node_modules",
-                ".mypy_cache",
                 "docs",
                 "documentation",
             )

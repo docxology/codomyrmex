@@ -1,6 +1,6 @@
 """MCP tool definitions for the formal_verification module.
 
-Exposes the mcp-solver 6-tool interface as MCP tools that can be
+Exposes the mcp-solver-compatible 9-tool interface as MCP tools that can be
 discovered and invoked by Claude Code and other MCP-compatible agents.
 
 References:

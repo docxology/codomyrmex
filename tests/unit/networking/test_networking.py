@@ -397,9 +397,7 @@ class TestSSHClient:
 
         import paramiko
 
-        assert isinstance(
-            client.client.get_missing_host_key_policy(), paramiko.RejectPolicy
-        )
+        assert isinstance(client.client._policy, paramiko.RejectPolicy)
 
     def test_ssh_client_key_based_auth(self):
         client = SSHClient(
@@ -419,9 +417,7 @@ class TestSSHClient:
             username="user",
             allow_unknown_host_keys=True,
         )
-        assert isinstance(
-            client.client.get_missing_host_key_policy(), paramiko.WarningPolicy
-        )
+        assert isinstance(client.client._policy, paramiko.WarningPolicy)
 
     @requires_ssh
     def test_ssh_client_connect_and_execute(self):

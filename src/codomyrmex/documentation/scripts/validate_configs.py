@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
-Configuration Validator for Codomyrmex Examples
+Configuration Validator for Codomyrmex Repository Configuration
 
-This script validates all YAML and JSON configuration files in the examples directory.
-It checks syntax, required fields, and schema compliance.
+This script validates YAML and JSON files under ``config/``. It checks syntax,
+generic object shape, and the shape of optional shared sections without
+assuming that every domain-specific configuration has the same schema.
 
 Usage:
     python src/codomyrmex/documentation/scripts/validate_configs.py
@@ -46,7 +47,7 @@ except ImportError:
 
 
 class ConfigValidator:
-    """Validates configuration files for Codomyrmex examples."""
+    """Validate heterogeneous repository configuration files."""
 
     def __init__(self, project_root: Path):
         """Initialize the config validator."""
@@ -67,6 +68,16 @@ class ConfigValidator:
     ) -> dict[str, Any]:
         """Validate all configuration files."""
         logger.info("Starting configuration validation...")
+        self.validation_results = {
+            "scope": "config/**/*.{json,yaml,yml}",
+            "path_base": "project-root",
+            "total_files": 0,
+            "valid_files": 0,
+            "invalid_files": 0,
+            "errors": [],
+            "warnings": [],
+            "file_results": {},
+        }
 
         if not YAML_AVAILABLE:
             logger.warning("PyYAML not available. YAML validation will be skipped.")
@@ -78,7 +89,9 @@ class ConfigValidator:
 
         for file_path, file_type in config_files:
             result = self._validate_config_file(file_path, file_type, fix, verbose)
-            self.validation_results["file_results"][str(file_path)] = result
+            self.validation_results["file_results"][self._display_path(file_path)] = (
+                result
+            )
 
             if result["valid"]:
                 self.validation_results["valid_files"] += 1
@@ -105,31 +118,40 @@ class ConfigValidator:
 
     def _find_config_files(self) -> list[tuple[Path, str]]:
         """Find all configuration files in config directory."""
-        config_files = []
+        config_files: list[tuple[Path, str]] = []
 
         if not self.config_dir.exists():
             logger.error("Config directory not found: %s", self.config_dir)
             return config_files
 
         # Find YAML files
-        for yaml_file in self.config_dir.rglob("*.yaml"):
+        for yaml_file in sorted(self.config_dir.rglob("*.yaml")):
             config_files.append((yaml_file, "yaml"))
-        for yml_file in self.config_dir.rglob("*.yml"):
+        for yml_file in sorted(self.config_dir.rglob("*.yml")):
             config_files.append((yml_file, "yaml"))
 
         # Find JSON files
-        for json_file in self.config_dir.rglob("*.json"):
+        for json_file in sorted(self.config_dir.rglob("*.json")):
             config_files.append((json_file, "json"))
 
         logger.info("Found %s configuration files", len(config_files))
         return config_files
+
+    def _display_path(self, file_path: Path) -> str:
+        """Return a portable project-relative path for reports."""
+        try:
+            return (
+                file_path.resolve().relative_to(self.project_root.resolve()).as_posix()
+            )
+        except ValueError:
+            return file_path.name
 
     def _validate_config_file(
         self, file_path: Path, file_type: str, fix: bool, verbose: bool
     ) -> dict[str, Any]:
         """Validate a single configuration file."""
         result = {
-            "file": str(file_path),
+            "file": self._display_path(file_path),
             "type": file_type,
             "valid": True,
             "errors": [],
@@ -148,11 +170,10 @@ class ConfigValidator:
         # Validate syntax
         self._validate_syntax(config, result)
 
-        # Validate structure
-        self._validate_structure(config, result)
-
-        # Validate content
-        self._validate_content(config, result)
+        if isinstance(config, dict):
+            # Validate only shared sections that are actually present.
+            self._validate_structure(config, result)
+            self._validate_content(config, result)
 
         # Attempt fixes if requested
         if fix and not result["valid"]:
@@ -166,7 +187,7 @@ class ConfigValidator:
 
     def _load_config_file(
         self, file_path: Path, file_type: str, result: dict[str, Any]
-    ) -> dict[str, Any] | None:
+    ) -> Any | None:
         """Load configuration from file."""
         try:
             with open(file_path, encoding="utf-8") as f:
@@ -189,11 +210,12 @@ class ConfigValidator:
 
         except Exception as e:
             result["valid"] = False
-            result["errors"].append(f"Parse error: {e}")
+            message = str(e).replace(str(file_path), self._display_path(file_path))
+            result["errors"].append(f"Parse error: {message}")
 
         return None
 
-    def _validate_syntax(self, config: dict[str, Any], result: dict[str, Any]):
+    def _validate_syntax(self, config: Any, result: dict[str, Any]):
         """Validate basic syntax and structure."""
         if not isinstance(config, dict):
             result["valid"] = False
@@ -205,44 +227,35 @@ class ConfigValidator:
             result["warnings"].append("Configuration file is empty")
 
     def _validate_structure(self, config: dict[str, Any], result: dict[str, Any]):
-        """Validate configuration structure."""
-        # Required top-level sections for examples
-        expected_sections = ["output", "logging"]
-
-        missing_required = []
-        for section in expected_sections:
-            if section not in config:
-                missing_required.append(section)
-
-        if missing_required:
-            result["valid"] = False
-            result["errors"].append(
-                f"Missing required sections: {', '.join(missing_required)}"
-            )
-
-        # Validate output section
+        """Validate optional shared-section structure."""
         if "output" in config:
             output_config = config["output"]
             if not isinstance(output_config, dict):
+                result["valid"] = False
                 result["errors"].append("output section must be a dictionary")
             elif "format" not in output_config:
                 result["warnings"].append("output section missing 'format' field")
 
-        # Validate logging section
         if "logging" in config:
             logging_config = config["logging"]
             if not isinstance(logging_config, dict):
+                result["valid"] = False
                 result["errors"].append("logging section must be a dictionary")
             elif "level" not in logging_config:
                 result["warnings"].append("logging section missing 'level' field")
 
     def _validate_content(self, config: dict[str, Any], result: dict[str, Any]):
         """Validate configuration content and values."""
-        # Validate logging level
-        if "logging" in config and "level" in config["logging"]:
+        logging_config = config.get("logging")
+        if isinstance(logging_config, dict) and "level" in logging_config:
             valid_levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-            log_level = config["logging"]["level"]
-            if log_level not in valid_levels:
+            log_level = logging_config["level"]
+            is_environment_expression = (
+                isinstance(log_level, str)
+                and log_level.startswith("${")
+                and log_level.endswith("}")
+            )
+            if log_level not in valid_levels and not is_environment_expression:
                 result["warnings"].append(
                     f"logging.level '{log_level}' not in valid levels: {valid_levels}"
                 )
@@ -288,23 +301,30 @@ class ConfigValidator:
         print(f"   Success Rate: {results['success_rate']:.1f}%")
         print("\n" + "=" * 80)
 
-    def save_report(self, results: dict[str, Any], output_file: str | None = None):
+    def save_report(
+        self,
+        results: dict[str, Any],
+        output_file: str | Path | None = None,
+    ) -> None:
         """Save validation results to file."""
         if output_file is None:
-            output_file = (  # type: ignore
+            output_path = (
                 self.project_root
                 / "src"
                 / "codomyrmex"
                 / "examples"
                 / "config_validation_report.json"
             )
+        else:
+            output_path = Path(output_file)
 
-        output_file.parent.mkdir(parents=True, exist_ok=True)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(output_file, "w", encoding="utf-8") as f:  # type: ignore
+        with output_path.open("w", encoding="utf-8") as f:
             json.dump(results, f, indent=2, ensure_ascii=False)
+            f.write("\n")
 
-        logger.info("Report saved to: %s", output_file)
+        logger.info("Report saved to: %s", output_path)
 
 
 def main():
@@ -319,12 +339,16 @@ def main():
         "--verbose", "-v", action="store_true", help="Show detailed validation results"
     )
     parser.add_argument("--output", "-o", help="Output file for validation report")
+    parser.add_argument(
+        "--project-root",
+        type=Path,
+        default=Path(__file__).resolve().parents[4],
+        help="Repository root containing config/ (default: inferred)",
+    )
 
     args = parser.parse_args()
 
-    # Determine project root based on this script's location
-    project_root = Path(__file__).parent.parent.parent.parent.parent
-    validator = ConfigValidator(project_root)
+    validator = ConfigValidator(args.project_root.resolve())
 
     # Run validation
     results = validator.validate_all_configs(fix=args.fix, verbose=args.verbose)

@@ -1,16 +1,19 @@
 # ML Pipeline — Functional Specification
 
-**Version**: v1.3.0 | **Status**: Stub | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Experimental | **Last Updated**: July 2026
 
 ## Purpose
 
-The `ml_pipeline` module provides a lightweight interface for defining and executing machine learning pipelines. Currently implemented as a stub with two MCP tools for pipeline creation and execution. For full workflow orchestration, see the `orchestrator` module.
+The `ml_pipeline` module provides a lightweight interface for producing
+pipeline-definition and execution-shaped receipts. Its two functions are
+exported from the Python package and discovered as MCP tools. They do not
+execute machine-learning workloads.
 
 ## Architecture
 
 ```
 ml_pipeline/
-├── __init__.py    # Module marker (no public exports)
+├── __init__.py    # Explicit exports for both public functions
 └── mcp_tools.py   # 2 MCP tools: ml_pipeline_create, ml_pipeline_execute
 ```
 
@@ -52,8 +55,8 @@ Executes a pipeline by name with provided inputs. Currently a pass-through that 
 
 | Capability | Status | Target |
 | :--- | :--- | :--- |
-| Pipeline definition | ✅ Stub | — |
-| Pipeline execution | ✅ Stub | — |
+| Pipeline-definition receipt | Implemented | — |
+| Execution-shaped echo receipt | Implemented | — |
 | Step validation | ❌ Planned | v1.3.0 |
 | Pipeline persistence | ❌ Planned | v1.3.0 |
 | Data loading steps | ❌ Planned | v1.3.0 |
@@ -65,13 +68,12 @@ Executes a pipeline by name with provided inputs. Currently a pass-through that 
 | Module | Relationship |
 | :--- | :--- |
 | `orchestrator` | General workflow orchestration (production-ready alternative) |
-| `feature_store` | Feature management and serving for ML pipelines |
 | `eval_harness` | Model evaluation pipeline components |
 | `model_ops` | ML model lifecycle management |
 
 ## Constraints
 
-- **Stub**: No actual ML execution — returns echo responses
+- **No ML execution**: `ml_pipeline_execute` returns an echo receipt
 - **Stateless**: No pipeline persistence between calls
 - **Zero-Mock**: Future tests must use real pipeline execution
 

@@ -19,7 +19,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from codomyrmex.agentic_memory.models import MemoryImportance, MemoryType
+from codomyrmex.agentic_memory.core.models import MemoryImportance, MemoryType
 
 logger = logging.getLogger(__name__)
 

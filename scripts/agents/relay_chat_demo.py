@@ -79,7 +79,7 @@ def main():
     # 2. Start Agents (in background threads)
     # The AutonomousAgent.start() method blocks if background=False
     # We want them parallel, so we run them in threads or async
-    # AutonomousAgent uses ClaudeCodeEndpoint which is threaded, so .start() is non-blocking?
+    # AutonomousAgent uses the threaded RelayEndpoint, so .start() is non-blocking.
     # Let's check implementation. created file says:
     # self.endpoint.start() ... if not background: while loop
     # So start(background=True) is non-blocking.

@@ -11,16 +11,13 @@ import pytest
 
 from codomyrmex.deployment import (
     BlueGreenDeployment,
-    BlueGreenStrategy,
     CanaryDeployment,
-    CanaryStrategy,
     DeploymentManager,
     DeploymentResult,
     DeploymentState,
     DeploymentTarget,
     GitOpsSynchronizer,
     RollingDeployment,
-    RollingStrategy,
     create_strategy,
 )
 from codomyrmex.deployment.health_checks import (
@@ -270,21 +267,21 @@ def test_canary_deployment_stops_on_failure():
 def test_create_strategy_rolling():
     """Test factory creates rolling strategy."""
     s = create_strategy("rolling", batch_size=3, delay_seconds=0)
-    assert isinstance(s, RollingStrategy)
+    assert isinstance(s, RollingDeployment)
 
 
 @pytest.mark.unit
 def test_create_strategy_blue_green():
     """Test factory creates blue-green strategy."""
     s = create_strategy("blue_green")
-    assert isinstance(s, BlueGreenStrategy)
+    assert isinstance(s, BlueGreenDeployment)
 
 
 @pytest.mark.unit
 def test_create_strategy_canary():
     """Test factory creates canary strategy."""
     s = create_strategy("canary", stages=[25, 50, 100], stage_duration_seconds=0)
-    assert isinstance(s, CanaryStrategy)
+    assert isinstance(s, CanaryDeployment)
 
 
 @pytest.mark.unit
@@ -602,7 +599,7 @@ def test_canary_deployment_single_stage():
 def test_create_strategy_rolling_defaults():
     """create_strategy('rolling') with defaults uses batch_size=1."""
     s = create_strategy("rolling")
-    assert isinstance(s, RollingStrategy)
+    assert isinstance(s, RollingDeployment)
 
 
 @pytest.mark.unit

@@ -61,7 +61,7 @@ Full Mamba block forward pass.
 
 ##### `__call__(x: np.ndarray) -> np.ndarray`
 
-Alias for `forward`.
+Callable interface for running the forward pass.
 
 ---
 

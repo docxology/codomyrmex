@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 import docker
+from docker import errors as docker_errors
 from loguru import logger
 
 
@@ -82,7 +83,7 @@ class ResourceTuner:
                 memory_limit_bytes=mem_limit,
                 memory_percent=mem_percent,
             )
-        except docker.errors.NotFound as exc:
+        except docker_errors.NotFound as exc:
             raise ValueError(f"Container '{container_id}' not found") from exc
         except Exception as e:
             logger.error("Failed to analyze container %s: %s", container_id, e)

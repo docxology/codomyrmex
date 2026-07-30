@@ -33,11 +33,9 @@ from codomyrmex.encryption import (
     Signer,
     compute_hmac,
     decrypt,
-    decrypt_data,
     decrypt_file,
     derive_key_hkdf,
     encrypt,
-    encrypt_data,
     encrypt_file,
     generate_aes_key,
     generate_key,
@@ -1122,16 +1120,6 @@ class TestConvenienceFunctions:
     def test_generate_aes_key_length(self):
         key = generate_aes_key()
         assert len(key) == 32
-
-    def test_encrypt_data_decrypt_data(self):
-        key = generate_aes_key()
-        ctx = _suppress_cbc_warning()
-        try:
-            ct = encrypt_data(b"data", key, "AES")
-            pt = decrypt_data(ct, key, "AES")
-        finally:
-            ctx.__exit__(None, None, None)
-        assert pt == b"data"
 
     def test_encrypt_file_decrypt_file(self):
         key = generate_aes_key()

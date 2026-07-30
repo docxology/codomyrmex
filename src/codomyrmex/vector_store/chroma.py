@@ -97,8 +97,8 @@ class ChromaVectorStore(VectorStore):
 
         Note: `filter_fn` requires pulling all metadata and discarding results
         if evaluated purely in Python. Chroma accepts a `where` dict for meta filtering,
-        but for compatibility with VectorStore ABC, we will over-fetch and filter in memory,
-        or just apply it if small.
+        but the VectorStore contract requires over-fetching and filtering in memory,
+        or applying the predicate after a small result set is returned.
         """
         # If we have a filter_fn, we might need to fetch more than k.
         fetch_k = max(k * 5, 100) if filter_fn else k

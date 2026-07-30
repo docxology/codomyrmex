@@ -50,20 +50,17 @@ These functions are primarily sourced from the `env_checker.py` script.
     - `False` if version requirements are not met or validation fails
 - **Events Emitted**: N/A
 
-### Function 4: `validate_environment_completeness(repo_root: str | None = None) -> bool`
+### Function 4: `validate_environment(min_python: str = "3.10") -> ValidationReport`
 
-- **Source**: `environment_setup.env_checker.validate_environment_completeness`
-- **Description**: Performs comprehensive validation of the development environment, checking Python version, dependencies, environment variables, and configuration. This is the primary validation function to call before running Codomyrmex operations.
+- **Source**: `environment_setup.env_checker.validate_environment`
+- **Description**: Performs comprehensive validation of the Python runtime and core dependencies.
 - **Method**: N/A (Python function)
-- **Path**: N/A (Importable function: `from codomyrmex.environment_setup.env_checker import validate_environment_completeness`)
+- **Path**: N/A (Importable function: `from codomyrmex.environment_setup import validate_environment`)
 - **Parameters/Arguments**:
-    - `repo_root` (str | None, optional): The root directory of the repository. If not provided, defaults to the parent directory of the codomyrmex package.
+    - `min_python` (str, optional): Minimum Python version, defaulting to `"3.10"`.
 - **Request Body**: N/A
-- **Returns/Response**: `bool`
-    - `True` if all environment checks pass (dependencies installed, .env file loaded, Python version valid)
-    - `False` otherwise
+- **Returns/Response**: `ValidationReport` with `valid`, `missing_items`, and `details` fields.
 - **Events Emitted**: N/A
-- **Note**: This function is not re-exported from `__init__.py`; import it directly from `env_checker`.
 
 ### Function 5: `generate_environment_report() -> str`
 

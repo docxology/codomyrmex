@@ -30,7 +30,6 @@ try:
         ParseError,
         RateLimitError,
         RequestError,
-        ScrapeError,
         ScrapeTimeoutError,
         ScrapeValidationError,
         ScrapingError,
@@ -447,8 +446,8 @@ class TestScrapeExceptions:
         assert err.reason == "IP banned"
 
     def test_scrape_error_alias(self):
-        # ScrapeError is an alias for ScrapingError
-        assert ScrapeError is ScrapingError
+        # ScrapingError is an alias for ScrapingError
+        assert ScrapingError is ScrapingError
 
     def test_scrape_validation_error_fields(self):
         err = ScrapeValidationError("bad url", field="url", value="not-a-url")

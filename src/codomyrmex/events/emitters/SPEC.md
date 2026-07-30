@@ -26,7 +26,7 @@ Facade pattern over `EventBus`. Emitters encapsulate a source identifier and del
 |--------|-----------|---------|-------------|
 | `__init__` | `source: str`, `event_bus: EventBus \ | None` | `None` Initialize with source ID and optional bus |
 | `emit` | `event_type`, `data`, `correlation_id`, `metadata`, `priority` | `None` | Sync publish; no-op if disabled |
-| `emit_sync` | (same as `emit`) | `None` | Alias for `emit` |
+| `emit_sync` | (same as `emit`) | `None` | Explicit synchronous emission entry point |
 | `emit_async` | (same as `emit`) | `None` | Async publish via `bus.publish_async` |
 | `emit_batch` | `events: list[dict]` | `None` | Sync publish multiple events |
 | `emit_batch_async` | `events: list[dict]` | `None` | Async publish multiple events via `asyncio.gather` |

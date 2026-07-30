@@ -55,7 +55,7 @@ Five modules: `protocol.py` (shared vocabulary: roles, messages, task types), `p
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `resolve` | `votes: list[Vote], strategy: str, threshold: float` | `ConsensusResult` | Dispatch to majority/weighted/veto strategy |
+| `resolve` | `votes: list[SwarmVote], strategy: str, threshold: float` | `ConsensusResult` | Dispatch to majority/weighted/veto strategy |
 
 ## Dependencies
 

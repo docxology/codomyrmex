@@ -71,8 +71,9 @@ Full pipeline: falsification → budget pre-check → trust/role refresh → gat
 evaluation.
 
 **Does not consume budget.** Budget is consumed only if a caller later invokes
-`record_outcome`; the kernel does not attest that execution occurred between
-the two calls.
+an accepted ordinary or attested outcome path. With attestation enabled, this
+method appends local proposal and verdict events. Those events do not attest
+that an external action occurred.
 
 **Parameters**
 
@@ -117,14 +118,17 @@ def record_outcome(
 
 Record a caller-supplied consequence report. Updates the agent's trust score,
 consumes a supplied cost or the proposal estimate, and adjusts pheromone
-traces. The method does not require a matching prior EXECUTE decision and does
-not attest the reported action or outcome.
+traces. In the default configuration this method accepts a caller report
+without requiring a matching prior EXECUTE decision or attesting the action.
+When the kernel is configured with required attestation, callers must use the
+authenticated `authorize_execution` → `record_execution_receipt` path and
+call `record_attested_outcome` instead.
 
 **Parameters**
 
 | Name | Type | Description |
 |------|------|-------------|
-| `proposal` | `ActionProposal` | Caller-supplied proposal context; not checked against a prior gate authorization. |
+| `proposal` | `ActionProposal` | Caller-supplied proposal context. On this ordinary method it is not checked against a prior gate authorization. |
 | `outcome` | `dict[str, Any]` | Caller-supplied result dict. Recognised keys: `summary` (str), `repair_needed` (bool), `action_taken` (str), `cost` (dict matching `ResourceCost` fields). |
 | `tests_passed` | `bool` | Caller's report of whether tests passed. |
 | `human_feedback` | `str \| None` | Optional operator feedback. Parsed tokens: `"good"/"approve"/"yes"/"+" → +1.0`, `"bad"/"reject"/"no"/"-" → -1.0`, numeric string → clamped to `[-1.0, 1.0]`, `None`/unrecognised → `0.0`. |
@@ -202,6 +206,7 @@ Return a dashboard snapshot of the colony's current state.
 
 | Key | Type | Description |
 |-----|------|-------------|
+| `tick_count` | `int` | Number of colony ticks elapsed since kernel initialization |
 | `pheromone_summary` | `dict` | `total_signals` (int) and `top_signals` (list of top-10 strongest signals) |
 | `budget_usage` | `dict` | Current period consumption vs ceiling from `ResourceLedger.usage_summary()` |
 | `role_distribution` | `dict` | Agent count per `AgentRole` value |
@@ -231,6 +236,32 @@ imposes no clock rate.
 
 **Side effects**: mutates `PheromoneStore` and potentially `ResourceLedger`
 internal state.
+
+---
+
+## Optional authenticated, pruning, and emergency methods
+
+These public methods are available in addition to the five core lifecycle
+methods above. Authenticated execution methods require a kernel configured with
+attestation; they raise `ValueError` when that mode is disabled or when the
+required preceding ledger event is absent.
+
+`attestation_mode="optional"` records proposal/verdict events and permits both
+the ordinary and linked outcome paths. `attestation_mode="required"` rejects
+all direct `record_outcome()` calls—even after a receipt—and requires
+`record_attested_outcome()` so the outcome itself is appended to the ledger.
+The chain establishes local identity, ordering, linkage, and tamper evidence.
+Because the receipt and outcome payloads remain caller-supplied, it does not
+independently observe external actuation or establish deployment safety.
+
+| Method | Purpose | Output |
+|--------|---------|--------|
+| `authorize_execution(proposal_id, actor_id)` | Authorize an attested EXECUTE verdict | `LedgerEvent` |
+| `record_execution_receipt(proposal_id, receipt, actor_id="executor")` | Link a caller receipt to an authorization | `LedgerEvent` |
+| `record_attested_outcome(proposal, outcome, tests_passed, human_feedback=None, actor_id="observer")` | Record a consequence after an execution receipt | `ConsequenceRecord` |
+| `attestation_status(run_id=None)` | Validate the current or requested attestation ledger run | `LedgerValidationResult \| None` |
+| `pruning_report(module_registry=None)` | Scan a registry or derive one from DEPENDENCY traces | `dict[str, Any]` |
+| `calm_down(reason="emergency_brake")` | Clear live pheromones and reset budget/tick state while preserving history | `dict[str, Any]` |
 
 ---
 

@@ -141,10 +141,12 @@ class TestRepositoryMetadata:
         )
         assert metadata.name == "test-repo"
 
-    def test_metadata_manager(self) -> None:
-        """RepositoryMetadataManager should be instantiable."""
+    def test_metadata_manager(self, monkeypatch, tmp_path: Path) -> None:
+        """The default metadata path should honor the user-state override."""
+        metadata_file = tmp_path / "state" / "repository_metadata.json"
+        monkeypatch.setenv("CODOMYRMEX_REPOSITORY_METADATA_FILE", str(metadata_file))
         manager = RepositoryMetadataManager()
-        assert manager is not None
+        assert manager.metadata_file == metadata_file
 
 
 class TestGitAddFiles:

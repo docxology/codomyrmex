@@ -623,19 +623,9 @@ def _count_falsification_checks(project_root: Path) -> int:
 
 
 def _count_figure_generators(project_root: Path) -> int:
-    orchestrator = (
-        project_root
-        / "src"
-        / "codomyrmex"
-        / "manuscript"
-        / "figures"
-        / "orchestrator.py"
-    )
-    source = orchestrator.read_text(encoding="utf-8")
-    count = len(re.findall(r'^\s*\("[^"]+\.png",\s*fig_', source, flags=re.MULTILINE))
-    if count <= 0:
-        raise RuntimeError(f"Figure generator registry is empty in {orchestrator}")
-    return count
+    """Count the executable registry, including multiline tuple entries."""
+
+    return len(_figure_generator_filenames(project_root))
 
 
 def _figure_generator_filenames(project_root: Path) -> list[str]:
@@ -1168,6 +1158,8 @@ def compute_variables(
     experiment = _required_mapping(config, "experiment", config_path)
     figure_config = _required_mapping(config, "figures", config_path)
     figure_parameters = _required_mapping(experiment, "figure_parameters", config_path)
+    protocols = _required_mapping(config, "protocols", config_path)
+    mcp_protocol = _required_mapping(protocols, "mcp", config_path)
     research_roadmap = _research_roadmap_entries(
         _required_list(config, "research_roadmap", config_path),
         config_path,
@@ -1211,6 +1203,12 @@ def compute_variables(
     github_repository = str(
         _required_value(publication, "github_repository", config_path)
     )
+    mcp_official_revision = str(
+        _required_value(mcp_protocol, "official_revision", config_path)
+    )
+    mcp_specification_url = str(
+        _required_value(mcp_protocol, "specification_url", config_path)
+    )
     config_version = str(_required_value(paper, "version", config_path))
     acknowledgement_text = _format_acknowledgements(acknowledgements, config_path)
 
@@ -1253,8 +1251,8 @@ def compute_variables(
         _CONSEQUENCE_HISTORY_MAX,
         ConsequenceMemory,
     )
+    from codomyrmex.colony_kernel.falsification import AttackVector
     from codomyrmex.colony_kernel.falsification.models import _SEVERITY_RANK
-    from codomyrmex.colony_kernel.falsification_worker import AttackVector
     from codomyrmex.colony_kernel.kernel import ColonyKernel
     from codomyrmex.colony_kernel.models import (
         _TRUST_DELTA_FAIL,
@@ -1294,6 +1292,41 @@ def compute_variables(
     models_source = (colony_kernel_dir / "models.py").read_text(encoding="utf-8")
     pruning_source = (colony_kernel_dir / "pruning_daemon.py").read_text(
         encoding="utf-8"
+    )
+    mcp_client_path = (
+        codomyrmex_pkg / "model_context_protocol" / "transport" / "client.py"
+    )
+    mcp_server_path = (
+        codomyrmex_pkg / "model_context_protocol" / "transport" / "server.py"
+    )
+    mcp_client_source = mcp_client_path.read_text(encoding="utf-8")
+    mcp_server_source = mcp_server_path.read_text(encoding="utf-8")
+    revision_match = re.search(
+        r'protocol_version:\s*str\s*=\s*"([^"]+)"',
+        mcp_client_source,
+    )
+    if revision_match is None:
+        raise RuntimeError(
+            f"Could not derive the advertised MCP revision from {mcp_client_path}"
+        )
+    mcp_advertised_revision = revision_match.group(1)
+    server_revisions = set(
+        re.findall(r'"protocolVersion":\s*"([^"]+)"', mcp_server_source)
+    )
+    if server_revisions != {mcp_advertised_revision}:
+        raise RuntimeError(
+            "MCP client and server advertise inconsistent protocol revisions: "
+            f"client={mcp_advertised_revision!r}, server={sorted(server_revisions)!r}"
+        )
+    mcp_revision_matches_official = mcp_advertised_revision == mcp_official_revision
+    mcp_compatibility_status = (
+        "revision match measured"
+        if mcp_revision_matches_official
+        else (
+            "not established: Codomyrmex advertises "
+            f"{mcp_advertised_revision}, while the referenced official revision is "
+            f"{mcp_official_revision}"
+        )
     )
     gate_weights = _gate_weights(actuation_gate_source)
     gate_weight_budget = gate_weights["budget_ok"]
@@ -1575,6 +1608,8 @@ def compute_variables(
         _required_value(spec, "width", config_path)
         _required_value(spec, "evidence_class", config_path)
         _required_value(spec, "caption", config_path)
+        _required_value(spec, "alt_text", config_path)
+        _required_value(spec, "long_description", config_path)
         configured_filenames.append(filename)
     if configured_filenames != generator_filenames:
         raise RuntimeError(
@@ -1942,6 +1977,8 @@ def compute_variables(
         "CONFIG_COLONY_KERNEL_SUBSYSTEMS": str(colony_kernel_subsystems),
         "CONFIG_OPERATIONAL_SUBSYSTEM_COUNT": str(operational_subsystem_count),
         "CONFIG_MCP_TOOL_COUNT": str(mcp_tool_count),
+        "CONFIG_MCP_OFFICIAL_REVISION": mcp_official_revision,
+        "CONFIG_MCP_SPECIFICATION_URL": mcp_specification_url,
         "CONFIG_GATE_COMPONENT_COUNT": str(len(gate_weights)),
         "CONFIG_GATE_DECISION_COUNT": str(gate_decision_count),
         "CONFIG_GATE_EXECUTE_THRESHOLD": str(gate_execute_threshold),
@@ -2131,12 +2168,17 @@ def compute_variables(
         "REPRO_INVENTORY_WORKFLOW_COUNT": str(inventory["workflow_count"]),
         # RESULT tokens
         "RESULT_TEST_COUNT": str(test_count),
-        # CONFIG_TEST_COUNT: alias for RESULT_TEST_COUNT — 05_experimental_setup.md line 11
-        # uses the CONFIG_ prefix to reference the same live pytest-collected count.
+        # CONFIG_TEST_COUNT maps to the same live pytest-collected count used by
+        # RESULT_TEST_COUNT — 05_experimental_setup.md line 11 uses the CONFIG_ prefix.
         "CONFIG_TEST_COUNT": str(test_count),
         "RESULT_COVERAGE_PCT": str(coverage_pct),
         "RESULT_RUFF_ERRORS": str(ruff_errors),
         "RESULT_TY_ERRORS": str(ty_errors),
+        "RESULT_MCP_ADVERTISED_REVISION": mcp_advertised_revision,
+        "RESULT_MCP_OFFICIAL_REVISION_MATCH": str(
+            mcp_revision_matches_official
+        ).lower(),
+        "RESULT_MCP_COMPATIBILITY_STATUS": mcp_compatibility_status,
         "RESULT_ATTESTATION_EVENT_COUNT": str(attestation_event_count),
         "RESULT_ATTESTATION_CHAIN_VALID": str(attestation_validation.valid).lower(),
         "RESULT_BENCHMARK_TASK_COUNT": str(benchmark_metrics["task_count"]),
@@ -2202,16 +2244,49 @@ def compute_variables(
     # Captions therefore share exactly the same live values as prose, tables, and
     # figure annotations, while the source Markdown contains no duplicated caption
     # text or filenames.
+    figure_accessibility_rows: list[str] = []
     for key, spec in figure_config.items():
         slug = re.sub(r"[^A-Z0-9]+", "_", str(key).upper()).strip("_")
         variables[f"FIGURE_FILENAME_{slug}"] = str(spec["filename"])
         variables[f"FIGURE_LABEL_{slug}"] = str(spec["label"])
         variables[f"FIGURE_WIDTH_{slug}"] = str(spec["width"])
         variables[f"FIGURE_EVIDENCE_{slug}"] = str(spec["evidence_class"])
-        variables[f"FIGURE_CAPTION_{slug}"] = _render_template(
+        caption = _render_template(
             str(spec["caption"]),
             variables,
             source_label=f"figure metadata {key}",
         )
+        alt_text = _render_template(
+            str(spec["alt_text"]),
+            variables,
+            source_label=f"figure alternative {key}",
+        )
+        long_description = _render_template(
+            str(spec["long_description"]),
+            variables,
+            source_label=f"figure long description {key}",
+        )
+        if not alt_text.strip() or not long_description.strip():
+            raise RuntimeError(f"Figure {key!r} has an empty text alternative")
+        if alt_text.strip() == caption.strip():
+            raise RuntimeError(
+                f"Figure {key!r} must distinguish its concise alternative from its caption"
+            )
+        if len(long_description.split()) <= len(alt_text.split()):
+            raise RuntimeError(
+                f"Figure {key!r} long description must add information beyond its alt text"
+            )
+        variables[f"FIGURE_CAPTION_{slug}"] = caption
+        variables[f"FIGURE_ALT_{slug}"] = alt_text
+        variables[f"FIGURE_LONG_DESCRIPTION_{slug}"] = long_description
+        alt_cell = alt_text.replace("|", "\\|")
+        description_cell = long_description.replace("|", "\\|")
+        figure_accessibility_rows.append(
+            f"| `{spec['filename']}` — `{spec['evidence_class']}` | "
+            f"**Short alternative:** {alt_cell} "
+            f"**Extended description:** {description_cell} |"
+        )
+
+    variables["RESULT_FIGURE_ACCESSIBILITY_ROWS"] = "\n".join(figure_accessibility_rows)
 
     return variables

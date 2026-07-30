@@ -13,6 +13,7 @@ Usage:
 import argparse
 import sys
 from pathlib import Path
+from typing import Any
 
 # Bootstrap path only — not needed when package is already installed
 try:
@@ -38,15 +39,15 @@ _REPO_ROOT: Path = Path(__file__).resolve().parent.parent.parent.parent
 _HERMES_CONFIG_PATH: Path = _REPO_ROOT / "config" / "agents" / "hermes.yaml"
 
 
-def _resolve_config() -> dict:
+def _resolve_config() -> dict[str, Any]:
     """Load agent config and extract Hermes-specific settings.
 
     Returns:
         Flat dict of effective hermes config values.
     """
     try:
-        config = get_config()
-        return config.get("hermes", {}) if isinstance(config, dict) else {}
+        hermes_cfg = get_config().to_dict().get("hermes", {})
+        return hermes_cfg if isinstance(hermes_cfg, dict) else {}
     except (OSError, ValueError):
         return {}
 
@@ -82,10 +83,10 @@ def _load_sorted_sessions(store: object, limit: int) -> list:
     Returns:
         List of session objects, most-recent first.
     """
-    session_ids: list[str] = store.list_sessions()  # type: ignore[attr-defined]
+    session_ids: list[str] = store.list_sessions()
     all_sessions: list = []
     for sid in session_ids:
-        sess = store.load(sid)  # type: ignore[attr-defined]
+        sess = store.load(sid)
         if sess:
             all_sessions.append(sess)
     all_sessions.sort(key=lambda s: s.updated_at, reverse=True)
@@ -99,17 +100,17 @@ def _print_session(index: int, session: object) -> None:
         index: 1-based position in the displayed list.
         session: A session object loaded from SQLiteSessionStore.
     """
-    name_label = f" — {session.name}" if getattr(session, "name", None) else ""  # type: ignore[attr-defined]
-    print_success(f"[{index}] Session: {session.session_id}{name_label}")  # type: ignore[attr-defined]
-    print_info(f"    Created:  {session.created_at}")  # type: ignore[attr-defined]
-    turns: int = session.message_count // 2  # type: ignore[attr-defined]
-    print_info(f"    Turns:    {turns} (Total messages: {session.message_count})")  # type: ignore[attr-defined]
+    name_label = f" — {session.name}" if getattr(session, "name", None) else ""
+    print_success(f"[{index}] Session: {session.session_id}{name_label}")
+    print_info(f"    Created:  {session.created_at}")
+    turns: int = session.message_count // 2
+    print_info(f"    Turns:    {turns} (Total messages: {session.message_count})")
 
-    if session.metadata:  # type: ignore[attr-defined]
-        print_info(f"    Traces:   {session.metadata}")  # type: ignore[attr-defined]
+    if session.metadata:
+        print_info(f"    Traces:   {session.metadata}")
 
-    if session.message_count > 0:  # type: ignore[attr-defined]
-        first_content: str = session.messages[0]["content"]  # type: ignore[attr-defined]
+    if session.message_count > 0:
+        first_content: str = session.messages[0]["content"]
         preview: str = (
             first_content[:60] + "..." if len(first_content) > 60 else first_content
         )
@@ -152,20 +153,20 @@ def main() -> int:
     # Import Hermes modules — fail fast if unavailable (ImportError is a structural issue,
     # not a runtime edge case; surfacing it explicitly helps developers debug broken installs).
     try:
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
     except ImportError as exc:
         print_error(f"Required Hermes modules unavailable: {exc}")
         print_error("  Ensure codomyrmex package is installed: uv sync")
         return 1
 
-    hermes_client: HermesClient = HermesClient()  # type: ignore
+    hermes_client: HermesClient = HermesClient()
 
     # Priority: --db-path CLI > hermes.yaml session_db > client default
     db_path: Path = _resolve_db_path(
         args.db_path,
         config_db_path,
-        hermes_client._session_db_path,  # type: ignore[attr-defined]
+        hermes_client._session_db_path,
     )
 
     if not db_path.exists():
@@ -180,14 +181,14 @@ def main() -> int:
     with SQLiteSessionStore(str(db_path)) as store:
         # If --search is provided, filter by name substring (v0.2.0)
         if args.search:
-            matches = store.search_sessions(args.search)  # type: ignore[attr-defined]
+            matches = store.search_sessions(args.search)
             if not matches:
                 print_info(f"No sessions matching '{args.search}'.")
                 return 0
             print_success(f"Found {len(matches)} session(s) matching '{args.search}':")
             print_info("─" * 60)
             for i, match in enumerate(matches[: args.limit], 1):
-                sess = store.load(match["session_id"])  # type: ignore[attr-defined]
+                sess = store.load(match["session_id"])
                 if sess:
                     _print_session(i, sess)
         else:
@@ -197,7 +198,7 @@ def main() -> int:
                 print_info("No execution histories found.")
                 return 0
 
-            total_available = len(store.list_sessions())  # type: ignore[attr-defined]
+            total_available = len(store.list_sessions())
             print_success(f"Total historical sessions recorded: {total_available}")
             print_info("─" * 60)
 

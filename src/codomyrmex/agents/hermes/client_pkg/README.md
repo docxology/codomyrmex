@@ -1,5 +1,5 @@
 # agents.hermes.client_pkg
 
-Hermes client mixins split from `hermes_client.py`.
+Hermes client mixins organized into focused modules.
 
-Import via `codomyrmex.agents.hermes.hermes_client` (shim) or submodules here.
+Import via `codomyrmex.agents.hermes.client_pkg` or its focused submodules.

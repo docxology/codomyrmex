@@ -60,7 +60,7 @@ When refactoring code:
 
 1. **Preserve Functionality**: Maintain original behavior while improving structure
 2. **Explain Changes**: Describe what was improved and why
-3. **Maintain Compatibility**: Ensure backward compatibility unless specified otherwise
+3. **Maintain Contracts**: Preserve declared interfaces unless the task specifies a migration
 4. **Add Tests**: Suggest test cases for the refactored code
 
 ## Constraints and Limitations

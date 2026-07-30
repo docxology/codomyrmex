@@ -4,7 +4,7 @@
 - **Parent**: [[Parent Directory Name]](../AGENTS.md)
 - **Self**: [[Directory Name] Agents](AGENTS.md)
 - **Children**:
-    - [[Subdirectory Name]](subdirectory/AGENTS.md)
+    - `[Subdirectory Name]` — `subdirectory/AGENTS.md`
 - **Key Artifacts**:
     - [Functional Spec](SPEC.md)
     - [Human Readme](README.md)
@@ -36,4 +36,3 @@
 - **Parent Directory**: [[Parent Directory Name]](../README.md) - Parent directory documentation
 - **Project Root**: [README](../../README.md) - Main project documentation
 - **Source Root**: [src](../../README.md) - Source code documentation (if applicable)
-

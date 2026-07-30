@@ -26,12 +26,12 @@ def ledger() -> ResourceLedger:
 def tight_budget() -> ResourceBudget:
     """A budget with very low caps to trigger violations easily."""
     return ResourceBudget(
-        max_llm_calls_per_hour=5,
+        max_llm_calls=5,
         max_runtime_seconds=10.0,
         max_risk_level=0.3,
         max_human_attention_minutes=5.0,
         max_merge_risk=0.2,
-        total_doc_debt_allowed=1.0,
+        max_doc_debt=1.0,
         max_security_exposure=0.1,
     )
 
@@ -82,12 +82,12 @@ class TestCanAffordAffordable:
 
     def test_all_dimensions_near_limit_is_affordable(self) -> None:
         budget = ResourceBudget(
-            max_llm_calls_per_hour=10,
+            max_llm_calls=10,
             max_runtime_seconds=100.0,
             max_risk_level=0.5,
             max_human_attention_minutes=20.0,
             max_merge_risk=0.4,
-            total_doc_debt_allowed=5.0,
+            max_doc_debt=5.0,
             max_security_exposure=0.3,
         )
         ledger = ResourceLedger(budget=budget)
@@ -544,7 +544,7 @@ class TestCheckBudget:
 
     def test_check_budget_exceeded_returns_reason(self) -> None:
         """Cost exceeding llm_calls cap → rejected with reason mentioning 'llm_calls'."""
-        budget = ResourceBudget(max_llm_calls_per_hour=3)
+        budget = ResourceBudget(max_llm_calls=3)
         ledger = ResourceLedger(budget=budget)
 
         ok, reason = ledger.check_budget(_cost(llm_calls=10))

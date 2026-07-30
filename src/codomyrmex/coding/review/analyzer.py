@@ -22,7 +22,7 @@ from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
-from ._compat import monitor_performance
+from ._instrumentation import monitor_performance
 from .models import (
     ToolNotFoundError,
 )

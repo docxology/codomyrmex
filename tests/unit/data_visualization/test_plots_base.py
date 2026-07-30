@@ -133,11 +133,11 @@ class TestBasePlotRender:
     def test_render_subclass_name_appears(self):
         from codomyrmex.data_visualization.plots._base import BasePlot
 
-        class BarPlot(BasePlot):
+        class ExamplePlot(BasePlot):
             pass
 
-        p = BarPlot(title="Bar")
-        assert "BarPlot" in p.render()
+        p = ExamplePlot(title="Bar")
+        assert "ExamplePlot" in p.render()
 
     def test_render_empty_title(self):
         from codomyrmex.data_visualization.plots._base import BasePlot

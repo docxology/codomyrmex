@@ -88,7 +88,8 @@ under concurrency, restart, or external workloads.
 [@fig:replay_contract] summarizes the four semantic states and the repeatability
 assertion in a compact visual form.
 
-![{{FIGURE_CAPTION_REPLAY_CONTRACT}}](figures/{{FIGURE_FILENAME_REPLAY_CONTRACT}}){#{{FIGURE_LABEL_REPLAY_CONTRACT}} width={{FIGURE_WIDTH_REPLAY_CONTRACT}}}
+![{{FIGURE_CAPTION_REPLAY_CONTRACT}}](figures/{{FIGURE_FILENAME_REPLAY_CONTRACT}}){#{{FIGURE_LABEL_REPLAY_CONTRACT}} width={{FIGURE_WIDTH_REPLAY_CONTRACT}} alt="{{FIGURE_ALT_REPLAY_CONTRACT}}" aria-describedby="{{FIGURE_LABEL_REPLAY_CONTRACT}}-description"}
+<div id="{{FIGURE_LABEL_REPLAY_CONTRACT}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_REPLAY_CONTRACT}}</div>
 
 ## Gate landscape and attainable scores {#sec:results-gate}
 
@@ -121,7 +122,8 @@ floor and trust-credit tier; the horizontal discontinuities come from effective 
 thresholds at {{CONFIG_HAZARD_MEDIUM_THRESHOLD}} and {{CONFIG_HAZARD_HIGH_THRESHOLD}}. The pressure axis should be read as
 $\max(\mathrm{RISK},\mathrm{FAILURE})$, not RISK alone.
 
-![{{FIGURE_CAPTION_GATE_SCORE_HEATMAP}}](figures/{{FIGURE_FILENAME_GATE_SCORE_HEATMAP}}){#{{FIGURE_LABEL_GATE_SCORE_HEATMAP}} width={{FIGURE_WIDTH_GATE_SCORE_HEATMAP}}}
+![{{FIGURE_CAPTION_GATE_SCORE_HEATMAP}}](figures/{{FIGURE_FILENAME_GATE_SCORE_HEATMAP}}){#{{FIGURE_LABEL_GATE_SCORE_HEATMAP}} width={{FIGURE_WIDTH_GATE_SCORE_HEATMAP}} alt="{{FIGURE_ALT_GATE_SCORE_HEATMAP}}" aria-describedby="{{FIGURE_LABEL_GATE_SCORE_HEATMAP}}-description"}
+<div id="{{FIGURE_LABEL_GATE_SCORE_HEATMAP}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_GATE_SCORE_HEATMAP}}</div>
 
 ## Trust accounting path {#sec:results-trust}
 
@@ -142,11 +144,14 @@ does not itself authorize a proposal.
 alternating or stochastic outcomes need not converge, and the current constant-step
 clipped update has no restoring term.
 
-![{{FIGURE_CAPTION_TRUST_TRAJECTORY}}](figures/{{FIGURE_FILENAME_TRUST_TRAJECTORY}}){#{{FIGURE_LABEL_TRUST_TRAJECTORY}} width={{FIGURE_WIDTH_TRUST_TRAJECTORY}}}
+![{{FIGURE_CAPTION_TRUST_TRAJECTORY}}](figures/{{FIGURE_FILENAME_TRUST_TRAJECTORY}}){#{{FIGURE_LABEL_TRUST_TRAJECTORY}} width={{FIGURE_WIDTH_TRUST_TRAJECTORY}} alt="{{FIGURE_ALT_TRUST_TRAJECTORY}}" aria-describedby="{{FIGURE_LABEL_TRUST_TRAJECTORY}}-description"}
+<div id="{{FIGURE_LABEL_TRUST_TRAJECTORY}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_TRUST_TRAJECTORY}}</div>
 
-The fixture is also not an attested credential protocol. The current MCP outcome tool
+The fixture is also not an attested credential protocol. The ordinary MCP outcome tool
 does not require a matching prior EXECUTE record, so an operator or client can submit
-the reports that drive this path. This is a deployment blocker for adversarial trust.
+the reports that drive this path. Local lifecycle attestation can protect linkage, but
+does not independently verify competence or external execution. This remains a
+deployment blocker for adversarial trust.
 
 ## Subtractive signal dynamics {#sec:results-decay}
 
@@ -193,11 +198,13 @@ backend.
 The default MCP compatibility path still has a proposal–outcome linkage gap:
 `colony_propose_action` does not return a durable authorization record consumed by
 `colony_record_outcome`, and the outcome tool synthesizes a proposal from caller input.
-The additive `AttestationLedger` now provides proposal, verdict, authorization,
-receipt, outcome, rejection, and error events; its optional/required modes reject
-unlinked outcomes and duplicate nonces. That ledger is not automatically inserted into
-the default caller-reported MCP path, so this release does not claim that every outcome
-report is authenticated.
+The additive `AttestationLedger` provides proposal, verdict, authorization, receipt,
+outcome, rejection, and error events and rejects duplicate nonces. Optional mode records
+proposal/verdict events and offers a fully linked outcome route while preserving the
+ordinary caller-report method. Required mode rejects that ordinary method and makes the
+linked route mandatory. The default MCP singleton does not enable either mode, and even
+a valid local chain does not independently observe external actuation. This release
+therefore does not claim that every outcome report is authenticated or externally true.
 
 ## What has not been measured {#sec:results-not-measured}
 

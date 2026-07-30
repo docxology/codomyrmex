@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
@@ -53,34 +52,3 @@ class DeploymentResult:
             "errors": self.errors,
             "metadata": self.metadata,
         }
-
-
-@dataclass
-class StrategyProgress:
-    """Tracks the progress of a strategy execution."""
-
-    service: str
-    version: str
-    strategy_name: str
-    status: DeploymentState = DeploymentState.PENDING
-    started_at: float = field(default_factory=time.time)
-    completed_at: float | None = None
-    traffic_percentage: float = 0.0
-    metadata: dict[str, Any] = field(default_factory=dict)
-
-    @property
-    def duration_seconds(self) -> float:
-        end = self.completed_at or time.time()
-        return end - self.started_at
-
-    def complete(self) -> None:
-        """Mark as completed."""
-        self.status = DeploymentState.COMPLETED
-        self.completed_at = time.time()
-        self.traffic_percentage = 100.0
-
-    def fail(self, reason: str = "") -> None:
-        """Mark as failed."""
-        self.status = DeploymentState.FAILED
-        self.completed_at = time.time()
-        self.metadata["failure_reason"] = reason

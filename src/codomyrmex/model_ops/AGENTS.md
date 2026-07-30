@@ -15,7 +15,6 @@ Model operations including evaluation, fine-tuning, optimization, and deployment
 - `__init__.py` – Python package entry point — exports and initialization
 - `datasets/` – datasets module implementation
 - `evaluation/` – evaluation module implementation
-- `feature_store/` – feature store module implementation
 - `fine_tuning/` – fine tuning module implementation
 - `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
 - `optimization/` – optimization module implementation

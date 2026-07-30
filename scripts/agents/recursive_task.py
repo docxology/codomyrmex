@@ -18,7 +18,7 @@ from agent_utils import get_llm_client
 
 from codomyrmex.agents.core import AgentRequest
 from codomyrmex.ide.antigravity.agent_relay import AgentRelay
-from codomyrmex.ide.antigravity.live_bridge import ClaudeCodeEndpoint
+from codomyrmex.ide.antigravity.relay_endpoint import RelayEndpoint
 
 CHANNEL = "recursive-task"
 
@@ -31,11 +31,11 @@ class TaskAgent:
         self.system_prompt = system_prompt
         self.client = get_llm_client(identity=identity)
 
-        self.endpoint = ClaudeCodeEndpoint(
+        self.endpoint = RelayEndpoint(
             CHANNEL,
             identity=identity,
             poll_interval=0.5,
-            claude_client=self.client,
+            llm_client=self.client,
             auto_respond=False,  # We handle messages manually to inject system prompt
         )
         # Register handler

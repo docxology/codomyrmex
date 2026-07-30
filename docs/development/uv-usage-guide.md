@@ -139,7 +139,7 @@ uv run ruff format --check .
 uv run ruff check src/ tests/
 
 # Type checking
-uv run ty check src/codomyrmex/
+uv run ty check --output-format concise src/ scripts/ tests/
 
 # Security scanning
 uv run bandit -r src/codomyrmex/

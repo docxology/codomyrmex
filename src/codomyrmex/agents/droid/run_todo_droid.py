@@ -95,16 +95,16 @@ CODOMYRMEX_ENHANCED_PROMPT = (
 )
 
 
-def resolve_handler(handler_path: str) -> Callable:
+def resolve_handler(handler_ref: str) -> Callable:
     """Resolve a handler string to a callable function."""
     import importlib
 
-    if ":" not in handler_path:
+    if ":" not in handler_ref:
         # Default to droid.tasks if no module specified
         module_name = "codomyrmex.agents.droid.tasks"
-        function_name = handler_path
+        function_name = handler_ref
     else:
-        module_name, function_name = handler_path.split(":", 1)
+        module_name, function_name = handler_ref.split(":", 1)
         # Expansion logic for short names
         if module_name == "droid":
             module_name = "codomyrmex.agents.droid.tasks"
@@ -115,7 +115,7 @@ def resolve_handler(handler_path: str) -> Callable:
         module = importlib.import_module(module_name)
         return getattr(module, function_name)
     except (ImportError, AttributeError) as e:
-        logger.error("Failed to resolve handler %s: %s", handler_path, e)
+        logger.error("Failed to resolve handler %s: %s", handler_ref, e)
         raise
 
 
@@ -191,7 +191,6 @@ def run_todos(
         # Enhanced task header
         print(f"\n⚙️  Task {i}/{len(to_process)}: {item.task_name}")
         print(f"   📝 {item.description}")
-        print(f"   🎯 Handler: {item.handler_path}")
 
         # Progress indicator
         progress = (i - 1) / len(to_process)
@@ -200,49 +199,47 @@ def run_todos(
         print(f"   📊 Progress: [{bar}] {progress * 100:.1f}%")
 
         try:
-            # Resolve handler: use explicit path when provided, otherwise infer from task_name
-            inferred_handler = None
-            if not item.handler_path:
-                base = item.task_name.strip()
-                for prefix in ("implement_", "create_", "build_", "generate_", "add_"):
-                    if base.startswith(prefix):
-                        base = base[len(prefix) :]
+            base = item.task_name.strip()
+            for prefix in ("implement_", "create_", "build_", "generate_", "add_"):
+                if base.startswith(prefix):
+                    base = base[len(prefix) :]
+                    break
+            candidate = base.strip().lower()
+            mapping = {
+                "ollama_module": "ai_code_editing:ollama_module",
+                "prompt_composability": "ai_code_editing:prompt_engineering",
+                "prompt_engineering": "ai_code_editing:prompt_engineering",
+            }
+            handler_ref = mapping.get(candidate)
+            if handler_ref is None:
+                # Fall back to the built-in task namespaces using the task name.
+                for namespace in ("droid", "tasks", "ai_code_editing"):
+                    candidate_ref = f"{namespace}:{candidate}"
+                    try:
+                        resolve_handler(candidate_ref)
+                    except (
+                        ImportError,
+                        ValueError,
+                        RuntimeError,
+                        AttributeError,
+                        OSError,
+                        TypeError,
+                    ) as e:
+                        logger.debug(
+                            "Handler resolution failed for %s via %s: %s",
+                            candidate,
+                            candidate_ref,
+                            e,
+                        )
+                    else:
+                        handler_ref = candidate_ref
                         break
-                candidate = base.strip().lower()
-                # map some common names
-                mapping = {
-                    "ollama_module": "ai_code_editing:ollama_module",
-                    "prompt_composability": "ai_code_editing:prompt_engineering",
-                    "prompt_engineering": "ai_code_editing:prompt_engineering",
-                }
-                inferred_handler = mapping.get(candidate)
-                if inferred_handler is None:
-                    # fallback to droid: or tasks: with same name
-                    for ns in ("droid", "tasks", "ai_code_editing"):
-                        try_path = f"{ns}:{candidate}"
-                        try:
-                            _ = resolve_handler(try_path)
-                            inferred_handler = try_path
-                            break
-                        except (
-                            ValueError,
-                            RuntimeError,
-                            AttributeError,
-                            OSError,
-                            TypeError,
-                        ) as e:
-                            logger.debug(
-                                "Handler resolution failed for %s via %s: %s",
-                                candidate,
-                                try_path,
-                                e,
-                            )
-            handler_path = item.handler_path or inferred_handler
-            if not handler_path:
+            if not handler_ref:
                 raise ValueError(
-                    f"No handler specified or inferable for task '{item.task_name}'"
+                    f"No built-in handler could be inferred for task '{item.task_name}'"
                 )
-            handler = resolve_handler(handler_path)
+            print(f"   🎯 Handler: {handler_ref}")
+            handler = resolve_handler(handler_ref)
 
             # Execute with enhanced monitoring
             controller.execute_task(
@@ -355,8 +352,6 @@ def _list_todos(todo_items: list[TodoItem], completed_items: list[TodoItem]) -> 
             print(f"{i}. [{item.task_name}] {item.description}")
             if item.outcomes:
                 print(f"   → Outcomes: {item.outcomes}")
-            if item.handler_path:
-                print(f"   Handler: {item.handler_path}")
 
     if completed_items:
         print(f"\n✅ Completed ({len(completed_items)} items):")

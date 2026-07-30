@@ -3,5 +3,5 @@
 Adversarial falsification worker for colony-kernel gate review.
 
 - Entry: `FalsificationWorker` in `worker.py`
-- Shim: `codomyrmex.colony_kernel.falsification_worker`
+- Public import: `codomyrmex.colony_kernel.falsification`
 - Tests: `tests/unit/colony_kernel/test_falsification_worker.py`

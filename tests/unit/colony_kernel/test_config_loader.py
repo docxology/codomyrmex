@@ -54,8 +54,8 @@ budget:
   max_llm_calls: 200
   max_runtime_seconds: 1800.0
 gate:
-  score_execute: 0.60
-  score_hold: 0.35
+  execute_threshold: 0.60
+  hold_threshold: 0.35
 """,
         )
         monkeypatch.setenv("CODOMYRMEX_COLONY_CONFIG", str(tmp_path))
@@ -65,8 +65,8 @@ gate:
         assert isinstance(result, dict)
         assert result["budget"]["max_llm_calls"] == 200
         assert result["budget"]["max_runtime_seconds"] == pytest.approx(1800.0)
-        assert result["gate"]["score_execute"] == pytest.approx(0.60)
-        assert result["gate"]["score_hold"] == pytest.approx(0.35)
+        assert result["gate"]["execute_threshold"] == pytest.approx(0.60)
+        assert result["gate"]["hold_threshold"] == pytest.approx(0.35)
 
     def test_non_existent_path_returns_empty_dict(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
@@ -256,7 +256,7 @@ budget:
             "kernel.yaml",
             """\
 gate:
-  score_execute: 0.55
+  execute_threshold: 0.55
 """,
         )
         monkeypatch.setenv("CODOMYRMEX_COLONY_CONFIG", str(tmp_path))
@@ -284,8 +284,8 @@ class TestDefaultGateConfigFromYaml:
             "kernel.yaml",
             """\
 gate:
-  score_execute: 0.60
-  score_hold: 0.35
+  execute_threshold: 0.60
+  hold_threshold: 0.35
 budget:
   max_llm_calls: 100
 """,
@@ -295,10 +295,10 @@ budget:
         gate_cfg = _cl.default_gate_config_from_yaml()
 
         assert isinstance(gate_cfg, dict)
-        assert "score_execute" in gate_cfg
-        assert "score_hold" in gate_cfg
-        assert gate_cfg["score_execute"] == pytest.approx(0.60)
-        assert gate_cfg["score_hold"] == pytest.approx(0.35)
+        assert "execute_threshold" in gate_cfg
+        assert "hold_threshold" in gate_cfg
+        assert gate_cfg["execute_threshold"] == pytest.approx(0.60)
+        assert gate_cfg["hold_threshold"] == pytest.approx(0.35)
 
     def test_missing_gate_section_returns_empty_dict(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch

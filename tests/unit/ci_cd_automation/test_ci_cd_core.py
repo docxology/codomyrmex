@@ -45,12 +45,10 @@ from codomyrmex.ci_cd_automation.pipeline.async_manager import (
 )
 from codomyrmex.ci_cd_automation.pipeline.manager import PipelineManager
 from codomyrmex.ci_cd_automation.pipeline.models import (
-    JobStatus,
     Pipeline,
     PipelineJob,
     PipelineStage,
     PipelineStatus,
-    StageStatus,
 )
 from codomyrmex.ci_cd_automation.pipeline.pipeline_monitor import (
     PipelineMonitor,
@@ -851,16 +849,14 @@ class TestPipelineConfigRoundTrip:
 
 
 class TestPipelineStatusEnums:
-    """Ensure all pipeline/stage/job status enums are consistent."""
+    """Ensure the shared pipeline status enum remains complete."""
 
     @pytest.mark.unit
-    @pytest.mark.parametrize("enum_cls", [PipelineStatus, StageStatus, JobStatus])
-    def test_status_enums_have_members(self, enum_cls):
-        assert len(enum_cls) == 10
+    def test_status_enums_have_members(self):
+        assert len(PipelineStatus) == 10
 
     @pytest.mark.unit
-    @pytest.mark.parametrize("enum_cls", [PipelineStatus, StageStatus, JobStatus])
-    def test_status_enums_share_same_values(self, enum_cls):
+    def test_status_enums_share_same_values(self):
         expected = {
             "pending",
             "running",
@@ -873,7 +869,7 @@ class TestPipelineStatusEnums:
             "succeeded",
             "failed",
         }
-        actual = {member.value for member in enum_cls}
+        actual = {member.value for member in PipelineStatus}
         assert actual == expected
 
     @pytest.mark.unit

@@ -16,7 +16,7 @@
 
 - The module is in-process and deterministic except for honeytoken identifiers and generated poison phrase selection.
 - Tests must use real instances; no mocks are required for the public contract.
-- The compatibility import paths must remain stable for demos and `security.ai_safety`.
+- The public package and `security.ai_safety` use the canonical `active` primitives.
 
 ## Validation
 

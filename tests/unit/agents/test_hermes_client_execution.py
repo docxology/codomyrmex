@@ -13,14 +13,14 @@ from typing import TYPE_CHECKING
 import pytest
 
 from codomyrmex.agents.core import AgentRequest
-from codomyrmex.agents.hermes.hermes_client import HermesClient, HermesError
+from codomyrmex.agents.hermes.client_pkg import HermesClient, HermesError
 
 if TYPE_CHECKING:
     from pathlib import Path
 
 
 class TestHermesClientExecutionShims:
-    """Verify hermes_client.py execution logic using subprocess shims."""
+    """Verify Hermes client execution logic using subprocess boundaries."""
 
     @pytest.fixture
     def shim_bin_dir(self, tmp_path: Path, monkeypatch) -> Path:

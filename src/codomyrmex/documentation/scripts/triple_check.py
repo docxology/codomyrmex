@@ -150,7 +150,7 @@ def check_file_completeness(content: str, file_path: Path) -> list[str]:
 
     Structural requirements for ``AGENTS.md`` are owned by
     ``validate_agents_structure.py`` and link requirements are owned by the
-    comprehensive link validator.  This legacy checker should not reject
+    comprehensive link validator.  This focused checker should not reject
     concise, hand-maintained signposts merely because they omit metadata or a
     sibling document that does not exist.  Keep this check focused on content
     that is universally actionable: a heading and meaningful prose.

@@ -1,4 +1,4 @@
-"""Hermes MCP tools — compatibility shim.
+"""Hermes MCP tool facade.
 
 Implementation lives in ``mcp_tools_pkg/`` (category-split modules).
 """

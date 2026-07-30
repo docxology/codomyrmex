@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Local active-defense compatibility package for prompt-exploit detection,
+Local active-defense package for prompt-exploit detection,
 honeytokens, context poisoning, rate limiting, threat rules, and containment.
 
 ## Active Components
@@ -12,7 +12,6 @@ honeytokens, context poisoning, rate limiting, threat rules, and containment.
 - `active.py` - ActiveDefense, ThreatLevel, and RabbitHole primitives.
 - `defense.py` - RateLimiter, ThreatDetector, ThreatEvent, DetectionRule, and Defense orchestrator.
 - `mcp_tools.py` - MCP wrappers for detection, request processing, and reports.
-- `rabbithole.py` - Backward-compatible RabbitHole import path.
 - `README.md` - Module overview and quick start.
 - `SPEC.md` - Functional and non-functional requirements.
 - `API_SPECIFICATION.md` - Public Python API contract.
@@ -20,7 +19,7 @@ honeytokens, context poisoning, rate limiting, threat rules, and containment.
 
 ## Operating Contracts
 
-- Preserve legacy imports from `codomyrmex.defense` and `codomyrmex.defense.active`.
+- Preserve the canonical imports from `codomyrmex.defense` and `codomyrmex.defense.active`.
 - Keep `codomyrmex.security.ai_safety` imports functional.
 - Maintain zero-mock tests against real implementations.
 - Treat high-risk prompt patterns as containment candidates without claiming external security guarantees.
@@ -35,7 +34,6 @@ honeytokens, context poisoning, rate limiting, threat rules, and containment.
 - `active.py`
 - `defense.py`
 - `mcp_tools.py`
-- `rabbithole.py`
 
 ## Dependencies
 

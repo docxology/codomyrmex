@@ -8,7 +8,7 @@ Provides container security scanning via Trivy CLI and container performance met
 
 ## Architecture
 
-Two-file design. `security_scanner.py` contains two scanner classes backed by the Trivy CLI (located via `shutil.which("trivy")`), shared helper functions `_trivy_cli()` and `_parse_trivy_results()`, and data models for vulnerabilities and scan results. `performance_optimizer.py` contains `ContainerOptimizer` (uses Docker CLI) and `PerformanceOptimizer` (stub that raises `NotImplementedError`).
+Two-file design. `security_scanner.py` contains two scanner classes backed by the Trivy CLI (located via `shutil.which("trivy")`), shared helper functions `_trivy_cli()` and `_parse_trivy_results()`, and data models for vulnerabilities and scan results. `performance_optimizer.py` contains `ContainerOptimizer`, which uses the Docker CLI for metrics and resource recommendations.
 
 ## Key Classes and Methods
 
@@ -39,10 +39,6 @@ Two-file design. `security_scanner.py` contains two scanner classes backed by th
 | `__init__` | `config: dict or None` | -- | Initialize with optional config; maintains `_metrics_history` |
 | `collect_metrics` | `container_id: str` | `ContainerMetrics` | Run `docker stats --no-stream` and parse CPU, memory, network, disk IO |
 | `optimize_resources` | `container_id: str` | `dict` | Run `docker inspect` and recommend CPU/memory limits |
-
-### PerformanceOptimizer (`performance_optimizer.py`)
-
-Stub class. `optimize()` raises `NotImplementedError` directing users to `ContainerOptimizer`.
 
 ### Data Models
 
@@ -76,7 +72,6 @@ Values: `CRITICAL`, `HIGH`, `MEDIUM`, `LOW`, `INFO`.
 - `ContainerOptimizer.collect_metrics` parses `docker stats` JSON output with unit conversions (GiB, MiB, GB, MB, kB, B to MB).
 - `ContainerOptimizer.optimize_resources` uses `docker inspect --format '{{json .HostConfig}}'` to read CPU shares and memory limits.
 - Docker CLI subprocess timeout is 15 seconds for stats and 10 seconds for inspect.
-- `PerformanceOptimizer.optimize()` is a stub that always raises `NotImplementedError`.
 
 ## Error Handling
 

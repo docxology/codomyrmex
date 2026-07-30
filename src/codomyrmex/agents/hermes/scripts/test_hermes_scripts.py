@@ -528,14 +528,14 @@ class TestHermesClientDirect:
     """Direct tests for HermesClient construction and properties."""
 
     def test_client_instantiation(self) -> None:
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         client = HermesClient()
         assert client.active_backend in ("cli", "ollama", "none")
         assert isinstance(client.ollama_model, str)
 
     def test_client_backend_override(self) -> None:
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         client = HermesClient(
             config={"hermes_backend": "ollama", "hermes_model": "test-model"}
@@ -543,14 +543,14 @@ class TestHermesClientDirect:
         assert client.ollama_model == "test-model"
 
     def test_hermes_error_has_command(self) -> None:
-        from codomyrmex.agents.hermes.hermes_client import HermesError
+        from codomyrmex.agents.hermes.client_pkg import HermesError
 
         err = HermesError("test failure", command="hermes chat")
         assert "test failure" in str(err)
         assert err.command == "hermes chat"
 
     def test_get_hermes_status(self) -> None:
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         client = HermesClient()
         status = client.get_hermes_status()

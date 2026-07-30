@@ -33,6 +33,8 @@ from codomyrmex.utils.cli_helpers import (
     setup_logging,
 )
 
+logger = logging.getLogger("orchestrator")
+
 # Import the demo main function
 # We need to add the current dir to path to import sibling scripts if not using package relative imports
 sys.path.append(str(Path(__file__).parent))
@@ -61,8 +63,6 @@ def main():
             print(f"Loaded config from {config_path.name}")
 
     setup_logging()
-    logging.getLogger("orchestrator")
-
     print_info("Initializing Real Ollama Orchestration...")
 
     # 1. Initialize Manager (starts server if needed)

@@ -24,7 +24,7 @@ pytestmark = pytest.mark.skipif(
 
 try:
     from codomyrmex.api.openapi_generator import OpenAPISpecification
-    from codomyrmex.api.openapi_generator import (
+    from codomyrmex.api.openapi_standardization_generator import (
         StandardizationOpenAPIGenerator as OpenAPIGenerator,
     )
     from codomyrmex.api.standardization.api_versioning import (

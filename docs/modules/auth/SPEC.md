@@ -124,9 +124,9 @@ class TokenManager:
     def refresh_token(token: Token, ttl: int = 3600) -> Token | None
 
 class APIKeyManager:
-    def generate_api_key(user_id: str, permissions: List[str] = None) -> str
-    def validate_api_key(api_key: str) -> dict | None
-    def revoke_api_key(api_key: str) -> bool
+    def generate(user_id: str, permissions: List[str] = None) -> str
+    def validate(api_key: str) -> APIKey | None
+    def revoke(api_key: str) -> bool
 ```
 
 ## Implementation Guidelines

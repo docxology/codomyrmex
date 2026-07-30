@@ -6,6 +6,7 @@ logic is tested with real data structures.
 """
 
 import pytest
+from pydantic import BaseModel
 
 from codomyrmex.scrape.config import ScrapeConfig
 from codomyrmex.scrape.exceptions import (
@@ -13,7 +14,10 @@ from codomyrmex.scrape.exceptions import (
     ScrapingError,
 )
 from codomyrmex.scrape.firecrawl.adapter import FirecrawlAdapter
-from codomyrmex.scrape.firecrawl.client import FirecrawlClient
+from codomyrmex.scrape.firecrawl.client import (
+    FirecrawlClient,
+    _normalize_sdk_result,
+)
 
 # Check if firecrawl-py is available
 try:
@@ -26,6 +30,24 @@ except ImportError:
 
 class TestFirecrawlClient:
     """Test FirecrawlClient wrapper with real implementations."""
+
+    def test_normalize_sdk_dictionary(self):
+        """Legacy Firecrawl dictionaries retain their public mapping contract."""
+        payload = {"data": [{"url": "https://example.com"}]}
+        assert _normalize_sdk_result(payload) == payload
+
+    def test_normalize_sdk_pydantic_model(self):
+        """Firecrawl v2-style Pydantic responses normalize to dictionaries."""
+
+        class FirecrawlResponse(BaseModel):
+            status: str
+            total: int
+
+        response = FirecrawlResponse(status="completed", total=2)
+        assert _normalize_sdk_result(response) == {
+            "status": "completed",
+            "total": 2,
+        }
 
     def test_init_without_firecrawl_package(self):
         """Test that FirecrawlClient raises error when firecrawl-py is not installed."""

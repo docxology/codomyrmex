@@ -32,7 +32,7 @@ Enables dynamic extension of the platform. It handles plugin discovery, loading,
 
 ## Detailed Architecture and Implementation
 
-The implementation follows the Unified Streamline principles (v0.1.0), removing backward compatibility aliases in favor of a modern, standardized API.
+The implementation exposes one standardized plugin-management API through the package surface.
 
 ### Design Principles
 

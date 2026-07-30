@@ -33,8 +33,8 @@ class SSHClient:
         else:
             self.client.load_system_host_keys()
         if allow_unknown_host_keys:
-            # This compatibility escape hatch is deliberately explicit. It
-            # accepts unknown keys and must never be the secure default.
+            # This unsafe opt-in is deliberately explicit. It accepts unknown
+            # keys and must never be the secure default.
             logger.warning(
                 "SSH unknown host keys are accepted for %s; this is unsafe "
                 "and vulnerable to man-in-the-middle attacks",

@@ -4,7 +4,7 @@
 
 ## Purpose
 
-The `encryption/core` submodule provides the primary `Encryptor` class and convenience functions for symmetric (AES-256-CBC) and asymmetric (RSA-OAEP) encryption, key generation, digital signatures (RSA-PSS), file encryption, and hashing. AES-CBC mode is considered legacy; prefer `encryption/algorithms` (AES-GCM) for new code.
+The `encryption/core` submodule provides the primary `Encryptor` class and key-generation helper for symmetric (AES-256-CBC) and asymmetric (RSA-OAEP) encryption, digital signatures (RSA-PSS), file encryption, and hashing. AES-CBC is unauthenticated and emits a deprecation warning; prefer `encryption/algorithms` (AES-GCM) for new code.
 
 ## 3.1 Interface / API
 
@@ -30,12 +30,10 @@ Encryptor(algorithm: str = "AES")
 | `generate_salt(length)` | `length: int = 16` | `bytes` | Generate random salt |
 | `generate_key_pair(key_size)` | `key_size: int = 2048` | `tuple[bytes, bytes]` | Generate RSA (private_pem, public_pem) |
 
-### Convenience Functions
+### Key Generation Helper
 
 | Function | Signature | Description |
 |----------|-----------|-------------|
-| `encrypt_data` | `(data: bytes, key: bytes, algorithm: str = "AES") -> bytes` | Module-level encrypt shortcut |
-| `decrypt_data` | `(data: bytes, key: bytes, algorithm: str = "AES") -> bytes` | Module-level decrypt shortcut |
 | `generate_aes_key` | `() -> bytes` | Generate random 32-byte AES-256 key |
 
 ### Exceptions

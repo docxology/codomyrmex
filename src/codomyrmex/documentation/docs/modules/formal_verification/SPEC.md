@@ -9,7 +9,7 @@
 - The module shall export 15 public symbols via `__all__`.
 
 ### FR-2: MCP Integration
-- The module shall expose 8 MCP tools for agent consumption.
+- The module shall expose 9 MCP tools for agent consumption.
 
 ## Interface Contracts
 
@@ -23,6 +23,7 @@
 - `solve_model()`
 - `push()`
 - `pop()`
+- `verify_code_change()`
 
 ## Non-Functional Requirements
 

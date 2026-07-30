@@ -16,6 +16,7 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
+from typing import Any
 
 
 def check_requirements(req_file: Path) -> dict:
@@ -59,7 +60,10 @@ def check_env_template() -> dict:
     env_file = Path(".env")
     example_file = Path(".env.example")
 
-    result = {"env_exists": env_file.exists(), "example_exists": example_file.exists()}
+    result: dict[str, Any] = {
+        "env_exists": env_file.exists(),
+        "example_exists": example_file.exists(),
+    }
 
     if example_file.exists():
         with open(example_file) as f:

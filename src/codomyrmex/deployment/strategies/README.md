@@ -14,7 +14,6 @@ Module implementation, resources, and local coordination for Strategies..
 - `base.py` – File
 - `implementations.py` – File
 - `py.typed` – File
-- `strategies.py` – File
 - `types.py` – File
 
 ## Navigation

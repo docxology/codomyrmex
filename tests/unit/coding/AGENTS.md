@@ -11,7 +11,6 @@ Validation coverage, fixtures, and regression checks for Coding.
 - `SPEC.md` – Project file
 - `execution/` – Directory containing execution components
 - `monitoring/` – Directory containing monitoring components
-- `parsers/` – Directory containing parsers components
 - `review/` – Directory containing review components
 - `sandbox/` – Directory containing sandbox components
 - `test_coding_exceptions.py` – Project file

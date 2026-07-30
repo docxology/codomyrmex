@@ -23,11 +23,7 @@ from codomyrmex.encryption import (
     verify_hmac,
 )
 from codomyrmex.encryption.algorithms.aes_gcm import AESGCMEncryptor
-from codomyrmex.encryption.core.encryptor import (
-    Encryptor,
-    decrypt_data,
-    encrypt_data,
-)
+from codomyrmex.encryption.core.encryptor import Encryptor
 from codomyrmex.encryption.keys.key_manager import KeyManager
 from codomyrmex.exceptions import EncryptionError as ExceptionsEncryptionError
 
@@ -284,26 +280,6 @@ class TestConvenienceFunctions:
         """Test generate_aes_key function."""
         key = generate_aes_key()
         assert len(key) == 32
-
-    def test_encrypt_data_aes(self):
-        """Test encrypt_data convenience function with AES."""
-        key = generate_aes_key()
-        data = b"test data"
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", DeprecationWarning)
-            encrypted = encrypt_data(data, key, "AES")
-            decrypted = decrypt_data(encrypted, key, "AES")
-        assert decrypted == data
-
-    def test_encrypt_data_rsa(self):
-        """Test encrypt_data convenience function with RSA."""
-        encryptor = Encryptor(algorithm="RSA")
-        private_key, public_key = encryptor.generate_key_pair()
-
-        data = b"test data"
-        encrypted = encrypt_data(data, public_key, "RSA")
-        decrypted = decrypt_data(encrypted, private_key, "RSA")
-        assert decrypted == data
 
 
 # ==============================================================================

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The Collaboration module provides tools for multi-agent collaboration, including swarm management, agent proxies, and task decomposition for coordinated work across multiple AI agents.
+The Collaboration module provides typed multi-agent collaboration primitives, including swarm management, task decomposition, message routing, and consensus.
 
 ## Endpoints / Functions / Interfaces
 
@@ -10,33 +10,24 @@ The Collaboration module provides tools for multi-agent collaboration, including
 
 - **Description**: Manages a swarm of collaborating agents.
 - **Constructor**:
-    - `max_agents` (int, optional): Maximum concurrent agents. Default: 10.
-    - `coordination_strategy` (str, optional): Strategy for coordination ("round_robin", "priority", "capability"). Default: "round_robin".
+    - No arguments. Register concrete `SwarmAgent` instances after construction.
 - **Methods**:
 
-#### `add_agent(agent: AgentProxy) -> str`
+#### `register_agent(agent: SwarmAgent) -> None`
 
-- **Description**: Add an agent to the swarm.
-- **Parameters/Arguments**:
-    - `agent` (AgentProxy): Agent to add.
-- **Returns**:
-    - `str`: Agent ID in the swarm.
+- **Description**: Register a typed agent and subscribe it to result messages.
 
-#### `remove_agent(agent_id: str) -> bool`
+#### `queue_mission(mission: str) -> list[dict[str, Any]]`
 
-- **Description**: Remove an agent from the swarm.
-- **Parameters/Arguments**:
-    - `agent_id` (str): ID of the agent to remove.
-- **Returns**:
-    - `bool`: True if removal was successful.
+- **Description**: Decompose a mission and return its queued task records without waiting for execution.
 
-#### `submit_task(task: Task) -> TaskHandle`
+#### `execute_mission(mission: str) -> list[dict[str, Any]]`
 
-- **Description**: Submit a task to the swarm for execution.
-- **Parameters/Arguments**:
-    - `task` (Task): Task to execute.
-- **Returns**:
-    - `TaskHandle`: Handle for tracking task progress.
+- **Description**: Decompose and execute a mission asynchronously, returning each task result.
+
+#### `request_consensus(proposal: str, votes: list[SwarmVote], strategy: str = "majority") -> ConsensusResult`
+
+- **Description**: Resolve and publish a swarm consensus decision.
 
 #### `get_status() -> SwarmStatus`
 
@@ -52,42 +43,10 @@ The Collaboration module provides tools for multi-agent collaboration, including
 - **Returns**:
     - `CoordinationResult`: Coordination outcome.
 
-### Class: `AgentProxy`
+### Class: `SwarmAgent`
 
-- **Description**: Proxy for communicating with an AI agent.
-- **Constructor**:
-    - `agent_id` (str): Unique agent identifier.
-    - `capabilities` (list[str]): Agent capabilities.
-    - `endpoint` (str, optional): Agent communication endpoint.
-- **Methods**:
-
-#### `execute(task: Task) -> TaskResult`
-
-- **Description**: Execute a task on the agent.
-- **Parameters/Arguments**:
-    - `task` (Task): Task to execute.
-- **Returns**:
-    - `TaskResult`: Task execution result.
-
-#### `get_capabilities() -> list[str]`
-
-- **Description**: Get agent capabilities.
-- **Returns**:
-    - `list[str]`: List of capabilities.
-
-#### `get_status() -> AgentStatus`
-
-- **Description**: Get agent status.
-- **Returns**:
-    - `AgentStatus`: Current agent status.
-
-#### `send_message(message: Message) -> Response`
-
-- **Description**: Send a message to the agent.
-- **Parameters/Arguments**:
-    - `message` (Message): Message to send.
-- **Returns**:
-    - `Response`: Agent response.
+- **Description**: Typed swarm participant with an ID, role, capabilities, and concurrency limit.
+- **Constructor**: `SwarmAgent(agent_id: str, role: AgentRole, capabilities: set[str] = set(), max_concurrent: int = 3)`
 
 ### Class: `TaskDecomposer`
 
@@ -96,21 +55,13 @@ The Collaboration module provides tools for multi-agent collaboration, including
     - `strategy` (str, optional): Decomposition strategy ("hierarchical", "functional", "parallel"). Default: "hierarchical".
 - **Methods**:
 
-#### `decompose(task: Task) -> list[Task]`
+#### `decompose(task: str) -> list[SubTask]`
 
 - **Description**: Decompose a task into subtasks.
 - **Parameters/Arguments**:
-    - `task` (Task): Task to decompose.
+    - `task` (str): Mission description to decompose.
 - **Returns**:
-    - `list[Task]`: List of subtasks.
-
-#### `merge_results(results: list[TaskResult]) -> TaskResult`
-
-- **Description**: Merge subtask results into a single result.
-- **Parameters/Arguments**:
-    - `results` (list[TaskResult]): Subtask results.
-- **Returns**:
-    - `TaskResult`: Merged result.
+    - `list[SubTask]`: Ordered role-based subtasks.
 
 ## Data Models
 

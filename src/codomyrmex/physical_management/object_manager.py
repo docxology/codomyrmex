@@ -4,8 +4,8 @@
 This module provides the PhysicalObjectManager and related classes for managing
 physical entities in the system.
 
-Data models (enums, dataclasses) are defined in ``models.py`` and re-exported
-here for backward compatibility.
+Data models (enums, dataclasses) are defined in ``models.py`` and imported here
+alongside the manager for a single module-level integration surface.
 """
 
 import json

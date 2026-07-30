@@ -15,9 +15,9 @@ Adversarial plan review for the colony kernel gate.
 
 ## Dependencies
 
-Public import path remains `codomyrmex.colony_kernel.falsification_worker` (shim).
+Public import path: `codomyrmex.colony_kernel.falsification`.
 
 ## Development Guidelines
 
 - New attack vectors get their own module under `checks/`, registered in `models.py`'s `AttackVector` enum.
-- Keep the `falsification_worker` shim's public surface (`AttackVector`, `FalsificationReport`, `FalsificationWorker`) stable.
+- Keep the package public surface (`AttackVector`, `FalsificationReport`, `FalsificationWorker`) stable.

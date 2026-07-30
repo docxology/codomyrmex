@@ -49,7 +49,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --all-extras --dev
+          uv sync --locked --all-groups --all-extras
 
       - name: Generate dependency tree
         run: |
@@ -64,11 +64,10 @@ jobs:
       - name: Run pip-audit for vulnerability scanning
         run: |
           echo "🔍 Running pip-audit for vulnerability scanning..."
-          uv pip install pip-audit
-          
-          # Generate vulnerability report
-          pip-audit --format=json --output=vulnerability-report.json
-          pip-audit --format=markdown --output=vulnerability-report.md
+          uv run --locked --extra security_audit python scripts/security/audit_uv_lock.py \
+            --format json --output vulnerability-report.json
+          uv run --locked --extra security_audit python scripts/security/audit_uv_lock.py \
+            --format markdown --output vulnerability-report.md
           
           # Add to security report
           echo "" >> security-report.md
@@ -82,11 +81,9 @@ jobs:
       - name: Run Safety vulnerability scanner
         run: |
           echo "🛡️  Running Safety vulnerability scanner..."
-          uv pip install safety
-          
           # Generate safety report (safety scan replaces deprecated safety check)
-          safety scan --output json --save-json safety-report.json
-          safety scan --output text --save-as text safety-report.txt
+          uv run --locked --extra security_audit safety scan --output json --save-json safety-report.json
+          uv run --locked --extra security_audit safety scan --output text --save-as text safety-report.txt
           
           # Add to security report
           echo "" >> security-report.md
@@ -132,7 +129,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --all-extras --dev
+          uv sync --locked --all-groups --all-extras
 
       - name: Run Bandit security scan
         run: |
@@ -268,7 +265,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --all-extras --dev
+          uv sync --locked --all-groups --all-extras
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
@@ -292,7 +289,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --all-extras --dev
+          uv sync --locked --all-groups --all-extras
 
       - name: Install license analysis tools
         run: |

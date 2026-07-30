@@ -6,7 +6,7 @@ from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from codomyrmex.agents.hermes.hermes_client import HermesClient
+    from codomyrmex.agents.hermes.client_pkg import HermesClient
 
 _factory_override: Callable[..., HermesClient] | None = None
 
@@ -24,7 +24,7 @@ def _get_client(
             timeout=timeout,
         )
 
-    from codomyrmex.agents.hermes.hermes_client import HermesClient
+    from codomyrmex.agents.hermes.client_pkg import HermesClient
 
     return HermesClient(
         config={

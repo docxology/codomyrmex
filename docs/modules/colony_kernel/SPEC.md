@@ -20,6 +20,13 @@ The Colony Kernel is the control plane for Codomyrmex's artificial ecology thesi
 
 The kernel exposes 8 MCP tools for agent interaction.
 
+The MCP outcome surface remains ordinary and caller-reported. A direct kernel
+supports `attestation_mode` values `disabled`, `optional`, and `required`.
+Optional mode permits ordinary and linked outcomes. Required mode rejects
+ordinary `record_outcome()` even after a receipt and accepts only a linked
+`record_attested_outcome()`. The resulting signed, hash-linked ledger is local
+integrity evidence, not independent observation of external execution.
+
 ## Architecture
 
 ```
@@ -91,7 +98,7 @@ drift.
 The kernel separates typed operational state, pheromone recurrence, piecewise gate
 semantics, and runtime invariant predicates. These are executable contracts with
 bounded evidence, not a complete formal semantics or proof of safety. The generated
-[formalism-to-code crosswalk](../../../docs/manuscript/10_formalism_code_crosswalk.md)
+[formalism-to-code crosswalk](../../manuscript/technical-report.html#sec:formalism-code-crosswalk)
 identifies the code symbols, translation mechanisms, tests, and limits for each layer.
 In particular, the optional SMT bridge proves supplied obligations only; it does not
 prove the Python kernel without a kernel-specific translation and refinement test.
@@ -189,7 +196,7 @@ All 8 tools route through a module-level `ColonyKernel` singleton. State persist
 | `colony_propose_action` | agent_id, action_type, target, rationale, rollback_plan, evidence | GateResult (decision, gate_score, reason, required_evidence) |
 | `colony_record_outcome` | agent_id, action_type, target, actual_outcome, tests_passed, human_feedback | status, consequence_id, trust_score, role |
 | `colony_agent_profile` | agent_id | AgentTrustProfile (role, trust_score, total_proposals, consequence_history) |
-| `colony_status` | (none) | pheromone_summary, budget_usage, role_distribution, recent_consequences, pruning_candidates_count |
+| `colony_status` | (none) | tick_count, pheromone_summary, budget_usage, role_distribution, recent_consequences, pruning_candidates_count |
 | `colony_pheromone_query` | location, signal_type | list of ColonySignal dicts |
 | `colony_falsify_plan` | plan_json | findings, severity_score, recommendation |
 | `colony_pruning_report` | (none) | candidates, total_candidates, generated_at |
@@ -204,7 +211,9 @@ All 8 tools route through a module-level `ColonyKernel` singleton. State persist
 5. **Budget enforcement**: Any single dimension exceeded → HOLD.
 6. **SANDBOX block**: SANDBOX agents always receive REFUSE.
 7. **Report is read-only**: the MCP pruning report only nominates candidates; the separate archive API is dry-run by default and mutates only when explicitly invoked.
-8. **DEPENDENCY on record**: `record_outcome` always deposits DEPENDENCY signal.
+8. **DEPENDENCY on record**: every accepted ordinary or attested outcome deposits a DEPENDENCY signal.
+9. **Required attestation**: direct `record_outcome` is always rejected; the linked outcome must follow an EXECUTE verdict, authorization, and receipt.
+10. **Attestation boundary**: a valid local chain does not establish that external actuation occurred or was safe.
 
 ## Test Coverage
 

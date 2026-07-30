@@ -312,48 +312,6 @@ class SystemDiscovery:
 
         print(f"\nTotal Capabilities Discovered: {len(all_capabilities)}")
 
-    # ---- Delegate methods (preserve original private API for test compatibility) ----
-
-    def _get_module_description(self, module_path: Path) -> str:
-        """Delegate to DependencyAnalyzer."""
-        return self._analyzer.get_module_description(module_path)
-
-    def _get_module_version(self, module_path: Path) -> str:
-        """Delegate to DependencyAnalyzer."""
-        return self._analyzer.get_module_version(module_path)
-
-    def _get_module_dependencies(self, module_path: Path) -> list[str]:
-        """Delegate to DependencyAnalyzer."""
-        return self._analyzer.get_module_dependencies(module_path)
-
-    def _has_tests(self, module_name: str) -> bool:
-        """Delegate to DependencyAnalyzer."""
-        return self._analyzer.has_tests(module_name)
-
-    def _has_docs(self, module_path: Path) -> bool:
-        """Delegate to DependencyAnalyzer."""
-        return self._analyzer.has_docs(module_path)
-
-    def _get_last_modified(self, module_path: Path) -> str:
-        """Delegate to DependencyAnalyzer."""
-        return self._analyzer.get_last_modified(module_path)
-
-    def _static_analysis_capabilities(
-        self, module_path: Path
-    ) -> list[ModuleCapability]:
-        """Delegate to DependencyAnalyzer."""
-        return self._analyzer.static_analysis_capabilities(module_path)
-
-    def _get_function_signature_from_ast(self, node) -> str:
-        """Delegate to DependencyAnalyzer."""
-        return self._analyzer.get_function_signature_from_ast(node)
-
-    def _analyze_object(
-        self, name: str, obj: Any, module_path: Path
-    ) -> ModuleCapability | None:
-        """Delegate to DependencyAnalyzer."""
-        return self._analyzer.analyze_object(name, obj, module_path)
-
     def _check_core_dependencies(self) -> None:
         """Delegate to SystemHealthChecker."""
         self._health.check_core_dependencies()

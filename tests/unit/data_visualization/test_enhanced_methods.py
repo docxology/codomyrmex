@@ -41,10 +41,9 @@ def test_main_module_exports():
     """Verify main module exports behavior."""
     from codomyrmex.data_visualization import (
         BarChart,
-        BarPlot,
     )
 
-    assert BarPlot is BarChart
+    assert BarChart is not None
 
 
 # ── BasePlot enhanced methods ─────────────────────────────────────

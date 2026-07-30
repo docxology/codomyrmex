@@ -22,13 +22,13 @@ from codomyrmex.skills.arscontexta.models import (
 )
 
 # ============================================================================
-# KernelPrimitiveRegistry tests (from services.py)
+# KernelPrimitiveRegistry tests (from core.py)
 # ============================================================================
 
 
 @pytest.mark.unit
 class TestServicesKernelPrimitiveRegistry:
-    """Test KernelPrimitiveRegistry as exported from services.py."""
+    """Test KernelPrimitiveRegistry as exported from the package."""
 
     def test_all_15_primitives_loaded(self):
         """Registry loads exactly 15 default primitives."""
@@ -111,13 +111,13 @@ class TestServicesKernelPrimitiveRegistry:
 
 
 # ============================================================================
-# ProcessingPipeline tests (from services.py)
+# ProcessingPipeline tests (from core.py)
 # ============================================================================
 
 
 @pytest.mark.unit
 class TestServicesProcessingPipeline:
-    """Test ProcessingPipeline as exported from services.py."""
+    """Test ProcessingPipeline as exported from the package."""
 
     def test_no_handlers_passthrough(self):
         """Pipeline with no handlers passes content through all 6 stages."""
@@ -207,13 +207,13 @@ class TestServicesProcessingPipeline:
 
 
 # ============================================================================
-# DerivationEngine tests (from services.py)
+# DerivationEngine tests (from core.py)
 # ============================================================================
 
 
 @pytest.mark.unit
 class TestServicesDerivationEngine:
-    """Test DerivationEngine as exported from services.py."""
+    """Test DerivationEngine as exported from the package."""
 
     def test_empty_engine_confidence_is_zero(self):
         """Fresh engine with no signals has 0.0 confidence."""

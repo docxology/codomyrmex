@@ -19,32 +19,17 @@ def _make_endpoint(
     client: object,
     scheduler_config: object | None,
 ) -> object:
-    """Create the best available relay endpoint.
+    """Create the provider-agnostic relay endpoint."""
+    from codomyrmex.ide.antigravity.relay_endpoint import RelayEndpoint
 
-    Prefers :class:`RelayEndpoint` (provider-agnostic); falls back to
-    the :class:`ClaudeCodeEndpoint` interface.
-    """
-    try:
-        from codomyrmex.ide.antigravity.relay_endpoint import RelayEndpoint
-
-        return RelayEndpoint(
-            channel,
-            llm_client=client,
-            identity=identity,
-            poll_interval=poll_interval,
-            auto_respond=False,
-            scheduler_config=scheduler_config,
-        )
-    except ImportError:
-        from codomyrmex.ide.antigravity.live_bridge import ClaudeCodeEndpoint
-
-        return ClaudeCodeEndpoint(
-            channel,
-            claude_client=client,
-            identity=identity,
-            poll_interval=poll_interval,
-            auto_respond=False,
-        )
+    return RelayEndpoint(
+        channel,
+        llm_client=client,
+        identity=identity,
+        poll_interval=poll_interval,
+        auto_respond=False,
+        scheduler_config=scheduler_config,
+    )
 
 
 class AutonomousAgent:

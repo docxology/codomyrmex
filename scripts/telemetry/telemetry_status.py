@@ -6,9 +6,7 @@ Usage:
     python telemetry_status.py [--verbose]
 """
 
-logger = logging.getLogger(__name__)
-
-
+import logging
 import sys
 from pathlib import Path
 
@@ -21,9 +19,10 @@ except ImportError:
 import argparse
 import contextlib
 import json
-import logging
 import os
 from datetime import datetime
+
+logger = logging.getLogger(__name__)
 
 
 def get_telemetry_config() -> dict:

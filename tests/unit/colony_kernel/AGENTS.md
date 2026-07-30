@@ -8,9 +8,9 @@ enforces the 60% coverage floor on the colony_kernel package.
 
 ## Navigation
 
-- **Source README**: [../../../colony_kernel/README.md](../../../colony_kernel/README.md)
-- **Source SPEC**: [../../../colony_kernel/SPEC.md](../../../colony_kernel/SPEC.md)
-- **Source Agent Guide**: [../../../colony_kernel/AGENTS.md](../../../colony_kernel/AGENTS.md)
+- **Source README**: [../../../src/codomyrmex/colony_kernel/README.md](../../../src/codomyrmex/colony_kernel/README.md)
+- **Source SPEC**: [../../../src/codomyrmex/colony_kernel/SPEC.md](../../../src/codomyrmex/colony_kernel/SPEC.md)
+- **Source Agent Guide**: [../../../src/codomyrmex/colony_kernel/AGENTS.md](../../../src/codomyrmex/colony_kernel/AGENTS.md)
 
 ## Test Files
 

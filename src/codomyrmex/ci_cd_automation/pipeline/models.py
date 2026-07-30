@@ -6,12 +6,6 @@ from typing import Any
 
 from codomyrmex.validation.schemas.infra import PipelineStatus
 
-# ExecutionStatus is the local alias for the canonical PipelineStatus.
-# ci_cd_automation values (SUCCESS, FAILURE, PENDING, SKIPPED) are all present in PipelineStatus.
-ExecutionStatus = PipelineStatus
-StageStatus = PipelineStatus
-JobStatus = PipelineStatus
-
 
 @dataclass
 class PipelineJob:
@@ -25,7 +19,7 @@ class PipelineJob:
     timeout: int = 3600  # 1 hour
     retry_count: int = 0
     allow_failure: bool = False
-    status: JobStatus = JobStatus.PENDING
+    status: PipelineStatus = PipelineStatus.PENDING
     start_time: datetime | None = None
     end_time: datetime | None = None
     output: str = ""
@@ -60,7 +54,7 @@ class PipelineStage:
     environment: dict[str, str] = field(default_factory=dict)
     allow_failure: bool = False
     parallel: bool = True
-    status: StageStatus = StageStatus.PENDING
+    status: PipelineStatus = PipelineStatus.PENDING
     start_time: datetime | None = None
     end_time: datetime | None = None
 

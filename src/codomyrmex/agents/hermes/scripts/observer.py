@@ -11,7 +11,7 @@ import time
 from pathlib import Path
 
 from codomyrmex.agents import AgentRequest
-from codomyrmex.agents.hermes.hermes_client import HermesClient
+from codomyrmex.agents.hermes.client_pkg import HermesClient
 
 
 class CodebaseObserver:

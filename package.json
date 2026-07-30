@@ -4,9 +4,10 @@
   "description": "Codomyrmex - AI-powered code analysis and automation toolkit",
   "private": true,
   "scripts": {
-    "serve": "uv run python -m http.server 8000 --directory docs",
-    "start": "uv run python -m http.server 8000 --directory docs",
-    "build": "uv run python src/codomyrmex/documentation/scripts/triple_check.py --repo-root . --fail-on-issues",
+    "serve": "NO_MKDOCS_2_WARNING=1 uv run --locked --group docs mkdocs serve",
+    "start": "NO_MKDOCS_2_WARNING=1 uv run --locked --group docs mkdocs serve",
+    "build": "make docs-check",
+    "docs:check": "make docs-check",
     "test": "uv run pytest tests/unit"
   },
   "repository": {

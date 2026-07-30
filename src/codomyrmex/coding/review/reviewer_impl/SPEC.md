@@ -19,8 +19,8 @@ Mixin composition pattern. `CodeReviewer` inherits all five; method resolution o
 | `_run_pyscn_analysis` | `file_path: str` | `list[AnalysisResult]` | Run PyscnAnalyzer on a single file |
 | `_run_traditional_analysis` | `file_path: str` | `list[AnalysisResult]` | Run all available external tools |
 | `_run_pylint` | `file_path: str` | `list[AnalysisResult]` | pylint subprocess execution and output parsing |
-| `_run_flake8` | `file_path: str` | `list[AnalysisResult]` | flake8 subprocess execution and output parsing |
-| `_run_mypy` | `file_path: str` | `list[AnalysisResult]` | mypy subprocess execution and output parsing |
+| `_run_ruff` | `file_path: str` | `list[AnalysisResult]` | ruff subprocess execution and output parsing |
+| `_run_ty` | `file_path: str` | `list[AnalysisResult]` | ty subprocess execution and output parsing |
 | `_run_bandit` | `file_path: str` | `list[AnalysisResult]` | bandit security analysis |
 | `_run_vulture` | `file_path: str` | `list[AnalysisResult]` | vulture dead-code detection |
 
@@ -55,7 +55,7 @@ Mixin composition pattern. `CodeReviewer` inherits all five; method resolution o
 ## Dependencies
 
 - **Internal**: `review.models` (all dataclasses and enums)
-- **External**: pylint, flake8, mypy, bandit, vulture (via subprocess; optional)
+- **External**: pylint, ruff, ty, bandit, vulture (via subprocess; optional)
 
 ## Constraints
 

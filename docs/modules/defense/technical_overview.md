@@ -11,7 +11,7 @@ The module is intentionally local and deterministic:
 - `defense.py` contains request-level orchestration, rate limiting, blocklists,
   and detection rules.
 - `mcp_tools.py` wraps the safe defense operations for MCP discovery.
-- `rabbithole.py` preserves compatibility imports for `RabbitHole`.
+- `active.py` provides the `RabbitHole` primitive used for containment.
 
 ## Data Flow
 

@@ -26,7 +26,7 @@ All plotting functions are Python functions importable from `codomyrmex.data_vis
 
 ### Function 1: `create_line_plot()`
 
-When the advanced plotter engine is available (default), this is an alias for `create_advanced_line_plot`.
+This uses the canonical basic chart implementation in `charts.line_plot`.
 
 - **Description**: Generates a line plot using the `AdvancedPlotter`.
 - **Path**: `from codomyrmex.data_visualization import create_line_plot`
@@ -43,7 +43,7 @@ When the advanced plotter engine is available (default), this is an alias for `c
 
 ### Function 2: `create_scatter_plot()`
 
-When the advanced plotter engine is available (default), this is an alias for `create_advanced_scatter_plot`.
+This uses the canonical basic chart implementation in `charts.scatter_plot`.
 
 - **Description**: Generates a scatter plot using the `AdvancedPlotter`.
 - **Path**: `from codomyrmex.data_visualization import create_scatter_plot`
@@ -59,7 +59,7 @@ When the advanced plotter engine is available (default), this is an alias for `c
 
 ### Function 3: `create_bar_chart()`
 
-When the advanced plotter engine is available (default), this is an alias for `create_advanced_bar_chart`.
+This uses the canonical basic chart implementation in `charts.bar_chart`.
 
 - **Description**: Generates a bar chart using the `AdvancedPlotter`.
 - **Path**: `from codomyrmex.data_visualization import create_bar_chart`
@@ -76,7 +76,7 @@ When the advanced plotter engine is available (default), this is an alias for `c
 
 ### Function 4: `create_histogram()`
 
-When the advanced plotter engine is available (default), this is an alias for `create_advanced_histogram`.
+This uses the canonical basic chart implementation in `charts.histogram`.
 
 - **Description**: Generates a histogram using the `AdvancedPlotter`.
 - **Path**: `from codomyrmex.data_visualization import create_histogram`
@@ -109,7 +109,7 @@ Available from the basic charts module (fallback when advanced plotter handles o
 
 ### Function 6: `create_heatmap()`
 
-From the basic charts module. For an advanced version, see `create_heatmap_advanced` (alias for `create_advanced_heatmap`).
+From the basic charts module. The advanced engine exposes `create_advanced_heatmap` separately.
 
 - **Description**: Generates a heatmap from a 2D data array using Seaborn.
 - **Path**: `from codomyrmex.data_visualization import create_heatmap`

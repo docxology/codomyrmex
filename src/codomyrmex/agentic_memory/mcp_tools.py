@@ -20,7 +20,7 @@ def _agent_memory() -> type:
     Returns:
         The AgentMemory class (not an instance).
     """
-    from codomyrmex.agentic_memory.memory import AgentMemory
+    from codomyrmex.agentic_memory.core.memory import AgentMemory
 
     return AgentMemory
 
@@ -31,7 +31,7 @@ def _vector_memory() -> type:
     Returns:
         The VectorStoreMemory class (not an instance).
     """
-    from codomyrmex.agentic_memory.memory import VectorStoreMemory
+    from codomyrmex.agentic_memory.core.memory import VectorStoreMemory
 
     return VectorStoreMemory
 
@@ -46,7 +46,7 @@ def memory_put(
     importance: str = "medium",
 ) -> dict[str, Any]:
     """Save a memory. Returns the created memory as a dict."""
-    from codomyrmex.agentic_memory.models import MemoryImportance, MemoryType
+    from codomyrmex.agentic_memory.core.models import MemoryImportance, MemoryType
 
     if not content or not content.strip():
         raise ValueError("content must be a non-empty string")

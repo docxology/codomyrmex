@@ -183,12 +183,6 @@ def classify_http_error(
     )
 
 
-# ── Aliases (imported by __init__.py) ───────────
-
-# Base class name alias
-ScrapeError = ScrapingError
-
-
 class FirecrawlError(ScrapingError):
     """Error specific to Firecrawl adapter operations."""
 

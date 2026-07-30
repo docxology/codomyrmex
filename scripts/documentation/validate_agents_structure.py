@@ -184,7 +184,6 @@ def validate_agents_structure(
         "venv",
         "__pycache__",
         ".pytest_cache",
-        ".mypy_cache",
         ".cursor",
         ".vscode",
         ".cache",

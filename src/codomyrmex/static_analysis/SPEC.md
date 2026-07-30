@@ -1,6 +1,6 @@
 # static_analysis -- Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Purpose
 
@@ -13,6 +13,8 @@ export detection, and unused function detection across the Codomyrmex package.
 - **AST-Only Analysis**: Parses Python source via `ast` module -- never imports analyzed code
 - **Zero External Dependencies**: Uses only Python stdlib (`ast`, `os`, `pathlib`)
 - **Layer-Aware**: Classifies modules into architectural layers matching the package SPEC
+- **Fail-Closed Exceptions**: Permits upward imports only through exact,
+  rationale-bearing file contracts and reports stale contracts
 - **Non-Destructive**: Read-only analysis; never modifies analyzed files
 - **Codebase-Wide Scope**: Scans all `.py` files recursively, skipping `__pycache__`
 
@@ -43,15 +45,17 @@ The canonical layer membership:
 
 | Layer | Modules |
 |-------|---------|
-| Foundation | `config_management`, `environment_setup`, `logging_monitoring`, `model_context_protocol`, `telemetry`, `terminal_interface` |
+| Foundation | `config_management`, `environment_setup`, `exceptions`, `logging_monitoring`, `model_context_protocol`, `telemetry`, `terminal_interface`, `validation` |
 | Core | `cache`, `coding`, `compression`, `data_visualization`, `documents`, `encryption`, `git_operations`, `llm`, `networking`, `performance`, `scrape`, `search`, `security`, `serialization`, `static_analysis` |
 | Service | `api`, `auth`, `ci_cd_automation`, `cloud`, `containerization`, `database_management`, `deployment`, `documentation`, `logistics`, `orchestrator` |
-| Specialized | All remaining modules (~47 modules including `agents`, `cerebrum`, `cli`, `simulation`, etc.) |
+| Specialized | All remaining modules, including `agents`, `events`, and `utils` |
 
 ### Violation Detection (`check_layer_violations`)
 
 - Assign numeric ranks: Foundation=0, Core=1, Service=2, Specialized=3
 - A violation occurs when `src_rank < dst_rank` (lower-layer module imports higher-layer module)
+- An exact `(source module, destination module, file)` entry in
+  `UPWARD_INTERFACE_CONTRACTS` exempts only that integration adapter
 - Return violations with human-readable reason strings
 - Do not flag `"other"` layer modules as violations
 
@@ -60,6 +64,15 @@ Violation rules restated:
 1. Foundation modules must not import Core, Service, or Specialized modules
 2. Core modules must not import Service or Specialized modules
 3. Service modules must not import Specialized modules
+
+### Upward Interface-Contract Audit
+
+- `UPWARD_INTERFACE_CONTRACTS` is an immutable registry of narrow integration
+  adapters and reader-facing rationales
+- `get_upward_interface_contract` resolves only exact file-scoped matches
+- `audit_upward_interface_contracts` reports both live and stale registry
+  entries; the repository audit fails on either unexplained upward imports or
+  stale exceptions
 
 ### Export Auditing (`audit_exports`)
 
@@ -104,6 +117,8 @@ no file-based output format -- consumers handle serialization.
 |----------|-------------|
 | `scan_imports` | `list[dict[str, Any]]` -- edge dicts |
 | `check_layer_violations` | `list[dict[str, Any]]` -- violation dicts (superset of edge fields + `reason`) |
+| `get_upward_interface_contract` | `str \| None` -- exact contract rationale |
+| `audit_upward_interface_contracts` | `dict[str, list[dict[str, str]]]` -- used/stale contracts |
 | `extract_imports_ast` | `list[str]` -- module names |
 | `audit_exports` | `list[dict[str, str]]` -- finding dicts |
 | `check_all_defined` | `tuple[bool, list[str] \ None]` |

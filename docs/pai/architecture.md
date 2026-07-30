@@ -148,7 +148,7 @@ PAI Agent (TypeScript)
 PAIBridge
   │
   ├─ ~/.claude/PAI/SKILL.md           → Algorithm version (v4+)
-  ├─ ~/.claude/skills/PAI/SKILL.md    → Algorithm version (v3 legacy fallback)
+  ├─ ~/.claude/skills/PAI/SKILL.md    → Algorithm version (v3 fallback)
   ├─ ~/.claude/skills/*/              → Skill enumeration (77+ skills)
   ├─ ~/.claude/PAI/Tools/*.ts         → Tool listing
   ├─ ~/.claude/hooks/                 → Hook discovery (22 hooks)

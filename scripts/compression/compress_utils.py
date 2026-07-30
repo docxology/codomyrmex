@@ -8,6 +8,7 @@ Usage:
 
 import sys
 from pathlib import Path
+from typing import Any
 
 try:
     import codomyrmex
@@ -21,7 +22,7 @@ import tarfile
 import zipfile
 
 
-def format_size(size: int) -> str:
+def format_size(size: float) -> str:
     for unit in ["B", "KB", "MB", "GB"]:
         if size < 1024:
             return f"{size:.1f} {unit}"
@@ -29,7 +30,7 @@ def format_size(size: int) -> str:
     return f"{size:.1f} TB"
 
 
-def compress_gzip(input_path: Path, output_path: Path | None = None) -> dict:
+def compress_gzip(input_path: Path, output_path: Path | None = None) -> dict[str, Any]:
     """Compress file with gzip."""
     output = output_path or input_path.with_suffix(input_path.suffix + ".gz")
 
@@ -47,7 +48,9 @@ def compress_gzip(input_path: Path, output_path: Path | None = None) -> dict:
     }
 
 
-def decompress_gzip(input_path: Path, output_path: Path | None = None) -> dict:
+def decompress_gzip(
+    input_path: Path, output_path: Path | None = None
+) -> dict[str, Any]:
     """Decompress gzip file."""
     output = output_path or input_path.with_suffix("").with_suffix(
         input_path.stem.split(".")[-1] if "." in input_path.stem else ""
@@ -61,9 +64,9 @@ def decompress_gzip(input_path: Path, output_path: Path | None = None) -> dict:
     return {"output": str(output), "size": output.stat().st_size}
 
 
-def analyze_archive(path: Path) -> dict:
+def analyze_archive(path: Path) -> dict[str, Any]:
     """Analyze archive contents."""
-    info = {"type": "unknown", "files": 0, "total_size": 0}
+    info: dict[str, Any] = {"type": "unknown", "files": 0, "total_size": 0}
 
     suffix = path.suffix.lower()
 

@@ -18,14 +18,15 @@ except ImportError:
 import argparse
 import ast
 import subprocess
+from typing import Any
 
 
-def analyze_python_file(file_path: Path) -> dict:
+def analyze_python_file(file_path: Path) -> dict[str, Any]:
     """Analyze a Python file."""
     with open(file_path) as f:
         source = f.read()
 
-    stats = {
+    stats: dict[str, Any] = {
         "lines": len(source.split("\n")),
         "functions": 0,
         "classes": 0,
@@ -64,9 +65,7 @@ def run_external_linter(path: str, linter: str) -> list:
     """Run an external linter."""
     cmd_map = {
         "ruff": ["ruff", "check", path],
-        "flake8": ["flake8", path],
-        "pylint": ["pylint", "--output-format=text", path],
-        "mypy": ["mypy", path],
+        "ty": ["ty", "check", path],
     }
 
     if linter not in cmd_map:
@@ -106,7 +105,7 @@ def main():
     parser.add_argument(
         "--type",
         "-t",
-        choices=["basic", "ruff", "flake8", "pylint", "mypy"],
+        choices=["basic", "ruff", "ty"],
         default="basic",
     )
     parser.add_argument("--verbose", "-v", action="store_true")
@@ -120,9 +119,7 @@ def main():
         print("\nAnalysis types:")
         print("  basic   - Built-in AST analysis")
         print("  ruff    - Fast Python linter")
-        print("  flake8  - Style guide enforcement")
-        print("  pylint  - Comprehensive linting")
-        print("  mypy    - Type checking")
+        print("  ty      - Repository type checking")
         return 0
 
     target = Path(args.path)

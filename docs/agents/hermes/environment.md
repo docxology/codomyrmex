@@ -57,7 +57,7 @@ OPENROUTER_API_KEY=sk-or-v1-...   # OpenRouter (recommended, access to many mode
 ```bash
 # Telegram
 TELEGRAM_BOT_TOKEN=1234567890:AAxxxxxxxxxxxxxxxxx
-TELEGRAM_ALLOWED_USERS=username1,username2  # Legacy — prefer pairing/telegram-approved.json (see telegram.md)
+TELEGRAM_ALLOWED_USERS=username1,username2  # Static allow-list; prefer pairing/telegram-approved.json
 TELEGRAM_HOME_CHANNEL=channel_name          # for cron/proactive messages
 
 # Gateway — multi-platform authorization (v0.4.0)

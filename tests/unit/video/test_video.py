@@ -8,6 +8,8 @@ Tests cover:
 - VideoProcessor, FrameExtractor, VideoAnalyzer initialization
 """
 
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -75,7 +77,7 @@ def test_frame_extraction_error_context() -> None:
 
 
 def test_availability_flags() -> None:
-    """Test that availability flags are defined."""
+    """Availability probes must not load optional native media libraries."""
     from codomyrmex.video import (
         ANALYSIS_AVAILABLE,
         EXTRACTION_AVAILABLE,
@@ -92,6 +94,24 @@ def test_availability_flags() -> None:
     assert isinstance(MOVIEPY_AVAILABLE, bool)
     assert isinstance(OPENCV_AVAILABLE, bool)
     assert isinstance(PIL_AVAILABLE, bool)
+
+    probe = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            (
+                "import sys; "
+                "import codomyrmex.audio.speech_to_text.providers; "
+                "import codomyrmex.video; "
+                "assert 'av' not in sys.modules; "
+                "assert 'cv2' not in sys.modules"
+            ),
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert probe.returncode == 0, probe.stderr
 
 
 # Configuration tests

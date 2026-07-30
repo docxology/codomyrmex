@@ -12,7 +12,7 @@ import threading
 from pathlib import Path
 from typing import Any
 
-from codomyrmex.agentic_memory.models import Memory
+from codomyrmex.agentic_memory.core.models import Memory
 from codomyrmex.agentic_memory.sqlite_store import SQLiteStore
 
 logger = logging.getLogger(__name__)

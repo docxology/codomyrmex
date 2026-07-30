@@ -17,28 +17,24 @@ from .core import (
     VaultHealthChecker,
 )
 
-# Exceptions
-from .exceptions import (
+# Exceptions and data models
+from .models import (
     ArsContextaError,
-    PipelineError,
-    PrimitiveValidationError,
-    VaultNotFoundError,
-)
-
-# Types and data models (enums + dataclasses)
-from .types import (
     ConfigDimension,
     DimensionSignal,
     HealthStatus,
     KernelConfig,
     KernelLayer,
     KernelPrimitive,
+    PipelineError,
     PipelineStage,
+    PrimitiveValidationError,
     ResearchClaim,
     SkillType,
     StageResult,
     VaultConfig,
     VaultHealthReport,
+    VaultNotFoundError,
     VaultSpace,
 )
 

@@ -120,13 +120,13 @@ class ShellDemoMixin:
             print(f"   ❌ Logging demo failed: {e}")
 
     def _demo_data_visualization(self, arg: str = ""):
-        """Deprecated compatibility shim for external callers."""
+        """Run the data-visualization demonstration when configured."""
         if self.demo_runner and self.demo_runner("data_visualization"):
             return
         print("🤷 No data_visualization demo runner configured")
 
     def _demo_code_execution(self, arg: str = ""):
-        """Deprecated compatibility shim for external callers."""
+        """Run the code-execution demonstration when configured."""
         if self.demo_runner and self.demo_runner("coding"):
             return
         print("🤷 No coding demo runner configured")

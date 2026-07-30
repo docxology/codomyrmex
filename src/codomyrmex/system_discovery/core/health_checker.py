@@ -90,7 +90,7 @@ class SystemHealthChecker:
 
         dep_mapping = {
             "python-dotenv": "dotenv",
-            "cased-kit": "kit",
+            "pydantic": "pydantic",
             "openai": "openai",
             "anthropic": "anthropic",
             "matplotlib": "matplotlib",
@@ -172,7 +172,7 @@ class SystemHealthChecker:
 
         dep_mapping = {
             "python-dotenv": "dotenv",
-            "cased-kit": "kit",
+            "pydantic": "pydantic",
             "openai": "openai",
             "anthropic": "anthropic",
             "matplotlib": "matplotlib",

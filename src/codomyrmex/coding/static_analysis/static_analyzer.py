@@ -84,11 +84,9 @@ class StaticAnalyzer:
 
         tools = {
             "pylint": False,
-            "flake8": False,
-            "mypy": False,
+            "ruff": False,
+            "ty": False,
             "bandit": False,
-            "black": False,
-            "isort": False,
             "pytest": False,
             "coverage": False,
             "radon": False,
@@ -195,11 +193,11 @@ class StaticAnalyzer:
         if AnalysisType.QUALITY in analysis_types and self.tools_available["pylint"]:
             results.extend(self.tool_runner.run_pylint(file_path))
 
-        if AnalysisType.STYLE in analysis_types and self.tools_available["flake8"]:
-            results.extend(self.tool_runner.run_flake8(file_path))
+        if AnalysisType.STYLE in analysis_types and self.tools_available["ruff"]:
+            results.extend(self.tool_runner.run_ruff(file_path))
 
-        if AnalysisType.QUALITY in analysis_types and self.tools_available["mypy"]:
-            results.extend(self.tool_runner.run_mypy(file_path))
+        if AnalysisType.QUALITY in analysis_types and self.tools_available["ty"]:
+            results.extend(self.tool_runner.run_ty(file_path))
 
         if AnalysisType.SECURITY in analysis_types and self.tools_available["bandit"]:
             results.extend(self.tool_runner.run_bandit(file_path))

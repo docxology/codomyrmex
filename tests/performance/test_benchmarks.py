@@ -4,8 +4,8 @@ import pytest
 
 pytestmark = [pytest.mark.performance, pytest.mark.benchmark]
 
-from codomyrmex.coding.parsers.tree_sitter import TreeSitterParser
-from codomyrmex.coding.parsers.tree_sitter.languages.languages import LanguageManager
+from codomyrmex.tree_sitter import TreeSitterParser
+from codomyrmex.tree_sitter.languages.languages import LanguageManager
 
 
 @pytest.mark.benchmark

@@ -18,11 +18,11 @@ GCSClient(project: Optional[str] = None)
 
 | Method | Returns | Description |
 |--------|---------|-------------|
-| `upload_blob(bucket_name, source_file_name, destination_blob_name)` | `bool` | Upload local file |
-| `download_blob(bucket_name, source_blob_name, destination_file_name)` | `bool` | Download to local |
-| `list_blobs(bucket_name)` | `list[str]` | List blob names |
-| `get_metadata(bucket_name, blob_name)` | `dict` | Get blob metadata |
-| `ensure_bucket(bucket_name, location="US")` | `bool` | Create if not exists |
+| `upload_file(bucket, key, file_path)` | `bool` | Upload local file |
+| `download_file(bucket, key, file_path)` | `bool` | Download to local |
+| `list_objects(bucket, prefix=None)` | `list[str]` | List object keys |
+| `get_object_metadata(bucket, key)` | `dict` | Get object metadata |
+| `create_bucket(name, region="US")` | `bool` | Create a bucket |
 
 ### Error Handling
 

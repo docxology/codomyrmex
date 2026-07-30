@@ -5,7 +5,7 @@ Integrates 4D time-series data with the existing four_d/ submodule to provide
 spatial world models for agent trajectory analysis and visualization.
 
 Provides:
-    - WorldModel ABC (existing, re-exported)
+    - WorldModel ABC
     - Trajectory4D: a time-series of (x, y, z, t) waypoints
     - TrialSummary: aggregated metrics from an agent trial
     - render_agent_trial: render an agent's trajectory through 4D space-time

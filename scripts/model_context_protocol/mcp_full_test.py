@@ -475,9 +475,9 @@ def run_discovery_tests(runner: TestRunner):
     tool = DiscoveredTool(
         name="test_tool",
         description="A test tool",
-        source="test",
-        source_path="/test/path",
-        input_schema={"type": "object"},
+        module_path="test.module",
+        callable_name="test_tool",
+        parameters={"type": "object"},
         tags=["test", "example"],
     )
 

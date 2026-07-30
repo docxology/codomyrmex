@@ -9,7 +9,7 @@ import time
 
 import pytest
 
-from codomyrmex.agentic_memory.memory import KnowledgeMemory
+from codomyrmex.agentic_memory.core.memory import KnowledgeMemory
 from codomyrmex.agentic_memory.stores import InMemoryStore
 
 # ── fixture ────────────────────────────────────────────────────────────────

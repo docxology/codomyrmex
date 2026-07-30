@@ -34,7 +34,8 @@ remain importable for standalone use and testing.
 each of the {{CONFIG_OPERATIONAL_SUBSYSTEM_COUNT}} operational subsystem classes at the
 leaves, all sharing the `models.py` value-object contract.
 
-![{{FIGURE_CAPTION_SUBSYSTEM_ARCHITECTURE}}](figures/{{FIGURE_FILENAME_SUBSYSTEM_ARCHITECTURE}}){#{{FIGURE_LABEL_SUBSYSTEM_ARCHITECTURE}} width={{FIGURE_WIDTH_SUBSYSTEM_ARCHITECTURE}}}
+![{{FIGURE_CAPTION_SUBSYSTEM_ARCHITECTURE}}](figures/{{FIGURE_FILENAME_SUBSYSTEM_ARCHITECTURE}}){#{{FIGURE_LABEL_SUBSYSTEM_ARCHITECTURE}} width={{FIGURE_WIDTH_SUBSYSTEM_ARCHITECTURE}} alt="{{FIGURE_ALT_SUBSYSTEM_ARCHITECTURE}}" aria-describedby="{{FIGURE_LABEL_SUBSYSTEM_ARCHITECTURE}}-description"}
+<div id="{{FIGURE_LABEL_SUBSYSTEM_ARCHITECTURE}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_SUBSYSTEM_ARCHITECTURE}}</div>
 
 ---
 
@@ -252,9 +253,13 @@ hand-calculated worked example in prose.
 The `ConsequenceMemory` subsystem stores each reported `ConsequenceRecord` and the
 derived agent profile. It uses SQLite WAL mode when configured with a file path. The
 kernel and MCP defaults use `:memory:`, so records survive only for the process
-lifetime unless an operator supplies a persistent database path. Because the MCP outcome
-endpoint does not yet attest reports against a prior EXECUTE record, this is an audit log
-of submitted outcomes rather than independent ground truth.
+lifetime unless an operator supplies a persistent database path. On the ordinary MCP
+path, the outcome endpoint does not attest reports against a prior EXECUTE record, so
+the database is an audit log of submitted outcomes rather than independent ground
+truth. Optional kernel attestation provides a separate linked lifecycle path; required
+mode rejects the ordinary outcome method and requires a proposal, EXECUTE verdict,
+authorization, execution receipt, and signed outcome event. Neither mode independently
+observes external actuation.
 
 The schema comprises three tables: `consequences` (one row per submitted consequence
 report), `agent_profiles` (one row per agent, containing current trust state and role),
@@ -364,7 +369,7 @@ and stale-document detection remains incomplete.
 The `FalsificationWorker` is the colony's deterministic adversarial-review component.
 It runs {{CONFIG_FALSIFICATION_CHECK_COUNT}} heuristic checks grouped into the
 {{CONFIG_FALSIFICATION_VECTORS}} `AttackVector` categories, without an LLM call. The
-design is motivated by falsifiability [@popper1959logic], but each check is
+design is motivated by falsifiability [@popper2002logic], but each check is
 a software heuristic rather than a scientific test of truth.
 
 **Attack vector taxonomy.** The {{CONFIG_FALSIFICATION_VECTORS}} attack vectors are
@@ -414,7 +419,8 @@ themselves force REFUSE; ordinary score components determine the result.
 vectors ranked by maximum severity weight. The current deterministic checks top out at
 HIGH severity; the CRITICAL class remains part of the actuation-gate override contract.
 
-![{{FIGURE_CAPTION_FALSIFICATION_VECTORS}}](figures/{{FIGURE_FILENAME_FALSIFICATION_VECTORS}}){#{{FIGURE_LABEL_FALSIFICATION_VECTORS}} width={{FIGURE_WIDTH_FALSIFICATION_VECTORS}}}
+![{{FIGURE_CAPTION_FALSIFICATION_VECTORS}}](figures/{{FIGURE_FILENAME_FALSIFICATION_VECTORS}}){#{{FIGURE_LABEL_FALSIFICATION_VECTORS}} width={{FIGURE_WIDTH_FALSIFICATION_VECTORS}} alt="{{FIGURE_ALT_FALSIFICATION_VECTORS}}" aria-describedby="{{FIGURE_LABEL_FALSIFICATION_VECTORS}}-description"}
+<div id="{{FIGURE_LABEL_FALSIFICATION_VECTORS}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_FALSIFICATION_VECTORS}}</div>
 
 ---
 
@@ -527,10 +533,13 @@ relabel deterministic gate scores as probabilistic outputs.
 ## The Pressure Loop
 
 The feedback path is composed from separate public operations. `propose_action` returns a
-decision but does not actuate; `record_outcome` accepts a later caller report but does not
-currently require a matching authorization. The pseudocode makes that boundary explicit.
+decision but does not actuate. With attestation disabled or optional, `record_outcome`
+accepts a later caller report without requiring a matching authorization. Optional mode
+also exposes a linked path; required mode rejects the ordinary method and admits only
+`record_attested_outcome` after authorization and an execution receipt. The pseudocode
+separates those contracts.
 
-**Algorithm 1: Colony Kernel Pressure Loop**
+**Algorithm 1: Colony Kernel Pressure Loop and Attestation Boundary**
 
 ```
 Input:  ActionProposal p from any agent
@@ -571,10 +580,11 @@ POST_GATE:
          if decision is REFUSE: deposit FAILURE at p.target
          return GateResult(decision, gate_score, reason, required_evidence)
 
-CALLER MAY ACTUATE AFTER EXECUTE; THE KERNEL DOES NOT ENFORCE THIS STEP.
+ORDINARY PATH: CALLER MAY ACTUATE AFTER EXECUTE; THE KERNEL DOES NOT ENFORCE THIS STEP.
 
-REPORT(p, outcome, tests_passed):
-         [No consumed authorization or duplicate-report check in this release]
+ORDINARY_REPORT(p, outcome, tests_passed):
+         [Available only when attestation is disabled or optional]
+         [No consumed authorization or duplicate-report check]
          record ← ConsequenceMemory.record(reported consequence)
          ResourceLedger.consume(outcome.cost or p.budget_estimate)
          if tests_passed and no repair: deposit/reinforce SUCCESS
@@ -583,6 +593,15 @@ REPORT(p, outcome, tests_passed):
          profile ← ConsequenceMemory.get_profile(p.agent_id)
          if RoleAdapter.update(profile): ConsequenceMemory.save_profile(profile)
          return record
+
+ATTESTED_REPORT(p, outcome, tests_passed):
+         require an attested EXECUTE verdict for p
+         authorization ← authorize_execution(p.proposal_id)
+         caller actuates only after authorization
+         execution ← record_execution_receipt(authorization, caller receipt)
+         append signed outcome event linked to execution
+         apply the same consequence, budget, trust, role, and signal updates
+         [Required mode rejects ORDINARY_REPORT; local linkage does not observe actuation]
 
 TICK(): subtract each trace's per-tick evaporation and check budget rollover
 PRUNING_REPORT(registry): scan and return candidates; do not archive by default
@@ -593,7 +612,8 @@ propose; callers optionally execute approved work; callers separately report out
 trust and local traces then affect later evaluations. Failed outcomes raise same-target
 hazard pressure and lower the reporting agent's trust. This can move later proposals
 from EXECUTE to HOLD or REFUSE, but the effect is bounded by decay and depends on the
-accuracy of caller-reported outcomes.
+accuracy of the submitted outcome. The authenticated path protects linkage and
+integrity of that submission, not its external truth.
 
 On the ordinary path, the generated weights are budget {{CONFIG_GATE_WEIGHT_BUDGET}},
 hazard {{CONFIG_GATE_WEIGHT_RISK}}, trust {{CONFIG_GATE_WEIGHT_TRUST}}, and completeness
@@ -607,4 +627,5 @@ probability.
 shows which state feeds later decisions; it is not a literal call-order trace, because
 outcome recording is a separate caller action and falsification runs before scoring.
 
-![{{FIGURE_CAPTION_COLONY_PRESSURE_LOOP}}](figures/{{FIGURE_FILENAME_COLONY_PRESSURE_LOOP}}){#{{FIGURE_LABEL_COLONY_PRESSURE_LOOP}} width={{FIGURE_WIDTH_COLONY_PRESSURE_LOOP}}}
+![{{FIGURE_CAPTION_COLONY_PRESSURE_LOOP}}](figures/{{FIGURE_FILENAME_COLONY_PRESSURE_LOOP}}){#{{FIGURE_LABEL_COLONY_PRESSURE_LOOP}} width={{FIGURE_WIDTH_COLONY_PRESSURE_LOOP}} alt="{{FIGURE_ALT_COLONY_PRESSURE_LOOP}}" aria-describedby="{{FIGURE_LABEL_COLONY_PRESSURE_LOOP}}-description"}
+<div id="{{FIGURE_LABEL_COLONY_PRESSURE_LOOP}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_COLONY_PRESSURE_LOOP}}</div>

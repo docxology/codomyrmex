@@ -3,13 +3,13 @@
 Provides seamless integration with the NousResearch Hermes Agent CLI framework.
 """
 
-from codomyrmex.agents.hermes._provider_router import (
+from codomyrmex.agents.hermes.client_pkg import HermesClient, HermesError
+from codomyrmex.agents.hermes.provider_router_pkg import (
     ContextCompressor,
     MCPBridgeManager,
     ProviderRouter,
     UserModel,
 )
-from codomyrmex.agents.hermes.hermes_client import HermesClient, HermesError
 from codomyrmex.agents.hermes.session import (
     HermesSession,
     InMemorySessionStore,

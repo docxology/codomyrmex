@@ -24,7 +24,6 @@ Module implementation, resources, and local coordination for Coding..
 - `generator.py` – File
 - `mcp_tools.py` – File
 - `monitoring/` – Subdirectory
-- `parsers/` – Subdirectory
 - `pattern_matching/` – Subdirectory
 - `py.typed` – File
 - `refactoring/` – Subdirectory

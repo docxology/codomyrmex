@@ -33,7 +33,7 @@
 
 | Algorithm | Status | Reason |
 |---|---|---|
-| MD5 | **Deprecated** | Collision attacks demonstrated (2004). Included only for legacy checksum verification. |
+| MD5 | **Deprecated** | Collision attacks demonstrated (2004). Included only for existing checksum verification. |
 
 ### Excluded
 

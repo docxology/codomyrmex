@@ -1,4 +1,4 @@
-"""Tests for agents.hermes.hermes_client — HermesClient dual-backend.
+"""Tests for agents.hermes.client_pkg — HermesClient dual-backend.
 
 Zero-Mock: Tests verify real client instantiation and method signatures.
 Backend-dependent tests use skipif for Ollama availability.
@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from codomyrmex.agents.hermes.hermes_client import HermesClient
+from codomyrmex.agents.hermes.client_pkg import HermesClient
 
 # ── Client instantiation ─────────────────────────────────────────────
 
@@ -146,7 +146,7 @@ class TestHermesClientSessionManagement:
         assert len(child.messages) > 0
 
     def test_session_merge(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         client = HermesClient()
         client._session_db_path = ":memory:"
@@ -201,7 +201,7 @@ class TestHermesClientAdvancedOperations:
         assert isinstance(cleanup, bool)
 
     def test_batch_execute(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        from codomyrmex.agents.hermes.hermes_client import HermesClient
+        from codomyrmex.agents.hermes.client_pkg import HermesClient
 
         # Mock class-level execute to catch thread spawns
         monkeypatch.setattr(

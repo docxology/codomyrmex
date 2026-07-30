@@ -4,7 +4,7 @@ from typing import Any
 
 import numpy as np
 
-from codomyrmex.cerebrum.core.exceptions import InferenceError, NetworkStructureError
+from codomyrmex.exceptions.cerebrum import InferenceError, NetworkStructureError
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)

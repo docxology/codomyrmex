@@ -29,14 +29,17 @@ def _get_builder():
     description="Validate release readiness by running certification checks on tests, coverage, security, and docs.",
 )
 def release_validate(
-    version: str = "1.0.0",
-    test_failures: int = 0,
-    test_total: int = 0,
-    coverage_overall: float = 0.0,
+    version: str = "1.3.0",
+    test_failures: int | None = None,
+    test_total: int | None = None,
+    coverage_overall: float | None = None,
     coverage_tier1: float = 0.0,
-    cve_count: int = 0,
-    secrets_found: int = 0,
-    docs_complete: bool = True,
+    type_errors: int | None = None,
+    cve_count: int | None = None,
+    secrets_found: int | None = None,
+    docs_complete: bool | None = None,
+    artifacts_verified: bool | None = None,
+    artifact_count: int | None = None,
 ) -> dict[str, Any]:
     """Run release certification checks and return the certification report.
 
@@ -55,12 +58,21 @@ def release_validate(
     """
     try:
         validator = _get_validator(version)
-        if test_total > 0:
+        if test_failures is not None and test_total is not None:
             validator.check_tests(failures=test_failures, total=test_total)
-        if coverage_overall > 0:
+        if coverage_overall is not None:
             validator.check_coverage(overall=coverage_overall, tier1=coverage_tier1)
-        validator.check_security(cve_count=cve_count, secrets_found=secrets_found)
-        validator.check_documentation(complete=docs_complete)
+        if type_errors is not None:
+            validator.check_type_safety(errors=type_errors)
+        if cve_count is not None and secrets_found is not None:
+            validator.check_security(cve_count=cve_count, secrets_found=secrets_found)
+        if docs_complete is not None:
+            validator.check_documentation(complete=docs_complete)
+        if artifacts_verified is not None and artifact_count is not None:
+            validator.check_artifacts(
+                verified=artifacts_verified,
+                artifact_count=artifact_count,
+            )
 
         cert = validator.certify()
         return {
@@ -89,8 +101,10 @@ def release_validate(
 )
 def release_build(
     name: str = "codomyrmex",
-    version: str = "1.0.0",
+    version: str = "1.3.0",
     python_requires: str = ">=3.11",
+    source_dir: str = ".",
+    output_dir: str | None = None,
 ) -> dict[str, Any]:
     """Build distribution artifacts for a package.
 
@@ -109,7 +123,11 @@ def release_build(
             version=version,
             python_requires=python_requires,
         )
-        builder = PackageBuilder(metadata)
+        builder = PackageBuilder(
+            metadata,
+            source_dir=source_dir,
+            output_dir=output_dir,
+        )
         report = builder.build()
         return {
             "status": "success",
@@ -117,9 +135,12 @@ def release_build(
             "artifacts": [
                 {
                     "filename": a.filename,
+                    "path": str(a.path),
                     "format": a.format,
+                    "media_type": a.media_type,
                     "size_bytes": a.size_bytes,
-                    "checksum": a.checksum,
+                    "sha256": a.sha256,
+                    "sha512": a.sha512,
                 }
                 for a in report.artifacts
             ],
@@ -134,10 +155,16 @@ def release_build(
     description="Generate a markdown-formatted release certification report.",
 )
 def release_certification_report(
-    version: str = "1.0.0",
-    test_failures: int = 0,
-    test_total: int = 100,
-    coverage_overall: float = 70.0,
+    version: str = "1.3.0",
+    test_failures: int | None = None,
+    test_total: int | None = None,
+    coverage_overall: float | None = None,
+    type_errors: int | None = None,
+    cve_count: int | None = None,
+    secrets_found: int | None = None,
+    docs_complete: bool | None = None,
+    artifacts_verified: bool | None = None,
+    artifact_count: int | None = None,
 ) -> dict[str, Any]:
     """Generate a markdown certification report for a release.
 
@@ -152,8 +179,21 @@ def release_certification_report(
     """
     try:
         validator = _get_validator(version)
-        validator.check_tests(failures=test_failures, total=test_total)
-        validator.check_coverage(overall=coverage_overall)
+        if test_failures is not None and test_total is not None:
+            validator.check_tests(failures=test_failures, total=test_total)
+        if coverage_overall is not None:
+            validator.check_coverage(overall=coverage_overall)
+        if type_errors is not None:
+            validator.check_type_safety(errors=type_errors)
+        if cve_count is not None and secrets_found is not None:
+            validator.check_security(cve_count=cve_count, secrets_found=secrets_found)
+        if docs_complete is not None:
+            validator.check_documentation(complete=docs_complete)
+        if artifacts_verified is not None and artifact_count is not None:
+            validator.check_artifacts(
+                verified=artifacts_verified,
+                artifact_count=artifact_count,
+            )
         cert = validator.certify()
         md = validator.to_markdown(cert)
         return {

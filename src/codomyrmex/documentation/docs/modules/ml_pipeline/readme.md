@@ -1,10 +1,13 @@
 # ml_pipeline
 
-**Version**: v1.3.0 | **Status**: Stub | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Experimental | **Last Updated**: July 2026
 
 ## Overview
 
-Lightweight interface for defining and executing machine learning pipelines. Currently implemented as a stub with two MCP tools. For production workflow orchestration, use the `orchestrator` module.
+Lightweight interface for producing pipeline-definition and execution-shaped
+receipts. The two functions are Python exports and MCP tools. They are
+stateless pass-through adapters—not an ML execution engine. For executable
+workflow orchestration, use the `orchestrator` module.
 
 ## Key Components
 
@@ -16,14 +19,15 @@ Lightweight interface for defining and executing machine learning pipelines. Cur
 ## Quick Start
 
 ```python
-from codomyrmex.ml_pipeline.mcp_tools import ml_pipeline_create, ml_pipeline_execute
+from codomyrmex.ml_pipeline import ml_pipeline_create, ml_pipeline_execute
 
 result = ml_pipeline_create("my_pipeline", [{"name": "train", "epochs": 3}])
 output = ml_pipeline_execute("my_pipeline", {"data": "/path/to/data"})
 ```
 
 > [!NOTE]
-> Both tools are currently stubs that return echo responses. No actual ML execution occurs.
+> Both functions return echo responses. No validation, persistence, or ML
+> execution occurs.
 
 ## MCP Tools
 
@@ -37,7 +41,7 @@ output = ml_pipeline_execute("my_pipeline", {"data": "/path/to/data"})
 | File | Purpose |
 | :--- | :--- |
 | `mcp_tools.py` | MCP tool definitions (2 tools, 34 lines) |
-| `__init__.py` | Module marker (no public exports) |
+| `__init__.py` | Explicit exports for both MCP-backed functions |
 
 ## Navigation
 

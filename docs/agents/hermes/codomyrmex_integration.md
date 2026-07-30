@@ -52,7 +52,7 @@ sequenceDiagram
 - **Batch Execution** *(v1.5.x)*: `HermesClient.batch_execute(prompts, parallel=False)` processes a list of prompts sequentially or via `ThreadPoolExecutor`. Results are returned as a structured list with per-prompt status and content, ideal for automated evaluation or bulk processing.
 
 ```python
-from codomyrmex.agents.hermes.hermes_client import HermesClient
+from codomyrmex.agents.hermes.client_pkg import HermesClient
 
 client = HermesClient()
 results = client.batch_execute(
@@ -64,8 +64,8 @@ results = client.batch_execute(
 
 **Deep Links**:
 
-- 🔗 **Client Engine**: [`src/codomyrmex/agents/hermes/hermes_client.py`](../../../src/codomyrmex/agents/hermes/hermes_client.py)
-- 🔗 **Provider Router**: [`src/codomyrmex/agents/hermes/_provider_router.py`](../../../src/codomyrmex/agents/hermes/_provider_router.py)
+- 🔗 **Client Engine**: [`src/codomyrmex/agents/hermes/client_pkg/`](../../../src/codomyrmex/agents/hermes/client_pkg/)
+- 🔗 **Provider Router**: [`src/codomyrmex/agents/hermes/provider_router_pkg/`](../../../src/codomyrmex/agents/hermes/provider_router_pkg/)
 
 ---
 
@@ -84,7 +84,7 @@ Hermes natively supports sessions, but Codomyrmex elevates this into a globally 
 - **Session Pruning** *(v1.5.x)*: `prune_old_sessions(days_old)` archives sessions to gzip-compressed JSON and removes them from the DB, keeping the session store lean.
 
 ```python
-from codomyrmex.agents.hermes.hermes_client import HermesClient
+from codomyrmex.agents.hermes.client_pkg import HermesClient
 
 client = HermesClient()
 
@@ -219,7 +219,7 @@ Hermes can now participate in and coordinate multi-agent swarms through four new
 # Spawn a specialist agent by capability role
 result = hermes_spawn_agent(
     role="code_reviewer",
-    task="Review the OAuth2 implementation in hermes_client.py.",
+    task="Review the OAuth2 implementation in the Hermes client package.",
     capability_profile={"code_reviewer": ["read_", "run_test"]},
 )
 
@@ -271,7 +271,7 @@ A major interface addition is the native ability for Hermes to act autonomously 
 
 **Deep Links**:
 
-- 🔗 **Autonomous Loop Logic**: [`hermes_client.py` — `chat_session` autonomous loop](../../../src/codomyrmex/agents/hermes/hermes_client.py#L751-L911)
+- 🔗 **Autonomous Loop Logic**: [`client_pkg/chat.py` — `chat_session` autonomous loop](../../../src/codomyrmex/agents/hermes/client_pkg/chat.py)
 - 🔗 **Task Integration Tests**: [`tests/integration/hermes/test_gateway_workflow_loop.py`](../../../tests/integration/hermes/test_gateway_workflow_loop.py)
 
 ---

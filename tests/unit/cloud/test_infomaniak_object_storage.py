@@ -355,16 +355,16 @@ class TestInfomaniakS3Client:
             Bucket="bucket", Key="key.txt"
         )
 
-    def test_delete_file_delegates_to_delete_object(self, stub_s3_client):
-        """delete_file is an alias that delegates to delete_object."""
+    def test_delete_object(self, stub_s3_client):
+        """delete_object removes the requested S3 object."""
         client = InfomaniakS3Client(stub_s3_client)
-        assert client.delete_file("bucket", "key.txt") is True
+        assert client.delete_object("bucket", "key.txt") is True
         stub_s3_client.delete_object.assert_called_once_with(
             Bucket="bucket", Key="key.txt"
         )
 
-    def test_get_metadata(self, stub_s3_client):
-        """get_metadata returns structured metadata from head_object."""
+    def test_get_object_metadata_from_s3(self, stub_s3_client):
+        """get_object_metadata returns structured metadata from head_object."""
         stub_s3_client.head_object.return_value = {
             "ContentLength": 2048,
             "ContentType": "image/png",
@@ -374,7 +374,7 @@ class TestInfomaniakS3Client:
         }
 
         client = InfomaniakS3Client(stub_s3_client)
-        meta = client.get_metadata("bucket", "photo.png")
+        meta = client.get_object_metadata("bucket", "photo.png")
 
         # In S3Client the keys are preserved as returned by boto3
         assert meta == {"custom-key": "custom-value"}
@@ -615,12 +615,12 @@ class TestInfomaniakS3ClientExpanded:
         assert client.download_file("bkt", "key.txt", "/tmp/out.txt") is True
         s3.download_file.assert_called_once_with("bkt", "key.txt", "/tmp/out.txt")
 
-    def test_delete_file_delegates(self):
+    def test_delete_object(self):
         client, s3 = self._make_client()
-        assert client.delete_file("bkt", "key.txt") is True
+        assert client.delete_object("bkt", "key.txt") is True
         s3.delete_object.assert_called_once_with(Bucket="bkt", Key="key.txt")
 
-    def test_get_metadata(self):
+    def test_get_object_metadata_from_s3(self):
         client, s3 = self._make_client()
         s3.head_object.return_value = {
             "ContentLength": 100,
@@ -629,7 +629,7 @@ class TestInfomaniakS3ClientExpanded:
             "LastModified": "2026-01-01",
             "Metadata": {"key": "val"},
         }
-        result = client.get_metadata("bkt", "key.txt")
+        result = client.get_object_metadata("bkt", "key.txt")
         assert result == {"key": "val"}
 
     def test_copy_object(self):

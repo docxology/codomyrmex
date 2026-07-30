@@ -17,7 +17,11 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 try:
-    from codomyrmex.static_analysis.imports import check_layer_violations, scan_imports
+    from codomyrmex.static_analysis.imports import (
+        audit_upward_interface_contracts,
+        check_layer_violations,
+        scan_imports,
+    )
 except ImportError as e:
     print(f"Error importing codomyrmex module: {e}")
     sys.exit(1)
@@ -54,6 +58,7 @@ def main():
 
     edges = scan_imports(src_dir)
     violations = check_layer_violations(edges)
+    contract_audit = audit_upward_interface_contracts(edges)
 
     unique_edges = {}
     for e in edges:
@@ -73,6 +78,8 @@ def main():
             json.dumps(
                 {
                     "total_edges": len(unique_edges),
+                    "contracted_upward_edges": contract_audit["used"],
+                    "stale_interface_contracts": contract_audit["stale"],
                     "violations": [
                         {"src": k[0], "dst": k[1], **v}
                         for k, v in unique_violations.items()
@@ -83,7 +90,24 @@ def main():
         )
     else:
         print(f"Import edges: {len(unique_edges)}")
+        print(f"Contracted upward edges: {len(contract_audit['used'])}")
+        print(f"Stale interface contracts: {len(contract_audit['stale'])}")
         print(f"Violations:   {len(unique_violations)}")
+        if contract_audit["used"]:
+            print()
+            for contract in contract_audit["used"]:
+                print(
+                    f"  🔗 {contract['src']} → {contract['dst']} ({contract['file']})"
+                )
+                print(f"     {contract['rationale']}")
+        if contract_audit["stale"]:
+            print()
+            for contract in contract_audit["stale"]:
+                print(
+                    "  ❌ stale contract: "
+                    f"{contract['src']} → {contract['dst']} "
+                    f"({contract['file']})"
+                )
         if unique_violations:
             print()
             for (src, dst), info in sorted(unique_violations.items()):
@@ -92,7 +116,7 @@ def main():
         else:
             print("  ✅ No cross-layer violations found")
 
-    sys.exit(1 if unique_violations else 0)
+    sys.exit(1 if unique_violations or contract_audit["stale"] else 0)
 
 
 if __name__ == "__main__":

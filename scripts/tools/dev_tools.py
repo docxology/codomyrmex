@@ -56,7 +56,7 @@ DEV_TOOLS = {
     "curl": "HTTP client",
     "jq": "JSON processor",
     "ruff": "Python linter",
-    "black": "Python formatter",
+    "ty": "Python type checker",
     "pytest": "Python testing",
     "cargo": "Rust package manager",
     "go": "Go compiler",

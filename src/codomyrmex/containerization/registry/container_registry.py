@@ -1,12 +1,9 @@
 import base64
+import importlib
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
-import docker
-import requests
-from docker.errors import APIError, DockerException, ImageNotFound
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring import get_logger
@@ -15,18 +12,24 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
-# Try to import Docker SDK
+docker: Any = None
+APIError: type[Exception] = Exception
+DockerException: type[Exception] = Exception
+ImageNotFound: type[Exception] = Exception
 try:
+    docker = importlib.import_module("docker")
+    docker_errors = importlib.import_module("docker.errors")
+    APIError = docker_errors.APIError
+    DockerException = docker_errors.DockerException
+    ImageNotFound = docker_errors.ImageNotFound
     DOCKER_AVAILABLE = True
 except ImportError:
-    APIError = Exception
-    DockerException = Exception
-    ImageNotFound = Exception
     DOCKER_AVAILABLE = False
     logger.warning("Docker SDK not available. Install with: pip install docker")
 
-# Try to import requests for registry API calls
+requests: Any = None
 try:
+    requests = importlib.import_module("requests")
     REQUESTS_AVAILABLE = True
 except ImportError:
     REQUESTS_AVAILABLE = False

@@ -430,7 +430,7 @@ git commit -m "Remove generated files from tracking"
 
 ```bash
 # Run the repository type checker
-uv run ty check src/
+uv run ty check --output-format concise src/ scripts/ tests/
 ```
 
 ## 🔍 Debugging Techniques

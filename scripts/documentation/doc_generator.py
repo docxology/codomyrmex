@@ -10,9 +10,7 @@ Usage:
     python doc_generator.py [--type TYPE] [--output OUTPUT]
 """
 
-logger = logging.getLogger(__name__)
-
-
+import logging
 import sys
 from pathlib import Path
 
@@ -24,7 +22,8 @@ except ImportError:
 
 import argparse
 import ast
-import logging
+
+logger = logging.getLogger(__name__)
 
 
 def extract_module_info(file_path: Path) -> dict:
@@ -65,7 +64,7 @@ def extract_module_info(file_path: Path) -> dict:
                     }
                 )
     except Exception as e:
-        logger.debug("Could not parse %s: %s", filepath, e)
+        logger.debug("Could not parse %s: %s", file_path, e)
 
     return info
 

@@ -22,7 +22,7 @@ generated documentation tree link-complete.
 
 - **Kernel centrality**: documentation should make the colony kernel visible as
   an orchestration and trust surface.
-- **Gate compatibility**: source-structure and docs checks must agree that the
+- **Gate contract**: source-structure and docs checks must agree that the
   module has complete documentation coverage.
 - **Implementation humility**: generated mirror docs summarize contracts without
   replacing source-level API specifications or tests.

@@ -13,9 +13,9 @@ from codomyrmex.collaboration.swarm import (
     SwarmManager,
     SwarmMessage,
     SwarmMessageType,
+    SwarmVote,
     TaskAssignment,
     TaskDecomposer,
-    Vote,
 )
 
 
@@ -106,7 +106,7 @@ async def test_consensus_engine_strategies():
     """Test different consensus resolution strategies."""
     manager = SwarmManager()
 
-    votes = [Vote("a1", True), Vote("a2", True), Vote("a3", False)]
+    votes = [SwarmVote("a1", True), SwarmVote("a2", True), SwarmVote("a3", False)]
 
     # Majority
     res_maj = await manager.request_consensus("test", votes, strategy="majority")
@@ -117,7 +117,10 @@ async def test_consensus_engine_strategies():
     assert res_veto.decision == Decision.VETOED
 
     # Weighted
-    votes_weighted = [Vote("a1", False, weight=2.0), Vote("a2", True, weight=1.0)]
+    votes_weighted = [
+        SwarmVote("a1", False, weight=2.0),
+        SwarmVote("a2", True, weight=1.0),
+    ]
     res_weight = await manager.request_consensus(
         "test", votes_weighted, strategy="weighted"
     )

@@ -11,7 +11,7 @@ The generators subpackage provides droid task handlers that produce source code,
 The package is organized into three generator categories, aggregated via `__init__.py`:
 
 1. **Documentation generators** (`documentation.py`) -- quality assessment, coverage scoring, consistency checking
-2. **Physical management generators** (`physical.py` -> `physical_generators/`) -- object manager, physics simulation, sensor integration scaffolding
+2. **Physical management generators** (`physical_generators/`) -- object manager, physics simulation, sensor integration scaffolding
 3. **Spatial/3D generators** (`spatial.py`) -- 3D engine, AR/VR, rendering pipeline scaffolding
 
 Each generator follows a common pattern: a function that returns a Python module source string, ready to be written to disk by the droid task runner.
@@ -39,9 +39,9 @@ Each generator follows a common pattern: a function that returns a Python module
 | `generate_rendering_content` | -- | `str` | Returns source for ShaderManager, TextureManager, RenderPipeline |
 | `create_3d_module_documentation` | `module_path, docs_content, files_created, logger, description` | `str` | Writes architecture.md to disk |
 
-### `physical.py`
+### `physical_generators/`
 
-Re-exports all 16 symbols from the `physical_generators` subpackage, including `create_physical_management_module`, `generate_physical_manager_content`, `generate_physical_simulation_content`, `generate_sensor_integration_content`, etc.
+Exports the physical-management generator functions, including `create_physical_management_module`, `generate_physical_manager_content`, `generate_physical_simulation_content`, and `generate_sensor_integration_content`.
 
 ## Dependencies
 

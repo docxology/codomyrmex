@@ -1,6 +1,6 @@
 from typing import Any
 
-from codomyrmex.coding.review._compat import monitor_performance
+from codomyrmex.coding.review._instrumentation import monitor_performance
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)

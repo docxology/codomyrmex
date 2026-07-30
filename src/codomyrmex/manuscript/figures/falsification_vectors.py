@@ -8,6 +8,7 @@ from codomyrmex.manuscript.figures._common import (
     _falsification_severity_map,
     _pub_style,
     _save,
+    _text_color_on,
     _var_float,
     mpatches,
     plt,
@@ -81,7 +82,6 @@ def fig_falsification_vectors() -> None:
     for index, (weight, severity, color) in enumerate(
         zip(weights, labels, colors, strict=False)
     ):
-        text_color = "white" if color not in (_OI["sky"], _OI["yellow"]) else "#1a1a1a"
         ax.text(
             weight,
             y_pos[index],
@@ -89,7 +89,7 @@ def fig_falsification_vectors() -> None:
             va="center",
             ha="center",
             fontsize=7.5,
-            color=text_color,
+            color=_text_color_on(color),
             fontweight="bold",
             zorder=5,
         )

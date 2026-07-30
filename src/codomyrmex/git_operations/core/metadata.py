@@ -26,6 +26,22 @@ src_dir = current_dir.parent.parent.parent.parent / "src"
 
 logger = get_logger(__name__)
 
+_METADATA_FILE_ENV = "CODOMYRMEX_REPOSITORY_METADATA_FILE"
+
+
+def _default_metadata_file() -> Path:
+    """Return a writable user-state path for repository metadata."""
+    configured = os.environ.get(_METADATA_FILE_ENV)
+    if configured:
+        return Path(configured).expanduser()
+    state_home = os.environ.get("XDG_STATE_HOME")
+    base = (
+        Path(state_home).expanduser()
+        if state_home
+        else Path.home() / ".local" / "state"
+    )
+    return base / "codomyrmex" / "git_operations" / "repository_metadata.json"
+
 
 class AccessLevel(Enum):
     """Repository access levels."""
@@ -185,15 +201,16 @@ class RepositoryMetadataManager:
         Initialize metadata manager.
 
         Args:
-            metadata_file: Path to metadata JSON file
+            metadata_file: Path to metadata JSON file. When omitted, use
+                ``CODOMYRMEX_REPOSITORY_METADATA_FILE`` or the user state
+                directory.
             github_token: GitHub personal access token for API access
         """
-        if metadata_file is None:
-            metadata_file = os.path.join(
-                os.path.dirname(__file__), "repository_metadata.json"
-            )
-
-        self.metadata_file = Path(metadata_file)
+        self.metadata_file = (
+            Path(metadata_file).expanduser()
+            if metadata_file is not None
+            else _default_metadata_file()
+        )
         self.github_token = github_token
         self.metadata: dict[str, RepositoryMetadata] = {}
 
@@ -230,6 +247,8 @@ class RepositoryMetadataManager:
     def save_metadata(self) -> bool:
         """Save metadata to JSON file."""
         try:
+            self.metadata_file.parent.mkdir(parents=True, exist_ok=True)
+
             # Create backup
             if self.metadata_file.exists():
                 backup_file = f"{self.metadata_file}.backup.{datetime.now().strftime('%Y%m%d_%H%M%S')}"

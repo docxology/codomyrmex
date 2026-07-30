@@ -1,4 +1,6 @@
-# src
+<!-- readme: curated -->
+
+# Source tree
 
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: April 2026
 
@@ -40,10 +42,10 @@ Current volatile counts are documented in [../docs/reference/inventory.md](../do
 Useful targeted checks from the repository root:
 
 ```bash
-uv run python scripts/doc_inventory.py
-uv run python -m compileall -q src
-uv run --no-sync ruff check src/codomyrmex/documentation scripts/doc_inventory.py scripts/rasp_gap_report.py
-PYTHONPATH=src python3 src/codomyrmex/documentation/scripts/check_doc_links.py
+uv run --locked python scripts/doc_inventory.py
+uv run --locked python -m compileall -q src
+uv run --locked ruff check src
+uv run --locked ty check --output-format concise src
 ```
 
 ## Navigation

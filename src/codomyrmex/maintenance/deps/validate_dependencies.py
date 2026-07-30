@@ -19,7 +19,7 @@ logger = get_logger(__name__)
 
 __all__ = [
     "check_duplicates",
-    "check_requirements_txt_deprecated",
+    "check_retired_requirements_markers",
     "check_version_constraints",
     "main",
     "parse_pyproject_dependencies",
@@ -114,8 +114,8 @@ def check_duplicates(dependencies: dict[str, list[tuple[str, str]]]) -> list[str
     return warnings
 
 
-def check_requirements_txt_deprecated(root: Path) -> list[str]:
-    """Check that all requirements.txt files have deprecation notices."""
+def check_retired_requirements_markers(root: Path) -> list[str]:
+    """Check that retired module requirement files carry their marker."""
     errors = []
     warnings = []
 
@@ -169,8 +169,8 @@ def main() -> int:
     duplicate_warnings = check_duplicates(dependencies)
     all_warnings.extend(duplicate_warnings)
 
-    # Check requirements.txt deprecation
-    req_issues = check_requirements_txt_deprecated(root)
+    # Check retired requirements markers
+    req_issues = check_retired_requirements_markers(root)
     for issue in req_issues:
         if issue.startswith("❌"):
             all_errors.append(issue)

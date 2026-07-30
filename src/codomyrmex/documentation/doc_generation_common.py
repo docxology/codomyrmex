@@ -46,10 +46,6 @@ def extract_init_docstring_first_line(dir_path: Path) -> str:
     val = tree.body[0].value
     if isinstance(val, ast.Constant) and isinstance(val.value, str):
         raw = val.value
-    elif isinstance(val, ast.Str):  # pragma: no cover - py<3.8
-        if not isinstance(val.s, str):
-            return ""
-        raw = val.s
     else:
         return ""
     for line in raw.strip().split("\n"):

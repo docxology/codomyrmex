@@ -3,7 +3,7 @@
 ## Purpose
 
 Maintain the local simulated actuator contract used by embodiment tests and
-examples. The implementation is a dependency-light compatibility surface, not
+examples. The implementation is a dependency-light local surface, not
 a physical-device driver.
 
 ## Key Files
@@ -23,7 +23,7 @@ Only Python standard-library modules are required.
 - Preserve actuator identity checks and disconnected-state behavior.
 - Add real local tests for new behavior; do not introduce mocks or hardware
   network calls.
-- Document compatibility aliases as non-primary APIs.
+- Keep simulated actuator behavior explicit and separate from physical hardware claims.
 
 ## Navigation
 

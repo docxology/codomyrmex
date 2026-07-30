@@ -535,20 +535,6 @@ class TestAPIKeyManagerUnit:
         time.sleep(0.2)
         assert mgr.validate(key) is None
 
-    def test_validate_api_key_legacy(self):
-        """Legacy validate_api_key returns dict."""
-        mgr = APIKeyManager()
-        key = mgr.generate_api_key(user_id="alice", permissions=["write"])
-        info = mgr.validate_api_key(key)
-        assert isinstance(info, dict)
-        assert info["user_id"] == "alice"
-        assert info["permissions"] == ["write"]
-
-    def test_validate_api_key_legacy_invalid(self):
-        """Legacy validate_api_key returns None for invalid."""
-        mgr = APIKeyManager()
-        assert mgr.validate_api_key("nope") is None
-
     def test_revoke_success(self):
         """Revoking existing key returns True."""
         mgr = APIKeyManager()
@@ -559,13 +545,6 @@ class TestAPIKeyManagerUnit:
         """Revoking unknown key returns False."""
         mgr = APIKeyManager()
         assert mgr.revoke("unknown") is False
-
-    def test_revoke_api_key_legacy(self):
-        """Legacy revoke_api_key works."""
-        mgr = APIKeyManager()
-        key = mgr.generate_api_key(user_id="alice")
-        assert mgr.revoke_api_key(key) is True
-        assert mgr.validate_api_key(key) is None
 
     def test_rotate_success(self):
         """Rotating a key revokes old and issues new with same permissions."""

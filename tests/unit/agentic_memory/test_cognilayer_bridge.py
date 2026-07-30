@@ -18,7 +18,7 @@ from codomyrmex.agentic_memory.cognilayer_bridge import (
     recall_memory,
     store_memory,
 )
-from codomyrmex.agentic_memory.models import MemoryImportance
+from codomyrmex.agentic_memory.core.models import MemoryImportance
 
 if TYPE_CHECKING:
     from pathlib import Path

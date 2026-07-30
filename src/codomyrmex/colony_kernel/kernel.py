@@ -7,10 +7,10 @@ without needing to know which subsystem handles each concern.
 Subsystem implementations live in their canonical standalone modules:
     pheromone_store.py, resource_ledger.py, actuation_gate.py,
     consequence_memory.py, role_adapter.py, pruning_daemon.py,
-    falsification_worker.py
+    falsification/worker.py
 
-This module imports and re-exports all subsystem classes so existing callers
-can continue to use ``from codomyrmex.colony_kernel.kernel import X``.
+This module exposes the integration class together with the subsystem classes
+from their canonical modules for a single colony-kernel entry point.
 
 Dependency graph:
     ColonyKernelConfig
@@ -21,7 +21,7 @@ Dependency graph:
         ├── ConsequenceMemory   (consequence_memory.py — SQLite consequence log)
         ├── RoleAdapter         (role_adapter.py — infers AgentRole from history)
         ├── PruningDaemon       (pruning_daemon.py — identifies stale modules)
-        └── FalsificationWorker (falsification_worker.py — adversarial checks)
+        └── FalsificationWorker (falsification/worker.py — adversarial checks)
 """
 
 from __future__ import annotations
@@ -45,7 +45,7 @@ from codomyrmex.colony_kernel.attestation import (
     LedgerValidationResult,
 )
 from codomyrmex.colony_kernel.consequence_memory import ConsequenceMemory
-from codomyrmex.colony_kernel.falsification_worker import FalsificationWorker
+from codomyrmex.colony_kernel.falsification import FalsificationWorker
 from codomyrmex.colony_kernel.models import (
     ActionProposal,
     AgentRole,
@@ -286,7 +286,12 @@ class ColonyKernel:
         tests_passed: bool,
         human_feedback: str | None = None,
     ) -> ConsequenceRecord:
-        """Record a caller-reported consequence and update pheromones.
+        """Record an ordinary caller-reported consequence and update state.
+
+        This path is available when attestation is disabled or optional. Required
+        attestation rejects it even if an execution receipt exists; callers must use
+        :meth:`record_attested_outcome` so the outcome itself is appended to the
+        authenticated lifecycle ledger.
 
         Parameters
         ----------
@@ -308,14 +313,26 @@ class ColonyKernel:
           - tests_passed=True  → reinforce SUCCESS at target
           - tests_passed=False → deposit FAILURE at target (FAST decay)
         """
-        if (
-            self._config.attestation_mode == "required"
-            and proposal.proposal_id not in self._attestation_executions
-        ):
+        if self._config.attestation_mode == "required":
             raise ValueError(
-                "attestation_mode='required' needs an authorized execution receipt "
-                "before recording an outcome"
+                "attestation_mode='required' needs record_attested_outcome after "
+                "an authorized execution receipt"
             )
+        return self._record_outcome_state(
+            proposal,
+            outcome,
+            tests_passed,
+            human_feedback=human_feedback,
+        )
+
+    def _record_outcome_state(
+        self,
+        proposal: ActionProposal,
+        outcome: dict[str, Any],
+        tests_passed: bool,
+        human_feedback: str | None = None,
+    ) -> ConsequenceRecord:
+        """Apply a validated or ordinary outcome to kernel state."""
 
         # Parse human_feedback string to float
         hf_float = _parse_human_feedback(human_feedback)
@@ -453,7 +470,7 @@ class ColonyKernel:
         self.attestation_ledger.record_outcome(
             execution.run_id, actor_id, execution, outcome
         )
-        return self.record_outcome(
+        return self._record_outcome_state(
             proposal,
             outcome,
             tests_passed,
@@ -495,7 +512,7 @@ class ColonyKernel:
         return {
             "tick_count": self._tick_count,
             "pheromone_summary": {
-                "total_signals": len(self.pheromone_store.top_signals(k=200)),
+                "total_signals": len(self.pheromone_store),
                 "top_signals": self.pheromone_store.top_signals(k=10),
             },
             "budget_usage": self.resource_ledger.usage_summary(),

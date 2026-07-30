@@ -8,8 +8,60 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Fail-closed release and technical-report stack**: `codomyrmex.release` now
+  performs real isolated `uv build` wheel/sdist construction with complete
+  SHA-256/SHA-512 receipts, requires all strict release evidence, verifies local
+  distribution copies, and creates portable technical-report bundle manifests.
+  Remote package targets and GitHub/Zenodo-sandbox publication remain
+  non-mutating dry-run plans.
+- **Colony Kernel local attestation modes**: optional/required direct-kernel
+  workflows record signed, hash-linked proposal, verdict, authorization,
+  execution-receipt, and outcome events. Required mode rejects every direct
+  `record_outcome()` call so the outcome cannot bypass the ledger. The ordinary
+  MCP path remains caller-reported, and the local ledger is not an independent
+  external-actuation witness.
+- **Package-wide README/AGENTS integrity audit**: a read-only, deterministic
+  auditor now checks first-party pairs, headings, relative links, documented
+  Python entry points, and repository-local skills, while inventorying legacy
+  boilerplate separately. Portable JSON and Markdown receipts are part of the
+  canonical documentation gate.
+- **Fail-closed documentation maintenance**: module enrichment and placeholder
+  repair now require explicit preview or apply modes, protect curated files,
+  and carry zero-mock subprocess regression coverage.
+
 ### Fixed
 
+- **Documentation package API/MCP drift**: corrected invalid PAI examples,
+  obsolete MCP build tools, stale coverage figures, and the `audit_rasp()` exit
+  code versus missing-file-count mismatch. Documentation MCP generation now
+  validates package names, rejects traversal, defaults to dry-run, and reports
+  execution state plus the proposed PAI content hash.
+- **Folder documentation paths**: repaired 41 missing README/AGENTS pair,
+  source-navigation, Python-command, local-skill, and relative-link findings,
+  including the OpenGauss submodule boundary and Colony Kernel test guide.
+- **Distribution archive boundary**: wheel and sdist validation now rejects
+  absolute or traversing member names and nested SCM, cache, and private
+  environment entries before copying artifacts. The root build excludes
+  `.git` marker files as well as `.git/` directories, preventing nested
+  submodule checkout paths from leaking into distributions. Artifact contents
+  embedding the active source or user-home path are rejected as well.
+- **Configuration validation receipt**: the producer now validates all 147
+  heterogeneous YAML/JSON files without imposing an unrelated universal
+  schema, emits deterministic repository-relative paths, and accepts a safe
+  `--project-root`. The sole real YAML escape defect was corrected; the
+  regenerated receipt is 147/147 valid.
+- **Git metadata state isolation**: `RepositoryMetadataManager` no longer
+  defaults to a mutable JSON file inside `src/`. It honors an explicit path,
+  `CODOMYRMEX_REPOSITORY_METADATA_FILE`, or the XDG/user state directory;
+  tests use temporary state, and live metadata plus timestamped backups are
+  excluded from package artifacts.
+- **Optional native media discovery**: audio and video capability probes now
+  inspect installed-package metadata without importing PyAV or OpenCV. The
+  native backends load only when a Whisper, frame-extraction, or video-analysis
+  operation runs, preventing discovery-only processes from loading conflicting
+  bundled FFmpeg libraries while preserving fail-closed runtime errors.
 - **`docs/manuscript/layer_contract.yaml`**: dropped dangling `src/codomyrmex/_infra.py` allowlist entry (file never existed). Was documentation-only — referenced by `docs/manuscript/AGENTS.md` as "enforced at CI boundary" but consumed by no code in the repository; added `test_layer_contract_forbids_infrastructure_imports` (`tests/unit/colony_kernel/test_manuscript_consistency.py`) to make the claim real, verified via negative control (planted a real `infrastructure.*` import under `colony_kernel/`, confirmed the test fails, removed it, confirmed green).
 - **Broken test path** (10 files: `CHANGELOG.md`, `docs/todo/COLONY_KERNEL.md`, `docs/modules/colony_kernel/{README,AGENTS,SPEC}.md`, `src/codomyrmex/colony_kernel/{README,AGENTS}.md`, `tests/unit/colony_kernel/AGENTS.md`, `src/codomyrmex/documentation/docs/modules/colony_kernel/{AGENTS,readme}.md`): `src/codomyrmex/tests/unit/colony_kernel/` (never existed) → `tests/unit/colony_kernel/` (real location); every `uv run pytest` snippet using the old path would have failed if copy-pasted.
 - **`docs/modules/colony_kernel/README.md`**: canonical `ActionProposal(...)` usage example raised `TypeError: missing 1 required positional argument: 'expected_outcome'` if copy-pasted; added the missing field and verified the example now runs.

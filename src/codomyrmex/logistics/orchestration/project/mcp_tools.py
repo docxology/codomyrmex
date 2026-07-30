@@ -5,14 +5,11 @@ This module provides MCP tools that allow AI models to interact with the
 orchestration system, enabling AI-driven project management and task execution.
 
 **ARCHITECTURAL NOTE ON CLASS-BASED MCP PATTERN:**
-This module implements a legacy, manual class-based routing pattern
-(via `OrchestrationMCPTools.execute_tool` and `get_tool_definitions`) rather
-than using the modern `@mcp_tool` auto-discovery decorators found elsewhere
-in Codomyrmex. This manual approach is preserved here because it allows
-dynamic initialization of the orchestration engine and fine-grained, centralized
-control over tool schemas for highly complex orchestration workflows.
-Auto-discovery tools like PAI Bridge may need special handling or an
-explicit adapter to register these tools if they rely solely on `@mcp_tool`.
+This module provides a stateful class-based MCP adapter through
+`OrchestrationMCPTools.execute_tool` and `get_tool_definitions`. The adapter
+supports dynamic engine initialization and centralized schemas for complex
+orchestration workflows; it is intentionally separate from stateless
+`@mcp_tool` handlers.
 """
 
 from datetime import UTC, datetime

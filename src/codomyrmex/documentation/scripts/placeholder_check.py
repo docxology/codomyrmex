@@ -104,9 +104,14 @@ def fix_generic_placeholders(content: str, file_path: Path) -> str:
     """Fix generic placeholder descriptions."""
     replacement = _replacement_for(file_path)
 
-    # Fix "Contains components for the src system"
-    if "Contains components for the src system" in content:
-        content = content.replace("Contains components for the src system", replacement)
+    # The source-system placeholder historically appeared both with and without
+    # terminal punctuation. Consume an optional period so a replacement that
+    # already ends in a period can never produce ``..``.
+    content = re.sub(
+        r"Contains components for the src system\.?",
+        replacement,
+        content,
+    )
 
     # Fix "Documentation files and guides."
     if "Documentation files and guides." in content:
@@ -119,7 +124,7 @@ def fix_generic_placeholders(content: str, file_path: Path) -> str:
     return content
 
 
-def main():
+def main() -> int:
     """Run comprehensive placeholder check."""
     parser = argparse.ArgumentParser(
         description="Find and repair generic generated documentation placeholders."
@@ -130,10 +135,16 @@ def main():
         default=Path.cwd(),
         help="Repository root. Defaults to the current working directory.",
     )
-    parser.add_argument(
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument(
         "--dry-run",
         action="store_true",
         help="Report generic placeholder fixes without writing files.",
+    )
+    mode.add_argument(
+        "--apply",
+        action="store_true",
+        help="Apply generic placeholder fixes to the selected repository.",
     )
     parser.add_argument(
         "--include-submodules",
@@ -167,11 +178,12 @@ def main():
                 doc_files.append(file_path)
 
     print(f"Checking {len(doc_files)} files for placeholders...\n")
-    if args.dry_run:
+    if not args.apply:
         print("Dry run: no files will be modified.\n")
 
     total_issues = 0
     fixed_count = 0
+    failed_count = 0
 
     for file_path in doc_files:
         try:
@@ -193,18 +205,21 @@ def main():
             content = fix_generic_placeholders(content, file_path)
 
             if content != original:
-                if not args.dry_run:
+                if args.apply:
                     file_path.write_text(content, encoding="utf-8")
                 fixed_count += 1
-                action = "Would fix" if args.dry_run else "Fixed"
+                action = "Fixed" if args.apply else "Would fix"
                 print(f"  {action} generic placeholders")
         except Exception as e:
+            failed_count += 1
             print(f"Error processing {file_path}: {e}")
 
     print("\n=== SUMMARY ===")
     print(f"Total placeholder issues found: {total_issues}")
     print(f"Files with generic placeholders fixed: {fixed_count}")
+    print(f"Files that could not be processed: {failed_count}")
+    return 1 if failed_count else 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

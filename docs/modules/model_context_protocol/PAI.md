@@ -4,7 +4,7 @@
 
 ## Overview
 
-The Model Context Protocol (MCP) module is **the operational bridge** between the PAI system (`~/.claude/PAI/`) and codomyrmex. PAI is TypeScript/Bun; codomyrmex is Python. MCP is the JSON-RPC protocol that connects them, exposing a configured profile of up to 608 merged runtime tools across file operations, code analysis, git, shell execution, memory, and module introspection.
+The Model Context Protocol (MCP) module is **the operational bridge** between the PAI system (`~/.claude/PAI/`) and codomyrmex. PAI is TypeScript/Bun; codomyrmex is Python. MCP is the JSON-RPC protocol that connects them. The measured merged runtime manifest currently contains 604 tools across file operations, code analysis, git, shell execution, memory, and module introspection; transport-specific profiles are enumerated at startup.
 
 ## Architecture
 
@@ -76,7 +76,7 @@ The HTTP transport includes a self-contained **Web UI** at the root URL (`/`) wi
 | `/resources` | GET | List registered resources |
 | `/prompts` | GET | List registered prompt templates |
 
-## Available Tools (608 PAI-manifest tools; 605 standalone full-profile tools; 10 readonly HTTP tools)
+## Available Tools (608 merged runtime-manifest tools in the complete locked dependency profile)
 
 ### Built-in Transport Tools (15) — Fully Implemented
 
@@ -105,10 +105,12 @@ The standard transport provides common operations directly implemented in `tools
 The transport layer uses `MCPDiscovery.scan_package("codomyrmex")` to traverse the
 130 top-level modules and register eligible decorated tools at server boot. The source
 inventory currently contains 623 production `@mcp_tool` lines, while the merged PAI
-manifest exposes 608 runtime entries and the discovery scan reports 590 dynamically
-registered entries in this checkout. These are intentionally separate measurements:
+manifest exposes 608 runtime entries in the complete locked dependency profile. These
+are intentionally separate measurements:
 wrappers, aliases, built-ins, profile filters, and registration eligibility can make
 the runtime registry smaller or otherwise different from the physical decorator count.
+Other launcher profiles are enumerated at startup; compatibility and tool availability
+must be measured for the selected profile rather than inferred from this snapshot.
 The authoritative snapshot and reproduction commands live in
 [../../reference/inventory.md](../../reference/inventory.md).
 
@@ -167,7 +169,7 @@ export CODOMYRMEX_MCP_AUTH_TOKEN='replace-with-a-secret'
 uv run python scripts/model_context_protocol/run_mcp_server.py \
   --transport http --profile full --auth-token "$CODOMYRMEX_MCP_AUTH_TOKEN"
 
-# List the standalone launcher's 605 full-profile tools or 10 readonly HTTP tools
+# Enumerate the selected launcher profile instead of relying on a copied count
 uv run python scripts/model_context_protocol/run_mcp_server.py --list-tools
 ```
 

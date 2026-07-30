@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from codomyrmex.cerebrum.core.cases import Case
-from codomyrmex.cerebrum.core.exceptions import TransformationError
 from codomyrmex.cerebrum.core.models import Model
+from codomyrmex.exceptions.cerebrum import TransformationError
 from codomyrmex.logging_monitoring import get_logger
 
 """Model transformation and adaptation algorithms."""

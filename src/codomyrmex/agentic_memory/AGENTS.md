@@ -18,8 +18,8 @@ Agent memory systems with SQLite persistence, Obsidian integration, and memory c
 - `consolidation.py` — Memory consolidation
 - `ki_index.py` — **NEW Sprint 34**: `KnowledgeItemIndex` incremental TF-IDF (add/remove/search/snippet)
 - `mcp_tools.py` — MCP tool implementations
-- `memory.py` — `AgentMemory`, `KnowledgeMemory` (Sprint 34: store/recall/merge_duplicates + Ollama re-rank)
-- `models.py` — Data models: `Memory`, `MemoryType`, `RetrievalResult`
+- `core/memory.py` — `AgentMemory`, `KnowledgeMemory` (Sprint 34: store/recall/merge_duplicates + Ollama re-rank)
+- `core/models.py` — Data models: `Memory`, `MemoryType`, `RetrievalResult`
 - `obsidian/` — Obsidian 19-module dual-mode integration
 - `obsidian_bridge.py` — ObsidianMemoryBridge
 - `py.typed` — PEP 561 marker
@@ -30,7 +30,7 @@ Agent memory systems with SQLite persistence, Obsidian integration, and memory c
 
 ## Key Interfaces
 
-- `memory.py` — `KnowledgeMemory`:
+- `core/memory.py` — `KnowledgeMemory`:
   - `store(title, body, tags, source_session_id)` → persists a structured KI
   - `recall(query, k, use_ollama, ollama_model)` → ranked semantic results (token-overlap + optional Ollama embedding)
   - `merge_duplicates(threshold)` → fold near-duplicates into older entries
@@ -59,7 +59,7 @@ Agent memory systems with SQLite persistence, Obsidian integration, and memory c
 
 - `AGENTS.md` — This document
 - `ki_index.py` — KnowledgeItemIndex (Sprint 34)
-- `memory.py` — KnowledgeMemory with Ollama fallback
+- `core/memory.py` — KnowledgeMemory with Ollama fallback
 - `sqlite_store.py` — SQLiteStore backing
 - `mcp_tools.py` — MCP tools
 

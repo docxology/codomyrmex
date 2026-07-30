@@ -6,7 +6,8 @@ packages, and managing publication to distribution targets.
 Components:
     - ReleaseValidator: Validate release readiness (tests, coverage, security, docs)
     - PackageBuilder: Build sdist and wheel distribution artifacts
-    - DistributionManager: Manage publishing to PyPI, TestPyPI, GitHub, and local targets
+    - DistributionManager: Verified local copies and remote dry-run plans
+    - PublicationBundle: Portable technical-report release artifacts
 """
 
 from codomyrmex.release.distribution import (
@@ -21,10 +22,22 @@ from codomyrmex.release.package_builder import (
     PackageBuilder,
     PackageMetadata,
 )
+from codomyrmex.release.publication import (
+    PublicationArtifact,
+    PublicationBundle,
+    PublicationManifest,
+    PublicationMetadata,
+    PublicationPlan,
+    PublicationVerification,
+    plan_publication,
+    prepare_publication_bundle,
+    verify_publication_bundle,
+)
 from codomyrmex.release.release_validator import (
     CertificationCheck,
     CertificationStatus,
     ReleaseCertification,
+    ReleasePolicy,
     ReleaseValidator,
 )
 
@@ -41,7 +54,17 @@ __all__ = [
     "PackageBuilder",
     "PackageMetadata",
     "PreflightResult",
+    "PublicationArtifact",
+    "PublicationBundle",
+    "PublicationManifest",
+    "PublicationMetadata",
+    "PublicationPlan",
+    "PublicationVerification",
     "PublishResult",
     "ReleaseCertification",
+    "ReleasePolicy",
     "ReleaseValidator",
+    "plan_publication",
+    "prepare_publication_bundle",
+    "verify_publication_bundle",
 ]

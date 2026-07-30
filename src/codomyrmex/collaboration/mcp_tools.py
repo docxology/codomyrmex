@@ -44,21 +44,24 @@ def swarm_submit_task(
         Dictionary with agent names as keys and their results as values.
 
     """
-    from codomyrmex.collaboration.swarm import AgentProxy
+    from codomyrmex.collaboration.swarm import AgentRole, SwarmAgent
 
     swarm = _get_swarm_manager()
 
     if agents:
         for agent_spec in agents:
-            proxy = AgentProxy(
-                name=agent_spec.get("name", "agent"),
-                role=agent_spec.get("role", "worker"),
+            role_value = agent_spec.get("role", AgentRole.CODER.value).lower()
+            try:
+                role = AgentRole(role_value)
+            except ValueError:
+                role = AgentRole.CODER
+            swarm.register_agent(
+                SwarmAgent(agent_id=agent_spec.get("name", "agent"), role=role)
             )
-            swarm.add_agent(proxy)
     else:
-        swarm.add_agent(AgentProxy(name="default_agent", role="worker"))
+        swarm.register_agent(SwarmAgent(agent_id="default_agent", role=AgentRole.CODER))
 
-    results = swarm.execute(mission)
+    results = swarm.queue_mission(mission)
 
     # Also decompose the mission for reporting
     decomposer = _get_task_decomposer()
@@ -117,7 +120,7 @@ def collaboration_list_agents() -> dict[str, Any]:
 
     """
     return {
-        "agent_classes": ["BaseAgent", "AgentProxy"],
+        "agent_classes": ["BaseAgent", "SwarmAgent"],
         "coordinator": "AgentCoordinator",
         "protocols": {
             "round_robin": {

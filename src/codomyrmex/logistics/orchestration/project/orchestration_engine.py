@@ -382,7 +382,7 @@ class OrchestrationEngine:
 
         try:
             # Add task to orchestrator
-            task_id = self.task_orchestrator.add_task(task)
+            task_id = self.task_orchestrator.submit_task(task)
 
             # Wait for completion (simplified - in practice might be async)
             import time
@@ -475,7 +475,7 @@ class OrchestrationEngine:
                     parameters=step.get("parameters", {}),
                     dependencies=task_deps,
                 )
-                task_id = self.task_orchestrator.add_task(task)
+                task_id = self.task_orchestrator.submit_task(task)
                 tasks[step_name] = task_id
 
             # Wait for all tasks to complete

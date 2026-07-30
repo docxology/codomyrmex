@@ -9,7 +9,7 @@ Tree-sitter parsing module for Codomyrmex. This is an **Extended Layer** module.
 ## PAI Capabilities
 
 ```python
-from codomyrmex.coding.parsers.tree_sitter import TreeSitterParser, LanguageManager, parsers, languages, queries
+from codomyrmex.tree_sitter import TreeSitterParser, LanguageManager, parsers, languages, queries
 ```
 
 ## Key Exports
@@ -42,6 +42,6 @@ This module does not expose MCP tools directly. Access its capabilities via:
 ## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [docs/modules/coding/parsers/tree_sitter/PAI.md](../../../docs/modules/coding/parsers/tree_sitter/PAI.md) — Published module PAI
+- **Parent**: [docs/modules/tree_sitter/PAI.md](../../../docs/modules/tree_sitter/PAI.md) — Published module PAI
 - **Root Bridge**: [PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
 - **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

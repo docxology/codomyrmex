@@ -24,10 +24,6 @@ class Difficulty(Enum):
     EXPERT = "expert"
 
 
-# Backward-compatible alias used by tests and external consumers
-DifficultyLevel = Difficulty
-
-
 # Ordered difficulty levels for comparison
 _DIFFICULTY_ORDER = [
     Difficulty.BEGINNER,

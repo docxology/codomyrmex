@@ -35,13 +35,13 @@ uv sync --all-extras
 | `observability` | opentelemetry-* | Distributed tracing |
 | `physical_management` | pybullet | Physics simulation |
 | `security_audit` | bandit | Security static analysis |
-| `static_analysis` | radon, pylint, mypy | Code quality tools |
+| `static_analysis` | radon, pylint, ty | Code quality tools |
 | `scrape` | firecrawl-py, playwright | Web scraping |
 | `fpf` | feedparser, lxml | Feed parsing |
 | `crypto` | cryptography, nacl | Cryptographic operations |
 | `documents` | pypdf, python-docx, openpyxl | Document processing |
 | `audio` | openai-whisper, pyttsx3, edge-tts | Speech processing |
-| `video` | moviepy, opencv-python, Pillow | Video processing |
+| `video` | opencv-python, Pillow | Frame extraction, analysis, and image processing |
 | `dark` | camelot-py, pdfplumber | PDF extraction |
 | `formal_verification` | z3-solver | SAT/SMT solving |
 | `obsidian` | watchdog | File system watching |

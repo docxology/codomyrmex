@@ -1,45 +1,44 @@
-# Codomyrmex Agents — src/codomyrmex/documentation/quality
+<!-- agents: curated -->
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+# Agent guidance for documentation quality
 
 ## Purpose
-Documentation tooling, generated references, and publishing assets for Quality.
 
-## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `audit.py` – Project file
-- `consistency_checker.py` – Project file
-- `py.typed` – Project file
-- `quality_assessment.py` – Project file
-
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
-
-## Key Files
-- `AGENTS.md` - Agent coordination and navigation
-- `README.md` - Directory overview
-- `PAI.md`
-- `README.md`
-- `SPEC.md`
-- `__init__.py`
-- `audit.py`
-- `consistency_checker.py`
-- `py.typed`
-- `quality_assessment.py`
-
-## Dependencies
-- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+Maintain truthful, deterministic package documentation audit and scoring
+behavior.
 
 ## Development Guidelines
-- Follow the universal agent protocols defined in the root `AGENTS.md`.
-- Adhere to the Python PEP 8 style guide and project-specific linting rules.
-- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
-## Navigation Links
-- **📁 Parent Directory**: [documentation](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../README.md - Main project documentation
+- Keep heuristic scores labeled as heuristics; never translate them into proof
+  of technical accuracy or release readiness.
+- Preserve `audit_rasp()` return semantics: `0` for compliant, `1` for gaps.
+- Count missing files separately when a consumer needs a count.
+- Keep analysis read-only except for an explicitly supplied report path.
+- Make paths and finding order deterministic.
+- Use real temporary packages and files in tests.
+- Update the parent API, MCP, PAI, SPEC, and changelog surfaces when output
+  fields or semantics change.
+
+## Key Files
+
+- [README.md](README.md) — reader overview and examples
+- [SPEC.md](SPEC.md) — quality contracts and limitations
+- `audit.py` — RASP discovery and reports
+- `consistency_checker.py` — line and structure findings
+- `quality_assessment.py` — heuristic scoring
+
+## Validation
+
+```bash
+uv run --locked pytest -q \
+  tests/unit/documentation/test_rasp_audit.py \
+  tests/unit/documentation/test_quality_comprehensive.py
+uv run --locked ruff check src/codomyrmex/documentation/quality
+```
+
+## Navigation
+
+- [Human overview](README.md)
+- [Functional specification](SPEC.md)
+- [Parent agent guidance](../AGENTS.md)
+- [Repository agent contract](../../../../AGENTS.md)

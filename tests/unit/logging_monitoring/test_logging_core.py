@@ -6,6 +6,8 @@ No mocks, no monkeypatch, no MagicMock. All tests call real code with real input
 
 from __future__ import annotations
 
+import contextlib
+import io
 import json
 import logging
 import os
@@ -516,6 +518,20 @@ class TestLoggerConfig:
                 else:
                     os.environ["CODOMYRMEX_LOG_FILE"] = old_file
                 setup_logging(force=True)
+
+    def test_setup_logging_does_not_retain_replaced_stdout(self):
+        """Console logging follows the current stream after capture ends."""
+        first_stream = io.StringIO()
+        with contextlib.redirect_stdout(first_stream):
+            setup_logging(force=True)
+            get_logger("test.dynamic.stdout").warning("first stream")
+        assert "first stream" in first_stream.getvalue()
+        first_stream.close()
+
+        second_stream = io.StringIO()
+        with contextlib.redirect_stdout(second_stream):
+            get_logger("test.dynamic.stdout").warning("second stream")
+        assert "second stream" in second_stream.getvalue()
 
     def test_enable_structured_json_on_named_logger(self):
         get_logger("codomyrmex.struct.test")

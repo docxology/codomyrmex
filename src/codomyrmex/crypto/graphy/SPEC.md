@@ -112,7 +112,7 @@ crypto/graphy/
 
 - AES-GCM nonces are 12 bytes, generated randomly per encryption call.
 - RSA key sizes must be at least 2048 bits.
-- `hash_md5` is provided for legacy compatibility; not suitable for security.
+- `hash_md5` is provided for existing checksum compatibility; it is not suitable for security.
 
 ## Error Handling
 

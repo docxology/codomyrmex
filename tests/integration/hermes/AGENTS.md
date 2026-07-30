@@ -9,7 +9,7 @@
 - **Path**: `tests/integration/hermes`
 - **Human overview**: [README.md](README.md)
 - **Functional spec**: [SPEC.md](SPEC.md)
-- **Agent coordination** (repo root): [../../../../../AGENTS.md](../../../../../AGENTS.md)
+- **Agent coordination** (repo root): [../../../AGENTS.md](../../../AGENTS.md)
 ## Purpose
 Validation coverage, fixtures, and regression checks for Hermes.
 

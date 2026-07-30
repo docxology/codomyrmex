@@ -20,11 +20,11 @@ AzureBlobClient(account_url: Optional[str] = None)
 
 | Method | Returns | Description |
 |--------|---------|-------------|
-| `upload_blob(container_name, blob_name, file_path)` | `bool` | Upload local file |
-| `download_blob(container_name, blob_name, file_path)` | `bool` | Download to local |
-| `list_blobs(container_name)` | `list[str]` | List blob names |
-| `get_metadata(container_name, blob_name)` | `dict` | Get blob metadata |
-| `ensure_container(container_name)` | `bool` | Create if not exists |
+| `upload_file(bucket, key, file_path)` | `bool` | Upload local file |
+| `download_file(bucket, key, file_path)` | `bool` | Download to local |
+| `list_objects(bucket, prefix=None)` | `list[str]` | List object keys |
+| `get_object_metadata(bucket, key)` | `dict` | Get object metadata |
+| `create_bucket(name)` | `bool` | Create a container |
 
 ### Error Handling
 

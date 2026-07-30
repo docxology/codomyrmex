@@ -9,7 +9,7 @@ swarm execution, shared workspaces, real-time synchronization, and collaborative
 interfaces for team-based AI-assisted development.
 
 For PAI, it is the backbone of **agent teams**: when the Algorithm decides to parallelize
-work across N agents, this module's `SwarmManager` and `AgentProxy` objects orchestrate
+work across N agents, this module's `SwarmManager` and `SwarmAgent` objects orchestrate
 mission dispatch, result collection, and task decomposition.
 
 It also exposes three MCP tools that allow PAI to submit missions to swarms, query pool
@@ -22,17 +22,17 @@ status, and enumerate available agents without any Python imports.
 Submit a multi-step mission to a dynamically-configured agent swarm:
 
 ```python
-from codomyrmex.collaboration.protocols.swarm import SwarmManager, AgentProxy, TaskDecomposer
+from codomyrmex.collaboration.swarm import AgentRole, SwarmAgent, SwarmManager, TaskDecomposer
 
 swarm = SwarmManager()
-swarm.add_agent(AgentProxy(name="engineer", role="builder"))
-swarm.add_agent(AgentProxy(name="reviewer", role="verifier"))
+swarm.register_agent(SwarmAgent("engineer", AgentRole.CODER))
+swarm.register_agent(SwarmAgent("reviewer", AgentRole.REVIEWER))
 
-results = swarm.execute("Implement and review authentication middleware")
+results = swarm.queue_mission("Implement and review authentication middleware")
 # Returns queued task-result records with task_id, description, and result keys.
 
-subtasks = TaskDecomposer.decompose("Implement and review authentication middleware")
-# Returns: ["Implement middleware", "Write tests", "Review code"]
+subtasks = TaskDecomposer().decompose("Implement and review authentication middleware")
+# Returns role-based SubTask records.
 ```
 
 ### Task Decomposition
@@ -40,10 +40,10 @@ subtasks = TaskDecomposer.decompose("Implement and review authentication middlew
 Break compound missions into atomic subtasks for parallel dispatch:
 
 ```python
-from codomyrmex.collaboration.protocols.swarm import TaskDecomposer
+from codomyrmex.collaboration.swarm import TaskDecomposer
 
-subtasks = TaskDecomposer.decompose("Build auth system with tests and docs")
-# Returns ordered list of atomic subtask strings
+subtasks = TaskDecomposer().decompose("Build auth system with tests and docs")
+# Returns ordered list of role-based SubTask records
 ```
 
 ### Protocol Types
@@ -82,8 +82,8 @@ The following tools are auto-discovered via `@mcp_tool` and available through th
 result = mcp_call("codomyrmex.swarm_submit_task", {
     "mission": "Refactor authentication module for async support",
     "agents": [
-        {"name": "backend_engineer", "role": "builder"},
-        {"name": "security_reviewer", "role": "auditor"}
+        {"name": "backend_engineer", "role": "coder"},
+        {"name": "security_reviewer", "role": "reviewer"}
     ]
 })
 # Returns: {"mission": "...", "results": {...}, "subtasks": [...], "agent_count": 2}
@@ -106,7 +106,7 @@ result = mcp_call("codomyrmex.list_agents")
 | Phase | Collaboration Contribution | Key Classes/Functions |
 |-------|----------------------------|-----------------------|
 | **PLAN** (3/7) | Allocate work across agents; select protocol for the task | `SwarmManager`, `CapabilityRoutingProtocol` |
-| **BUILD** (4/7) | Dispatch parallel build tasks to specialized agents | `SwarmManager.execute()`, `AgentProxy` |
+| **BUILD** (4/7) | Dispatch parallel build tasks to specialized agents | `SwarmManager.queue_mission()`, `SwarmAgent` |
 | **EXECUTE** (5/7) | Synchronize parallel agent work in shared workspaces; broadcast missions | `BroadcastProtocol`, `RoundRobinProtocol` |
 | **VERIFY** (6/7) | Aggregate and reconcile results from parallel agents | `TaskDecomposer`, result merging |
 
@@ -120,9 +120,9 @@ invoke `swarm_submit_task` to parallelize work:
 mcp_call("codomyrmex.swarm_submit_task", {
     "mission": "ISC-C1: Authentication JWT tokens valid. ISC-C2: Rate limiting enforced. ISC-C3: Audit log written.",
     "agents": [
-        {"name": "auth_impl", "role": "builder"},
-        {"name": "rate_impl", "role": "builder"},
-        {"name": "audit_impl", "role": "builder"},
+        {"name": "auth_impl", "role": "coder"},
+        {"name": "rate_impl", "role": "coder"},
+        {"name": "audit_impl", "role": "coder"},
     ]
 })
 ```

@@ -61,7 +61,7 @@ def main():
             stages=[
                 PipelineStage(
                     name="Lint",
-                    jobs=[PipelineJob(name="flake8", commands=["echo 'Linting...'"])],
+                    jobs=[PipelineJob(name="ruff", commands=["echo 'Linting...'"])],
                 ),
                 PipelineStage(
                     name="Security",

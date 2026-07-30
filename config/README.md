@@ -1,122 +1,41 @@
-# config
+<!-- readme: curated -->
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+# Configuration examples
 
-## Overview
+This tree contains versioned defaults, schemas, and examples for Codomyrmex
+modules. It must not contain live credentials, personal endpoints, or
+machine-specific absolute paths.
 
-Configuration templates and examples.
+## Usage boundary
 
-Hermes unified skills: copy [`hermes_skills_profile.example.yaml`](hermes_skills_profile.example.yaml) to **`.codomyrmex/hermes_skills_profile.yaml`** in a project (see `docs/agents/hermes/skills.md`).
+- Treat files here as examples or repository defaults, not as a secret store.
+- Copy user-specific overrides outside version control or into documented
+  ignored locations.
+- Environment variables and secret managers take precedence where the owning
+  module documents them.
+- Validate a configuration through the owning module's public loader or schema;
+  do not assume every YAML file shares one global schema.
+- Keep configuration, source defaults, tests, and module README/SPEC/security
+  documentation aligned.
 
-## Directory Contents
-- `PAI.md` – File
-- `README.md` – File
-- `SPEC.md` – File
-- `agentic_memory/` – Subdirectory
-- `agents/` – Subdirectory
-- `api/` – Subdirectory
-- `audio/` – Subdirectory
-- `auth/` – Subdirectory
-- `bio_simulation/` – Subdirectory
-- `cache/` – Subdirectory
-- `calendar_integration/` – Subdirectory
-- `cerebrum/` – Subdirectory
-- `ci_cd_automation/` – Subdirectory
-- `cli/` – Subdirectory
-- `cloud/` – Subdirectory
-- `coding/` – Subdirectory
-- `collaboration/` – Subdirectory
-- `compression/` – Subdirectory
-- `concurrency/` – Subdirectory
-- `config_audits/` – Subdirectory
-- `config_management/` – Subdirectory
-- `config_monitoring/` – Subdirectory
-- `container_optimization/` – Subdirectory
-- `containerization/` – Subdirectory
-- `cost_management/` – Subdirectory
-- `crypto/` – Subdirectory
-- `dark/` – Subdirectory
-- `data_lineage/` – Subdirectory
-- `data_visualization/` – Subdirectory
-- `database/` – Subdirectory
-- `database_management/` – Subdirectory
-- `default.yaml` – File
-- `defense/` – Subdirectory
-- `dependency_injection/` – Subdirectory
-- `deployment/` – Subdirectory
-- `docs_gen/` – Subdirectory
-- `documentation/` – Subdirectory
-- `documents/` – Subdirectory
-- `edge_computing/` – Subdirectory
-- `email/` – Subdirectory
-- `embodiment/` – Subdirectory
-- `encryption/` – Subdirectory
-- `environment_setup/` – Subdirectory
-- `events/` – Subdirectory
-- `evolutionary_ai/` – Subdirectory
-- `examples/` – Subdirectory
-- `exceptions/` – Subdirectory
-- `feature_flags/` – Subdirectory
-- `feature_store/` – Subdirectory
-- `file_system/` – Subdirectory
-- `finance/` – Subdirectory
-- `formal_verification/` – Subdirectory
-- `fpf/` – Subdirectory
-- `git_analysis/` – Subdirectory
-- `git_operations/` – Subdirectory
-- `graph_rag/` – Subdirectory
-- `ide/` – Subdirectory
-- `identity/` – Subdirectory
-- `llm/` – Subdirectory
-- `logging_monitoring/` – Subdirectory
-- `logistics/` – Subdirectory
-- `maintenance/` – Subdirectory
-- `market/` – Subdirectory
-- `meme/` – Subdirectory
-- `model_context_protocol/` – Subdirectory
-- `model_ops/` – Subdirectory
-- `module_template/` – Subdirectory
-- `monitoring/` – Subdirectory
-- `multimodal/` – Subdirectory
-- `networking/` – Subdirectory
-- `networks/` – Subdirectory
-- `operating_system/` – Subdirectory
-- `orchestrator/` – Subdirectory
-- `performance/` – Subdirectory
-- `physical_management/` – Subdirectory
-- `plugin_system/` – Subdirectory
-- `privacy/` – Subdirectory
-- `prompt_engineering/` – Subdirectory
-- `quantum/` – Subdirectory
-- `relations/` – Subdirectory
-- `release/` – Subdirectory
-- `scrape/` – Subdirectory
-- `search/` – Subdirectory
-- `security/` – Subdirectory
-- `serialization/` – Subdirectory
-- `simulation/` – Subdirectory
-- `skills/` – Subdirectory
-- `spatial/` – Subdirectory
-- `static_analysis/` – Subdirectory
-- `system_discovery/` – Subdirectory
-- `telemetry/` – Subdirectory
-- `templates/` – Subdirectory
-- `templating/` – Subdirectory
-- `terminal_interface/` – Subdirectory
-- `testing/` – Subdirectory
-- `tool_use/` – Subdirectory
-- `tree_sitter/` – Subdirectory
-- `utils/` – Subdirectory
-- `validation/` – Subdirectory
-- `vector_store/` – Subdirectory
-- `video/` – Subdirectory
-- `wallet/` – Subdirectory
-- `website/` – Subdirectory
-- `workflows/` – Subdirectory
+The Hermes skills profile is an example:
+[`hermes_skills_profile.example.yaml`](hermes_skills_profile.example.yaml).
+Its destination and precedence are documented in
+[`docs/agents/hermes/skills.md`](../docs/agents/hermes/skills.md).
+
+## Editing
+
+Before changing a default:
+
+1. locate all consumers and environment overrides;
+2. run GitNexus impact analysis for affected loader symbols;
+3. update schema and negative validation tests;
+4. document compatibility and security effects;
+5. run the owning module tests and package gates.
 
 ## Navigation
-- **Project Root**: ../README.md
 
-## Related Documents
-
-- **Agents**: [AGENTS.md](AGENTS.md)
+- [Agent guidance](AGENTS.md)
+- [Configuration specification](SPEC.md)
+- [Configuration management source](../src/codomyrmex/config_management/)
+- [Repository root](../README.md)

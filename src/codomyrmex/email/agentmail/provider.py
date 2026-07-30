@@ -38,10 +38,12 @@ from codomyrmex.email.generics import (
     EmailProvider,
 )
 
+ApiError: type[Exception]
 try:
     from agentmail import AgentMail
-    from agentmail.core import ApiError
+    from agentmail.core import ApiError as _AgentMailApiError
 
+    ApiError = _AgentMailApiError
     AGENTMAIL_AVAILABLE = True
 except ImportError:
     ApiError = Exception

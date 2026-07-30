@@ -9,8 +9,7 @@ tests, and demonstrations. It does not claim to drive physical hardware.
 
 - [`base.py`](base.py) defines `ActuatorCommand`, `ActuatorStatus`, and the
   `SimulatedActuator` lifecycle.
-- `MockActuator` remains a compatibility alias with the historical metadata
-  surface; new code should prefer `SimulatedActuator`.
+- `SimulatedActuator` provides the deterministic local command lifecycle.
 
 ## Validation
 

@@ -103,8 +103,6 @@ def main() -> None:
         print(f"View results in: {output_dir.absolute()}")
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
 
     config_path = (

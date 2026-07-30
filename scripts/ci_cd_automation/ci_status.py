@@ -6,9 +6,7 @@ Usage:
     python ci_status.py [--provider PROVIDER] [--repo REPO]
 """
 
-logger = logging.getLogger(__name__)
-
-
+import logging
 import sys
 from pathlib import Path
 
@@ -19,9 +17,10 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import logging
 import os
 import subprocess
+
+logger = logging.getLogger(__name__)
 
 
 def find_ci_configs() -> list:

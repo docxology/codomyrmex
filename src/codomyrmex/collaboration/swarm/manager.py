@@ -67,21 +67,6 @@ class SwarmManager:
             "Agent %s registered and results subscription established.", agent.agent_id
         )
 
-    def add_agent(self, agent: Any) -> None:
-        """Add an agent to the swarm, accepting AgentProxy or SwarmAgent.
-
-        Converts a legacy ``AgentProxy`` to a ``SwarmAgent`` automatically.
-        """
-        if isinstance(agent, SwarmAgent):
-            self.register_agent(agent)
-        else:
-            # Convert AgentProxy or any duck-typed object with name/role attrs
-            name = getattr(agent, "name", "agent")
-            role_str = getattr(agent, "role", "worker")
-            valid_values = {r.value for r in AgentRole}
-            role = AgentRole(role_str) if role_str in valid_values else AgentRole.CODER
-            self.register_agent(SwarmAgent(agent_id=name, role=role))
-
     def _handle_result(self, message: SwarmMessage) -> None:
         """Handle incoming results from agents."""
         task_id = message.payload.get("task_id")
@@ -198,10 +183,15 @@ class SwarmManager:
 
         return result
 
-    def execute(self, mission: str) -> list[dict[str, Any]]:
-        """Synchronous alias for execute_mission — decomposes and dispatches subtasks.
+    def queue_mission(self, mission: str) -> list[dict[str, Any]]:
+        """Queue a mission's subtasks for asynchronous agent processing.
 
-        Returns a flat list of result dicts for each subtask.
+        This method records the dispatch plan and returns immediately. Call
+        :meth:`execute_mission` when real task execution and result collection
+        are required.
+
+        Returns:
+            A flat list of queued task records for each subtask.
         """
         subtasks = self.decomposer.decompose(mission)
         results = []

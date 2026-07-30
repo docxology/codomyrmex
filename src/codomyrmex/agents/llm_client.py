@@ -28,8 +28,7 @@ _OLLAMA_ALLOWED_PREFIXES = (
 class OllamaClient:
     """Client for local Ollama instance (REST API).
 
-    Implements a robust interface compatible with ClaudeClient
-    for use in ClaudeCodeEndpoint, using real LLM inference.
+    Implements the real LLM client interface used by ``RelayEndpoint``.
     """
 
     def __init__(self, model: str = "llama3", base_url: str = DEFAULT_OLLAMA_URL):
@@ -39,7 +38,7 @@ class OllamaClient:
             )
         self.model = model
         self.base_url = base_url
-        self.session_manager = None  # dummy for interface compatibility
+        self.session_manager = None  # Session state is managed by the endpoint.
 
     def create_session(self, session_id: str) -> None:
         raise NotImplementedError("LLM session management not implemented")

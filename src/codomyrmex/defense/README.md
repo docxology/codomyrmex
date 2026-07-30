@@ -6,7 +6,7 @@
 
 The defense module provides local active-defense primitives for prompt-exploit
 detection, honeytokens, context poisoning, rate limiting, threat rules, and
-rabbit-hole containment. It is a compatibility package used by demos, security
+rabbit-hole containment. It is used by demos, security
 docs, MCP tools, and the AI-safety facade.
 
 ## Key Components
@@ -14,7 +14,7 @@ docs, MCP tools, and the AI-safety facade.
 | Component | File | Purpose |
 | :--- | :--- | :--- |
 | `ActiveDefense` | `active.py` | Detects prompt-exploit patterns, creates honeytokens, and emits threat reports |
-| `RabbitHole` | `active.py` / `rabbithole.py` | Tracks contained sources and returns decoy responses |
+| `RabbitHole` | `active.py` | Tracks contained sources and returns decoy responses |
 | `Defense` | `defense.py` | Orchestrates blocklist, rate-limit, rule, and prompt-defense checks |
 | `RateLimiter` | `defense.py` | Sliding-window request limiter |
 | `ThreatDetector` | `defense.py` | Rule engine for `DetectionRule` objects |

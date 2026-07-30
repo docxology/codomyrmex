@@ -11,14 +11,14 @@ Tests cover:
 - TextBlock component rendering
 - CodeBlock component rendering
 - Report subclass save mechanism
-- BarPlot construction
+- BarChart construction
 - ScatterPlot construction
 """
 
 import pytest
 
 from codomyrmex.data_visualization import (
-    BarPlot,
+    BarChart,
     Card,
     Dashboard,
     GeneralSystemReport,
@@ -47,7 +47,7 @@ def test_module_exports():
     assert "Dashboard" in visualization.__all__
     assert "Grid" in visualization.__all__
     assert "Theme" in visualization.__all__
-    assert "BarPlot" in visualization.__all__
+    assert "BarChart" in visualization.__all__
     assert "ScatterPlot" in visualization.__all__
 
 
@@ -195,8 +195,8 @@ def test_code_block():
 
 @pytest.mark.unit
 def test_bar_plot_construction():
-    """BarPlot initializes with categories and values."""
-    plot = BarPlot(
+    """BarChart initializes with categories and values."""
+    plot = BarChart(
         title="Sales",
         categories=["Q1", "Q2", "Q3"],
         values=[100, 200, 150],

@@ -6,7 +6,6 @@ Covers:
 - APIKey dataclass: construction, is_expired, is_valid properties
 - APIKeyManager: generate, validate, revoke, rotate, list_keys,
   cleanup_expired, active_count, total_count
-- Wrapper methods: generate_api_key, validate_api_key, revoke_api_key
 - Edge cases: custom prefix, TTL expiry, rate-limit tracking, label propagation
 """
 
@@ -395,33 +394,11 @@ class TestAPIKeyManagerCleanup:
 
 
 @pytest.mark.unit
-class TestAPIKeyManagerWrappers:
-    """Tests for the convenience wrapper methods."""
+class TestAPIKeyManagerCoreSurface:
+    """Canonical lifecycle methods are covered by the tests above."""
 
-    def test_generate_api_key_delegates_to_generate(self):
-        """generate_api_key() produces a valid key via generate()."""
-        mgr = APIKeyManager()
-        key_str = mgr.generate_api_key("alice")
-        assert key_str.startswith("codomyrmex_")
-        assert mgr.validate(key_str) is not None
-
-    def test_validate_api_key_returns_dict(self):
-        """validate_api_key() returns a dict with user_id and permissions."""
-        mgr = APIKeyManager()
-        key_str = mgr.generate_api_key("alice", permissions=["write"])
-        result = mgr.validate_api_key(key_str)
-        assert isinstance(result, dict)
-        assert result["user_id"] == "alice"
-        assert result["permissions"] == ["write"]
-
-    def test_validate_api_key_returns_none_for_invalid(self):
-        """validate_api_key() returns None for an unknown key."""
-        mgr = APIKeyManager()
-        assert mgr.validate_api_key("bogus") is None
-
-    def test_revoke_api_key_delegates_to_revoke(self):
-        """revoke_api_key() revokes the key."""
-        mgr = APIKeyManager()
-        key_str = mgr.generate_api_key("alice")
-        assert mgr.revoke_api_key(key_str) is True
-        assert mgr.validate_api_key(key_str) is None
+    def test_canonical_methods_are_present(self):
+        manager = APIKeyManager()
+        assert callable(manager.generate)
+        assert callable(manager.validate)
+        assert callable(manager.revoke)

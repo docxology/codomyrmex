@@ -1,60 +1,31 @@
-# documentation - Functional Specification
+# Documentation module functional specification
 
-**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
+The normative specification is maintained with the source package:
+[source SPEC](../../../src/codomyrmex/documentation/SPEC.md).
 
-## Purpose
+## Reader contract
 
-The `documentation` module manages the project's documentation ecosystem. It handles Docusaurus website generation, documentation aggregation from source code, and quality validation.
+- Public exports match
+  [`codomyrmex.documentation.__all__`](../../../src/codomyrmex/documentation/__init__.py).
+- Package quality checks remain labeled as heuristic.
+- `audit_rasp()` returns an exit code, not a missing-file count.
+- MCP module identifiers reject traversal-shaped input.
+- MCP PAI generation defaults to dry-run and reports its proposed hash.
+- Repository release documentation is validated by strict MkDocs, not the
+  package-local Docusaurus helper alone.
+- Broad mutators remain explicit and prohibited during the active hand-pass
+  freeze.
 
-## Design Principles
+## Acceptance
 
-### Modularity
-
-- **Separation of Concerns**: Generation (`generate_docs`), Aggregation (`aggregate_docs`), and Serving (`serve_static_site`) are distinct functions.
-- **Docusaurus Core**: Leverages Docusaurus for website generation rather than custom static site logic.
-
-### Internal Coherence
-
-- **Unified Quality**: All documentation passes through `QualityAssessment` before deployment.
-- **Consistent Structure**: `/docs/modules/` mirrors `src/codomyrmex/`.
-
-## Functional Requirements
-
-1. **Generation**: Extract API documentation from docstrings.
-2. **Aggregation**: Collect module docs into the central website.
-3. **Serving**: Provide development and production servers.
-4. **Quality**: Enforce completeness, accuracy, and link validity.
-
-## Interface Contracts
-
-- `generate_docs(source_path, output_path, format)`: Create docs from code.
-- `assess_site() -> dict`: Get quality metrics.
-- `build_static_site()`: Compile production build.
+```bash
+uv run --locked pytest -q tests/unit/documentation tests/integration/documentation
+make docs-check
+```
 
 ## Navigation
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-
-- **Parent**: [../SPEC.md](../SPEC.md)
-
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-### Design Principles
-
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
-
-## Testing
-
-```bash
-uv run python -m pytest tests/ -k documentation -v
-```
+- [README](README.md)
+- [API specification](API_SPECIFICATION.md)
+- [MCP tools](MCP_TOOL_SPECIFICATION.md)
+- [Source specification](../../../src/codomyrmex/documentation/SPEC.md)

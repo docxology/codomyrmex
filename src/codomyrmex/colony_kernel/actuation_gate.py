@@ -34,7 +34,7 @@ from codomyrmex.colony_kernel.models import (
 )
 
 # ---------------------------------------------------------------------------
-# Gate thresholds — exported so kernel.py can re-export them for tests. These
+# Gate thresholds — imported by kernel.py and the formal/research tests. These
 # are example/initial policy values, not universal safety constants; callers
 # should tune them for a measured deployment and rerun the contract evidence.
 # ---------------------------------------------------------------------------

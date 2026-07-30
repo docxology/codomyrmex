@@ -246,9 +246,6 @@ def default_gate_config_from_yaml() -> dict[str, Any]:
       - ``execute_threshold`` (maps to ``_GATE_SCORE_EXECUTE`` in actuation_gate.py)
       - ``hold_threshold``    (maps to ``_GATE_SCORE_HOLD`` in actuation_gate.py)
 
-    Note: Legacy YAML files may use ``score_execute`` / ``score_hold`` as key
-    names — those are also accepted but the canonical names are preferred.
-
     Raises:
         None — all errors fall back to returning ``{}``.
     """
@@ -257,10 +254,8 @@ def default_gate_config_from_yaml() -> dict[str, Any]:
 
     # Validate gate score weights sum constraints
     if gate_section:
-        execute = gate_section.get(
-            "execute_threshold", gate_section.get("score_execute")
-        )
-        hold = gate_section.get("hold_threshold", gate_section.get("score_hold"))
+        execute = gate_section.get("execute_threshold")
+        hold = gate_section.get("hold_threshold")
         if execute is not None and hold is not None:
             try:
                 execute_f = float(execute)

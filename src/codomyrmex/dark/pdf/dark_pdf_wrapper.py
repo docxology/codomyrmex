@@ -217,10 +217,10 @@ class DarkPDF:
         return self
 
     def process(self) -> DarkPDF:
-        """Process the PDF. (Placeholder for internal consistency)
+        """Mark the fluent processing chain before :meth:`save` applies changes.
 
-        In this implementation, processing happens during save().
-        This method is provided for API compatibility with AGENTS.md patterns.
+        Processing happens during ``save()``; this method keeps the fluent API
+        explicit without performing work twice.
 
         Returns:
             self for chaining.

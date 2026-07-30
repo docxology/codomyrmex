@@ -138,12 +138,12 @@ class TestDemandAggregator:
 
     def test_aggregator_init(self):
         assert self.aggregator.auction_system is self.auction
-        assert self.aggregator._pending_demands == {}
+        assert self.aggregator._demands == {}
 
     def test_register_interest(self):
         self.aggregator.register_interest("GPU", "p1", 100.0)
-        assert "GPU" in self.aggregator._pending_demands
-        assert len(self.aggregator._pending_demands["GPU"]) == 1
+        assert "GPU" in self.aggregator._demands
+        assert len(self.aggregator._demands["GPU"]) == 1
 
     def test_threshold_not_met(self):
         for i in range(3):
@@ -158,7 +158,7 @@ class TestDemandAggregator:
         assert isinstance(auction_id, str)
         assert len(auction_id) > 0
         # Pending should be cleared after trigger
-        assert "GPU" not in self.aggregator._pending_demands
+        assert "GPU" not in self.aggregator._demands
 
     def test_bulk_discount_applied(self):
         for i in range(5):

@@ -20,7 +20,6 @@ from .models import (
     PipelineJob,
     PipelineStage,
     PipelineStatus,
-    StageStatus,
 )
 
 logger = get_logger(__name__)
@@ -163,7 +162,7 @@ class PipelineManager(
                     pipeline.finished_at - pipeline.started_at
                 ).total_seconds()
 
-            if any(stage.status == StageStatus.FAILURE for stage in pipeline.stages):
+            if any(stage.status == PipelineStatus.FAILURE for stage in pipeline.stages):
                 pipeline.status = PipelineStatus.FAILURE
             else:
                 pipeline.status = PipelineStatus.SUCCESS

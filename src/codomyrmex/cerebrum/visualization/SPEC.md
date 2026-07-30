@@ -82,7 +82,7 @@ Themed matplotlib visualization library for cerebrum analysis outputs. Renders B
 
 ## 5. Dependencies
 
-- **Internal**: `cerebrum.core.exceptions`, `cerebrum.core.cases`, `cerebrum.inference.bayesian`, `logging_monitoring`
+- **Internal**: `codomyrmex.exceptions.cerebrum`, `cerebrum.core.cases`, `cerebrum.inference.bayesian`, `logging_monitoring`
 - **External**: `matplotlib` (required), `networkx` (optional, for graph viz), `numpy`
 
 ## 6. Constraints

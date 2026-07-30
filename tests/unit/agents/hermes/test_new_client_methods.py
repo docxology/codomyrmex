@@ -7,7 +7,7 @@ import shutil
 
 import pytest
 
-from codomyrmex.agents.hermes.hermes_client import HermesClient
+from codomyrmex.agents.hermes.client_pkg import HermesClient
 
 _HERMES_AVAILABLE = (
     os.environ.get("RUN_LIVE_HERMES") == "1" and shutil.which("hermes") is not None

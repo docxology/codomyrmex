@@ -29,6 +29,7 @@ from pathlib import Path
 # Bootstrap path when not installed as a package
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 try:
+    from codomyrmex.agents.hermes.client_pkg import HermesClient
     from codomyrmex.agents.hermes.gateway_verify import (
         default_launch_agents_dir,
         is_darwin,
@@ -36,13 +37,13 @@ try:
         launchd_python_matches_repo,
         load_dotenv_values,
     )
-    from codomyrmex.agents.hermes.hermes_client import HermesClient
     from codomyrmex.agents.hermes.hermes_paths import (
         discover_hermes_cli_binary,
         require_hermes_agent_repo,
     )
 except ImportError:
     sys.path.insert(0, str(_REPO_ROOT / "src"))
+    from codomyrmex.agents.hermes.client_pkg import HermesClient
     from codomyrmex.agents.hermes.gateway_verify import (
         default_launch_agents_dir,
         is_darwin,
@@ -50,7 +51,6 @@ except ImportError:
         launchd_python_matches_repo,
         load_dotenv_values,
     )
-    from codomyrmex.agents.hermes.hermes_client import HermesClient
     from codomyrmex.agents.hermes.hermes_paths import (
         discover_hermes_cli_binary,
         require_hermes_agent_repo,

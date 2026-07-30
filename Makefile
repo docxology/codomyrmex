@@ -1,7 +1,7 @@
 # Codomyrmex Development Makefile
 # Common development tasks and workflows
 
-.PHONY: help dev install setup submodules test lint lint-imports format format-check type-check security clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast verify-release dev-server docs-check manuscript-check docs-generate serve-docs
+.PHONY: help dev install setup submodules test lint lint-imports format format-check type-check security audit-lock clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast verify-release dev-server docs-check manuscript-check docs-generate serve-docs
 
 # Hypothesis loads its pytest plugin (and may bind NumPy RNG) before any conftest runs.
 # Export for all subprocesses so `uv run pytest` sees it even when not using a shell wrapper.
@@ -29,6 +29,7 @@ help:
 	@echo "  format       - Format code with ruff"
 	@echo "  type-check   - Run type checking with ty"
 	@echo "  security     - Run security scanning"
+	@echo "  audit-lock   - Audit all locked groups and extras"
 	@echo "  docs         - Generate and check documentation"
 	@echo "  manuscript-check - Validate generated manuscript, figures, claims, and provenance"
 	@echo "  serve-docs   - Serve documentation locally"
@@ -101,8 +102,10 @@ lint:
 	uv run ruff check .
 
 lint-imports:
-	@echo "Enforcing architectural layering (LP5) via import-linter..."
-	uv run lint-imports --config pyproject.toml
+	@echo "Enforcing architectural layering and explicit interface contracts..."
+	uv run --locked lint-imports --config pyproject.toml
+	uv run --locked python scripts/audits/audit_imports.py --root .
+	uv run --locked python scripts/audits/audit_exports.py --root .
 
 format:
 	@echo "Formatting code with ruff..."
@@ -114,15 +117,18 @@ format-check:
 
 type-check:
 	@echo "Running type checking with ty..."
-	uv run ty check src/
+	uv run ty check --output-format concise src/ scripts/ tests/
 
 security:
 	@echo "Running security scanning..."
-	uv run bandit -r src/codomyrmex/ \
+	uv run --locked bandit -r src/codomyrmex/ \
 		-x '*/tests/*,*/vendor/*,*/generated/*,src/codomyrmex/agents/open_gauss,src/codomyrmex/documentation/docs' \
 		-lll -iii
-	@echo "Checking for vulnerabilities..."
-	uv run pip-audit
+	@$(MAKE) audit-lock
+
+audit-lock:
+	@echo "Auditing the complete uv.lock dependency graph..."
+	uv run --locked --extra security_audit python scripts/security/audit_uv_lock.py
 
 # Performance Benchmarks
 benchmark-mcp:
@@ -136,27 +142,30 @@ benchmark: benchmark-mcp
 	@echo "All benchmarks completed."
 
 # Documentation
-docs: docs-check docs-generate
+docs: docs-check
 
 docs-check:
 	@echo "Checking documentation status..."
-	uv run python scripts/documentation/validate_links_comprehensive.py --repo-root . --format both --fail-on-broken
-	uv run python scripts/documentation/analyze_content_quality.py --repo-root . --format both --min-score 70 --fail-on-below
-	uv run python scripts/documentation/validate_agents_structure.py --repo-root . --format markdown --fail-on-invalid
-	uv run python scripts/documentation/enforce_quality_gate.py --repo-root . --max-broken-links 10
+	uv run --locked --group docs python scripts/rasp_gap_report.py --repo-root . --check
+	uv run --locked --group docs python scripts/documentation/audit_readme_agents.py --repo-root . --strict
+	uv run --locked --group docs python scripts/documentation/validate_links_comprehensive.py --repo-root . --format both --fail-on-broken
+	uv run --locked --group docs python scripts/documentation/analyze_content_quality.py --repo-root . --format both --min-score 70 --fail-on-below
+	uv run --locked --group docs python scripts/documentation/validate_agents_structure.py --repo-root . --format markdown --fail-on-invalid
+	uv run --locked --group docs python scripts/documentation/enforce_quality_gate.py --repo-root . --max-broken-links 0
+	uv run --locked --group docs python src/codomyrmex/documentation/scripts/triple_check.py --repo-root . --fail-on-issues
+	NO_MKDOCS_2_WARNING=1 uv run --locked --group docs mkdocs build --strict
 
 manuscript-check:
 	@echo "Checking manuscript evidence integrity..."
-	uv run python scripts/validate_manuscript_integrity.py
+	uv run --locked --group docs python scripts/validate_manuscript_integrity.py
 
 docs-generate:
-	@echo "Generating missing documentation..."
-	uv run python src/codomyrmex/documentation/scripts/generate_missing_readmes.py --repo-root .
+	@echo "Explicitly generating missing documentation (do not run during a hand-pass freeze)..."
+	uv run --locked --group docs python src/codomyrmex/documentation/scripts/generate_missing_readmes.py --repo-root .
 
 serve-docs:
-	@echo "Serving documentation locally..."
-	@echo "Note: This requires documentation website setup"
-	@echo "See docs/development/documentation.md for setup instructions"
+	@echo "Serving the canonical MkDocs site..."
+	NO_MKDOCS_2_WARNING=1 uv run --locked --group docs mkdocs serve
 
 # Analysis and maintenance
 analyze:

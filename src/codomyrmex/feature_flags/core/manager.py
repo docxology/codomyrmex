@@ -74,7 +74,7 @@ class FeatureManager:
         **kwargs: Any,
     ) -> FlagDefinition:
         """Create or update a flag definition."""
-        # Handle legacy kwargs mapping
+        # Map convenience targeting options into canonical targeting rules.
         if "allowlist" in kwargs:
             targeting_rules = targeting_rules or []
             targeting_rules.append(TargetingRule("user_id", "in", kwargs["allowlist"]))

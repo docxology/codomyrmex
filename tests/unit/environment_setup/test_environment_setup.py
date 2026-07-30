@@ -188,16 +188,3 @@ class TestEnvironmentSetupComprehensive:
         assert "Codomyrmex Environment Report" in report
         assert "Python Version" in report
         assert "UV Available" in report
-
-    def test_validate_environment_completeness_legacy(self, code_dir, tmp_path):
-        """Test legacy wrapper validate_environment_completeness."""
-        if str(code_dir) not in sys.path:
-            sys.path.insert(0, str(code_dir))
-
-        from codomyrmex.environment_setup.env_checker import (
-            validate_environment_completeness,
-        )
-
-        # Should return a boolean
-        result = validate_environment_completeness(repo_root=str(tmp_path))
-        assert isinstance(result, bool)

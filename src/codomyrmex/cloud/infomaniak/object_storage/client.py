@@ -326,10 +326,6 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             logger.error("Failed to delete %s/%s: %s", bucket, key, e)
             return False
 
-    def delete_file(self, bucket: str, key: str) -> bool:
-        """Delete a file. ABC-compatible alias for delete_object."""
-        return self.delete_object(bucket, key)
-
     def get_object_metadata(self, bucket: str, key: str) -> dict[str, Any]:
         """Get object metadata."""
         try:
@@ -338,10 +334,6 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
         except Exception as e:
             logger.error("Failed to get metadata for %s/%s: %s", bucket, key, e)
             return {}
-
-    def get_metadata(self, bucket: str, key: str) -> dict[str, Any]:
-        """Legacy alias for get_object_metadata."""
-        return self.get_object_metadata(bucket, key)
 
     def generate_presigned_url(
         self,

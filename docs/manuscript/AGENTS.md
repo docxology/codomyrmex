@@ -54,7 +54,7 @@ Key facts agents must use when editing or cross-referencing this manuscript — 
 |:-----|:-----|:---------------------|
 | Colony kernel test count | **{{RESULT_TEST_COUNT}}** | `RESULT_TEST_COUNT` token; `uv run pytest tests/unit/colony_kernel/` |
 | Local hazard input | **`max(RISK, FAILURE)`** | `ActuationGate.witness_state()`; paired kernel tests |
-| Outcome integrity | **caller-reported, not attested** | `colony_record_outcome`; no consumed authorization ledger |
+| Outcome integrity | **ordinary MCP path caller-reported; optional/required kernel path locally attested** | `colony_record_outcome` versus `ColonyKernel.record_attested_outcome`; neither independently observes external actuation |
 | Default state lifetime | **one process** | in-memory field and `db_path=":memory:"` |
 | Gate weights | **generated tokens** | live expressions in `ActuationGate.evaluate` |
 | Colony kernel subsystems | **generated count** | live `ColonyKernel` ownership graph |
@@ -83,10 +83,10 @@ Key facts agents must use when editing or cross-referencing this manuscript — 
 | `08_active_inference.md` | Explicitly non-equivalent Active Inference crosswalk and implementation agenda | `CONFIG_PARAMETER_STATUS_NOTE` | `fig:fep_correspondence` |
 | `09_research_roadmap.md` | Evidence-bound research milestones, promotion rules, and reproducibility bundle | `CONFIG_PARAMETER_STATUS_NOTE`, `CONFIG_RESEARCH_ROADMAP_STAGE_COUNT`, `RESULT_RESEARCH_ROADMAP_EVIDENCE_ROWS`, `RESULT_RESEARCH_ROADMAP_DECISION_ROWS` | `fig:research_roadmap` |
 | `10_formalism_code_crosswalk.md` | Formal objects, code anchors, translation mechanisms, evidence, and claim boundaries | `CONFIG_PARAMETER_STATUS_NOTE`, `CONFIG_FORMALISM_CROSSWALK_COUNT`, `RESULT_FORMALISM_CROSSWALK_ROWS`, `RESULT_FORMALISM_CROSSWALK_EVIDENCE_ROWS` | `fig:formalism_code_crosswalk` |
-| `90_appendix_design_rationale.md` | Auditable design choices, rejected alternatives, and calibration boundaries | `CONFIG_PARAMETER_STATUS_NOTE` | None |
+| `90_appendix_design_rationale.md` | Auditable design choices, rejected alternatives, calibration boundaries, and generated figure text alternatives | `CONFIG_PARAMETER_STATUS_NOTE`, `RESULT_FIGURE_ACCESSIBILITY_ROWS` | None |
 | `98_acknowledgements.md` | Contributor credit | `CONFIG_ACKNOWLEDGEMENTS` | None |
 | `99_references.md` | Citeproc bibliography anchor; bibliography rendered from `references.bib` | None | None |
-| `config.yaml` | Paper metadata, gate parameters, trust thresholds, pheromone decay rates, budget caps, publication settings, steganography profile | — | — |
+| `config.yaml` | Paper metadata, gate parameters, trust thresholds, pheromone decay rates, budget caps, transparent publication provenance, protocol revision, and roadmap | — | — |
 | `layer_contract.yaml` | Declares which `src/` files are permitted to import `infrastructure.*`; enforced at CI boundary | — | — |
 | `manuscript.css` | HTML rendering style; mirrors the PDF red hyperlink contract | — | — |
 | `preamble.md` | LaTeX injections shared by PDF output, including red hyperlinks and configuration-backed layout | `CONFIG_PDF_MARGIN` | — |
@@ -115,6 +115,13 @@ The categories are:
   `RESULT_REPLAY_UNRELATED_DECISION`, and `RESULT_REPLAY_RECOVERY_DECISION` identify
   the fixed-input, caller-reported paired locality artifact, its semantic/file
   digests, and the decision states exercised by the fixture.
+- Protocol tokens: `CONFIG_MCP_OFFICIAL_REVISION`,
+  `CONFIG_MCP_SPECIFICATION_URL`, `RESULT_MCP_ADVERTISED_REVISION`,
+  `RESULT_MCP_OFFICIAL_REVISION_MATCH`, and
+  `RESULT_MCP_COMPATIBILITY_STATUS` report the pinned official revision and the
+  independently extracted revision advertised by both local MCP endpoints. A
+  mismatch is reported as compatibility not established, never silently treated
+  as compatibility.
 
 ## `{{VARIABLE}}` Protocol
 
@@ -126,7 +133,7 @@ Numeric values that come from configuration or analysis outputs **must** use `{{
 
 2. **Persist** — The script writes the complete `{TOKEN: value}` mapping to `output/data/manuscript_variables.json`. This JSON file is the auditable record of every value injected into the rendered manuscript.
 
-3. **Render** — The script writes resolved copies of each `docs/manuscript/*.md` template to `output/manuscript/*.md`, substituting every `{{TOKEN}}` with its resolved string value. Figure filenames, labels, widths, evidence classes, and captions are also generated from the `figures:` registry in `config.yaml`. `scripts/compile_manuscript.py --pdf` inserts generated contents after the cover and renders the **substituted** copies from `output/manuscript/`, never the source templates.
+3. **Render** — The script writes resolved copies of each `docs/manuscript/*.md` template to `output/manuscript/*.md`, substituting every `{{TOKEN}}` with its resolved string value. Figure filenames, labels, widths, evidence classes, captions, concise alternatives, and extended descriptions are also generated from the `figures:` registry in `config.yaml`. `scripts/compile_manuscript.py --pdf` inserts generated contents after the cover and renders the **substituted** copies from `output/manuscript/`, never the source templates.
 
 **Adding a new token:**
 
@@ -161,16 +168,18 @@ Follow these steps in order whenever prose, parameters, or measured results chan
    ```bash
    grep -r "{{" output/manuscript/ --include="*.md" || echo "All resolved"
    ```
-5. **Render PDF** from the repository root:
+5. **Render PDF** from the repository root, using the resolved manuscript tree:
    ```bash
-   uv run python scripts/compile_manuscript.py --pdf
+   uv run --locked --group docs python scripts/compile_manuscript.py \
+     --manuscript-dir output/manuscript --output-dir output \
+     --pdf --bookends --pdf-engine lualatex --pdf-standard ua-2 --skip-generate
    ```
 
 ## RASP Conventions
 
 1. Every `{{TOKEN}}` in the source manuscript files must have a corresponding key in `compute_variables()`. Reviewer-sensitive tokens and public claims must have corresponding assertions in `tests/unit/colony_kernel/test_manuscript_consistency.py`. A manuscript file that references an undefined token causes a non-zero exit before the PDF renderer runs.
 2. `src/codomyrmex/manuscript/variables.py` is the only manuscript variable generator. Colony kernel modules remain independent of the parent template infrastructure.
-3. Do not hardcode numeric results (test counts, coverage percentages, gate thresholds, figure horizons, or figure captions) directly into manuscript prose. Every claim that can drift must be backed by a token. Put figure metadata and captions in `config.yaml`; use the generated `FIGURE_*` tokens in Markdown. Use `CONFIG_PARAMETER_STATUS_NOTE` / `CONFIG_PARAMETER_STATUS_SHORT` for the evidence qualifier that parameters are current defaults or illustrative starting values and remain tunable. Use the **Current State** table above when hand-editing prose that cannot use a token.
+3. Do not hardcode numeric results (test counts, coverage percentages, gate thresholds, figure horizons, or figure captions) directly into manuscript prose. Every claim that can drift must be backed by a token. Put figure metadata, captions, concise alternatives, and extended descriptions in `config.yaml`; use the generated `FIGURE_*` tokens in Markdown, associate each image with its extended description through `aria-describedby`, and preserve redundant encodings rather than relying on colour alone. Use `CONFIG_PARAMETER_STATUS_NOTE` / `CONFIG_PARAMETER_STATUS_SHORT` for the evidence qualifier that parameters are current defaults or illustrative starting values and remain tunable. Use the **Current State** table above when hand-editing prose that cannot use a token.
 4. The falsification attack vector for import-cycle detection is `CIRCULAR_ARCHITECTURE`, not `CIRCULAR_DEPS`. The canonical enum lives in `src/codomyrmex/colony_kernel/falsification/models.py`; do not invent aliases.
 5. Avoid boilerplate closers ("In summary", "In conclusion") at the end of sections unless the section genuinely warrants them.
 6. When cross-referencing sections, use Pandoc-crossref `[@sec:label]` syntax — never hardcoded section numbers.

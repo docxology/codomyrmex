@@ -17,14 +17,16 @@ from typing import Any
 @dataclass
 class AgentRequest:
     prompt: str
-    metadata: dict[str, Any] = None
+    metadata: dict[str, Any] | None = None
 
 
 # Try to import real Claude client
 try:
-    from codomyrmex.agents.claude.claude_client import ClaudeClient
+    from codomyrmex.agents.claude.claude_client import ClaudeClient as _ClaudeClient
 except ImportError:
-    ClaudeClient = None
+    ClaudeClient: type[Any] | None = None
+else:
+    ClaudeClient = _ClaudeClient
 
 logger = logging.getLogger(__name__)
 
@@ -32,14 +34,13 @@ logger = logging.getLogger(__name__)
 class OllamaClient:
     """Client for local Ollama instance (REST API).
 
-    Implements a robust interface compatible with ClaudeClient
-    for use in ClaudeCodeEndpoint, using real LLM inference.
+    Implements the real LLM client interface used by ``RelayEndpoint``.
     """
 
     def __init__(self, model="llama3", base_url="http://localhost:11434"):
         self.model = model
         self.base_url = base_url
-        self.session_manager = None  # dummy for interface compatibility
+        self.session_manager = None  # Session state is managed by the endpoint.
 
     def create_session(self, session_id):
         # Ollama manages context internally via /api/chat if messages are sent

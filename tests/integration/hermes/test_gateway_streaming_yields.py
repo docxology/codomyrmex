@@ -5,7 +5,7 @@ import time
 
 import pytest
 
-from codomyrmex.agents.hermes._provider_router import ProviderRouter
+from codomyrmex.agents.hermes.provider_router_pkg import ProviderRouter
 
 RUN_LIVE_OLLAMA = os.environ.get("RUN_LIVE_OLLAMA") == "1"
 

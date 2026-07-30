@@ -95,7 +95,11 @@ def main():
     # 4. Active Inference
     print_info("Testing Active Inference agent...")
     try:
-        ActiveInferenceAgent()
+        ActiveInferenceAgent(
+            states=["stable", "degraded"],
+            observations=["healthy", "unhealthy"],
+            actions=["inspect", "repair"],
+        )
         print_success("  ActiveInferenceAgent initialized successfully.")
     except Exception as e:
         print_error(f"  ActiveInferenceAgent failed: {e}")

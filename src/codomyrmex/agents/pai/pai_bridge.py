@@ -5,7 +5,7 @@ Comprehensive bridge between Codomyrmex and the
 (PAI) by Daniel Miessler.
 
 **Upstream**: https://github.com/danielmiessler/Personal_AI_Infrastructure
-**Local install**: ``~/.claude/PAI/`` (v4+) or ``~/.claude/skills/PAI/`` (v3 legacy)
+**Local install**: ``~/.claude/PAI/`` (v4+) or ``~/.claude/skills/PAI/`` (v3 installation)
 
 This module discovers the PAI installation and exposes programmatic access to
 every PAI subsystem:
@@ -43,7 +43,7 @@ from ._systems import PAI_UPSTREAM_URL, PAISystemsMixin
 
 logger = get_logger(__name__)
 
-# Expose constants at module level for compatibility
+# Expose upstream constants at module level.
 PAI_UPSTREAM_LICENSE = "MIT"
 
 
@@ -63,7 +63,7 @@ class PAIBridge(PAISystemsMixin, PAIModulesMixin):
     See Also:
         - Upstream: https://github.com/danielmiessler/Personal_AI_Infrastructure
         - Local install path (v4+): ``~/.claude/PAI/``
-        - Local install path (v3 legacy): ``~/.claude/skills/PAI/``
+        - Local install path (v3): ``~/.claude/skills/PAI/``
     """
 
     def __init__(self, config: PAIConfig | None = None) -> None:

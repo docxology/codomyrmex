@@ -18,7 +18,7 @@ from codomyrmex.scrape.core import (
     ScrapeResult,
     SearchResult,
 )
-from codomyrmex.scrape.exceptions import ScrapeError
+from codomyrmex.scrape.exceptions import ScrapingError
 
 from .client import FirecrawlClient
 
@@ -94,11 +94,11 @@ class FirecrawlAdapter(BaseScraper):
             # Convert Firecrawl result to ScrapeResult
             result = self._convert_scrape_result(firecrawl_result, url)
             return result
-        except ScrapeError:
+        except ScrapingError:
             raise
         except Exception as e:
             logger.error("Error in FirecrawlAdapter.scrape: %s", e)
-            raise ScrapeError(f"Failed to scrape {url}: {e}") from e
+            raise ScrapingError(f"Failed to scrape {url}: {e}") from e
 
     def crawl(self, url: str, options: ScrapeOptions | None = None) -> CrawlResult:
         """Crawl a website starting from a URL using Firecrawl.
@@ -138,11 +138,11 @@ class FirecrawlAdapter(BaseScraper):
             # Convert Firecrawl result to CrawlResult
             result = self._convert_crawl_result(firecrawl_result, url)
             return result
-        except ScrapeError:
+        except ScrapingError:
             raise
         except Exception as e:
             logger.error("Error in FirecrawlAdapter.crawl: %s", e)
-            raise ScrapeError(f"Failed to crawl {url}: {e}") from e
+            raise ScrapingError(f"Failed to crawl {url}: {e}") from e
 
     def map(self, url: str, search: str | None = None) -> MapResult:
         """Map the structure of a website using Firecrawl.
@@ -169,11 +169,11 @@ class FirecrawlAdapter(BaseScraper):
             # Convert Firecrawl result to MapResult
             result = self._convert_map_result(firecrawl_result)
             return result
-        except ScrapeError:
+        except ScrapingError:
             raise
         except Exception as e:
             logger.error("Error in FirecrawlAdapter.map: %s", e)
-            raise ScrapeError(f"Failed to map {url}: {e}") from e
+            raise ScrapingError(f"Failed to map {url}: {e}") from e
 
     def search(self, query: str, options: ScrapeOptions | None = None) -> SearchResult:
         """Search the web and optionally scrape results using Firecrawl.
@@ -213,11 +213,11 @@ class FirecrawlAdapter(BaseScraper):
             # Convert Firecrawl result to SearchResult
             result = self._convert_search_result(firecrawl_result, query)
             return result
-        except ScrapeError:
+        except ScrapingError:
             raise
         except Exception as e:
             logger.error("Error in FirecrawlAdapter.search: %s", e)
-            raise ScrapeError(f"Failed to search '{query}': {e}") from e
+            raise ScrapingError(f"Failed to search '{query}': {e}") from e
 
     def extract(
         self,
@@ -253,11 +253,11 @@ class FirecrawlAdapter(BaseScraper):
             # Convert Firecrawl result to ExtractResult
             result = self._convert_extract_result(firecrawl_result, urls)
             return result
-        except ScrapeError:
+        except ScrapingError:
             raise
         except Exception as e:
             logger.error("Error in FirecrawlAdapter.extract: %s", e)
-            raise ScrapeError(f"Failed to extract data: {e}") from e
+            raise ScrapingError(f"Failed to extract data: {e}") from e
 
     def _convert_scrape_result(
         self, firecrawl_data: dict[str, Any], url: str

@@ -86,6 +86,21 @@ This document provides a comprehensive overview of how Codomyrmex modules intera
 | **`video`** | Video processing | ffmpeg, opencv | logging_monitoring | llm, documents |
 | **`wallet`** | Self-custody, recovery, **smart contracts** | encryption | logging_monitoring, encryption | identity, market |
 
+### Audited upward integration contracts
+
+The layer audit rejects lower-to-higher imports by default. Sixteen exact
+file-scoped adapters are currently registered in
+`codomyrmex.static_analysis.imports.UPWARD_INTERFACE_CONTRACTS`; these cover
+the logging/event bridge, orchestrator agent/event/utility adapters,
+Infomaniak identity/privacy integration, coding agent adapters, the
+security/defense compatibility facade, and validation PAI/example adapters.
+Each entry carries a rationale. `scripts/audits/audit_imports.py` fails on both
+an unexplained upward edge and a stale registry entry.
+
+```bash
+uv run --locked python scripts/audits/audit_imports.py --root .
+```
+
 ## 🔄 Core Data Flow Patterns
 
 ### **1. Development Workflow Integration**

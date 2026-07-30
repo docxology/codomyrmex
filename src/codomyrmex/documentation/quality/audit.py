@@ -183,6 +183,44 @@ def audit_documentation(src_dir: Path, report_file: Path) -> None:
     generate_report(audits, report_file)
 
 
+def _rasp_packages(base_dir: Path) -> list[Path]:
+    """Return RASP-audited package directories in deterministic order."""
+    base_dir = base_dir.resolve()
+    packages: list[Path] = []
+    for root, dirs, files in os.walk(base_dir):
+        dirs[:] = sorted(
+            directory
+            for directory in dirs
+            if not directory.startswith(".") and directory != "__pycache__"
+        )
+        if "__init__.py" in files:
+            packages.append(Path(root))
+    return packages
+
+
+def find_rasp_gaps(base_dir: Path) -> dict[str, list[str]]:
+    """Return missing RASP files keyed by package-relative path.
+
+    The function is read-only and preserves the package-discovery semantics
+    used by :func:`audit_rasp`: a directory is in scope only when it contains
+    ``__init__.py``; hidden and cache paths are excluded.
+    """
+    base_dir = base_dir.resolve()
+    missing_report: dict[str, list[str]] = {}
+
+    for package in _rasp_packages(base_dir):
+        missing = [
+            rasp_file
+            for rasp_file in REQUIRED_DOCS
+            if not (package / rasp_file).is_file()
+        ]
+        if missing:
+            relative = package.relative_to(base_dir.parent).as_posix()
+            missing_report[relative] = sorted(missing)
+
+    return dict(sorted(missing_report.items()))
+
+
 def audit_rasp(base_dir: Path) -> int:
     """
     Audit RASP files specifically and print to stdout.
@@ -190,31 +228,7 @@ def audit_rasp(base_dir: Path) -> int:
     """
     print(f"Auditing RASP documentation in {base_dir}...\n")
 
-    # Simple check for RASP files in all submodules
-    missing_report: dict[str, list[str]] = {}
-
-    # Walk to find packages
-    packages = []
-    for root, _dirs, files in os.walk(base_dir):
-        if "__init__.py" in files:
-            path = Path(root)
-            # Skip hidden/cache
-            if any(
-                p.startswith(".") or p == "__pycache__"
-                for p in path.relative_to(base_dir).parts
-            ):
-                continue
-            packages.append(path)
-
-    for pkg in packages:
-        missing = []
-        for rasp_file in REQUIRED_DOCS:
-            if not (pkg / rasp_file).exists():
-                missing.append(rasp_file)
-
-        if missing:
-            rel_path = pkg.relative_to(base_dir.parent)
-            missing_report[str(rel_path)] = missing
+    missing_report = find_rasp_gaps(base_dir)
 
     if not missing_report:
         print("✅ SUCCESS: All modules have complete RASP documentation!")
@@ -230,5 +244,6 @@ def audit_rasp(base_dir: Path) -> int:
         print(f"{mod:<40} | {missing_str}")
 
     print("-" * 60)
-    print(f"\nTotal modules audited: {len(packages)}")
+    package_count = len(_rasp_packages(base_dir))
+    print(f"\nPackages with gaps: {len(missing_report)} / {package_count} audited")
     return 1

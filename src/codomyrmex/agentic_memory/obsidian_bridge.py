@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from codomyrmex.agentic_memory.models import MemoryImportance, MemoryType
+from codomyrmex.agentic_memory.core.models import MemoryImportance, MemoryType
 from codomyrmex.agentic_memory.obsidian.crud import (
     create_note,
     set_frontmatter,
@@ -12,7 +12,7 @@ from codomyrmex.agentic_memory.obsidian.crud import (
 from codomyrmex.logging_monitoring import get_logger
 
 if TYPE_CHECKING:
-    from codomyrmex.agentic_memory.memory import VectorStoreMemory
+    from codomyrmex.agentic_memory.core.memory import VectorStoreMemory
     from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
 
 logger = get_logger(__name__)

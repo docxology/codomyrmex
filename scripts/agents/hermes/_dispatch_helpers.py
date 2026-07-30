@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 # Bootstrap path — not needed when package is already installed
 try:
@@ -25,7 +26,7 @@ from codomyrmex.utils.cli_helpers import print_error, print_success
 # ── Filesystem Checkpoints ───────────────────────────────────────────
 
 
-def resolve_checkpoint_config() -> dict:
+def resolve_checkpoint_config() -> dict[str, Any]:
     """Load checkpoint configuration from hermes.yaml.
 
     Returns:
@@ -33,8 +34,9 @@ def resolve_checkpoint_config() -> dict:
     """
     try:
         config = get_config()
-        hermes_cfg: dict = config.get("hermes", {}) if isinstance(config, dict) else {}
-        return hermes_cfg.get("checkpoint", {})
+        config_data = config.to_dict()
+        hermes_cfg = config_data.get("hermes", {})
+        return hermes_cfg.get("checkpoint", {}) if isinstance(hermes_cfg, dict) else {}
     except Exception:
         return {}
 

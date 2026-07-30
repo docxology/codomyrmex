@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/static_analysis
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Purpose
 Static code analysis tools for bug detection, security scanning, and code quality.
@@ -21,6 +21,9 @@ Static code analysis tools for bug detection, security scanning, and code qualit
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
+- Keep layer membership aligned with `src/codomyrmex/SPEC.md`.
+- Add upward-import exceptions only as exact file-scoped contracts with a
+  rationale; the audit must reject stale contracts.
 
 ## Key Files
 - `AGENTS.md` - Agent coordination and navigation

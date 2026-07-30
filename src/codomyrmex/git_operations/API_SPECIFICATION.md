@@ -1,6 +1,6 @@
 # git_operations API Specification
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Overview
 
@@ -142,12 +142,15 @@ from codomyrmex.git_operations import (
 # Repository types
 repo_type = RepositoryType.OWN  # OWN, FORK, USE
 
-# Repository manager
-manager = RepositoryManager()
-repo = manager.get_repository("/path/to/repo")
+# Repository manager (lookup keys use owner/name)
+manager = RepositoryManager(metadata_file="/path/to/state/repositories.json")
+repo = manager.get_repository("example/repo")
 
-# Metadata
-metadata_mgr = RepositoryMetadataManager(repo)
+# Metadata persistence
+metadata_mgr = RepositoryMetadataManager(
+    metadata_file="/path/to/state/repositories.json"
+)
+metadata = metadata_mgr.get_repository_metadata("example/repo")
 ```
 
 ## Merge Conflict Resolution
@@ -213,6 +216,13 @@ The module respects Git configuration from:
 2. User-level `~/.gitconfig`
 3. System-level `/etc/gitconfig`
 4. Environment variables (`GIT_AUTHOR_NAME`, `GIT_AUTHOR_EMAIL`, etc.)
+
+Repository metadata persistence is separate from Git configuration. An
+explicit `metadata_file` takes precedence. Otherwise the manager uses
+`CODOMYRMEX_REPOSITORY_METADATA_FILE`, then
+`$XDG_STATE_HOME/codomyrmex/git_operations/repository_metadata.json`, then
+`~/.local/state/codomyrmex/git_operations/repository_metadata.json`. Runtime
+metadata and timestamped backups are not package resources.
 
 ## CLI Interface
 

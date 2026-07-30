@@ -3,7 +3,7 @@
 Provides comprehensive code review and static analysis capabilities including
 quality assessment, security scanning, complexity analysis, dead code detection,
 and clone identification. Integrates with pyscn for advanced analysis and
-traditional tools like pylint, flake8, mypy, and bandit.
+traditional tools like pylint, ruff, ty, and bandit.
 
 Public API:
     Models:

@@ -346,7 +346,7 @@ Coordinates individual task execution with dependency management.
   )
   ```
 
-##### `add_task(task: Task) -> str`
+##### `submit_task(task: Task) -> str`
 
 - **Description**: Add a task to the orchestrator.
 - **Parameters**:
@@ -360,7 +360,7 @@ Coordinates individual task execution with dependency management.
       action="analyze_code_quality",
       parameters={"path": "./src"}
   )
-  task_id = orchestrator.add_task(task)
+  task_id = orchestrator.submit_task(task)
   ```
 
 ##### `execute_task(task: Task) -> TaskResult`
@@ -382,9 +382,9 @@ Coordinates individual task execution with dependency management.
   ```
 - **Raises**:
   - Various exceptions depending on module/action execution failures
-- **Note**: This method is typically called by the internal execution loop. For external use, add tasks via `add_task()` and start execution.
+- **Note**: This method is typically called by the internal execution loop. For external use, submit tasks via `submit_task()` and start execution.
 
-##### `start_execution()`
+##### `start_processing()`
 
 - **Description**: Start the task execution engine. This starts a background thread that processes tasks.
 - **Note**: Must be called before tasks will be executed automatically.
@@ -915,7 +915,7 @@ pm.add_project_milestone(
 from codomyrmex.logistics.orchestration.project import TaskOrchestrator, Task, TaskPriority, TaskResource, ResourceType
 
 orchestrator = TaskOrchestrator(max_workers=4)
-orchestrator.start_execution()
+orchestrator.start_processing()
 
 # Create dependent tasks
 analysis_task = orchestrator.create_task(

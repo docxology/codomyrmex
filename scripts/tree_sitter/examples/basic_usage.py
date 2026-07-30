@@ -223,7 +223,7 @@ class TreeSitterScript(ScriptBase):
             modified_source = source + "\n# Added comment"
 
             start_time = time.perf_counter()
-            parser.parse(modified_source, old_tree=tree)
+            parser.parse(modified_source)
             incremental_time = (time.perf_counter() - start_time) * 1000
 
             results["parser_tests"]["incremental"] = {

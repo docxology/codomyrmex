@@ -40,15 +40,9 @@ def main() -> int:
         print_error(f"Import failed: {e}")
         return 1
 
-    agent = GitAgent(repo_path=repo_path)
+    agent = GitAgent(config={"repo_path": repo_path})
     print_success(f"GitAgent instantiated for: {repo_path}")
-
-    if hasattr(agent, "get_status"):
-        status = agent.get_status()
-        print_info(f"  Status: {status}")
-    if hasattr(agent, "get_branch"):
-        branch = agent.get_branch()
-        print_info(f"  Branch: {branch}")
+    print_info("  Use the agent's execute() interface for repository actions.")
 
     print_success("Git agent probe complete.")
     return 0

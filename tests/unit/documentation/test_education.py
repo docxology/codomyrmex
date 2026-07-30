@@ -10,10 +10,7 @@ import json
 import pytest
 
 from codomyrmex.documentation.education import Curriculum, Difficulty, Lesson
-from codomyrmex.documentation.education.curriculum import (
-    _DIFFICULTY_ORDER,
-    DifficultyLevel,
-)
+from codomyrmex.documentation.education.curriculum import _DIFFICULTY_ORDER
 
 # ---------------------------------------------------------------------------
 # education/__init__.py imports
@@ -32,10 +29,6 @@ class TestEducationModuleImports:
 
     def test_lesson_importable(self):
         assert Lesson is not None
-
-    def test_difficulty_level_alias(self):
-        """DifficultyLevel is a backward-compat alias for Difficulty."""
-        assert DifficultyLevel is Difficulty
 
     def test_optional_tutor_is_none_or_class(self):
         from codomyrmex.documentation.education import Tutor

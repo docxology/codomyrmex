@@ -51,10 +51,7 @@ with contextlib.suppress(ImportError):
     from .agent_relay import AgentRelay, RelayMessage
 
 with contextlib.suppress(ImportError):
-    from .live_bridge import (
-        ClaudeCodeEndpoint,
-        LiveAgentBridge,
-    )
+    from .live_bridge import LiveAgentBridge
 
 with contextlib.suppress(ImportError):
     from .message_scheduler import (
@@ -84,7 +81,6 @@ __all__ = [
     "AntigravityToolSkill",
     "Artifact",
     "ArtifactHistoryBridge",
-    "ClaudeCodeEndpoint",
     "ConversationContext",
     "DispatcherConfig",
     "LiveAgentBridge",

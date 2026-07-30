@@ -17,6 +17,7 @@ except ImportError:
 
 import argparse
 import re
+from typing import Any
 
 
 def find_skills(search_paths: list | None = None) -> list:
@@ -37,12 +38,12 @@ def find_skills(search_paths: list | None = None) -> list:
     return found
 
 
-def parse_skill_md(path: Path) -> dict:
+def parse_skill_md(path: Path) -> dict[str, Any]:
     """Parse SKILL.md file."""
     with open(path) as f:
         content = f.read()
 
-    info = {"path": str(path), "type": "markdown"}
+    info: dict[str, Any] = {"path": str(path), "type": "markdown"}
 
     # Extract frontmatter
     if content.startswith("---"):

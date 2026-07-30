@@ -22,7 +22,7 @@ The following tools are **specified but not yet implemented** in `mcp_tools.py`:
 
 ## General Considerations for Coding Tools
 
-- **Dependencies**: Requires `logging_monitoring` module. Docker is required for sandboxed execution. Static analysis tools (ruff, mypy) are required for code review.
+- **Dependencies**: Requires `logging_monitoring` module. Docker is required for sandboxed execution. Static analysis tools (ruff, ty) are required for code review.
 - **Initialization**: No module-level initialization required. Docker availability is checked at execution time.
 - **Error Handling**: Errors are logged via `logging_monitoring`. Tools return structured error objects with status codes.
 - **Security**: All code execution occurs in isolated Docker containers with resource limits. File operations are sandboxed.

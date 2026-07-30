@@ -190,6 +190,8 @@ def phase_pai_pm(restart: bool, port: int = _PAI_PM_PORT) -> subprocess.Popen | 
         print_info(f"  PAI PM process started (PID {p.pid}) — waiting for :{port}…")
 
         def _tail_logs(proc: subprocess.Popen) -> None:
+            if proc.stdout is None:
+                return
             for line in proc.stdout:
                 sys.stdout.write(f"\033[90m[PAI PM]\033[0m {line}")
                 sys.stdout.flush()

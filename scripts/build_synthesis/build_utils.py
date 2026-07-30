@@ -6,9 +6,7 @@ Usage:
     python build_utils.py <command> [options]
 """
 
-logger = logging.getLogger(__name__)
-
-
+import logging
 import sys
 from pathlib import Path
 
@@ -19,9 +17,11 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import logging
 import subprocess
 from datetime import datetime
+from typing import Any
+
+logger = logging.getLogger(__name__)
 
 
 def find_build_files() -> list:
@@ -46,9 +46,9 @@ def find_build_files() -> list:
     return found
 
 
-def get_build_info() -> dict:
+def get_build_info() -> dict[str, Any]:
     """Get build environment info."""
-    info = {
+    info: dict[str, Any] = {
         "python": sys.version.split()[0],
         "platform": sys.platform,
         "timestamp": datetime.now().isoformat(),

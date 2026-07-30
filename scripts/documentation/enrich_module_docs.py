@@ -1,25 +1,43 @@
 #!/usr/bin/env python3
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["pyyaml"]
+# dependencies = []
 # ///
 """
 Enrich module documentation by reading source code structure.
 
 Reads each src/codomyrmex/<module>/ directory and generates enriched
 README.md, AGENTS.md, and SPEC.md files in docs/modules/<module>/.
+
+This command is deliberately fail-closed: use ``--dry-run`` to inspect a
+change plan and ``--apply`` to write it. Existing hand-authored files are
+preserved unless a matching ``--force-*`` option is supplied, and curated
+README/AGENTS markers are never overwritten.
 """
 
-logger = logging.getLogger(__name__)
-
-
+import argparse
 import ast
 import logging
+import tomllib
+from collections.abc import Sequence
 from pathlib import Path
+from typing import Any
+
+logger = logging.getLogger(__name__)
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SRC_ROOT = REPO_ROOT / "src" / "codomyrmex"
 DOCS_ROOT = REPO_ROOT / "docs" / "modules"
+
+CURATED_MARKERS = {
+    "README.md": "<!-- readme: curated -->",
+    "AGENTS.md": "<!-- agents: curated -->",
+}
+GENERATED_MARKERS = {
+    "README.md": "<!-- readme: generated -->",
+    "AGENTS.md": "<!-- agents: generated -->",
+    "SPEC.md": "<!-- spec: generated -->",
+}
 
 # Human-readable display names for modules
 DISPLAY_NAMES = {
@@ -119,9 +137,9 @@ DISPLAY_NAMES = {
 }
 
 
-def extract_module_info(module_dir: Path) -> dict:
+def extract_module_info(module_dir: Path) -> dict[str, Any]:
     """Extract information from a source module directory."""
-    info = {
+    info: dict[str, Any] = {
         "name": module_dir.name,
         "display_name": DISPLAY_NAMES.get(
             module_dir.name, module_dir.name.replace("_", " ").title()
@@ -132,7 +150,7 @@ def extract_module_info(module_dir: Path) -> dict:
         "submodules": [],
         "py_files": [],
         "has_tests": False,
-        "version": "0.1.0",
+        "version": "",
     }
 
     init_file = module_dir / "__init__.py"
@@ -144,14 +162,10 @@ def extract_module_info(module_dir: Path) -> dict:
             if (
                 tree.body
                 and isinstance(tree.body[0], ast.Expr)
-                and isinstance(tree.body[0].value, (ast.Constant, ast.Str))
+                and isinstance(tree.body[0].value, ast.Constant)
+                and isinstance(tree.body[0].value.value, str)
             ):
-                raw = (
-                    tree.body[0].value.value
-                    if isinstance(tree.body[0].value, ast.Constant)
-                    else tree.body[0].value.s
-                )
-                info["docstring"] = raw.strip()
+                info["docstring"] = tree.body[0].value.value.strip()
 
             # Extract classes
             for node in ast.walk(tree):
@@ -194,14 +208,10 @@ def extract_module_info(module_dir: Path) -> dict:
                 if (
                     sub_tree.body
                     and isinstance(sub_tree.body[0], ast.Expr)
-                    and isinstance(sub_tree.body[0].value, (ast.Constant, ast.Str))
+                    and isinstance(sub_tree.body[0].value, ast.Constant)
+                    and isinstance(sub_tree.body[0].value.value, str)
                 ):
-                    raw = (
-                        sub_tree.body[0].value.value
-                        if isinstance(sub_tree.body[0].value, ast.Constant)
-                        else sub_tree.body[0].value.s
-                    )
-                    sub_doc = raw.strip().split("\n")[0]
+                    sub_doc = sub_tree.body[0].value.value.strip().split("\n")[0]
             except (SyntaxError, Exception) as e:
                 logger.debug(
                     "Could not parse submodule __init__.py for %s: %s", child.name, e
@@ -239,14 +249,16 @@ def get_module_description(info: dict) -> str:
     return f"Provides {info['display_name'].lower()} functionality for the Codomyrmex ecosystem."
 
 
-def generate_readme(info: dict) -> str:
+def generate_readme(info: dict, docs_root: Path = DOCS_ROOT) -> str:
     """Generate enriched README.md content."""
     desc = get_module_description(info)
 
     lines = [
+        GENERATED_MARKERS["README.md"],
+        "",
         f"# {info['display_name']} Module Documentation",
         "",
-        f"**Version**: v{info['version']} | **Status**: Active | **Last Updated**: February 2026",
+        f"**Package version**: v{info['version']} | **Status**: Generated reference",
         "",
         "## Overview",
         "",
@@ -288,24 +300,9 @@ def generate_readme(info: dict) -> str:
     lines.append("## Quick Start")
     lines.append("")
     lines.append("```python")
-    if info["classes"]:
-        imports = ", ".join(c["name"] for c in info["classes"][:3])
-        lines.append(f"from codomyrmex.{info['name']} import {imports}")
-        lines.append("")
-        first_cls = info["classes"][0]["name"]
-        lines.append("# Initialize")
-        lines.append(f"instance = {first_cls}()")
-    elif info["functions"]:
-        imports = ", ".join(f["name"] for f in info["functions"][:3])
-        lines.append(f"from codomyrmex.{info['name']} import {imports}")
-        lines.append("")
-        first_fn = info["functions"][0]["name"]
-        lines.append("# Use the module")
-        lines.append(f"result = {first_fn}()")
-    else:
-        lines.append(
-            f"from codomyrmex.{info['name']} import *  # See source for specific imports"
-        )
+    lines.append(f"import codomyrmex.{info['name']} as {info['name']}")
+    lines.append("")
+    lines.append(f"print({info['name']}.__all__)  # Authoritative public exports")
     lines.append("```")
     lines.append("")
 
@@ -342,7 +339,7 @@ def generate_readme(info: dict) -> str:
     lines.append("| `SPEC.md` | Technical specification |")
 
     # Check for extra files in docs dir
-    docs_dir = DOCS_ROOT / info["name"]
+    docs_dir = docs_root / info["name"]
     if docs_dir.exists():
         for child in sorted(docs_dir.iterdir()):
             if child.is_dir():
@@ -368,6 +365,8 @@ def generate_agents(info: dict) -> str:
     desc = get_module_description(info)
 
     lines = [
+        GENERATED_MARKERS["AGENTS.md"],
+        "",
         f"# {info['display_name']} Module — Agent Coordination",
         "",
         "## Purpose",
@@ -397,16 +396,9 @@ def generate_agents(info: dict) -> str:
     lines.append("## Agent Usage Patterns")
     lines.append("")
     lines.append("```python")
-    if info["classes"]:
-        cls_name = info["classes"][0]["name"]
-        lines.append(f"from codomyrmex.{info['name']} import {cls_name}")
-        lines.append("")
-        lines.append(f"# Agent initializes {info['display_name'].lower()}")
-        lines.append(f"instance = {cls_name}()")
-    else:
-        lines.append(f"from codomyrmex.{info['name']} import *")
-        lines.append("")
-        lines.append(f"# Agent uses {info['display_name'].lower()} capabilities")
+    lines.append(f"import codomyrmex.{info['name']} as {info['name']}")
+    lines.append("")
+    lines.append(f"print({info['name']}.__all__)  # Inspect supported public exports")
     lines.append("```")
     lines.append("")
 
@@ -428,6 +420,8 @@ def generate_spec(info: dict) -> str:
     desc = get_module_description(info)
 
     lines = [
+        GENERATED_MARKERS["SPEC.md"],
+        "",
         f"# {info['display_name']} — Functional Specification",
         "",
         f"**Module**: `codomyrmex.{info['name']}`  ",
@@ -511,110 +505,188 @@ def generate_spec(info: dict) -> str:
     return "\n".join(lines)
 
 
-def should_enrich(module_name: str, doc_file: Path, info: dict) -> bool:
-    """Decide whether a doc file needs enrichment."""
+def should_enrich(
+    module_name: str,
+    doc_file: Path,
+    info: dict,
+    *,
+    force: bool = False,
+) -> bool:
+    """Return whether a documentation file may be regenerated safely.
+
+    Missing files and files carrying an explicit generated marker are safe to
+    refresh. Other existing files require a matching force flag. Curated
+    README/AGENTS files remain protected even under force.
+    """
     if not doc_file.exists():
         return True
-    content = doc_file.read_text()
-    lines_count = content.count("\n")
-
-    # Always enrich if title is wrong
-    first_line = content.split("\n")[0] if content else ""
-    expected_display = info["display_name"]
-    if (
-        first_line
-        and expected_display.lower() not in first_line.lower()
-        and module_name not in first_line.lower()
-    ):
-        return True
-
-    # Enrich if very thin (under 50 lines for README, 25 for AGENTS/SPEC)
-    if doc_file.name == "README.md" and lines_count < 50:
-        return True
-    return bool(doc_file.name in ("AGENTS.md", "SPEC.md") and lines_count < 25)
+    head = doc_file.read_text(encoding="utf-8", errors="replace")[:800]
+    curated_marker = CURATED_MARKERS.get(doc_file.name)
+    if curated_marker and curated_marker in head:
+        return False
+    generated_marker = GENERATED_MARKERS.get(doc_file.name)
+    return bool(force or (generated_marker and generated_marker in head))
 
 
-def main():
-    # Auto-injected: Load configuration
-    from pathlib import Path
+def package_version(repo_root: Path) -> str:
+    """Read the repository package version from pyproject.toml."""
+    pyproject = repo_root / "pyproject.toml"
+    with pyproject.open("rb") as handle:
+        data = tomllib.load(handle)
+    version = data.get("project", {}).get("version")
+    if not isinstance(version, str) or not version.strip():
+        raise ValueError(f"Missing [project].version in {pyproject}")
+    return version.strip()
 
-    import yaml
 
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "documentation"
-        / "config.yaml"
-    )
-    if config_path.exists():
-        with open(config_path) as f:
-            yaml.safe_load(f) or {}
-            print("Loaded config from config/documentation/config.yaml")
+def enrich_modules(
+    repo_root: Path,
+    *,
+    apply_changes: bool,
+    module_names: Sequence[str] = (),
+    force_readmes: bool = False,
+    force_agents: bool = False,
+    force_specs: bool = False,
+) -> dict[str, Any]:
+    """Plan or apply source-derived module documentation changes."""
+    repo_root = repo_root.resolve()
+    src_root = repo_root / "src" / "codomyrmex"
+    docs_root = repo_root / "docs" / "modules"
+    if not src_root.is_dir() or not docs_root.is_dir():
+        raise ValueError(f"Expected src/codomyrmex and docs/modules under {repo_root}")
 
+    version = package_version(repo_root)
     enriched_count = 0
     skipped_count = 0
-
-    modules = sorted(
+    planned: list[str] = []
+    available_modules = sorted(
         [
             d.name
-            for d in SRC_ROOT.iterdir()
+            for d in src_root.iterdir()
             if d.is_dir() and d.name != "__pycache__" and (d / "__init__.py").exists()
         ]
     )
+    requested = sorted(set(module_names))
+    unknown = sorted(set(requested) - set(available_modules))
+    if unknown:
+        raise ValueError(f"Unknown source module(s): {', '.join(unknown)}")
+    modules = requested or available_modules
 
-    print(f"Found {len(modules)} source modules")
+    print(f"Found {len(available_modules)} source modules; selected {len(modules)}")
 
     for mod_name in modules:
-        src_dir = SRC_ROOT / mod_name
-        docs_dir = DOCS_ROOT / mod_name
+        src_dir = src_root / mod_name
+        docs_dir = docs_root / mod_name
 
         if not docs_dir.exists():
             print(f"  ⚠️ No docs dir for {mod_name}, skipping")
             continue
 
         info = extract_module_info(src_dir)
+        info["version"] = version
 
-        # README.md
-        readme_path = docs_dir / "README.md"
-        if should_enrich(mod_name, readme_path, info):
-            readme_content = generate_readme(info)
-            readme_path.write_text(readme_content)
+        candidates = (
+            (
+                docs_dir / "README.md",
+                generate_readme(info, docs_root),
+                force_readmes,
+            ),
+            (docs_dir / "AGENTS.md", generate_agents(info), force_agents),
+            (docs_dir / "SPEC.md", generate_spec(info), force_specs),
+        )
+        for path, content, force in candidates:
+            if not should_enrich(mod_name, path, info, force=force):
+                skipped_count += 1
+                continue
+            relative = path.relative_to(repo_root).as_posix()
+            planned.append(relative)
             enriched_count += 1
-            print(
-                f"  ✅ Enriched {mod_name}/README.md ({readme_content.count(chr(10))} lines)"
-            )
-        else:
-            skipped_count += 1
-
-        # AGENTS.md
-        agents_path = docs_dir / "AGENTS.md"
-        if should_enrich(mod_name, agents_path, info):
-            agents_content = generate_agents(info)
-            agents_path.write_text(agents_content)
-            enriched_count += 1
-            print(
-                f"  ✅ Enriched {mod_name}/AGENTS.md ({agents_content.count(chr(10))} lines)"
-            )
-        else:
-            skipped_count += 1
-
-        # SPEC.md
-        spec_path = docs_dir / "SPEC.md"
-        if should_enrich(mod_name, spec_path, info):
-            spec_content = generate_spec(info)
-            spec_path.write_text(spec_content)
-            enriched_count += 1
-            print(
-                f"  ✅ Enriched {mod_name}/SPEC.md ({spec_content.count(chr(10))} lines)"
-            )
-        else:
-            skipped_count += 1
+            action = "Enriched" if apply_changes else "Would enrich"
+            if apply_changes:
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(content + "\n", encoding="utf-8")
+            print(f"  {'✅' if apply_changes else '•'} {action} {relative}")
 
     print(f"\n{'=' * 50}")
-    print(f"✅ Enriched: {enriched_count} files")
+    print(f"{'✅ Enriched' if apply_changes else 'Planned'}: {enriched_count} files")
     print(f"⏭️ Skipped (already rich): {skipped_count} files")
     print(f"📊 Total processed: {enriched_count + skipped_count} files")
+    return {
+        "applied": apply_changes,
+        "planned": planned,
+        "planned_count": enriched_count,
+        "skipped_count": skipped_count,
+        "selected_module_count": len(modules),
+        "source_module_count": len(available_modules),
+    }
+
+
+def build_parser() -> argparse.ArgumentParser:
+    """Construct the fail-closed command-line parser."""
+    parser = argparse.ArgumentParser(
+        description=(
+            "Plan or apply source-derived docs/modules README, AGENTS, and SPEC "
+            "updates. Existing curated README/AGENTS files are always preserved."
+        )
+    )
+    parser.add_argument(
+        "--repo-root",
+        type=Path,
+        default=REPO_ROOT,
+        help="Repository root (default: inferred from this script)",
+    )
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print the exact change plan without writing files",
+    )
+    mode.add_argument(
+        "--apply",
+        action="store_true",
+        help="Write the reviewed change plan",
+    )
+    parser.add_argument(
+        "--module",
+        action="append",
+        default=[],
+        help="Limit work to one module; repeat for multiple modules",
+    )
+    parser.add_argument(
+        "--force-readmes",
+        action="store_true",
+        help="Regenerate non-curated README.md files even without a generated marker",
+    )
+    parser.add_argument(
+        "--force-agents",
+        action="store_true",
+        help="Regenerate non-curated AGENTS.md files even without a generated marker",
+    )
+    parser.add_argument(
+        "--force-specs",
+        action="store_true",
+        help="Regenerate SPEC.md files even without a generated marker",
+    )
+    return parser
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    """Run the module documentation enrichment CLI."""
+    args = build_parser().parse_args(argv)
+    try:
+        enrich_modules(
+            args.repo_root,
+            apply_changes=args.apply,
+            module_names=args.module,
+            force_readmes=args.force_readmes,
+            force_agents=args.force_agents,
+            force_specs=args.force_specs,
+        )
+    except ValueError as exc:
+        print(f"error: {exc}")
+        return 2
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

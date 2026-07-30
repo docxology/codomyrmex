@@ -47,7 +47,7 @@ src/codomyrmex/coding/
 ## Migration Actions Completed
 
 ### 1. Code Refactoring
-- ✅ Removed all backward compatibility code
+- ✅ Removed obsolete compatibility code
 - ✅ Split execution logic into `execution/` submodule
 - ✅ Split sandboxing logic into `sandbox/` submodule
 - ✅ Split review logic into `review/` submodule
@@ -125,7 +125,7 @@ from codomyrmex.coding.monitoring.metrics_collector import MetricsCollector
 
 ## Breaking Changes
 
-⚠️ **No backward compatibility** - All imports must use new paths:
+⚠️ **No compatibility layer is retained** - All imports must use the current paths:
 - `codomyrmex.code_execution_sandbox` → `codomyrmex.code` or `codomyrmex.coding.execution`
 - `codomyrmex.code_review` → `codomyrmex.coding.review`
 

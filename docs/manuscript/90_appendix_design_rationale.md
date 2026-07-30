@@ -84,10 +84,12 @@ can change the net update. The rule is transparent and supports exact fixtures s
 
 The cost of that simplicity is that trust is neither a calibrated posterior nor an
 uncertainty interval. Equal scores can arise from different histories, and constant-step
-updates do not imply convergence to a unique equilibrium. More importantly, current
-outcomes are caller supplied: the MCP surface does not consume a durable prior EXECUTE
-record. Before trust is used in an adversarial setting, proposal, execution, outcome,
-and attestation must be linked.
+updates do not imply convergence to a unique equilibrium. More importantly, ordinary
+MCP outcomes are caller supplied and do not consume a durable prior EXECUTE record.
+Optional and required kernel modes now support local proposal/verdict/authorization/
+receipt/outcome linkage, with required mode rejecting the ordinary method. Before trust
+is used in an adversarial setting, that local integrity chain must also be bound to
+independently observed external execution and authenticated deployment identities.
 
 ## DR-5: Three routing outcomes {#sec:dr-three-state}
 
@@ -131,7 +133,8 @@ This separation is important. A label taxonomy is inexpensive and auditable, but
 not a complete access-control system. The default lifecycle also has a bootstrap gap:
 new profiles begin in SANDBOX, the gate refuses their proposals, and trust rises only
 through submitted outcomes. An external study must either supply a fixed supervised
-calibration history or implement a narrowly constrained, attested SANDBOX path.
+calibration history or implement a narrowly constrained SANDBOX path with local
+lifecycle authentication and deployment-specific external observation.
 
 ## DR-8: Shared location field rather than peer messaging {#sec:dr-stigmergy}
 
@@ -159,39 +162,48 @@ which callers can invoke the lower-level archive method and on reviewing false-p
 candidates. Confidence scores are heuristic rankings, not calibrated probabilities,
 and DEPENDENCY pressure is a veto signal only within the implemented scan rules.
 
-## Generated figure inventory
+## Generated figure accessibility and evidence inventory
 
-The release route generates the {{ARTIFACT_FIGURE_COUNT}} assets in [@tbl:appendix-figures]. Captions in the
-body state the fixed inputs and permitted inference; this inventory makes the distinction
-between conceptual, formula-derived, and deterministic-fixture graphics explicit.
+The release route generates the {{ARTIFACT_FIGURE_COUNT}} assets in
+[@tbl:appendix-figures]. Captions in the body state the evidence class, fixed inputs,
+intended reading, and permitted inference. They are not reused as image alternatives:
+each figure instead has a concise structural alternative and a fuller description of
+layout, relationships, redundant encodings, and claim limits. This separation follows
+the distinction between chart semantics and prose description in accessible
+visualization research [@lundgard2022accessible], the evidence that visual
+communication depends on perceptual task and design rather than decoration
+[@franconeri2021science], and guidance to provide a complete text equivalent for
+complex images [@w3cImagesTutorial].
 
-| Asset and evidence class | Intended reading and explicit limit |
+Colour remains useful for grouping, but it is not the only categorical channel.
+Labels, position, marker shape, line style, arrow direction, or printed status repeat
+the relevant distinction, and the palette is luminance-adjusted against the light
+figure background. This responds to documented scientific-communication failures
+caused by unsuitable colour maps [@crameri2020misuse]. The contract is intentionally
+bounded: metadata checks and contrast calculations do not prove usability with every
+reader, assistive technology, display, or print process.
+
+| Asset and evidence class | Text alternative and extended description |
 |---|---|
-| `cover.png` — conceptual cover | Visual identity and subsystem motif; no quantitative evidence. |
-| `subsystem_architecture.png` — architecture | Kernel ownership of {{CONFIG_OPERATIONAL_SUBSYSTEM_COUNT}} operational components; no latency or distributed-topology claim. |
-| `colony_pressure_loop.png` — dependency diagram | Proposal, decision, report, and later-state dependencies; not a literal call trace or autonomous execution. |
-| `pheromone_decay.png` — formula-derived | Passive unit-trace paths; not empirical frequency or wall-clock half-life. |
-| `gate_score_heatmap.png` — formula-derived | Policy bands over trust and effective hazard; not an observed distribution or calibrated risk. |
-| `gate_score_3d.png` — formula-derived | Score envelope over trust and completeness; runtime inputs remain discrete. |
-| `trust_trajectory.png` — deterministic fixture | Fixed clean-report updates and label thresholds; not autonomous learning or convergence. |
-| `falsification_vectors.png` — code taxonomy | Implemented categories and representative severities; not prevalence, recall, or effectiveness. |
-| `fep_correspondence.png` — conceptual analogy | Vocabulary crosswalk; not Bayesian inference, EFE optimization, or formal equivalence. |
-: Generated figure registry and evidence class. {#tbl:appendix-figures}
+{{RESULT_FIGURE_ACCESSIBILITY_ROWS}}
+: Generated figure evidence classes and text alternatives. {#tbl:appendix-figures}
 
 Every generator reads the manuscript variable snapshot and stamps a version, compact
 configuration digest, and generation date. As explained in [@sec:reproducibility], that
 footer identifies the manuscript configuration used by the figure route; it does not
 hash all source or authenticate the image. The generated `figure_registry.json` adds
-an evidence-class label, byte size, and full SHA-256 for each PNG file;
-it is an integrity inventory for the emitted files, not an external signature.
+the caption, concise alternative, extended description, evidence-class label, byte
+size, and full SHA-256 for each PNG file. It is an accessibility and integrity
+inventory for the emitted files, not an external signature or a usability study.
 
 ## Calibration and replacement criteria {#sec:dr-weight-calibration}
 
 The gate weights and thresholds were selected as design constants. Replacing them with
 new hand-set values would change policy, not add evidence. A defensible calibration
 study should provide representative proposals, consumed execution records, independently
-attested outcomes, costs of HOLD/revision, pre-registered metrics, held-out evaluation,
-and calibration diagnostics. A learned policy should remain subordinate to named hard
+observed and externally attested outcomes, costs of HOLD/revision, pre-registered
+metrics, held-out evaluation, and calibration diagnostics. A learned policy should
+remain subordinate to named hard
 conditions unless the study separately justifies changing those conditions.
 
 The same replacement discipline applies to every decision in this appendix. A real-time

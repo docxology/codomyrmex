@@ -65,7 +65,7 @@ Key data models from `review.models`:
 ## Dependencies
 
 - **Internal**: `logging_monitoring`, `validation.schemas`, `model_context_protocol.decorators`
-- **External (optional)**: pylint, flake8, mypy, bandit, vulture (via subprocess)
+- **External (optional)**: pylint, ruff, ty, bandit, vulture (via subprocess)
 - **External (optional)**: Docker (for container sandbox)
 
 ## Constraints

@@ -1,4 +1,4 @@
-"""Unit tests for codomyrmex.colony_kernel.falsification_worker.
+"""Unit tests for codomyrmex.colony_kernel.falsification.
 
 Zero-mock policy: no unittest.mock, MagicMock, or pytest-mock.
 All inputs are real dicts; all assertions are against real return values.
@@ -8,10 +8,23 @@ from __future__ import annotations
 
 import pytest
 
-from codomyrmex.colony_kernel.falsification_worker import (
+from codomyrmex.colony_kernel.falsification import (
     AttackVector,
     FalsificationReport,
     FalsificationWorker,
+)
+from codomyrmex.colony_kernel.falsification.checks import (
+    check_circular_deps,
+    check_dependency_risk,
+    check_false_metric,
+    check_hidden_maintenance_cost,
+    check_missing_metrics,
+    check_no_rollback,
+    check_no_test_value,
+    check_over_broad_module,
+    check_premature_abstraction,
+    check_scope_creep,
+    check_security_risk,
 )
 from codomyrmex.colony_kernel.models import (
     FalsificationFinding,
@@ -52,7 +65,7 @@ class TestCheckNoRollback:
 
     def test_absent_rollback_returns_high_finding(self):
         plan = _minimal_plan(rollback_plan="")
-        finding = self.worker.check_no_rollback(plan)
+        finding = check_no_rollback(plan)
         assert finding is not None
         assert finding.attack_vector == AttackVector.NO_ROLLBACK.value
         assert finding.severity == FalsificationSeverity.HIGH
@@ -68,7 +81,7 @@ class TestCheckNoRollback:
             "not applicable",
         ):
             plan = _minimal_plan(rollback_plan=placeholder)
-            finding = self.worker.check_no_rollback(plan)
+            finding = check_no_rollback(plan)
             assert finding is not None, (
                 f"Expected finding for placeholder: {placeholder!r}"
             )
@@ -77,7 +90,7 @@ class TestCheckNoRollback:
     def test_very_short_rollback_returns_medium_finding(self):
         # < 20 chars but not empty/placeholder
         plan = _minimal_plan(rollback_plan="git revert")
-        finding = self.worker.check_no_rollback(plan)
+        finding = check_no_rollback(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.MEDIUM
         assert finding.attack_vector == AttackVector.NO_ROLLBACK.value
@@ -86,18 +99,18 @@ class TestCheckNoRollback:
         plan = _minimal_plan(
             rollback_plan="git revert HEAD --no-edit && uv run pytest to verify no regressions"
         )
-        finding = self.worker.check_no_rollback(plan)
+        finding = check_no_rollback(plan)
         assert finding is None
 
     def test_finding_contains_evidence(self):
         plan = _minimal_plan(rollback_plan="")
-        finding = self.worker.check_no_rollback(plan)
+        finding = check_no_rollback(plan)
         assert finding is not None
         assert "rollback_plan" in finding.evidence
 
     def test_finding_contains_remediation(self):
         plan = _minimal_plan(rollback_plan="")
-        finding = self.worker.check_no_rollback(plan)
+        finding = check_no_rollback(plan)
         assert finding is not None
         assert len(finding.remediation) > 0
 
@@ -114,14 +127,14 @@ class TestCheckNoTestValue:
     def test_absent_tests_key_returns_high_finding(self):
         plan = _minimal_plan()
         del plan["tests"]
-        finding = self.worker.check_no_test_value(plan)
+        finding = check_no_test_value(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.HIGH
         assert finding.attack_vector == AttackVector.NO_TEST_VALUE.value
 
     def test_empty_tests_list_returns_high_finding(self):
         plan = _minimal_plan(tests=[])
-        finding = self.worker.check_no_test_value(plan)
+        finding = check_no_test_value(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.HIGH
 
@@ -132,18 +145,18 @@ class TestCheckNoTestValue:
             "verify by hand after deploy",
         ]:
             plan = _minimal_plan(tests=manual_str)
-            finding = self.worker.check_no_test_value(plan)
+            finding = check_no_test_value(plan)
             assert finding is not None, f"Expected finding for: {manual_str!r}"
             assert finding.severity == FalsificationSeverity.MEDIUM
 
     def test_automated_test_paths_return_none(self):
         plan = _minimal_plan(tests=["tests/unit/mypackage/test_core.py"])
-        finding = self.worker.check_no_test_value(plan)
+        finding = check_no_test_value(plan)
         assert finding is None
 
     def test_non_empty_string_tests_return_none(self):
         plan = _minimal_plan(tests="tests/unit/test_foo.py::test_bar")
-        finding = self.worker.check_no_test_value(plan)
+        finding = check_no_test_value(plan)
         assert finding is None
 
 
@@ -239,7 +252,7 @@ class TestEvaluatePlanFailVerdict:
         report = self.worker.evaluate_plan(plan)
         # Missing metrics is MEDIUM; missing expected_outcome is also possible but:
         # check that it is not FAIL as long as rollback+tests are present
-        # (Note: _check_false_metric also fires when expected_outcome is absent — so
+        # (Note: check_false_metric also fires when expected_outcome is absent — so
         # we keep expected_outcome here)
         assert report.verdict in {"PASS", "CONDITIONAL"}
 
@@ -348,7 +361,7 @@ class TestCheckScopeCreep:
 
     def test_absent_scope_returns_none(self):
         plan = _minimal_plan(scope="")
-        finding = self.worker.check_scope_creep(plan)
+        finding = check_scope_creep(plan)
         assert finding is None
 
     def test_vague_language_two_hits_returns_medium(self):
@@ -356,14 +369,14 @@ class TestCheckScopeCreep:
         plan = _minimal_plan(
             scope="Covers various modules and applies changes as needed."
         )
-        finding = self.worker.check_scope_creep(plan)
+        finding = check_scope_creep(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.MEDIUM
         assert finding.attack_vector == AttackVector.SCOPE_CREEP.value
 
     def test_one_vague_hit_returns_none(self):
         plan = _minimal_plan(scope="Covers various modules.")
-        finding = self.worker.check_scope_creep(plan)
+        finding = check_scope_creep(plan)
         assert finding is None
 
     def test_foreign_module_refs_three_or_more_returns_high(self):
@@ -375,14 +388,14 @@ class TestCheckScopeCreep:
                 "other.reporting.dashboard and mypackage.core."
             ),
         )
-        finding = self.worker.check_scope_creep(plan)
+        finding = check_scope_creep(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.HIGH
         assert finding.attack_vector == AttackVector.SCOPE_CREEP.value
 
     def test_narrow_scope_single_module_returns_none(self):
         plan = _minimal_plan(target="mypackage.core", scope="mypackage.core only")
-        finding = self.worker.check_scope_creep(plan)
+        finding = check_scope_creep(plan)
         assert finding is None
 
 
@@ -398,33 +411,33 @@ class TestCheckMissingMetrics:
     def test_absent_metrics_key_returns_medium(self):
         plan = _minimal_plan()
         del plan["metrics"]
-        finding = self.worker.check_missing_metrics(plan)
+        finding = check_missing_metrics(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.MEDIUM
         assert finding.attack_vector == AttackVector.FALSE_METRIC.value
 
     def test_empty_string_metrics_returns_medium(self):
         plan = _minimal_plan(metrics="")
-        finding = self.worker.check_missing_metrics(plan)
+        finding = check_missing_metrics(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.MEDIUM
 
     def test_purely_qualitative_metrics_returns_low(self):
         # No numbers, no comparison operators, no comparison keywords
         plan = _minimal_plan(metrics="The deployment should complete without errors.")
-        finding = self.worker.check_missing_metrics(plan)
+        finding = check_missing_metrics(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.LOW
 
     def test_numeric_metric_returns_none(self):
         plan = _minimal_plan(metrics="coverage >= 80%")
-        finding = self.worker.check_missing_metrics(plan)
+        finding = check_missing_metrics(plan)
         assert finding is None
 
     def test_comparative_metric_no_number_returns_none(self):
         # "reduce error rate" has a comparison keyword → passes
         plan = _minimal_plan(metrics="reduce error rate significantly")
-        finding = self.worker.check_missing_metrics(plan)
+        finding = check_missing_metrics(plan)
         assert finding is None
 
 
@@ -443,7 +456,7 @@ class TestCheckCircularDeps:
             target="mypackage.core",
             dependencies=["mypackage.utils", "mypackage.core"],
         )
-        finding = self.worker.check_circular_deps(plan, repo_root=None)
+        finding = check_circular_deps(plan, repo_root=None)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.HIGH
         assert finding.attack_vector == AttackVector.CIRCULAR_ARCHITECTURE.value
@@ -454,20 +467,20 @@ class TestCheckCircularDeps:
             target="other.module",
             dependencies=["mypackage.core", "mypackage.core.utils"],
         )
-        finding = self.worker.check_circular_deps(plan, repo_root=None)
+        finding = check_circular_deps(plan, repo_root=None)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.MEDIUM
         assert finding.attack_vector == AttackVector.CIRCULAR_ARCHITECTURE.value
 
     def test_clean_dependencies_returns_none(self):
         plan = _minimal_plan(dependencies=["mypackage.utils", "mypackage.helpers"])
-        finding = self.worker.check_circular_deps(plan, repo_root=None)
+        finding = check_circular_deps(plan, repo_root=None)
         assert finding is None
 
     def test_no_repo_root_no_filesystem_check(self):
         # Without repo_root and clean deps → None
         plan = _minimal_plan(dependencies=[])
-        finding = self.worker.check_circular_deps(plan, repo_root=None)
+        finding = check_circular_deps(plan, repo_root=None)
         assert finding is None
 
     def test_string_dependencies_parsed(self):
@@ -476,7 +489,7 @@ class TestCheckCircularDeps:
             target="other.module",
             dependencies="mypackage.core, mypackage.core.utils",
         )
-        finding = self.worker.check_circular_deps(plan, repo_root=None)
+        finding = check_circular_deps(plan, repo_root=None)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.MEDIUM
 
@@ -499,7 +512,7 @@ class TestCheckCircularDepsFilesystem:
         (pkg / "beta.py").write_text("# no imports\n")
 
         plan = _minimal_plan(target="mymod", repo_root=str(tmp_path))
-        finding = self.worker.check_circular_deps(plan, repo_root=str(tmp_path))
+        finding = check_circular_deps(plan, repo_root=str(tmp_path))
         assert finding is None
 
     def test_cyclic_module_returns_high(self, tmp_path):
@@ -512,7 +525,7 @@ class TestCheckCircularDepsFilesystem:
         (pkg / "alpha.py").write_text("import cycmod.alpha\n")  # self-import
 
         plan = _minimal_plan(target="cycmod", repo_root=str(tmp_path))
-        finding = self.worker.check_circular_deps(plan, repo_root=str(tmp_path))
+        finding = check_circular_deps(plan, repo_root=str(tmp_path))
         assert finding is not None
         assert finding.severity == FalsificationSeverity.HIGH
         assert finding.attack_vector == AttackVector.CIRCULAR_ARCHITECTURE.value
@@ -520,7 +533,7 @@ class TestCheckCircularDepsFilesystem:
 
 
 # ---------------------------------------------------------------------------
-# _check_dependency_risk
+# check_dependency_risk
 # ---------------------------------------------------------------------------
 
 
@@ -530,14 +543,14 @@ class TestCheckDependencyRisk:
 
     def test_three_or_more_external_deps_returns_medium(self):
         plan = _minimal_plan(dependencies=["requests", "boto3", "httpx", "pydantic"])
-        finding = self.worker._check_dependency_risk(plan)
+        finding = check_dependency_risk(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.MEDIUM
         assert finding.attack_vector == AttackVector.DEPENDENCY_RISK.value
 
     def test_two_external_deps_returns_none(self):
         plan = _minimal_plan(dependencies=["requests", "boto3"])
-        finding = self.worker._check_dependency_risk(plan)
+        finding = check_dependency_risk(plan)
         assert finding is None
 
     def test_internal_dotted_deps_not_flagged(self):
@@ -545,17 +558,17 @@ class TestCheckDependencyRisk:
         plan = _minimal_plan(
             dependencies=["mypackage.core", "mypackage.utils", "mypackage.helpers"]
         )
-        finding = self.worker._check_dependency_risk(plan)
+        finding = check_dependency_risk(plan)
         assert finding is None
 
     def test_empty_deps_returns_none(self):
         plan = _minimal_plan(dependencies=[])
-        finding = self.worker._check_dependency_risk(plan)
+        finding = check_dependency_risk(plan)
         assert finding is None
 
 
 # ---------------------------------------------------------------------------
-# _check_security_risk
+# check_security_risk
 # ---------------------------------------------------------------------------
 
 
@@ -568,7 +581,7 @@ class TestCheckSecurityRisk:
             target="mypackage.authentication",
             rationale="Refactor the authentication flow.",
         )
-        finding = self.worker._check_security_risk(plan)
+        finding = check_security_risk(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.HIGH
         assert finding.attack_vector == AttackVector.SECURITY_RISK.value
@@ -577,7 +590,7 @@ class TestCheckSecurityRisk:
         plan = _minimal_plan(
             rationale="Update the password hashing algorithm to bcrypt.",
         )
-        finding = self.worker._check_security_risk(plan)
+        finding = check_security_risk(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.HIGH
 
@@ -588,7 +601,7 @@ class TestCheckSecurityRisk:
                 "Refactor authentication flow. A security review has been scheduled."
             )
         )
-        finding = self.worker._check_security_risk(plan)
+        finding = check_security_risk(plan)
         assert finding is None
 
     def test_no_sensitive_terms_returns_none(self):
@@ -596,18 +609,18 @@ class TestCheckSecurityRisk:
             target="mypackage.data",
             rationale="Reformat the output CSV columns.",
         )
-        finding = self.worker._check_security_risk(plan)
+        finding = check_security_risk(plan)
         assert finding is None
 
     def test_finding_lists_sensitive_terms_in_evidence(self):
         plan = _minimal_plan(rationale="Handles credential storage and encryption.")
-        finding = self.worker._check_security_risk(plan)
+        finding = check_security_risk(plan)
         assert finding is not None
         assert "sensitive_terms_found" in finding.evidence
 
 
 # ---------------------------------------------------------------------------
-# _check_false_metric
+# check_false_metric
 # ---------------------------------------------------------------------------
 
 
@@ -617,7 +630,7 @@ class TestCheckFalseMetric:
 
     def test_absent_expected_outcome_returns_medium(self):
         plan = _minimal_plan(expected_outcome="")
-        finding = self.worker._check_false_metric(plan)
+        finding = check_false_metric(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.MEDIUM
         assert finding.attack_vector == AttackVector.FALSE_METRIC.value
@@ -627,24 +640,24 @@ class TestCheckFalseMetric:
         plan = _minimal_plan(
             expected_outcome="The system will be improved overall with no issues."
         )
-        finding = self.worker._check_false_metric(plan)
+        finding = check_false_metric(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.LOW
 
     def test_concrete_expected_outcome_returns_none(self):
         plan = _minimal_plan(expected_outcome="all unit tests pass; coverage >= 80%")
-        finding = self.worker._check_false_metric(plan)
+        finding = check_false_metric(plan)
         assert finding is None
 
     def test_one_unfalsifiable_hit_returns_none(self):
         # Only "smoothly" — fewer than 2 hits → None
         plan = _minimal_plan(expected_outcome="The deploy will complete smoothly.")
-        finding = self.worker._check_false_metric(plan)
+        finding = check_false_metric(plan)
         assert finding is None
 
 
 # ---------------------------------------------------------------------------
-# _check_over_broad_module
+# check_over_broad_module
 # ---------------------------------------------------------------------------
 
 
@@ -659,7 +672,7 @@ class TestCheckOverBroadModule:
                 "workflows, provides utilities, and implements the core API."
             )
         )
-        finding = self.worker._check_over_broad_module(plan)
+        finding = check_over_broad_module(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.MEDIUM
         assert finding.attack_vector == AttackVector.OVER_BROAD_MODULE.value
@@ -667,7 +680,7 @@ class TestCheckOverBroadModule:
     def test_deep_target_path_returns_low(self):
         # 6 segments (5 dots) → LOW finding
         plan = _minimal_plan(target="a.b.c.d.e.f")
-        finding = self.worker._check_over_broad_module(plan)
+        finding = check_over_broad_module(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.LOW
         assert finding.attack_vector == AttackVector.OVER_BROAD_MODULE.value
@@ -676,18 +689,18 @@ class TestCheckOverBroadModule:
         plan = _minimal_plan(
             rationale="This module handles logging, manages sessions, coordinates workflows, provides utilities."
         )
-        finding = self.worker._check_over_broad_module(plan)
+        finding = check_over_broad_module(plan)
         assert finding is None
 
     def test_four_dots_target_returns_none(self):
         # exactly 4 dots (5 segments) — threshold is >= 5 dots
         plan = _minimal_plan(target="a.b.c.d.e")
-        finding = self.worker._check_over_broad_module(plan)
+        finding = check_over_broad_module(plan)
         assert finding is None
 
 
 # ---------------------------------------------------------------------------
-# _check_premature_abstraction
+# check_premature_abstraction
 # ---------------------------------------------------------------------------
 
 
@@ -699,7 +712,7 @@ class TestCheckPrematureAbstraction:
         plan = _minimal_plan(
             rationale="Build a generic, reusable interface for all data sources."
         )
-        finding = self.worker._check_premature_abstraction(plan)
+        finding = check_premature_abstraction(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.LOW
         assert finding.attack_vector == AttackVector.PREMATURE_ABSTRACTION.value
@@ -707,7 +720,7 @@ class TestCheckPrematureAbstraction:
     def test_one_abstraction_signal_returns_none(self):
         # Only "generic" — single hit, not enough
         plan = _minimal_plan(rationale="Build a generic helper function.")
-        finding = self.worker._check_premature_abstraction(plan)
+        finding = check_premature_abstraction(plan)
         assert finding is None
 
     def test_abstraction_with_caller_evidence_returns_none(self):
@@ -717,12 +730,12 @@ class TestCheckPrematureAbstraction:
                 "There are 3 existing callers that currently duplicate this logic."
             )
         )
-        finding = self.worker._check_premature_abstraction(plan)
+        finding = check_premature_abstraction(plan)
         assert finding is None
 
     def test_no_abstraction_signals_returns_none(self):
         plan = _minimal_plan(rationale="Fix the off-by-one error in the loop.")
-        finding = self.worker._check_premature_abstraction(plan)
+        finding = check_premature_abstraction(plan)
         assert finding is None
 
 
@@ -736,7 +749,7 @@ class TestCheckHiddenMaintenanceCost:
             target="mypackage.new_service",
             rationale="Introduce a new service module for task routing.",
         )
-        finding = self.worker._check_hidden_maintenance_cost(plan)
+        finding = check_hidden_maintenance_cost(plan)
         assert finding is not None
         assert finding.severity == FalsificationSeverity.MEDIUM
         assert finding.attack_vector == AttackVector.HIDDEN_MAINTENANCE_COST.value
@@ -748,7 +761,7 @@ class TestCheckHiddenMaintenanceCost:
             rationale="Introduce a new service module for task routing.",
             maintenance_plan="Owned by platform; runbook in docs/runbooks/task-routing.md.",
         )
-        finding = self.worker._check_hidden_maintenance_cost(plan)
+        finding = check_hidden_maintenance_cost(plan)
         assert finding is None
 
 

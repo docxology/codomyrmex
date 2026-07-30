@@ -124,8 +124,6 @@ def run_example():
     print("\n--- Example Completed Successfully ---")
 
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
 
     config_path = (

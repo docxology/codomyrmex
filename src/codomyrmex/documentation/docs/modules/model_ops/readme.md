@@ -16,7 +16,6 @@ Module implementation, resources, and local coordination for Model Ops..
 - `__init__.py` – File
 - `datasets/` – Subdirectory
 - `evaluation/` – Subdirectory
-- `feature_store/` – Subdirectory
 - `fine_tuning/` – Subdirectory
 - `mcp_tools.py` – File
 - `optimization/` – Subdirectory

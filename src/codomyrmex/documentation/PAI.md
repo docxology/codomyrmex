@@ -1,91 +1,87 @@
-# Personal AI Infrastructure — Documentation Module
+# Personal AI Infrastructure — documentation
 
-**Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
+The documentation module supports the PAI observe, build, and verify phases.
+Its generators are local filesystem operations; they do not establish
+publication, accessibility conformance, or external release status.
 
-## Overview
-
-The Documentation module handles the **semantics** of technical documentation — quality auditing, RASP compliance, auto-generation of PAI.md files, and root-level doc synchronization. Distinct from the `documents` module which handles document I/O mechanics.
-
-## PAI Capabilities
-
-### Documentation Quality Audit
+## Observe
 
 ```python
-from codomyrmex.documentation import audit_documentation, audit_rasp, ModuleAudit
+from pathlib import Path
 
-# Audit documentation quality across modules
-results = audit_documentation(path="src/codomyrmex")
+from codomyrmex.documentation import (
+    DocumentationConsistencyChecker,
+    audit_rasp,
+    generate_quality_report,
+)
 
-# Check RASP compliance (README, AGENTS, SPEC, PAI)
-rasp_results = audit_rasp(module_path="src/codomyrmex/agents")
-
-# Full module audit
-audit = ModuleAudit(module_path="src/codomyrmex/llm")
-report = audit.run()
+exit_code = audit_rasp(Path("src/codomyrmex/documentation"))
+quality_markdown = generate_quality_report(Path("."))
+consistency = DocumentationConsistencyChecker().check_directory("docs")
 ```
 
-### PAI Doc Generation
+`audit_rasp()` returns `0` or `1`; it does not return a report object or a count.
+
+## Build
 
 ```python
-from codomyrmex.documentation import update_pai_docs, generate_pai_md
+from pathlib import Path
 
-# Auto-generate PAI.md from module exports and metadata
-pai_content = generate_pai_md(module_path="src/codomyrmex/crypto")
+from codomyrmex.documentation import generate_pai_md, update_pai_docs
 
-# Update all PAI docs across the project
-update_pai_docs()
+module_dir = Path("src/codomyrmex/documentation")
+preview = generate_pai_md("documentation", module_dir)
+
+# Preview updates to stub PAI files; no writes by default.
+update_pai_docs(Path("src/codomyrmex"), apply=False)
 ```
 
-### Root Doc Maintenance
+`write_pai_md()` and `update_pai_docs(..., apply=True)` mutate source files and
+require an intentional reviewed call.
 
-```python
-from codomyrmex.documentation import update_root_docs, finalize_docs, update_spec
+## Verify
 
-# Synchronize root README, SPEC with module inventory
-update_root_docs()
-finalize_docs()
-update_spec()
+The authoritative repository gate is external to this package:
+
+```bash
+make docs-check
+make manuscript-check
 ```
 
-## Key Exports
+The first command validates README/AGENTS pairs, commands, links, content,
+structure, triple-check, and strict MkDocs. The second validates technical
+report evidence and generated publication relationships.
 
-| Export | Type | Purpose |
-|--------|------|---------|
-| `audit_documentation` | Function | Project-wide documentation quality audit |
-| `audit_rasp` | Function | RASP compliance check for a module |
-| `ModuleAudit` | Class | Comprehensive single-module doc audit |
-| `update_pai_docs` | Function | Auto-update all PAI.md files |
-| `generate_pai_md` | Function | Generate PAI.md content for a module |
-| `update_root_docs` | Function | Sync root-level documentation |
-| `finalize_docs` | Function | Final documentation pass |
-| `update_spec` | Function | Update SPEC.md |
-| `quality` | Module | Documentation quality metrics |
+## MCP tools
 
-## PAI Algorithm Phase Mapping
+| Tool | Default behavior | Mutation boundary |
+| :--- | :--- | :--- |
+| `codomyrmex.generate_module_docs` | Generates and hashes a proposed `PAI.md` with `dry_run=true` | `dry_run=false` replaces one validated module's PAI file |
+| `codomyrmex.audit_rasp_compliance` | Read-only RASP presence check | No source writes |
 
-| Phase | Documentation Contribution |
-|-------|----------------------------|
-| **OBSERVE** | Audit RASP compliance and documentation coverage |
-| **BUILD** | Generate and update PAI.md, README.md, SPEC.md files |
-| **VERIFY** | Validate documentation quality, check for stale references |
-| **LEARN** | Record documentation improvements and audit history |
+The generation name is retained for compatibility; its implemented scope is
+PAI-only. See [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md).
 
-## MCP Tools
+## Phase mapping
 
-Two tools are auto-discovered via `@mcp_tool` and available through the PAI MCP bridge:
+| PAI phase | Contribution |
+| :--- | :--- |
+| OBSERVE | Read documentation structure, quality, and consistency |
+| BUILD | Produce source-derived PAI content and package-local site artifacts |
+| VERIFY | Check RASP presence, links, structure, and quality |
+| LEARN | Persist reviewed receipts and changelog evidence outside runtime state |
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `generate_module_docs` | Generate documentation for a codomyrmex module (README, SPEC, AGENTS) | Safe | documentation |
-| `audit_rasp_compliance` | Audit modules for RASP documentation compliance (README/AGENTS/SPEC/PAI.md) | Safe | documentation |
+## Boundaries
 
-## Architecture Role
-
-**Service Layer** — Consumes `static_analysis/` (import scanning), `system_discovery/` (module listing), `documents/` (file I/O). Consumed by `maintenance/` for automated doc updates.
+- Heuristic quality scores are not proof of technical accuracy.
+- RASP presence is not proof that prose is current.
+- A clean MkDocs build is not a DOI assignment or publication event.
+- `qpdf --check` is structural, not PDF/UA conformance.
+- Local ledgers and hashes do not independently observe external actuation.
 
 ## Navigation
 
-- **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
-- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
-- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)
+- [Package overview](README.md)
+- [API specification](API_SPECIFICATION.md)
+- [MCP tools](MCP_TOOL_SPECIFICATION.md)
+- [Repository PAI bridge](../../../PAI.md)

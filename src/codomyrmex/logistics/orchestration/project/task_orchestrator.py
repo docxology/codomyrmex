@@ -71,7 +71,7 @@ class TaskResult:
         return self.status == TaskStatus.COMPLETED
 
     def to_dict(self) -> dict[str, Any]:
-        """Convert result to dictionary for legacy compatibility."""
+        """Convert the result to a serializable dictionary."""
         return {
             "task_id": self.task_id,
             "status": self.status.value,
@@ -348,10 +348,6 @@ class TaskOrchestrator:
             logger.info("Cancelled task: %s", task.name)
             return True
 
-    def add_task(self, task: Task) -> str:
-        """Legacy wrapper for submit_task."""
-        return self.submit_task(task)
-
     def wait_for_completion(self, timeout: float | None = 10.0) -> bool:
         """Wait for all tasks to complete."""
         effective_timeout = (
@@ -379,7 +375,7 @@ class TaskOrchestrator:
         return False
 
     def get_task_result(self, task_id: str) -> TaskResult | None:
-        """Legacy wrapper to get task result."""
+        """Return the result recorded for a task, if available."""
         task = self.tasks.get(task_id)
         if task:
             return task.result

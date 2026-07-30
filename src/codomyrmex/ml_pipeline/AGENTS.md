@@ -1,9 +1,11 @@
 # Codomyrmex Agents — src/codomyrmex/ml_pipeline
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Experimental | **Last Updated**: July 2026
 
 ## Purpose
-End-to-end ML pipeline with data ingestion, training, evaluation, and deployment stages.
+Maintain the bounded, stateless pipeline-receipt surface. Do not describe
+`ml_pipeline_execute` as executing an ML workload until a real engine and
+evidence are present.
 
 ## Active Components
 - `PAI.md` – Public API Interface — integration patterns and usage guidelines
@@ -17,6 +19,7 @@ End-to-end ML pipeline with data ingestion, training, evaluation, and deployment
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
+- Keep package-root exports, MCP metadata, tests, and API documentation aligned.
 
 ## Key Files
 - `AGENTS.md` - Agent coordination and navigation

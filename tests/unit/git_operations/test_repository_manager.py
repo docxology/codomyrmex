@@ -38,11 +38,15 @@ class TestRepositoryManager:
     """Test cases for Repository Manager."""
 
     @pytest.fixture(autouse=True)
-    def setup_environment(self, tmp_path):
+    def setup_environment(self, monkeypatch, tmp_path):
         """set up test environment."""
         self.temp_dir = str(tmp_path)
         self.library_file = os.path.join(self.temp_dir, "test_library.txt")
         self.base_path = os.path.join(self.temp_dir, "repos")
+        monkeypatch.setenv(
+            "CODOMYRMEX_REPOSITORY_METADATA_FILE",
+            str(tmp_path / "repository_metadata.json"),
+        )
 
         # Create test library file
         library_content = """# Test Repository Library

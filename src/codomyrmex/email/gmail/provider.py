@@ -28,11 +28,13 @@ from codomyrmex.email.generics import (
     EmailProvider,
 )
 
+HttpError: type[Exception]
 try:
     from google.oauth2.credentials import Credentials
     from googleapiclient.discovery import Resource, build
-    from googleapiclient.errors import HttpError
+    from googleapiclient.errors import HttpError as _GoogleHttpError
 
+    HttpError = _GoogleHttpError
     GMAIL_AVAILABLE = True
 except ImportError:
     HttpError = Exception

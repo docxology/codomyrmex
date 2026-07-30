@@ -2,8 +2,6 @@
 """Build and validation workflow.
 
 
-logger = logging.getLogger(__name__)
-
 Complete build pipeline with validation:
 1. Clean previous build artifacts
 2. Run linting and type checking
@@ -27,6 +25,8 @@ sys.path.insert(0, str(project_root / "src"))
 
 import contextlib
 import logging
+
+logger = logging.getLogger(__name__)
 
 from codomyrmex.orchestrator import RetryPolicy, Workflow
 from codomyrmex.utils.cli_helpers import print_error, print_info, setup_logging
@@ -74,15 +74,18 @@ async def run_linting(_task_results: dict | None = None) -> dict:
 
 
 async def run_type_checking(_task_results: dict | None = None) -> dict:
-    """Run mypy type checking."""
+    """Run the repository-wide ty type check."""
     result = subprocess.run(
         [
             "uv",
             "run",
-            "mypy",
-            "src/codomyrmex",
-            "--ignore-missing-imports",
-            "--no-error-summary",
+            "ty",
+            "check",
+            "--output-format",
+            "concise",
+            "src/",
+            "scripts/",
+            "tests/",
         ],
         capture_output=True,
         text=True,

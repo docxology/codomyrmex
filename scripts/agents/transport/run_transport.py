@@ -55,10 +55,10 @@ def main() -> int:
 
     # Exercise snapshot creation
     snapshot = AgentSnapshot(
-        agent_id="test-agent", state={"counter": 42, "mode": "explore"}
+        agent_id="test-agent", metadata={"counter": 42, "mode": "explore"}
     )
     print_success(
-        f"Snapshot created: agent_id={snapshot.agent_id}, keys={list(snapshot.state.keys())}"
+        f"Snapshot created: agent_id={snapshot.agent_id}, keys={list(snapshot.metadata.keys())}"
     )
 
     # Serialize roundtrip
@@ -68,7 +68,7 @@ def main() -> int:
 
     deserializer = AgentDeserializer()
     restored = deserializer.deserialize(data)
-    assert restored.state["counter"] == 42, "Roundtrip integrity check failed"
+    assert restored.metadata["counter"] == 42, "Roundtrip integrity check failed"
     print_success("Roundtrip integrity verified ✓")
     return 0
 

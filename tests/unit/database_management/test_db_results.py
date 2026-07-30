@@ -69,7 +69,6 @@ class TestResultSetIteration:
             row_count=1,
             execution_time=0.01,
         )
-        assert result.valid == result.success
 
     def test_result_execution_time(self, db_connector):
         """Test that query can execute and return results."""

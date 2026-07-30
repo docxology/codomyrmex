@@ -23,7 +23,7 @@ Docs: `README.md`, `SPEC.md`.
 
 ## Navigation
 
-- [README.md](README.md) · [SPEC.md](SPEC.md) · [unit tests parent](../AGENTS.md) · [package source](../../../demos/)
+- [README.md](README.md) · [SPEC.md](SPEC.md) · [unit tests parent](../AGENTS.md) · [package source](../../../src/codomyrmex/demos/)
 ## Maintenance Notes
 
 - Keep this document synchronized with adjacent source files.

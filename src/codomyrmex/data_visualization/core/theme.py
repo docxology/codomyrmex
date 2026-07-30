@@ -43,7 +43,7 @@ class Theme:
 
     @property
     def secondary(self) -> str:
-        """Alias for compatibility."""
+        """Return the configured secondary color."""
         return self.secondary_color
 
     @property

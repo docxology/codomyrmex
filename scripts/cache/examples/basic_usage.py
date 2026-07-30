@@ -56,7 +56,7 @@ def main():
         if val == "bar":
             print_success("  Cache Set/Get functional.")
 
-        stats = cache.get_stats()
+        stats = cache.stats
         if stats:
             print_success("  Cache statistics retrieved.")
     except Exception as e:

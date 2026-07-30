@@ -32,7 +32,7 @@ Provides AI-specific security capabilities for the Codomyrmex platform, includin
 ### Optional Components
 
 - `ActiveDefense` (from `codomyrmex.defense.active`): Exploit detection via `detect_exploit()`. Available when `ACTIVE_DEFENSE_AVAILABLE` is True
-- `RabbitHole` (from `codomyrmex.defense.rabbithole`): Adversarial containment. Available when `RABBITHOLE_AVAILABLE` is True
+- `RabbitHole` (from `codomyrmex.defense.active`): Adversarial containment. Available when `RABBITHOLE_AVAILABLE` is True
 
 ## Error Handling
 

@@ -27,7 +27,7 @@ multiagent dispatch.
 ## Navigation Links
 
 - **Parent directory**: [agents](../README.md)
-- **Source module**: [../../../../agents/codex](../../../../agents/codex)
+- **Source module**: [../../../../src/codomyrmex/agents/codex](../../../../src/codomyrmex/agents/codex)
 
 ## Related Documents
 

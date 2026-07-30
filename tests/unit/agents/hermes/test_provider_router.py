@@ -1,11 +1,11 @@
-"""Tests for codomyrmex.agents.hermes._provider_router using zero-mock."""
+"""Tests for codomyrmex.agents.hermes.provider_router_pkg using zero-mock."""
 
 from __future__ import annotations
 
 import json
 from typing import TYPE_CHECKING, Any
 
-from codomyrmex.agents.hermes._provider_router import (
+from codomyrmex.agents.hermes.provider_router_pkg import (
     ContextCompressor,
     ModelContextRegistry,
     ProviderRouter,

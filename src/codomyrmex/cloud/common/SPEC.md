@@ -32,7 +32,7 @@ class StorageClient(ABC):
         """Download object contents as bytes."""
     
     @abstractmethod
-    def delete_file(self, bucket: str, key: str) -> bool:
+    def delete_object(self, bucket: str, key: str) -> bool:
         """Delete object. Returns success status."""
     
     @abstractmethod

@@ -8,7 +8,7 @@ Defines the protocol layer for multi-agent collaboration: shared enums, message 
 
 ## Architecture
 
-Two files: `__init__.py` contains the full protocol stack (enums, data types, abstract classes, coordinator, four protocol implementations), and `swarm.py` provides a simplified swarm facade (`SwarmManager`) for basic task distribution and voting.
+The protocol package contains the shared protocol stack (enums, data types, abstract classes, coordinator, and four protocol implementations). Swarm orchestration lives in `collaboration.swarm` and uses these interfaces where appropriate.
 
 ## Key Classes
 
@@ -46,14 +46,6 @@ Two files: `__init__.py` contains the full protocol stack (enums, data types, ab
 |--------|-----------|---------|-------------|
 | `execute` | `task, agents` | `Any` | All process; most common result returned if quorum met |
 
-### `SwarmManager` (swarm.py)
-
-| Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
-| `add_agent` | `agent: AgentProxy` | `None` | Add to swarm |
-| `execute` | `mission: str` | `list[dict[str, object]]` | Decompose mission and return queued task result records |
-| `consensus_vote` | `proposal: str` | `bool` | Simple majority vote |
-
 ## Dependencies
 
 - **Internal**: None (this is the foundational protocol layer)
@@ -63,7 +55,6 @@ Two files: `__init__.py` contains the full protocol stack (enums, data types, ab
 
 - `AgentMessage.create_reply()` swaps sender/receiver and sets `reply_to`.
 - `ConsensusProtocol` uses JSON serialization for result comparison; non-serializable results use `default=str`.
-- `SwarmManager.consensus_vote()` is simplified (all agents vote True); real implementations should override.
 - Zero-mock: real data only, `NotImplementedError` for unimplemented paths.
 
 ## Error Handling

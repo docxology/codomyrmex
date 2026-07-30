@@ -15,15 +15,14 @@ Usage:
               (default: <repo_root>/reports/stub_audit.md)
 """
 
-logger = logging.getLogger(__name__)
-
-
 import argparse
 import ast
 import logging
 from pathlib import Path
 
 from codomyrmex.utils.cli_helpers import print_info, print_success
+
+logger = logging.getLogger(__name__)
 
 
 def is_stub_node(node) -> bool:
@@ -134,7 +133,7 @@ def audit_stubs_better(src_dir: Path) -> list:
         # Attach parent pointers for class-membership checks
         for node in ast.walk(tree):
             for child in ast.iter_child_nodes(node):
-                child.parent = node  # type: ignore[attr-defined]
+                child.parent = node
 
         for node in ast.walk(tree):
             if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):

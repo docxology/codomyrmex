@@ -24,8 +24,11 @@ if TYPE_CHECKING:
     from codomyrmex.agentic_memory.core.stores import InMemoryStore
     from codomyrmex.vector_store import VectorStore
 
+SentenceTransformer: type[Any] | None
 try:
-    from sentence_transformers import SentenceTransformer
+    from sentence_transformers import SentenceTransformer as _SentenceTransformer
+
+    SentenceTransformer = _SentenceTransformer
 except ImportError:
     SentenceTransformer = None
 
@@ -97,14 +100,6 @@ class AgentMemory:
         )
         self.store.save(mem)
         return mem
-
-    def add(
-        self,
-        content: str,
-        importance: MemoryImportance = MemoryImportance.MEDIUM,
-    ) -> Memory:
-        """Convenience alias for :meth:`remember`."""
-        return self.remember(content, importance=importance)
 
     # -- recall / search ----------------------------------------------
 
@@ -246,14 +241,6 @@ class VectorStoreMemory:
                 )
 
         return mem
-
-    def add(
-        self,
-        content: str,
-        importance: MemoryImportance = MemoryImportance.MEDIUM,
-    ) -> Memory:
-        """Convenience alias for :meth:`remember`."""
-        return self.remember(content, importance=importance)
 
     def search(self, query: str, k: int = 10) -> list[RetrievalResult]:
         """Search memory, using semantic vector similarity if a backend is configured."""

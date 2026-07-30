@@ -18,7 +18,7 @@
 | ConsequenceMemory | `consequence_memory.py` | Implemented | Covered by the live scoped suite |
 | RoleAdapter | `role_adapter.py` | Implemented | Covered by the live scoped suite |
 | PruningDaemon | `pruning_daemon.py` | Implemented | Covered by the live scoped suite |
-| FalsificationWorker | `falsification_worker.py` | Implemented | Covered by the live scoped suite |
+| FalsificationWorker | `falsification/worker.py` | Implemented | Covered by the live scoped suite |
 | ColonyKernel + MCP | `kernel.py` + `mcp_tools.py` | Implemented | Covered by the live scoped suite |
 
 The scoped suite and branch-coverage values are generated rather than maintained as
@@ -112,7 +112,7 @@ colony_kernel/
     consequence_memory.py   # Records outcome, updates trust scores, feeds gate
     role_adapter.py         # Maps consequence history to role assignment
     pruning_daemon.py       # Scans stale exports, reports pruning candidates
-    falsification_worker.py # Adversarial attack on any plan before execution
+    falsification/worker.py  # Adversarial attack on any plan before execution
     kernel.py               # ColonyKernel: wires all components
     mcp_tools.py            # @mcp_tool exposure to MCP clients
 ```
@@ -325,9 +325,9 @@ trust_delta = delta
 
 ---
 
-### 8. `falsification_worker.py` — Adversarial Plan Attacker
+### 8. `falsification/worker.py` — Adversarial Plan Attacker
 
-**Purpose:** Every plan that reaches the gate has already been falsified. `falsification_worker` takes an `ActionProposal`, attacks it with adversarial probes, and returns a `FalsificationReport`. The gate uses the report's severity to adjust its score.
+**Purpose:** Every plan that reaches the gate has already been falsified. `FalsificationWorker` takes an `ActionProposal`, attacks it with adversarial probes, and returns a `FalsificationReport`. The gate uses the report's severity to adjust its score.
 
 **Key class:** `FalsificationWorker`
 
@@ -378,7 +378,7 @@ class FalsificationReport:
    - Agent constructs ActionProposal with rationale, budget_estimate, rollback_plan
 
 3. GATE
-   - falsification_worker.evaluate_plan() attacks the proposal
+   - FalsificationWorker.analyze() attacks the proposal
    - resource_ledger.check_budget() supplies budget verdict
    - consequence_memory.get_profile() supplies trust profile
    - role_adapter.update() refreshes deterministic role
@@ -448,7 +448,7 @@ class FalsificationReport:
 
 ### Phase 3 — Ecology
 
-**Deliverables:** `role_adapter.py`, `pruning_daemon.py`, `falsification_worker.py`
+**Deliverables:** `role_adapter.py`, `pruning_daemon.py`, `falsification/worker.py`
 
 **Goal:** Roles are derived deterministically, dead-code candidates are flagged, and plans are attacked before ordinary scoring.
 
@@ -588,7 +588,7 @@ class PruningDaemon:
     def report(self, candidates: list[PruningCandidate]) -> str: ...
 ```
 
-### `falsification_worker.py`
+### `falsification/worker.py`
 
 ```python
 @dataclass
@@ -677,7 +677,7 @@ No changes required to `stigmergy/` to implement Colony Kernel Phase 1.
 | Consequence memory | `src/codomyrmex/colony_kernel/consequence_memory.py` |
 | Role adapter | `src/codomyrmex/colony_kernel/role_adapter.py` |
 | Pruning daemon | `src/codomyrmex/colony_kernel/pruning_daemon.py` |
-| Falsification worker | `src/codomyrmex/colony_kernel/falsification_worker.py` |
+| Falsification worker | `src/codomyrmex/colony_kernel/falsification/worker.py` |
 | Integration kernel | `src/codomyrmex/colony_kernel/kernel.py` |
 | MCP tools | `src/codomyrmex/colony_kernel/mcp_tools.py` |
 | Package init | `src/codomyrmex/colony_kernel/__init__.py` |

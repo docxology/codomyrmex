@@ -4,8 +4,11 @@ This module provides the FrameExtractor class for extracting frames,
 generating thumbnails, and extracting audio from video files.
 """
 
+import importlib
+import importlib.util
 import time
 from pathlib import Path
+from typing import Any
 
 from codomyrmex.video._validation import SUPPORTED_FORMATS, validate_video_path
 from codomyrmex.video.config import get_config
@@ -24,21 +27,24 @@ try:
 except ImportError:
     PIL_AVAILABLE = False
 
-# Check for OpenCV availability
-try:
-    import cv2
+# Probe optional packages without loading their native media libraries. Importing
+# PyAV and OpenCV in the same discovery process can load incompatible bundled
+# FFmpeg libraries on macOS.
+OPENCV_AVAILABLE = importlib.util.find_spec("cv2") is not None
+MOVIEPY_AVAILABLE = importlib.util.find_spec("moviepy") is not None
 
-    OPENCV_AVAILABLE = True
-except ImportError:
-    OPENCV_AVAILABLE = False
 
-# Check for moviepy availability
-try:
-    from moviepy.editor import VideoFileClip
+def _load_cv2() -> Any:
+    """Import OpenCV only when an OpenCV-backed operation runs."""
+    return importlib.import_module("cv2")
 
-    MOVIEPY_AVAILABLE = True
-except ImportError:
-    MOVIEPY_AVAILABLE = False
+
+def _load_video_file_clip() -> Any:
+    """Import MoviePy's ``VideoFileClip`` only when it is needed."""
+    try:
+        return importlib.import_module("moviepy.editor").VideoFileClip
+    except ImportError:
+        return importlib.import_module("moviepy").VideoFileClip
 
 
 class FrameExtractor:
@@ -117,6 +123,7 @@ class FrameExtractor:
         self, video_path: Path, timestamp: float
     ) -> "Image.Image":
         """Extract frame using OpenCV."""
+        cv2 = _load_cv2()
         cap = cv2.VideoCapture(str(video_path))
 
         if not cap.isOpened():
@@ -149,8 +156,9 @@ class FrameExtractor:
         self, video_path: Path, timestamp: float
     ) -> "Image.Image":
         """Extract frame using moviepy."""
+        video_file_clip = _load_video_file_clip()
         try:
-            with VideoFileClip(str(video_path)) as clip:
+            with video_file_clip(str(video_path)) as clip:
                 if timestamp > clip.duration:
                     raise FrameExtractionError(
                         f"Timestamp {timestamp}s exceeds video duration {clip.duration}s",
@@ -174,6 +182,7 @@ class FrameExtractor:
         self, path: Path, interval: float, start: float, end: float
     ) -> list["Image.Image"]:
         """Extract frames at intervals using OpenCV."""
+        cv2 = _load_cv2()
         frames: list[Image.Image] = []
         cap = cv2.VideoCapture(str(path))
         if not cap.isOpened():
@@ -199,8 +208,9 @@ class FrameExtractor:
         self, path: Path, interval: float, start: float, end: float | None
     ) -> list["Image.Image"]:
         """Extract frames at intervals using moviepy."""
+        video_file_clip = _load_video_file_clip()
         frames: list[Image.Image] = []
-        with VideoFileClip(str(path)) as clip:
+        with video_file_clip(str(path)) as clip:
             effective_end = end if end is not None else clip.duration
             current_time = start
             while current_time <= effective_end:
@@ -279,13 +289,15 @@ class FrameExtractor:
         path = validate_video_path(video_path)
         if timestamp is None:
             if OPENCV_AVAILABLE:
+                cv2 = _load_cv2()
                 cap = cv2.VideoCapture(str(path))
                 duration = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) / cap.get(
                     cv2.CAP_PROP_FPS
                 )
                 cap.release()
             elif MOVIEPY_AVAILABLE:
-                with VideoFileClip(str(path)) as clip:
+                video_file_clip = _load_video_file_clip()
+                with video_file_clip(str(path)) as clip:
                     duration = clip.duration
             else:
                 duration = 10.0
@@ -298,8 +310,9 @@ class FrameExtractor:
         self, path: Path, output: Path, bitrate: str, audio_format: str
     ) -> None:
         """Write audio from video clip to output file."""
+        video_file_clip = _load_video_file_clip()
         try:
-            with VideoFileClip(str(path)) as clip:
+            with video_file_clip(str(path)) as clip:
                 if clip.audio is None:
                     raise AudioExtractionError(
                         "Video has no audio track", video_path=path

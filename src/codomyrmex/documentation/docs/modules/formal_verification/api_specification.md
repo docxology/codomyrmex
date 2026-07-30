@@ -19,7 +19,9 @@ ConstraintSolver(backend: str = "z3")
 | `solve` | `(timeout_ms: int = 30000) -> SolverResult` | Result | Execute solver |
 | `add_constraints` | `(*items: str) -> list[int]` | Indices | Batch add |
 | `item_count` | `() -> int` | Count | Number of items |
-| `is_satisfiable` | `(timeout_ms: int = 30000) -> bool \ | None` | Bool/None Quick SAT check |
+| `is_satisfiable` | `(timeout_ms: int = 30000) -> bool \ | None` | Bool/None | Quick SAT check |
+| `push` | `() -> None` | None | Start an incremental solver scope |
+| `pop` | `(n: int = 1) -> None` | None | Pop incremental solver scopes |
 
 ## verify_criteria_consistency
 
@@ -63,6 +65,21 @@ class SolverResult:
     statistics: dict[str, Any]        # Solver statistics
     error_message: str | None         # Error details
 ```
+
+## MCP tool entrypoints
+
+The module exports these decorated MCP functions. Their response envelopes are
+defined in [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md):
+
+- `clear_model()`
+- `add_item(item, index)`
+- `delete_item(index)`
+- `replace_item(index, new_item)`
+- `get_model()`
+- `solve_model(timeout_ms)`
+- `push()`
+- `pop(n)`
+- `verify_code_change(file_path, original_source, modified_source)`
 
 ## Code-Change Verification (v1.3.0)
 

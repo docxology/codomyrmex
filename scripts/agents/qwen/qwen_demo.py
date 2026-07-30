@@ -136,7 +136,9 @@ def demo_chat(model: str) -> None:
     client = QwenClient(config={"qwen_model": model})
     request = AgentRequest(
         prompt="Write a Python function that computes Fibonacci numbers using memoization. Include type hints.",
-        system_prompt="You are a Python expert. Write clean, documented code.",
+        context={
+            "system_prompt": "You are a Python expert. Write clean, documented code."
+        },
     )
 
     print_info(f"Model: {model}")
@@ -156,7 +158,7 @@ def demo_streaming(model: str) -> None:
     client = QwenClient(config={"qwen_model": model})
     request = AgentRequest(prompt="Explain Python decorators in 3 sentences.")
 
-    print_info("Streaming: ", end="")
+    print_info("Streaming:")
     for chunk in client._stream_impl(request):
         print(chunk, end="", flush=True)
     print()

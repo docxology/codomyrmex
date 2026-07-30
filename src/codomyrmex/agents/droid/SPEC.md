@@ -47,13 +47,12 @@ The package follows a controller-configuration-manager pattern:
 | `save` | `todo_items, completed_items` | `None` | Write items back to file |
 | `rotate` | `processed, remaining, completed` | `None` | Move processed items to completed section |
 | `validate` | -- | `tuple[bool, list[tuple]]` | Check file for structural issues |
-| `migrate_to_three_columns` | -- | `int` | Convert legacy entries to new format; returns count of changed lines |
 
 ### `TodoItem`
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `parse` | `raw: str` | `TodoItem` | Parse a pipe-delimited line into a TodoItem (auto-detects legacy vs new format) |
+| `parse` | `raw: str` | `TodoItem` | Parse a canonical three-column pipe-delimited line into a TodoItem |
 | `serialise` | -- | `str` | Serialize in 3-column format |
 
 ## Dependencies

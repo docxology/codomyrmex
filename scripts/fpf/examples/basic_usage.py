@@ -18,7 +18,16 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.fpf import Concept, FPFClient, FPFSpec, Pattern, Relationship
+from codomyrmex.fpf import (
+    Concept,
+    ConceptType,
+    FPFClient,
+    FPFSpec,
+    Pattern,
+    PatternStatus,
+    Relationship,
+    RelationshipType,
+)
 from codomyrmex.utils.cli_helpers import (
     print_error,
     print_info,
@@ -55,16 +64,30 @@ def main():
     # 2. Models
     print_info("Testing FPF models...")
     try:
-        spec = FPFSpec(title="Demo Spec", version="1.0.0")
-        print_success(f"  FPFSpec instance created: {spec.title}")
+        spec = FPFSpec(version="1.0.0")
+        print_success(f"  FPFSpec instance created: {spec.version}")
 
-        concept = Concept(id="concept1", name="Test Concept")
+        concept = Concept(
+            name="Test Concept",
+            definition="A concept used by the example.",
+            pattern_id="pattern1",
+            type=ConceptType.TERM,
+        )
         print_success(f"  Concept model instance created: {concept.name}")
 
-        pattern = Pattern(id="pattern1", name="Test Pattern")
-        print_success(f"  Pattern model instance created: {pattern.name}")
+        pattern = Pattern(
+            id="pattern1",
+            title="Test Pattern",
+            status=PatternStatus.DRAFT,
+            content="A demonstration pattern.",
+        )
+        print_success(f"  Pattern model instance created: {pattern.title}")
 
-        Relationship(id="rel1", source_id="concept1", target_id="pattern1")
+        Relationship(
+            source="concept1",
+            target="pattern1",
+            type=RelationshipType.USED_BY,
+        )
         print_success("  Relationship model instance created.")
     except Exception as e:
         print_error(f"  Models check failed: {e}")

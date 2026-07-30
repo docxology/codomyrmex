@@ -69,8 +69,8 @@ claims:
 
   - id: "C4"
     class: "implementation_contract"
-    status: "conditional"
-    statement: "The attestation ledger can bind proposal, gate, authorization, execution receipt, and outcome events with hash-chain and signature validation."
+    status: "supported"
+    statement: "Optional and required Colony Kernel modes locally bind proposal, gate, authorization, execution receipt, and outcome events with hash-chain and signature validation."
     source:
       - "docs/manuscript/09_research_roadmap.md"
       - "docs/manuscript/10_formalism_code_crosswalk.md"
@@ -180,7 +180,7 @@ claims:
   - id: "C12"
     class: "implementation_contract"
     status: "conditional"
-    statement: "The release documents process-local state, caller-reported outcomes, role-label limits, and the need for attestation, restart, and external-workload evidence before broader claims are made."
+    statement: "The release documents process-local state, caller-reported outcomes, role-label limits, and the need for external-actuation attestation, restart, and external-workload evidence before broader claims are made."
     source:
       - "docs/manuscript/04_conclusion.md"
       - "docs/manuscript/90_appendix_design_rationale.md"
@@ -190,3 +190,39 @@ claims:
       - "src/codomyrmex/colony_kernel/research/schemas.py"
     boundary: "This is a documented limitation and evidence requirement, not evidence that the unrun external studies have succeeded."
     citations: []
+
+  - id: "C13"
+    class: "external_scholarship"
+    status: "supported"
+    statement: "The figure pipeline distinguishes captions, concise alternatives, and extended descriptions while using redundant encodings and a contrast-checked palette."
+    source:
+      - "docs/manuscript/06_reproducibility.md"
+      - "docs/manuscript/90_appendix_design_rationale.md"
+    evidence:
+      - "docs/manuscript/config.yaml"
+      - "src/codomyrmex/manuscript/variables.py"
+      - "src/codomyrmex/manuscript/figures/_common.py"
+      - "scripts/validate_manuscript_integrity.py"
+      - "tests/unit/manuscript/test_integrity.py"
+    boundary: "Metadata, contrast checks, and redundant encodings improve the inspectable design contract; they do not prove usability for every reader, assistive technology, display, or print process."
+    citations:
+      - "lundgard2022accessible"
+      - "franconeri2021science"
+      - "crameri2020misuse"
+      - "w3cImagesTutorial"
+
+  - id: "C14"
+    class: "implementation_contract"
+    status: "supported"
+    statement: "The manuscript measures the MCP revision advertised by Codomyrmex against the configured current official revision and does not infer compatibility from the protocol name."
+    source:
+      - "docs/manuscript/07_scope_and_related_work.md"
+      - "docs/manuscript/06_reproducibility.md"
+    evidence:
+      - "src/codomyrmex/model_context_protocol/transport/client.py"
+      - "src/codomyrmex/model_context_protocol/transport/server.py"
+      - "src/codomyrmex/manuscript/variables.py"
+      - "output/data/manuscript_variables.json"
+    boundary: "A revision-string comparison is not a protocol conformance suite, interoperability test, or deployment compatibility guarantee."
+    citations:
+      - "mcp2026spec"

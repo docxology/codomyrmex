@@ -1,52 +1,118 @@
 # README / AGENTS hand-pass tracker
 
-**Status:** Batch refresh applied (bootstrap + curated markers); root `README.md` / `ARCHITECTURE.md`, `docs/AGENTS.md`, and curated `src/` hub pair manually tightened. **Last updated:** April 2026.
+**Status:** Active freeze; package-wide integrity audited, bounded hub review in
+progress. **Last measured:** July 29, 2026.
 
-## Policy
+## Current receipt
 
-- Do not run `bootstrap_agents_readmes` or `enrich_module_docs` casually while this tree is frozen; see root [AGENTS.md](../../AGENTS.md) and [documentation.md](../development/documentation.md).
-- `<!-- agents: curated -->` in the first ~800 bytes of `AGENTS.md` skips bootstrap rewrites for that file.
-- `<!-- readme: curated -->` in the first ~800 bytes of `README.md` skips bootstrap rewrites for that file.
+The read-only package audit currently covers the repository root, six RASP
+roots, and test directories that already carry at least one README/AGENTS pair.
 
-## Surfaces (`DocumentationBootstrapper.SURFACE_ROOTS`)
+| Measure | Current result |
+| :--- | ---: |
+| Governed directories | 1,550 |
+| README files | 1,550 |
+| AGENTS files | 1,550 |
+| Blocking errors | 0 |
+| Non-blocking generated-punctuation warnings | 916 |
+| Files matching generic-boilerplate inventory signals | 2,006 |
+| Files carrying a legacy `v0.1.0` label | 2,625 |
+| Files under 15 lines | 25 |
+| Curated-marker files | 153 |
 
-| Surface        | README | AGENTS | Notes                                      |
-| -------------- | ------ | ------ | ------------------------------------------ |
-| `src/`         | done   | done   | Includes `src/codomyrmex/**` and tests    |
-| `scripts/`     | done   | done   |                                            |
-| `docs/`        | done   | done   | Excludes `docs/modules/<pkg>/` when mirrored by `src/codomyrmex/<pkg>/` |
-| `config/`      | done   | done   |                                            |
-| `testing/`     | done   | done   | If present                                 |
-| `projects/`    | done   | done   |                                            |
-| `cursorrules/` | done   | done   | If present                                 |
-| `examples/`    | done   | done   |                                            |
+Receipt:
+`output/readme_agents_audit.json` and
+`output/readme_agents_audit.md`.
 
-Repo root `README.md` / `AGENTS.md` are maintained separately (not produced by bootstrap).
+The metrics overlap. A generic signpost or old label is not automatically a
+false behavioral claim, but it identifies a candidate for human review.
+Blocking validation covers missing pair members, headings, relative links,
+documented Python entry points, and repository-local skill references.
 
-## How this batch was applied
+The narrower RASP scan reports zero gaps across `src/codomyrmex/`, `docs/`,
+`projects/`, `scripts/`, `config/`, and `.github/`.
 
-1. Regenerate folder docs: `uv run python -m codomyrmex.documentation.scripts.bootstrap_agents_readmes --repo-root .` (latest run: **4755** file writes).
-2. Lock against future overwrites: `uv run python -m codomyrmex.documentation.scripts.apply_curated_markers --repo-root .` (latest run: **2376** `AGENTS.md`, **2379** `README.md` gained markers where missing; a few trees already had `<!-- agents: curated -->`).
-3. QA: `uv run python src/codomyrmex/documentation/scripts/triple_check.py --repo-root .` (report: `output/triple_check_report.md`; many findings are legacy `SPEC.md` / completeness noise, not bootstrap output).
-4. Structure: `uv run python scripts/documentation/validate_agents_structure.py --fail-on-invalid` (sample: **2242** `AGENTS.md` validated, 100% valid).
+## Freeze policy
 
-## PR-style batches (for future diffs)
+- Do not run broad bootstrap, module enrichment, placeholder repair, or
+  missing-file generators in apply mode.
+- Use dry-run and audit receipts for discovery, then make bounded hand edits.
+- Preserve all concurrent dirty-worktree content and submodule state.
+- Put `<!-- agents: curated -->` or `<!-- readme: curated -->` near the start of
+  reviewed files so supported generators preserve them.
+- Do not label thousands of files curated merely to silence an inventory
+  metric; a marker means the content was actually reviewed.
+- Re-run the package audit and strict documentation gate after every batch.
 
-Use 50–150 directory pairs per PR when doing incremental human edits. Columns for manual use:
+## Commands
 
-| `relative_path` | `README done` | `AGENTS done` | `PR` | `notes` |
-| --------------- | ------------- | ------------- | ---- | ------- |
-| `.` (root README/ARCH) | yes | N/A | — | Inventory-aligned copy; reduced filler adjectives |
-| `.github/README.md` | yes | N/A | — | Manual twin of root README; historical 2026-05-13 stats are superseded by the measured snapshot in [inventory.md](../reference/inventory.md) |
-| `docs/` hub | yes | yes | — | Curated; AGENTS: readme marker + apply_curated note |
-| `src/` hub | yes | yes | — | Curated; signposts, table layout, correct agent links |
-| `src/codomyrmex/` package hub | yes | yes | — | `AGENTS.md`: curated marker; Active Components collapsed to README + `list_modules()`; `__init__.py` docstring tightened |
-| `.github/` (AGENTS) | N/A | yes | — | Workflow count line (37) aligned with inventory |
-| `scripts/documentation/validate_agents_structure.py` | N/A | N/A | — | 2026-04-07: hub heading aliases (`Contents (by file)`, `Navigation`→Dependencies, `Protocol Directives`/`Diagram conventions`→Dev); path skips for upstream/skills/tests; **1385/1385** valid |
-| `docs/`, `docs/agents/`, `docs/project/`, `scripts/agents/google`, `src/.../free_apis` AGENTS | — | yes | — | 2026-04-07: Dependencies/Dev sections or inventory copy (39 agent packages); `education/__init__.py` exports `Tutor`/`Assessment` as None when optional submodules absent |
-| `README.md`, `.github/README.md`, `docs/README.md`, `docs/index.md`, agent SPEC/PAI/core, getting-started | yes | N/A | — | 2026-05-13: **39** agent packages + **34,422** tests + **37** workflows + **1,164** `docs/*.md`; hub tables aligned with `find` |
-| _(add rows)_    |               |               |      |         |
+```bash
+# Presence only; no report write
+uv run --locked python scripts/rasp_gap_report.py --repo-root . --check
 
-## Module mirrors
+# Package-wide pair, link, command, and skill audit
+uv run --locked python scripts/documentation/audit_readme_agents.py \
+  --repo-root . --strict
 
-`docs/modules/<package>/` for packages that exist under `src/codomyrmex/<package>/` are owned by `enrich_module_docs.py`, not bootstrap. Refresh those only with an explicit `enrich_module_docs` run.
+# Preview one module mirror
+uv run --locked python scripts/documentation/enrich_module_docs.py \
+  --repo-root . --dry-run --module <module>
+
+# Authoritative composed validation
+make docs-check
+```
+
+The module enricher requires explicit `--apply`. Existing unmarked files also
+require the corresponding `--force-readmes`, `--force-agents`, or
+`--force-specs` flag. Curated README/AGENTS files remain protected under force.
+
+## Completed in the current batch
+
+- Added package-wide README/AGENTS auditing with portable receipts and
+  zero-mock regression tests.
+- Restored README/AGENTS parity for `tests/unit/colony_kernel/`.
+- Corrected broken repository, source-module, and test navigation links.
+- Corrected stale documented Python entry points and added a bounded local qmd
+  skill with an `rg` fallback.
+- Replaced obsolete OpenGauss wrapper documentation with the actual Git
+  submodule, installer, and console-entry-point boundary.
+- Made module enrichment and placeholder repair fail closed.
+- Hardened RASP `--help` and added a read-only `--check` mode.
+- Curated the central documentation-package and tooling README/AGENTS hubs.
+- Replaced the Git core leaf inventories of transient metadata backups with
+  reviewed runtime-state, packaging, and test-isolation contracts.
+- Added the pair and command/link audits to Makefile and justfile parity.
+
+## Remaining hand-pass debt
+
+The 916 duplicated periods are a known artifact of an older generic-placeholder
+repair. The producer is fixed, but changing roughly nine hundred otherwise
+clean leaf files would violate the active bounded-edit policy. Retire this debt
+in reviewed batches after the freeze decision, not through an unreviewed global
+replacement.
+
+Prioritize:
+
+1. high-traffic root, `src/`, `docs/`, `scripts/`, and `tests/` hubs;
+2. modules whose runtime or public interface changed without documentation;
+3. the 25 thin files;
+4. generic leaf pairs, grouped by owning module;
+5. legacy version labels that imply an incorrect behavioral version.
+
+For each batch, record the paths reviewed, why prose changed, validation
+results, and whether the source/API/MCP/PAI/security/changelog surfaces remain
+aligned.
+
+## Historical batch record
+
+An earlier broad bootstrap wrote thousands of files and then applied curated
+markers widely. Those counts are historical evidence, not instructions to
+repeat the operation. Repository root files remain hand-maintained, and
+`docs/modules/<package>/` mirrors are outside bootstrap ownership when a
+matching `src/codomyrmex/<package>/` exists.
+
+## Navigation
+
+- [Documentation maintenance guide](../development/documentation.md)
+- [Generated RASP gap report](agents-readme-gap-report.md)
+- [Repository agent contract](../../AGENTS.md)

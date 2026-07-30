@@ -1,32 +1,43 @@
-# tests
+<!-- readme: curated -->
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+# Test suite
 
-## Overview
+The repository test tree covers package units, integration boundaries,
+language adapters, orchestration, scripts, and performance behavior. Detailed
+zero-mock and marker rules are in [SPEC.md](SPEC.md) and
+[RUNNING_TESTS.md](RUNNING_TESTS.md).
 
-Validation coverage, fixtures, and regression checks for Tests.
+## Run
 
-## Directory Contents
-- `API_SPECIFICATION.md` – File
-- `MCP_TOOL_SPECIFICATION.md` – File
-- `PAI.md` – File
-- `README.md` – File
-- `RUNNING_TESTS.md` – File
-- `SPEC.md` – File
-- `__init__.py` – File
-- `conftest.py` – File
-- `fixtures/` – Subdirectory
-- `integration/` – Subdirectory
-- `languages/` – Subdirectory
-- `orchestrator/` – Subdirectory
-- `performance/` – Subdirectory
-- `py.typed` – File
-- `unit/` – Subdirectory
-- `utils/` – Subdirectory
+```bash
+# Focused diagnostic run; no package coverage claim
+uv run --locked pytest -q tests/unit/<module>
+
+# Full configured coverage gate
+make test
+```
+
+Plain `uv run pytest` skips the coverage threshold for speed. `make test`
+measures the configured source scope and enforces the 60% floor.
+
+## Test classes
+
+- `unit/`: deterministic package and script behavior
+- `integration/`: real cross-component boundaries
+- `performance/`: explicit benchmark and load checks
+- `languages/`: language tooling behavior
+- `orchestrator/`: workflow and fractal orchestration
+- `fixtures/`: versioned non-secret test inputs
+- `scripts/`: repository-script regression tests
+
+Optional services and platform capabilities should be detected and skipped with
+a clear reason when unavailable. Tests must not fabricate external success.
 
 ## Navigation
-- **Parent Directory**: [Project root](../README.md)
 
-## Related Documents
-
-- **Agents**: [AGENTS.md](AGENTS.md)
+- [Agent guidance](AGENTS.md)
+- [Testing specification](SPEC.md)
+- [Running tests](RUNNING_TESTS.md)
+- [Unit tests](unit/README.md)
+- [Integration tests](integration/README.md)
+- [Repository root](../README.md)

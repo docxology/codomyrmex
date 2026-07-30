@@ -214,55 +214,57 @@ class TestAPIKeyManager:
         """Create a fresh APIKeyManager for each test."""
         return APIKeyManager()
 
-    def test_generate_api_key(self, manager):
+    def test_generate(self, manager):
         """Test API key generation."""
-        api_key = manager.generate_api_key(user_id="user-123")
+        api_key = manager.generate(user_id="user-123")
         assert api_key.startswith("codomyrmex_")
         assert len(api_key) > 20
 
-    def test_generate_api_key_with_permissions(self, manager):
+    def test_generate_with_permissions(self, manager):
         """Test API key generation with custom permissions."""
-        api_key = manager.generate_api_key(
-            user_id="user-123", permissions=["read", "write"]
-        )
-        info = manager.validate_api_key(api_key)
-        assert info["permissions"] == ["read", "write"]
-
-    def test_generate_api_key_default_permissions(self, manager):
-        """Test API key has default read permission."""
-        api_key = manager.generate_api_key(user_id="user-123")
-        info = manager.validate_api_key(api_key)
-        assert info["permissions"] == ["read"]
-
-    def test_validate_api_key_success(self, manager):
-        """Test successful API key validation."""
-        api_key = manager.generate_api_key(user_id="user-123")
-        info = manager.validate_api_key(api_key)
+        api_key = manager.generate(user_id="user-123", permissions=["read", "write"])
+        info = manager.validate(api_key)
         assert info is not None
-        assert info["user_id"] == "user-123"
+        assert info.permissions == ["read", "write"]
 
-    def test_validate_api_key_invalid(self, manager):
+    def test_generate_default_permissions(self, manager):
+        """Test API key has default read permission."""
+        api_key = manager.generate(user_id="user-123")
+        info = manager.validate(api_key)
+        assert info is not None
+        assert info.permissions == ["read"]
+
+    def test_validate_success(self, manager):
+        """Test successful API key validation."""
+        api_key = manager.generate(user_id="user-123")
+        info = manager.validate(api_key)
+        assert info is not None
+        assert info.user_id == "user-123"
+
+    def test_validate_invalid(self, manager):
         """Test validation fails for invalid API key."""
-        info = manager.validate_api_key("invalid-key")
+        info = manager.validate("invalid-key")
         assert info is None
 
-    def test_revoke_api_key_success(self, manager):
+    def test_revoke_success(self, manager):
         """Test successful API key revocation."""
-        api_key = manager.generate_api_key(user_id="user-123")
-        assert manager.revoke_api_key(api_key)
-        assert manager.validate_api_key(api_key) is None
+        api_key = manager.generate(user_id="user-123")
+        assert manager.revoke(api_key)
+        assert manager.validate(api_key) is None
 
-    def test_revoke_api_key_nonexistent(self, manager):
+    def test_revoke_nonexistent(self, manager):
         """Test revoking nonexistent API key returns False."""
-        assert not manager.revoke_api_key("nonexistent-key")
+        assert not manager.revoke("nonexistent-key")
 
     def test_multiple_api_keys_per_user(self, manager):
         """Test user can have multiple API keys."""
-        key1 = manager.generate_api_key(user_id="user-123")
-        key2 = manager.generate_api_key(user_id="user-123")
+        key1 = manager.generate(user_id="user-123")
+        key2 = manager.generate(user_id="user-123")
         assert key1 != key2
-        assert manager.validate_api_key(key1)["user_id"] == "user-123"
-        assert manager.validate_api_key(key2)["user_id"] == "user-123"
+        info1 = manager.validate(key1)
+        info2 = manager.validate(key2)
+        assert info1 is not None and info1.user_id == "user-123"
+        assert info2 is not None and info2.user_id == "user-123"
 
 
 # ==============================================================================
@@ -445,7 +447,7 @@ class TestAuthenticator:
     def test_authenticate_with_api_key(self, authenticator):
         """Test authentication with API key."""
         # Generate an API key
-        api_key = authenticator.api_key_manager.generate_api_key(
+        api_key = authenticator.api_key_manager.generate(
             user_id="user-123", permissions=["read", "write"]
         )
 
@@ -489,7 +491,7 @@ class TestAuthenticator:
 
     def test_authorize_with_valid_permission(self, authenticator):
         """Test authorization with valid permission."""
-        api_key = authenticator.api_key_manager.generate_api_key(
+        api_key = authenticator.api_key_manager.generate(
             user_id="user-123", permissions=["read"]
         )
         token = authenticator.authenticate({"api_key": api_key})
@@ -498,7 +500,7 @@ class TestAuthenticator:
 
     def test_authorize_with_invalid_permission(self, authenticator):
         """Test authorization fails with invalid permission."""
-        api_key = authenticator.api_key_manager.generate_api_key(
+        api_key = authenticator.api_key_manager.generate(
             user_id="user-123", permissions=["read"]
         )
         token = authenticator.authenticate({"api_key": api_key})
@@ -507,7 +509,7 @@ class TestAuthenticator:
 
     def test_authorize_with_admin_permission(self, authenticator):
         """Test admin permission grants all access."""
-        api_key = authenticator.api_key_manager.generate_api_key(
+        api_key = authenticator.api_key_manager.generate(
             user_id="admin-user", permissions=["admin"]
         )
         token = authenticator.authenticate({"api_key": api_key})
@@ -518,7 +520,7 @@ class TestAuthenticator:
 
     def test_authorize_with_revoked_token(self, authenticator):
         """Test authorization fails with revoked token."""
-        api_key = authenticator.api_key_manager.generate_api_key(
+        api_key = authenticator.api_key_manager.generate(
             user_id="user-123", permissions=["read"]
         )
         token = authenticator.authenticate({"api_key": api_key})
@@ -528,7 +530,7 @@ class TestAuthenticator:
 
     def test_refresh_token(self, authenticator):
         """Test token refresh."""
-        api_key = authenticator.api_key_manager.generate_api_key(
+        api_key = authenticator.api_key_manager.generate(
             user_id="user-123", permissions=["read"]
         )
         original_token = authenticator.authenticate({"api_key": api_key})
@@ -540,7 +542,7 @@ class TestAuthenticator:
 
     def test_revoke_token(self, authenticator):
         """Test token revocation."""
-        api_key = authenticator.api_key_manager.generate_api_key(
+        api_key = authenticator.api_key_manager.generate(
             user_id="user-123", permissions=["read"]
         )
         token = authenticator.authenticate({"api_key": api_key})
@@ -653,17 +655,17 @@ class TestAPIKeyManagerEdgeCases:
         """All generated keys start with 'codomyrmex_'."""
         manager = APIKeyManager()
         for _ in range(5):
-            key = manager.generate_api_key(user_id="test")
+            key = manager.generate(user_id="test")
             assert key.startswith("codomyrmex_")
 
     def test_revoke_all_keys_for_user(self):
         """Revoking all keys for a user invalidates them all."""
         manager = APIKeyManager()
-        keys = [manager.generate_api_key(user_id="u1") for _ in range(3)]
+        keys = [manager.generate(user_id="u1") for _ in range(3)]
         for key in keys:
-            assert manager.revoke_api_key(key)
+            assert manager.revoke(key)
         for key in keys:
-            assert manager.validate_api_key(key) is None
+            assert manager.validate(key) is None
 
 
 class TestAuthenticatorExtended:

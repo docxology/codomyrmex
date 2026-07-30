@@ -1,51 +1,66 @@
-# Codomyrmex Agents — src/codomyrmex/release
+# Codomyrmex Agents — `src/codomyrmex/release`
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Purpose
-Release automation, versioning, and changelog generation.
 
-## Active Components
-- `API_SPECIFICATION.md` – API reference — public functions, classes, parameters, and return types
-- `MCP_TOOL_SPECIFICATION.md` – MCP tool definitions — schemas, parameters, and invocation patterns
-- `PAI.md` – Public API Interface — integration patterns and usage guidelines
-- `README.md` – Module overview — quick start, features, and usage examples
-- `SPEC.md` – Module specification — design, purpose, interfaces, and architecture
-- `__init__.py` – Python package entry point — exports and initialization
-- `distribution.py` – Distribution implementation
-- `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
-- `package_builder.py` – Internal implementation module
-- `py.typed` – PEP 561 marker for typed package
-- `release_validator.py` – Internal implementation module
+Maintain the fail-closed package and technical-report release boundary. The
+module may build and verify local artifacts and generate non-mutating remote
+plans; it must not silently upload, reserve a DOI, or report unexecuted work as
+published.
 
 ## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+
+- Keep `README.md`, `SPEC.md`, `API_SPECIFICATION.md`,
+  `MCP_TOOL_SPECIFICATION.md`, `PAI.md`, and the `docs/modules/release/` mirror
+  synchronized with public behavior.
+- Keep `ReleasePolicy(strict=True)` fail closed across testing, coverage,
+  typing, security, documentation, and artifact evidence.
+- Build with real `uv build` output. Validate metadata and archive-member
+  safety inside both the wheel and sdist, and retain complete SHA-256 and
+  SHA-512 values. SCM markers, private environment files, traversal, and
+  absolute member paths or checkout-specific content must fail closed before
+  artifacts are copied.
+- Treat `BuildArtifact.path` as a local build receipt only. Publication
+  manifests must contain portable relative paths and no home-directory paths.
+- For `DistributionManager`, remote targets must remain dry-run-only. Local
+  distribution must require an explicit destination and verify copied files.
+- For report publication, require content PDF, distribution PDF, and semantic
+  HTML before preparing a bundle. Never insert the final PDF digest into the
+  PDF itself.
+- Preserve shared metadata: generate citation and Zenodo metadata from
+  `PublicationMetadata`; do not maintain independent hard-coded identities.
+- Use real temporary projects and files in tests; follow the repository
+  zero-mock policy.
 
 ## Key Files
-- `AGENTS.md` - Agent coordination and navigation
-- `README.md` - Directory overview
-- `API_SPECIFICATION.md`
-- `MCP_TOOL_SPECIFICATION.md`
-- `PAI.md`
-- `README.md`
-- `SPEC.md`
-- `__init__.py`
-- `distribution.py`
-- `mcp_tools.py`
-- `package_builder.py`
-- `py.typed`
-- `release_validator.py`
 
-## Dependencies
-- Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
+| File | Contract |
+|---|---|
+| `release_validator.py` | `ReleasePolicy`, evidence checks, certification |
+| `package_builder.py` | real isolated wheel/sdist build and inspection |
+| `distribution.py` | verified local copy; remote dry-run receipts |
+| `publication.py` | immutable publication records, manifest v1, verification, plans |
+| `__main__.py` | `publication prepare`, `verify`, and `plan` |
+| `mcp_tools.py` | `release_validate`, `release_build`, `release_certification_report` |
 
-## Development Guidelines
-- Follow the universal agent protocols defined in the root `AGENTS.md`.
-- Adhere to the Python PEP 8 style guide and project-specific linting rules.
-- Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+## Validation
 
-## Navigation Links
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+```bash
+uv run --locked pytest tests/unit/release -q
+uv run --locked ruff check src/codomyrmex/release tests/unit/release
+uv run --locked ty check src/codomyrmex/release
+uv run --locked python -m build --help >/dev/null
+```
+
+The package builder itself uses `uv build`; the final repository gate must also
+perform a real root build and a clean-install public-API smoke test.
+
+## Navigation
+
+- [README](README.md)
+- [Specification](SPEC.md)
+- [API specification](API_SPECIFICATION.md)
+- [MCP specification](MCP_TOOL_SPECIFICATION.md)
+- [PAI integration](PAI.md)
+- [Changelog](CHANGELOG.md)

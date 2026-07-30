@@ -66,6 +66,8 @@ graph TB
         Terminal[terminal_interface<br/>CLI utilities]
         Config[config_management<br/>Configuration]
         Telemetry[telemetry<br/>Metrics & tracing]
+        Exceptions[exceptions<br/>Shared errors]
+        Validation[validation<br/>Data validation]
     end
 
     subgraph "Core Layer - Primary Functionality"
@@ -111,7 +113,6 @@ graph TB
         Template[module_template<br/>Module templates]
         Maint[maintenance<br/>Maintenance utils]
         Utils[utils<br/>Common utilities]
-        Validation[validation<br/>Data validation]
         Website[website<br/>Website generation]
         Templating[templating<br/>Template engine]
         Skills[skills<br/>Skills management]
@@ -152,6 +153,8 @@ graph TB
 - `terminal_interface`: Interactive CLI and terminal utilities
 - `config_management`: Configuration loading, validation, and secret management
 - `telemetry`: Metrics collection, tracing, and observability
+- `exceptions`: Shared exception hierarchy
+- `validation`: Cross-cutting data and schema validation
 
 **Characteristics**:
 
@@ -230,7 +233,6 @@ graph TB
 - `module_template`: Module creation templates
 - `maintenance`: Project maintenance and dependency analysis utilities
 - `utils`: Common utilities
-- `validation`: Data validation and schema checking
 - `website`: Website generation and hosting
 - `templating`: Template rendering engine
 - `skills`: Skills management and integration
@@ -352,7 +354,8 @@ Each module must contain:
 
 Modules must follow dependency rules:
 
-1. **Foundation Layer**: No Codomyrmex dependencies
+1. **Foundation Layer**: No upward Codomyrmex dependencies except exact,
+   audited integration adapters in `UPWARD_INTERFACE_CONTRACTS`
 2. **Core Layer**: Foundation Layer only
 3. **Service Layer**: Foundation and Core Layers
 4. **Specialized Layer**: Any layer, but minimize dependencies
@@ -371,9 +374,12 @@ Modules must integrate with:
 ### Strict Dependency Rules
 
 1. **Import-Layer Policy**: Modules must respect the enforced layer boundaries;
-   package-local cycles are measured separately and are not silently claimed absent
+   narrow upward integration adapters require immutable, file-scoped contracts,
+   and stale contracts fail the audit. Package-local cycles are measured
+   separately and are not silently claimed absent
 2. **Layer Boundaries**: Modules can only depend on lower layers
-3. **Foundation Independence**: Foundation modules have no Codomyrmex dependencies
+3. **Foundation Independence**: Foundation modules have no unexplained upward
+   dependencies; the optional logging/event bridge is explicitly contracted
 4. **Explicit Dependencies**: All dependencies must be explicit in imports
 
 ### Dependency Graph

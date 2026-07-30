@@ -59,6 +59,8 @@ Git workflow automation including commits, branching, merging, stash, submodules
 - Follow the universal agent protocols defined in the root `AGENTS.md`.
 - Adhere to the Python PEP 8 style guide and project-specific linting rules.
 - Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+- Keep mutable repository metadata outside the source/package tree. Tests must
+  use `tmp_path` or `CODOMYRMEX_REPOSITORY_METADATA_FILE`.
 
 ## Navigation Links
 - **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation

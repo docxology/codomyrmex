@@ -452,6 +452,36 @@ class TestMcpToolsGenerateModuleDocs:
         result = generate_module_docs("no_module_here")
         assert "status" in result
 
+    def test_rejects_path_traversal(self):
+        from codomyrmex.documentation.mcp_tools import generate_module_docs
+
+        result = generate_module_docs("../../tmp")
+
+        assert result["status"] == "error"
+        assert result["executed"] is False
+        assert "package name" in result["message"]
+
+    def test_existing_module_defaults_to_byte_preserving_dry_run(self):
+        from codomyrmex.documentation.mcp_tools import generate_module_docs
+
+        pai_path = (
+            Path(__file__).resolve().parents[3]
+            / "src"
+            / "codomyrmex"
+            / "documentation"
+            / "PAI.md"
+        )
+        original = pai_path.read_bytes()
+
+        result = generate_module_docs("documentation")
+
+        assert result["status"] == "success"
+        assert result["dry_run"] is True
+        assert result["executed"] is False
+        assert result["paths"] == ["src/codomyrmex/documentation/PAI.md"]
+        assert len(result["content_sha256"]) == 64
+        assert pai_path.read_bytes() == original
+
 
 @pytest.mark.unit
 class TestMcpToolsAuditRaspCompliance:
@@ -485,6 +515,14 @@ class TestMcpToolsAuditRaspCompliance:
         from codomyrmex.documentation.mcp_tools import generate_module_docs
 
         assert hasattr(generate_module_docs, "_mcp_tool_meta")
+
+    def test_rejects_path_traversal(self):
+        from codomyrmex.documentation.mcp_tools import audit_rasp_compliance
+
+        result = audit_rasp_compliance("../../tmp")
+
+        assert result["status"] == "error"
+        assert "package name" in result["message"]
 
 
 # ---------------------------------------------------------------------------
@@ -562,6 +600,21 @@ class TestPlaceholderCheckFixGeneric:
         result = fix_generic_placeholders(content, file_path)
         assert "Contains components for the src system" not in result
         assert "Mydir" in result
+        assert ".." not in result
+
+    def test_generic_src_system_with_period_keeps_single_period(self, tmp_path: Path):
+        from codomyrmex.documentation.scripts.placeholder_check import (
+            fix_generic_placeholders,
+        )
+
+        file_path = tmp_path / "mydir" / "README.md"
+        file_path.parent.mkdir()
+        result = fix_generic_placeholders(
+            "Contains components for the src system.",
+            file_path,
+        )
+        assert result.endswith("Mydir.")
+        assert not result.endswith("..")
 
     def test_content_without_placeholder_unchanged(self, tmp_path: Path):
         from codomyrmex.documentation.scripts.placeholder_check import (

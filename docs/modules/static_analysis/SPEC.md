@@ -1,6 +1,6 @@
 # static_analysis - Functional Specification
 
-**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Purpose
 
@@ -11,6 +11,8 @@ AST-based static analysis module for import dependency scanning, architectural l
 - **AST-Only Analysis**: Parses Python source via `ast` module — never imports analyzed code
 - **Zero External Dependencies**: Uses only Python stdlib (`ast`, `os`, `pathlib`)
 - **Layer-Aware**: Classifies modules into architectural layers matching the package SPEC
+- **Fail-Closed Exceptions**: Upward imports require an exact file-scoped
+  contract; stale exception entries fail the repository audit
 - **Non-Destructive**: Read-only analysis; never modifies analyzed files
 
 ## Functional Requirements
@@ -31,6 +33,9 @@ AST-based static analysis module for import dependency scanning, architectural l
 
 - Foundation modules must not import Core or Specialized modules
 - Core modules must not import Specialized modules
+- Service modules must not import Specialized modules
+- Exact entries in `UPWARD_INTERFACE_CONTRACTS` exempt only named integration
+  adapters and must remain live
 - Return violations with human-readable reason strings
 
 ### Export Auditing

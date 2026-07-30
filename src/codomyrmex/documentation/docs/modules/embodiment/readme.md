@@ -14,8 +14,8 @@ actuators, an in-process ROS-style pub/sub bridge, and 3D vector transforms.
 | :--- | :--- | :--- |
 | `SensorPayload` / `TelemetryStream` | `telemetry.py` | Parse and retain latest sensor readings by node |
 | `EmbodimentBridge` | `bridge.py` | WebSocket telemetry ingress and actuator command egress |
-| `SimulatedSensor` / `MockSensor` | `sensors/base.py` | Deterministic sensor readings |
-| `SimulatedActuator` / `MockActuator` | `actuators/base.py` | Deterministic actuator command lifecycle |
+| `SimulatedSensor` | `sensors/base.py` | Deterministic sensor readings |
+| `SimulatedActuator` | `actuators/base.py` | Deterministic actuator command lifecycle |
 | `ROS2Bridge` | `ros/ros_bridge.py` | In-process topic history, latching, subscribe, publish, and simulation |
 | `Vec3` / `Transform3D` | `transformation/transformation.py` | Vector math and Euler transform composition |
 

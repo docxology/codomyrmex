@@ -11,7 +11,11 @@ Agent coordination for this module: [AGENTS.md](AGENTS.md).
 ## Quick Start
 
 ```python
-from codomyrmex.pai_pm import *  # See source for specific imports
+from codomyrmex.pai_pm import HAS_BUN, PaiPmServerManager
+
+if HAS_BUN:
+    manager = PaiPmServerManager()
+    print(manager.is_running())
 ```
 
 ## Directory Contents

@@ -163,7 +163,7 @@ Lowest numeric value = highest priority = returned first in RuleSet.resolved()
 
 ### Enforcement Quality
 
-- Automated enforcement via pre-commit (`ruff`, `mypy`)
+- Automated enforcement via pre-commit (`ruff`, `ty`)
 - CI/CD pipeline validation (`uv run pytest`)
 - Clear violation reporting
 - Consistent application across all 75 rules

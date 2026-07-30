@@ -202,7 +202,7 @@ def generate_deprecation_notice(module_name: str, new_location: str) -> str:
 # Or install all optional dependencies:
 #   uv sync --all-extras
 #
-# This file is kept temporarily for backward compatibility but should not be modified.
+# This file remains only as a migration marker and should not be modified.
 # See docs/project/contributing.md for the new dependency management strategy.
 #
 # Migration completed: {new_location}

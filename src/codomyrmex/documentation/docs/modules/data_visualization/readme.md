@@ -16,7 +16,7 @@ Module implementation, resources, and local coordination for Data Visualization.
 - `SPEC.md` – File
 - `USAGE_EXAMPLES.md` – File
 - `__init__.py` – File
-- `_compat.py` – File
+- `_instrumentation.py` – Optional performance instrumentation
 - `charts/` – Subdirectory
 - `components/` – Subdirectory
 - `core/` – Subdirectory

@@ -1,11 +1,13 @@
+import importlib
 import os
 import sys
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 
+docker: Any
 try:
-    import docker
+    docker = importlib.import_module("docker")
 except ImportError:
     docker = None
 

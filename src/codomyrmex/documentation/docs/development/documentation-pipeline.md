@@ -11,7 +11,7 @@ This document describes the process for building, maintaining, and deploying the
 The documentation pipeline involves several key stages:
 
 1.  **Content Creation & Updates**: Documentation is written in Markdown within individual modules and in the central `documentation` module.
-2.  **Content Aggregation**: Module-specific documentation lives in `docs/modules/` at the project root and in each `src/codomyrmex/<module>/` source directory. The legacy `documentation/docs/modules/` output path has been removed.
+2.  **Content Aggregation**: Module-specific documentation lives in `docs/modules/` at the project root and in each `src/codomyrmex/<module>/` source directory. The obsolete `documentation/docs/modules/` output path has been removed.
 3.  **Docusaurus Build**: Docusaurus processes all Markdown files, configurations, and assets to generate a static HTML website.
 4.  **Testing & Preview**: The site is tested locally for correctness, working links, and visual appearance.
 5.  **Deployment**: The static site is deployed to a web server or hosting platform (e.g., GitHub Pages).

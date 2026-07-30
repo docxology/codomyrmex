@@ -33,7 +33,7 @@ Source code directory containing the core Codomyrmex platform implementation. It
 
 - Working implementations over theoretical designs
 - Forward-looking architecture
-- No legacy compatibility layers
+- No obsolete internal compatibility wrappers; migrations are explicit
 - Current and future needs focus
 
 ### Testing

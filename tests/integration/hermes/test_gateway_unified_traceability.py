@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 from codomyrmex.agents.core import AgentRequest
-from codomyrmex.agents.hermes.hermes_client import HermesClient
+from codomyrmex.agents.hermes.client_pkg import HermesClient
 from codomyrmex.agents.hermes.mcp_tools import hermes_create_task
 from codomyrmex.agents.hermes.session import SQLiteSessionStore
 from codomyrmex.logging_monitoring.core.correlation import get_correlation_id

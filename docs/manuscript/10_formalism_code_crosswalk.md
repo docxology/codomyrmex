@@ -38,16 +38,20 @@ This discipline follows design-by-contract and formal-methods practice
 artifacts follow the broader requirements of reproducible and accountable computation
 [@peng2011reproducible; @raji2020accountability; @buhl2024safetycases].
 
-![{{FIGURE_CAPTION_FORMALISM_CODE_CROSSWALK}}](figures/{{FIGURE_FILENAME_FORMALISM_CODE_CROSSWALK}}){#{{FIGURE_LABEL_FORMALISM_CODE_CROSSWALK}} width={{FIGURE_WIDTH_FORMALISM_CODE_CROSSWALK}}}
+![{{FIGURE_CAPTION_FORMALISM_CODE_CROSSWALK}}](figures/{{FIGURE_FILENAME_FORMALISM_CODE_CROSSWALK}}){#{{FIGURE_LABEL_FORMALISM_CODE_CROSSWALK}} width={{FIGURE_WIDTH_FORMALISM_CODE_CROSSWALK}} alt="{{FIGURE_ALT_FORMALISM_CODE_CROSSWALK}}" aria-describedby="{{FIGURE_LABEL_FORMALISM_CODE_CROSSWALK}}-description"}
+<div id="{{FIGURE_LABEL_FORMALISM_CODE_CROSSWALK}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_FORMALISM_CODE_CROSSWALK}}</div>
 
-![{{FIGURE_CAPTION_FORMALISM_COVERAGE}}](figures/{{FIGURE_FILENAME_FORMALISM_COVERAGE}}){#{{FIGURE_LABEL_FORMALISM_COVERAGE}} width={{FIGURE_WIDTH_FORMALISM_COVERAGE}}}
+![{{FIGURE_CAPTION_FORMALISM_COVERAGE}}](figures/{{FIGURE_FILENAME_FORMALISM_COVERAGE}}){#{{FIGURE_LABEL_FORMALISM_COVERAGE}} width={{FIGURE_WIDTH_FORMALISM_COVERAGE}} alt="{{FIGURE_ALT_FORMALISM_COVERAGE}}" aria-describedby="{{FIGURE_LABEL_FORMALISM_COVERAGE}}-description"}
+<div id="{{FIGURE_LABEL_FORMALISM_COVERAGE}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_FORMALISM_COVERAGE}}</div>
 
-![{{FIGURE_CAPTION_RESEARCH_STATUS_MATRIX}}](figures/{{FIGURE_FILENAME_RESEARCH_STATUS_MATRIX}}){#{{FIGURE_LABEL_RESEARCH_STATUS_MATRIX}} width={{FIGURE_WIDTH_RESEARCH_STATUS_MATRIX}}}
+![{{FIGURE_CAPTION_RESEARCH_STATUS_MATRIX}}](figures/{{FIGURE_FILENAME_RESEARCH_STATUS_MATRIX}}){#{{FIGURE_LABEL_RESEARCH_STATUS_MATRIX}} width={{FIGURE_WIDTH_RESEARCH_STATUS_MATRIX}} alt="{{FIGURE_ALT_RESEARCH_STATUS_MATRIX}}" aria-describedby="{{FIGURE_LABEL_RESEARCH_STATUS_MATRIX}}-description"}
+<div id="{{FIGURE_LABEL_RESEARCH_STATUS_MATRIX}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_RESEARCH_STATUS_MATRIX}}</div>
 
 The visual in [@fig:formalism_code_crosswalk] shows correspondence as a chain with
-missing links, not as a proof graph. Green denotes a mapping whose implementation and
-focused evidence are present; blue denotes a partial bridge; amber and pink denote
-future work or a research component.
+missing links, not as a proof graph. Every row prints its status, and the coloured
+strip repeats that status as a secondary scanning cue. The visual abbreviates the
+source-backed entries for print legibility; [@tbl:formalism-code-inventory] and
+[@tbl:formalism-code-evidence] retain their complete searchable wording.
 
 The inventory summary in [@fig:formalism_coverage] counts these documented statuses,
 while [@fig:research_status_matrix] places the formalism rows beside the roadmap
@@ -76,8 +80,8 @@ rendering.
 : Translation, evidence, and claim boundaries for the formalism inventory. {#tbl:formalism-code-evidence}
 
 [@tbl:formalism-code-inventory] is the status view; [@tbl:formalism-code-evidence] is
-the evidence and limitation view. Keeping both views explicit prevents a green
-implementation row from being read as a universal proof.
+the evidence and limitation view. Keeping both views explicit prevents an implemented
+row from being read as a universal proof.
 
 The inventory distinguishes *representation* from *verification*. For example,
 `ActiveInferenceAgent` and `InferenceEngine` provide probabilistic components, but their
@@ -139,7 +143,7 @@ weaker one being replayable:
    cover the current gate projection. More transition families should be added before
    claiming complete refinement.
 4. **Probabilistic adapter.** The explicit adapter declares an observation model over
-   attested traces, a latent
+   externally observed and attested traces, a latent
    state space, priors, transition and observation models, preferences, and policy
    horizon. Keep the deterministic gate as a baseline and report calibration, held-out
    log loss, utility, refusal cost, and compute cost.

@@ -106,6 +106,18 @@ class _LiveServer:
         self._thread.start()
 
     def shutdown(self):
+        orchestrator = WebsiteServer._dispatch_orch
+        stop = getattr(orchestrator, "stop", None)
+        if callable(stop):
+            stop()
+        dispatch_thread = WebsiteServer._dispatch_thread
+        if dispatch_thread is not None and dispatch_thread.is_alive():
+            dispatch_thread.join(timeout=10)
+        assert dispatch_thread is None or not dispatch_thread.is_alive(), (
+            "Agent dispatch thread did not stop"
+        )
+        WebsiteServer._dispatch_orch = None
+        WebsiteServer._dispatch_thread = None
         self.httpd.shutdown()
         self.httpd.server_close()
         self._thread.join(timeout=5)
@@ -657,10 +669,10 @@ class TestRouting:
         assert status == 400  # Missing script name, but routed correctly
 
     def test_post_tests_routes_correctly(self, live_server):
-        """Test that dry-run routing never leaves a test worker behind."""
+        """Test that validation routing never leaves a test worker behind."""
         WebsiteServer._test_running = False
         WebsiteServer._test_thread = None
-        status, data = live_server.post("/api/tests", {"dry_run": True})
+        status, data = live_server.post("/api/tests", {"validate_only": True})
         assert status == 200
         assert data.get("status") == "validated"
         assert data.get("worker_started") is False
@@ -1053,17 +1065,21 @@ class TestAgentDispatchEndpoint:
         finally:
             conn.close()
 
-    @pytest.mark.requires_ollama
-    def test_with_prompt_returns_dict(self, live_server):
-        """POST with a prompt returns a dict response (200 or 500 if orch unavailable)."""
+    def test_with_prompt_returns_dict(self, live_server, monkeypatch):
+        """POST starts a dispatch and leaves no worker thread behind."""
+        monkeypatch.setenv("OLLAMA_BASE_URL", "http://127.0.0.1:1")
         WebsiteServer._dispatch_orch = None
         WebsiteServer._dispatch_thread = None
         status, data = live_server.post("/api/agent/dispatch", {"prompt": "hello"})
-        assert status in (200, 500)
+        assert status == 200
         assert isinstance(data, dict)
-        if status == 200:
-            assert data.get("success") is True
-            assert "channel" in data
+        assert data.get("success") is True
+        assert "channel" in data
+
+        dispatch_thread = WebsiteServer._dispatch_thread
+        assert dispatch_thread is not None
+        dispatch_thread.join(timeout=10)
+        assert not dispatch_thread.is_alive()
 
     def test_running_thread_returns_429(self, live_server):
         """Already-running dispatch thread returns 429."""

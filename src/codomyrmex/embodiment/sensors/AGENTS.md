@@ -7,8 +7,7 @@ used by the embodiment package.
 
 ## Key Files
 
-- [`base.py`](base.py) — sensor readings, connection state, and compatibility
-  sensor implementation.
+- [`base.py`](base.py) — sensor readings and connection state.
 - [`../SPEC.md`](../SPEC.md) — parent embodiment contract.
 - [`../../../../tests/unit/embodiment/`](../../../../tests/unit/embodiment/) —
   behavioral tests.
@@ -21,7 +20,7 @@ Only Python standard-library modules are required.
 
 - Keep `SensorData` serializable and explicit about metadata.
 - Preserve deterministic default readings for local tests.
-- Treat `MockSensor` as a compatibility surface, not evidence of hardware
+- Treat `SimulatedSensor` as a local simulation, not evidence of hardware
   integration.
 - Add tests for disconnected, default, and metadata behavior.
 

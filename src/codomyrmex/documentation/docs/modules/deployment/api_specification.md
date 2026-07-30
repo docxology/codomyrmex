@@ -22,7 +22,7 @@ The Deployment module provides tools for managing application deployments, inclu
     - `service_name` (str): Name of the service to deploy.
     - `version` (str): Version to deploy.
     - `strategy` (DeploymentStrategy, optional): Strategy to use. Defaults to `RollingDeployment`.
-    - `targets` (list[DeploymentTarget], optional): List of targets. Defaults to auto-generated mocks if None.
+    - `targets` (list[DeploymentTarget], optional): List of targets. Defaults to three local deployment targets if None.
 - **Returns**:
     - `DeploymentResult`: Outcome of the deployment.
 

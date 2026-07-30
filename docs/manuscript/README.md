@@ -2,7 +2,7 @@
 
 **Status**: Active. Version and publication date are injected from `config.yaml`.
 
-This manuscript presents **Codomyrmex**, an agentic software-development framework that models an AI-agent collective as an artificial ecology. Its Colony Control Plane records caller-reported consequences, maintains a process-local signal field, computes deterministic trust and role labels, nominates pruning candidates, and returns EXECUTE/HOLD/REFUSE gate decisions. The central checked contract is deliberately narrow: reported FAILURE at one location contributes to `max(RISK, FAILURE)`, lowering an otherwise identical same-target proposal while leaving an unrelated target unchanged. Outcome attestation, complete restart persistence, external effectiveness, and production safety remain open. Numeric claims and generated images are rebuilt from the evaluated snapshot.
+This manuscript presents **Codomyrmex**, an agentic software-development framework that models an AI-agent collective as an artificial ecology. Its Colony Control Plane records caller-reported consequences, maintains a process-local signal field, computes deterministic trust and role labels, nominates pruning candidates, and returns EXECUTE/HOLD/REFUSE gate decisions. The central checked contract is deliberately narrow: reported FAILURE at one location contributes to `max(RISK, FAILURE)`, lowering an otherwise identical same-target proposal while leaving an unrelated target unchanged. The ordinary MCP outcome path remains caller-reported and unattested; optional and required `ColonyKernel` modes add a signed, hash-linked local lifecycle ledger. That ledger does not independently observe external actuation. Complete restart persistence, external effectiveness, and production safety therefore remain open. Numeric claims, generated images, captions, text alternatives, extended descriptions, and bibliography-audit results are rebuilt from the evaluated snapshot.
 
 ## Navigation
 
@@ -10,6 +10,7 @@ This manuscript presents **Codomyrmex**, an agentic software-development framewo
 - **Syntax Reference**: [SYNTAX.md](SYNTAX.md)
 - **Configuration**: [config.yaml](config.yaml)
 - **Claim Ledger**: [claim_ledger.yaml](claim_ledger.yaml)
+- **Generated Semantic Report**: [technical-report.html](technical-report.html)
 - **Colony Kernel Specification**: [../modules/colony_kernel/SPEC.md](../modules/colony_kernel/SPEC.md)
 
 ## Manuscript Structure
@@ -35,6 +36,13 @@ The `manuscript/` directory contains raw Markdown files rendered by `scripts/com
 - `99_references.md` — Minimal bibliography anchor; rendered entries come from `references.bib` through Pandoc citeproc.
 
 The renderer requires `pandoc-crossref` and Pandoc citeproc. Cross-reference labels (`sec`, `fig`, `tbl`, `eq`) are resolved before citations, and citations/cross-references are linked in both PDF and HTML outputs. Citation syntax guidance lives in [SYNTAX.md](SYNTAX.md), not in the rendered paper.
+
+The numbered Markdown files and `preamble.md` are Pandoc inputs, not MkDocs
+pages, so `mkdocs.yml` excludes them from site rendering. A strict site build
+requires `output/paper.html`, validates its semantic figure relationships, and
+installs that generated artifact at
+`manuscript/technical-report.html`. The checked-in HTML file at that path is
+only a source-tree signpost; the generated report replaces it in `site/`.
 
 ## Architecture
 
@@ -79,14 +87,14 @@ uv run python scripts/z_generate_manuscript_variables.py
 # 2. Generate the provenance-stamped visual assets
 uv run python scripts/generate_manuscript_figures.py
 
-# 3. Render linked HTML, contents, bookends, and the final PDF
-uv run python scripts/compile_manuscript.py --pdf --bookends --skip-generate
+# 3. Render linked HTML, content PDF, visible bookends, and final PDF
+uv run --locked --group docs python scripts/compile_manuscript.py \
+  --manuscript-dir output/manuscript --output-dir output \
+  --pdf --bookends --pdf-engine lualatex --pdf-standard ua-2 --skip-generate
 
-# 4. Verify source, figure, claim-ledger, HTML, and PDF integrity
-uv run python scripts/validate_manuscript_integrity.py --require-rendered
-
-# Or, from the parent template checkout, run the integrated pipeline:
-./run.sh --pipeline --project ongoing/codomyrmex --core-only
+# 4. Verify source, bibliography, figure, claim-ledger, HTML, and PDF integrity
+uv run --locked python scripts/validate_manuscript_integrity.py \
+  --require-rendered --online-bibliography
 ```
 
 ## AI Agent Directives

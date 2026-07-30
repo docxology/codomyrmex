@@ -159,7 +159,7 @@ class CacheManager:
         for cache_file in self.cache_dir.glob("*.json"):
             cache_file.unlink(missing_ok=True)
 
-        # Also clean up legacy pickle files
+        # Also clean up pickle cache files
         for cache_file in self.cache_dir.glob("*.pkl"):
             cache_file.unlink(missing_ok=True)
 

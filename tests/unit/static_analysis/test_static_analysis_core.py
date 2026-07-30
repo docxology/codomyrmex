@@ -29,6 +29,7 @@ from codomyrmex.static_analysis.imports import (
     FOUNDATION,
     SERVICE,
     SPECIALIZED,
+    audit_upward_interface_contracts,
     check_layer_violations,
     extract_imports_ast,
     get_layer,
@@ -718,6 +719,65 @@ class TestCheckLayerViolations:
         """An empty edge list produces no violations."""
         assert check_layer_violations([]) == []
 
+    def test_file_scoped_interface_contract_is_fail_closed(self):
+        """Only the exact registered integration file receives an exception."""
+        contracted = {
+            "src": "logging_monitoring",
+            "dst": "events",
+            "file": "logging_monitoring/handlers/event_bridge.py",
+            "src_layer": "foundation",
+            "dst_layer": "specialized",
+        }
+        unregistered = {
+            **contracted,
+            "file": "logging_monitoring/unregistered_bridge.py",
+        }
+
+        assert check_layer_violations([contracted]) == []
+        assert check_layer_violations([unregistered]) == [
+            {
+                **unregistered,
+                "reason": (
+                    "Foundation module 'logging_monitoring' imports "
+                    "specialized module 'events'"
+                ),
+            }
+        ]
+
+    def test_interface_contract_audit_reports_used_and_stale_entries(self):
+        """Contract audit distinguishes an exact live edge from stale policy."""
+        live_key = ("foundation_module", "specialized_module", "bridge.py")
+        stale_key = ("foundation_module", "specialized_module", "retired.py")
+        edge = {
+            "src": "foundation_module",
+            "dst": "specialized_module",
+            "file": "bridge.py",
+            "src_layer": "foundation",
+            "dst_layer": "specialized",
+        }
+
+        result = audit_upward_interface_contracts(
+            [edge],
+            contracts={live_key: "live", stale_key: "stale"},
+        )
+
+        assert result["used"] == [
+            {
+                "src": "foundation_module",
+                "dst": "specialized_module",
+                "file": "bridge.py",
+                "rationale": "live",
+            }
+        ]
+        assert result["stale"] == [
+            {
+                "src": "foundation_module",
+                "dst": "specialized_module",
+                "file": "retired.py",
+                "rationale": "stale",
+            }
+        ]
+
 
 # ===================================================================
 # imports.py  --  layer set completeness
@@ -750,3 +810,8 @@ class TestLayerSets:
     def test_specialized_is_nonempty(self):
         """SPECIALIZED contains at least one module."""
         assert len(SPECIALIZED) > 0
+
+    def test_validation_matches_canonical_foundation_layer(self):
+        """Validation is a cross-cutting package foundation."""
+        assert "validation" in FOUNDATION
+        assert "validation" not in SPECIALIZED

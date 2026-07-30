@@ -6,19 +6,19 @@ the hierarchical .cursorrules coding governance system via Python API and
 MCP tools.
 """
 
-from codomyrmex.agentic_memory.ki_index import KnowledgeItemIndex
-from codomyrmex.agentic_memory.memory import (
+from codomyrmex.agentic_memory.core.memory import (
     AgentMemory,
     ConversationMemory,
     KnowledgeMemory,
     VectorStoreMemory,
 )
-from codomyrmex.agentic_memory.models import (
+from codomyrmex.agentic_memory.core.models import (
     Memory,
     MemoryImportance,
     MemoryType,
     RetrievalResult,
 )
+from codomyrmex.agentic_memory.ki_index import KnowledgeItemIndex
 from codomyrmex.agentic_memory.obsidian_bridge import ObsidianMemoryBridge
 from codomyrmex.agentic_memory.rules import (
     Rule,

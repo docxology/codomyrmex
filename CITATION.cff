@@ -22,7 +22,7 @@ keywords:
 abstract: >-
   Codomyrmex is a modular, AI-native coding workspace with 130 top-level
   modules and 623 production MCP tool decorators. Its current merged runtime
-  manifest exposes 608 tools. It provides multi-agent
+  manifest exposes 604 tools. It provides multi-agent
   orchestration for Claude, Gemini, GPT, and 10+ agent providers,
   integrated with the Personal AI Infrastructure (PAI) via the Model
   Context Protocol.

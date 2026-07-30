@@ -272,3 +272,28 @@ class TestConfigValidatorDeep:
         v = ConfigValidator(project_root=tmp_path)
         result = v.validate_all_configs()
         assert isinstance(result, (dict, list, bool))
+
+    def test_reports_portable_paths_and_heterogeneous_shapes(self, tmp_path):
+        from codomyrmex.documentation.scripts.validate_configs import ConfigValidator
+
+        config_dir = tmp_path / "config"
+        config_dir.mkdir()
+        (config_dir / "database.yaml").write_text(
+            "database:\n  engine: sqlite\n",
+            encoding="utf-8",
+        )
+        (config_dir / "broken.json").write_text('{"broken":', encoding="utf-8")
+        validator = ConfigValidator(project_root=tmp_path)
+
+        result = validator.validate_all_configs()
+        report_path = tmp_path / "receipts" / "config-validation.json"
+        validator.save_report(result, str(report_path))
+
+        assert result["total_files"] == 2
+        assert result["valid_files"] == 1
+        assert result["invalid_files"] == 1
+        assert set(result["file_results"]) == {
+            "config/broken.json",
+            "config/database.yaml",
+        }
+        assert str(tmp_path) not in report_path.read_text(encoding="utf-8")

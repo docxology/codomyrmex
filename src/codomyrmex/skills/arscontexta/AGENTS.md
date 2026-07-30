@@ -11,12 +11,9 @@ Module implementation, resources, and local coordination for Arscontexta..
 - `SPEC.md` – Project file
 - `__init__.py` – Project file
 - `core.py` – Project file
-- `exceptions.py` – Project file
 - `models.py` – Project file
 - `py.typed` – Project file
-- `services.py` – Project file
 - `skills.py` – Project file
-- `types.py` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -31,12 +28,9 @@ Module implementation, resources, and local coordination for Arscontexta..
 - `SPEC.md`
 - `__init__.py`
 - `core.py`
-- `exceptions.py`
 - `models.py`
 - `py.typed`
-- `services.py`
 - `skills.py`
-- `types.py`
 
 ## Dependencies
 - Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.

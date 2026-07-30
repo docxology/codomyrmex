@@ -11,13 +11,13 @@ from codomyrmex.api.openapi_generator import (
     create_openapi_from_graphql_api,
     create_openapi_from_rest_api,
 )
-
-# OpenAPI Generation components (from parent module)
-from codomyrmex.api.openapi_generator import (
-    StandardizationOpenAPIGenerator as OpenAPIGenerator,
-)
 from codomyrmex.api.openapi_generator import (
     create_openapi_generator as generate_openapi_spec,
+)
+
+# OpenAPI Generation components (from parent module)
+from codomyrmex.api.openapi_standardization_generator import (
+    StandardizationOpenAPIGenerator as OpenAPIGenerator,
 )
 
 # API Versioning components

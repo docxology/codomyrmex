@@ -8,7 +8,12 @@ Defines the abstract STT provider interface and the Whisper-based concrete imple
 
 ## Architecture
 
-Strategy pattern: `STTProvider` (ABC) defines the contract; `WhisperProvider` implements it using `faster-whisper` (CTranslate2). The `get_provider()` factory in `__init__.py` resolves provider names to classes. Providers are conditionally imported based on dependency availability.
+Strategy pattern: `STTProvider` (ABC) defines the contract; `WhisperProvider`
+implements it using `faster-whisper` (CTranslate2). The `get_provider()` factory
+in `__init__.py` resolves provider names to classes. Availability is determined
+from installed-package metadata; importing the provider surface does not import
+PyAV or construct a model. The native dependency and model are loaded only when
+`WhisperProvider` is instantiated.
 
 ## Key Classes
 
@@ -46,7 +51,7 @@ Returns an initialized `STTProvider`. Raises `ValueError` for unknown names.
 ## Dependencies
 
 - **Internal**: `audio.speech_to_text.models`, `audio.exceptions`
-- **External**: `faster-whisper` (optional; guarded by `try/except ImportError`)
+- **External**: `faster-whisper` (optional; metadata-probed and lazily imported)
 
 ## Constraints
 

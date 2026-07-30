@@ -1,9 +1,7 @@
 """Relay Endpoint --- provider-agnostic LLM relay for inter-agent chat.
 
-A generic replacement for :class:`ClaudeCodeEndpoint` that accepts **any**
-LLM client (Ollama, Claude, or custom) rather than hard-wiring to a single
-provider.  The public API mirrors ``ClaudeCodeEndpoint`` so callers can
-migrate with a single import-path change.
+Accepts any LLM client (Ollama, Claude, or custom) and integrates the
+``MessageScheduler`` when configured.
 
 Example::
 

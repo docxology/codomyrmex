@@ -47,25 +47,6 @@ class ContainerMetrics:
         }
 
 
-class PerformanceOptimizer:
-    """Alias for ContainerOptimizer."""
-
-    def __init__(self):
-        """Initialize the performance optimizer."""
-        self._optimizations = {}
-
-    def optimize(self, config: dict) -> dict:
-        """Optimize container configuration.
-
-        Raises NotImplementedError — no Docker CLI available to perform real optimization.
-        Use ContainerOptimizer with Docker installed for real resource analysis.
-        """
-        raise NotImplementedError(
-            "PerformanceOptimizer.optimize() requires Docker CLI to inspect running "
-            "containers. Install Docker and use ContainerOptimizer.optimize_resources() instead."
-        )
-
-
 class ContainerOptimizer:
     """
     Container performance optimizer.

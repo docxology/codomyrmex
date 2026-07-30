@@ -1,14 +1,14 @@
 ---
 name: Codomyrmex
-description: Full-spectrum coding workspace skill providing 623 production MCP `@mcp_tool` lines across 130 top-level modules; the current merged runtime manifest exposes 608 tools. USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', 'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', 'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', 'codomyrmex memory', 'codomyrmex docs', 'codomyrmex status', 'codomyrmex git', 'codomyrmex security', 'codomyrmex ai', 'codomyrmex code', 'codomyrmex data', 'codomyrmex deploy', 'codomyrmex test', or uses any 'codomyrmex' automation tools.
+description: Full-spectrum coding workspace skill providing 623 production MCP `@mcp_tool` lines across 130 top-level modules; the complete locked dependency profile currently exposes 608 tools in the merged runtime manifest. USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', 'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', 'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', 'codomyrmex memory', 'codomyrmex docs', 'codomyrmex status', 'codomyrmex git', 'codomyrmex security', 'codomyrmex ai', 'codomyrmex code', 'codomyrmex data', 'codomyrmex deploy', 'codomyrmex test', or uses any 'codomyrmex' automation tools.
 ---
 # Codomyrmex Skill for PAI
 
-**Package version**: v1.3.0 (tracks [pyproject.toml](pyproject.toml)) | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: 623 production `@mcp_tool` lines; 608 merged runtime tools ([inventory](docs/reference/inventory.md))
+**Package version**: v1.3.0 (tracks [pyproject.toml](pyproject.toml)) | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: 623 production `@mcp_tool` lines; 608 merged runtime tools in the complete locked dependency profile ([inventory](docs/reference/inventory.md))
 
 ## Description
 
-Full-spectrum coding workspace skill providing 623 production `@mcp_tool` lines across 130 top-level modules for AI-assisted development, code analysis, testing, documentation generation, and workflow automation. The merged runtime manifest currently exposes 608 tools because decorator lines and registered runtime entries are distinct measurements.
+Full-spectrum coding workspace skill providing 623 production `@mcp_tool` lines across 130 top-level modules for AI-assisted development, code analysis, testing, documentation generation, and workflow automation. In the complete locked dependency profile, the merged runtime manifest currently exposes 608 tools because decorator lines and registered runtime entries are distinct measurements.
 
 ## Installation
 
@@ -75,7 +75,7 @@ Most tools are read-only; a small set is destructive (require `/codomyrmexTrust`
 
 - **Destructive**: `write_file`, `run_command`, `run_tests`, `call_module_function`
 
-The source inventory contains **623** production decorator lines across **150** `mcp_tools.py` files and **130** top-level modules. Runtime registration is a separate measured surface: the merged manifest currently exposes **608** tools, while the standalone full launcher and readonly HTTP profile expose narrower configured profiles.
+The source inventory contains **623** production decorator lines across **150** `mcp_tools.py` files and **130** top-level modules. Runtime registration is a separate measured surface: the merged manifest exposes **608** tools in the complete locked dependency profile, while the standalone full launcher and readonly HTTP profile expose narrower configured profiles.
 
 ## Resources
 
@@ -100,7 +100,7 @@ The source inventory contains **623** production decorator lines across **150** 
 | ------- | -------- | ------------ |
 | `UNTRUSTED` | None | Default state |
 | `VERIFIED` | Read-only tools | `/codomyrmexVerify` |
-| `TRUSTED` | All registered dynamic tools (623 source `@mcp_tool` lines; 608 merged runtime tools; see inventory) plus PAI static proxy tools | `/codomyrmexTrust` |
+| `TRUSTED` | All registered dynamic tools (623 source `@mcp_tool` lines; 608 merged runtime tools in the complete locked dependency profile; see inventory) plus PAI static proxy tools | `/codomyrmexTrust` |
 
 ## Repository
 

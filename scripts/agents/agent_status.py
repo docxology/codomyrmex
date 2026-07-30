@@ -6,9 +6,7 @@ Usage:
     python agent_status.py [--list] [--health]
 """
 
-logger = logging.getLogger(__name__)
-
-
+import logging
 import sys
 from pathlib import Path
 
@@ -19,8 +17,9 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import logging
 import os
+
+logger = logging.getLogger(__name__)
 
 
 def find_agents_configs() -> list:

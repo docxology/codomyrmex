@@ -154,9 +154,10 @@ uv sync --dev
 # Run tests
 pytest
 
-# Run linting
-flake8 src/codomyrmex/logistics/orchestration/project/
-black src/codomyrmex/logistics/orchestration/project/
+# Run linting, formatting, and type checks
+uv run ruff check src/codomyrmex/logistics/orchestration/project/
+uv run ruff format --check src/codomyrmex/logistics/orchestration/project/
+uv run ty check --output-format concise src/codomyrmex/logistics/orchestration/project/
 
 # Generate documentation
 sphinx-build docs/ docs/_build/
@@ -171,9 +172,7 @@ Create `.vscode/settings.json`:
 ```json
 {
     "python.defaultInterpreterPath": "./.venv/bin/python",
-    "python.linting.enabled": true,
-    "python.linting.flake8Enabled": true,
-    "python.formatting.provider": "black",
+    "ruff.enable": true,
     "python.testing.pytestEnabled": true,
     "python.testing.pytestArgs": ["tests/"]
 }
@@ -183,8 +182,8 @@ Create `.vscode/settings.json`:
 
 1. Configure Python interpreter to use virtual environment
 2. Enable pytest as test runner
-3. Configure code style to use Black formatter
-4. Enable flake8 inspection
+3. Enable Ruff linting and formatting
+4. Enable Ty type checking
 
 ---
 
@@ -737,7 +736,7 @@ class WorkflowManager:
 3. Make your changes
 4. Add tests for your changes
 5. Ensure all tests pass: `pytest`
-6. Run linting: `flake8` and `black`
+6. Run quality checks: `ruff check`, `ruff format --check`, and `ty check`
 7. Commit your changes: `git commit -m "Add amazing feature"`
 8. Push to the branch: `git push origin feature/amazing-feature`
 9. Open a Pull Request

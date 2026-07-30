@@ -26,7 +26,7 @@ rate_limiting/
 | `check` | `(key: str, cost: int = 1) -> RateLimitResult` | Inspect quota without consuming |
 | `acquire` | `(key: str, cost: int = 1) -> RateLimitResult` | Consume quota; raises `RateLimitExceeded` on failure |
 | `reset` | `(key: str) -> None` | Clear quota state for key |
-| `consume` | `(key: str, cost: int = 1, *, tokens: int \ | None = None) -> RateLimitResult` Acquire-or-deny wrapper (never raises) |
+| `consume` | `(key: str, cost: int = 1) -> RateLimitResult` Acquire-or-deny wrapper (never raises) |
 
 ### FixedWindowLimiter — `limiters.py`
 
@@ -77,7 +77,7 @@ rate_limiting/
 | `limit` | `int` | Total quota limit |
 | `reset_at` | `datetime \ | None` When the window resets |
 | `retry_after` | `float \ | None` Seconds until retry is possible |
-| `headers` / `to_headers()` | `dict[str, str]` | `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`, `Retry-After` |
+| `headers` | `dict[str, str]` | `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`, `Retry-After` |
 
 ## Error Handling
 

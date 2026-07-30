@@ -4,15 +4,15 @@ This module defines exceptions specific to orchestration operations
 including workflows, steps, timeouts, and state management.
 All exceptions inherit from CodomyrmexError for consistent error handling.
 
-Note: Some base exceptions (WorkflowError, CycleError, TaskFailedError) are
-defined in workflow.py and are re-exported here.
+The workflow exceptions are imported here so callers can use one centralized
+orchestration exception surface.
 """
 
 from typing import Any
 
 from codomyrmex.exceptions import OrchestrationError
 
-# Re-export workflow exceptions for centralized access
+# Centralized workflow exception imports
 from .workflows.workflow import CycleError, TaskFailedError, WorkflowError
 
 
@@ -177,6 +177,6 @@ __all__ = [
     # Defined in this module
     "StepError",
     "TaskFailedError",
-    # Re-exported from workflow.py
+    # Imported from workflow.py
     "WorkflowError",
 ]

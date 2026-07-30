@@ -64,7 +64,7 @@ knowledge.add_fact("Python 3.12 supports type parameter syntax", source="PEP 695
 
 # Vector store memory with pluggable backend
 vector = VectorStoreMemory()
-vector.add("Important architectural decision about caching")
+vector.remember("Important architectural decision about caching")
 results = vector.search("caching strategy", k=3)
 ```
 

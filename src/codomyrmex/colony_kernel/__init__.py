@@ -28,7 +28,7 @@ from codomyrmex.colony_kernel.config_loader import (
     load_roles_yaml,
 )
 from codomyrmex.colony_kernel.consequence_memory import ConsequenceMemory
-from codomyrmex.colony_kernel.falsification_worker import FalsificationWorker
+from codomyrmex.colony_kernel.falsification import FalsificationWorker
 from codomyrmex.colony_kernel.formal import (
     FormalResult,
     FormalStatus,

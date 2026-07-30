@@ -4,7 +4,7 @@ import tempfile
 
 import pytest
 
-from codomyrmex.agentic_memory.memory import VectorStoreMemory
+from codomyrmex.agentic_memory.core.memory import VectorStoreMemory
 from codomyrmex.agentic_memory.obsidian.crud import create_note, read_note
 from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
 from codomyrmex.agentic_memory.obsidian_bridge import ObsidianMemoryBridge

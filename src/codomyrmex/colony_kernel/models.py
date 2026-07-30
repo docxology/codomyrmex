@@ -175,7 +175,7 @@ class ActionProposal:
     """The atomic unit submitted to the actuation gate.
 
     ``proposal_id`` is auto-assigned if not provided.
-    ``evidence`` is free-form context that falsification_worker and the gate
+    ``evidence`` is free-form context that falsification.worker and the gate
     may inspect (e.g. test IDs, PR URLs, error messages).
     """
 

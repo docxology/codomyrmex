@@ -91,7 +91,7 @@ class EvolutionaryAIScript(ScriptBase):
 
     def run(self, args, config: ScriptConfig) -> dict[str, Any]:
         """Execute evolutionary algorithm demonstrations."""
-        results = {
+        results: dict[str, Any] = {
             "config": {
                 "generations": args.generations,
                 "population_size": args.population_size,
