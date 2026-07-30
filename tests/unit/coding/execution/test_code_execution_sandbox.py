@@ -49,7 +49,8 @@ class TestCodeExecutionSandboxComprehensive:
 
         from codomyrmex.coding.sandbox.container import check_docker_available
 
-        monkeypatch.setenv("DOCKER_HOST", f"unix://{tmp_path / 'missing.sock'}")
+        monkeypatch.delenv("DOCKER_CONTEXT", raising=False)
+        monkeypatch.setenv("DOCKER_HOST", "tcp://127.0.0.1:9")
 
         assert check_docker_available() is False
 
@@ -170,7 +171,8 @@ class TestCodeExecutionSandboxComprehensive:
 
         code_file = tmp_path / "code.py"
         code_file.write_text("print('Hello, World!')")
-        monkeypatch.setenv("DOCKER_HOST", f"unix://{tmp_path / 'missing.sock'}")
+        monkeypatch.delenv("DOCKER_CONTEXT", raising=False)
+        monkeypatch.setenv("DOCKER_HOST", "tcp://127.0.0.1:9")
 
         result = run_code_in_docker(
             language="python",
@@ -256,7 +258,8 @@ class TestCodeExecutionSandboxComprehensive:
 
         from codomyrmex.coding.execution.executor import execute_code
 
-        monkeypatch.setenv("DOCKER_HOST", f"unix://{tmp_path / 'missing.sock'}")
+        monkeypatch.delenv("DOCKER_CONTEXT", raising=False)
+        monkeypatch.setenv("DOCKER_HOST", "tcp://127.0.0.1:9")
 
         result = execute_code(
             language="python",

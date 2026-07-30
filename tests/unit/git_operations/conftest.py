@@ -11,6 +11,27 @@ from codomyrmex.git_operations import initialize_git_repository
 """
 
 
+@pytest.fixture(autouse=True)
+def deterministic_git_identity(
+    monkeypatch: pytest.MonkeyPatch, tmp_path_factory: pytest.TempPathFactory
+) -> None:
+    """Give real temporary repositories a CI-independent commit identity."""
+    git_config = tmp_path_factory.mktemp("git-config") / "config"
+    git_config.write_text(
+        "[user]\n\tname = Codomyrmex Tests\n\temail = tests@codomyrmex.dev\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setenv("GIT_CONFIG_GLOBAL", str(git_config))
+    monkeypatch.setenv("GIT_CONFIG_NOSYSTEM", "1")
+    for variable in (
+        "GIT_AUTHOR_NAME",
+        "GIT_AUTHOR_EMAIL",
+        "GIT_COMMITTER_NAME",
+        "GIT_COMMITTER_EMAIL",
+    ):
+        monkeypatch.delenv(variable, raising=False)
+
+
 @pytest.fixture
 def temp_dir() -> Generator[str, None, None]:
     """Create a temporary directory for tests."""

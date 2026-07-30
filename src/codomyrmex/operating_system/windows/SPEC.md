@@ -1,5 +1,6 @@
-# Windows Provider - Technical Specification
+<!-- markdownlint-disable MD060 -->
 
+# Windows Provider - Technical Specification
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
 
@@ -11,14 +12,19 @@ The Windows provider (`WindowsProvider`) is a concrete implementation of `OSProv
 
 ## Design Principles
 
-1. **PowerShell-first** -- most system queries use PowerShell one-liners via `_powershell()`, providing structured output that is easier to parse than older command output.
-2. **Older-system fallbacks** -- `wmic` is used for memory information where PowerShell alternatives may not be available on older systems.
+1. **Native-first** -- stable Win32 APIs and native commands are preferred for
+   core system and process data; PowerShell remains the interface for richer
+   service, disk, network, and uptime queries.
+2. **Current Windows compatibility** -- physical memory uses
+   `GlobalMemoryStatusEx` because WMIC is not installed by default on current
+   Windows releases.
 3. **Extended timeouts** -- 15-second default timeout (vs 10 on Unix) to account for PowerShell startup latency.
-4. **Zero external dependencies** -- only `os`, `platform`, `re`, `subprocess` from the standard library.
+4. **Zero external dependencies** -- only Python standard-library modules and
+   Windows-native interfaces are required.
 
 ## Architecture
 
-```
+```text
 windows/
     __init__.py     # Re-exports WindowsProvider
     provider.py     # WindowsProvider(OSProviderBase) + _run() + _powershell() helpers
@@ -36,15 +42,17 @@ windows/
 | platform_version | `platform.version()` | -- |
 | kernel_version | `platform.release()` | -- |
 | cpu_count | `os.cpu_count()` | 1 |
-| memory_total_bytes | `wmic ComputerSystem get TotalPhysicalMemory` | 0 |
+| memory_total_bytes | Win32 `GlobalMemoryStatusEx` | 0 |
 | uptime_seconds | PowerShell `gcim Win32_OperatingSystem` | 0.0 |
 
 ### list_processes(limit: int = 50) -> list[ProcessInfo]
 
-- Command: PowerShell `Get-Process | Select-Object Id, ProcessName, CPU, WorkingSet64`
-- Parses structured output for PID, name, CPU, and memory.
-- Memory from `WorkingSet64` is already in bytes.
-- All processes reported as RUNNING (PowerShell `Get-Process` only returns running processes).
+- Command: `tasklist /FO CSV /NH`
+- Parses CSV output for PID, image name, and working-set memory.
+- Localized memory separators and unit text are normalized before conversion to bytes.
+- CPU usage is reported as `0.0` because `tasklist` does not expose a stable
+  instantaneous CPU percentage.
+- All returned entries are reported as RUNNING because `tasklist` lists active processes.
 
 ### get_disk_usage() -> list[DiskInfo]
 
@@ -78,6 +86,8 @@ windows/
 
 | Dependency | Purpose |
 |------------|---------|
+| `csv` | Parse stable `tasklist` CSV output |
+| `ctypes` | Call `GlobalMemoryStatusEx` |
 | `os` | `cpu_count()` |
 | `platform` | Hostname, version, release info |
 | `re` | Parse command output |
@@ -87,7 +97,6 @@ windows/
 ## Constraints
 
 - Requires PowerShell 3.0+ for `Get-NetAdapter` and `Get-NetIPAddress`.
-- `wmic` is deprecated on Windows 10 21H1+ but still functional; may need replacement with PowerShell `Get-CimInstance` in future versions.
 - `_run()` uses `shell=True` which invokes `cmd.exe` as the command interpreter.
 - 15-second timeout may be insufficient on systems with antivirus scanning of process creation.
 

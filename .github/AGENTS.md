@@ -14,7 +14,7 @@ This document tells AI agents what they need to know to operate safely within th
 
 | Path | Purpose |
 | --- | --- |
-| `workflows/ci.yml` | Continuous integration: lint, `coverage-gate` (full tests, 60% cov), test matrix (slim for PRs), build |
+| `workflows/ci.yml` | Continuous integration: lint, `coverage-gate` (full tests, 60% cov), Unix full-suite matrix, blocking Windows portability matrix, build |
 | `workflows/pre-commit.yml` | Pre-commit hook validation and commit message checks (soft-fail for agents) |
 | `workflows/security.yml` | Daily + push-triggered security scanning (6 scanners) |
 | `workflows/release.yml` | Tag-triggered release: quality gate (60% pytest cov), build, PyPI publish |

@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD060 -->
+
 # .github/workflows — AI Agent Guide
 
 **Status**: Active | **Last Updated**: March 2026
@@ -13,7 +15,7 @@ documentation, benchmarks, PR automation, and repository maintenance. 33 workflo
 
 | File | Trigger | Key Jobs |
 |------|---------|----------|
-| `ci.yml` | push/PR main,develop | lint, `coverage-gate`, test-matrix (slim for PRs), build |
+| `ci.yml` | push/PR main,develop | lint, `coverage-gate`, Unix full-suite matrix, Windows portability matrix, build |
 | `pre-commit.yml` | push/PR | pre-commit, commit-message-check and repository consistency checks |
 | `security.yml` | schedule daily + push | dependency-scan, bandit, semgrep, codeql, trufflehog |
 | `release.yml` | tag `v*.*.*` | quality-gate (60% cov), build, PyPI publish |
@@ -80,11 +82,18 @@ documentation, benchmarks, PR automation, and repository maintenance. 33 workflo
 
 - All workflows have `permissions: {}` at top-level (deny-all default)
 - `astral-sh/setup-uv@v5` is the standard for all UV installations
-- CI runs slim matrix (ubuntu/3.11 only) for PRs; full matrix on main push
+- CI runs Ubuntu/Python 3.11 plus Windows/Python 3.11 on PRs. Main pushes run
+  the full suite on Ubuntu and macOS across Python 3.11–3.13, plus the blocking
+  Windows portability contract across the same Python versions.
 - Ruff, ty, import layering, package build, dependency validation, and the
   primary test/coverage gates are authoritative. Optional PR commentary and
   benchmark/health reporting jobs remain informational.
-- Documented coverage floor is **60%** (`fail_under` in `pyproject.toml`). CI unit matrix and **`coverage-gate`** jobs pass `--cov-fail-under=60` and fail on breach. `release.yml` uses `--cov-fail-under=60`. Default local `uv run pytest` omits `--cov` for speed.
+- Documented coverage floor is **60%** (`fail_under` in `pyproject.toml`). The
+  Unix unit matrix and **`coverage-gate`** jobs pass `--cov-fail-under=60` and
+  fail on breach. The Windows portability matrix is a scoped platform contract,
+  so it emits JUnit evidence without pretending to measure repository-wide
+  coverage. `release.yml` uses `--cov-fail-under=60`. Default local
+  `uv run pytest` omits `--cov` for speed.
 - Jules PRs are exempt from stale closure (90d stale, 14d close)
 
 ## AI Agent Guidelines
@@ -98,7 +107,8 @@ documentation, benchmarks, PR automation, and repository maintenance. 33 workflo
 
 1. Read the full workflow file
 2. Preserve all `permissions:` blocks
-3. Check Windows matrix — use `shell: bash` for bash syntax
+3. Keep the Windows portability paths explicit and use cross-platform commands
+   (or declare `shell: bash` when Bash syntax is unavoidable)
 4. Verify action versions don't change interface
 5. Stage changes on a feature branch, not directly on main
 

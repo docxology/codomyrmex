@@ -13,6 +13,8 @@ Advantages:
 """
 
 import asyncio
+import ctypes.util
+import sys
 import tempfile
 import time
 from pathlib import Path
@@ -35,11 +37,15 @@ from .base import TTSProvider
 
 logger = get_logger(__name__)
 
-# Check if pyttsx3 is available
+# Check both the Python package and the native speech backend. Importing
+# pyttsx3 alone is insufficient on Linux, where initialization requires
+# libespeak even when the wheel is installed.
 try:
     import pyttsx3
 
-    PYTTSX3_AVAILABLE = True
+    PYTTSX3_AVAILABLE = not sys.platform.startswith("linux") or bool(
+        ctypes.util.find_library("espeak") or ctypes.util.find_library("espeak-ng")
+    )
 except ImportError:
     PYTTSX3_AVAILABLE = False
 
@@ -77,7 +83,8 @@ class Pyttsx3Provider(TTSProvider):
         """
         if not PYTTSX3_AVAILABLE:
             raise ProviderNotAvailableError(
-                "pyttsx3 is not installed. Install with: uv sync --extra audio",
+                "pyttsx3 or its platform speech backend is unavailable. "
+                "Install with: uv sync --extra audio",
                 provider_name="pyttsx3",
                 missing_packages=["pyttsx3"],
             )

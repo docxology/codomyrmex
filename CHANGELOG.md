@@ -33,6 +33,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Hermetic CI capability checks**: full-history test jobs no longer exercise
+  Git-analysis contracts against a shallow clone, generated receipts stay
+  outside the importable source tree, temporary Git repositories receive an
+  isolated commit identity, optional Docker/Hermes/audio/Swift checks reflect
+  actual runtime availability, and Docker registry simulations no longer
+  contact live endpoints. Image optimization suggestions also handle command
+  and environment collections without applying `any()` to scalar booleans,
+  macOS hardware reports retain stable fields after partial psutil failures,
+  and timing smoke tests tolerate bounded shared-runner scheduling delay. The
+  complete suite remains authoritative on Ubuntu and macOS while a named,
+  blocking Windows portability contract verifies native locking, isolation,
+  filesystem, operating-system, terminal, structure, and temporary-Git
+  behavior without misreporting scoped coverage as repository coverage.
+- **Current Windows host discovery**: the Windows operating-system provider now
+  obtains physical memory through `GlobalMemoryStatusEx` instead of deprecated
+  WMIC and parses `tasklist` CSV for process enumeration.
 - **Cross-platform local isolation and locking**: Windows imports no longer fail
   on POSIX-only `resource`, `fcntl`, or `SIGALRM` APIs. Local file locks use
   `msvcrt.locking` on Windows and `fcntl.flock` on POSIX; subprocess isolation

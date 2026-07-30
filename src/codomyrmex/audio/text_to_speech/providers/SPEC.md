@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD060 -->
 # Text-to-Speech Providers -- Technical Specification
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
@@ -54,7 +55,9 @@ Returns an initialized `TTSProvider`. Raises `ValueError` for unknown names.
 ## Dependencies
 
 - **Internal**: `audio.text_to_speech.models`, `audio.exceptions`
-- **External**: `edge-tts` (optional), `pyttsx3` (optional); guarded by `try/except ImportError`
+- **External**: `edge-tts` (optional), `pyttsx3` (optional); availability
+  requires the Python package and, on Linux, a discoverable eSpeak/eSpeak-ng
+  shared library.
 
 ## Constraints
 

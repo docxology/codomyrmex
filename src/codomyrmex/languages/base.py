@@ -37,7 +37,7 @@ class BaseLanguageManager:
             for cmd in self._check_commands:
                 subprocess.run(cmd, check=True, capture_output=True, timeout=10)
             return True
-        except (FileNotFoundError, subprocess.CalledProcessError):
+        except (FileNotFoundError, subprocess.SubprocessError):
             return False
 
     def _cleanup(self, files: list[str]) -> None:

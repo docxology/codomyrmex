@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD060 -->
+
 # .github/workflows — PAI Integration Guide
 
 **Status**: Active | **Last Updated**: February 2026
@@ -23,7 +25,9 @@ never modifies them autonomously on `main`.
 - All 10 workflows have `permissions: {}` top-level (deny-all default)
 - `astral-sh/setup-uv@v5` is the standard across all workflows
 - Cache restore step precedes `uv sync` in every job for maximum hit rate
-- Windows matrix steps with bash syntax include `shell: bash`
+- The blocking Windows lane is an explicit portability contract; it uses
+  cross-platform commands and does not infer repository-wide coverage from its
+  scoped test set
 - Security scans use `continue-on-error: true` to prevent blocking on external service issues
 
 ## Safe Operations for PAI

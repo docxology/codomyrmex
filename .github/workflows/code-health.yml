@@ -27,6 +27,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -40,7 +42,7 @@ jobs:
         run: uv sync --all-extras --dev
 
       - name: Create output directories
-        run: mkdir -p src/codomyrmex/output health-results
+        run: mkdir -p output health-results
 
       - name: Collect test count
         id: test-count

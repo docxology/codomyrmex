@@ -8,8 +8,9 @@ Tests cover:
 - manage_container_registry dispatcher for all operations
 - Edge cases: unknown operations, empty registry URLs, Docker Hub aliases
 
-Zero-mock policy: no unittest.mock, no MagicMock, no monkeypatch.
-Docker-daemon-dependent tests guarded with @pytest.mark.skipif(not HAS_DOCKER).
+Zero-mock policy: no unittest.mock or MagicMock. Narrow environment isolation
+uses pytest's monkeypatch fixture to select an unreachable Docker endpoint.
+Docker-daemon-dependent tests are guarded with @pytest.mark.skipif(not HAS_DOCKER).
 """
 
 import base64
@@ -123,18 +124,18 @@ class TestRegistryCredentials:
     def test_basic_construction(self):
         creds = RegistryCredentials(
             username="user",
-            password="pass",
+            password="pass",  # pragma: allowlist secret
             registry_url="docker.io",
         )
         assert creds.username == "user"
-        assert creds.password == "pass"
+        assert creds.password == "pass"  # pragma: allowlist secret
         assert creds.registry_url == "docker.io"
         assert creds.token is None
 
     def test_get_auth_header_basic(self):
         creds = RegistryCredentials(
             username="alice",
-            password="s3cret",
+            password="s3cret",  # pragma: allowlist secret
             registry_url="gcr.io",
         )
         header = creds.get_auth_header()
@@ -144,7 +145,7 @@ class TestRegistryCredentials:
     def test_get_auth_header_with_token(self):
         creds = RegistryCredentials(
             username="alice",
-            password="s3cret",
+            password="s3cret",  # pragma: allowlist secret
             registry_url="gcr.io",
             token="my-jwt-token",
         )
@@ -155,7 +156,7 @@ class TestRegistryCredentials:
         """Username/password with special characters should encode correctly."""
         creds = RegistryCredentials(
             username="user@domain.com",
-            password="p@ss:w0rd!",
+            password="p@ss:w0rd!",  # pragma: allowlist secret
             registry_url="registry.example.com",
         )
         header = creds.get_auth_header()
@@ -165,7 +166,10 @@ class TestRegistryCredentials:
     def test_token_takes_precedence(self):
         """When token is set, Bearer auth is returned regardless of user/pass."""
         creds = RegistryCredentials(
-            username="u", password="p", registry_url="r", token="tok"
+            username="u",
+            password="p",  # pragma: allowlist secret
+            registry_url="r",
+            token="tok",
         )
         assert creds.get_auth_header().startswith("Bearer ")
 
@@ -189,7 +193,11 @@ class TestContainerRegistryInit:
         assert not reg.registry_url.endswith("/")
 
     def test_credentials_stored(self):
-        creds = RegistryCredentials(username="u", password="p", registry_url="r")
+        creds = RegistryCredentials(
+            username="u",
+            password="p",  # pragma: allowlist secret
+            registry_url="r",
+        )
         reg = ContainerRegistry(registry_url="r", credentials=creds)
         assert reg.credentials is creds
 
@@ -335,8 +343,10 @@ class TestContainerRegistryHttpMethods:
 class TestManageContainerRegistry:
     """Tests for the manage_container_registry convenience function."""
 
-    def test_push_operation_simulated(self):
+    def test_push_operation_simulated(self, monkeypatch):
         """Push without Docker daemon returns simulated."""
+        monkeypatch.delenv("DOCKER_CONTEXT", raising=False)
+        monkeypatch.setenv("DOCKER_HOST", "tcp://127.0.0.1:9")
         result = manage_container_registry(
             operation="push",
             registry_url="test.example.com",
@@ -348,7 +358,9 @@ class TestManageContainerRegistry:
         assert isinstance(result, dict)
         assert "status" in result
 
-    def test_pull_operation_simulated(self):
+    def test_pull_operation_simulated(self, monkeypatch):
+        monkeypatch.delenv("DOCKER_CONTEXT", raising=False)
+        monkeypatch.setenv("DOCKER_HOST", "tcp://127.0.0.1:9")
         result = manage_container_registry(
             operation="pull",
             registry_url="test.example.com",
@@ -407,7 +419,7 @@ class TestManageContainerRegistry:
             registry_url="test.example.com",
             credentials={
                 "username": "user",
-                "password": "pass",
+                "password": "pass",  # pragma: allowlist secret
             },
         )
         assert isinstance(result, list)
@@ -418,13 +430,15 @@ class TestManageContainerRegistry:
             registry_url="test.example.com",
             credentials={
                 "username": "user",
-                "password": "pass",
+                "password": "pass",  # pragma: allowlist secret
                 "token": "jwt-token",
             },
         )
         assert isinstance(result, list)
 
-    def test_build_and_push_operation(self, tmp_path):
+    def test_build_and_push_operation(self, monkeypatch, tmp_path):
+        monkeypatch.delenv("DOCKER_CONTEXT", raising=False)
+        monkeypatch.setenv("DOCKER_HOST", "tcp://127.0.0.1:9")
         dockerfile = tmp_path / "Dockerfile"
         dockerfile.write_text("FROM alpine:latest\n")
         result = manage_container_registry(

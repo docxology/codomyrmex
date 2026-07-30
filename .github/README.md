@@ -784,7 +784,7 @@ Every module follows the **RASP** documentation pattern:
 
 | Category | Workflows | Description |
 |:---|:---|:---|
-| **Core CI/CD** | [ci.yml](workflows/ci.yml), [security.yml](workflows/security.yml), [release.yml](workflows/release.yml), [pre-commit.yml](workflows/pre-commit.yml) | Lint, test, security scan, release |
+| **Core CI/CD** | [ci.yml](workflows/ci.yml), [security.yml](workflows/security.yml), [release.yml](workflows/release.yml), [pre-commit.yml](workflows/pre-commit.yml) | Lint, full Unix tests, Windows portability, security scan, release |
 | **Code Quality** | [code-health.yml](workflows/code-health.yml), [benchmarks.yml](workflows/benchmarks.yml), [documentation.yml](workflows/documentation.yml), [documentation-validation.yml](workflows/documentation-validation.yml) | Quality gates, benchmarks, docs |
 | **PR Automation** | [auto-merge.yml](workflows/auto-merge.yml), [pr-labeler.yml](workflows/pr-labeler.yml), [pr-title-check.yml](workflows/pr-title-check.yml), [pr-conflict-check.yml](workflows/pr-conflict-check.yml), [pr-coverage-comment.yml](workflows/pr-coverage-comment.yml), [pr-linter-comments.yml](workflows/pr-linter-comments.yml) | Auto-merge, labeling, coverage |
 | **AI Dispatch** | [gemini-dispatch.yml](workflows/gemini-dispatch.yml), [gemini-invoke.yml](workflows/gemini-invoke.yml), [gemini-review.yml](workflows/gemini-review.yml), [gemini-triage.yml](workflows/gemini-triage.yml), [gemini-scheduled-triage.yml](workflows/gemini-scheduled-triage.yml), [jules-dispatch.yml](workflows/jules-dispatch.yml) | Gemini and Jules agent orchestration |

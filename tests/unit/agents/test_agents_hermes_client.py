@@ -89,8 +89,9 @@ class TestHermesClientExecution:
         assert "success" in result
 
     @pytest.mark.skipif(HAS_HERMES, reason="hermes CLI is installed")
-    def test_hermes_missing_error(self) -> None:
+    def test_hermes_missing_error(self, monkeypatch) -> None:
         """Test that missing hermes command returns an error response."""
+        monkeypatch.setenv("OPENROUTER_API_KEY", "test-key")
         client = HermesClient(
             config={
                 "hermes_command": "nonexistent_hermes_binary",
@@ -149,8 +150,9 @@ class TestHermesMCPTools:
 class TestHermesClientSessionIntegration:
     """Zero-mock tests for stateful chat sessions."""
 
-    def test_chat_session_new_and_continue(self, tmp_path) -> None:
+    def test_chat_session_new_and_continue(self, monkeypatch, tmp_path) -> None:
         """Test creating a new session and appending to it."""
+        monkeypatch.setenv("OPENROUTER_API_KEY", "test-key")
         db_path = tmp_path / "test_sessions.db"
 
         # Use echo to simulate a fast, mock-free successful execution
@@ -180,7 +182,8 @@ class TestHermesClientSessionIntegration:
             assert session.messages[0]["content"] == "hello session"
             assert session.messages[2]["content"] == "follow up"
 
-    def test_chat_session_persists_skills_metadata(self, tmp_path) -> None:
+    def test_chat_session_persists_skills_metadata(self, monkeypatch, tmp_path) -> None:
+        monkeypatch.setenv("OPENROUTER_API_KEY", "test-key")
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
         from codomyrmex.agents.hermes.skill_names import (
             SESSION_METADATA_HERMES_SKILLS_KEY,
@@ -208,6 +211,7 @@ class TestHermesSessionMCPTools:
 
     def test_mcp_session_lifecycle(self, monkeypatch, tmp_path) -> None:
         """Test create, list, and clear session MCP tools."""
+        monkeypatch.setenv("OPENROUTER_API_KEY", "test-key")
         db_path = tmp_path / "mcp_sessions.db"
         # Patch _get_client to inject our test config
         from codomyrmex.agents.hermes import mcp_tools

@@ -410,7 +410,8 @@ class ImageOptimizer:
             )
 
         # Package manager optimizations
-        if any("apt" in str(analysis.commands).lower()):
+        commands_text = str(analysis.commands).lower()
+        if "apt" in commands_text:
             suggestions.append(
                 OptimizationSuggestion(
                     category="packages",
@@ -424,7 +425,7 @@ class ImageOptimizer:
                 )
             )
 
-        if any("pip" in str(analysis.commands).lower()):
+        if "pip" in commands_text:
             suggestions.append(
                 OptimizationSuggestion(
                     category="packages",
@@ -439,7 +440,7 @@ class ImageOptimizer:
             )
 
         # Security suggestions
-        if not any("USER" in str(analysis.environment_vars).upper()):
+        if "USER" not in str(analysis.environment_vars).upper():
             suggestions.append(
                 OptimizationSuggestion(
                     category="security",

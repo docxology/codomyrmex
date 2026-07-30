@@ -542,10 +542,12 @@ class TestGetDiskUsage:
         usage = fs.get_disk_usage(td)
         assert 0 <= usage["percent"] <= 100
 
-    def test_total_equals_used_plus_free(self, fs, td):
+    def test_total_accounts_for_used_free_and_reserved(self, fs, td):
         usage = fs.get_disk_usage(td)
-        # Allow for minor rounding or concurrent changes
-        assert abs(usage["total"] - (usage["used"] + usage["free"])) < 1024 * 1024
+        # POSIX filesystems may reserve blocks for privileged processes, so
+        # shutil.disk_usage() can report total > used + user-available free.
+        reserved = usage["total"] - (usage["used"] + usage["free"])
+        assert 0 <= reserved <= usage["total"] * 0.1
 
     def test_nonexistent_path_falls_back(self, fs, td):
         """get_disk_usage with nonexistent path uses '.' as fallback."""

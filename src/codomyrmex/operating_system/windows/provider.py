@@ -6,6 +6,8 @@ ipconfig, powershell) to gather real system information.
 
 from __future__ import annotations
 
+import csv
+import ctypes
 import os
 import platform
 import re
@@ -46,6 +48,36 @@ def _powershell(script: str, timeout: float = 15.0) -> str:
     return _run(f'powershell -NoProfile -Command "{script}"', timeout=timeout)
 
 
+def _total_physical_memory() -> int:
+    """Return installed physical memory through the native Windows API."""
+
+    class MemoryStatusEx(ctypes.Structure):
+        _fields_ = [
+            ("dwLength", ctypes.c_ulong),
+            ("dwMemoryLoad", ctypes.c_ulong),
+            ("ullTotalPhys", ctypes.c_ulonglong),
+            ("ullAvailPhys", ctypes.c_ulonglong),
+            ("ullTotalPageFile", ctypes.c_ulonglong),
+            ("ullAvailPageFile", ctypes.c_ulonglong),
+            ("ullTotalVirtual", ctypes.c_ulonglong),
+            ("ullAvailVirtual", ctypes.c_ulonglong),
+            ("ullAvailExtendedVirtual", ctypes.c_ulonglong),
+        ]
+
+    windll = getattr(ctypes, "windll", None)
+    if windll is None:
+        return 0
+
+    status = MemoryStatusEx()
+    status.dwLength = ctypes.sizeof(status)
+    try:
+        if windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(status)):
+            return int(status.ullTotalPhys)
+    except (AttributeError, OSError):
+        pass
+    return 0
+
+
 class WindowsProvider(OSProviderBase):
     """Windows implementation of the OS provider."""
 
@@ -59,13 +91,9 @@ class WindowsProvider(OSProviderBase):
         platform_version = platform.version()
         kernel_version = platform.release()
 
-        # Total physical memory via wmic
-        mem_raw = _run("wmic ComputerSystem get TotalPhysicalMemory /Format:Value")
-        try:
-            m = re.search(r"TotalPhysicalMemory=(\d+)", mem_raw)
-            memory_total = int(m.group(1)) if m else 0
-        except (ValueError, AttributeError):
-            memory_total = 0
+        # WMIC is no longer installed by default on current Windows releases.
+        # GlobalMemoryStatusEx is available on every supported Windows version.
+        memory_total = _total_physical_memory()
 
         # Uptime via powershell
         uptime_raw = _powershell(
@@ -91,40 +119,34 @@ class WindowsProvider(OSProviderBase):
     # ── Processes ───────────────────────────────────────────────────
 
     def list_processes(self, limit: int = 50) -> list[ProcessInfo]:
-        raw = _powershell(
-            f"Get-Process | Select-Object -First {limit} "
-            "Id,ProcessName,@{{N='CPU';E={{$_.CPU}}}},@{{N='WS';E={{$_.WorkingSet64}}}},@{{N='User';E={{'N/A'}}}} "
-            "| Format-Table -HideTableHeaders -AutoSize"
-        )
+        if limit <= 0:
+            return []
+
+        raw = _run("tasklist /FO CSV /NH")
         processes: list[ProcessInfo] = []
-        for line in raw.splitlines():
-            parts = line.split(None, 4)
-            if len(parts) < 4:
+        for row in csv.reader(raw.splitlines()):
+            if len(row) < 5:
                 continue
             try:
-                pid = int(parts[0])
+                pid = int(row[1])
             except ValueError:
                 continue
-            name = parts[1]
-            try:
-                cpu = float(parts[2])
-            except ValueError:
-                cpu = 0.0
-            try:
-                mem = int(parts[3])
-            except ValueError:
-                mem = 0
+            name = row[0]
+            memory_kib = re.sub(r"[^\d]", "", row[4])
+            mem = int(memory_kib) * 1024 if memory_kib else 0
             processes.append(
                 ProcessInfo(
                     pid=pid,
                     name=name,
                     status=ProcessStatus.RUNNING,
-                    cpu_percent=cpu,
+                    cpu_percent=0.0,
                     memory_bytes=mem,
-                    user=parts[4].strip() if len(parts) > 4 else "",
+                    user="",
                     command=name,
                 )
             )
+            if len(processes) >= limit:
+                break
         return processes
 
     # ── Disk Usage ──────────────────────────────────────────────────

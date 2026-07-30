@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD060 -->
 # Reporting -- Technical Specification
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
@@ -54,7 +55,9 @@ environment-variable inspection respectively.
 
 - Git subprocess calls use a 10-second timeout to avoid blocking.
 - `check_dependencies` tests 14 specific packages; the list is not auto-discovered.
-- `HardwareProfiler` requires `psutil`; guard with `@pytest.mark.skipif` in tests.
+- `HardwareProfiler` returns stable CPU-frequency and RAM keys even when
+  `psutil` is unavailable or an individual platform probe fails; unavailable
+  values are `None`.
 - `TerminalFormatter` is optional; `format_message` degrades to plain text if unavailable.
 - Zero-mock: real data only, `NotImplementedError` for unimplemented paths.
 
@@ -62,7 +65,7 @@ environment-variable inspection respectively.
 
 - All git subprocess errors are caught and logged; partial results are returned.
 - Import failures in `check_dependencies` return `False` per package, not exceptions.
-- All errors logged before propagation.
+- Hardware and git probe failures are logged and represented as partial results.
 
 ## Navigation
 

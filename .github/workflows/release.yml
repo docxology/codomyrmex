@@ -58,11 +58,11 @@ jobs:
               IS_PRERELEASE="false"
             fi
           fi
-          
+
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
           echo "is_prerelease=${IS_PRERELEASE}" >> $GITHUB_OUTPUT
-          
+
           echo "Release Details:"
           echo "  Version: ${VERSION}"
           echo "  Tag: ${TAG}"
@@ -85,6 +85,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -155,7 +157,7 @@ jobs:
           VERSION="${{ needs.prepare-release.outputs.version }}"
           echo "📝 Updating version to $VERSION in pyproject.toml"
           sed -i "s/version = \".*\"/version = \"$VERSION\"/" pyproject.toml
-          
+
           # Verify the change
           grep "version = " pyproject.toml
 
@@ -191,12 +193,12 @@ jobs:
         run: |
           echo "📦 Preparing release artifacts..."
           mkdir -p release-assets
-          
+
           # Collect all distribution files
           find ./artifacts -name "*.whl" -o -name "*.tar.gz" | while read -r file; do
             cp "$file" release-assets/
           done
-          
+
           ls -la release-assets/
 
       - name: Generate release notes
@@ -204,19 +206,19 @@ jobs:
         run: |
           VERSION="${{ needs.prepare-release.outputs.version }}"
           TAG="${{ needs.prepare-release.outputs.tag }}"
-          
+
           echo "# Release Notes for $TAG" > release-notes.md
           echo "" >> release-notes.md
           echo "## What's New" >> release-notes.md
           echo "" >> release-notes.md
-          
+
           # Try to extract changelog information
           if [ -f "CHANGELOG.md" ]; then
             echo "📝 Extracting changelog for version $VERSION..."
-            
+
             # Look for version-specific changes
             awk "/## \[$VERSION\]/{flag=1; next} /## \[/{flag=0} flag" CHANGELOG.md >> release-notes.md || true
-            
+
             if [ ! -s release-notes.md ] || [ "$(wc -l < release-notes.md)" -le 4 ]; then
               echo "📝 No specific changelog found, using recent changes..."
               echo "### Recent Changes" >> release-notes.md
@@ -228,7 +230,7 @@ jobs:
             echo "" >> release-notes.md
             echo "- This release includes various improvements and bug fixes" >> release-notes.md
           fi
-          
+
           echo "" >> release-notes.md
           echo "## Installation" >> release-notes.md
           echo "" >> release-notes.md
@@ -240,7 +242,7 @@ jobs:
           echo "" >> release-notes.md
           echo "- **Source Distribution**: \`codomyrmex-$VERSION.tar.gz\`" >> release-notes.md
           echo "- **Wheel Distribution**: \`codomyrmex-$VERSION-py3-none-any.whl\`" >> release-notes.md
-          
+
           echo "Generated release notes:"
           cat release-notes.md
 
@@ -351,9 +353,9 @@ jobs:
       - name: Test installation from ${{ steps.pypi_source.outputs.source }}
         run: |
           VERSION="${{ needs.prepare-release.outputs.version }}"
-          
+
           echo "🧪 Testing installation of codomyrmex==$VERSION from ${{ steps.pypi_source.outputs.source }}"
-          
+
           # Retry installation with backoff to wait for package propagation
           installed=false
           for i in {1..10}; do
@@ -368,7 +370,7 @@ jobs:
             echo "❌ Package did not become installable after 10 attempts"
             exit 1
           fi
-          
+
           # Basic functionality test
           python -c "
           import codomyrmex
@@ -402,12 +404,12 @@ jobs:
           VERSION="${{ needs.prepare-release.outputs.version }}"
 
           echo "📝 Updating version references in documentation..."
-          
+
           # Update README.md if it contains version references
           if grep -q "version" README.md; then
             sed -i "s/version [0-9]\+\.[0-9]\+\.[0-9]\+/version $VERSION/g" README.md || true
           fi
-          
+
           # Update installation instructions
           find . -name "*.md" -exec grep -l "uv pip install codomyrmex" {} \; | while read -r file; do
             sed -i "s/codomyrmex==[0-9]\+\.[0-9]\+\.[0-9]\+/codomyrmex==$VERSION/g" "$file" || true
@@ -436,25 +438,25 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Status" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [[ "${{ needs.quality-gate.result }}" == "success" ]]; then
             echo "✅ **Quality Gate**: Passed" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **Quality Gate**: Failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.build-artifacts.result }}" == "success" ]]; then
             echo "✅ **Build Artifacts**: Success" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **Build Artifacts**: Failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.create-release.result }}" == "success" ]]; then
             echo "✅ **GitHub Release**: Created" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **GitHub Release**: Failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.publish-pypi.result }}" == "success" ]]; then
             echo "✅ **PyPI Publication**: Success" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.publish-test-pypi.result }}" == "success" ]]; then
@@ -462,7 +464,7 @@ jobs:
           else
             echo "❌ **Package Publication**: Failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.verify-release.result }}" == "success" ]]; then
             echo "✅ **Release Verification**: Passed" >> $GITHUB_STEP_SUMMARY
           else

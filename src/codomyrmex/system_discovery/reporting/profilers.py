@@ -9,6 +9,7 @@ import subprocess
 import sys
 from typing import Any
 
+psutil = None
 with contextlib.suppress(ImportError):
     import psutil
 
@@ -37,25 +38,26 @@ class HardwareProfiler:
             "architecture": platform.machine(),
             "processor": platform.processor(),
             "gpu": HardwareProfiler.get_gpu_info(),
+            "cpu_freq": None,
+            "total_ram_gb": None,
+            "available_ram_gb": None,
         }
 
-        if psutil:
+        if psutil is not None:
             try:
                 info["cpu_freq"] = (
                     psutil.cpu_freq()._asdict() if psutil.cpu_freq() else None
                 )
-                info["total_ram_gb"] = round(
-                    psutil.virtual_memory().total / (1024**3), 2
-                )
-                info["available_ram_gb"] = round(
-                    psutil.virtual_memory().available / (1024**3), 2
-                )
             except Exception as e:
-                logger.debug("Failed to get psutil info: %s", e)
+                logger.debug("Failed to get psutil CPU frequency: %s", e)
+
+            try:
+                memory = psutil.virtual_memory()
+                info["total_ram_gb"] = round(memory.total / (1024**3), 2)
+                info["available_ram_gb"] = round(memory.available / (1024**3), 2)
+            except Exception as e:
+                logger.debug("Failed to get psutil memory information: %s", e)
         else:
-            info["cpu_freq"] = None
-            info["total_ram_gb"] = None
-            info["available_ram_gb"] = None
             logger.debug("psutil not available, RAM info will be missing")
 
         return info

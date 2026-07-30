@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD060 -->
+
 # .github -- PAI Integration Guide
 
 **Status**: Active | **Last Updated**: July 2026
@@ -16,7 +18,7 @@ PAI's Algorithm phases:
 
 | Workflow | Trigger | What It Does |
 |----------|---------|-------------|
-| `ci.yml` | push/PR to main, develop | Ruff/format, ty, test matrix, security scan, documentation hard gate, build package |
+| `ci.yml` | push/PR to main, develop | Ruff/format, ty, Unix full-suite matrix, Windows portability matrix, security scan, documentation hard gate, build package |
 | `pre-commit.yml` | push/PR | Pre-commit hooks and commit message validation |
 | `security.yml` | daily 2 AM UTC + push pyproject/uv.lock | Dependency scan (pip-audit, Safety), Bandit SAST, Semgrep, CodeQL, license compliance, TruffleHog secrets |
 | `release.yml` | tag push `v*.*.*` or manual | Quality gate, build sdist+wheel, GitHub Release, PyPI publish, verify install |
@@ -100,6 +102,7 @@ jobs that require write access declare their own `permissions:` block explicitly
 follows the principle of least privilege for `GITHUB_TOKEN` usage.
 
 Key security workflows:
+
 - **Bandit** -- Python SAST scanning with SARIF upload to GitHub Security tab
 - **Semgrep** -- Pattern-based vulnerability and secrets detection
 - **CodeQL** -- GitHub-native deep code analysis

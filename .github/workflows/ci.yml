@@ -17,6 +17,8 @@ env:
   PYTHON_VERSION: "3.11"
   UV_VERSION: "0.10.8"
   NODE_VERSION: "20"
+  PYTHONUTF8: "1"
+  PYTHONIOENCODING: "utf-8"
   # Hypothesis's pytest plugin imports before conftest; conftest cannot set this in time.
   HYPOTHESIS_NO_NPY: "1"
 
@@ -205,6 +207,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -220,7 +224,7 @@ jobs:
 
       - name: Create output directory
         run: |
-          mkdir -p src/codomyrmex/output
+          mkdir -p output
 
       - name: Full test suite with coverage floor
         run: |
@@ -286,28 +290,24 @@ jobs:
             output/figures/figure_registry.json
 
   test-matrix:
-    name: Test Suite
+    name: Full Test Suite
     runs-on: ${{ matrix.os }}
     needs: lint-and-format
     strategy:
       fail-fast: false
       matrix:
-        # Slim matrix for PRs: ubuntu+3.11 only. Full matrix on main push.
-        os: ${{ github.event_name == 'pull_request' && fromJSON('["ubuntu-latest"]') || fromJSON('["ubuntu-latest", "macos-latest", "windows-latest"]') }}
+        # Slim matrix for PRs: Ubuntu/Python 3.11. Main validates both supported
+        # Unix families across every supported Python version.
+        os: ${{ github.event_name == 'pull_request' && fromJSON('["ubuntu-latest"]') || fromJSON('["ubuntu-latest", "macos-latest"]') }}
         python-version: ${{ github.event_name == 'pull_request' && fromJSON('["3.11"]') || fromJSON('["3.11", "3.12", "3.13"]') }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
-
-      - name: Install UV (Unix)
-        if: runner.os != 'Windows'
-        uses: astral-sh/setup-uv@v5
         with:
-          version: ${{ env.UV_VERSION }}
+          fetch-depth: 0
 
-      - name: Install UV (Windows)
-        if: runner.os == 'Windows'
+      - name: Install UV
         uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
@@ -321,7 +321,7 @@ jobs:
 
       - name: Create output directory
         run: |
-          mkdir -p src/codomyrmex/output
+          mkdir -p output
 
       - name: Run unit tests
         run: >-
@@ -374,6 +374,61 @@ jobs:
           verbose: true
           token: "${{ secrets['CODECOV_TOKEN'] }}"
 
+  windows-portability:
+    name: Windows Portability
+    runs-on: windows-latest
+    needs: lint-and-format
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ${{ github.event_name == 'pull_request' && fromJSON('["3.11"]') || fromJSON('["3.11", "3.12", "3.13"]') }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
+
+      - name: Create output directory
+        run: >-
+          uv run python -c
+          "from pathlib import Path; Path('output').mkdir(exist_ok=True)"
+
+      - name: Run blocking Windows portability contract
+        run: >-
+          uv run pytest -v --tb=short
+          tests/unit/concurrency/test_distributed_lock.py
+          tests/unit/coding/sandbox/test_sandbox_isolation.py
+          tests/unit/environment_setup/
+          tests/unit/file_system/
+          tests/unit/operating_system/
+          tests/unit/terminal_interface/
+          tests/unit/system_discovery/test_module_catalog.py
+          tests/unit/system_discovery/test_structure_audit.py
+          tests/unit/git_operations/core/test_git_advanced.py
+          tests/unit/git_operations/integration/test_git_workflows.py
+          tests/unit/git_operations/unit/test_git_manager.py
+          --junit-xml=junit-unit-windows-latest-${{ matrix.python-version }}.xml
+
+      - name: Upload Windows portability results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-windows-latest-${{ matrix.python-version }}
+          path: junit-*.xml
+          retention-days: 30
+
   comprehensive-tests:
     name: Comprehensive Module Tests
     runs-on: ubuntu-latest
@@ -390,6 +445,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -405,7 +462,7 @@ jobs:
 
       - name: Create output directory
         run: |
-          mkdir -p src/codomyrmex/output
+          mkdir -p output
 
       - name: Run comprehensive tests for ${{ matrix.test-suite }}
         run: |
@@ -421,7 +478,7 @@ jobs:
   build-package:
     name: Build Package
     runs-on: ubuntu-latest
-    needs: [test-matrix, security-scan, coverage-gate]
+    needs: [test-matrix, windows-portability, security-scan, coverage-gate]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
@@ -490,7 +547,7 @@ jobs:
   test-summary:
     name: Test Results Summary
     runs-on: ubuntu-latest
-    needs: [test-matrix, comprehensive-tests]
+    needs: [test-matrix, windows-portability, comprehensive-tests]
     if: always()
     steps:
       - name: Download all test artifacts
@@ -534,9 +591,14 @@ jobs:
       - name: Enforce test job results
         run: |
           test_matrix_result="${{ needs.test-matrix.result }}"
+          windows_portability_result="${{ needs.windows-portability.result }}"
           comprehensive_result="${{ needs.comprehensive-tests.result }}"
           if [[ "$test_matrix_result" != "success" ]]; then
             echo "Test matrix result was $test_matrix_result; failing the summary job."
+            exit 1
+          fi
+          if [[ "$windows_portability_result" != "success" ]]; then
+            echo "Windows portability result was $windows_portability_result; failing the summary job."
             exit 1
           fi
           if [[ "$comprehensive_result" != "success" && "$comprehensive_result" != "skipped" ]]; then
@@ -547,7 +609,7 @@ jobs:
   final-status:
     name: CI Status
     runs-on: ubuntu-latest
-    needs: [lint-and-format, security-scan, complexity-analysis, documentation-gates, test-matrix, coverage-gate, offline-research, build-package, validate-dependencies, test-summary]
+    needs: [lint-and-format, security-scan, complexity-analysis, documentation-gates, test-matrix, windows-portability, coverage-gate, offline-research, build-package, validate-dependencies, test-summary]
     if: always()
     steps:
       - name: Check CI Status
@@ -575,6 +637,7 @@ jobs:
           check_result "Complexity Analysis" "${{ needs.complexity-analysis.result }}"
           check_result "Documentation"       "${{ needs.documentation-gates.result }}"
           check_result "Test Matrix"         "${{ needs.test-matrix.result }}"
+          check_result "Windows Portability" "${{ needs.windows-portability.result }}"
           check_result "Coverage gate"       "${{ needs.coverage-gate.result }}"
           check_result "Offline research"    "${{ needs.offline-research.result }}"
           check_result "Package Build"       "${{ needs.build-package.result }}"

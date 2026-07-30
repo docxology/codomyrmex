@@ -59,10 +59,12 @@ for all 36 GitHub Actions workflows.
 
 ### PR vs Main Matrix
 
-| Context | OS | Python Versions |
-| --- | --- | --- |
-| Pull Requests | `ubuntu-latest` | `3.11` only |
-| Push to `main` | `ubuntu-latest`, `macos-latest`, `windows-latest` | `3.10`, `3.11`, `3.12`, `3.13` |
+| Context | Contract | OS | Python Versions |
+| --- | --- | --- | --- |
+| Pull Requests | Full suite | `ubuntu-latest` | `3.11` |
+| Pull Requests | Portability suite | `windows-latest` | `3.11` |
+| Push to `main` | Full suite | `ubuntu-latest`, `macos-latest` | `3.11`, `3.12`, `3.13` |
+| Push to `main` | Portability suite | `windows-latest` | `3.11`, `3.12`, `3.13` |
 
 ### Lint & Format Requirements
 
@@ -80,7 +82,8 @@ for all 36 GitHub Actions workflows.
 | Context | Threshold |
 | --- | --- |
 | Documented floor | 60% (`[tool.coverage.report] fail_under` in `pyproject.toml`) |
-| CI unit job (pytest with `--cov`) | `--cov-fail-under=60` |
+| CI Unix unit job (pytest with `--cov`) | `--cov-fail-under=60` |
+| CI Windows portability job | Scoped JUnit contract; repository coverage is not inferred |
 | `release.yml` quality gate | `--cov-fail-under=60` |
 | Default local `uv run pytest` | No coverage (add `--cov` / use `make test` to measure) |
 

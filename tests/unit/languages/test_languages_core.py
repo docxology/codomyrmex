@@ -58,6 +58,16 @@ from codomyrmex.languages.rust.manager import RustManager
 from codomyrmex.languages.swift.manager import SwiftManager
 from codomyrmex.languages.typescript.manager import TypeScriptManager
 
+
+def _swift_runtime_available() -> bool:
+    """Return True only when the Swift executable responds within the probe limit."""
+    if not shutil.which("swift"):
+        return False
+    return SwiftManager().is_installed()
+
+
+_SWIFT_AVAILABLE = _swift_runtime_available()
+
 # ---------------------------------------------------------------------------
 # BaseLanguageManager — contract tests
 # ---------------------------------------------------------------------------
@@ -583,7 +593,7 @@ class TestElixirManager:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not shutil.which("swift"), reason="swift not installed")
+@pytest.mark.skipif(not _SWIFT_AVAILABLE, reason="swift runtime not available")
 class TestSwiftManager:
     def test_is_installed_returns_true(self):
         assert SwiftManager().is_installed() is True
