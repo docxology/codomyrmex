@@ -33,6 +33,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Downstream CI package and module routing**: the wheel smoke test now imports
+  with the same project virtual-environment interpreter used for installation,
+  and comprehensive testing targets the current `coding` unit-test tree after
+  the retired `code_execution_sandbox` module was consolidated into it.
 - **Config watcher deletion synchronization**: the real-thread deletion
   contract now waits for the observable missing-file state with a bounded
   monotonic deadline instead of imposing a 200 ms shared-runner scheduling

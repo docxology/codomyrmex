@@ -439,7 +439,7 @@ jobs:
         test-suite:
           - "git_operations"
           - "static_analysis"
-          - "code_execution_sandbox"
+          - "coding"
           - "environment_setup"
 
     steps:
@@ -508,8 +508,8 @@ jobs:
       - name: Test package installation
         run: |
           # Test installation from built wheel
-          uv pip install dist/*.whl
-          python -c "import codomyrmex; print('Package installed successfully')"
+          uv pip install --python .venv/bin/python --reinstall dist/*.whl
+          .venv/bin/python -c "import codomyrmex; print(f'Package installed successfully: {codomyrmex.__file__}')"
 
   validate-dependencies:
     name: Dependency Validation
