@@ -228,13 +228,13 @@ jobs:
 
           if __name__ == "__main__":
               results = profile_memory()
-              with open('benchmarks/results/memory-profile-results.json', 'w') as f:
+              with open('results/memory-profile-results.json', 'w') as f:
                   json.dump(results, f, indent=2)
               print("Memory profiling completed")
               print(json.dumps(results, indent=2))
           EOF
           
-          cd benchmarks && python memory_profiler.py
+          cd benchmarks && uv run python memory_profiler.py
 
       - name: Generate memory report
         run: |
