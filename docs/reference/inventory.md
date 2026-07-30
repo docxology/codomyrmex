@@ -24,9 +24,9 @@ Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/a
 | Top-level modules | 130 |
 | Agent packages (`src/codomyrmex/agents/`) | 39 |
 | `mcp_tools.py` files (non-test) | 150 |
-| Runtime MCP tools | 608 (PAI merged manifest in the complete locked dependency profile; other launcher profiles are enumerated at startup) |
+| Runtime MCP tools | 605 (PAI merged manifest in the complete locked dependency profile; other launcher profiles are enumerated at startup) |
 | Production `@mcp_tool` decorators | 623 |
-| Pytest tests collected | 35,780 (`uv run python scripts/doc_inventory.py --pytest` in the complete locked dependency profile) |
+| Pytest tests collected | 35,508 (`uv run python scripts/doc_inventory.py --pytest` in the complete locked dependency profile) |
 | GitHub Actions workflow files (`.github/workflows/*.yml`) | 37 |
 | Markdown files under `docs/` | 1,199 (`find docs -name '*.md' -type f \| wc -l`) |
 

@@ -6,7 +6,7 @@
 
 This document describes how to run and filter the Codomyrmex test suite. Canonical counts and inventory live in [docs/reference/inventory.md](../docs/reference/inventory.md).
 
-**Collected tests (repo-wide):** **35,780** — measured with `uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest` from the repository root after `uv sync --locked --all-groups --all-extras`. Count varies with optional extras and discovery paths.
+**Collected tests (repo-wide):** **35,508** — measured with `uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest` from the repository root after `uv sync --locked --all-groups --all-extras`. Count varies with optional extras and discovery paths.
 
 ### Zero-Mock Policy
 
@@ -22,7 +22,7 @@ This document describes how to run and filter the Codomyrmex test suite. Canonic
 
 | Category | Location | Count (indicative) | Notes |
 |----------|----------|--------------------|--------|
-| **All collected** | under `tests/` | **35,780** | Complete locked dependency profile; single source of truth: `uv run python scripts/doc_inventory.py --pytest` |
+| **All collected** | under `tests/` | **35,508** | Complete locked dependency profile; single source of truth: `uv run python scripts/doc_inventory.py --pytest` |
 | **`unit` marker** | mostly `tests/unit/**` | **21,024** | `pytest -m unit --collect-only` |
 | **`integration` marker** | mixed | **253** | `pytest -m integration --collect-only` |
 | **Integration tree** | `tests/integration/` | **339** | `pytest tests/integration/ --collect-only` |

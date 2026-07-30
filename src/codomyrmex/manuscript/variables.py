@@ -1989,8 +1989,12 @@ def compute_variables(
         "CONFIG_TRUST_SANDBOX_SCORE": str(trust_sandbox_score),
         "CONFIG_TRUST_HARD_FLOOR": str(trust_hard_floor),
         "CONFIG_TRUST_PROMOTE_THRESHOLD": str(trust_promote_threshold),
-        "CONFIG_TRUST_STANDALONE_REPAIR_THRESHOLD": str(_ROLE_STANDALONE_REPAIR_MIN_TRUST),
-        "CONFIG_TRUST_STANDALONE_GUARD_THRESHOLD": str(_ROLE_STANDALONE_GUARD_MIN_TRUST),
+        "CONFIG_TRUST_STANDALONE_REPAIR_THRESHOLD": str(
+            _ROLE_STANDALONE_REPAIR_MIN_TRUST
+        ),
+        "CONFIG_TRUST_STANDALONE_GUARD_THRESHOLD": str(
+            _ROLE_STANDALONE_GUARD_MIN_TRUST
+        ),
         "CONFIG_TRUST_FULL_CREDIT_THRESHOLD": str(trust_full_credit_threshold),
         "CONFIG_TRUST_CREDIT_LOWER": str(trust_credit_lower),
         "CONFIG_RECENT_FAILURE_COUNT_THRESHOLD": str(recent_failure_threshold),

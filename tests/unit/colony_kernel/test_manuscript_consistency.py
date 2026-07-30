@@ -358,12 +358,12 @@ FORBIDDEN_CLAIMS = {
     ): "the manuscript should not claim a queue budget path absent a checked-in trace",
     re.compile(
         r"\b610 MCP tools\b", re.IGNORECASE
-    ): "root docs must distinguish 608 runtime tools from 623 decorator lines",
+    ): "root docs must distinguish 605 runtime tools from 623 decorator lines",
     re.compile(
         r"\b610 decorators\b", re.IGNORECASE
     ): "production @mcp_tool decorator count is now 623, not 610",
     re.compile(
-        r"\b(?:601|604)\s+(?:runtime|merged runtime|PAI-manifest)\s+(?:MCP\s+)?tools?\b",
+        r"\b(?:601|604|608)\s+(?:runtime|merged runtime|PAI-manifest)\s+(?:MCP\s+)?tools?\b",
         re.IGNORECASE,
     ): "active runtime tool claims must match the authoritative inventory",
     re.compile(
@@ -437,10 +437,10 @@ REQUIRED_CLAIMS = {
         "not a delivery timeline",
     ],
     "README.md": [
-        "608 runtime MCP tools",
+        "605 runtime MCP tools",
         "623 decorators",
         "1,199",
-        "35,780",
+        "35,508",
     ],
 }
 
@@ -1137,6 +1137,7 @@ def test_public_inventory_counts_match_live_tree() -> None:
     pytest_count = inventory_module.pytest_collect_count(REPO_ROOT)
     runtime_count = inventory_module.manifest_tool_count()
     readme = _read("README.md")
+    github_readme = _read(".github/README.md")
     inventory = _read("docs/reference/inventory.md")
 
     assert pytest_count is not None
@@ -1152,6 +1153,9 @@ def test_public_inventory_counts_match_live_tree() -> None:
     assert f"{docs_count:,} Markdown" in readme
     assert f"{docs_count:,} (`find docs" in inventory
     assert f"**{pytest_count:,}** collected tests" in readme
+    badge_count = f"{pytest_count:,}".replace(",", "%2C")
+    assert f"badge/tests-{badge_count}-brightgreen" in readme
+    assert f"badge/tests-{badge_count}-brightgreen" in github_readme
     assert f"| Pytest tests collected | {pytest_count:,}" in inventory
     assert f"{workflow_count} GitHub Actions workflows" in readme
     assert f"| Runtime MCP tools | {runtime_count} " in inventory
@@ -1159,6 +1163,8 @@ def test_public_inventory_counts_match_live_tree() -> None:
     assert "other launcher profiles are enumerated at startup" in inventory
     assert f"| Production `@mcp_tool` decorators | {decorator_count} |" in inventory
     assert f"**{runtime_count}** runtime MCP tools" in readme
+    assert f"badge/MCP_Runtime-{runtime_count}-orange" in readme
+    assert f"badge/MCP_Runtime-{runtime_count}-orange" in github_readme
     assert f"{decorator_count} decorators" in readme
 
     # The MCP PAI guides are active operational contracts.  Keep their

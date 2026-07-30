@@ -76,7 +76,7 @@ The HTTP transport includes a self-contained **Web UI** at the root URL (`/`) wi
 | `/resources` | GET | List registered resources |
 | `/prompts` | GET | List registered prompt templates |
 
-## Available Tools (608 merged runtime-manifest tools in the complete locked dependency profile)
+## Available Tools (605 merged runtime-manifest tools in the complete locked dependency profile)
 
 ### Built-in Transport Tools (15) — Fully Implemented
 
@@ -105,7 +105,7 @@ The standard transport provides common operations directly implemented in `tools
 The transport layer uses `MCPDiscovery.scan_package("codomyrmex")` to traverse the
 130 top-level modules and register eligible decorated tools at server boot. The source
 inventory currently contains 623 production `@mcp_tool` lines, while the merged PAI
-manifest exposes 608 runtime entries in the complete locked dependency profile. These
+manifest exposes 605 runtime entries in the complete locked dependency profile. These
 are intentionally separate measurements:
 wrappers, aliases, built-ins, profile filters, and registration eligibility can make
 the runtime registry smaller or otherwise different from the physical decorator count.
