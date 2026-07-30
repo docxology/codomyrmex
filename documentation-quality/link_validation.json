@@ -19572,6 +19572,55 @@
     "message": "File exists"
   },
   {
+    "file": "scripts/agents/memory/AGENTS.md",
+    "link": "run_memory.py",
+    "line": 9,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "scripts/agents/memory/AGENTS.md",
+    "link": "../../../src/codomyrmex/agents/memory/",
+    "line": 10,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "scripts/agents/memory/AGENTS.md",
+    "link": "README.md",
+    "line": 11,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "scripts/agents/memory/AGENTS.md",
+    "link": "README.md",
+    "line": 27,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "scripts/agents/memory/AGENTS.md",
+    "link": "../AGENTS.md",
+    "line": 28,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "scripts/agents/memory/README.md",
+    "link": "AGENTS.md",
+    "line": 22,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "scripts/agents/memory/README.md",
+    "link": "../README.md",
+    "line": 23,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
     "file": "scripts/agents/claude/AGENTS.md",
     "link": "../README.md",
     "line": 36,
@@ -80549,6 +80598,41 @@
     "message": "File exists"
   },
   {
+    "file": "docs/modules/config_audits/AGENTS.md",
+    "link": "README.md",
+    "line": 11,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/config_audits/AGENTS.md",
+    "link": "../../../src/codomyrmex/config_audits/",
+    "line": 12,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/config_audits/AGENTS.md",
+    "link": "../../../src/codomyrmex/config_audits/SPEC.md",
+    "line": 13,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/config_audits/AGENTS.md",
+    "link": "README.md",
+    "line": 28,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/config_audits/AGENTS.md",
+    "link": "../README.md",
+    "line": 29,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
     "file": "docs/modules/config_audits/README.md",
     "link": "../../../src/codomyrmex/config_audits/",
     "line": 11,
@@ -96848,6 +96932,41 @@
     "file": "docs/modules/fpf/SPEC.md",
     "link": "FPF-Spec.md",
     "line": 181,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/config_monitoring/AGENTS.md",
+    "link": "README.md",
+    "line": 10,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/config_monitoring/AGENTS.md",
+    "link": "../../../src/codomyrmex/config_monitoring/",
+    "line": 11,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/config_monitoring/AGENTS.md",
+    "link": "../../../src/codomyrmex/config_monitoring/SPEC.md",
+    "line": 12,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/config_monitoring/AGENTS.md",
+    "link": "README.md",
+    "line": 27,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/config_monitoring/AGENTS.md",
+    "link": "../README.md",
+    "line": 28,
     "status": "ok",
     "message": "File exists"
   },

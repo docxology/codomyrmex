@@ -9292,6 +9292,30 @@
     }
   },
   {
+    "file": "scripts/agents/memory/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 6,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 123,
+      "link_count": 5
+    }
+  },
+  {
+    "file": "scripts/agents/memory/README.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 1,
+      "word_count": 75,
+      "link_count": 2
+    }
+  },
+  {
     "file": "scripts/agents/claude/AGENTS.md",
     "score": 100,
     "issues": [],
@@ -52856,6 +52880,18 @@
     }
   },
   {
+    "file": "docs/modules/config_audits/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 6,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 110,
+      "link_count": 5
+    }
+  },
+  {
     "file": "docs/modules/config_audits/README.md",
     "score": 100,
     "issues": [],
@@ -61421,6 +61457,18 @@
       "code_block_count": 1,
       "word_count": 781,
       "link_count": 4
+    }
+  },
+  {
+    "file": "docs/modules/config_monitoring/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 6,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 99,
+      "link_count": 5
     }
   },
   {

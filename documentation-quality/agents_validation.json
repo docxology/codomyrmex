@@ -2341,6 +2341,18 @@
     "score": 100
   },
   {
+    "file": "scripts/agents/memory/AGENTS.md",
+    "valid": true,
+    "missing_sections": [],
+    "warnings": [
+      "Consider adding 'Code Style' section",
+      "Consider adding 'Testing' section",
+      "Consider adding 'Integration Points' section",
+      "Consider adding 'Common Tasks' section"
+    ],
+    "score": 100
+  },
+  {
     "file": "scripts/agents/claude/AGENTS.md",
     "valid": true,
     "missing_sections": [],
@@ -13693,6 +13705,18 @@
     "score": 100
   },
   {
+    "file": "docs/modules/config_audits/AGENTS.md",
+    "valid": true,
+    "missing_sections": [],
+    "warnings": [
+      "Consider adding 'Code Style' section",
+      "Consider adding 'Testing' section",
+      "Consider adding 'Integration Points' section",
+      "Consider adding 'Common Tasks' section"
+    ],
+    "score": 100
+  },
+  {
     "file": "docs/modules/audio/AGENTS.md",
     "valid": true,
     "missing_sections": [],
@@ -15230,6 +15254,18 @@
   },
   {
     "file": "docs/modules/fpf/AGENTS.md",
+    "valid": true,
+    "missing_sections": [],
+    "warnings": [
+      "Consider adding 'Code Style' section",
+      "Consider adding 'Testing' section",
+      "Consider adding 'Integration Points' section",
+      "Consider adding 'Common Tasks' section"
+    ],
+    "score": 100
+  },
+  {
+    "file": "docs/modules/config_monitoring/AGENTS.md",
     "valid": true,
     "missing_sections": [],
     "warnings": [
