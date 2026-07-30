@@ -14,7 +14,7 @@ permissions: {}
 
 env:
   PYTHON_VERSION: "3.11"
-  UV_VERSION: "0.5.7"
+  UV_VERSION: "0.10.8"
 
 jobs:
   pre-commit:
@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install UV
         uses: astral-sh/setup-uv@v5
@@ -56,13 +58,24 @@ jobs:
             echo "The actual config is already present — this should never happen on main."
             exit 1
           fi
-          pre-commit install
+          uv run pre-commit install
           echo "✅ Pre-commit hooks installed from .pre-commit-config.yaml"
 
-      - name: Run pre-commit on all files
+      - name: Run pre-commit on changed files
         run: |
-          echo "🔍 Running pre-commit hooks on all files..."
-          pre-commit run --all-files --show-diff-on-failure
+          echo "🔍 Running pre-commit hooks on changed files..."
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            from_ref="${{ github.event.pull_request.base.sha }}"
+          else
+            from_ref="${{ github.event.before }}"
+          fi
+          if [ -z "$from_ref" ] || [[ "$from_ref" =~ ^0+$ ]]; then
+            from_ref="$(git rev-parse HEAD^ 2>/dev/null || git hash-object -t tree /dev/null)"
+          fi
+          uv run pre-commit run \
+            --from-ref "$from_ref" \
+            --to-ref "${{ github.sha }}" \
+            --show-diff-on-failure
 
   commit-message-check:
     name: Commit Message Validation
@@ -78,26 +91,26 @@ jobs:
       - name: Validate commit messages
         run: |
           echo "📝 Validating commit messages..."
-          
+
           # Get commits in this PR
           commits=$(git log --format="%H %s" origin/main..HEAD)
-          
+
           if [ -z "$commits" ]; then
             echo "No commits to validate"
             exit 0
           fi
-          
+
           # Conventional commit pattern
           # Type(scope): description
           # where type can be: feat, fix, docs, style, refactor, test, chore, ci, build, perf
           pattern="^(feat|fix|docs|style|refactor|test|chore|ci|build|perf)(\(.+\))?: .{1,72}$"
-          
+
           invalid_commits=()
-          
+
           echo "$commits" | while IFS= read -r line; do
             commit_hash=$(echo "$line" | cut -d' ' -f1)
             commit_msg=$(echo "$line" | cut -d' ' -f2-)
-            
+
             if ! echo "$commit_msg" | grep -qE "$pattern"; then
               echo "❌ Invalid commit message: $commit_msg"
               echo "   Commit: $commit_hash"
@@ -108,7 +121,7 @@ jobs:
               echo "✅ Valid commit message: $commit_msg"
             fi
           done
-          
+
           if [ ${#invalid_commits[@]} -gt 0 ]; then
             echo ""
             echo "❌ Found ${#invalid_commits[@]} invalid commit message(s)"
@@ -145,28 +158,28 @@ jobs:
       - name: Analyze file changes
         run: |
           echo "📊 Analyzing file changes in this PR..."
-          
+
           # Get changed files
           changed_files=$(git diff --name-only origin/main..HEAD)
-          
+
           if [ -z "$changed_files" ]; then
             echo "No files changed"
             exit 0
           fi
-          
+
           echo "Changed files:"
           echo "$changed_files"
           echo ""
-          
+
           # Categorize changes
           source_files=$(echo "$changed_files" | grep -E '\.(py|js|ts|jsx|tsx)$' || true)
           test_files=$(echo "$changed_files" | grep -E 'test.*\.(py|js|ts)$|.*test\.(py|js|ts)$' || true)
           config_files=$(echo "$changed_files" | grep -E '\.(yml|yaml|json|toml|cfg|ini|conf)$' || true)
           doc_files=$(echo "$changed_files" | grep -E '\.(md|rst|txt)$' || true)
-          
+
           echo "## Change Analysis" >> change-analysis.md
           echo "" >> change-analysis.md
-          
+
           if [ -n "$source_files" ]; then
             echo "### Source Code Changes" >> change-analysis.md
             echo "$source_files" | while read -r file; do
@@ -174,7 +187,7 @@ jobs:
             done
             echo "" >> change-analysis.md
           fi
-          
+
           if [ -n "$test_files" ]; then
             echo "### Test Changes" >> change-analysis.md
             echo "$test_files" | while read -r file; do
@@ -182,7 +195,7 @@ jobs:
             done
             echo "" >> change-analysis.md
           fi
-          
+
           if [ -n "$config_files" ]; then
             echo "### Configuration Changes" >> change-analysis.md
             echo "$config_files" | while read -r file; do
@@ -190,7 +203,7 @@ jobs:
             done
             echo "" >> change-analysis.md
           fi
-          
+
           if [ -n "$doc_files" ]; then
             echo "### Documentation Changes" >> change-analysis.md
             echo "$doc_files" | while read -r file; do
@@ -198,23 +211,23 @@ jobs:
             done
             echo "" >> change-analysis.md
           fi
-          
+
           # Check for important patterns
           echo "### Analysis" >> change-analysis.md
           echo "" >> change-analysis.md
-          
+
           if echo "$changed_files" | grep -q "pyproject.toml"; then
             echo "⚠️  **Dependencies changed** - Review dependency updates carefully" >> change-analysis.md
           fi
-          
+
           if echo "$changed_files" | grep -q "\.github/workflows/"; then
             echo "🔧 **Workflow changes detected** - Test workflows thoroughly" >> change-analysis.md
           fi
-          
+
           if [ -n "$source_files" ] && [ -z "$test_files" ]; then
             echo "⚠️  **Source code changed without test updates** - Consider adding tests" >> change-analysis.md
           fi
-          
+
           if echo "$changed_files" | grep -q "requirements\.txt"; then
             echo "📦 **Requirements changed** - Ensure compatibility" >> change-analysis.md
           fi
@@ -226,7 +239,7 @@ jobs:
             const fs = require('fs');
             if (fs.existsSync('change-analysis.md')) {
               const analysis = fs.readFileSync('change-analysis.md', 'utf8');
-              
+
               github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
@@ -249,21 +262,21 @@ jobs:
       - name: Check PR size
         run: |
           echo "📏 Checking PR size..."
-          
+
           # Get PR stats
           additions=$(git diff --numstat origin/main..HEAD | awk '{sum += $1} END {print sum}')
           deletions=$(git diff --numstat origin/main..HEAD | awk '{sum += $2} END {print sum}')
           changed_files=$(git diff --name-only origin/main..HEAD | wc -l)
-          
+
           echo "PR Statistics:"
           echo "- Files changed: $changed_files"
           echo "- Lines added: $additions"
           echo "- Lines deleted: $deletions"
           echo "- Total changes: $((additions + deletions))"
-          
+
           # Set size labels
           total_changes=$((additions + deletions))
-          
+
           if [ $total_changes -lt 10 ]; then
             size_label="size/XS"
           elif [ $total_changes -lt 100 ]; then
@@ -275,10 +288,10 @@ jobs:
           else
             size_label="size/XL"
           fi
-          
+
           echo "PR Size: $size_label"
           echo "size_label=$size_label" >> $GITHUB_ENV
-          
+
           # Warning for large PRs
           if [ $total_changes -gt 1000 ]; then
             echo ""
@@ -298,44 +311,44 @@ jobs:
       - name: Check quality gates
         run: |
           echo "🚪 Checking quality gates..."
-          
+
           # Check if all required checks passed
           if [[ "${{ needs.pre-commit.result }}" != "success" ]]; then
             echo "❌ Pre-commit checks failed"
             exit 1
           fi
-          
+
           # Commit message check is informational only (agents may not follow conventional commits)
           if [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ needs.commit-message-check.result }}" != "success" ]]; then
             echo "⚠️ Commit message validation did not pass (non-blocking)"
           fi
-          
+
           echo "✅ All quality gates passed!"
 
       - name: Quality summary
         run: |
           echo "# 🏆 Pre-commit Quality Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [[ "${{ needs.pre-commit.result }}" == "success" ]]; then
             echo "✅ **Pre-commit Hooks**: Passed" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **Pre-commit Hooks**: Failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             if [[ "${{ needs.commit-message-check.result }}" == "success" ]]; then
               echo "✅ **Commit Messages**: Valid" >> $GITHUB_STEP_SUMMARY
             else
               echo "❌ **Commit Messages**: Invalid" >> $GITHUB_STEP_SUMMARY
             fi
-            
+
             if [[ "${{ needs.file-changes-check.result }}" == "success" ]]; then
               echo "✅ **File Changes**: Analyzed" >> $GITHUB_STEP_SUMMARY
             else
               echo "❌ **File Changes**: Analysis failed" >> $GITHUB_STEP_SUMMARY
             fi
-            
+
             if [[ "${{ needs.size-check.result }}" == "success" ]]; then
               echo "✅ **PR Size**: Checked" >> $GITHUB_STEP_SUMMARY
             else

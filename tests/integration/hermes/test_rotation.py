@@ -52,7 +52,7 @@ def test_rotation_on_429(
         }
 
     monkeypatch.setattr(rotation_router, "_dispatch", side_effect)
-    res = rotation_router.call_llm("hello")
+    res = rotation_router.call_llm("hello", provider="openrouter")
     assert res["success"] is True
     assert res["model"] == "model-2"
     assert "model-1" in rotation_router._cooldowns
@@ -78,7 +78,7 @@ def test_rotation_cooldown(
         }
 
     monkeypatch.setattr(rotation_router, "_dispatch", tracking_dispatch)
-    res = rotation_router.call_llm("hello")
+    res = rotation_router.call_llm("hello", provider="openrouter")
 
     assert res["model"] == "model-2"
     # Verify model-1 was NEVER called
@@ -95,6 +95,6 @@ def test_rotation_all_fail(
         raise RuntimeError("Generic Error")
 
     monkeypatch.setattr(rotation_router, "_dispatch", always_fail)
-    res = rotation_router.call_llm("hello")
+    res = rotation_router.call_llm("hello", provider="openrouter")
     assert res["success"] is False
     assert "Generic Error" in res["error"]

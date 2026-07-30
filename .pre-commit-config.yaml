@@ -4,7 +4,6 @@
 # Run: pre-commit run --all-files
 
 repos:
-
   # Python linting and import sorting
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.4
@@ -40,7 +39,6 @@ repos:
     rev: v1.5.0
     hooks:
       - id: detect-secrets
-        args: [--baseline, .secrets.baseline]
         exclude: \.lock$|\.min\.js$
 
   # Python syntax checking
@@ -115,9 +113,10 @@ repos:
 
       - id: check-placeholders
         name: Check for Placeholder Content
-        entry: python3 -c "import sys; content = open(sys.argv[1]).read(); patterns = ['TODO', 'FIXME', 'placeholder', 'TBD', 'HACK', 'STUB']; found = [p for p in patterns if p in content]; sys.exit(1 if found else 0)"
+        entry: uv run --locked python src/codomyrmex/documentation/scripts/triple_check.py --repo-root . --fail-on-issues
         language: system
         files: \.md$
+        pass_filenames: false
 
       - id: validate-agents-structure
         name: Validate AGENTS.md Structure

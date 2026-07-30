@@ -15,14 +15,14 @@
 
 | Metric | Value | Command |
 | :--- | :--- | :--- |
-| **Tests collected** | **35,508** (0 collection errors) | Complete locked dependency profile; `uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest` |
+| **Tests collected** | **35,780** (0 collection errors) | Complete locked dependency profile; `uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest` |
 | **Ruff errors** | **0** | `uv run ruff check .` |
 | **ty diagnostics** | **0** | `uv run ty check --output-format concise src/` |
 | **Mock violations** | **0** | `rg -n "from unittest\\.mock" src --glob '*.py'` |
 | **MCP tool decorators** | **623** | `uv run python scripts/doc_inventory.py` (production tree; lines starting with `@mcp_tool`) |
 | **Top-level modules** | **130** | `uv run python scripts/doc_inventory.py --pytest` |
 | **pyproject.toml version** | **1.3.0** | `grep version pyproject.toml \| head -1` |
-| **AGENTS validation** | **1,349 / 1,349 valid** | `make docs-check` |
+| **AGENTS validation** | **1,339 / 1,339 valid** | `make docs-check` |
 | **Doc triple-check debt** | **0 files with issues; 0 broken links; 0 actionable placeholders; 0 completeness issues** | `make docs-check` |
 | **RASP doc gaps** | **0 dir-rows with gaps** (six configured roots) | `uv run python scripts/rasp_gap_report.py` |
 
@@ -95,11 +95,11 @@
 | B3 | ~~Video module depth~~ | `video/` | ✅ Audited — video processor, extractor, analyzer, and transcription paths all implemented; 207 tests pass, 1 skip (optional dep) |
 | B4 | ~~Meme module MCP exposure~~ | `meme/` | ✅ Fixed — 5 `@mcp_tool` decorators in `mcp_tools.py` (dissect, fitness, synthesize, propagate, narrative); RASP docs present |
 | B5 | ~~Secure Cognitive Layer MCP~~ | `identity/`, `wallet/`, `defense/`, `market/`, `privacy/` | ✅ Fixed — PAI bridge module `pai_pm/secure_cognitive_bridge.py` registers all 15 MCP tools (3 per module × 5 modules); `register_secure_cognitive_tools()` + `get_secure_cognitive_tool_catalog()` |
-| B6 | ~~Test collection errors~~ | `tests/` | ✅ Fixed — 35,508 tests collect with 0 errors in the complete locked dependency profile via import guards and optional submodule skips |
-| B7 | ~~README / inventory metric drift watch~~ | root | ✅ Fixed — updated active surfaces to 130 modules, 605 runtime MCP tools, and 1,199 docs; manuscript consistency test updated |
+| B6 | ~~Test collection errors~~ | `tests/` | ✅ Fixed — 35,780 tests collect with 0 errors in the complete locked dependency profile via import guards and optional submodule skips |
+| B7 | ~~README / inventory metric drift watch~~ | root | ✅ Fixed — updated active surfaces to 130 modules, 608 runtime MCP tools, and 1,199 docs; manuscript consistency test updated |
 | B8 | ~~Coverage gate~~ | repo-wide | ✅ Verified — **60%** in `[tool.coverage.report] fail_under`; `meme/*` omitted from `[tool.coverage.run]`. Enforce with `make test` or `--cov-fail-under=60`. |
 | B9 | ~~Type safety burn-down~~ | repo-wide | ✅ Fixed — `uv run ty check --output-format concise src/` now reports 0 diagnostics. Keep this zero baseline in CI/local gates. |
-| B10 | ~~Documentation completeness burn-down~~ | `docs/`, `src/codomyrmex/**` | ✅ Fixed — `make docs-check` reports 5,462 quality docs, 0 actionable placeholders, 0 broken links, 0 completeness issues, and 1,349/1,349 AGENTS valid. |
+| B10 | ~~Documentation completeness burn-down~~ | `docs/`, `src/codomyrmex/**` | ✅ Fixed — `make docs-check` reports 5,423 quality docs, 0 actionable placeholders, 0 broken links, 0 completeness issues, and 1,339/1,339 AGENTS valid. |
 
 ---
 
@@ -156,7 +156,7 @@
 
 ## 🗂️ Document Hierarchy
 
-```
+```text
 codomyrmex/
 ├── TODO.md              ← This file (project backlog)
 ├── CHANGELOG.md         ← Historical releases (v1.2.4+)

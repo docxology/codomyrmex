@@ -72,7 +72,8 @@ def test_gateway_refuses_when_active_without_replace(temp_home: str) -> None:
     assert p1.pid is not None
 
     p2 = _run_gateway_process(temp_home, False)
-    p2.wait(timeout=5.0)
+    # A cold Hermes import can exceed five seconds on shared CI runners.
+    p2.wait(timeout=30.0)
 
     # Failed to start natively without crashing the test runner, exits cleanly with code 0 per docs
     assert p2.returncode == 0
@@ -99,8 +100,9 @@ def test_gateway_replace_kills_old_pid(temp_home: str) -> None:
 
     p2 = _run_gateway_process(temp_home, True)
 
-    # Wait for takeover
-    for _ in range(100):
+    # Wait for takeover; a cold Hermes import can be slow on shared runners.
+    takeover_deadline = time.monotonic() + 30.0
+    while time.monotonic() < takeover_deadline:
         if not (home / "gateway.pid").exists():
             time.sleep(0.1)
             continue

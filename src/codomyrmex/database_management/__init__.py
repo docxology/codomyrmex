@@ -4,7 +4,6 @@ The Database Management module provides database management,
 migration, and administration capabilities for the Codomyrmex ecosystem.
 
 Submodules:
-    lineage: Consolidated lineage capabilities.
     migration: Consolidated migration capabilities.
     backup: Database backup and recovery.
     connections: Connection pooling and management.
@@ -12,7 +11,7 @@ Submodules:
     schema_generator: Schema generation and management.
 """
 
-from . import audit, backup, connections, lineage, migration, replication, sharding
+from . import audit, backup, connections, migration, replication, sharding
 from .backup.backup_manager import (
     Backup,
     BackupManager,
@@ -97,7 +96,6 @@ __all__ = [
     "connections",
     "execute_query",
     "generate_schema",
-    "lineage",
     "manage_databases",
     "migration",
     "monitor_database",

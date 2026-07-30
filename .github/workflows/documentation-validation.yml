@@ -21,7 +21,7 @@ permissions: {}
 
 env:
   PYTHON_VERSION: "3.11"
-  UV_VERSION: "0.5.7"
+  UV_VERSION: "0.10.8"
 
 jobs:
   validate-links:
@@ -67,21 +67,26 @@ jobs:
       - name: Display link validation summary
         if: always()
         run: |
-          if [ -f output/link_validation.json ]; then
-            python3 -c "
-            import json
-            with open('output/link_validation.json') as f:
-                data = json.load(f)
-            broken = sum(1 for r in data if r.get('status') == 'broken')
-            ok = sum(1 for r in data if r.get('status') == 'ok')
-            ext = sum(1 for r in data if r.get('status') == 'external')
-            print('\n## Link Validation Summary')
-            print(f'- Total link checks: {len(data)}')
-            print(f'- OK: {ok}')
-            print(f'- Broken: {broken}')
-            print(f'- External: {ext}')
-            "
-          fi
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("output/link_validation.json")
+          if path.exists():
+              data = json.loads(path.read_text())
+              broken = sum(
+                  1 for result in data if result.get("status") == "broken"
+              )
+              ok = sum(1 for result in data if result.get("status") == "ok")
+              external = sum(
+                  1 for result in data if result.get("status") == "external"
+              )
+              print("\n## Link Validation Summary")
+              print(f"- Total link checks: {len(data)}")
+              print(f"- OK: {ok}")
+              print(f"- Broken: {broken}")
+              print(f"- External: {external}")
+          PY
 
   check-quality:
     name: Check Content Quality
@@ -127,22 +132,30 @@ jobs:
       - name: Display quality summary
         if: always()
         run: |
-          if [ -f output/content_quality.json ]; then
-            python3 -c "
-            import json
-            with open('output/content_quality.json') as f:
-                data = json.load(f)
-            n = len(data)
-            avg = sum(q['score'] for q in data) / n if n else 0
-            ph = sum(q['metrics'].get('placeholder_count', 0) for q in data)
-            low = sum(1 for q in data if q['score'] < 60)
-            print('\n## Content Quality Summary')
-            print(f'- Files analyzed: {n}')
-            print(f'- Average score: {avg:.1f}/100')
-            print(f'- Total placeholders: {ph}')
-            print(f'- Files below 60: {low}')
-            "
-          fi
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("output/content_quality.json")
+          if path.exists():
+              data = json.loads(path.read_text())
+              count = len(data)
+              average = (
+                  sum(result["score"] for result in data) / count
+                  if count
+                  else 0
+              )
+              placeholders = sum(
+                  result["metrics"].get("placeholder_count", 0)
+                  for result in data
+              )
+              low = sum(1 for result in data if result["score"] < 60)
+              print("\n## Content Quality Summary")
+              print(f"- Files analyzed: {count}")
+              print(f"- Average score: {average:.1f}/100")
+              print(f"- Total placeholders: {placeholders}")
+              print(f"- Files below 60: {low}")
+          PY
 
   validate-structure:
     name: Validate AGENTS.md Structure
@@ -187,25 +200,28 @@ jobs:
       - name: Display structure validation summary
         if: always()
         run: |
-          if [ -f output/agents_validation.json ]; then
-            python3 -c "
-            import json
-            with open('output/agents_validation.json') as f:
-                data = json.load(f)
-            total = len(data)
-            valid = sum(1 for a in data if a.get('valid'))
-            print('\n## AGENTS.md Structure Summary')
-            print(f'- Total files: {total}')
-            print(f'- Valid files: {valid}')
-            print(f'- Invalid files: {total - valid}')
-            "
-          fi
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("output/agents_validation.json")
+          if path.exists():
+              data = json.loads(path.read_text())
+              total = len(data)
+              valid = sum(1 for result in data if result.get("valid"))
+              print("\n## AGENTS.md Structure Summary")
+              print(f"- Total files: {total}")
+              print(f"- Valid files: {valid}")
+              print(f"- Invalid files: {total - valid}")
+          PY
 
   generate-dashboard:
     name: Generate Documentation Dashboard
     needs: [validate-links, check-quality, validate-structure]
     runs-on: ubuntu-latest
     if: always()
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -246,12 +262,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: documentation-dashboard
-          path: output/documentation_dashboard.html
+          path: output/dashboard.html
           retention-days: 90
 
       - name: Publish dashboard to GitHub Pages
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./output
@@ -263,6 +279,10 @@ jobs:
     needs: [validate-links, check-quality, validate-structure]
     runs-on: ubuntu-latest
     if: always()
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -309,14 +329,14 @@ jobs:
           script: |
             const fs = require('fs');
             let comment = '## 📚 Documentation Quality Check Results\n\n';
-            
+
             // Add summary from each validation
             const files = [
               'output/link_validation.json',
               'output/content_quality.json',
               'output/agents_validation.json'
             ];
-            
+
             for (const file of files) {
               if (fs.existsSync(file)) {
                 const data = JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -344,9 +364,9 @@ jobs:
                 }
               }
             }
-            
+
             comment += '\n[View detailed dashboard →](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})';
-            
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,

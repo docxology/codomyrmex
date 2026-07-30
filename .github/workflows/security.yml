@@ -17,6 +17,12 @@ on:
       - 'uv.lock'
       - '.github/workflows/security.yml'
   workflow_dispatch:
+    inputs:
+      dependency_updates:
+        description: Run the dependency update and pull-request job
+        required: false
+        default: false
+        type: boolean
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -26,7 +32,7 @@ permissions: {}
 
 env:
   PYTHON_VERSION: "3.11"
-  UV_VERSION: "0.5.7"
+  UV_VERSION: "0.10.8"
 
 jobs:
   dependency-scan:
@@ -55,7 +61,7 @@ jobs:
         run: |
           echo "📋 Generating dependency tree..."
           uv tree > dependency-tree.txt
-          
+
           echo "## Current Dependencies" >> security-report.md
           echo '```' >> security-report.md
           cat dependency-tree.txt >> security-report.md
@@ -68,7 +74,7 @@ jobs:
             --format json --output vulnerability-report.json
           uv run --locked --extra security_audit python scripts/security/audit_uv_lock.py \
             --format markdown --output vulnerability-report.md
-          
+
           # Add to security report
           echo "" >> security-report.md
           echo "## Vulnerability Scan Results" >> security-report.md
@@ -84,7 +90,7 @@ jobs:
           # Generate safety report (safety scan replaces deprecated safety check)
           uv run --locked --extra security_audit safety scan --output json --save-json safety-report.json
           uv run --locked --extra security_audit safety scan --output text --save-as text safety-report.txt
-          
+
           # Add to security report
           echo "" >> security-report.md
           echo "## Safety Scan Results" >> security-report.md
@@ -134,7 +140,7 @@ jobs:
       - name: Run Bandit security scan
         run: |
           echo "🔒 Running Bandit security analysis..."
-          
+
           # Scan first-party production code only. Tests, vendored code, and
           # generated documentation are validated by their own gates.
           BANDIT_ARGS=(
@@ -146,19 +152,19 @@ jobs:
           uv run bandit "${BANDIT_ARGS[@]}" -f json -o bandit-report.json || bandit_status=$?
           uv run bandit "${BANDIT_ARGS[@]}" -f txt -o bandit-report.txt || true
           uv run bandit "${BANDIT_ARGS[@]}" -f xml -o bandit-report.xml || true
-          
+
           # Create human-readable summary
           echo "# Bandit Security Analysis Report" > bandit-summary.md
           echo "" >> bandit-summary.md
           echo "Generated on: $(date)" >> bandit-summary.md
           echo "" >> bandit-summary.md
-          
+
           if [ -f "bandit-report.txt" ]; then
             echo "## Summary" >> bandit-summary.md
             echo '```' >> bandit-summary.md
             head -20 bandit-report.txt >> bandit-summary.md
             echo '```' >> bandit-summary.md
-            
+
             # Extract key metrics
             echo "" >> bandit-summary.md
             echo "## Key Metrics" >> bandit-summary.md
@@ -298,25 +304,25 @@ jobs:
       - name: Generate license report
         run: |
           echo "📄 Generating license compliance report..."
-          
+
           # Generate pip-licenses report
           pip-licenses --format=markdown --output-file=licenses-pip.md || true
           pip-licenses --format=json --output-file=licenses.json || true
-          
+
           # Create comprehensive license report
           echo "# License Compliance Report" > license-report.md
           echo "" >> license-report.md
           echo "Generated on: $(date)" >> license-report.md
           echo "" >> license-report.md
           echo "## Dependencies and Their Licenses" >> license-report.md
-          
+
           if [ -f "licenses-pip.md" ]; then
             cat licenses-pip.md >> license-report.md
           fi
-          
+
           echo "" >> license-report.md
           echo "## License Summary" >> license-report.md
-          
+
           # Count licenses by type
           if [ -f "licenses.json" ]; then
             echo "License distribution:" >> license-report.md
@@ -328,10 +334,10 @@ jobs:
       - name: Check for problematic licenses
         run: |
           echo "🔍 Checking for potentially problematic licenses..."
-          
+
           # Define problematic licenses
           PROBLEMATIC_LICENSES=("GPL" "AGPL" "LGPL" "Copyleft")
-          
+
           if [ -f "licenses.json" ]; then
             for license in "${PROBLEMATIC_LICENSES[@]}"; do
               if grep -i "$license" licenses.json > /dev/null; then
@@ -370,7 +376,9 @@ jobs:
   dependency-update:
     name: Automated Dependency Updates
     runs-on: ubuntu-latest
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    if: >-
+      github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_dispatch' && inputs.dependency_updates)
     permissions:
       contents: write
       pull-requests: write
@@ -392,18 +400,18 @@ jobs:
         id: check_updates
         run: |
           echo "🔄 Checking for dependency updates..."
-          
+
           # Backup current lock file
           cp uv.lock uv.lock.backup
-          
+
           # Update dependencies
           uv sync --upgrade
-          
+
           # Check if there are changes
           if ! diff -q uv.lock uv.lock.backup > /dev/null; then
             echo "updates_available=true" >> $GITHUB_OUTPUT
             echo "📦 Dependencies have been updated"
-            
+
             # Generate update summary
             echo "# Dependency Updates" > dependency-updates.md
             echo "" >> dependency-updates.md
@@ -433,19 +441,19 @@ jobs:
           title: "🔄 Automated dependency updates"
           body: |
             ## Automated Dependency Updates
-            
+
             This PR contains automated updates to project dependencies.
-            
+
             ### Changes
             - Updated `uv.lock` with latest compatible versions
             - All tests have been run with the updated dependencies
-            
+
             ### Review Checklist
             - [ ] Review the dependency changes
             - [ ] Ensure all tests pass
             - [ ] Check for any breaking changes in updated packages
             - [ ] Verify security scan results
-            
+
             This PR was automatically created by the security workflow.
           branch: automated-dependency-updates
           base: main
@@ -477,31 +485,31 @@ jobs:
           echo "Repository: ${{ github.repository }}" >> comprehensive-security-report.md
           echo "Commit: ${{ github.sha }}" >> comprehensive-security-report.md
           echo "" >> comprehensive-security-report.md
-          
+
           echo "## Summary" >> comprehensive-security-report.md
           echo "" >> comprehensive-security-report.md
-          
+
           # Dependency scan results
           if [ -f "security-artifacts/security-scan-results/security-report.md" ]; then
             echo "### Dependency Security" >> comprehensive-security-report.md
             cat security-artifacts/security-scan-results/security-report.md >> comprehensive-security-report.md
             echo "" >> comprehensive-security-report.md
           fi
-          
+
           # Bandit results
           if [ -f "security-artifacts/bandit-scan-results/bandit-summary.md" ]; then
             echo "### Static Security Analysis (Bandit)" >> comprehensive-security-report.md
             cat security-artifacts/bandit-scan-results/bandit-summary.md >> comprehensive-security-report.md
             echo "" >> comprehensive-security-report.md
           fi
-          
+
           # License results
           if [ -f "security-artifacts/license-scan-results/license-report.md" ]; then
             echo "### License Compliance" >> comprehensive-security-report.md
             cat security-artifacts/license-scan-results/license-report.md >> comprehensive-security-report.md
             echo "" >> comprehensive-security-report.md
           fi
-          
+
           echo "## Recommendations" >> comprehensive-security-report.md
           echo "" >> comprehensive-security-report.md
           echo "1. Review all HIGH and MEDIUM severity vulnerabilities" >> comprehensive-security-report.md
@@ -524,13 +532,13 @@ jobs:
             const fs = require('fs');
             if (fs.existsSync('comprehensive-security-report.md')) {
               const report = fs.readFileSync('comprehensive-security-report.md', 'utf8');
-              
+
               // Truncate if too long for PR comment
               const maxLength = 65000;
-              const summary = report.length > maxLength 
+              const summary = report.length > maxLength
                 ? report.substring(0, maxLength) + '\n\n... (truncated, see artifacts for full report)'
                 : report;
-              
+
               github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
@@ -555,37 +563,37 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Scan Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [[ "${{ needs.dependency-scan.result }}" == "success" ]]; then
             echo "✅ **Dependency Scan**: Completed" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **Dependency Scan**: Failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.bandit-scan.result }}" == "success" ]]; then
             echo "✅ **Bandit Security Analysis**: Completed" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **Bandit Security Analysis**: Failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.semgrep-scan.result }}" == "success" || "${{ needs.semgrep-scan.result }}" == "skipped" ]]; then
             echo "✅ **Semgrep Analysis**: ${{ needs.semgrep-scan.result }}" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **Semgrep Analysis**: Failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.codeql-analysis.result }}" == "success" ]]; then
             echo "✅ **CodeQL Analysis**: Completed" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **CodeQL Analysis**: Failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.license-scan.result }}" == "success" ]]; then
             echo "✅ **License Compliance**: Completed" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **License Compliance**: Failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.secret-scan.result }}" == "success" ]]; then
             echo "✅ **Secret Detection**: Completed" >> $GITHUB_STEP_SUMMARY
           else

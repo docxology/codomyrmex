@@ -1,6 +1,5 @@
 # tests/unit — Behavioral Specification
 
-
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
 
 ## Layout
@@ -12,22 +11,24 @@
 
 ## Coverage Requirements
 
-| Metric | Baseline | Target | Gate |
-|--------|----------|--------|------|
-| Line coverage | varies per run | 60%+ stretch | CI fails below **60%** floor (`pyproject.toml`) |
-| Tests collected | 35,508 (July 2026; complete locked dependency profile; `uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest`) | growing | `uv run pytest tests --collect-only -q` |
-| Skipped | varies | minimize | — |
-| Failures | 0 | 0 | Blocks merge |
+| Metric          | Baseline                                                                                                                                     | Target       | Gate                                            |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ----------------------------------------------- |
+| Line coverage   | varies per run                                                                                                                               | 60%+ stretch | CI fails below **60%** floor (`pyproject.toml`) |
+| Tests collected | 35,780 (July 2026; complete locked dependency profile; `uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest`) | growing      | `uv run pytest tests --collect-only -q`         |
+| Skipped         | varies                                                                                                                                       | minimize     | —                                               |
+| Failures        | 0                                                                                                                                            | 0            | Blocks merge                                    |
 
 ## Naming Conventions
 
 ### File naming
-```
+
+```text
 test_<module_name>.py          # Primary module test
 test_<module_name>_<aspect>.py # Secondary aspect (e.g., test_events_async.py)
 ```
 
 ### Class and function naming
+
 ```python
 class TestFeatureName:         # CamelCase, Test prefix, describe the feature
     def test_behavior(self):   # snake_case, test_ prefix, describe the behavior
@@ -38,6 +39,7 @@ class TestFeatureName:         # CamelCase, Test prefix, describe the feature
 ## Zero-Mock Policy (Hard Requirement)
 
 Tests MUST NOT use:
+
 - `unittest.mock.MagicMock`
 - `unittest.mock.patch`
 - `pytest-mock` (`mocker` fixture)
@@ -45,6 +47,7 @@ Tests MUST NOT use:
 - Any fake/stub objects returning hardcoded data
 
 Tests MUST use:
+
 - Real module instances with real configurations
 - `tmp_path` for isolated filesystem operations
 - `@pytest.mark.skipif` for tests that require unavailable services
@@ -54,13 +57,13 @@ Tests MUST use:
 
 Each test must be marked appropriately:
 
-| Marker | Requirement |
-|--------|-------------|
-| `unit` | No external network, no real DB, no API keys |
+| Marker        | Requirement                                           |
+| ------------- | ----------------------------------------------------- |
+| `unit`        | No external network, no real DB, no API keys          |
 | `integration` | Requires running service or multi-module coordination |
-| `slow` | Runs in >5 seconds on reference hardware |
-| `network` | Makes outbound HTTP/socket calls |
-| `external` | Requires environment variable (API key, URL) |
+| `slow`        | Runs in >5 seconds on reference hardware              |
+| `network`     | Makes outbound HTTP/socket calls                      |
+| `external`    | Requires environment variable (API key, URL)          |
 
 Unmarked tests are treated as `unit` by default.
 
@@ -110,6 +113,7 @@ pytest.importorskip("heavy_sdk")
 ## CI Integration
 
 The `ci.yml` workflow runs unit tests with:
+
 ```bash
 uv run pytest tests/unit/ ... --cov=src/codomyrmex --cov-fail-under=60
 ```

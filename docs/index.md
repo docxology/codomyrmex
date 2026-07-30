@@ -37,27 +37,27 @@ just build
 - **130 top-level modules** under `src/codomyrmex/` — AI agents, code analysis, security, cloud, and more ([inventory](reference/inventory.md))
 - **623** production `@mcp_tool` decorators (see [reference/inventory.md](reference/inventory.md); refresh via `uv run python scripts/doc_inventory.py`)
 - **39 agent packages** — Claude, Gemini, Jules, Hermes, Codex, and 34 more (see [agents/](agents/))
-- **Zero-Mock testing** — active tests use real functional verification (**35,508** tests collected in the complete locked dependency profile with `uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest`; see [inventory](reference/inventory.md); snapshot values must be refreshed after discovery changes)
+- **Zero-Mock testing** — active tests use real functional verification (**35,780** tests collected in the complete locked dependency profile with `uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest`; see [inventory](reference/inventory.md); snapshot values must be refreshed after discovery changes)
 - **PAI integration** — Personal AI bridge with 14-tab SPA dashboard + WebSocket push (see [PAI_DASHBOARD.md](PAI_DASHBOARD.md))
 - **Lint / types** — run `uv run ruff check .` and `uv run ty check --output-format concise src/ scripts/ tests/` for current output; thresholds live in `pyproject.toml`
 - **Coverage gate** — configured in `pyproject.toml`; run `uv run pytest --cov=src/codomyrmex` for measured coverage
 
 ## Documentation Sections
 
-| Section | Description |
-|:---|:---|
-| [Getting Started](getting-started/quickstart.md) | Installation, setup, and tutorials |
-| [Architecture](ARCHITECTURE.md) | System design and module layout |
-| [Agent Integrations](agents/) | 39 agent packages; Hermes includes [skill registry & MCP preload](agents/hermes/skills.md) |
-| [Module Docs](modules/) | Per-module README, SPEC, AGENTS docs (130 top-level packages) |
-| [Reference](reference/) | API reference, CLI, changelog, troubleshooting |
-| [Development](development/) | Contributing, testing, CI/CD, uv usage |
-| [PAI](pai/) | Personal AI infrastructure and dashboard |
-| [Security](security/) | Security policy, threat model, trust governance |
-| [Integration](integration/) | CI/CD, cloud, database, monitoring patterns |
-| [Project Orchestration](project_orchestration/) | Workflow coordination and dispatch |
-| [AGI Theory](agi/) | Theoretical foundations and emergence models |
-| [Bio](bio/) | Biological inspiration — myrmecology, swarm intelligence |
-| [Cognitive](cognitive/) | Active inference, cognitive modeling |
-| [Examples](examples/) | Code examples and tutorials |
-| [Skills](skills/) | Agent skill lifecycle and marketplace |
+| Section                                          | Description                                                                                |
+| :----------------------------------------------- | :----------------------------------------------------------------------------------------- |
+| [Getting Started](getting-started/quickstart.md) | Installation, setup, and tutorials                                                         |
+| [Architecture](ARCHITECTURE.md)                  | System design and module layout                                                            |
+| [Agent Integrations](agents/)                    | 39 agent packages; Hermes includes [skill registry & MCP preload](agents/hermes/skills.md) |
+| [Module Docs](modules/)                          | Per-module README, SPEC, AGENTS docs (130 top-level packages)                              |
+| [Reference](reference/)                          | API reference, CLI, changelog, troubleshooting                                             |
+| [Development](development/)                      | Contributing, testing, CI/CD, uv usage                                                     |
+| [PAI](pai/)                                      | Personal AI infrastructure and dashboard                                                   |
+| [Security](security/)                            | Security policy, threat model, trust governance                                            |
+| [Integration](integration/)                      | CI/CD, cloud, database, monitoring patterns                                                |
+| [Project Orchestration](project_orchestration/)  | Workflow coordination and dispatch                                                         |
+| [AGI Theory](agi/)                               | Theoretical foundations and emergence models                                               |
+| [Bio](bio/)                                      | Biological inspiration — myrmecology, swarm intelligence                                   |
+| [Cognitive](cognitive/)                          | Active inference, cognitive modeling                                                       |
+| [Examples](examples/)                            | Code examples and tutorials                                                                |
+| [Skills](skills/)                                | Agent skill lifecycle and marketplace                                                      |

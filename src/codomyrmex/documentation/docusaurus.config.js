@@ -11,7 +11,11 @@ const config = {
   projectName: 'codomyrmex',
 
   onBrokenLinks: 'warn',
-  onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
 
   i18n: {
     defaultLocale: 'en',
@@ -91,4 +95,4 @@ const config = {
     }),
 };
 
-module.exports = config; 
+module.exports = config;

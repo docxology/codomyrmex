@@ -81,6 +81,13 @@ def run_code_in_docker(
 
     # Prepare Docker command
     docker_args = DEFAULT_DOCKER_ARGS.copy()
+    getuid = getattr(os, "getuid", None)
+    getgid = getattr(os, "getgid", None)
+    if callable(getuid) and callable(getgid):
+        # Temporary sandbox directories are owner-only by default. Run the
+        # container as that owner so code remains readable after all Linux
+        # capabilities (including DAC overrides) are dropped.
+        docker_args.append(f"--user={getuid()}:{getgid()}")
 
     # Validate temp_dir is within system temp to prevent path traversal (C4)
     real_temp = os.path.realpath(temp_dir)

@@ -92,23 +92,23 @@ The policy is enforced via `ruff` — any import of mock libraries will fail lin
 
 ## Useful pytest Flags
 
-| Flag | Purpose |
-|------|---------|
-| `-v` | Verbose output with test names |
-| `-x` | Stop on first failure |
-| `--tb=short` | Short tracebacks |
-| `-q` | Quiet — summary only |
-| `--lf` | Re-run only last-failed tests |
-| `-n auto` | Parallel execution (requires `pytest-xdist`) |
+| Flag         | Purpose                                      |
+| ------------ | -------------------------------------------- |
+| `-v`         | Verbose output with test names               |
+| `-x`         | Stop on first failure                        |
+| `--tb=short` | Short tracebacks                             |
+| `-q`         | Quiet — summary only                         |
+| `--lf`       | Re-run only last-failed tests                |
+| `-n auto`    | Parallel execution (requires `pytest-xdist`) |
 
 ## Key Metrics
 
-| Metric | Value |
-|--------|-------|
-| Test files | 1,503 (`find tests -name '*.py' -type f`) |
-| Tests collected | 35,508 in the complete locked dependency profile (`uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest`; see [reference/inventory.md](../../reference/inventory.md)) |
-| Coverage gate | **60%** (`fail_under` in `pyproject.toml`; pass `--cov-fail-under=60` or `make test`) |
-| Actual coverage | After a run with `--cov` (e.g. `make test-coverage`) — see pytest summary or `coverage.json` (`meme/` omitted; see `pyproject.toml`) |
+| Metric          | Value                                                                                                                                                                                               |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Test files      | 1,503 (`find tests -name '*.py' -type f`)                                                                                                                                                           |
+| Tests collected | 35,780 in the complete locked dependency profile (`uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest`; see [reference/inventory.md](../../reference/inventory.md)) |
+| Coverage gate   | **60%** (`fail_under` in `pyproject.toml`; pass `--cov-fail-under=60` or `make test`)                                                                                                               |
+| Actual coverage | After a run with `--cov` (e.g. `make test-coverage`) — see pytest summary or `coverage.json` (`meme/` omitted; see `pyproject.toml`)                                                                |
 
 ## Next Steps
 

@@ -358,12 +358,12 @@ FORBIDDEN_CLAIMS = {
     ): "the manuscript should not claim a queue budget path absent a checked-in trace",
     re.compile(
         r"\b610 MCP tools\b", re.IGNORECASE
-    ): "root docs must distinguish 605 runtime tools from 623 decorator lines",
+    ): "root docs must distinguish 608 runtime tools from 623 decorator lines",
     re.compile(
         r"\b610 decorators\b", re.IGNORECASE
     ): "production @mcp_tool decorator count is now 623, not 610",
     re.compile(
-        r"\b(?:601|604|608)\s+(?:runtime|merged runtime|PAI-manifest)\s+(?:MCP\s+)?tools?\b",
+        r"\b(?:601|604|605)\s+(?:runtime|merged runtime|PAI-manifest)\s+(?:MCP\s+)?tools?\b",
         re.IGNORECASE,
     ): "active runtime tool claims must match the authoritative inventory",
     re.compile(
@@ -437,10 +437,10 @@ REQUIRED_CLAIMS = {
         "not a delivery timeline",
     ],
     "README.md": [
-        "605 runtime MCP tools",
+        "608 runtime MCP tools",
         "623 decorators",
         "1,199",
-        "35,508",
+        "35,780",
     ],
 }
 

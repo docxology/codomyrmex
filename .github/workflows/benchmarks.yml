@@ -30,7 +30,7 @@ permissions: {}
 
 env:
   PYTHON_VERSION: "3.11"
-  UV_VERSION: "0.5.7"
+  UV_VERSION: "0.10.8"
 
 jobs:
   benchmark-setup:
@@ -90,14 +90,14 @@ jobs:
       - name: Generate benchmark report
         run: |
           echo "📊 Generating benchmark report..."
-          
+
           echo "# 🏃‍♂️ Unit Performance Benchmark Report" > benchmarks/results/unit-report.md
           echo "" >> benchmarks/results/unit-report.md
           echo "Generated on: $(date)" >> benchmarks/results/unit-report.md
           echo "Platform: $(uname -s) $(uname -r)" >> benchmarks/results/unit-report.md
           echo "Python version: $(python --version)" >> benchmarks/results/unit-report.md
           echo "" >> benchmarks/results/unit-report.md
-          
+
           if [ -f "benchmarks/results/unit-benchmarks.json" ]; then
             echo "## Pytest Benchmark Results" >> benchmarks/results/unit-report.md
             echo "" >> benchmarks/results/unit-report.md
@@ -115,7 +115,7 @@ jobs:
           path: benchmarks/results/
 
   integration-benchmarks:
-    name: Integration Performance Benchmarks  
+    name: Integration Performance Benchmarks
     runs-on: ubuntu-latest
     needs: benchmark-setup
     if: needs.benchmark-setup.outputs.benchmark-enabled == 'true'
@@ -152,7 +152,7 @@ jobs:
           echo "" >> benchmarks/results/integration-report.md
           echo "Generated on: $(date)" >> benchmarks/results/integration-report.md
           echo "" >> benchmarks/results/integration-report.md
-          
+
           if [ -f "benchmarks/results/integration-benchmarks.json" ]; then
             echo "## Integration Benchmark Results" >> benchmarks/results/integration-report.md
             echo '```json' >> benchmarks/results/integration-report.md
@@ -193,9 +193,9 @@ jobs:
       - name: Run memory benchmarks
         run: |
           echo "🧠 Running memory performance analysis..."
-          
+
           mkdir -p benchmarks/results
-          
+
           # Create basic memory profiling script
           cat > benchmarks/memory_profiler.py << 'EOF'
           import psutil
@@ -233,8 +233,8 @@ jobs:
               print("Memory profiling completed")
               print(json.dumps(results, indent=2))
           EOF
-          
-          cd benchmarks && python memory_profiler.py
+
+          uv run python benchmarks/memory_profiler.py
 
       - name: Generate memory report
         run: |
@@ -242,14 +242,14 @@ jobs:
           echo "" >> benchmarks/results/memory-report.md
           echo "Generated on: $(date)" >> benchmarks/results/memory-report.md
           echo "" >> benchmarks/results/memory-report.md
-          
+
           if [ -f "benchmarks/results/memory-profile-results.json" ]; then
             echo "## Memory Profiling Results" >> benchmarks/results/memory-report.md
             echo '```json' >> benchmarks/results/memory-report.md
             cat benchmarks/results/memory-profile-results.json >> benchmarks/results/memory-report.md
             echo '```' >> benchmarks/results/memory-report.md
           fi
-          
+
           echo "" >> benchmarks/results/memory-report.md
           echo "## System Memory Information" >> benchmarks/results/memory-report.md
           echo '```' >> benchmarks/results/memory-report.md
@@ -276,7 +276,7 @@ jobs:
       - name: Generate comprehensive benchmark report
         run: |
           echo "📊 Generating comprehensive benchmark report..."
-          
+
           echo "# 📊 Comprehensive Performance Benchmark Report" > comprehensive-benchmark-report.md
           echo "" >> comprehensive-benchmark-report.md
           echo "Generated on: $(date)" >> comprehensive-benchmark-report.md
@@ -284,10 +284,10 @@ jobs:
           echo "Repository: ${{ github.repository }}" >> comprehensive-benchmark-report.md
           echo "Commit: ${{ github.sha }}" >> comprehensive-benchmark-report.md
           echo "" >> comprehensive-benchmark-report.md
-          
+
           echo "## Summary" >> comprehensive-benchmark-report.md
           echo "" >> comprehensive-benchmark-report.md
-          
+
           # Check for benchmark results
           if [ -d "benchmark-artifacts" ]; then
             echo "Benchmark artifacts found:" >> comprehensive-benchmark-report.md
@@ -297,7 +297,7 @@ jobs:
           else
             echo "No benchmark artifacts found" >> comprehensive-benchmark-report.md
           fi
-          
+
           echo "" >> comprehensive-benchmark-report.md
           echo "## Recommendations" >> comprehensive-benchmark-report.md
           echo "" >> comprehensive-benchmark-report.md
@@ -320,19 +320,19 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Benchmark Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [[ "${{ needs.unit-benchmarks.result }}" == "success" ]]; then
             echo "✅ **Unit Benchmarks**: Completed" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **Unit Benchmarks**: Failed or Skipped" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.integration-benchmarks.result }}" == "success" ]]; then
             echo "✅ **Integration Benchmarks**: Completed" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **Integration Benchmarks**: Failed or Skipped" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.memory-benchmarks.result }}" == "success" ]]; then
             echo "✅ **Memory Analysis**: Completed" >> $GITHUB_STEP_SUMMARY
           else

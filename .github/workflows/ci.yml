@@ -15,7 +15,7 @@ permissions: {}
 
 env:
   PYTHON_VERSION: "3.11"
-  UV_VERSION: "0.5.7"  # Updated to latest version
+  UV_VERSION: "0.10.8"
   NODE_VERSION: "20"
   # Hypothesis's pytest plugin imports before conftest; conftest cannot set this in time.
   HYPOTHESIS_NO_NPY: "1"
@@ -385,7 +385,7 @@ jobs:
           - "static_analysis"
           - "code_execution_sandbox"
           - "environment_setup"
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
@@ -555,9 +555,9 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Status Overview" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           all_passed=true
-          
+
           # Helper: treat 'success' and 'skipped' as passing
           check_result() {
             local name="$1" result="$2"
@@ -568,7 +568,7 @@ jobs:
               all_passed=false
             fi
           }
-          
+
           check_result "Code Quality"        "${{ needs.lint-and-format.result }}"
           check_result "Security Scan"       "${{ needs.security-scan.result }}"
           check_result "Complexity Analysis" "${{ needs.complexity-analysis.result }}"
@@ -579,9 +579,9 @@ jobs:
           check_result "Package Build"       "${{ needs.build-package.result }}"
           check_result "Dependencies"        "${{ needs.validate-dependencies.result }}"
           check_result "Test Summary"        "${{ needs.test-summary.result }}"
-          
+
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [[ "$all_passed" == "true" ]]; then
             echo "🎉 **Overall Result: SUCCESS** - All CI checks passed!" >> $GITHUB_STEP_SUMMARY
             echo "✅ All CI checks passed!"

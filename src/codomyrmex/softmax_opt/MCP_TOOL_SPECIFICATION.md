@@ -14,7 +14,7 @@ including standard, log-softmax, and online softmax implementations.
 ## Auto-Discovery
 
 | Property | Value |
-|----------|-------|
+| -------- | ----- |
 | Discovery method | `@mcp_tool` decorator scan |
 | Namespace | `softmax_opt` |
 | Trust default | Safe |
@@ -31,14 +31,15 @@ including standard, log-softmax, and online softmax implementations.
 **Parameters**:
 
 | Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
+| --------- | ---- | -------- | ------- | ----------- |
 | `logits` | `list[float]` | Yes | -- | Raw unnormalized scores |
-| `temperature` | `float` | No | `1.0` | Temperature scaling (>1 = more uniform, <1 = more peaked) |
+| `temperature` | `float` | No | `1.0` | Temperature scaling (above 1 is more uniform and below 1 is more peaked) |
 | `variant` | `str` | No | `"standard"` | Softmax variant: `"standard"`, `"log"`, or `"online"` |
 
 **Returns**: `dict` — Dictionary with `status`, `probabilities` (list), `log_probs` (list), `entropy` (float), `max_prob` (float), and `sum_check` (float, should be ~1.0).
 
 **Example**:
+
 ```python
 from codomyrmex.softmax_opt.mcp_tools import compute_softmax
 

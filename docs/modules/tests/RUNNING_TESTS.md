@@ -8,7 +8,7 @@
 
 This document describes how to run and filter the Codomyrmex test suite. Canonical counts and inventory live in [docs/reference/inventory.md](../../reference/inventory.md).
 
-**Collected tests (repo-wide):** **35,508** — measured with `uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest` from the repository root after `uv sync --locked --all-groups --all-extras`. Count varies with optional extras and discovery paths; refresh the snapshot in [docs/reference/inventory.md](../../reference/inventory.md) after test discovery changes.
+**Collected tests (repo-wide):** **35,780** — measured with `uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest` from the repository root after `uv sync --locked --all-groups --all-extras`. Count varies with optional extras and discovery paths; refresh the snapshot in [docs/reference/inventory.md](../../reference/inventory.md) after test discovery changes.
 
 ### Zero-Mock Policy
 
@@ -22,15 +22,15 @@ This document describes how to run and filter the Codomyrmex test suite. Canonic
 
 ### Test Categories
 
-| Category | Location | Count (indicative) | Notes |
-|----------|----------|--------------------|--------|
-| **All collected** | under `tests/` (`tests/` + `tests/**`) | **35,508** | Complete locked dependency profile; single source of truth: `uv run python scripts/doc_inventory.py --pytest` |
-| **`unit` marker** | mostly `tests/unit/**` | **20,922** | `pytest -m unit --collect-only` |
-| **`integration` marker** | mixed | **245** | `pytest -m integration --collect-only` |
-| **Integration tree** | `tests/integration/` | **343** | `pytest tests/integration/ --collect-only` |
-| **Example tests** | `tests/unit/examples/` | **24** | Example validation lives under unit tree |
-| **Performance tree** | `tests/performance/` | **59** | Benchmark-style jobs |
-| **Unit test files** | `tests/unit/**/test_*.py` | **1,187** | `find` count; changes as tests are added |
+| Category                 | Location                               | Count (indicative) | Notes                                                                                                         |
+| ------------------------ | -------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------- |
+| **All collected**        | under `tests/` (`tests/` + `tests/**`) | **35,780**         | Complete locked dependency profile; single source of truth: `uv run python scripts/doc_inventory.py --pytest` |
+| **`unit` marker**        | mostly `tests/unit/**`                 | **20,922**         | `pytest -m unit --collect-only`                                                                               |
+| **`integration` marker** | mixed                                  | **245**            | `pytest -m integration --collect-only`                                                                        |
+| **Integration tree**     | `tests/integration/`                   | **343**            | `pytest tests/integration/ --collect-only`                                                                    |
+| **Example tests**        | `tests/unit/examples/`                 | **24**             | Example validation lives under unit tree                                                                      |
+| **Performance tree**     | `tests/performance/`                   | **59**             | Benchmark-style jobs                                                                                          |
+| **Unit test files**      | `tests/unit/**/test_*.py`              | **1,187**          | `find` count; changes as tests are added                                                                      |
 
 Full-suite wall time varies widely (often **tens of minutes**); use markers, `-k`, scoped directories, or `make test-unit` / `make test-integration` for tighter loops.
 
@@ -40,7 +40,7 @@ abort the interpreter. Run it explicitly with
 `RUN_LIVE_MLX=1 uv run pytest tests/unit/test_v132_execution.py -q` after
 verifying the local MLX runtime.
 
-### Test Markers
+### Development Test Markers
 
 Tests are marked with pytest markers for selective execution:
 
@@ -124,7 +124,7 @@ uv run pytest --collect-only
 uv run pytest tests/unit/ --collect-only
 ```
 
-### Coverage Reports
+### Generated Coverage Reports
 
 Default `uv run pytest` does **not** enable coverage (see `pyproject.toml` `[tool.pytest.ini_options]`). Use `make test`, `make test-coverage`, or explicit `--cov` flags. The documented floor is **60%** (`[tool.coverage.report] fail_under`); enforce it with `--cov-fail-under=60` when running pytest with `--cov`. The experimental `meme` package is omitted from coverage measurement (`[tool.coverage.run] omit`).
 
@@ -194,12 +194,12 @@ Use **`make test`**, **`make test-unit`**, **`make test-integration`**, or direc
 
 Common flags on any command:
 
-| Flag | Use |
-|------|-----|
-| `-x` / `--maxfail=1` | Stop on first failure |
-| `--timeout=N` | Per-test timeout (requires `pytest-timeout` if configured) |
-| `--durations=20` | Print slowest tests |
-| `-vv` | Very verbose |
+| Flag                 | Use                                                        |
+| -------------------- | ---------------------------------------------------------- |
+| `-x` / `--maxfail=1` | Stop on first failure                                      |
+| `--timeout=N`        | Per-test timeout (requires `pytest-timeout` if configured) |
+| `--durations=20`     | Print slowest tests                                        |
+| `-vv`                | Very verbose                                               |
 
 Typical order when running pieces by hand: **unit** → **integration** → **examples** → **performance** (slowest last).
 

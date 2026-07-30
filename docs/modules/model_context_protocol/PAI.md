@@ -49,10 +49,10 @@ graph TB
 
 ## Transports
 
-| Transport | Protocol | Use Case | Command |
-|-----------|----------|----------|---------|
-| **stdio** | JSON-RPC over stdin/stdout | Claude Desktop, Claude Code (production) | `--transport stdio` |
-| **HTTP** | FastAPI + Uvicorn, REST + Streamable HTTP | Browser access, remote clients, Web UI | `--transport http --port 8080` |
+| Transport | Protocol                                  | Use Case                                 | Command                        |
+| --------- | ----------------------------------------- | ---------------------------------------- | ------------------------------ |
+| **stdio** | JSON-RPC over stdin/stdout                | Claude Desktop, Claude Code (production) | `--transport stdio`            |
+| **HTTP**  | FastAPI + Uvicorn, REST + Streamable HTTP | Browser access, remote clients, Web UI   | `--transport http --port 8080` |
 
 The HTTP transport includes a self-contained **Web UI** at the root URL (`/`) with interactive tool testing, server info, resource browsing, and prompt browsing.
 
@@ -65,47 +65,47 @@ The HTTP transport includes a self-contained **Web UI** at the root URL (`/`) wi
 
 ## HTTP Endpoints (8 REST + 1 JSON-RPC)
 
-| Endpoint | Method | Purpose |
-|----------|--------|---------|
-| `/` | GET | Web UI — interactive tool tester and server dashboard |
-| `/health` | GET | Health check — returns status, tool/resource/prompt counts, protocol version |
-| `/mcp` | POST | JSON-RPC endpoint (Streamable HTTP) for MCP protocol messages |
-| `/tools` | GET | List all registered tools with schemas |
-| `/tools/{name}` | GET | Get a single tool's schema and parameters |
-| `/tools/{name}/call` | POST | Execute a tool — body is raw arguments (server wraps as `arguments`) |
-| `/resources` | GET | List registered resources |
-| `/prompts` | GET | List registered prompt templates |
+| Endpoint             | Method | Purpose                                                                      |
+| -------------------- | ------ | ---------------------------------------------------------------------------- |
+| `/`                  | GET    | Web UI — interactive tool tester and server dashboard                        |
+| `/health`            | GET    | Health check — returns status, tool/resource/prompt counts, protocol version |
+| `/mcp`               | POST   | JSON-RPC endpoint (Streamable HTTP) for MCP protocol messages                |
+| `/tools`             | GET    | List all registered tools with schemas                                       |
+| `/tools/{name}`      | GET    | Get a single tool's schema and parameters                                    |
+| `/tools/{name}/call` | POST   | Execute a tool — body is raw arguments (server wraps as `arguments`)         |
+| `/resources`         | GET    | List registered resources                                                    |
+| `/prompts`           | GET    | List registered prompt templates                                             |
 
-## Available Tools (605 merged runtime-manifest tools in the complete locked dependency profile)
+## Available Tools (608 merged runtime-manifest tools in the complete locked dependency profile)
 
 ### Built-in Transport Tools (15) — Fully Implemented
 
 The standard transport provides common operations directly implemented in `tools.py`:
 
-| Category | Tool | Description | PAI Phase |
-|----------|------|-------------|-----------|
-| **File Ops** | `read_file` | Read file contents with metadata (size, lines, mtime) | All |
-| **File Ops** | `write_file` | Write content, creating parent dirs if needed | BUILD |
-| **File Ops** | `list_directory` | List directory with filtering, pagination, metadata | OBSERVE |
-| **Code** | `search_code` | Regex search across code files with type filtering | OBSERVE |
-| **Code** | `analyze_python_file` | Python AST analysis: classes, functions, imports, metrics | VERIFY |
-| **Shell** | `run_command` | Execute shell commands with timeout and env support | EXECUTE |
-| **Git** | `git_status` | Branch, changed files, recent commits | OBSERVE |
-| **Git** | `git_diff` | File diffs, optionally staged only | OBSERVE |
-| **Data** | `json_query` | Read/query JSON files with dot-notation paths | OBSERVE |
-| **Data** | `checksum_file` | Calculate MD5, SHA1, or SHA256 checksums | VERIFY |
-| **Memory** | `store_memory` | Store key-value pair in session memory | LEARN |
-| **Memory** | `recall_memory` | Retrieve value from session memory | OBSERVE |
-| **Memory** | `list_memories` | List all stored memory keys | OBSERVE |
-| **Module** | `list_modules` | List all codomyrmex modules | OBSERVE |
-| **Module** | `module_info` | Get module info and file listing for a specific module | OBSERVE |
+| Category     | Tool                  | Description                                               | PAI Phase |
+| ------------ | --------------------- | --------------------------------------------------------- | --------- |
+| **File Ops** | `read_file`           | Read file contents with metadata (size, lines, mtime)     | All       |
+| **File Ops** | `write_file`          | Write content, creating parent dirs if needed             | BUILD     |
+| **File Ops** | `list_directory`      | List directory with filtering, pagination, metadata       | OBSERVE   |
+| **Code**     | `search_code`         | Regex search across code files with type filtering        | OBSERVE   |
+| **Code**     | `analyze_python_file` | Python AST analysis: classes, functions, imports, metrics | VERIFY    |
+| **Shell**    | `run_command`         | Execute shell commands with timeout and env support       | EXECUTE   |
+| **Git**      | `git_status`          | Branch, changed files, recent commits                     | OBSERVE   |
+| **Git**      | `git_diff`            | File diffs, optionally staged only                        | OBSERVE   |
+| **Data**     | `json_query`          | Read/query JSON files with dot-notation paths             | OBSERVE   |
+| **Data**     | `checksum_file`       | Calculate MD5, SHA1, or SHA256 checksums                  | VERIFY    |
+| **Memory**   | `store_memory`        | Store key-value pair in session memory                    | LEARN     |
+| **Memory**   | `recall_memory`       | Retrieve value from session memory                        | OBSERVE   |
+| **Memory**   | `list_memories`       | List all stored memory keys                               | OBSERVE   |
+| **Module**   | `list_modules`        | List all codomyrmex modules                               | OBSERVE   |
+| **Module**   | `module_info`         | Get module info and file listing for a specific module    | OBSERVE   |
 
 ### Runtime discovery and source inventory
 
 The transport layer uses `MCPDiscovery.scan_package("codomyrmex")` to traverse the
 130 top-level modules and register eligible decorated tools at server boot. The source
 inventory currently contains 623 production `@mcp_tool` lines, while the merged PAI
-manifest exposes 605 runtime entries in the complete locked dependency profile. These
+manifest exposes 608 runtime entries in the complete locked dependency profile. These
 are intentionally separate measurements:
 wrappers, aliases, built-ins, profile filters, and registration eligibility can make
 the runtime registry smaller or otherwise different from the physical decorator count.
@@ -116,42 +116,42 @@ The authoritative snapshot and reproduction commands live in
 
 ### Registered Resources
 
-| Resource | Type | Description |
-|----------|------|-------------|
+| Resource               | Type            | Description                |
+| ---------------------- | --------------- | -------------------------- |
 | `file://.../README.md` | `text/markdown` | Main project documentation |
 
 ### Registered Prompts
 
-| Prompt | Arguments | Description |
-|--------|-----------|-------------|
-| `code_review` | `focus`, `code` | Review code for security, performance, or style |
+| Prompt         | Arguments              | Description                                      |
+| -------------- | ---------------------- | ------------------------------------------------ |
+| `code_review`  | `focus`, `code`        | Review code for security, performance, or style  |
 | `explain_code` | `detail_level`, `code` | Explain code at brief, detailed, or expert level |
 
 ## Web UI
 
 The Web UI (`web_ui.py`) is a self-contained HTML/CSS/JS application served at `GET /` when the HTTP transport is active. It provides:
 
-| Tab | Features |
-|-----|----------|
-| **Tools** | Searchable tool list, click to select, parameter form auto-generated from inputSchema, Execute button with JSON result display |
-| **Resources** | Browse registered resources with URI, name, MIME type |
-| **Prompts** | Browse prompt templates with arguments |
-| **Server Info** | Stats grid (tool count, resource count, prompt count, protocol version, server name, transport) |
+| Tab             | Features                                                                                                                       |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| **Tools**       | Searchable tool list, click to select, parameter form auto-generated from inputSchema, Execute button with JSON result display |
+| **Resources**   | Browse registered resources with URI, name, MIME type                                                                          |
+| **Prompts**     | Browse prompt templates with arguments                                                                                         |
+| **Server Info** | Stats grid (tool count, resource count, prompt count, protocol version, server name, transport)                                |
 
 The UI uses a dark theme with the codomyrmex accent color (`#6c8cff`), and the tool tester supports real-time tool execution against the running server.
 
 ## Key Classes and Files
 
-| Class/File | Location | Purpose |
-|------------|----------|---------|
-| `MCPServer` | `server.py` | Full MCP server — tool/resource/prompt registration, JSON-RPC dispatch, stdio and HTTP transports |
-| `MCPServerConfig` | `server.py` | Server configuration dataclass (name, version, transport, log_level) |
-| `MCPToolRegistry` | `schemas/mcp_schemas.py` | Tool registration and execution engine |
-| `MCPToolCall` | `schemas/mcp_schemas.py` | Tool call data model |
-| `get_web_ui_html()` | `web_ui.py` | Self-contained HTML Web UI (524 lines) |
-| `tools.py` | `tools.py` | All tool implementations (file, code, shell, git, data) |
-| `discovery.py` | `discovery.py` | Auto-discover tools from `MCP_TOOL_SPECIFICATION.md` files |
-| `run_mcp_server.py` | `scripts/model_context_protocol/` | Server runner — creates server, registers all tools, starts transport |
+| Class/File          | Location                          | Purpose                                                                                           |
+| ------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `MCPServer`         | `server.py`                       | Full MCP server — tool/resource/prompt registration, JSON-RPC dispatch, stdio and HTTP transports |
+| `MCPServerConfig`   | `server.py`                       | Server configuration dataclass (name, version, transport, log_level)                              |
+| `MCPToolRegistry`   | `schemas/mcp_schemas.py`          | Tool registration and execution engine                                                            |
+| `MCPToolCall`       | `schemas/mcp_schemas.py`          | Tool call data model                                                                              |
+| `get_web_ui_html()` | `web_ui.py`                       | Self-contained HTML Web UI (524 lines)                                                            |
+| `tools.py`          | `tools.py`                        | All tool implementations (file, code, shell, git, data)                                           |
+| `discovery.py`      | `discovery.py`                    | Auto-discover tools from `MCP_TOOL_SPECIFICATION.md` files                                        |
+| `run_mcp_server.py` | `scripts/model_context_protocol/` | Server runner — creates server, registers all tools, starts transport                             |
 
 ## Setup for PAI Users
 
@@ -179,15 +179,16 @@ Add to `~/.claude/claude_desktop_config.json`:
 
 ```json
 {
-  "mcpServers": {
-    "codomyrmex": {
-      "command": "python",
-      "args": [
-        "/absolute/path/to/codomyrmex/scripts/model_context_protocol/run_mcp_server.py",
-        "--transport", "stdio"
-      ]
+    "mcpServers": {
+        "codomyrmex": {
+            "command": "python",
+            "args": [
+                "/absolute/path/to/codomyrmex/scripts/model_context_protocol/run_mcp_server.py",
+                "--transport",
+                "stdio"
+            ]
+        }
     }
-  }
 }
 ```
 
@@ -213,29 +214,30 @@ curl -H "Authorization: Bearer $CODOMYRMEX_MCP_AUTH_TOKEN" \
 
 ## PAI Algorithm Phase Mapping
 
-| Phase | MCP Module Contribution |
-|-------|------------------------|
+| Phase       | MCP Module Contribution                                                                                                       |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | **OBSERVE** | `git_status`, `git_diff`, `read_file`, `list_directory`, `search_code`, `list_modules`, `recall_memory` — gather system state |
-| **THINK** | Tool schemas inform capability selection; `analyze_python_file` for code understanding |
-| **PLAN** | `/health` endpoint shows tool inventory for planning; discovery bridge reveals available module tools |
-| **BUILD** | `write_file` — create artifacts; `run_command` — run build scripts |
-| **EXECUTE** | `run_command` — shell execution; all tools available for agent-driven work |
-| **VERIFY** | `checksum_file` — integrity checks; `analyze_python_file` — code quality; `git_diff` — change validation |
-| **LEARN** | `store_memory` — capture learnings; discovery system learns from new `MCP_TOOL_SPECIFICATION.md` files |
+| **THINK**   | Tool schemas inform capability selection; `analyze_python_file` for code understanding                                        |
+| **PLAN**    | `/health` endpoint shows tool inventory for planning; discovery bridge reveals available module tools                         |
+| **BUILD**   | `write_file` — create artifacts; `run_command` — run build scripts                                                            |
+| **EXECUTE** | `run_command` — shell execution; all tools available for agent-driven work                                                    |
+| **VERIFY**  | `checksum_file` — integrity checks; `analyze_python_file` — code quality; `git_diff` — change validation                      |
+| **LEARN**   | `store_memory` — capture learnings; discovery system learns from new `MCP_TOOL_SPECIFICATION.md` files                        |
 
 ## MCP Introspection Tools
 
 Three tools are auto-discovered via `@mcp_tool` from `model_context_protocol/mcp_tools.py` — these allow PAI agents to introspect the MCP server itself:
 
-| Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
-| `inspect_server` | Inspect the running MCP server configuration, capabilities, and registered tools | Safe | model_context_protocol |
-| `list_registered_tools` | List all tools currently registered with the MCP server, with schemas | Safe | model_context_protocol |
-| `get_tool_schema` | Get the input/output schema for a specific registered tool | Safe | model_context_protocol |
+| Tool                    | Description                                                                      | Trust Level | Category               |
+| ----------------------- | -------------------------------------------------------------------------------- | ----------- | ---------------------- |
+| `inspect_server`        | Inspect the running MCP server configuration, capabilities, and registered tools | Safe        | model_context_protocol |
+| `list_registered_tools` | List all tools currently registered with the MCP server, with schemas            | Safe        | model_context_protocol |
+| `get_tool_schema`       | Get the input/output schema for a specific registered tool                       | Safe        | model_context_protocol |
 
 ## MCP Protocol Version
 
 The server implements **MCP 2025-06-18** with:
+
 - `protocolVersion: "2025-06-18"` in `initialize` response
 - `title` field on tools (human-friendly display name)
 - `outputSchema` support for structured tool output
@@ -272,11 +274,11 @@ Any codomyrmex module can expose tools through MCP by adding an `MCP_TOOL_SPECIF
 
 ## MCP Tools
 
-| Tool | Description | Key Parameters | PAI Phase |
-|------|-------------|----------------|-----------|
-| `inspect_server` | Get MCP server metadata, capability count, and protocol version | `server_url: str` | OBSERVE |
-| `list_registered_tools` | List all registered tools on the running MCP server | -- | OBSERVE |
-| `get_tool_schema` | Get input schema and description for a specific tool | `tool_name: str` | OBSERVE |
+| Tool                    | Description                                                     | Key Parameters    | PAI Phase |
+| ----------------------- | --------------------------------------------------------------- | ----------------- | --------- |
+| `inspect_server`        | Get MCP server metadata, capability count, and protocol version | `server_url: str` | OBSERVE   |
+| `list_registered_tools` | List all registered tools on the running MCP server             | --                | OBSERVE   |
+| `get_tool_schema`       | Get input schema and description for a specific tool            | `tool_name: str`  | OBSERVE   |
 
 ## Navigation
 
