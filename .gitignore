@@ -279,18 +279,18 @@ memory.db
 scorecard.png
 fail_prompt.py
 review.md
-config_audits/
+/config_audits/
 !src/codomyrmex/config_audits/
 !src/codomyrmex/config_audits/API_SPECIFICATION.md
 !src/codomyrmex/config_audits/MCP_TOOL_SPECIFICATION.md
-config_monitoring/
+/config_monitoring/
 !src/codomyrmex/config_monitoring/
 !src/codomyrmex/config_monitoring/API_SPECIFICATION.md
 db_performance/
 
 # Test artifacts
 config/default.yaml
-MEMORY/
+/MEMORY/
 !docs/agents/memory/
 !docs/agents/memory/AGENTS.md
 !docs/agents/memory/README.md

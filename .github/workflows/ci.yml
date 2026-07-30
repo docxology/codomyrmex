@@ -259,8 +259,6 @@ jobs:
             tests/unit/colony_kernel/test_reference_semantics.py \
             tests/unit/colony_kernel/test_research_harness.py \
             tests/unit/build_synthesis/test_build_synthesis.py \
-            tests/unit/manuscript/test_integrity.py \
-            tests/unit/manuscript/test_variable_contract.py \
             tests/scripts/sair/test_sair_scripts.py
           uv run python scripts/run_colony_research.py \
             --output output/research/colony_kernel_offline.json --seed 0
@@ -271,6 +269,9 @@ jobs:
           uv run python scripts/validate_manuscript_contract.py
           uv run python scripts/generate_manuscript_figures.py
           uv run python scripts/validate_manuscript_integrity.py
+          uv run pytest -q \
+            tests/unit/manuscript/test_integrity.py \
+            tests/unit/manuscript/test_variable_contract.py
           test -s output/data/manuscript_variable_manifest.json
           test -s output/figures/figure_registry.json
 
@@ -323,15 +324,15 @@ jobs:
           mkdir -p src/codomyrmex/output
 
       - name: Run unit tests
-        run: |
-          uv run pytest tests/unit/ -v --tb=short \
-            --cov=src/codomyrmex \
-            --cov-report=xml \
-            --cov-report=html \
-            --cov-report=term-missing \
-            --junit-xml=junit-unit-${{ matrix.os }}-${{ matrix.python-version }}.xml \
-            --cov-report=json \
-            --cov-fail-under=60
+        run: >-
+          uv run pytest tests/unit/ -v --tb=short
+          --cov=src/codomyrmex
+          --cov-report=xml
+          --cov-report=html
+          --cov-report=term-missing
+          --junit-xml=junit-unit-${{ matrix.os }}-${{ matrix.python-version }}.xml
+          --cov-report=json
+          --cov-fail-under=60
 
       - name: Run integration tests
         run: |
