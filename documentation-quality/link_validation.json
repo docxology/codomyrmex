@@ -387,28 +387,28 @@
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:11434/api/embed`",
-    "line": 159,
+    "line": 179,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:11434\"",
-    "line": 159,
+    "line": 179,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:3100`",
-    "line": 165,
+    "line": 185,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:8080/`",
-    "line": 1094,
+    "line": 1114,
     "status": "external",
     "message": "External link (not validated)"
   },
@@ -5630,28 +5630,28 @@
   {
     "file": ".github/PAI.md",
     "link": "AGENTS.md",
-    "line": 142,
+    "line": 145,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": ".github/PAI.md",
     "link": "SPEC.md",
-    "line": 142,
+    "line": 145,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": ".github/PAI.md",
     "link": "../PAI.md",
-    "line": 143,
+    "line": 146,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": ".github/PAI.md",
     "link": "../AGENTS.md",
-    "line": 143,
+    "line": 146,
     "status": "ok",
     "message": "File exists"
   },
@@ -9676,28 +9676,28 @@
   {
     "file": ".github/SPEC.md",
     "link": "AGENTS.md",
-    "line": 142,
+    "line": 145,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": ".github/SPEC.md",
     "link": "PAI.md",
-    "line": 142,
+    "line": 145,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": ".github/SPEC.md",
     "link": "../SPEC.md",
-    "line": 143,
+    "line": 146,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": ".github/SPEC.md",
     "link": "../README.md",
-    "line": 143,
+    "line": 146,
     "status": "ok",
     "message": "File exists"
   },
@@ -14842,35 +14842,35 @@
   {
     "file": "scripts/documentation/README.md",
     "link": "../../docs/plans/readme_agents_hand_pass.md",
-    "line": 75,
+    "line": 77,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/documentation/README.md",
     "link": "AGENTS.md",
-    "line": 93,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "scripts/documentation/README.md",
-    "link": "../../docs/development/documentation.md",
-    "line": 94,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "scripts/documentation/README.md",
-    "link": "../README.md",
     "line": 95,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/documentation/README.md",
-    "link": "../../README.md",
+    "link": "../../docs/development/documentation.md",
     "line": 96,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "scripts/documentation/README.md",
+    "link": "../README.md",
+    "line": 97,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "scripts/documentation/README.md",
+    "link": "../../README.md",
+    "line": 98,
     "status": "ok",
     "message": "File exists"
   },
@@ -35324,28 +35324,28 @@
   {
     "file": "src/codomyrmex/audio/text_to_speech/providers/SPEC.md",
     "link": "../README.md",
-    "line": 76,
+    "line": 79,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/audio/text_to_speech/providers/SPEC.md",
     "link": "README.md",
-    "line": 77,
+    "line": 80,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/audio/text_to_speech/providers/SPEC.md",
     "link": "AGENTS.md",
-    "line": 78,
+    "line": 81,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/audio/text_to_speech/providers/SPEC.md",
     "link": "../../../../../README.md",
-    "line": 79,
+    "line": 82,
     "status": "ok",
     "message": "File exists"
   },
@@ -36696,35 +36696,35 @@
   {
     "file": "src/codomyrmex/operating_system/windows/SPEC.md",
     "link": "../README.md",
-    "line": 96,
+    "line": 105,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/operating_system/windows/SPEC.md",
     "link": "../mac/SPEC.md",
-    "line": 97,
+    "line": 106,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/operating_system/windows/SPEC.md",
     "link": "../linux/SPEC.md",
-    "line": 97,
+    "line": 106,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/operating_system/windows/SPEC.md",
     "link": "../../../../README.md",
-    "line": 98,
+    "line": 107,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/operating_system/windows/SPEC.md",
     "link": "AGENTS.md",
-    "line": 102,
+    "line": 111,
     "status": "ok",
     "message": "File exists"
   },
@@ -43486,28 +43486,28 @@
   {
     "file": "src/codomyrmex/system_discovery/reporting/SPEC.md",
     "link": "../README.md",
-    "line": 70,
+    "line": 73,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/system_discovery/reporting/SPEC.md",
     "link": "README.md",
-    "line": 71,
+    "line": 74,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/system_discovery/reporting/SPEC.md",
     "link": "AGENTS.md",
-    "line": 72,
+    "line": 75,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/system_discovery/reporting/SPEC.md",
     "link": "../../../../README.md",
-    "line": 73,
+    "line": 76,
     "status": "ok",
     "message": "File exists"
   },
