@@ -11,3 +11,8 @@ Duplicate definitions across modules (e.g., repeating the `SecretType` definitio
 
 **Prevention:**
 Use descriptive suffixes or alternatives (e.g., changing `"password"` to `"password_type"`) for model or type definitions. Implement robust CI checks to enforce single-source-of-truth patterns rather than duplicating classes.
+
+## 2025-07-25 - Fix Command Injection in Transcription Tools
+**Vulnerability:** Found `subprocess.run(command, shell=True)` used for executing local transcription commands in `src/codomyrmex/agents/open_gauss/tools/transcription_tools.py`.
+**Learning:** Using `shell=True` with string-based commands is highly vulnerable to command injection, even when variables are quoted, because the shell itself interprets the string.
+**Prevention:** Eliminate `shell=True` completely and replace it with `shell=False`, using `shlex.split()` to correctly tokenize the command string into a list of arguments without manually reconstructing the command array.
