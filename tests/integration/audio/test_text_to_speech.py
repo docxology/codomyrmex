@@ -1,10 +1,11 @@
 """Integration tests for the text-to-speech providers."""
 
 from pathlib import Path
+from typing import NoReturn
 
 import pytest
 
-from codomyrmex.audio.exceptions import ProviderNotAvailableError
+from codomyrmex.audio.exceptions import ProviderNotAvailableError, SynthesisError
 from codomyrmex.audio.text_to_speech.models import AudioFormat
 from codomyrmex.audio.text_to_speech.providers import (
     EDGE_TTS_AVAILABLE,
@@ -18,6 +19,16 @@ from codomyrmex.audio.text_to_speech.synthesizer import Synthesizer
 TEST_TEXT = (
     "This is a zero mock functional test of the Codomyrmex text to speech system."
 )
+
+
+def _skip_if_edge_service_unavailable(error: SynthesisError) -> NoReturn:
+    """Skip only failures originating in the optional remote Edge service."""
+    from aiohttp import ClientError
+    from edge_tts.exceptions import EdgeTTSException
+
+    if isinstance(error.__cause__, (ClientError, EdgeTTSException)):
+        pytest.skip(f"Edge TTS remote service is unavailable: {error.__cause__}")
+    raise error
 
 
 @pytest.mark.integration
@@ -81,6 +92,8 @@ class TestEdgeTTSProviderIntegration:
             result = provider.synthesize(TEST_TEXT)
         except ProviderNotAvailableError as err:
             pytest.skip(f"Edge TTS requires working internet connection: {err}")
+        except SynthesisError as err:
+            _skip_if_edge_service_unavailable(err)
 
         # Basic assertions
         assert result.audio_data
@@ -106,6 +119,8 @@ class TestEdgeTTSProviderIntegration:
             result = await provider.synthesize_async(TEST_TEXT)
         except ProviderNotAvailableError as err:
             pytest.skip(f"Edge TTS requires working internet connection: {err}")
+        except SynthesisError as err:
+            _skip_if_edge_service_unavailable(err)
 
         # Verify result
         assert result.audio_data
@@ -140,3 +155,5 @@ class TestSynthesizerInterfaceIntegration:
             assert result.format == AudioFormat.MP3
         except ProviderNotAvailableError as err:
             pytest.skip(f"Edge TTS requires working internet connection: {err}")
+        except SynthesisError as err:
+            _skip_if_edge_service_unavailable(err)

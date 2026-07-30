@@ -151,9 +151,7 @@ class EdgeTTSProvider(TTSProvider):
             SynthesisResult with audio data
 
         """
-        return asyncio.get_event_loop().run_until_complete(
-            self.synthesize_async(text, config)
-        )
+        return asyncio.run(self.synthesize_async(text, config))
 
     async def synthesize_async(
         self,
@@ -299,7 +297,7 @@ class EdgeTTSProvider(TTSProvider):
         """
         # Ensure voices are loaded
         if not self._voices_loaded:
-            asyncio.get_event_loop().run_until_complete(self._load_voices())
+            asyncio.run(self._load_voices())
 
         if language:
             return [
@@ -343,7 +341,7 @@ class EdgeTTSProvider(TTSProvider):
 
         """
         if not self._voices_loaded:
-            asyncio.get_event_loop().run_until_complete(self._load_voices())
+            asyncio.run(self._load_voices())
 
         for voice in self._voices:
             if voice.id == voice_id:
@@ -358,7 +356,7 @@ class EdgeTTSProvider(TTSProvider):
 
         """
         if not self._voices_loaded:
-            asyncio.get_event_loop().run_until_complete(self._load_voices())
+            asyncio.run(self._load_voices())
 
         languages = set()
         for voice in self._voices:

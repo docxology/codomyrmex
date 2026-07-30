@@ -33,6 +33,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Python 3.13 Edge TTS synchronization**: synchronous synthesis and voice
+  discovery now use `asyncio.run()` to create their event loop instead of the
+  deprecated implicit `get_event_loop()` behavior, preserving the separate
+  asynchronous API while keeping warnings-as-errors integration runs clean.
+  Live integration coverage treats only underlying Edge/aiohttp transport
+  failures as capability skips, so transient service outages no longer mask or
+  resemble local synthesis defects.
 - **Nested manuscript coverage isolation**: the manuscript variable producer now
   runs its scoped Colony Kernel branch-coverage proof with dedicated raw data
   and without inherited pytest-cov bootstrap settings, preventing full-suite
