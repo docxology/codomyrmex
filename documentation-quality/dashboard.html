@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation Quality Dashboard</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+               background: #f5f5f5; padding: 20px; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: #2c3e50; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .card h2 { color: #34495e; font-size: 1.2rem; margin-bottom: 15px; }
+        .metric { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .metric:last-child { border-bottom: none; }
+        .metric-value { font-weight: bold; font-size: 1.1rem; }
+        .success { color: #27ae60; }
+        .warning { color: #f39c12; }
+        .danger { color: #e74c3c; }
+        .timestamp { text-align: center; color: #7f8c8d; margin-top: 20px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Documentation Quality Dashboard</h1>
+
+        <div class="grid">
+            <div class="card">
+                <h2>🔗 Link Validation</h2>
+                <div class="metric">
+                    <span>Total Links</span>
+                    <span class="metric-value">16062</span>
+                </div>
+                <div class="metric">
+                    <span>Valid Links</span>
+                    <span class="metric-value success">15640</span>
+                </div>
+                <div class="metric">
+                    <span>Broken Links</span>
+                    <span class="metric-value success">0</span>
+                </div>
+                <div class="metric">
+                    <span>External Links</span>
+                    <span class="metric-value">422</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📝 Content Quality</h2>
+                <div class="metric">
+                    <span>Files Analyzed</span>
+                    <span class="metric-value">5371</span>
+                </div>
+                <div class="metric">
+                    <span>Average Score</span>
+                    <span class="metric-value success">99.2/100</span>
+                </div>
+                <div class="metric">
+                    <span>Lowest Score</span>
+                    <span class="metric-value">75</span>
+                </div>
+                <div class="metric">
+                    <span>Placeholder signals (total)</span>
+                    <span class="metric-value success">0</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🤖 AGENTS.md Validation</h2>
+                <div class="metric">
+                    <span>Total Files</span>
+                    <span class="metric-value">1336</span>
+                </div>
+                <div class="metric">
+                    <span>Valid Files</span>
+                    <span class="metric-value success">1336</span>
+                </div>
+                <div class="metric">
+                    <span>Average Score</span>
+                    <span class="metric-value">100.0/100</span>
+                </div>
+            </div>
+        </div>
+
+        <p class="timestamp">Generated: 2026-07-30T06:07:14.559122</p>
+    </div>
+</body>
+</html>

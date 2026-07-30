@@ -1,0 +1,21 @@
+{
+  "generated": "2026-07-30T06:07:14.559122",
+  "links": {
+    "total": 16062,
+    "broken": 0,
+    "valid": 15640,
+    "external": 422
+  },
+  "quality": {
+    "files": 5371,
+    "avg_score": 99.20126605846211,
+    "min_score": 75,
+    "max_score": 100,
+    "placeholder_total": 0
+  },
+  "agents": {
+    "total": 1336,
+    "valid": 1336,
+    "avg_score": 100.0
+  }
+}
