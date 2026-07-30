@@ -4,6 +4,7 @@ check_json_syntax, check_debug_enabled, DEFAULT_RULES.
 Zero-mock policy: real filesystem + real regex matching only.
 No external dependencies beyond stdlib.
 """
+
 import os
 
 import pytest
@@ -26,18 +27,18 @@ class TestCheckSecrets:
         assert result == []
 
     def test_password_pattern_detected(self):
-        content = 'password: "mysupersecret"'
+        content = 'password: "mysupersecret"'  # pragma: allowlist secret
         issues = check_secrets(content, None)
         assert len(issues) >= 1
         assert any(i.rule_id == "SEC001" for i in issues)
 
     def test_api_key_pattern_detected(self):
-        content = 'api_key = "sk-abc123"'
+        content = 'api_key = "sk-abc123"'  # pragma: allowlist secret
         issues = check_secrets(content, None)
         assert len(issues) >= 1
 
     def test_secret_pattern_detected(self):
-        content = "secret: 'mySecretValue'"
+        content = "secret: 'mySecretValue'"  # pragma: allowlist secret
         issues = check_secrets(content, None)
         assert len(issues) >= 1
 
@@ -69,7 +70,7 @@ class TestCheckSecrets:
         assert all(i.file_path is None for i in issues)
 
     def test_dict_content_stringified(self):
-        content = {"password": "plaintext"}
+        content = {"password": "plaintext"}  # pragma: allowlist secret
         issues = check_secrets(content, None)
         # dict.__str__ may not match regex (no quotes around value in all cases)
         assert isinstance(issues, list)
@@ -82,7 +83,7 @@ class TestCheckSecrets:
         assert all(i.recommendation is not None for i in issues)
 
     def test_multiple_patterns_multiple_issues(self):
-        content = 'password: "p1"\napi_key: "k1"\nsecret: "s1"\ntoken: "t1"'
+        content = 'password: "p1"\napi_key: "k1"\nsecret: "s1"\ntoken: "t1"'  # pragma: allowlist secret
         issues = check_secrets(content, None)
         assert len(issues) == 4
 
