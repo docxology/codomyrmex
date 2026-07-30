@@ -9,7 +9,7 @@ Git submodule. The human-facing overview is [README.md](README.md).
 
 ## Development Guidelines
 
-- Treat [`src/codomyrmex/agents/open_gauss/`](../../../src/codomyrmex/agents/open_gauss/)
+- Treat [`src/codomyrmex/agents/open_gauss/`](https://github.com/math-inc/OpenGauss/tree/f87633900ae185b8037bf451a914fe7eeae1eb08)
   as a separate Git worktree with its own history and instructions.
 - Inspect both the superproject and submodule status before any operation that
   could update, clean, format, or test the submodule.
@@ -25,7 +25,7 @@ Git submodule. The human-facing overview is [README.md](README.md).
 ## Key Files
 
 - [README.md](README.md) — integration and installation boundary
-- [Submodule README](../../../src/codomyrmex/agents/open_gauss/README.md) —
+- [Submodule README](https://github.com/math-inc/OpenGauss/blob/f87633900ae185b8037bf451a914fe7eeae1eb08/README.md) —
   upstream operational authority
 - [`.gitmodules`](../../../.gitmodules) — repository ownership declaration
 
@@ -47,4 +47,4 @@ The last command is read-only apart from its reports under `output/`.
 - [OpenGauss integration overview](README.md)
 - [Agent documentation index](../README.md)
 - [Repository agent contract](../../../AGENTS.md)
-- [Submodule agent instructions](../../../src/codomyrmex/agents/open_gauss/AGENTS.md)
+- [Submodule agent instructions](https://github.com/math-inc/OpenGauss/blob/f87633900ae185b8037bf451a914fe7eeae1eb08/AGENTS.md)

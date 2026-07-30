@@ -24,12 +24,14 @@ uv run --locked --group docs python scripts/documentation/audit_readme_agents.py
 uv run --locked --group docs python scripts/documentation/validate_links_comprehensive.py \
   --repo-root . --format both --fail-on-broken
 uv run --locked --group docs python scripts/documentation/validate_agents_structure.py \
-  --repo-root . --format markdown --fail-on-invalid
+  --repo-root . --format both --fail-on-invalid
 ```
 
 The README/AGENTS auditor writes
 `output/readme_agents_audit.{json,md}`. Other validators document their receipt
-paths in `--help` and command output.
+paths in `--help` and command output. The aggregate quality gate consumes the
+JSON receipts produced by the preceding validators, so the canonical
+composition emits both human-readable Markdown and machine-readable JSON.
 
 ## Tool groups
 

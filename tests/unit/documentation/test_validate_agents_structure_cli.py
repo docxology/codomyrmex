@@ -25,3 +25,11 @@ def test_validate_agents_structure_fail_on_invalid_passes() -> None:
     )
     assert proc.returncode == 0, f"stdout:\n{proc.stdout}\nstderr:\n{proc.stderr}"
     assert "All AGENTS.md files are valid" in proc.stdout
+
+    receipt_command = (
+        "uv run --locked --group docs python "
+        "scripts/documentation/validate_agents_structure.py "
+        "--repo-root . --format both --fail-on-invalid"
+    )
+    assert receipt_command in (REPO_ROOT / "Makefile").read_text(encoding="utf-8")
+    assert receipt_command in (REPO_ROOT / "justfile").read_text(encoding="utf-8")

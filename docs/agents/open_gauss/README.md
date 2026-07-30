@@ -1,22 +1,23 @@
 # OpenGauss integration
 
 OpenGauss is included at
-[`src/codomyrmex/agents/open_gauss/`](../../../src/codomyrmex/agents/open_gauss/)
+[`src/codomyrmex/agents/open_gauss/`](https://github.com/math-inc/OpenGauss/tree/f87633900ae185b8037bf451a914fe7eeae1eb08)
 as the `math-inc/OpenGauss` Git submodule. It provides the `gauss` command and
 project-scoped Lean workflows. Codomyrmex does not maintain a separate
 `open_gauss_client.py` wrapper; the checked-out submodule and its own
-documentation are authoritative.
+documentation are authoritative. Upstream links on this page target the
+superproject's recorded submodule commit so they also work before initialization.
 
 ## Boundary
 
 - `.gitmodules` defines the upstream repository.
 - The superproject records the submodule commit used by a Codomyrmex checkout.
 - The submodule's
-  [`pyproject.toml`](../../../src/codomyrmex/agents/open_gauss/pyproject.toml)
+  [`pyproject.toml`](https://github.com/math-inc/OpenGauss/blob/f87633900ae185b8037bf451a914fe7eeae1eb08/pyproject.toml)
   defines its version, dependencies, and console entry points.
 - The upstream
-  [README](../../../src/codomyrmex/agents/open_gauss/README.md) and
-  [Start Here guide](../../../src/codomyrmex/agents/open_gauss/website/docs/getting-started/start-here.md)
+  [README](https://github.com/math-inc/OpenGauss/blob/f87633900ae185b8037bf451a914fe7eeae1eb08/README.md) and
+  [Start Here guide](https://github.com/math-inc/OpenGauss/blob/f87633900ae185b8037bf451a914fe7eeae1eb08/website/docs/getting-started/start-here.md)
   define installation and operational behavior.
 - Changes inside the submodule belong to its own repository and must not be
   silently folded into a Codomyrmex documentation or formatting pass.
@@ -78,6 +79,6 @@ submodule, and upstream test totals must not be hard-coded here.
 
 - [Agent documentation index](../README.md)
 - [Repository agent contract](../../../AGENTS.md)
-- [Submodule source](../../../src/codomyrmex/agents/open_gauss/)
-- [Submodule README](../../../src/codomyrmex/agents/open_gauss/README.md)
+- [Submodule source](https://github.com/math-inc/OpenGauss/tree/f87633900ae185b8037bf451a914fe7eeae1eb08)
+- [Submodule README](https://github.com/math-inc/OpenGauss/blob/f87633900ae185b8037bf451a914fe7eeae1eb08/README.md)
 - [Git submodules](../../../.gitmodules)

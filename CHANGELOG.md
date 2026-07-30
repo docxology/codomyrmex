@@ -40,7 +40,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Clean-checkout agent documentation contracts**: repository-referenced
   GitNexus and qmd skill files are now versioned, and the README/AGENTS audit
   recognizes links beneath registered but uninitialized submodule paths while
-  continuing to reject ordinary missing relative links.
+  continuing to reject ordinary missing relative links. The canonical
+  documentation gate now produces both AGENTS structure receipts before the
+  aggregate quality check consumes the JSON report, and OpenGauss integration
+  docs link to the pinned upstream revision so strict MkDocs works in a clean
+  checkout without initializing the submodule.
 - **Documentation package API/MCP drift**: corrected invalid PAI examples,
   obsolete MCP build tools, stale coverage figures, and the `audit_rasp()` exit
   code versus missing-file-count mismatch. Documentation MCP generation now
