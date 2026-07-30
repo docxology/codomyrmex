@@ -38,9 +38,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and without inherited pytest-cov bootstrap settings, preventing full-suite
   statement coverage from combining incompatible coverage modes. Docker
   daemon-negative tests also use a guaranteed-missing local socket on POSIX
-  runners instead of assuming a TCP service port is unused, and the Hermes
-  distinct-session concurrency contract now verifies real lock overlap instead
-  of relying on a loaded-runner wall-clock threshold. Retry backoff coverage
+  runners instead of assuming a TCP service port is unused, while the runtime
+  daemon probe now requires a non-empty server version rather than trusting a
+  successful Docker CLI exit status alone. Clean-checkout figure tests refresh
+  their in-memory variable map after producing the ignored source-bound
+  manuscript snapshot, so pytest collection order cannot leave generators
+  bound to an empty pre-generation cache. The Hermes distinct-session
+  concurrency contract now verifies real lock overlap instead of relying on a
+  loaded-runner wall-clock threshold, and gateway latency coverage verifies
+  minimum elapsed intervals plus the inference/IO partition without imposing
+  uncontrollable shared-runner completion ceilings. Retry backoff coverage
   validates each configured minimum interval without comparing scheduler-noisy
   durations. Fractal workspace initialization supplies a command-scoped Git
   identity for its synthetic bootstrap commit instead of requiring user-global

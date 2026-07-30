@@ -26,13 +26,14 @@ def test_platform_context_latency_metrics() -> None:
 
     assert metrics["total_latency_ms"] > 0
 
-    # LLM inference took ~400ms. Float timing means it won't be perfectly 400.0.
-    assert 390.0 < metrics["llm_inference_latency_ms"] < 450.0
+    # Sleep establishes a minimum duration; a loaded runner can resume later.
+    assert metrics["llm_inference_latency_ms"] >= 390.0
 
-    # Total platform routing (routing + formatting) took ~150ms
-    assert 140.0 < metrics["platform_io_latency_ms"] < 180.0
+    # Routing plus formatting likewise establishes a minimum of about 150ms.
+    assert metrics["platform_io_latency_ms"] >= 140.0
+    assert metrics["total_latency_ms"] >= 530.0
 
-    # Total should be the sum of both roughly
+    # The split remains the substantive contract: inference is excluded from IO.
     assert (
         abs(
             metrics["total_latency_ms"]

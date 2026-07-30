@@ -4,6 +4,7 @@ Docker Container Management
 Handles Docker container creation, execution, and cleanup for sandboxed code execution.
 """
 
+import json
 import os
 import subprocess
 import tempfile
@@ -45,9 +46,23 @@ def check_docker_available() -> bool:
             text=True,
             timeout=5,
         )
-        if result.returncode == 0:
+        try:
+            server_version = json.loads(result.stdout)
+        except json.JSONDecodeError:
+            server_version = None
+        if (
+            result.returncode == 0
+            and isinstance(server_version, str)
+            and server_version.strip()
+        ):
             return True
-        logger.warning("Docker daemon check failed: %s", result.stderr.strip())
+        error_detail = result.stderr.strip()
+        if not error_detail:
+            error_detail = (
+                "Docker CLI did not return a non-empty JSON server version "
+                f"(stdout={result.stdout.strip()!r})"
+            )
+        logger.warning("Docker daemon check failed: %s", error_detail)
         return False
     except (subprocess.SubprocessError, FileNotFoundError, OSError) as e:
         logger.warning("Docker availability check failed: %s", e)

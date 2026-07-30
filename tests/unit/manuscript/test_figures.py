@@ -11,7 +11,7 @@ import pytest
 
 @pytest.fixture(scope="module", autouse=True)
 def _ensure_generated_manuscript_snapshot() -> None:
-    """Prepare the authoritative variable snapshot when running from a fresh clone."""
+    """Prepare and load the authoritative snapshot when running from a fresh clone."""
     snapshot = (
         Path(__file__).resolve().parents[3] / "output/data/manuscript_variables.json"
     )
@@ -22,6 +22,12 @@ def _ensure_generated_manuscript_snapshot() -> None:
             cwd=root,
             check=True,
         )
+    # Another test module can import the figure package during collection, before
+    # this fixture creates the ignored snapshot. Refresh that cached empty map.
+    from codomyrmex.manuscript.figures import _common
+
+    _common._VARIABLES.clear()
+    _common._VARIABLES.update(_common._load_json(snapshot))
 
 
 def test_figure_registry_lists_all_referenced_generators() -> None:
