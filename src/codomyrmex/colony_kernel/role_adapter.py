@@ -187,15 +187,24 @@ class RoleAdapter:
             return AgentRole.SANDBOX
 
         # Rule 3: GUARD_ANT requires trust >= standalone guard threshold and security actions
-        if trust >= _ROLE_STANDALONE_GUARD_MIN_TRUST and successful & _GUARD_ACTION_TYPES:
+        if (
+            trust >= _ROLE_STANDALONE_GUARD_MIN_TRUST
+            and successful & _GUARD_ACTION_TYPES
+        ):
             return AgentRole.GUARD_ANT
 
         # Rule 1: REPAIR_ANT requires trust >= standalone repair threshold and repair actions
-        if trust >= _ROLE_STANDALONE_REPAIR_MIN_TRUST and successful & _REPAIR_ACTION_TYPES:
+        if (
+            trust >= _ROLE_STANDALONE_REPAIR_MIN_TRUST
+            and successful & _REPAIR_ACTION_TYPES
+        ):
             return AgentRole.REPAIR_ANT
 
         # Rule 2: MEMORY_ANT requires trust >= standalone repair threshold and memory actions
-        if trust >= _ROLE_STANDALONE_REPAIR_MIN_TRUST and successful & _MEMORY_ACTION_TYPES:
+        if (
+            trust >= _ROLE_STANDALONE_REPAIR_MIN_TRUST
+            and successful & _MEMORY_ACTION_TYPES
+        ):
             return AgentRole.MEMORY_ANT
 
         # Rule 4: DISPATCHER requires >= 20 proposals and >= 70% acceptance
