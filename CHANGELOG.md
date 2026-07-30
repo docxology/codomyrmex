@@ -33,6 +33,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Config watcher deletion synchronization**: the real-thread deletion
+  contract now waits for the observable missing-file state with a bounded
+  monotonic deadline instead of imposing a 200 ms shared-runner scheduling
+  ceiling.
 - **Python 3.13 Edge TTS synchronization**: synchronous synthesis and voice
   discovery now use `asyncio.run()` to create their event loop instead of the
   deprecated implicit `get_event_loop()` behavior, preserving the separate

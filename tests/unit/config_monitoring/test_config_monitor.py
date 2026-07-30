@@ -156,7 +156,9 @@ class TestConfigWatcher:
 
         try:
             f.unlink()
-            time.sleep(0.2)
+            deadline = time.monotonic() + 5.0
+            while watcher._last_mtime != 0 and time.monotonic() < deadline:
+                time.sleep(0.05)
             # Should not crash, but _last_mtime should become 0
             assert watcher._last_mtime == 0
         finally:
