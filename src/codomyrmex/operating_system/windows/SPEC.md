@@ -49,6 +49,8 @@ windows/
 
 - Command: `tasklist /FO CSV /NH`
 - Parses CSV output for PID, image name, and working-set memory.
+- Omits the Windows scheduler pseudo-process at PID 0 so every returned
+  `ProcessInfo` satisfies the shared positive-PID contract.
 - Localized memory separators and unit text are normalized before conversion to bytes.
 - CPU usage is reported as `0.0` because `tasklist` does not expose a stable
   instantaneous CPU percentage.

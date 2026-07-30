@@ -131,6 +131,10 @@ class WindowsProvider(OSProviderBase):
                 pid = int(row[1])
             except ValueError:
                 continue
+            if pid <= 0:
+                # Windows exposes "System Idle Process" as PID 0. The shared
+                # ProcessInfo contract represents schedulable OS processes.
+                continue
             name = row[0]
             memory_kib = re.sub(r"[^\d]", "", row[4])
             mem = int(memory_kib) * 1024 if memory_kib else 0
