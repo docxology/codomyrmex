@@ -85,11 +85,25 @@ jobs:
           fi
 
       - name: Run Safety vulnerability scanner
+        env:
+          SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
         run: |
           echo "🛡️  Running Safety vulnerability scanner..."
-          # Generate safety report (safety scan replaces deprecated safety check)
-          uv run --locked --extra security_audit safety scan --output json --save-json safety-report.json
-          uv run --locked --extra security_audit safety scan --output text --save-as text safety-report.txt
+          if [[ -n "$SAFETY_API_KEY" ]]; then
+            uv run --locked --extra security_audit safety \
+              --stage cicd \
+              scan \
+              --output screen \
+              --save-as json safety-report.json \
+              --save-as text safety-report.txt
+          else
+            printf '%s\n' \
+              '{"status":"skipped","reason":"SAFETY_API_KEY is not configured"}' \
+              > safety-report.json
+            printf '%s\n' \
+              "Safety scan skipped: SAFETY_API_KEY is not configured." \
+              > safety-report.txt
+          fi
 
           # Add to security report
           echo "" >> security-report.md
