@@ -387,28 +387,28 @@
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:11434/api/embed`",
-    "line": 191,
+    "line": 198,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:11434\"",
-    "line": 191,
+    "line": 198,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:3100`",
-    "line": 197,
+    "line": 204,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:8080/`",
-    "line": 1126,
+    "line": 1133,
     "status": "external",
     "message": "External link (not validated)"
   },
