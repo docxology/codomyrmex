@@ -1080,10 +1080,13 @@ def _run_colony_kernel_coverage(
     project_root: Path, test_path: Path, coverage_floor: float
 ) -> dict[str, Any]:
     coverage_path = project_root / "output" / "data" / "colony_kernel_coverage.json"
+    coverage_data_path = coverage_path.with_name(".coverage-colony-kernel")
     coverage_path.parent.mkdir(parents=True, exist_ok=True)
     # Release evidence is regenerated for the current tree. Removing the prior
     # report prevents a failed pytest process from being mistaken for fresh proof.
     coverage_path.unlink(missing_ok=True)
+    for data_artifact in coverage_data_path.parent.glob(f"{coverage_data_path.name}*"):
+        data_artifact.unlink(missing_ok=True)
     cmd = [
         sys.executable,
         "-m",
@@ -1097,13 +1100,26 @@ def _run_colony_kernel_coverage(
         "--tb=short",
         "-q",
     ]
-    result = subprocess.run(
-        cmd,
-        cwd=project_root,
-        capture_output=True,
-        text=True,
-        timeout=600,
-    )
+    coverage_env = os.environ.copy()
+    for variable_name in tuple(coverage_env):
+        if variable_name.startswith("COV_CORE_"):
+            coverage_env.pop(variable_name)
+    coverage_env.pop("COVERAGE_PROCESS_START", None)
+    coverage_env["COVERAGE_FILE"] = str(coverage_data_path)
+    try:
+        result = subprocess.run(
+            cmd,
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            timeout=600,
+            env=coverage_env,
+        )
+    finally:
+        for data_artifact in coverage_data_path.parent.glob(
+            f"{coverage_data_path.name}*"
+        ):
+            data_artifact.unlink(missing_ok=True)
     output = f"{result.stdout}\n{result.stderr}".strip()
     if result.returncode != 0:
         raise RuntimeError(

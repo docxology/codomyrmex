@@ -8,6 +8,7 @@ import yaml
 
 from codomyrmex.manuscript.variables import (
     _canonical_sqlite_sha256,
+    _run_colony_kernel_coverage,
     validate_variable_contract,
 )
 
@@ -59,6 +60,48 @@ def test_sqlite_artifact_digest_is_stable_across_temporary_paths(
     assert _canonical_sqlite_sha256(database_paths[0]) == _canonical_sqlite_sha256(
         database_paths[1]
     )
+
+
+def test_scoped_branch_coverage_isolated_from_parent_coverage(
+    tmp_path: Path, monkeypatch
+) -> None:
+    source_dir = tmp_path / "src" / "codomyrmex" / "colony_kernel"
+    source_dir.mkdir(parents=True)
+    source_file = source_dir / "sample.py"
+    source_file.write_text(
+        "def classify(value: bool) -> str:\n"
+        "    if value:\n"
+        "        return 'yes'\n"
+        "    return 'no'\n",
+        encoding="utf-8",
+    )
+    test_dir = tmp_path / "tests"
+    test_dir.mkdir()
+    (test_dir / "test_sample.py").write_text(
+        "from importlib.util import module_from_spec, spec_from_file_location\n"
+        "from pathlib import Path\n\n"
+        "SOURCE = Path(__file__).parents[1] / "
+        "'src/codomyrmex/colony_kernel/sample.py'\n"
+        "SPEC = spec_from_file_location('isolated_colony_sample', SOURCE)\n"
+        "assert SPEC is not None and SPEC.loader is not None\n"
+        "MODULE = module_from_spec(SPEC)\n"
+        "SPEC.loader.exec_module(MODULE)\n\n"
+        "def test_both_branches() -> None:\n"
+        "    assert MODULE.classify(True) == 'yes'\n"
+        "    assert MODULE.classify(False) == 'no'\n",
+        encoding="utf-8",
+    )
+
+    parent_data = tmp_path / ".coverage-parent-sentinel"
+    monkeypatch.setenv("COV_CORE_SOURCE", "src/codomyrmex")
+    monkeypatch.setenv("COV_CORE_DATAFILE", str(parent_data))
+    monkeypatch.setenv("COV_CORE_BRANCH", "disabled")
+
+    result = _run_colony_kernel_coverage(tmp_path, test_dir, 0.0)
+
+    assert result == {"collected": 1, "coverage_pct": 100.0}
+    assert not parent_data.exists()
+    assert not list((tmp_path / "output" / "data").glob(".coverage-colony-kernel*"))
 
 
 def test_variable_contract_reports_used_reserved_and_unused_values(tmp_path: Path):

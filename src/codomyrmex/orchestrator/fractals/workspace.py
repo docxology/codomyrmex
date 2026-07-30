@@ -37,7 +37,19 @@ class WorkspaceManager:
             gitkeep = self.workspace_path / ".gitkeep"
             gitkeep.touch()
             self._run(["git", "add", "."], self.workspace_path)
-            self._run(["git", "commit", "-m", "initial commit"], self.workspace_path)
+            self._run(
+                [
+                    "git",
+                    "-c",
+                    "user.name=Codomyrmex Workspace",
+                    "-c",
+                    "user.email=workspace@codomyrmex.invalid",
+                    "commit",
+                    "-m",
+                    "initial commit",
+                ],
+                self.workspace_path,
+            )
 
     def create_worktree(self, task_id: str) -> Path:
         """Create a git worktree for a specific task. Returns the worktree path."""

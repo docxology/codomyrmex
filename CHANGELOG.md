@@ -33,6 +33,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Nested manuscript coverage isolation**: the manuscript variable producer now
+  runs its scoped Colony Kernel branch-coverage proof with dedicated raw data
+  and without inherited pytest-cov bootstrap settings, preventing full-suite
+  statement coverage from combining incompatible coverage modes. Docker
+  daemon-negative tests also use a guaranteed-missing local socket on POSIX
+  runners instead of assuming a TCP service port is unused, and the Hermes
+  distinct-session concurrency contract now verifies real lock overlap instead
+  of relying on a loaded-runner wall-clock threshold. Retry backoff coverage
+  validates each configured minimum interval without comparing scheduler-noisy
+  durations. Fractal workspace initialization supplies a command-scoped Git
+  identity for its synthetic bootstrap commit instead of requiring user-global
+  author configuration.
 - **Hermetic CI capability checks**: full-history test jobs no longer exercise
   Git-analysis contracts against a shallow clone, generated receipts stay
   outside the importable source tree, temporary Git repositories receive an

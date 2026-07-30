@@ -6,7 +6,12 @@
 
 Module implementation, resources, and local coordination for Fractals..
 
+`WorkspaceManager.init_workspace()` creates its synthetic initial commit with a
+command-scoped bootstrap identity, so clean environments do not need global Git
+author configuration and user configuration remains unchanged.
+
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SKILL.md` – File
@@ -19,6 +24,7 @@ Module implementation, resources, and local coordination for Fractals..
 - `workspace.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [orchestrator](../README.md)
 - **Project Root**: ../../../../README.md
 

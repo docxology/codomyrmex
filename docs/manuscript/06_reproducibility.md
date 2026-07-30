@@ -1,3 +1,5 @@
+<!-- markdownlint-disable table-pipe-style table-column-count table-column-style -->
+
 # Reproducibility Chain, Provenance, and Limits {#sec:reproducibility}
 
 This section describes the evidence that the checked-in manuscript route actually
@@ -199,6 +201,11 @@ uv run --locked ruff format --check src scripts tests
 uv run --locked ty check
 uv run --locked python scripts/replay_colony_kernel.py
 ```
+
+The variable producer isolates this scoped branch-coverage run from any parent
+pytest-cov session by assigning it a dedicated raw-data file and removing inherited
+pytest-cov bootstrap variables. This prevents a repository-wide statement-coverage
+run from attempting to combine incompatible branch-coverage data.
 
 After those files exist, the detached publication bundle and non-mutating remote plans
 are produced and verified with:

@@ -77,24 +77,25 @@ class TestSessionRaceGuard:
         store = SQLiteSessionStore(":memory:")
         guard = SessionRaceGuard(store)
 
-        results: dict[str, float] = {}
+        overlap = threading.Barrier(2, timeout=2.0)
+        entered: set[str] = set()
+        entered_lock = threading.Lock()
 
-        def thread_func(session_id: str, delay: float) -> None:
-            start = time.time()
+        def thread_func(session_id: str) -> None:
             with guard.acquire(session_id):
-                time.sleep(delay)
-            results[session_id] = time.time() - start
+                with entered_lock:
+                    entered.add(session_id)
+                overlap.wait()
 
-        # Different sessions should complete roughly in parallel
+        # Both workers must hold their distinct session locks concurrently.
+        # A global lock would leave the first worker stuck at the barrier.
         with ThreadPoolExecutor(max_workers=2) as executor:
-            f1 = executor.submit(thread_func, "session-a", 0.1)
-            f2 = executor.submit(thread_func, "session-b", 0.1)
-            f1.result()
-            f2.result()
+            f1 = executor.submit(thread_func, "session-a")
+            f2 = executor.submit(thread_func, "session-b")
+            f1.result(timeout=3.0)
+            f2.result(timeout=3.0)
 
-        # Both should complete in ~0.1s (parallel), not ~0.2s (serial)
-        assert results["session-a"] < 0.2
-        assert results["session-b"] < 0.2
+        assert entered == {"session-a", "session-b"}
         store.close()
 
     def test_timeout_raises_on_stuck_lock(self) -> None:

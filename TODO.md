@@ -15,7 +15,7 @@
 
 | Metric | Value | Command |
 | :--- | :--- | :--- |
-| **Tests collected** | **35,782** (0 collection errors) | Complete locked dependency profile; `uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest` |
+| **Tests collected** | **35,783** (0 collection errors) | Complete locked dependency profile; `uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest` |
 | **Ruff errors** | **0** | `uv run ruff check .` |
 | **ty diagnostics** | **0** | `uv run ty check --output-format concise src/` |
 | **Mock violations** | **0** | `rg -n "from unittest\\.mock" src --glob '*.py'` |
@@ -95,7 +95,7 @@
 | B3 | ~~Video module depth~~ | `video/` | ✅ Audited — video processor, extractor, analyzer, and transcription paths all implemented; 207 tests pass, 1 skip (optional dep) |
 | B4 | ~~Meme module MCP exposure~~ | `meme/` | ✅ Fixed — 5 `@mcp_tool` decorators in `mcp_tools.py` (dissect, fitness, synthesize, propagate, narrative); RASP docs present |
 | B5 | ~~Secure Cognitive Layer MCP~~ | `identity/`, `wallet/`, `defense/`, `market/`, `privacy/` | ✅ Fixed — PAI bridge module `pai_pm/secure_cognitive_bridge.py` registers all 15 MCP tools (3 per module × 5 modules); `register_secure_cognitive_tools()` + `get_secure_cognitive_tool_catalog()` |
-| B6 | ~~Test collection errors~~ | `tests/` | ✅ Fixed — 35,782 tests collect with 0 errors in the complete locked dependency profile via import guards and optional submodule skips |
+| B6 | ~~Test collection errors~~ | `tests/` | ✅ Fixed — 35,783 tests collect with 0 errors in the complete locked dependency profile via import guards and optional submodule skips |
 | B7 | ~~README / inventory metric drift watch~~ | root | ✅ Fixed — updated active surfaces to 130 modules, 608 runtime MCP tools, and 1,199 docs; manuscript consistency test updated |
 | B8 | ~~Coverage gate~~ | repo-wide | ✅ Verified — **60%** in `[tool.coverage.report] fail_under`; `meme/*` omitted from `[tool.coverage.run]`. Enforce with `make test` or `--cov-fail-under=60`. |
 | B9 | ~~Type safety burn-down~~ | repo-wide | ✅ Fixed — `uv run ty check --output-format concise src/` now reports 0 diagnostics. Keep this zero baseline in CI/local gates. |

@@ -1,5 +1,6 @@
 """Comprehensive unit tests for code.execution and code.sandbox modules."""
 
+import os
 import shutil
 import sys
 
@@ -7,6 +8,17 @@ import sys
 from pathlib import Path
 
 import pytest
+
+
+def _set_unreachable_docker_host(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """Point Docker at an endpoint that cannot resolve to the runner daemon."""
+    monkeypatch.delenv("DOCKER_CONTEXT", raising=False)
+    if os.name == "nt":
+        monkeypatch.setenv("DOCKER_HOST", "tcp://127.0.0.1:9")
+    else:
+        monkeypatch.setenv("DOCKER_HOST", f"unix://{tmp_path / 'missing-docker.sock'}")
 
 
 @pytest.mark.unit
@@ -49,8 +61,7 @@ class TestCodeExecutionSandboxComprehensive:
 
         from codomyrmex.coding.sandbox.container import check_docker_available
 
-        monkeypatch.delenv("DOCKER_CONTEXT", raising=False)
-        monkeypatch.setenv("DOCKER_HOST", "tcp://127.0.0.1:9")
+        _set_unreachable_docker_host(monkeypatch, tmp_path)
 
         assert check_docker_available() is False
 
@@ -171,8 +182,7 @@ class TestCodeExecutionSandboxComprehensive:
 
         code_file = tmp_path / "code.py"
         code_file.write_text("print('Hello, World!')")
-        monkeypatch.delenv("DOCKER_CONTEXT", raising=False)
-        monkeypatch.setenv("DOCKER_HOST", "tcp://127.0.0.1:9")
+        _set_unreachable_docker_host(monkeypatch, tmp_path)
 
         result = run_code_in_docker(
             language="python",
@@ -258,8 +268,7 @@ class TestCodeExecutionSandboxComprehensive:
 
         from codomyrmex.coding.execution.executor import execute_code
 
-        monkeypatch.delenv("DOCKER_CONTEXT", raising=False)
-        monkeypatch.setenv("DOCKER_HOST", "tcp://127.0.0.1:9")
+        _set_unreachable_docker_host(monkeypatch, tmp_path)
 
         result = execute_code(
             language="python",

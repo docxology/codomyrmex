@@ -125,11 +125,11 @@ class TestRetryDecorator:
         """Test retry with exponential backoff."""
         from codomyrmex.utils import retry
 
-        call_times = []
+        call_times: list[float] = []
 
-        @retry(max_attempts=3, delay=0.05, backoff=2.0)
+        @retry(max_attempts=3, delay=0.01, backoff=10.0)
         def track_calls():
-            call_times.append(time.time())
+            call_times.append(time.monotonic())
             if len(call_times) < 3:
                 raise ValueError("Fail")
             return "success"
@@ -137,11 +137,13 @@ class TestRetryDecorator:
         result = track_calls()
 
         assert result == "success"
-        # Check delays increase
-        if len(call_times) >= 3:
-            delay1 = call_times[1] - call_times[0]
-            delay2 = call_times[2] - call_times[1]
-            assert delay2 > delay1
+        assert len(call_times) == 3
+        delay1 = call_times[1] - call_times[0]
+        delay2 = call_times[2] - call_times[1]
+        # Scheduler pauses can lengthen either interval, so validate each
+        # configured lower bound instead of comparing two noisy measurements.
+        assert delay1 >= 0.009
+        assert delay2 >= 0.09
 
 
 # From test_coverage_boost.py

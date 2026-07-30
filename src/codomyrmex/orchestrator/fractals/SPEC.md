@@ -1,6 +1,5 @@
 # FRACTALS SUBMODULE SPECIFICATION
 
-
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
 
 ## Context & Motivation
@@ -16,7 +15,8 @@ Large tasks often paralyze standard single-agent loops. Codomyrmex required an e
 
 1. Root `build_tree` instantiated over objective standard payload.
 2. `plan()` resolves recursively up to `-max_depth`.
-3. `workspace.init_workspace()` provisions base operational space.
+3. `workspace.init_workspace()` provisions base operational space and uses a
+   command-scoped identity for its synthetic initial commit.
 4. `executor` sweeps over `planned_tree.get_leaves()` triggering `WorkspaceManager.create_worktree()`.
 5. AI completion triggers `TaskStatus.DONE` and propagates statuses.
 6. MCP interface returns normalized JSON of successes and failures.
