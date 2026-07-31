@@ -56,11 +56,12 @@ jobs:
               if not (is_jules or is_labeled):
                   continue
 
-              # Check if all status checks passed
+              # Check if all status checks actually passed (strict)
+              # Only 'SUCCESS' is accepted — None, PENDING, SKIPPED, NEUTRAL,
+              # and EXPECTED all mean the gate has not confirmed passage.
               checks = pr.get('statusCheckRollup', [])
               all_passed = all(
-                  c.get('conclusion') in ('SUCCESS', 'NEUTRAL', 'SKIPPED', None)
-                  or c.get('state') in ('SUCCESS', 'EXPECTED', 'PENDING')
+                  c.get('conclusion') == 'SUCCESS'
                   for c in checks
               ) if checks else False
 

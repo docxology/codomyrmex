@@ -23,6 +23,7 @@ from __future__ import annotations
 import collections
 import enum
 import hashlib
+import hmac
 import json
 import logging
 import os
@@ -44,6 +45,56 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 logger = get_logger(__name__)
+
+
+# ── Ledger integrity ──────────────────────────────────────────────
+# The trust ledger is signed with a machine-specific HMAC to detect
+# tampering. The key is derived from /etc/machine-id (/var/lib/dbus
+# on systems without it) or the hostname as fallback — any process
+# running as the same user can *write* the ledger, but an attacker
+# who can only *edit* the file (e.g. via a compromised editor or
+# backup restore) cannot forge a valid signature.
+
+
+def _ledger_signing_key() -> bytes:
+    """Return a stable, machine-specific HMAC key for ledger signing."""
+    candidates = [
+        "/etc/machine-id",
+        "/var/lib/dbus/machine-id",
+    ]
+    for path in candidates:
+        try:
+            return Path(path).read_text().strip().encode("utf-8")
+        except OSError:
+            continue
+    # Fallback: hostname (less stable but avoids a hard crash)
+    return os.uname().nodename.encode("utf-8")
+
+
+_SIGNATURE_KEY = _ledger_signing_key()
+
+
+def _sign_ledger(data: dict[str, str]) -> dict[str, str]:
+    """Return a copy of *data* with a ``_signature`` field."""
+    payload = {k: v for k, v in data.items() if k != "_signature"}
+    raw = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
+    sig = hmac.new(_SIGNATURE_KEY, raw, "sha256").hexdigest()
+    signed = dict(payload)
+    signed["_signature"] = sig
+    return signed
+
+
+def _verify_ledger(data: dict[str, str]) -> dict[str, str] | None:
+    """Return the payload minus the signature if valid, or ``None``."""
+    sig = data.pop("_signature", None)
+    if sig is None:
+        return None
+    payload = {k: v for k, v in data.items() if k != "_signature"}
+    raw = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
+    expected = hmac.new(_SIGNATURE_KEY, raw, "sha256").hexdigest()
+    if not hmac.compare_digest(expected, sig):
+        return None
+    return payload
 
 
 # =====================================================================
@@ -398,8 +449,18 @@ class TrustRegistry:
             return
 
         try:
-            data = json.loads(self._ledger_path.read_text())
-            for name, level_val in data.items():
+            raw_data = json.loads(self._ledger_path.read_text())
+            payload = _verify_ledger(raw_data)
+            if payload is None:
+                logger.warning(
+                    "Trust ledger signature is missing or invalid — "
+                    "the file may have been tampered with. "
+                    "Resetting all tools to UNTRUSTED."
+                )
+                self._levels = dict.fromkeys(self._levels, TrustLevel.UNTRUSTED)
+                self._disk_loaded = True
+                return
+            for name, level_val in payload.items():
                 if name in self._levels:
                     try:
                         self._levels[name] = TrustLevel(level_val)
@@ -422,13 +483,19 @@ class TrustRegistry:
             pass
 
     def _save(self) -> None:
-        """Save trust state to disk (atomic write + restricted permissions)."""
+        """Save trust state to disk (atomic write + restricted permissions).
+
+        The ledger is signed with a machine-specific HMAC key so that
+        tampering (e.g. an attacker writing ``{\"codomyrmex.run_command\": \"trusted\"}``
+        directly into the file) is detected on the next load.
+        """
         self._ensure_levels()
         try:
             self._ledger_path.parent.mkdir(parents=True, exist_ok=True)
             data = {name: lvl.value for name, lvl in self._levels.items()}
+            signed = _sign_ledger(data)
             tmp_path = self._ledger_path.with_suffix(".tmp")
-            tmp_path.write_text(json.dumps(data, indent=2))
+            tmp_path.write_text(json.dumps(signed, indent=2))
             tmp_path.chmod(0o600)  # set before rename — avoids brief readable window
             tmp_path.rename(self._ledger_path)
             self._disk_loaded = True  # cache is now consistent with disk
