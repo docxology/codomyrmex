@@ -117,11 +117,14 @@ uv run pytest -m "not slow and not network"
 
 ### Zero-Mock Policy
 
-This project enforces a **strict zero-mock policy**:
+This project enforces a **strict zero-mock policy** against behavior faking:
 
-- ❌ **No** `unittest.mock`, `MagicMock`, `monkeypatch`, `pytest-mock`
+- ❌ **No** `unittest.mock`, `MagicMock`, `pytest-mock` or any `mock.patch`-style method replacement
+- ✅ **Permitted for test-input isolation:** Narrow `monkeypatch.setenv`/`delenv`/`chdir` (environment variables, working directory) and `tmp_path` fixtures — these control test-time inputs without replacing behavior
 - ✅ Use `FakeLLMClient`, `ConcreteAgent`, `FailingAgent` — real implementations with fake data
 - ✅ Use `@pytest.mark.skipif` for tests requiring network, API keys, or heavy SDKs
+
+The distinction: environment isolation (`monkeypatch.setenv`) doesn't change the code's behavior — it controls inputs. Behavior mocking (`mock.patch`) does change behavior and is the actual hazard. See [docs/development/testing-strategy.md § Zero-Mock Policy (clarified)](docs/development/testing-strategy.md#zero-mock-policy-clarified) for the full rationale.
 
 ```python
 # ✅ Correct: real implementation with test data
