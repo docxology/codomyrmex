@@ -9,10 +9,11 @@ Agent coordination for project-level standards: architecture narratives, contrib
 ## Contents (by file)
 
 | File | Role |
-|:---|:---|
+| --- | --- |
 | [contributing.md](contributing.md) | PR process, deps policy, optional local review/SARIF pointers |
 | [architecture.md](architecture.md), [architecture-overview.md](architecture-overview.md) | System design |
 | [codebase_audit.md](codebase_audit.md), [docs_audit.md](docs_audit.md) | Audit logs |
+| [ci-release-hardening-handoff-2026-07-31.md](ci-release-hardening-handoff-2026-07-31.md) | Published CI/release hardening handoff and follow-up checklist |
 | [README.md](README.md) | Section index |
 | [SPEC.md](SPEC.md), [PAI.md](PAI.md) | Local specs / PAI notes |
 

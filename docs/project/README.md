@@ -9,11 +9,12 @@ Project-level documentation covering architecture decisions, contributing guidel
 ## Contents
 
 | Document | Description |
-|:---|:---|
+| --- | --- |
 | [architecture-overview.md](architecture-overview.md) | High-level architecture overview and diagrams |
 | [architecture.md](architecture.md) | Detailed system architecture documentation |
 | [codebase_audit.md](codebase_audit.md) | Codebase health audit results and recommendations |
 | [contributing.md](contributing.md) | Contribution guidelines, PR workflow, code review |
+| [ci-release-hardening-handoff-2026-07-31.md](ci-release-hardening-handoff-2026-07-31.md) | CI/release hardening handoff and next-operator checklist |
 | [docs_audit.md](docs_audit.md) | Documentation audit results and gap analysis |
 
 ## Coordination
