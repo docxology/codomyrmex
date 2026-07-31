@@ -135,11 +135,18 @@ class PAISystemsMixin:
         return self._load_settings()
 
     def get_pai_env(self) -> dict[str, str]:
-        """Extract PAI-specific environment variables from settings."""
+        """Extract effective PAI environment variables from settings.
+
+        ``PAI_DIR`` is the stable root consumed by the PAI project-management
+        tools. Older installations persist it in ``settings.json``; newer
+        installations may rely on the documented ``~/.claude`` default.
+        """
         settings = self._load_settings()
         if settings is None:
             return {}
-        return dict(settings.get("env", {}))
+        env = dict(settings.get("env", {}))
+        env.setdefault("PAI_DIR", str(self.config.claude_root))
+        return env
 
     def get_mcp_registration(self) -> dict[str, Any] | None:
         """Read MCP server registrations from ``claude_desktop_config.json``."""

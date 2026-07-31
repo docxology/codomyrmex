@@ -33,7 +33,7 @@ AI-Native Modular Coding Workspace
 
 > **Modular, agentic Python workspace for software engineering, personal AI infrastructure, and multi-agent orchestration.**
 
-Codomyrmex is a modular library of **130 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more. The repository applies a strict **Zero-Mock** testing policy to its active suites, while its measured inventory describes the checked-in surface at refresh time rather than proving that every method is complete or production-safe. In the complete locked dependency profile (`--all-groups --all-extras`), the ecosystem exposes **608** runtime MCP tools from **623** production `@mcp_tool` lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](../docs/reference/inventory.md)). It includes **3,000+ Python files**, **35,783** collected tests (`uv run python scripts/doc_inventory.py --pytest`), **1,199** markdown files under `docs/` (recursive; see [inventory](../docs/reference/inventory.md)), and **37** GitHub Actions workflows. These measured values are profile-specific snapshots.
+Codomyrmex is a modular library of **130 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more. The repository applies a strict **Zero-Mock** testing policy to its active suites, while its measured inventory describes the checked-in surface at refresh time rather than proving that every method is complete or production-safe. In the complete locked dependency profile (`--all-groups --all-extras`), the ecosystem exposes **608** runtime MCP tools from **623** production `@mcp_tool` lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](../docs/reference/inventory.md)). It includes **3,000+ Python files**, **35,783** collected tests (`uv run python scripts/doc_inventory.py --pytest`), **1,200** markdown files under `docs/` (recursive; see [inventory](../docs/reference/inventory.md)), and **37** GitHub Actions workflows. These measured values are profile-specific snapshots.
 
 ```bash
 # Install
@@ -511,7 +511,7 @@ sequenceDiagram
 codomyrmex/
 ├── .github/                  # 37 GitHub Actions workflows, templates, docs
 ├── config/                   # Configuration templates; see inventory for measured files
-├── docs/                     # 1,199 markdown files (recursive); see inventory
+├── docs/                     # 1,200 markdown files (recursive); see inventory
 │   ├── ARCHITECTURE.md       # System architecture
 │   ├── AGENTS.md             # Agent coordination
 │   ├── SPEC.md               # Technical specification
@@ -548,7 +548,7 @@ codomyrmex/
 | **Total Modules** | 130 (top-level under `src/codomyrmex/`) |
 | **Total Python Files** | 3,000+ |
 | **Collected tests** | 35,783 in the complete locked dependency profile (`uv run python scripts/doc_inventory.py --pytest`) |
-| **Documentation Files** | 1,199 (`*.md` under `docs/`; see [inventory](../docs/reference/inventory.md)) |
+| **Documentation Files** | 1,200 (`*.md` under `docs/`; see [inventory](../docs/reference/inventory.md)) |
 | **GitHub Workflows** | 37 |
 | **Runtime MCP Tools** | 608 (merged PAI manifest in the complete locked dependency profile; distinct from 623 production decorator lines) |
 | **`mcp_tools.py` files** | 150 (non-test) |
@@ -831,7 +831,7 @@ Copyright © 2025–2026 The Codomyrmex Contributors ([@docxology](https://githu
 
 <p align="center">
   <b>Built with 🐜 Codomyrmex — The Autonomous Software Colony</b><br>
-  <sub>130 modules · 608 runtime MCP tools · 623 decorators · 35,783 tests · 1,199 docs · 37 workflows · Zero-Mock · Evidence-scoped</sub>
+  <sub>130 modules · 608 runtime MCP tools · 623 decorators · 35,783 tests · 1,200 docs · 37 workflows · Zero-Mock · Evidence-scoped</sub>
 </p>
 
 <!-- Keywords for discoverability: AI agent framework, MCP tools, Model Context Protocol, autonomous software engineering, multi-agent orchestration, LLM tooling, Python AI library, agentic coding, Claude tools, Gemini tools, GPT tools, vector store, graph RAG, code analysis, static analysis, security scanning, personal AI infrastructure, PAI -->

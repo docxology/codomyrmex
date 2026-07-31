@@ -7,6 +7,7 @@ and TELOS subsystems within PAI. Extracted from pai_bridge.py.
 from __future__ import annotations
 
 import itertools
+from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -31,36 +32,45 @@ class PAIModulesMixin:
     # ==================================================================
 
     def list_skills(self) -> list[PAISkillInfo]:
-        """list all installed PAI skill packs.
+        """List all installed PAI skill packs.
 
-        Scans ``~/.claude/skills/`` for subdirectories containing
-        a ``SKILL.md`` file (the PAI skill marker).
+        PAI v3 stores its root skill at ``~/.claude/skills/PAI/`` while v4+
+        stores it at ``~/.claude/PAI/``. Discover both layouts and avoid
+        reporting the same directory twice when the v3 path is active.
         """
         skills_dir = self.config.skills_dir
-        if not skills_dir.is_dir():
-            return []
-
         result: list[PAISkillInfo] = []
+
+        def skill_info(entry: Path, name: str | None = None) -> PAISkillInfo:
+            skill_md = entry / "SKILL.md"
+            tools_dir = entry / "Tools"
+            workflows_dir = entry / "Workflows"
+            file_count = sum(
+                1 for _ in itertools.islice(entry.rglob("*"), 10000) if _.is_file()
+            )
+            return PAISkillInfo(
+                name=name or entry.name,
+                path=str(entry),
+                has_skill_md=skill_md.is_file(),
+                has_tools=tools_dir.is_dir(),
+                has_workflows=workflows_dir.is_dir(),
+                file_count=file_count,
+            )
+
         try:
+            pai_root = self.config.pai_root
+            if self.config.skill_md.is_file():
+                result.append(skill_info(pai_root, name="PAI"))
+
+            if not skills_dir.is_dir():
+                return result
+
             for entry in sorted(skills_dir.iterdir()):
                 if not entry.is_dir():
                     continue
-                skill_md = entry / "SKILL.md"
-                tools_dir = entry / "Tools"
-                workflows_dir = entry / "Workflows"
-                file_count = sum(
-                    1 for _ in itertools.islice(entry.rglob("*"), 10000) if _.is_file()
-                )
-                result.append(
-                    PAISkillInfo(
-                        name=entry.name,
-                        path=str(entry),
-                        has_skill_md=skill_md.is_file(),
-                        has_tools=tools_dir.is_dir(),
-                        has_workflows=workflows_dir.is_dir(),
-                        file_count=file_count,
-                    )
-                )
+                if entry.resolve() == pai_root.resolve():
+                    continue
+                result.append(skill_info(entry))
         except OSError as exc:
             logger.warning("Failed to list skills: %s", exc)
 

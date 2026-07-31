@@ -29,12 +29,19 @@ _DOCKER_SETUP_ERROR_MARKERS = (
     "github.com/docker/docker",
     "github.com/moby/moby/client",
 )
+_DOCKER_COMPATIBILITY_SHIM_MARKERS = ("emulate docker cli using podman",)
 
 
 def _is_docker_setup_error(stderr: str) -> bool:
     """Return True when Docker failed before user code could run."""
     stderr_lower = stderr.lower()
     return any(marker in stderr_lower for marker in _DOCKER_SETUP_ERROR_MARKERS)
+
+
+def _is_docker_compatibility_shim(output: str) -> bool:
+    """Return True when the Docker command is provided by a non-Docker shim."""
+    output_lower = output.lower()
+    return any(marker in output_lower for marker in _DOCKER_COMPATIBILITY_SHIM_MARKERS)
 
 
 def check_docker_available() -> bool:
@@ -50,6 +57,12 @@ def check_docker_available() -> bool:
             server_version = json.loads(result.stdout)
         except json.JSONDecodeError:
             server_version = None
+        if _is_docker_compatibility_shim(f"{result.stderr}\n{result.stdout}"):
+            logger.warning(
+                "Docker CLI is a Podman compatibility shim; a Docker daemon is "
+                "required for sandbox execution"
+            )
+            return False
         if (
             result.returncode == 0
             and isinstance(server_version, str)
@@ -130,6 +143,16 @@ def run_code_in_docker(
         real_stdin = os.path.realpath(stdin_file)
         if not real_stdin.startswith(real_temp + os.sep):
             raise ValueError(f"stdin_file must be inside temp_dir: {stdin_file!r}")
+
+    if not check_docker_available():
+        return {
+            "stdout": "",
+            "stderr": "Docker is not available",
+            "exit_code": -1,
+            "execution_time": round(time.time() - start_time, 3),
+            "status": "setup_error",
+            "error_message": "Docker is required but not available or not running",
+        }
 
     # Calculate the docker command timeout (slightly longer than the code timeout)
     docker_timeout = timeout * language_config.get("timeout_factor", 1.2)
