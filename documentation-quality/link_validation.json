@@ -92,10 +92,10 @@
   },
   {
     "file": "AGENTS.md",
-    "link": "https://github.com/docxology/codomyrmex/issues/175",
+    "link": ".github/CONTRIBUTING.md#testing-requirements",
     "line": 53,
-    "status": "external",
-    "message": "External link (not validated)"
+    "status": "ok",
+    "message": "File exists"
   },
   {
     "file": "AGENTS.md",
@@ -5601,29 +5601,36 @@
   },
   {
     "file": ".github/CONTRIBUTING.md",
+    "link": "docs/development/testing-strategy.md#zero-mock-policy-clarified",
+    "line": 127,
+    "status": "broken",
+    "message": "Target not found: docs/development/testing-strategy.md"
+  },
+  {
+    "file": ".github/CONTRIBUTING.md",
     "link": "#testing-requirements",
-    "line": 279,
+    "line": 282,
     "status": "ok",
     "message": "Anchor link"
   },
   {
     "file": ".github/CONTRIBUTING.md",
     "link": "https://github.com/docxology/codomyrmex/issues",
-    "line": 305,
+    "line": 308,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": ".github/CONTRIBUTING.md",
     "link": "../PAI.md",
-    "line": 306,
+    "line": 309,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": ".github/CONTRIBUTING.md",
     "link": "../docs/pai/README.md",
-    "line": 306,
+    "line": 309,
     "status": "ok",
     "message": "File exists"
   },

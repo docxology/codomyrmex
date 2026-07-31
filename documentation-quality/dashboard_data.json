@@ -1,10 +1,10 @@
 {
-  "generated": "2026-07-31T17:40:22.003783",
+  "generated": "2026-07-31T17:42:44.053616",
   "links": {
-    "total": 16088,
-    "broken": 0,
-    "valid": 15665,
-    "external": 423
+    "total": 16089,
+    "broken": 1,
+    "valid": 15666,
+    "external": 422
   },
   "quality": {
     "files": 5383,
