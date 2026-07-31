@@ -37,9 +37,26 @@ def _hash160(data: bytes) -> bytes:
     return hashlib.new("ripemd160", sha).digest()
 
 
-def _sha3_256(data: bytes) -> bytes:
-    """SHA3-256 hash (used as Keccak-256 stand-in for educational purposes)."""
-    return hashlib.sha3_256(data).digest()
+def _keccak_256(data: bytes) -> bytes:
+    """Keccak-256 hash.
+
+    Uses ``Crypto.Hash.keccak`` from ``pycryptodome`` when available
+    (produces correct Ethereum addresses).  Falls back to ``hashlib.sha3_256``
+    with a warning — note that NIST SHA3-256 uses different padding constants
+    than Keccak-256 and will produce different addresses.
+    """
+    try:
+        from Crypto.Hash import keccak
+
+        k = keccak.new(digest_bits=256, data=data)
+        return k.digest()
+    except ImportError:
+        logger.warning(
+            "pycryptodome not installed — using SHA3-256 as Keccak-256 "
+            "stand-in. Ethereum addresses will NOT match production tools. "
+            "Install pycryptodome: uv sync --extra crypto"
+        )
+        return hashlib.sha3_256(data).digest()
 
 
 # ---------------------------------------------------------------------------
@@ -133,7 +150,7 @@ def checksum_ethereum_address(address: str) -> str:
     if len(hex_addr) != 40 or not re.fullmatch(r"[0-9a-f]{40}", hex_addr):
         raise WalletError(f"Invalid Ethereum address hex: {address}")
 
-    addr_hash = _sha3_256(hex_addr.encode("ascii")).hex()
+    addr_hash = _keccak_256(hex_addr.encode("ascii")).hex()
 
     checksummed = ""
     for i, c in enumerate(hex_addr):
@@ -173,7 +190,7 @@ def generate_ethereum_address(public_key: bytes) -> str:
             f"Expected 64 or 65 byte public key, got {len(public_key)} bytes"
         )
 
-    addr_hash = _sha3_256(pub_body)
+    addr_hash = _keccak_256(pub_body)
     raw_addr = addr_hash[-20:]
     hex_addr = raw_addr.hex()
 

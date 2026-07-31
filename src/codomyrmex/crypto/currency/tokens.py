@@ -11,18 +11,18 @@ Note:
 
 from __future__ import annotations
 
-import hashlib
 from dataclasses import dataclass
 
+from codomyrmex.crypto.currency.addresses import _keccak_256
 from codomyrmex.crypto.exceptions import WalletError
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
 
-def _sha3_256(data: bytes) -> bytes:
-    """SHA3-256 hash (Keccak-256 educational stand-in)."""
-    return hashlib.sha3_256(data).digest()
+# Keccak-256 used for ERC-20 function selectors and event topics.
+# Delegates to addresses._keccak_256 which tries pycryptodome first,
+# falls back to SHA3-256 with a warning.
 
 
 # ---------------------------------------------------------------------------
@@ -99,10 +99,10 @@ def create_erc20_interface(
 # ---------------------------------------------------------------------------
 
 # Function selector for transfer(address,uint256)
-_TRANSFER_SELECTOR = _sha3_256(b"transfer(address,uint256)")[:4]
+_TRANSFER_SELECTOR = _keccak_256(b"transfer(address,uint256)")[:4]
 
 # Event topic for Transfer(address,address,uint256)
-TRANSFER_EVENT_TOPIC = _sha3_256(b"Transfer(address,address,uint256)")
+TRANSFER_EVENT_TOPIC = _keccak_256(b"Transfer(address,address,uint256)")
 
 
 def encode_transfer(to: str, amount: int) -> bytes:

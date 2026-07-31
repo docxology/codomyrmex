@@ -264,14 +264,16 @@ class HDWallet:
             # Ethereum uses the Keccak-256 of the uncompressed public key
             # (without the 0x04 prefix).  We use SHA3-256 as a simplified
             # stand-in; see addresses.py for the full note.
+            from codomyrmex.crypto.currency.addresses import _keccak_256
+
             pub_uncompressed = _private_key_to_uncompressed_public(self.private_key)
             # Strip the 0x04 prefix
             pub_body = pub_uncompressed[1:]
-            addr_hash = hashlib.sha3_256(pub_body).digest()
+            addr_hash = _keccak_256(pub_body)
             raw_addr = addr_hash[-20:]
             hex_addr = raw_addr.hex()
             # EIP-55 checksum
-            hash_hex = hashlib.sha3_256(hex_addr.encode("ascii")).hexdigest()
+            hash_hex = _keccak_256(hex_addr.encode("ascii")).hex()
             checksummed = "".join(
                 c.upper() if int(hash_hex[i], 16) >= 8 else c
                 for i, c in enumerate(hex_addr)

@@ -204,6 +204,7 @@ fpf = [
 crypto = [
     "pillow>=12.3.0",
     "mnemonic>=0.21",
+    "pycryptodome>=3.21.0",  # Keccak-256 for correct Ethereum address derivation
 ]
 
 documents = [
@@ -385,6 +386,9 @@ codomyrmex = "codomyrmex.agents.pai:mcp_bridge"
 [tool.coverage.run]
 source = ["src/codomyrmex"]
 # meme: experimental module (root AGENTS.md); omitted from aggregate coverage until stabilized.
+# Enable branch coverage so the gate catches untested code paths
+# (e.g. the else branch of a trust check).
+branch = true
 omit = [
     "*/tests/*",
     "*/test_*.py",
