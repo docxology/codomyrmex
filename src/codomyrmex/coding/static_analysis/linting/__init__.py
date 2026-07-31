@@ -174,6 +174,9 @@ class TodoCommentRule(LintRule):
         """Check the condition and return the result."""
         issues = []
         for i, line in enumerate(code.split("\n"), 1):
+            # Fast-path optimization: simple substring check is significantly faster than regex
+            if "#" not in line:
+                continue
             for match in self._PATTERN.finditer(line):
                 issues.append(
                     LintIssue(
