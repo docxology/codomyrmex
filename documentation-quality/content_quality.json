@@ -63153,8 +63153,8 @@
       "heading_count": 6,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 136,
-      "link_count": 16
+      "word_count": 151,
+      "link_count": 17
     }
   },
   {
@@ -63206,6 +63206,18 @@
     }
   },
   {
+    "file": "docs/project/ci-release-hardening-handoff-2026-07-31.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 7,
+      "placeholder_count": 0,
+      "code_block_count": 2,
+      "word_count": 613,
+      "link_count": 6
+    }
+  },
+  {
     "file": "docs/project/architecture.md",
     "score": 100,
     "issues": [],
@@ -63225,8 +63237,8 @@
       "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 112,
-      "link_count": 10
+      "word_count": 126,
+      "link_count": 11
     }
   },
   {

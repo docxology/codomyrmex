@@ -1,14 +1,14 @@
 {
-  "generated": "2026-07-31T01:50:03.099822",
+  "generated": "2026-07-31T15:54:17.409381",
   "links": {
-    "total": 16080,
+    "total": 16088,
     "broken": 0,
-    "valid": 15657,
+    "valid": 15665,
     "external": 423
   },
   "quality": {
-    "files": 5382,
-    "avg_score": 99.20289855072464,
+    "files": 5383,
+    "avg_score": 99.2030466282742,
     "min_score": 75,
     "max_score": 100,
     "placeholder_total": 0

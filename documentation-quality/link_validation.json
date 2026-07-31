@@ -103062,78 +103062,85 @@
   },
   {
     "file": "docs/project/AGENTS.md",
-    "link": "README.md",
+    "link": "ci-release-hardening-handoff-2026-07-31.md",
     "line": 16,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project/AGENTS.md",
-    "link": "SPEC.md",
+    "link": "README.md",
     "line": 17,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project/AGENTS.md",
+    "link": "SPEC.md",
+    "line": 18,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project/AGENTS.md",
     "link": "PAI.md",
-    "line": 17,
+    "line": 18,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project/AGENTS.md",
     "link": "../AGENTS.md",
-    "line": 21,
+    "line": 22,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project/AGENTS.md",
     "link": "../README.md",
-    "line": 21,
+    "line": 22,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project/AGENTS.md",
     "link": "../../README.md",
-    "line": 22,
+    "line": 23,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project/AGENTS.md",
     "link": "../../AGENTS.md",
-    "line": 22,
+    "line": 23,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project/AGENTS.md",
     "link": "../AGENTS.md",
-    "line": 26,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/project/AGENTS.md",
-    "link": "../../src/codomyrmex/",
     "line": 27,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project/AGENTS.md",
+    "link": "../../src/codomyrmex/",
+    "line": 28,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project/AGENTS.md",
     "link": "contributing.md",
-    "line": 31,
+    "line": 32,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project/AGENTS.md",
     "link": "../../CONTRIBUTING.md",
-    "line": 31,
+    "line": 32,
     "status": "ok",
     "message": "File exists"
   },
@@ -103253,6 +103260,48 @@
     "file": "docs/project/PAI.md",
     "link": "../",
     "line": 27,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project/ci-release-hardening-handoff-2026-07-31.md",
+    "link": "../../.github/workflows/release.yml",
+    "line": 94,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project/ci-release-hardening-handoff-2026-07-31.md",
+    "link": "../../.github/workflows/ci.yml",
+    "line": 95,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project/ci-release-hardening-handoff-2026-07-31.md",
+    "link": "../../.github/workflows/pre-commit.yml",
+    "line": 96,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project/ci-release-hardening-handoff-2026-07-31.md",
+    "link": "../../pyproject.toml",
+    "line": 97,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project/ci-release-hardening-handoff-2026-07-31.md",
+    "link": "../../uv.lock",
+    "line": 98,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project/ci-release-hardening-handoff-2026-07-31.md",
+    "link": "../modules/tests/RUNNING_TESTS.md",
+    "line": 99,
     "status": "ok",
     "message": "File exists"
   },
@@ -103510,43 +103559,50 @@
   },
   {
     "file": "docs/project/README.md",
-    "link": "docs_audit.md",
+    "link": "ci-release-hardening-handoff-2026-07-31.md",
     "line": 17,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project/README.md",
-    "link": "AGENTS.md",
-    "line": 21,
+    "link": "docs_audit.md",
+    "line": 18,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project/README.md",
-    "link": "SPEC.md",
+    "link": "AGENTS.md",
     "line": 22,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project/README.md",
-    "link": "PAI.md",
+    "link": "SPEC.md",
     "line": 23,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project/README.md",
+    "link": "PAI.md",
+    "line": 24,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project/README.md",
     "link": "../README.md",
-    "line": 27,
+    "line": 28,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project/README.md",
     "link": "../../README.md",
-    "line": 28,
+    "line": 29,
     "status": "ok",
     "message": "File exists"
   },
