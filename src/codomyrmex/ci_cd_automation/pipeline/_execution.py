@@ -2,6 +2,7 @@ import asyncio
 import concurrent.futures
 import fnmatch
 import os
+import shlex
 import subprocess
 import time
 from datetime import UTC, datetime
@@ -163,10 +164,11 @@ class PipelineExecutionMixin:
         return await loop.run_in_executor(self.executor, run_cmd)
 
     def _substitute_variables(self, text: str, variables: dict[str, str]) -> str:
-        """Substitute variables in text."""
+        """Substitute variables in text, shell-quoting values."""
         for key, value in variables.items():
-            text = text.replace(f"${{{key}}}", value)
-            text = text.replace(f"${key}", value)
+            quoted = shlex.quote(value)
+            text = text.replace(f"${{{key}}}", quoted)
+            text = text.replace(f"${key}", quoted)
         return text
 
     def parallel_pipeline_execution(self, stages: list[dict]) -> dict:

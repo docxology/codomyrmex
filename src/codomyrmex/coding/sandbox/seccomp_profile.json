@@ -1,0 +1,90 @@
+{
+  "defaultAction": "SCMP_ACT_ERRNO",
+  "architectures": ["SCMP_ARCH_X86_64", "SCMP_ARCH_X86", "SCMP_ARCH_AARCH64"],
+  "syscalls": [
+    {
+      "names": [
+        "accept", "accept4", "access", "adjtimex", "alarm",
+        "bind", "brk",
+        "capget", "capset", "chdir", "chmod", "chown", "clock_getres",
+        "clock_gettime", "clock_nanosleep", "clone", "close",
+        "connect", "copy_file_range", "creat",
+        "dup", "dup2", "dup3",
+        "epoll_create", "epoll_create1", "epoll_ctl", "epoll_pwait",
+        "epoll_wait", "eventfd", "eventfd2", "execve", "execveat",
+        "exit", "exit_group",
+        "faccessat", "fadvise64", "fallocate", "fchdir", "fchmod",
+        "fchmodat", "fchown", "fchownat", "fcntl", "fdatasync",
+        "fgetxattr", "flistxattr", "flock", "fork", "fremovexattr",
+        "fsetxattr", "fstat", "fstatfs", "fstatvfs", "fsync",
+        "ftruncate", "futex",
+        "getcpu", "getcwd", "getdents", "getdents64", "getegid",
+        "geteuid", "getgid", "getgroups", "getitimer", "getpeername",
+        "getpgid", "getpgrp", "getpid", "getppid", "getpriority",
+        "getrandom", "getresgid", "getresuid", "getrlimit",
+        "getrusage", "getsockname", "getsockopt", "gettid",
+        "gettimeofday", "getuid", "getxattr",
+        "inotify_add_watch", "inotify_init", "inotify_init1",
+        "inotify_rm_watch",
+        "ioctl", "ioprio_get", "ioprio_set",
+        "link", "linkat", "listen", "listxattr", "lseek",
+        "lstat", "madvise", "mbind", "memfd_create", "mincore",
+        "mkdir", "mkdirat", "mknod", "mknodat", "mlock", "mlock2",
+        "mlockall", "mmap", "mprotect", "mremap", "msync", "munlock",
+        "munlockall", "munmap",
+        "name_to_handle_at",
+        "nanosleep", "newfstatat",
+        "open", "openat", "openat2",
+        "pause", "pidfd_open", "poll", "ppoll", "prctl", "pread64",
+        "preadv", "preadv2", "prlimit64",
+        "pselect6", "pwrite64", "pwritev", "pwritev2",
+        "read", "readahead", "readdir", "readlink", "readlinkat",
+        "readv", "recvfrom", "recvmmsg", "recvmsg", "remap_file_pages",
+        "removexattr", "rename", "renameat", "renameat2",
+        "restart_syscall",
+        "rmdir", "rt_sigaction", "rt_sigpending", "rt_sigprocmask",
+        "rt_sigqueueinfo", "rt_sigreturn", "rt_sigsuspend",
+        "rt_sigtimedwait",
+        "sched_getattr", "sched_getparam", "sched_getscheduler",
+        "sched_rr_get_interval", "sched_setattr", "sched_setparam",
+        "sched_setscheduler", "sched_yield",
+        "seccomp", "select", "semtimedop",
+        "sendfile", "sendmmsg", "sendmsg", "sendto",
+        "set_robust_list", "set_tid_address", "setdomainname",
+        "setgid", "setgroups", "sethostname", "setitimer",
+        "setpgid", "setpriority", "setrlimit",
+        "setsid", "setsockopt", "setuid",
+        "shmctl", "shmdt", "shmat", "shmget",
+        "shutdown", "sigaltstack",
+        "socket", "socketpair", "splice",
+        "stat", "statfs", "statvfs", "symlink", "symlinkat",
+        "sync", "sync_file_range", "syncfs",
+        "sysinfo",
+        "tee", "tgkill", "time", "timer_create", "timer_delete",
+        "timer_getoverrun", "timer_gettime", "timer_settime",
+        "timerfd_create", "timerfd_gettime", "timerfd_settime",
+        "times", "tkill", "truncate", "umask", "uname", "unlink",
+        "unlinkat", "utime", "utimensat", "utimes",
+        "vfork", "vmsplice",
+        "wait4", "waitid", "write", "writev"
+      ],
+      "action": "SCMP_ACT_ALLOW",
+      "args": [],
+      "comment": "Essential syscalls for Python/code execution in sandbox"
+    },
+    {
+      "names": [
+        "personality"
+      ],
+      "action": "SCMP_ACT_ALLOW",
+      "args": [
+        {
+          "index": 0,
+          "value": 0,
+          "op": "SCMP_CMP_EQ"
+        }
+      ],
+      "comment": "Allow only Linux-personality (no ASLR disable)"
+    }
+  ]
+}

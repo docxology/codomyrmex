@@ -1,7 +1,7 @@
 # Codomyrmex Security Audit & Threat Model
 
 **Reviewers**: critical_review.code_security_review + critical_review.threat_model_review  
-**Date**: 2026-07-31  
+| **Date**: 2026-07-31 (findings updated 2026-07-31 — F1, F2, F4, F11, F12 resolved)
 **Scope**: PAI bridge trust gateway, Docker sandbox, MCP tool surface (655 tools), identity/wallet crypto, dependency supply chain, command injection, CI/CD  
 **Confidence**: High — every finding is pinned to file:line evidence and corroborated by manual tracing.
 

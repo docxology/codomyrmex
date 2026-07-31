@@ -482,6 +482,11 @@ target-version = "py311"
 line-length = 88
 src = ["src"]
 extend-exclude = [
+    "*.json",
+    "*.yaml",
+    "*.yml",
+    "*.html",
+    "*.css",
     "src/codomyrmex/agents/hermes/evolution",
     "src/codomyrmex/agents/mission_control/app",
     "src/codomyrmex/agents/open_gauss",
