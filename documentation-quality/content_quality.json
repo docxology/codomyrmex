@@ -168,6 +168,18 @@
     }
   },
   {
+    "file": "SECURITY_AUDIT_REPORT.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 23,
+      "placeholder_count": 0,
+      "code_block_count": 12,
+      "word_count": 2548,
+      "link_count": 0
+    }
+  },
+  {
     "file": "SECURITY.md",
     "score": 100,
     "issues": [],
