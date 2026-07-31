@@ -113,6 +113,27 @@ def tool_list_module_functions(*, module: str = "") -> dict[str, Any]:
     }
 
 
+# Modules considered safe for runtime function invocation via
+# tool_call_module_function. Modules with I/O, subprocess, or volatile
+# side effects are excluded; add new entries only after a security review.
+_ALLOWED_MODULE_PREFIXES: frozenset[str] = frozenset({
+    "codomyrmex.encryption.",
+    "codomyrmex.validation.",
+    "codomyrmex.serialization.",
+    "codomyrmex.static_analysis.",
+    "codomyrmex.search.",
+    "codomyrmex.schemas.",
+    "codomyrmex.metrics.",
+    "codomyrmex.relations.",
+    "codomyrmex.strategy.",
+    "codomyrmex.skills.",
+    "codomyrmex.soul.",
+    "codomyrmex.text_to_sql.",
+    "codomyrmex.logging_monitoring.",
+    "codomyrmex.model_context_protocol.",
+})
+
+
 def tool_call_module_function(
     *, function: str = "", kwargs: dict | None = None
 ) -> dict[str, Any]:
@@ -140,6 +161,16 @@ def tool_call_module_function(
     module_path, func_name = parts
     if func_name.startswith("_"):
         return {"error": f"Cannot call private function {func_name!r}."}
+
+    # Security: only allow calls into reviewed modules
+    if not any(module_path.startswith(p) for p in _ALLOWED_MODULE_PREFIXES):
+        return {
+            "error": (
+                f"Module {module_path} is not in the allowed list for "
+                f"runtime function invocation. Allowed prefixes: "
+                f"{sorted(_ALLOWED_MODULE_PREFIXES)}"
+            ),
+        }
 
     try:
         mod = importlib.import_module(module_path)

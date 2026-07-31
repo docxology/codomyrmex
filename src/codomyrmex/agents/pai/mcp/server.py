@@ -140,13 +140,33 @@ def create_codomyrmex_mcp_server(
     # The server uses its own internal registry, so we copy over
     # (or ideally server accepts a pre-built registry, but standard pattern confirms manual reg)
 
+    from codomyrmex.agents.pai.trust_gateway import SecurityError, trusted_call_tool
+
+    def _wrap_with_trust(
+        tool_name: str, handler: Any
+    ) -> Any:
+        """Wrap a raw handler to enforce trust level before execution.
+
+        MCP protocol callers go through this wrapper; the direct Python
+        API already routes through ``trusted_call_tool()``.
+        """
+        def _trusted_handler(**kwargs: Any) -> dict[str, Any]:
+            try:
+                return trusted_call_tool(tool_name, **kwargs)
+            except SecurityError as exc:
+                raise
+            except Exception as exc:
+                return {"error": str(exc), "status": "error"}
+
+        return _trusted_handler
+
     for tool_name in registry.list_tools():
         tool = registry.get(tool_name)
         if tool:
             server.register_tool(
                 name=tool_name,
                 schema=tool["schema"],
-                handler=tool["handler"],
+                handler=_wrap_with_trust(tool_name, tool["handler"]),
             )
 
     # ── Register resources ────────────────────────────────────────
