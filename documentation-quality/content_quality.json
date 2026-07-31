@@ -48,6 +48,18 @@
     }
   },
   {
+    "file": "ASSUMPTION_REGISTER.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 12,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 2518,
+      "link_count": 0
+    }
+  },
+  {
     "file": "PAI.md",
     "score": 100,
     "issues": [],
