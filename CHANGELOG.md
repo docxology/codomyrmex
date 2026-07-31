@@ -10,6 +10,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **PAI v3/v4 skill directory coexistence**: `_modules.py` now discovers PAI
+  root skills at both `~/.claude/skills/PAI/` (v3) and `~/.claude/PAI/` (v4+),
+  deduplicating when both resolve to the same directory.
+- **PAI_DIR env default fallback**: `_systems.py` derives `PAI_DIR` from
+  `claude_root` when `settings.json` lacks an explicit entry, keeping newer PAI
+  installations functional.
+- **Docker Podman compatibility shim detection**: `container.py` detects when
+  `docker` is actually a Podman emulation shim and rejects it, since the
+  sandbox requires a real Docker daemon. Early-exit gate in
+  `run_code_in_docker()` surfaces setup errors immediately.
 - **Fail-closed release and technical-report stack**: `codomyrmex.release` now
   performs real isolated `uv build` wheel/sdist construction with complete
   SHA-256/SHA-512 receipts, requires all strict release evidence, verifies local
