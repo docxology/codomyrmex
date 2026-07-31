@@ -52,7 +52,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --all-extras --dev
+          uv sync --locked --all-extras --dev
 
       - name: Run Ruff linting
         run: |
@@ -106,7 +106,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --all-extras --dev
+          uv sync --locked --all-extras --dev
 
       - name: Run Bandit security scan
         run: |
@@ -139,7 +139,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --all-extras --dev
+          uv sync --locked --all-extras --dev
 
       - name: Run Radon complexity analysis
         run: |
@@ -184,7 +184,7 @@ jobs:
         run: uv python install ${{ env.PYTHON_VERSION }}
 
       - name: Install dependencies
-        run: uv sync --all-extras --dev
+        run: uv sync --locked --all-extras --dev
 
       - name: Run documentation gates
         run: make docs-check
@@ -220,7 +220,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --all-extras --dev
+          uv sync --locked --group docs --all-extras --dev
 
       - name: Create output directory
         run: |
@@ -252,7 +252,7 @@ jobs:
         run: uv python install ${{ env.PYTHON_VERSION }}
 
       - name: Install dependencies
-        run: uv sync --all-extras --dev
+        run: uv sync --locked --all-extras --dev
 
       - name: Run offline research and contract suites
         run: |
@@ -317,7 +317,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --all-extras --dev
+          uv sync --locked --group docs --all-extras --dev
 
       - name: Create output directory
         run: |
@@ -398,7 +398,7 @@ jobs:
         run: uv python install ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: uv sync --all-extras --dev
+        run: uv sync --locked --all-extras --dev
 
       - name: Create output directory
         run: >-
@@ -458,7 +458,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --all-extras --dev
+          uv sync --locked --all-extras --dev
 
       - name: Create output directory
         run: |
@@ -493,7 +493,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --all-extras --dev
+          uv sync --locked --all-extras --dev
 
       - name: Build package
         run: |
@@ -528,7 +528,7 @@ jobs:
 
       - name: Check dependency consistency
         run: |
-          uv sync --all-extras --dev
+          uv sync --locked --all-extras --dev
           # Check for dependency conflicts — fail CI on conflicts
           uv pip check
 

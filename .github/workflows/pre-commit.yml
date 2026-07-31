@@ -36,7 +36,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --all-extras --dev
+          uv sync --locked --all-extras --dev
 
       - name: Cache pre-commit hooks
         uses: actions/cache@v4
@@ -46,9 +46,8 @@ jobs:
           restore-keys: |
             pre-commit-${{ env.PYTHON_VERSION }}-
 
-      - name: Install pre-commit
-        run: |
-          uv run pip install pre-commit
+      - name: Verify pre-commit
+        run: uv run --locked pre-commit --version
 
       - name: Install pre-commit hooks
         run: |

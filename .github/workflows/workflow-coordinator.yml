@@ -27,7 +27,7 @@ permissions: {}
 
 env:
   PYTHON_VERSION: "3.11"
-  UV_VERSION: "0.5.7"
+  UV_VERSION: "0.10.8"
   NODE_VERSION: "20"
 
 jobs:
@@ -207,17 +207,17 @@ jobs:
         id: strategy
         run: |
           echo "🧠 Analyzing changes for smart testing strategy..."
-          
+
           # Get list of changed Python files
           changed_files=$(git diff --name-only origin/main...HEAD | grep '\.py$' || true)
-          
+
           if [ -z "$changed_files" ]; then
             echo "strategy=minimal" >> $GITHUB_OUTPUT
             echo "modules=[]" >> $GITHUB_OUTPUT
             echo "No Python files changed, using minimal testing"
             exit 0
           fi
-          
+
           # Determine affected modules
           affected_modules=()
           for file in $changed_files; do
@@ -228,10 +228,10 @@ jobs:
               fi
             fi
           done
-          
+
           # Determine test strategy based on changes
           total_changes=$(echo "$changed_files" | wc -l)
-          
+
           if [ $total_changes -gt 50 ]; then
             strategy="comprehensive"
           elif [ $total_changes -gt 20 ]; then
@@ -241,7 +241,7 @@ jobs:
           else
             strategy="targeted"
           fi
-          
+
           echo "strategy=$strategy" >> $GITHUB_OUTPUT
 
           if [ ${#affected_modules[@]} -eq 0 ]; then
@@ -250,7 +250,7 @@ jobs:
             modules_json=$(printf '%s\n' "${affected_modules[@]}" | jq -R . | jq -c -s .)
             echo "modules=$modules_json" >> $GITHUB_OUTPUT
           fi
-          
+
           echo "Test strategy: $strategy"
           echo "Affected modules: ${affected_modules[*]}"
           echo "Total changed files: $total_changes"
@@ -262,7 +262,7 @@ jobs:
           echo "**Strategy**: ${{ steps.strategy.outputs.strategy }}" >> $GITHUB_STEP_SUMMARY
           echo "**Affected Modules**: ${{ steps.strategy.outputs.modules }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           strategy="${{ steps.strategy.outputs.strategy }}"
           case $strategy in
             "minimal")
@@ -302,41 +302,41 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Changes Detected" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [[ "${{ needs.changes.outputs.source }}" == "true" ]]; then
             echo "✅ **Source Code**: Changed" >> $GITHUB_STEP_SUMMARY
           else
             echo "⚪ **Source Code**: No changes" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.changes.outputs.tests }}" == "true" ]]; then
             echo "✅ **Tests**: Changed" >> $GITHUB_STEP_SUMMARY
           else
             echo "⚪ **Tests**: No changes" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.changes.outputs.docs }}" == "true" ]]; then
             echo "✅ **Documentation**: Changed" >> $GITHUB_STEP_SUMMARY
           else
             echo "⚪ **Documentation**: No changes" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.changes.outputs.dependencies }}" == "true" ]]; then
             echo "✅ **Dependencies**: Changed" >> $GITHUB_STEP_SUMMARY
           else
             echo "⚪ **Dependencies**: No changes" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.changes.outputs.workflows }}" == "true" ]]; then
             echo "✅ **Workflows**: Changed" >> $GITHUB_STEP_SUMMARY
           else
             echo "⚪ **Workflows**: No changes" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Triggered Workflows" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [[ "${{ needs.coordinate-ci.result }}" != "skipped" ]]; then
             if [[ "${{ needs.coordinate-ci.result }}" == "success" ]]; then
               echo "✅ **CI Pipeline**: Completed successfully" >> $GITHUB_STEP_SUMMARY
@@ -346,7 +346,7 @@ jobs:
           else
             echo "⏭️ **CI Pipeline**: Skipped (no relevant changes)" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.coordinate-security.result }}" != "skipped" ]]; then
             if [[ "${{ needs.coordinate-security.result }}" == "success" ]]; then
               echo "✅ **Security Scan**: Completed successfully" >> $GITHUB_STEP_SUMMARY
@@ -356,7 +356,7 @@ jobs:
           else
             echo "⏭️ **Security Scan**: Skipped (no relevant changes)" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.coordinate-docs.result }}" != "skipped" ]]; then
             if [[ "${{ needs.coordinate-docs.result }}" == "success" ]]; then
               echo "✅ **Documentation**: Built successfully" >> $GITHUB_STEP_SUMMARY
@@ -366,7 +366,7 @@ jobs:
           else
             echo "⏭️ **Documentation**: Skipped (no doc changes)" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.coordinate-benchmarks.result }}" != "skipped" ]]; then
             if [[ "${{ needs.coordinate-benchmarks.result }}" == "success" ]]; then
               echo "✅ **Benchmarks**: Completed successfully" >> $GITHUB_STEP_SUMMARY
@@ -376,7 +376,7 @@ jobs:
           else
             echo "⏭️ **Benchmarks**: Skipped (not main branch or scheduled)" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Optimization Benefits" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -394,7 +394,7 @@ jobs:
         run: |
           echo "❌ Some coordinated workflows failed!"
           echo "CI Result: ${{ needs.coordinate-ci.result }}"
-          echo "Security Result: ${{ needs.coordinate-security.result }}"  
+          echo "Security Result: ${{ needs.coordinate-security.result }}"
           echo "Docs Result: ${{ needs.coordinate-docs.result }}"
           echo "Benchmarks Result: ${{ needs.coordinate-benchmarks.result }}"
           exit 1

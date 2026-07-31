@@ -1,5 +1,5 @@
 # Pre-commit hooks configuration for Codomyrmex
-# Install: uv sync (pre-commit is included in dev dependencies)
+# Install: uv sync --locked --all-groups (pre-commit is included in dev dependencies)
 # Setup: pre-commit install
 # Run: pre-commit run --all-files
 

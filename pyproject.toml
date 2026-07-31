@@ -347,6 +347,7 @@ source-exclude = [
 dev = [
     {include-group = "lint"},
     {include-group = "test"},
+    "pre-commit>=4.0.0",
     "hypothesis>=6.151.9",
     "sarif-tools>=3.0.0",
     "desloppify[full]>=0.9.14",

@@ -13,24 +13,24 @@ install:
 
 # Install all dependency groups (dev, test, docs, etc.)
 dev:
-    uv sync --all-groups
+    uv sync --locked --all-groups
 
 # ─── Testing ─────────────────────────────────────────────────────
 # Run all tests with coverage
 test:
-    uv run pytest tests/ -v --tb=short -m "not performance and not benchmark and not bench" --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=60
+    uv run --locked --group docs pytest tests/ -v --tb=short -m "not performance and not benchmark and not bench" --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=60
 
 # Run unit tests only
 test-unit:
-    uv run pytest tests/unit/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-fail-under=60
+    uv run --locked --group docs pytest tests/unit/ -v --tb=short --cov=src/codomyrmex --cov-report=term-missing --cov-fail-under=60
 
 # Run integration tests
 test-integration:
-    uv run pytest tests/integration/ -v --tb=short
+    uv run --locked --group docs pytest tests/integration/ -v --tb=short
 
 # Fast test run (no coverage overhead)
 test-fast:
-    uv run pytest tests/ -q --no-header -m "not performance and not benchmark and not bench" --override-ini="addopts=" --import-mode=importlib
+    uv run --locked --group docs pytest tests/ -q --no-header -m "not performance and not benchmark and not bench" --override-ini="addopts=" --import-mode=importlib
 
 # Run tests with HTML coverage report
 test-coverage-html: test

@@ -58,10 +58,9 @@ Tests are marked with pytest markers for selective execution:
 Ensure you have the development environment set up:
 
 ```bash
-# Install dependencies (use --all-extras --dev to mirror CI and optional stacks like FPF / scientific)
-uv sync --dev
-# CI parity (recommended before a full-suite gate):
-uv sync --all-extras --dev
+# Install the locked test profile, including the MkDocs dependency used by
+# documentation-hook tests and optional stacks such as FPF / scientific.
+uv sync --locked --group docs --all-extras --dev
 
 # Verify pytest installation
 uv run pytest --version

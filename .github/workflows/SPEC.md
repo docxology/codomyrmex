@@ -38,7 +38,8 @@
 
 - Triggers: `v*.*.*` tag push
 - Flow: quality-gate → build-artifacts → publish-pypi → verify-install (retry loop 10×) → GitHub Release;
-  the release gate uses the same Ruff/ty/security contracts as CI.
+  the release gate uses the same Ruff/ty/security contracts as CI and opens a reviewable documentation
+  update PR for stable releases.
 - Git identity: `github-actions[bot]` for automated version bumps
 
 ### benchmarks.yml
@@ -53,5 +54,5 @@
 | `astral-sh/setup-uv` | `@v5` | Upgrade from v3 — all workflows |
 | `actions/checkout` | `@v4` | Standard across all jobs |
 | `codecov/codecov-action` | `@v5` | Token in `with:`, not `env:` |
-| `peter-evans/create-pull-request` | `@v7` | For automated dependency PRs |
+| `peter-evans/create-pull-request` | `@v7` | For automated dependency and release-documentation PRs |
 | `actions/setup-python` | `@v5` | Only in release verify job |

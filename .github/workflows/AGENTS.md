@@ -2,12 +2,12 @@
 
 # .github/workflows — AI Agent Guide
 
-**Status**: Active | **Last Updated**: March 2026
+**Status**: Active | **Last Updated**: July 2026
 
 ## Purpose
 
 GitHub Actions workflow definitions for CI/CD, security, multi-agent infrastructure,
-documentation, benchmarks, PR automation, and repository maintenance. 33 workflows total.
+documentation, benchmarks, PR automation, and repository maintenance. 37 workflows total.
 
 ## Workflow Inventory
 
@@ -18,7 +18,7 @@ documentation, benchmarks, PR automation, and repository maintenance. 33 workflo
 | `ci.yml` | push/PR main,develop | lint, `coverage-gate`, Unix full-suite matrix, Windows portability matrix, build |
 | `pre-commit.yml` | push/PR | pre-commit, commit-message-check and repository consistency checks |
 | `security.yml` | schedule daily + push | dependency-scan, bandit, semgrep, codeql, trufflehog |
-| `release.yml` | tag `v*.*.*` | quality-gate (60% cov), build, PyPI publish |
+| `release.yml` | tag `v*.*.*` | quality-gate (60% cov), build, PyPI publish, stable-release documentation PR |
 
 ### Agent & PR Infrastructure
 
@@ -114,7 +114,8 @@ documentation, benchmarks, PR automation, and repository maintenance. 33 workflo
 
 ### Common Patterns
 
-- `uv sync --all-extras --dev` installs all optional dependencies
+- `uv sync --locked --group docs --all-extras --dev` installs the locked test profile;
+  the explicit `docs` group is required because documentation-hook tests import MkDocs.
 - `if: always()` is limited to report/status jobs; required checks must preserve
   the underlying failure result and be enforced by their final status job.
 - `if: always()` on summary jobs ensures they run after failures

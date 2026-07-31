@@ -10,7 +10,7 @@ permissions:
 
 env:
   PYTHON_VERSION: "3.11"
-  UV_VERSION: "0.5.7"
+  UV_VERSION: "0.10.8"
 
 jobs:
   ruff-comments:
@@ -31,24 +31,24 @@ jobs:
         run: uv python install ${{ env.PYTHON_VERSION }}
 
       - name: Install dependencies
-        run: uv sync --all-extras --dev
+        run: uv sync --locked --all-extras --dev
 
       - name: Re-run Ruff and output GitHub annotations
         run: |
           # Use --output-format=github to generate inline annotations
           # We only want to run it on changed files in the PR
-          
+
           # Get list of changed Python files
           files=$(git diff --name-only origin/main...HEAD | grep '\.py$' || true)
-          
+
           if [ -z "$files" ]; then
             echo "No Python files changed, skipping Ruff."
             exit 0
           fi
-          
+
           echo "Running Ruff on changed files..."
           uv run ruff check $files --output-format=github || true
-          
+
       - name: Run Ruff Format check
         run: |
           files=$(git diff --name-only origin/main...HEAD | grep '\.py$' || true)

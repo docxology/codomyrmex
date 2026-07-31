@@ -74,7 +74,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --all-extras --dev
+          uv sync --locked --group docs --all-extras --dev
           uv pip install pytest-benchmark memory-profiler psutil
 
       - name: Create output directory
@@ -133,7 +133,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --all-extras --dev
+          uv sync --locked --group docs --all-extras --dev
           uv pip install pytest-benchmark memory-profiler psutil
 
       - name: Create output directory
@@ -187,7 +187,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --all-extras --dev
+          uv sync --locked --all-extras --dev
           uv pip install memory-profiler psutil
 
       - name: Run memory benchmarks

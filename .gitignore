@@ -251,8 +251,6 @@ pytest_output.txt
 src/codomyrmex/tests/unit/git_operations/@output/**/*.json
 /~
 /git_analysis/
-/Any
-/dict[str,
 
 # Stale analysis/test artifacts
 missing_docs*.txt

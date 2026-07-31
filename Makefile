@@ -49,7 +49,7 @@ install:
 
 dev:
 	@echo "Installing all dependency groups..."
-	uv sync --all-groups
+	uv sync --locked --all-groups
 
 submodules:
 	@echo "Initializing and setting up git submodules..."
@@ -61,27 +61,27 @@ setup: install submodules
 # Testing
 test:
 	@echo "Running all tests..."
-	uv run pytest tests/ -v --tb=short -m "not performance and not benchmark and not bench" --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=60
+	uv run --locked --group docs pytest tests/ -v --tb=short -m "not performance and not benchmark and not bench" --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=60
 
 test-unit:
 	@echo "Running unit tests..."
-	uv run pytest tests/unit/ -v --tb=short -m unit --cov=src/codomyrmex --cov-report=term-missing --cov-report=json:coverage.json --cov-fail-under=60
+	uv run --locked --group docs pytest tests/unit/ -v --tb=short -m unit --cov=src/codomyrmex --cov-report=term-missing --cov-report=json:coverage.json --cov-fail-under=60
 
 test-integration:
 	@echo "Running integration tests..."
-	uv run pytest tests/integration/ -v --tb=short -m integration
+	uv run --locked --group docs pytest tests/integration/ -v --tb=short -m integration
 
 test-obsidian:
 	@echo "Running Obsidian module tests..."
-	uv run pytest tests/unit/agentic_memory/obsidian/ -v --tb=short --override-ini="addopts="
+	uv run --locked --group docs pytest tests/unit/agentic_memory/obsidian/ -v --tb=short --override-ini="addopts="
 
 test-fast:
 	@echo "Running tests with minimal addopts while preserving importlib collection..."
-	uv run pytest tests/ -q --no-header -m "not performance and not benchmark and not bench" --override-ini="addopts=" --import-mode=importlib
+	uv run --locked --group docs pytest tests/ -q --no-header -m "not performance and not benchmark and not bench" --override-ini="addopts=" --import-mode=importlib
 
 test-coverage:
 	@echo "Running tests with coverage report..."
-	uv run pytest tests/ -v --tb=short -m "not performance and not benchmark and not bench" --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=60
+	uv run --locked --group docs pytest tests/ -v --tb=short -m "not performance and not benchmark and not bench" --cov=src/codomyrmex --cov-report=term-missing --cov-report=html:htmlcov --cov-report=json:coverage.json --cov-fail-under=60
 	@echo "Coverage report generated: coverage.json and htmlcov/"
 
 test-coverage-html:

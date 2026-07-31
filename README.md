@@ -31,7 +31,7 @@ Codomyrmex is a modular library of **130 top-level modules** under `src/codomyrm
 ```bash
 # Install
 git clone https://github.com/docxology/codomyrmex.git && cd codomyrmex
-uv sync --all-groups
+uv sync --locked --all-groups
 
 # Verify
 uv run codomyrmex doctor --all
@@ -735,7 +735,7 @@ graph LR
 git clone https://github.com/docxology/codomyrmex.git && cd codomyrmex
 
 # 2. Install (all dev dependencies via uv)
-uv sync --all-groups
+uv sync --locked --all-groups
 
 # 3. Configure environment
 cp .env.example .env   # Add GEMINI_API_KEY, ANTHROPIC_API_KEY, etc.
