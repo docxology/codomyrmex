@@ -1394,3851 +1394,3872 @@
   },
   {
     "file": "README.md",
+    "link": "https://doi.org/10.5281/zenodo.21750800",
+    "line": 33,
+    "status": "external",
+    "message": "External link (not validated)"
+  },
+  {
+    "file": "README.md",
+    "link": "https://doi.org/10.5281/zenodo.21750801",
+    "line": 33,
+    "status": "external",
+    "message": "External link (not validated)"
+  },
+  {
+    "file": "README.md",
+    "link": "https://github.com/docxology/codomyrmex/releases/tag/v1.3.0-paper",
+    "line": 33,
+    "status": "external",
+    "message": "External link (not validated)"
+  },
+  {
+    "file": "README.md",
     "link": "#-documentation-hub",
-    "line": 44,
-    "status": "ok",
-    "message": "Anchor link"
-  },
-  {
-    "file": "README.md",
-    "link": "#-system-architecture",
-    "line": 45,
-    "status": "ok",
-    "message": "Anchor link"
-  },
-  {
-    "file": "README.md",
-    "link": "#\ufe0f-complete-module-inventory",
-    "line": 46,
-    "status": "ok",
-    "message": "Anchor link"
-  },
-  {
-    "file": "README.md",
-    "link": "#-module-dependency-architecture",
-    "line": 47,
-    "status": "ok",
-    "message": "Anchor link"
-  },
-  {
-    "file": "README.md",
-    "link": "#-agent-orchestration-pipeline",
     "line": 48,
     "status": "ok",
     "message": "Anchor link"
   },
   {
     "file": "README.md",
-    "link": "#\ufe0f-project-structure",
+    "link": "#-system-architecture",
     "line": 49,
     "status": "ok",
     "message": "Anchor link"
   },
   {
     "file": "README.md",
-    "link": "#-aggregate-statistics",
+    "link": "#\ufe0f-complete-module-inventory",
     "line": 50,
     "status": "ok",
     "message": "Anchor link"
   },
   {
     "file": "README.md",
-    "link": "#-llm-provider-matrix",
+    "link": "#-module-dependency-architecture",
     "line": 51,
     "status": "ok",
     "message": "Anchor link"
   },
   {
     "file": "README.md",
-    "link": "#-agent-dispatch-architecture",
+    "link": "#-agent-orchestration-pipeline",
     "line": 52,
     "status": "ok",
     "message": "Anchor link"
   },
   {
     "file": "README.md",
-    "link": "#-testing-philosophy",
+    "link": "#\ufe0f-project-structure",
     "line": 53,
     "status": "ok",
     "message": "Anchor link"
   },
   {
     "file": "README.md",
-    "link": "#\ufe0f-configuration-architecture",
+    "link": "#-aggregate-statistics",
     "line": 54,
     "status": "ok",
     "message": "Anchor link"
   },
   {
     "file": "README.md",
-    "link": "#-personal-ai-dashboard",
+    "link": "#-llm-provider-matrix",
     "line": 55,
     "status": "ok",
     "message": "Anchor link"
   },
   {
     "file": "README.md",
-    "link": "#-quick-start",
+    "link": "#-agent-dispatch-architecture",
     "line": 56,
     "status": "ok",
     "message": "Anchor link"
   },
   {
     "file": "README.md",
-    "link": "#-documentation-standards",
+    "link": "#-testing-philosophy",
     "line": 57,
     "status": "ok",
     "message": "Anchor link"
   },
   {
     "file": "README.md",
-    "link": "#\ufe0f-github-directory-overview",
+    "link": "#\ufe0f-configuration-architecture",
     "line": 58,
     "status": "ok",
     "message": "Anchor link"
   },
   {
     "file": "README.md",
-    "link": "#-license",
+    "link": "#-personal-ai-dashboard",
     "line": 59,
     "status": "ok",
     "message": "Anchor link"
   },
   {
     "file": "README.md",
+    "link": "#-quick-start",
+    "line": 60,
+    "status": "ok",
+    "message": "Anchor link"
+  },
+  {
+    "file": "README.md",
+    "link": "#-documentation-standards",
+    "line": 61,
+    "status": "ok",
+    "message": "Anchor link"
+  },
+  {
+    "file": "README.md",
+    "link": "#\ufe0f-github-directory-overview",
+    "line": 62,
+    "status": "ok",
+    "message": "Anchor link"
+  },
+  {
+    "file": "README.md",
+    "link": "#-license",
+    "line": 63,
+    "status": "ok",
+    "message": "Anchor link"
+  },
+  {
+    "file": "README.md",
     "link": "docs/reference/inventory.md",
-    "line": 68,
+    "line": 72,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
     "link": "docs/README.md",
-    "line": 85,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/ARCHITECTURE.md",
-    "line": 86,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/AGENTS.md",
-    "line": 87,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/SPEC.md",
-    "line": 88,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/PAI.md",
     "line": 89,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": "docs/PAI_DASHBOARD.md",
+    "link": "docs/ARCHITECTURE.md",
     "line": 90,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": "docs/index.md",
+    "link": "docs/AGENTS.md",
     "line": 91,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": "docs/getting-started/",
-    "line": 97,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/development/",
-    "line": 98,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/reference/",
-    "line": 99,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/",
-    "line": 100,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/agents/",
-    "line": 101,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/integration/",
-    "line": 102,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/deployment/",
-    "line": 103,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/security/",
-    "line": 104,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/pai/",
-    "line": 105,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/bio/",
-    "line": 106,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/cognitive/",
-    "line": 107,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/agi/",
-    "line": 108,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/compliance/",
-    "line": 109,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/examples/",
-    "line": 110,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/project/",
-    "line": 111,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/project_orchestration/",
-    "line": 112,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/skills/",
-    "line": 113,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/plans/",
-    "line": 114,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/agents/",
-    "line": 218,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/agents/",
-    "line": 218,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/agents/config.yaml",
-    "line": 218,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/agents/",
-    "line": 218,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/cerebrum/",
-    "line": 219,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/cerebrum/",
-    "line": 219,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/cerebrum/config.yaml",
-    "line": 219,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/cerebrum/",
-    "line": 219,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/llm/",
-    "line": 220,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/llm/",
-    "line": 220,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/llm/config.yaml",
-    "line": 220,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/llm/",
-    "line": 220,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/orchestrator/",
-    "line": 221,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/orchestrator/",
-    "line": 221,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/orchestrator/config.yaml",
-    "line": 221,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/orchestrator/",
-    "line": 221,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/model_context_protocol/",
-    "line": 222,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/model_context_protocol/",
-    "line": 222,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/model_context_protocol/config.yaml",
-    "line": 222,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/model_context_protocol/",
-    "line": 222,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/prompt_engineering/",
-    "line": 223,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/prompt_engineering/",
-    "line": 223,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/prompt_engineering/config.yaml",
-    "line": 223,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/prompt_engineering/",
-    "line": 223,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/skills/",
-    "line": 224,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/skills/",
-    "line": 224,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/skills/config.yaml",
-    "line": 224,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/skills/",
-    "line": 224,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/colony_kernel/",
-    "line": 225,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/colony_kernel/",
-    "line": 225,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/colony_kernel/",
-    "line": 225,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/coding/",
-    "line": 231,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/coding/",
-    "line": 231,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/coding/config.yaml",
-    "line": 231,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/coding/",
-    "line": 231,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/evolutionary_ai/",
-    "line": 232,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/evolutionary_ai/",
-    "line": 232,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/evolutionary_ai/config.yaml",
-    "line": 232,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/evolutionary_ai/",
-    "line": 232,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/graph_rag/",
-    "line": 233,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/graph_rag/",
-    "line": 233,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/graph_rag/config.yaml",
-    "line": 233,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/graph_rag/",
-    "line": 233,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/vector_store/",
-    "line": 234,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/vector_store/",
-    "line": 234,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/vector_store/config.yaml",
-    "line": 234,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/vector_store/",
-    "line": 234,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/bio_simulation/",
-    "line": 235,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/bio_simulation/",
-    "line": 235,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/bio_simulation/config.yaml",
-    "line": 235,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/bio_simulation/",
-    "line": 235,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/simulation/",
-    "line": 236,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/simulation/",
-    "line": 236,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/simulation/config.yaml",
-    "line": 236,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/simulation/",
-    "line": 236,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/quantum/",
-    "line": 237,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/quantum/",
-    "line": 237,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/quantum/config.yaml",
-    "line": 237,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/quantum/",
-    "line": 237,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/fpf/",
-    "line": 238,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/fpf/",
-    "line": 238,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/fpf/config.yaml",
-    "line": 238,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/fpf/",
-    "line": 238,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/cloud/",
-    "line": 244,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/cloud/",
-    "line": 244,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/cloud/config.yaml",
-    "line": 244,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/cloud/",
-    "line": 244,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/containerization/",
-    "line": 245,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/containerization/",
-    "line": 245,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/containerization/config.yaml",
-    "line": 245,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/containerization/",
-    "line": 245,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/container_optimization/",
-    "line": 246,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/container_optimization/",
-    "line": 246,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/container_optimization/config.yaml",
-    "line": 246,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/container_optimization/",
-    "line": 246,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/ci_cd_automation/",
-    "line": 247,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/ci_cd_automation/",
-    "line": 247,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/ci_cd_automation/config.yaml",
-    "line": 247,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/ci_cd_automation/",
-    "line": 247,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/deployment/",
-    "line": 248,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/deployment/",
-    "line": 248,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/deployment/config.yaml",
-    "line": 248,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/deployment/",
-    "line": 248,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/edge_computing/",
-    "line": 249,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/edge_computing/",
-    "line": 249,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/edge_computing/config.yaml",
-    "line": 249,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/edge_computing/",
-    "line": 249,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/networking/",
-    "line": 250,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/networking/",
-    "line": 250,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/networking/config.yaml",
-    "line": 250,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/networking/",
-    "line": 250,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/networks/",
-    "line": 251,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/networks/",
-    "line": 251,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/networks/config.yaml",
-    "line": 251,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/networks/",
-    "line": 251,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/cost_management/",
-    "line": 252,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/cost_management/",
-    "line": 252,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/cost_management/config.yaml",
-    "line": 252,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/cost_management/",
-    "line": 252,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/database_management/",
-    "line": 258,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/database_management/",
-    "line": 258,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/database_management/config.yaml",
-    "line": 258,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/database_management/",
-    "line": 258,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/cache/",
-    "line": 259,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/cache/",
-    "line": 259,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/cache/config.yaml",
-    "line": 259,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/cache/",
-    "line": 259,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/data_lineage/",
-    "line": 260,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/data_lineage/",
-    "line": 260,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/data_lineage/config.yaml",
-    "line": 260,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/data_lineage/",
-    "line": 260,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/serialization/",
-    "line": 261,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/serialization/",
-    "line": 261,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/serialization/config.yaml",
-    "line": 261,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/serialization/",
-    "line": 261,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/documents/",
-    "line": 262,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/documents/",
-    "line": 262,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/documents/config.yaml",
-    "line": 262,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/documents/",
-    "line": 262,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/feature_store/",
-    "line": 263,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/feature_store/",
-    "line": 263,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/feature_store/config.yaml",
-    "line": 263,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/feature_store/",
-    "line": 263,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/agentic_memory/",
-    "line": 264,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/agentic_memory/",
-    "line": 264,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/agentic_memory/config.yaml",
-    "line": 264,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/agentic_memory/",
-    "line": 264,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/model_ops/",
-    "line": 265,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/model_ops/",
-    "line": 265,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/model_ops/config.yaml",
-    "line": 265,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/model_ops/",
-    "line": 265,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/security/",
-    "line": 271,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/security/",
-    "line": 271,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/security/config.yaml",
-    "line": 271,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/security/",
-    "line": 271,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/auth/",
-    "line": 272,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/auth/",
-    "line": 272,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/auth/config.yaml",
-    "line": 272,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/auth/",
-    "line": 272,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/crypto/",
-    "line": 273,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/crypto/",
-    "line": 273,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/crypto/config.yaml",
-    "line": 273,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/crypto/",
-    "line": 273,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/encryption/",
-    "line": 274,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/encryption/",
-    "line": 274,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/encryption/config.yaml",
-    "line": 274,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/encryption/",
-    "line": 274,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/privacy/",
-    "line": 275,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/privacy/",
-    "line": 275,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/privacy/config.yaml",
-    "line": 275,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/privacy/",
-    "line": 275,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/identity/",
-    "line": 276,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/identity/",
-    "line": 276,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/identity/config.yaml",
-    "line": 276,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/identity/",
-    "line": 276,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/wallet/",
-    "line": 277,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/wallet/",
-    "line": 277,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/wallet/config.yaml",
-    "line": 277,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/wallet/",
-    "line": 277,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/audio/",
-    "line": 283,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/audio/",
-    "line": 283,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/audio/config.yaml",
-    "line": 283,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/audio/",
-    "line": 283,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/video/",
-    "line": 284,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/video/",
-    "line": 284,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/video/config.yaml",
-    "line": 284,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/video/",
-    "line": 284,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/multimodal/",
-    "line": 285,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/multimodal/",
-    "line": 285,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/multimodal/config.yaml",
-    "line": 285,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/multimodal/",
-    "line": 285,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/data_visualization/",
-    "line": 286,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/data_visualization/",
-    "line": 286,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/data_visualization/config.yaml",
-    "line": 286,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/data_visualization/",
-    "line": 286,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/meme/",
-    "line": 287,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/meme/",
-    "line": 287,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/meme/config.yaml",
-    "line": 287,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/meme/",
-    "line": 287,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/spatial/",
-    "line": 288,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/spatial/",
-    "line": 288,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/spatial/config.yaml",
-    "line": 288,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/spatial/",
-    "line": 288,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/email/",
-    "line": 294,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/email/",
-    "line": 294,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/email/config.yaml",
-    "line": 294,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/email/",
-    "line": 294,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/calendar_integration/",
-    "line": 295,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/calendar_integration/",
-    "line": 295,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/calendar_integration/config.yaml",
-    "line": 295,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/calendar_integration/",
-    "line": 295,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/finance/",
-    "line": 296,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/finance/",
-    "line": 296,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/finance/config.yaml",
-    "line": 296,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/finance/",
-    "line": 296,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/website/",
-    "line": 297,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/website/",
-    "line": 297,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/website/config.yaml",
-    "line": 297,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/website/",
-    "line": 297,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/market/",
-    "line": 298,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/market/",
-    "line": 298,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/market/config.yaml",
-    "line": 298,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/market/",
-    "line": 298,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/logistics/",
-    "line": 299,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/logistics/",
-    "line": 299,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/logistics/config.yaml",
-    "line": 299,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/logistics/",
-    "line": 299,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/relations/",
-    "line": 300,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/relations/",
-    "line": 300,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/relations/config.yaml",
-    "line": 300,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/relations/",
-    "line": 300,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/physical_management/",
-    "line": 301,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/physical_management/",
-    "line": 301,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/physical_management/config.yaml",
-    "line": 301,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/physical_management/",
-    "line": 301,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/cli/",
-    "line": 307,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/cli/",
-    "line": 307,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/cli/config.yaml",
-    "line": 307,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/cli/",
-    "line": 307,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/ide/",
-    "line": 308,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/ide/",
-    "line": 308,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/ide/config.yaml",
-    "line": 308,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/ide/",
-    "line": 308,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/git_operations/",
-    "line": 309,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/git_operations/",
-    "line": 309,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/git_operations/config.yaml",
-    "line": 309,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/git_operations/",
-    "line": 309,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/git_analysis/",
-    "line": 310,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/git_analysis/",
-    "line": 310,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/git_analysis/config.yaml",
-    "line": 310,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/git_analysis/",
-    "line": 310,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/tree_sitter/",
-    "line": 311,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/tree_sitter/",
-    "line": 311,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/tree_sitter/config.yaml",
-    "line": 311,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/tree_sitter/",
-    "line": 311,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/static_analysis/",
-    "line": 312,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/static_analysis/",
-    "line": 312,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/static_analysis/config.yaml",
-    "line": 312,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/static_analysis/",
-    "line": 312,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/terminal_interface/",
-    "line": 313,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/terminal_interface/",
-    "line": 313,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/terminal_interface/config.yaml",
-    "line": 313,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/terminal_interface/",
-    "line": 313,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/scrape/",
-    "line": 314,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/scrape/",
-    "line": 314,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/scrape/config.yaml",
-    "line": 314,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/scrape/",
-    "line": 314,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/search/",
-    "line": 315,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/search/",
-    "line": 315,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/search/config.yaml",
-    "line": 315,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/search/",
-    "line": 315,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/config_management/",
-    "line": 321,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/config_management/",
-    "line": 321,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/config_management/config.yaml",
-    "line": 321,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/config_management/",
-    "line": 321,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/config_monitoring/",
-    "line": 322,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/config_monitoring/",
-    "line": 322,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/config_monitoring/config.yaml",
-    "line": 322,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/config_monitoring/",
-    "line": 322,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/config_audits/",
-    "line": 323,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/config_audits/",
-    "line": 323,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/config_audits/config.yaml",
-    "line": 323,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/config_audits/",
-    "line": 323,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/environment_setup/",
-    "line": 324,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/environment_setup/",
-    "line": 324,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/environment_setup/config.yaml",
-    "line": 324,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/environment_setup/",
-    "line": 324,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/logging_monitoring/",
-    "line": 325,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/logging_monitoring/",
-    "line": 325,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/logging_monitoring/config.yaml",
-    "line": 325,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/logging_monitoring/",
-    "line": 325,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/telemetry/",
-    "line": 326,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/telemetry/",
-    "line": 326,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/telemetry/config.yaml",
-    "line": 326,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/telemetry/",
-    "line": 326,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/performance/",
-    "line": 327,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/performance/",
-    "line": 327,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/performance/config.yaml",
-    "line": 327,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/performance/",
-    "line": 327,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/maintenance/",
-    "line": 328,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/maintenance/",
-    "line": 328,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/maintenance/config.yaml",
-    "line": 328,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/maintenance/",
-    "line": 328,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/release/",
-    "line": 329,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/release/",
-    "line": 329,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/release/config.yaml",
-    "line": 329,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/release/",
-    "line": 329,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/utils/",
-    "line": 335,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/utils/",
-    "line": 335,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/utils/config.yaml",
-    "line": 335,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/utils/",
-    "line": 335,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/validation/",
-    "line": 336,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/validation/",
-    "line": 336,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/validation/config.yaml",
-    "line": 336,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/validation/",
-    "line": 336,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/exceptions/",
-    "line": 337,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/exceptions/",
-    "line": 337,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/exceptions/config.yaml",
-    "line": 337,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/exceptions/",
-    "line": 337,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/events/",
-    "line": 338,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/events/",
-    "line": 338,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/events/config.yaml",
-    "line": 338,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/events/",
-    "line": 338,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/plugin_system/",
-    "line": 339,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/plugin_system/",
-    "line": 339,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/plugin_system/config.yaml",
-    "line": 339,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/plugin_system/",
-    "line": 339,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/dependency_injection/",
-    "line": 340,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/dependency_injection/",
-    "line": 340,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/dependency_injection/config.yaml",
-    "line": 340,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/dependency_injection/",
-    "line": 340,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/concurrency/",
-    "line": 341,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/concurrency/",
-    "line": 341,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/concurrency/config.yaml",
-    "line": 341,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/concurrency/",
-    "line": 341,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/compression/",
-    "line": 342,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/compression/",
-    "line": 342,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/compression/config.yaml",
-    "line": 342,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/compression/",
-    "line": 342,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/templating/",
-    "line": 343,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/templating/",
-    "line": 343,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/templating/config.yaml",
-    "line": 343,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/templating/",
-    "line": 343,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/feature_flags/",
-    "line": 344,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/feature_flags/",
-    "line": 344,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/feature_flags/config.yaml",
-    "line": 344,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/feature_flags/",
-    "line": 344,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/tool_use/",
-    "line": 345,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/tool_use/",
-    "line": 345,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/tool_use/config.yaml",
-    "line": 345,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/tool_use/",
-    "line": 345,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/testing/",
-    "line": 346,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/testing/",
-    "line": 346,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/testing/config.yaml",
-    "line": 346,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/testing/",
-    "line": 346,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/documentation/",
-    "line": 347,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/documentation/",
-    "line": 347,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/documentation/config.yaml",
-    "line": 347,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/documentation/",
-    "line": 347,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/docs_gen/",
-    "line": 348,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/docs_gen/",
-    "line": 348,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/docs_gen/config.yaml",
-    "line": 348,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/docs_gen/",
-    "line": 348,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/module_template/",
-    "line": 349,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/module_template/",
-    "line": 349,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/module_template/config.yaml",
-    "line": 349,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/module_template/",
-    "line": 349,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/operating_system/",
-    "line": 350,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/operating_system/",
-    "line": 350,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/operating_system/config.yaml",
-    "line": 350,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/operating_system/",
-    "line": 350,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/file_system/",
-    "line": 351,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/file_system/",
-    "line": 351,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/file_system/config.yaml",
-    "line": 351,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/file_system/",
-    "line": 351,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/dark/",
-    "line": 352,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/dark/",
-    "line": 352,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/dark/config.yaml",
-    "line": 352,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/dark/",
-    "line": 352,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/demos/",
-    "line": 353,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/demos/",
-    "line": 353,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/demos/config.yaml",
-    "line": 353,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/demos/",
-    "line": 353,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/formal_verification/",
-    "line": 354,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/formal_verification/",
-    "line": 354,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/formal_verification/config.yaml",
-    "line": 354,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/formal_verification/",
-    "line": 354,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/system_discovery/",
-    "line": 355,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/system_discovery/",
-    "line": 355,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/system_discovery/config.yaml",
-    "line": 355,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "scripts/system_discovery/",
-    "line": 355,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/lora/",
-    "line": 361,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/lora/",
-    "line": 361,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/peft/",
-    "line": 362,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/peft/",
-    "line": 362,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/rlhf/",
-    "line": 363,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/rlhf/",
-    "line": 363,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/dpo/",
-    "line": 364,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/dpo/",
-    "line": 364,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/distillation/",
-    "line": 365,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/distillation/",
-    "line": 365,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/quantization/",
-    "line": 366,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/quantization/",
-    "line": 366,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/distributed_training/",
-    "line": 367,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/distributed_training/",
-    "line": 367,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/autograd/",
-    "line": 368,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/autograd/",
-    "line": 368,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/matmul_kernel/",
-    "line": 369,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/matmul_kernel/",
-    "line": 369,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/softmax_opt/",
-    "line": 370,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/softmax_opt/",
-    "line": 370,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/nas/",
-    "line": 371,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/nas/",
-    "line": 371,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/model_merger/",
-    "line": 372,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/model_merger/",
-    "line": 372,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/slm/",
-    "line": 373,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/slm/",
-    "line": 373,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/ssm/",
-    "line": 374,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/ssm/",
-    "line": 374,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/eval_harness/",
-    "line": 375,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/eval_harness/",
-    "line": 375,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/logit_processor/",
-    "line": 376,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/logit_processor/",
-    "line": 376,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/tokenizer/",
-    "line": 377,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/tokenizer/",
-    "line": 377,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/api/",
-    "line": 383,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/api/",
-    "line": 383,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/collaboration/",
-    "line": 384,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/collaboration/",
-    "line": 384,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/ml_pipeline/",
-    "line": 385,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/ml_pipeline/",
-    "line": 385,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/data_curation/",
-    "line": 386,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/data_curation/",
-    "line": 386,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/synthetic_data/",
-    "line": 387,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/synthetic_data/",
-    "line": 387,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/text_to_sql/",
-    "line": 388,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/text_to_sql/",
-    "line": 388,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/semantic_router/",
-    "line": 389,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/semantic_router/",
-    "line": 389,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/ai_gateway/",
-    "line": 395,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/ai_gateway/",
-    "line": 395,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/aider/",
-    "line": 396,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/aider/",
-    "line": 396,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/neural/",
-    "line": 397,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/neural/",
-    "line": 397,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/interpretability/",
-    "line": 398,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/interpretability/",
-    "line": 398,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/image/",
-    "line": 399,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/image/",
-    "line": 399,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/examples/",
-    "line": 400,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/examples/",
-    "line": 400,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/pai_pm/",
-    "line": 401,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/pai_pm/",
-    "line": 401,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/soul/",
-    "line": 402,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/soul/",
-    "line": 402,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/defense/",
-    "line": 403,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/defense/",
-    "line": 403,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/embodiment/",
-    "line": 404,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/embodiment/",
-    "line": 404,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/languages/",
-    "line": 405,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/languages/",
-    "line": 405,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/manuscript/",
-    "line": 406,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/manuscript/",
-    "line": 406,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "src/codomyrmex/vision/",
-    "line": 407,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/modules/vision/",
-    "line": 407,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/development/testing-strategy.md",
-    "line": 621,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "config/",
-    "line": 663,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/pai/",
-    "line": 700,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/getting-started/quickstart.md",
-    "line": 764,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/getting-started/GETTING_STARTED_WITH_AGENTS.md",
-    "line": 764,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "Dockerfile",
-    "line": 766,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docker-compose.yml",
-    "line": 766,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "index.html",
-    "line": 766,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "package.json",
-    "line": 766,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "README.md",
-    "line": 776,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/README.md",
-    "line": 776,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "AGENTS.md",
-    "line": 777,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "docs/AGENTS.md",
-    "line": 777,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "SPEC.md",
-    "line": 778,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
     "link": "docs/SPEC.md",
-    "line": 778,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "README.md",
-    "link": "PAI.md",
-    "line": 779,
+    "line": 92,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
     "link": "docs/PAI.md",
-    "line": 779,
+    "line": 93,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/ci.yml",
-    "line": 791,
+    "link": "docs/PAI_DASHBOARD.md",
+    "line": 94,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/security.yml",
-    "line": 791,
+    "link": "docs/index.md",
+    "line": 95,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/release.yml",
-    "line": 791,
+    "link": "docs/getting-started/",
+    "line": 101,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/pre-commit.yml",
-    "line": 791,
+    "link": "docs/development/",
+    "line": 102,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/code-health.yml",
-    "line": 792,
+    "link": "docs/reference/",
+    "line": 103,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/benchmarks.yml",
-    "line": 792,
+    "link": "docs/modules/",
+    "line": 104,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/documentation.yml",
-    "line": 792,
+    "link": "docs/agents/",
+    "line": 105,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/documentation-validation.yml",
-    "line": 792,
+    "link": "docs/integration/",
+    "line": 106,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/auto-merge.yml",
-    "line": 793,
+    "link": "docs/deployment/",
+    "line": 107,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/pr-labeler.yml",
-    "line": 793,
+    "link": "docs/security/",
+    "line": 108,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/pr-title-check.yml",
-    "line": 793,
+    "link": "docs/pai/",
+    "line": 109,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/pr-conflict-check.yml",
-    "line": 793,
+    "link": "docs/bio/",
+    "line": 110,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/pr-coverage-comment.yml",
-    "line": 793,
+    "link": "docs/cognitive/",
+    "line": 111,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/pr-linter-comments.yml",
-    "line": 793,
+    "link": "docs/agi/",
+    "line": 112,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/gemini-dispatch.yml",
-    "line": 794,
+    "link": "docs/compliance/",
+    "line": 113,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/gemini-invoke.yml",
-    "line": 794,
+    "link": "docs/examples/",
+    "line": 114,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/gemini-review.yml",
-    "line": 794,
+    "link": "docs/project/",
+    "line": 115,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/gemini-triage.yml",
-    "line": 794,
+    "link": "docs/project_orchestration/",
+    "line": 116,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/gemini-scheduled-triage.yml",
-    "line": 794,
+    "link": "docs/skills/",
+    "line": 117,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/jules-dispatch.yml",
-    "line": 794,
+    "link": "docs/plans/",
+    "line": 118,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/maintenance.yml",
-    "line": 795,
+    "link": "src/codomyrmex/agents/",
+    "line": 222,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/cleanup-branches.yml",
-    "line": 795,
+    "link": "docs/modules/agents/",
+    "line": 222,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/lock-threads.yml",
-    "line": 795,
+    "link": "config/agents/config.yaml",
+    "line": 222,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/workflow-coordinator.yml",
-    "line": 795,
+    "link": "scripts/agents/",
+    "line": 222,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/workflow-status.yml",
-    "line": 795,
+    "link": "src/codomyrmex/cerebrum/",
+    "line": 223,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/first-interaction.yml",
-    "line": 796,
+    "link": "docs/modules/cerebrum/",
+    "line": 223,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/first-pr-merged.yml",
-    "line": 796,
+    "link": "config/cerebrum/config.yaml",
+    "line": 223,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/agent-welcome.yml",
-    "line": 796,
+    "link": "scripts/cerebrum/",
+    "line": 223,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/agent-metrics.yml",
-    "line": 796,
+    "link": "src/codomyrmex/llm/",
+    "line": 224,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/dependency-review.yml",
-    "line": 797,
+    "link": "docs/modules/llm/",
+    "line": 224,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/dependabot-auto-approve.yml",
-    "line": 797,
+    "link": "config/llm/config.yaml",
+    "line": 224,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/workflows/sbom.yml",
-    "line": 797,
+    "link": "scripts/llm/",
+    "line": 224,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": "CONTRIBUTING.md",
-    "line": 803,
+    "link": "src/codomyrmex/orchestrator/",
+    "line": 225,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/CODEOWNERS",
-    "line": 804,
+    "link": "docs/modules/orchestrator/",
+    "line": 225,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/PULL_REQUEST_TEMPLATE.md",
-    "line": 805,
+    "link": "config/orchestrator/config.yaml",
+    "line": 225,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/ISSUE_TEMPLATE/",
-    "line": 806,
+    "link": "scripts/orchestrator/",
+    "line": 225,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/dependabot.yml",
-    "line": 807,
+    "link": "src/codomyrmex/model_context_protocol/",
+    "line": 226,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/release-drafter.yml",
-    "line": 808,
+    "link": "docs/modules/model_context_protocol/",
+    "line": 226,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/FUNDING.yml",
-    "line": 809,
+    "link": "config/model_context_protocol/config.yaml",
+    "line": 226,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/WORKFLOW_IMPROVEMENTS.md",
-    "line": 810,
+    "link": "scripts/model_context_protocol/",
+    "line": 226,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": ".github/WORKFLOW_TESTING_GUIDE.md",
-    "line": 811,
+    "link": "src/codomyrmex/prompt_engineering/",
+    "line": 227,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": "CONTRIBUTING.md",
-    "line": 817,
+    "link": "docs/modules/prompt_engineering/",
+    "line": 227,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": "LICENSE",
-    "line": 830,
+    "link": "config/prompt_engineering/config.yaml",
+    "line": 227,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
-    "link": "https://github.com/docxology",
-    "line": 832,
-    "status": "external",
-    "message": "External link (not validated)"
+    "link": "scripts/prompt_engineering/",
+    "line": 227,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/skills/",
+    "line": 228,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/skills/",
+    "line": 228,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/skills/config.yaml",
+    "line": 228,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/skills/",
+    "line": 228,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/colony_kernel/",
+    "line": 229,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/colony_kernel/",
+    "line": 229,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/colony_kernel/",
+    "line": 229,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/coding/",
+    "line": 235,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/coding/",
+    "line": 235,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/coding/config.yaml",
+    "line": 235,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/coding/",
+    "line": 235,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/evolutionary_ai/",
+    "line": 236,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/evolutionary_ai/",
+    "line": 236,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/evolutionary_ai/config.yaml",
+    "line": 236,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/evolutionary_ai/",
+    "line": 236,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/graph_rag/",
+    "line": 237,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/graph_rag/",
+    "line": 237,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/graph_rag/config.yaml",
+    "line": 237,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/graph_rag/",
+    "line": 237,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/vector_store/",
+    "line": 238,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/vector_store/",
+    "line": 238,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/vector_store/config.yaml",
+    "line": 238,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/vector_store/",
+    "line": 238,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/bio_simulation/",
+    "line": 239,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/bio_simulation/",
+    "line": 239,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/bio_simulation/config.yaml",
+    "line": 239,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/bio_simulation/",
+    "line": 239,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/simulation/",
+    "line": 240,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/simulation/",
+    "line": 240,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/simulation/config.yaml",
+    "line": 240,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/simulation/",
+    "line": 240,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/quantum/",
+    "line": 241,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/quantum/",
+    "line": 241,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/quantum/config.yaml",
+    "line": 241,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/quantum/",
+    "line": 241,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/fpf/",
+    "line": 242,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/fpf/",
+    "line": 242,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/fpf/config.yaml",
+    "line": 242,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/fpf/",
+    "line": 242,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/cloud/",
+    "line": 248,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/cloud/",
+    "line": 248,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/cloud/config.yaml",
+    "line": 248,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/cloud/",
+    "line": 248,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/containerization/",
+    "line": 249,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/containerization/",
+    "line": 249,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/containerization/config.yaml",
+    "line": 249,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/containerization/",
+    "line": 249,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/container_optimization/",
+    "line": 250,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/container_optimization/",
+    "line": 250,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/container_optimization/config.yaml",
+    "line": 250,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/container_optimization/",
+    "line": 250,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/ci_cd_automation/",
+    "line": 251,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/ci_cd_automation/",
+    "line": 251,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/ci_cd_automation/config.yaml",
+    "line": 251,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/ci_cd_automation/",
+    "line": 251,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/deployment/",
+    "line": 252,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/deployment/",
+    "line": 252,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/deployment/config.yaml",
+    "line": 252,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/deployment/",
+    "line": 252,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/edge_computing/",
+    "line": 253,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/edge_computing/",
+    "line": 253,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/edge_computing/config.yaml",
+    "line": 253,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/edge_computing/",
+    "line": 253,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/networking/",
+    "line": 254,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/networking/",
+    "line": 254,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/networking/config.yaml",
+    "line": 254,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/networking/",
+    "line": 254,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/networks/",
+    "line": 255,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/networks/",
+    "line": 255,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/networks/config.yaml",
+    "line": 255,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/networks/",
+    "line": 255,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/cost_management/",
+    "line": 256,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/cost_management/",
+    "line": 256,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/cost_management/config.yaml",
+    "line": 256,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/cost_management/",
+    "line": 256,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/database_management/",
+    "line": 262,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/database_management/",
+    "line": 262,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/database_management/config.yaml",
+    "line": 262,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/database_management/",
+    "line": 262,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/cache/",
+    "line": 263,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/cache/",
+    "line": 263,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/cache/config.yaml",
+    "line": 263,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/cache/",
+    "line": 263,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/data_lineage/",
+    "line": 264,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/data_lineage/",
+    "line": 264,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/data_lineage/config.yaml",
+    "line": 264,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/data_lineage/",
+    "line": 264,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/serialization/",
+    "line": 265,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/serialization/",
+    "line": 265,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/serialization/config.yaml",
+    "line": 265,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/serialization/",
+    "line": 265,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/documents/",
+    "line": 266,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/documents/",
+    "line": 266,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/documents/config.yaml",
+    "line": 266,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/documents/",
+    "line": 266,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/feature_store/",
+    "line": 267,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/feature_store/",
+    "line": 267,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/feature_store/config.yaml",
+    "line": 267,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/feature_store/",
+    "line": 267,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/agentic_memory/",
+    "line": 268,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/agentic_memory/",
+    "line": 268,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/agentic_memory/config.yaml",
+    "line": 268,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/agentic_memory/",
+    "line": 268,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/model_ops/",
+    "line": 269,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/model_ops/",
+    "line": 269,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/model_ops/config.yaml",
+    "line": 269,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/model_ops/",
+    "line": 269,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/security/",
+    "line": 275,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/security/",
+    "line": 275,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/security/config.yaml",
+    "line": 275,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/security/",
+    "line": 275,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/auth/",
+    "line": 276,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/auth/",
+    "line": 276,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/auth/config.yaml",
+    "line": 276,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/auth/",
+    "line": 276,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/crypto/",
+    "line": 277,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/crypto/",
+    "line": 277,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/crypto/config.yaml",
+    "line": 277,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/crypto/",
+    "line": 277,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/encryption/",
+    "line": 278,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/encryption/",
+    "line": 278,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/encryption/config.yaml",
+    "line": 278,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/encryption/",
+    "line": 278,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/privacy/",
+    "line": 279,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/privacy/",
+    "line": 279,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/privacy/config.yaml",
+    "line": 279,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/privacy/",
+    "line": 279,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/identity/",
+    "line": 280,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/identity/",
+    "line": 280,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/identity/config.yaml",
+    "line": 280,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/identity/",
+    "line": 280,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/wallet/",
+    "line": 281,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/wallet/",
+    "line": 281,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/wallet/config.yaml",
+    "line": 281,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/wallet/",
+    "line": 281,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/audio/",
+    "line": 287,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/audio/",
+    "line": 287,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/audio/config.yaml",
+    "line": 287,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/audio/",
+    "line": 287,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/video/",
+    "line": 288,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/video/",
+    "line": 288,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/video/config.yaml",
+    "line": 288,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/video/",
+    "line": 288,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/multimodal/",
+    "line": 289,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/multimodal/",
+    "line": 289,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/multimodal/config.yaml",
+    "line": 289,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/multimodal/",
+    "line": 289,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/data_visualization/",
+    "line": 290,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/data_visualization/",
+    "line": 290,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/data_visualization/config.yaml",
+    "line": 290,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/data_visualization/",
+    "line": 290,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/meme/",
+    "line": 291,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/meme/",
+    "line": 291,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/meme/config.yaml",
+    "line": 291,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/meme/",
+    "line": 291,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/spatial/",
+    "line": 292,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/spatial/",
+    "line": 292,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/spatial/config.yaml",
+    "line": 292,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/spatial/",
+    "line": 292,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/email/",
+    "line": 298,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/email/",
+    "line": 298,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/email/config.yaml",
+    "line": 298,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/email/",
+    "line": 298,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/calendar_integration/",
+    "line": 299,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/calendar_integration/",
+    "line": 299,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/calendar_integration/config.yaml",
+    "line": 299,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/calendar_integration/",
+    "line": 299,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/finance/",
+    "line": 300,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/finance/",
+    "line": 300,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/finance/config.yaml",
+    "line": 300,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/finance/",
+    "line": 300,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/website/",
+    "line": 301,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/website/",
+    "line": 301,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/website/config.yaml",
+    "line": 301,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/website/",
+    "line": 301,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/market/",
+    "line": 302,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/market/",
+    "line": 302,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/market/config.yaml",
+    "line": 302,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/market/",
+    "line": 302,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/logistics/",
+    "line": 303,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/logistics/",
+    "line": 303,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/logistics/config.yaml",
+    "line": 303,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/logistics/",
+    "line": 303,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/relations/",
+    "line": 304,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/relations/",
+    "line": 304,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/relations/config.yaml",
+    "line": 304,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/relations/",
+    "line": 304,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/physical_management/",
+    "line": 305,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/physical_management/",
+    "line": 305,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/physical_management/config.yaml",
+    "line": 305,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/physical_management/",
+    "line": 305,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/cli/",
+    "line": 311,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/cli/",
+    "line": 311,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/cli/config.yaml",
+    "line": 311,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/cli/",
+    "line": 311,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/ide/",
+    "line": 312,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/ide/",
+    "line": 312,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/ide/config.yaml",
+    "line": 312,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/ide/",
+    "line": 312,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/git_operations/",
+    "line": 313,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/git_operations/",
+    "line": 313,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/git_operations/config.yaml",
+    "line": 313,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/git_operations/",
+    "line": 313,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/git_analysis/",
+    "line": 314,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/git_analysis/",
+    "line": 314,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/git_analysis/config.yaml",
+    "line": 314,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/git_analysis/",
+    "line": 314,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/tree_sitter/",
+    "line": 315,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/tree_sitter/",
+    "line": 315,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/tree_sitter/config.yaml",
+    "line": 315,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/tree_sitter/",
+    "line": 315,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/static_analysis/",
+    "line": 316,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/static_analysis/",
+    "line": 316,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/static_analysis/config.yaml",
+    "line": 316,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/static_analysis/",
+    "line": 316,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/terminal_interface/",
+    "line": 317,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/terminal_interface/",
+    "line": 317,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/terminal_interface/config.yaml",
+    "line": 317,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/terminal_interface/",
+    "line": 317,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/scrape/",
+    "line": 318,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/scrape/",
+    "line": 318,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/scrape/config.yaml",
+    "line": 318,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/scrape/",
+    "line": 318,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/search/",
+    "line": 319,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/search/",
+    "line": 319,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/search/config.yaml",
+    "line": 319,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/search/",
+    "line": 319,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/config_management/",
+    "line": 325,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/config_management/",
+    "line": 325,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/config_management/config.yaml",
+    "line": 325,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/config_management/",
+    "line": 325,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/config_monitoring/",
+    "line": 326,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/config_monitoring/",
+    "line": 326,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/config_monitoring/config.yaml",
+    "line": 326,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/config_monitoring/",
+    "line": 326,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/config_audits/",
+    "line": 327,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/config_audits/",
+    "line": 327,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/config_audits/config.yaml",
+    "line": 327,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/config_audits/",
+    "line": 327,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/environment_setup/",
+    "line": 328,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/environment_setup/",
+    "line": 328,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/environment_setup/config.yaml",
+    "line": 328,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/environment_setup/",
+    "line": 328,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/logging_monitoring/",
+    "line": 329,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/logging_monitoring/",
+    "line": 329,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/logging_monitoring/config.yaml",
+    "line": 329,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/logging_monitoring/",
+    "line": 329,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/telemetry/",
+    "line": 330,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/telemetry/",
+    "line": 330,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/telemetry/config.yaml",
+    "line": 330,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/telemetry/",
+    "line": 330,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/performance/",
+    "line": 331,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/performance/",
+    "line": 331,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/performance/config.yaml",
+    "line": 331,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/performance/",
+    "line": 331,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/maintenance/",
+    "line": 332,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/maintenance/",
+    "line": 332,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/maintenance/config.yaml",
+    "line": 332,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/maintenance/",
+    "line": 332,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/release/",
+    "line": 333,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/release/",
+    "line": 333,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/release/config.yaml",
+    "line": 333,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/release/",
+    "line": 333,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/utils/",
+    "line": 339,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/utils/",
+    "line": 339,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/utils/config.yaml",
+    "line": 339,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/utils/",
+    "line": 339,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/validation/",
+    "line": 340,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/validation/",
+    "line": 340,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/validation/config.yaml",
+    "line": 340,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/validation/",
+    "line": 340,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/exceptions/",
+    "line": 341,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/exceptions/",
+    "line": 341,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/exceptions/config.yaml",
+    "line": 341,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/exceptions/",
+    "line": 341,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/events/",
+    "line": 342,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/events/",
+    "line": 342,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/events/config.yaml",
+    "line": 342,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/events/",
+    "line": 342,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/plugin_system/",
+    "line": 343,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/plugin_system/",
+    "line": 343,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/plugin_system/config.yaml",
+    "line": 343,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/plugin_system/",
+    "line": 343,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/dependency_injection/",
+    "line": 344,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/dependency_injection/",
+    "line": 344,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/dependency_injection/config.yaml",
+    "line": 344,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/dependency_injection/",
+    "line": 344,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/concurrency/",
+    "line": 345,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/concurrency/",
+    "line": 345,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/concurrency/config.yaml",
+    "line": 345,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/concurrency/",
+    "line": 345,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/compression/",
+    "line": 346,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/compression/",
+    "line": 346,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/compression/config.yaml",
+    "line": 346,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/compression/",
+    "line": 346,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/templating/",
+    "line": 347,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/templating/",
+    "line": 347,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/templating/config.yaml",
+    "line": 347,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/templating/",
+    "line": 347,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/feature_flags/",
+    "line": 348,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/feature_flags/",
+    "line": 348,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/feature_flags/config.yaml",
+    "line": 348,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/feature_flags/",
+    "line": 348,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/tool_use/",
+    "line": 349,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/tool_use/",
+    "line": 349,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/tool_use/config.yaml",
+    "line": 349,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/tool_use/",
+    "line": 349,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/testing/",
+    "line": 350,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/testing/",
+    "line": 350,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/testing/config.yaml",
+    "line": 350,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/testing/",
+    "line": 350,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/documentation/",
+    "line": 351,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/documentation/",
+    "line": 351,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/documentation/config.yaml",
+    "line": 351,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/documentation/",
+    "line": 351,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/docs_gen/",
+    "line": 352,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/docs_gen/",
+    "line": 352,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/docs_gen/config.yaml",
+    "line": 352,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/docs_gen/",
+    "line": 352,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/module_template/",
+    "line": 353,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/module_template/",
+    "line": 353,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/module_template/config.yaml",
+    "line": 353,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/module_template/",
+    "line": 353,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/operating_system/",
+    "line": 354,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/operating_system/",
+    "line": 354,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/operating_system/config.yaml",
+    "line": 354,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/operating_system/",
+    "line": 354,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/file_system/",
+    "line": 355,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/file_system/",
+    "line": 355,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/file_system/config.yaml",
+    "line": 355,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/file_system/",
+    "line": 355,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/dark/",
+    "line": 356,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/dark/",
+    "line": 356,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/dark/config.yaml",
+    "line": 356,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/dark/",
+    "line": 356,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/demos/",
+    "line": 357,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/demos/",
+    "line": 357,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/demos/config.yaml",
+    "line": 357,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/demos/",
+    "line": 357,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/formal_verification/",
+    "line": 358,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/formal_verification/",
+    "line": 358,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/formal_verification/config.yaml",
+    "line": 358,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/formal_verification/",
+    "line": 358,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/system_discovery/",
+    "line": 359,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/system_discovery/",
+    "line": 359,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/system_discovery/config.yaml",
+    "line": 359,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "scripts/system_discovery/",
+    "line": 359,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/lora/",
+    "line": 365,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/lora/",
+    "line": 365,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/peft/",
+    "line": 366,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/peft/",
+    "line": 366,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/rlhf/",
+    "line": 367,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/rlhf/",
+    "line": 367,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/dpo/",
+    "line": 368,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/dpo/",
+    "line": 368,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/distillation/",
+    "line": 369,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/distillation/",
+    "line": 369,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/quantization/",
+    "line": 370,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/quantization/",
+    "line": 370,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/distributed_training/",
+    "line": 371,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/distributed_training/",
+    "line": 371,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/autograd/",
+    "line": 372,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/autograd/",
+    "line": 372,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/matmul_kernel/",
+    "line": 373,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/matmul_kernel/",
+    "line": 373,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/softmax_opt/",
+    "line": 374,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/softmax_opt/",
+    "line": 374,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/nas/",
+    "line": 375,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/nas/",
+    "line": 375,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/model_merger/",
+    "line": 376,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/model_merger/",
+    "line": 376,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/slm/",
+    "line": 377,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/slm/",
+    "line": 377,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/ssm/",
+    "line": 378,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/ssm/",
+    "line": 378,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/eval_harness/",
+    "line": 379,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/eval_harness/",
+    "line": 379,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/logit_processor/",
+    "line": 380,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/logit_processor/",
+    "line": 380,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/tokenizer/",
+    "line": 381,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/tokenizer/",
+    "line": 381,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/api/",
+    "line": 387,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/api/",
+    "line": 387,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/collaboration/",
+    "line": 388,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/collaboration/",
+    "line": 388,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/ml_pipeline/",
+    "line": 389,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/ml_pipeline/",
+    "line": 389,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/data_curation/",
+    "line": 390,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/data_curation/",
+    "line": 390,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/synthetic_data/",
+    "line": 391,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/synthetic_data/",
+    "line": 391,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/text_to_sql/",
+    "line": 392,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/text_to_sql/",
+    "line": 392,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/semantic_router/",
+    "line": 393,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/semantic_router/",
+    "line": 393,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/ai_gateway/",
+    "line": 399,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/ai_gateway/",
+    "line": 399,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/aider/",
+    "line": 400,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/aider/",
+    "line": 400,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/neural/",
+    "line": 401,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/neural/",
+    "line": 401,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/interpretability/",
+    "line": 402,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/interpretability/",
+    "line": 402,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/image/",
+    "line": 403,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/image/",
+    "line": 403,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/examples/",
+    "line": 404,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/examples/",
+    "line": 404,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/pai_pm/",
+    "line": 405,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/pai_pm/",
+    "line": 405,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/soul/",
+    "line": 406,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/soul/",
+    "line": 406,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/defense/",
+    "line": 407,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/defense/",
+    "line": 407,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/embodiment/",
+    "line": 408,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/embodiment/",
+    "line": 408,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/languages/",
+    "line": 409,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/languages/",
+    "line": 409,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/manuscript/",
+    "line": 410,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/manuscript/",
+    "line": 410,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "src/codomyrmex/vision/",
+    "line": 411,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/modules/vision/",
+    "line": 411,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/development/testing-strategy.md",
+    "line": 625,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "config/",
+    "line": 667,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/pai/",
+    "line": 704,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/getting-started/quickstart.md",
+    "line": 768,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/getting-started/GETTING_STARTED_WITH_AGENTS.md",
+    "line": 768,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "Dockerfile",
+    "line": 770,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docker-compose.yml",
+    "line": 770,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "index.html",
+    "line": 770,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "package.json",
+    "line": 770,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "README.md",
+    "line": 780,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/README.md",
+    "line": 780,
+    "status": "ok",
+    "message": "File exists"
   },
   {
     "file": "README.md",
     "link": "AGENTS.md",
-    "line": 846,
+    "line": 781,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/AGENTS.md",
+    "line": 781,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "README.md",
     "link": "SPEC.md",
-    "line": 847,
+    "line": 782,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/SPEC.md",
+    "line": 782,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "PAI.md",
+    "line": 783,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "docs/PAI.md",
+    "line": 783,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/ci.yml",
+    "line": 795,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/security.yml",
+    "line": 795,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/release.yml",
+    "line": 795,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/pre-commit.yml",
+    "line": 795,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/code-health.yml",
+    "line": 796,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/benchmarks.yml",
+    "line": 796,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/documentation.yml",
+    "line": 796,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/documentation-validation.yml",
+    "line": 796,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/auto-merge.yml",
+    "line": 797,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/pr-labeler.yml",
+    "line": 797,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/pr-title-check.yml",
+    "line": 797,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/pr-conflict-check.yml",
+    "line": 797,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/pr-coverage-comment.yml",
+    "line": 797,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/pr-linter-comments.yml",
+    "line": 797,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/gemini-dispatch.yml",
+    "line": 798,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/gemini-invoke.yml",
+    "line": 798,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/gemini-review.yml",
+    "line": 798,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/gemini-triage.yml",
+    "line": 798,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/gemini-scheduled-triage.yml",
+    "line": 798,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/jules-dispatch.yml",
+    "line": 798,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/maintenance.yml",
+    "line": 799,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/cleanup-branches.yml",
+    "line": 799,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/lock-threads.yml",
+    "line": 799,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/workflow-coordinator.yml",
+    "line": 799,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/workflow-status.yml",
+    "line": 799,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/first-interaction.yml",
+    "line": 800,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/first-pr-merged.yml",
+    "line": 800,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/agent-welcome.yml",
+    "line": 800,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/agent-metrics.yml",
+    "line": 800,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/dependency-review.yml",
+    "line": 801,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/dependabot-auto-approve.yml",
+    "line": 801,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/workflows/sbom.yml",
+    "line": 801,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "CONTRIBUTING.md",
+    "line": 807,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/CODEOWNERS",
+    "line": 808,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/PULL_REQUEST_TEMPLATE.md",
+    "line": 809,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/ISSUE_TEMPLATE/",
+    "line": 810,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/dependabot.yml",
+    "line": 811,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/release-drafter.yml",
+    "line": 812,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/FUNDING.yml",
+    "line": 813,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/WORKFLOW_IMPROVEMENTS.md",
+    "line": 814,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": ".github/WORKFLOW_TESTING_GUIDE.md",
+    "line": 815,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "CONTRIBUTING.md",
+    "line": 821,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "LICENSE",
+    "line": 834,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "https://github.com/docxology",
+    "line": 836,
+    "status": "external",
+    "message": "External link (not validated)"
+  },
+  {
+    "file": "README.md",
+    "link": "AGENTS.md",
+    "line": 850,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "README.md",
+    "link": "SPEC.md",
+    "line": 851,
     "status": "ok",
     "message": "File exists"
   },
@@ -5372,97 +5393,6 @@
     "file": "TODO.md",
     "link": "CHANGELOG.md",
     "line": 8,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "TODO.md",
-    "link": "CHANGELOG.md",
-    "line": 46,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "TODO.md",
-    "link": "README.md",
-    "line": 127,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "TODO.md",
-    "link": "AGENTS.md",
-    "line": 128,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "TODO.md",
-    "link": "SPEC.md",
-    "line": 129,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "TODO.md",
-    "link": "CHANGELOG.md",
-    "line": 130,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "TODO.md",
-    "link": "docs/modules/README.md",
-    "line": 131,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "TODO.md",
-    "link": "docs/agents/hermes/README.md",
-    "line": 148,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "TODO.md",
-    "link": "src/codomyrmex/agents/hermes/AGENTS.md",
-    "line": 148,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "TODO.md",
-    "link": "src/codomyrmex/orchestrator/AGENTS.md",
-    "line": 149,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "TODO.md",
-    "link": "src/codomyrmex/agentic_memory/AGENTS.md",
-    "line": 150,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "TODO.md",
-    "link": "src/codomyrmex/spatial/AGENTS.md",
-    "line": 151,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "TODO.md",
-    "link": "src/codomyrmex/identity/AGENTS.md",
-    "line": 152,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "TODO.md",
-    "link": "src/codomyrmex/wallet/AGENTS.md",
-    "line": 153,
     "status": "ok",
     "message": "File exists"
   },
@@ -5601,10 +5531,10 @@
   },
   {
     "file": ".github/CONTRIBUTING.md",
-    "link": "docs/development/testing-strategy.md#zero-mock-policy-clarified",
+    "link": "../docs/development/testing-strategy.md#zero-mock-policy-clarified",
     "line": 127,
-    "status": "broken",
-    "message": "Target not found: docs/development/testing-strategy.md"
+    "status": "ok",
+    "message": "File exists"
   },
   {
     "file": ".github/CONTRIBUTING.md",
@@ -38579,77 +38509,77 @@
   {
     "file": "src/codomyrmex/release/README.md",
     "link": "API_SPECIFICATION.md",
-    "line": 121,
+    "line": 127,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/release/README.md",
     "link": "SPEC.md",
-    "line": 122,
+    "line": 128,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/release/README.md",
     "link": "MCP_TOOL_SPECIFICATION.md",
-    "line": 123,
+    "line": 129,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/release/README.md",
     "link": "PAI.md",
-    "line": 124,
+    "line": 130,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/release/README.md",
     "link": "AGENTS.md",
-    "line": 125,
+    "line": 131,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/release/README.md",
     "link": "../../../docs/modules/release/README.md",
-    "line": 126,
+    "line": 132,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/release/SPEC.md",
     "link": "README.md",
-    "line": 105,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/release/SPEC.md",
-    "link": "API_SPECIFICATION.md",
-    "line": 106,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/release/SPEC.md",
-    "link": "MCP_TOOL_SPECIFICATION.md",
-    "line": 107,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/release/SPEC.md",
-    "link": "PAI.md",
     "line": 108,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/release/SPEC.md",
-    "link": "CHANGELOG.md",
+    "link": "API_SPECIFICATION.md",
     "line": 109,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/release/SPEC.md",
+    "link": "MCP_TOOL_SPECIFICATION.md",
+    "line": 110,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/release/SPEC.md",
+    "link": "PAI.md",
+    "line": 111,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/release/SPEC.md",
+    "link": "CHANGELOG.md",
+    "line": 112,
     "status": "ok",
     "message": "File exists"
   },

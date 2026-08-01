@@ -172,11 +172,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 38,
+      "heading_count": 39,
       "placeholder_count": 0,
       "code_block_count": 11,
-      "word_count": 5348,
-      "link_count": 551
+      "word_count": 5392,
+      "link_count": 554
     }
   },
   {
@@ -208,11 +208,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 13,
+      "heading_count": 4,
       "placeholder_count": 0,
-      "code_block_count": 1,
-      "word_count": 1945,
-      "link_count": 14
+      "code_block_count": 0,
+      "word_count": 793,
+      "link_count": 1
     }
   },
   {
@@ -23929,7 +23929,7 @@
       "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 211,
+      "word_count": 233,
       "link_count": 0
     }
   },
@@ -23977,7 +23977,7 @@
       "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 539,
+      "word_count": 590,
       "link_count": 6
     }
   },
@@ -23989,7 +23989,7 @@
       "heading_count": 11,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 558,
+      "word_count": 578,
       "link_count": 5
     }
   },
@@ -63069,6 +63069,18 @@
       "code_block_count": 0,
       "word_count": 182,
       "link_count": 1
+    }
+  },
+  {
+    "file": "docs/plans/manuscript-red-team-review-2026-08-01.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 7,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 1464,
+      "link_count": 0
     }
   },
   {
