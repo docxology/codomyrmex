@@ -31,6 +31,7 @@ The `manuscript/` directory contains raw Markdown files rendered by `scripts/com
 - `08_active_inference.md` — A bounded Active Inference interpretation that distinguishes structural analogy from implemented Bayesian inference.
 - `09_research_roadmap.md` — Evidence-bound research milestones, promotion rules, and reproducibility requirements.
 - `10_formalism_code_crosswalk.md` — Methods for translating formal objects into code anchors, evidence, and bounded claims.
+- `11_supplemental_notation.md` — Authoritative notation glossary for equations, Active Inference vocabulary, and paired statistics.
 - `90_appendix_design_rationale.md` — Design decisions, alternatives, trade-offs, and calibration limits.
 - `98_acknowledgements.md` — Unnumbered, configuration-injected contributor credit.
 - `99_references.md` — Minimal bibliography anchor; rendered entries come from `references.bib` through Pandoc citeproc.

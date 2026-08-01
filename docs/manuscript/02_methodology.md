@@ -70,7 +70,7 @@ update is linear and floored at zero, as formalized in [@eq:field-recurrence].
 
 [@tbl:methodology_decay_rates] records unit-trace behavior for each decay class.
 
-| Class | Multiplier $m_k$ | Subtraction $\epsilon_0m_k$ | Unit trace after one tick | Unit-trace extinction |
+| Class | Source multiplier | Subtraction $\epsilon_0\,\text{multiplier}$ | Unit trace after one tick | Unit-trace extinction |
 |---|---|---|---|---|---|
 | `FAST` | {{CONFIG_DECAY_RATE_FAST}} | {{CONFIG_EVAPORATION_FAST}}/tick | {{CONFIG_PHEROMONE_RETENTION_FAST_PCT}}% | {{RESULT_UNIT_EXTINCTION_FAST_TICKS}} discrete ticks |
 | `NORMAL` | {{CONFIG_DECAY_RATE_NORMAL}} | {{CONFIG_EVAPORATION_NORMAL}}/tick | {{CONFIG_PHEROMONE_RETENTION_NORMAL_PCT}}% | {{RESULT_UNIT_EXTINCTION_NORMAL_TICKS}} discrete ticks |
@@ -86,7 +86,7 @@ more history.
 
 The effective-strength calculation in [@eq:effective_strength] determines the initial trace written to the field.
 
-$$\text{effective\_strength} = \text{signal.strength} \times \text{source\_multiplier} \times \text{trust\_factor}$$ {#eq:effective_strength}
+$$d_{j,t} = \text{signal.strength} \times \text{source\_multiplier} \times \text{trust\_factor}$$ {#eq:effective_strength}
 
 where `source_multiplier` is HUMAN×{{CONFIG_SOURCE_MULTIPLIER_HUMAN}},
 TEST×{{CONFIG_SOURCE_MULTIPLIER_TEST}}, SECURITY×{{CONFIG_SOURCE_MULTIPLIER_SECURITY}},
@@ -153,12 +153,14 @@ provenance before a new interpretation is made.
 The gate score $g$ is a weighted linear combination of
 {{CONFIG_GATE_COMPONENT_COUNT}} normalised components ([@eq:gate_score_detail]):
 
-$$g = {{CONFIG_GATE_WEIGHT_BUDGET}} \cdot \text{budget\_ok} + {{CONFIG_GATE_WEIGHT_RISK}} \cdot \text{risk\_ok} + {{CONFIG_GATE_WEIGHT_TRUST}} \cdot \text{trust\_ok} + {{CONFIG_GATE_WEIGHT_COMPLETENESS}} \cdot \text{completeness}$$ {#eq:gate_score_detail}
+$$g = {{CONFIG_GATE_WEIGHT_BUDGET}}b + {{CONFIG_GATE_WEIGHT_RISK}}\rho(h) + {{CONFIG_GATE_WEIGHT_TRUST}}u + {{CONFIG_GATE_WEIGHT_COMPLETENESS}}c$$ {#eq:gate_score_detail}
 
 clamped to $[{{CONFIG_SCORE_MIN}}, {{CONFIG_SCORE_MAX}}]$ after summation:
 $g \leftarrow \max({{CONFIG_SCORE_MIN}},\; \min({{CONFIG_SCORE_MAX}},\; g))$.
 
-The weights sum to {{CONFIG_GATE_WEIGHT_SUM}}. Each component is described below.
+The weights sum to {{CONFIG_GATE_WEIGHT_SUM}}. In the implementation, the code
+components `budget_ok`, `risk_ok`, `trust_ok`, and `completeness` are the glossary
+quantities $b$, $\rho(h)$, $u$, and $c$, respectively. Each component is described below.
 
 **`budget_ok`** ($w = {{CONFIG_GATE_WEIGHT_BUDGET}}$) is binary resource headroom.
 A false approval bypasses ordinary scoring; each proposal receives a fresh pre-check.
@@ -198,7 +200,7 @@ credit.
 **Trust penalty.** When `ConsequenceMemory` is available and the agent's recent-failure
 count reaches {{CONFIG_RECENT_FAILURE_COUNT_THRESHOLD}}, the gate applies:
 
-$$\text{trust\_ok} \leftarrow \max({{CONFIG_SCORE_MIN}},\; \text{trust\_ok} - {{CONFIG_FAILURE_PENALTY}})$$ {#eq:trust_penalty}
+$$u \leftarrow \max({{CONFIG_SCORE_MIN}},\; u - {{CONFIG_FAILURE_PENALTY}})$$ {#eq:trust_penalty}
 
 This decrement reduces `trust_ok` — the gate's normalised trust contribution for this evaluation only. It does not modify the agent's persistent `trust_score` stored in `ConsequenceMemory`. The agent's durable trust record is updated separately on each `record_outcome` call; the gate penalty is a single-evaluation correction that makes the gate more conservative while an agent is on a losing streak, without permanently penalising the agent's history.
 
@@ -208,7 +210,7 @@ proposal. The gate inspects {{CONFIG_COMPLETENESS_FIELD_COUNT}} fields:
 
 The proposal-completeness expression in [@eq:proposal_completeness] supplies the ordinary score component for incomplete proposals.
 
-$$\text{completeness} = \max({{CONFIG_SCORE_MIN}},\; {{CONFIG_UNIT_SCORE}} - |\text{missing}| \times {{CONFIG_MISSING_FIELD_PENALTY}})$$ {#eq:proposal_completeness}
+$$c = \max({{CONFIG_SCORE_MIN}},\; {{CONFIG_UNIT_SCORE}} - |\text{missing}| \times {{CONFIG_MISSING_FIELD_PENALTY}})$$ {#eq:proposal_completeness}
 
 The rendered result tables compute all discrete completeness values from that expression.
 
@@ -268,15 +270,17 @@ at the most recent {{CONFIG_CONSEQUENCE_HISTORY_MAX}} rows).
 
 **Trust delta computation.** When a `ConsequenceRecord` is persisted with `trust_delta == {{CONFIG_SCORE_MIN}}`, the memory computes it from outcome fields:
 
-The durable trust update is computed by [@eq:trust_delta].
+The durable trust update is computed by [@eq:trust_delta]. Notation follows
+[@sec:supplemental-notation]; $\Delta_n$ is a trust increment, not a field signal.
 
-$$\Delta_\text{trust} = \Delta_\text{pass/fail} + \Delta_\text{repair} + h \cdot \Delta_\text{human}$$ {#eq:trust_delta}
+$$\Delta_n = \delta_\text{test}(n) + \delta_\text{repair}\,\mathbf 1_\text{repair}(n) + f_n \cdot \delta_\text{human}$$ {#eq:trust_delta}
 
-where $\Delta_\text{pass/fail} = {{CONFIG_TRUST_DELTA_PASS}}$ if tests passed else
-${{CONFIG_TRUST_DELTA_FAIL}}$; $\Delta_\text{repair} =
-{{CONFIG_TRUST_DELTA_REPAIR}}$ if repair was needed; $h \in [{{CONFIG_HUMAN_FEEDBACK_MIN}}, {{CONFIG_HUMAN_FEEDBACK_MAX}}]$ is the parsed
-human feedback score and $\Delta_\text{human} =
-{{CONFIG_TRUST_DELTA_HUMAN_WEIGHT}}$. The delta is clamped to keep `trust_score`
+where $\delta_\text{test}(n) = {{CONFIG_TRUST_DELTA_PASS}}$ if tests passed else
+${{CONFIG_TRUST_DELTA_FAIL}}$; $\delta_\text{repair} =
+{{CONFIG_TRUST_DELTA_REPAIR}}$ is applied when $\mathbf 1_\text{repair}(n)=1$;
+$f_n \in [{{CONFIG_HUMAN_FEEDBACK_MIN}}, {{CONFIG_HUMAN_FEEDBACK_MAX}}]$ is the parsed
+human feedback score and $\delta_\text{human} =
+{{CONFIG_TRUST_DELTA_HUMAN_WEIGHT}}$. The increment is clamped to keep `trust_score`
 within $[{{CONFIG_SCORE_MIN}},{{CONFIG_SCORE_MAX}}]$.
 
 **`recent_failures()` and gate coupling.** The `ConsequenceMemory` exposes a

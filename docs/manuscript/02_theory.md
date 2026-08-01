@@ -15,6 +15,8 @@ safety, optimality, differential privacy, or long-run ecological convergence.
 {{CONFIG_PARAMETER_STATUS_NOTE}} The equations in this section state consequences of
 the current implementation; they are not a claim that the selected constants are
 universal or empirically calibrated.
+Notation is fixed in [@sec:supplemental-notation]; in particular, $h$ denotes hazard,
+$\rho$ denotes risk clearance, and $f_n$ denotes human feedback.
 
 ## Capped local signal field {#sec:theory-field}
 
@@ -70,18 +72,18 @@ $$ {#eq:passive-linear-decay}
 event, exactly $\epsilon_j$ is removed per tick; after the value reaches zero, further
 applications leave it at zero. $\square$
 
-A trace with initial strength $s$ therefore disappears after at most
+A trace with current strength $x_{j,t}$ therefore disappears after at most
 
 $$
-N_{\mathrm{extinct}}(s,\epsilon_j)=
-\left\lceil \frac{s}{\epsilon_j}\right\rceil
+N_{\mathrm{extinct}}(x_{j,t},\epsilon_j)=
+\left\lceil \frac{x_{j,t}}{\epsilon_j}\right\rceil
 $$ {#eq:finite-extinction}
 
 ticks without reinforcement. This is finite forgetting, not exponential half-life.
 For a unit trace, FAST, NORMAL, and SLOW disappear after
 {{RESULT_UNIT_EXTINCTION_FAST_TICKS}}, {{RESULT_UNIT_EXTINCTION_NORMAL_TICKS}}, and
 {{RESULT_UNIT_EXTINCTION_SLOW_TICKS}} discrete ticks,
-respectively (the ceiling matters when $s/\epsilon_j$ is not integral).
+respectively (the ceiling matters when $x_{j,t}/\epsilon_j$ is not integral).
 
 ![{{FIGURE_CAPTION_PHEROMONE_DECAY}}](figures/{{FIGURE_FILENAME_PHEROMONE_DECAY}}){#{{FIGURE_LABEL_PHEROMONE_DECAY}} width={{FIGURE_WIDTH_PHEROMONE_DECAY}} alt="{{FIGURE_ALT_PHEROMONE_DECAY}}" aria-describedby="{{FIGURE_LABEL_PHEROMONE_DECAY}}-description"}
 <div id="{{FIGURE_LABEL_PHEROMONE_DECAY}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_PHEROMONE_DECAY}}</div>
@@ -94,15 +96,15 @@ gate uses their maximum as effective local hazard pressure:
 $$
 h_t(\ell)=
 \max\!\left(
-x_t(\ell,\mathrm{RISK}),
-x_t(\ell,\mathrm{FAILURE})
+x_{(\ell,\mathrm{RISK}),t},
+x_{(\ell,\mathrm{FAILURE}),t}
 \right).
 $$ {#eq:effective-hazard}
 
 The risk-clearance component is the piecewise function
 
 $$
-r(h)=
+\rho(h)=
 \begin{cases}
 {{CONFIG_UNIT_SCORE}}, & {{CONFIG_SCORE_MIN}}\leq h<{{CONFIG_HAZARD_MEDIUM_THRESHOLD}},\\
 {{CONFIG_RISK_CREDIT_MEDIUM}}, & {{CONFIG_HAZARD_MEDIUM_THRESHOLD}}\leq h<{{CONFIG_HAZARD_HIGH_THRESHOLD}},\\
@@ -115,7 +117,7 @@ increasing either `RISK` or `FAILURE` pressure at the proposal target cannot inc
 the gate score.
 
 *Proof.* The maximum in [@eq:effective-hazard] is coordinate-wise non-decreasing, while
-$r(h)$ in [@eq:risk-clearance] is non-increasing. Its gate coefficient is positive.
+$\rho(h)$ in [@eq:risk-clearance] is non-increasing. Its gate coefficient is positive.
 $\square$
 
 **Deterministic paired case.** A caller-reported failed outcome deposits a base-strength
@@ -125,13 +127,15 @@ multiplier {{CONFIG_SOURCE_MULTIPLIER_TEST}} produces effective pressure
 and no prior pressure, the ordinary score changes from
 
 $$
-g_{\mathrm{clear}}={{CONFIG_GATE_WEIGHT_BUDGET}}+{{CONFIG_GATE_WEIGHT_RISK}}+{{CONFIG_GATE_WEIGHT_TRUST}}({{CONFIG_TRUST_CREDIT_LOWER}})+{{CONFIG_GATE_WEIGHT_COMPLETENESS}}={{RESULT_PAIRED_CLEAR_SCORE}}
+g_{\mathrm{clear}}=w_b b+w_\rho\rho(h_{\mathrm{clear}})+w_u u+w_c c
+=w_b(1)+w_\rho(1)+w_u({{CONFIG_TRUST_CREDIT_LOWER}})+w_c(1)={{RESULT_PAIRED_CLEAR_SCORE}}
 $$ {#eq:paired-clear-score}
 
 to
 
 $$
-g_{\mathrm{failed}}={{CONFIG_GATE_WEIGHT_BUDGET}}+{{CONFIG_GATE_WEIGHT_RISK}}({{CONFIG_RISK_CREDIT_MEDIUM}})+{{CONFIG_GATE_WEIGHT_TRUST}}({{CONFIG_TRUST_CREDIT_LOWER}})+{{CONFIG_GATE_WEIGHT_COMPLETENESS}}={{RESULT_PAIRED_FAILURE_SCORE}} .
+g_{\mathrm{failed}}=w_b b+w_\rho\rho(h_{\mathrm{failed}})+w_u u+w_c c
+=w_b(1)+w_\rho({{CONFIG_RISK_CREDIT_MEDIUM}})+w_u({{CONFIG_TRUST_CREDIT_LOWER}})+w_c(1)={{RESULT_PAIRED_FAILURE_SCORE}} .
 $$ {#eq:paired-failure-score}
 
 Thus the same-target decision changes from EXECUTE to HOLD, while an otherwise identical
@@ -146,11 +150,11 @@ a proof that deception is prevented.
 For proposals that reach ordinary scoring,
 
 $$
-g={{CONFIG_GATE_WEIGHT_BUDGET}}b+{{CONFIG_GATE_WEIGHT_RISK}}r+{{CONFIG_GATE_WEIGHT_TRUST}}u+{{CONFIG_GATE_WEIGHT_COMPLETENESS}}c,
+g={{CONFIG_GATE_WEIGHT_BUDGET}}b+{{CONFIG_GATE_WEIGHT_RISK}}\rho(h)+{{CONFIG_GATE_WEIGHT_TRUST}}u+{{CONFIG_GATE_WEIGHT_COMPLETENESS}}c,
 $$ {#eq:theory-gate-score}
 
 where $b\in\{{{CONFIG_SCORE_MIN}},{{CONFIG_UNIT_SCORE}}\}$,
-$r\in\{{{CONFIG_SCORE_MIN}},{{CONFIG_RISK_CREDIT_MEDIUM}},{{CONFIG_UNIT_SCORE}}\}$,
+$\rho(h)\in\{{{CONFIG_SCORE_MIN}},{{CONFIG_RISK_CREDIT_MEDIUM}},{{CONFIG_UNIT_SCORE}}\}$,
 $u$ uses the generated trust-credit tiers and optional
 {{CONFIG_FAILURE_PENALTY}} recent-failure penalty, and $c$ is generated from zero
 through {{CONFIG_COMPLETENESS_FIELD_COUNT}} missing fields with a
@@ -220,28 +224,28 @@ $$ {#eq:trust-update}
 with
 
 $$
-d_{\mathrm{test}}(n)=
+\delta_{\mathrm{test}}(n)=
 \begin{cases}
 +{{CONFIG_TRUST_DELTA_PASS}}, & \text{tests pass},\\
 {{CONFIG_TRUST_DELTA_FAIL}}, & \text{tests fail}
 \end{cases},
 \qquad
-r_{\mathrm{repair}}={{CONFIG_TRUST_DELTA_REPAIR}},
+\delta_{\mathrm{repair}}={{CONFIG_TRUST_DELTA_REPAIR}},
 \qquad
-\Delta_n=d_{\mathrm{test}}(n)
-+r_{\mathrm{repair}}\,\mathbf 1_{\mathrm{repair}}
-+{{CONFIG_TRUST_DELTA_HUMAN_WEIGHT}}h_n,\qquad h_n\in[{{CONFIG_HUMAN_FEEDBACK_MIN}},{{CONFIG_HUMAN_FEEDBACK_MAX}}].
+\Delta_n=\delta_{\mathrm{test}}(n)
++\delta_{\mathrm{repair}}\,\mathbf 1_{\mathrm{repair}}(n)
++{{CONFIG_TRUST_DELTA_HUMAN_WEIGHT}}f_n,\qquad f_n\in[{{CONFIG_HUMAN_FEEDBACK_MIN}},{{CONFIG_HUMAN_FEEDBACK_MAX}}].
 $$ {#eq:trust-delta}
 
 This proves boundedness by construction. It does not prove convergence. With continuing
 random non-zero increments, a clipped constant-step process can continue moving
 indefinitely.
 
-If tests pass independently with probability $p$, with no repairs and neutral human
+If tests pass independently with probability $p_{\mathrm{pass}}$, with no repairs and neutral human
 feedback, the expected *unclipped* increment is
 
 $$
-\mathbb E[\Delta]={{CONFIG_TRUST_DELTA_PASS}}p+{{CONFIG_TRUST_DELTA_FAIL}}(1-p).
+\mathbb E[\Delta]={{CONFIG_TRUST_DELTA_PASS}}p_{\mathrm{pass}}+{{CONFIG_TRUST_DELTA_FAIL}}(1-p_{\mathrm{pass}}).
 $$ {#eq:trust-drift}
 
 The drift is zero at $p={{RESULT_TRUST_BREAK_EVEN_PASS_RATE}}$, positive above it, and negative below it. This is a

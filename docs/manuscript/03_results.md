@@ -9,7 +9,7 @@ distinguishes:
 - **unexecuted evaluation plans**: the comparative benchmark specified in
   [@sec:experimental-design].
 
-No raw multi-condition benchmark trace ships with this snapshot. Accordingly, this
+No external multi-condition benchmark trace ships with this snapshot. Accordingly, this
 section reports no production effect size, confidence interval, ecological optimum, or
 population-level safety rate.
 
@@ -101,8 +101,12 @@ attainable.
 For a lower-tier authorized agent with clear budget and hazard, the score is
 
 $$
-g(c)=w_b+w_r+w_t\,t_{\mathrm{lower}}+w_c c,
+g(c)=w_b+w_\rho+w_u\,u+w_c c,
 $$ {#eq:lower-tier-score}
+
+Here $b=1$, $\rho(h)=1$, and $u={{CONFIG_TRUST_CREDIT_LOWER}}$ for the stated
+clear-field, lower-tier case; the only varying term is the attainable completeness
+credit $c$.
 
 Each coefficient and the lower trust credit are injected from the live gate. Runtime
 completeness has a finite attainable set because each missing field incurs the generated

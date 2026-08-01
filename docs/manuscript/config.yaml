@@ -67,7 +67,7 @@ figures:
     caption: >-
       Analytical trajectories of a {{CONFIG_SCORE_MAX}}-strength trace under the
       implemented subtractive decay rule. Each curve is
-      s(t)=max({{CONFIG_SCORE_MIN}},s0-epsilon t),
+      $x_{j,t}=\max({{CONFIG_SCORE_MIN}},x_{j,0}-\epsilon_j t)$,
       with no deposits, reads, or reinforcement. Vertical markers show continuous
       extinction points; the runtime updates at integer ticks and removes values at
       or below zero. Distinct dash patterns and direct endpoint labels identify the
@@ -305,28 +305,37 @@ figures:
     width: "88%"
     evidence_class: "offline-synthetic"
     caption: >-
-      Paired safety--utility points from {{RESULT_BENCHMARK_TASK_COUNT}} deterministic
-      synthetic tool-use cases. Baseline and mediated harmful-action rates are
+      Paired safety--utility points from {{RESULT_BENCHMARK_PAIR_COUNT}} deterministic
+      synthetic tool-use cases, with denominator N={{RESULT_BENCHMARK_TASK_COUNT}}
+      task cases per condition. Baseline and reference-gate-mediated harmful-action rates are
       {{RESULT_BENCHMARK_BASELINE_HARM_RATE}} and
       {{RESULT_BENCHMARK_MEDIATED_HARM_RATE}}, with utilities
       {{RESULT_BENCHMARK_BASELINE_UTILITY}} and
       {{RESULT_BENCHMARK_MEDIATED_UTILITY}}. The paired harmful-action difference is
-      {{RESULT_BENCHMARK_HARM_DELTA}} with a descriptive percentile-bootstrap interval
-      at a nominal {{RESULT_BENCHMARK_CI_LEVEL}}% confidence level
+      {{RESULT_BENCHMARK_HARM_DELTA}} ({{RESULT_BENCHMARK_HARM_DIFFERENCE_DIRECTION}})
+      with a descriptive percentile-resampling interval from
+      {{RESULT_BENCHMARK_CI_METHOD}} at a nominal {{RESULT_BENCHMARK_CI_LEVEL}}%
+      reference level
       [{{RESULT_BENCHMARK_HARM_CI_LOW}}, {{RESULT_BENCHMARK_HARM_CI_HIGH}}]. The
-      interval uses task-case pairs, not a population sample. This fixture demonstrates
+      interval uses task-case pairs, not a population sample, and is not a conventional
+      inferential confidence interval ({{RESULT_BENCHMARK_INTERVAL_INTERPRETATION}}).
+      The plotted mediator is {{RESULT_BENCHMARK_MEDIATOR_PROVENANCE}}; production-gate
+      parity is {{RESULT_BENCHMARK_PRODUCTION_GATE_PARITY}}. This fixture demonstrates
       analysis plumbing, not calibration or generalization to external agents or
       workloads. Marker shape, direct labels, and colour redundantly identify the two
       conditions.
     alt_text: >-
-      Scatter plot comparing directly labelled baseline and mediated conditions on
-      harmful-action rate and utility, using different marker shapes.
+      Scatter plot comparing directly labelled always-execute and independent-reference-gate
+      conditions on harmful-action rate and fixture utility, using different marker shapes.
     long_description: >-
       Harmful-action rate is on the horizontal axis and utility is on the vertical
-      axis. One labelled point represents the baseline condition and a differently
-      shaped labelled point represents the mediated condition; an arrow links the
-      paired observations. The points come from deterministic synthetic cases, and the
-      descriptive interval does not imply population generalization or calibration.
+      axis, both averaged over the same ordered synthetic task cases. One labelled point
+      represents the always-execute baseline and a differently shaped labelled point
+      represents the independent ReferenceGate-mediated condition; an arrow annotates
+      the paired mediated-minus-baseline harm difference and its descriptive interval.
+      The points come from deterministic synthetic cases. The mediator is not the
+      production ActuationGate, parity is not established, and the interval does not
+      imply population generalization or calibration.
   calibration_reliability:
     filename: "calibration_reliability.png"
     label: "fig:calibration_reliability"
@@ -423,14 +432,15 @@ acknowledgements:
   - name: "Marek Pawel Bargiel"
     contribution: "conceptual comments on pressure-aware gating / colony-control framing"
 
-# Publication identity remains a technical report until an actual deposit exists.
-# Remote publication commands in this repository create dry-run plans only.
+# Publication identity for the source-bound technical report. The concept DOI
+# resolves to the Zenodo record family; version_doi identifies this release.
 publication:
   type: "technical-report"
-  doi: ""
-  doi_status: "not assigned"
-  version_doi: ""
-  version_record: ""
+  doi: "10.5281/zenodo.21750800"
+  doi_status: "assigned"
+  version_doi: "10.5281/zenodo.21750801"
+  version_record: "https://zenodo.org/records/21750801"
+  release_tag: "v1.3.0-paper"
   github_repository: "docxology/codomyrmex"
   transmission_bookends:
     enabled: true
@@ -603,7 +613,7 @@ formalism_code_crosswalk:
     name: "Discrete dynamical recurrence"
     status: "implemented"
     formalism: "Bounded state recurrence"
-    formal_object: "s_(t+1)=max(0, s_t-epsilon) for a trace without new deposits"
+    formal_object: "x_(j,t+1)=max(0, x_(j,t)-ε_j) for a trace without new deposits"
     code_symbols: "PheromoneStore.evaporate; PheromoneStore.tick; TraceField.sense"
     code_paths:
       - "src/codomyrmex/colony_kernel/pheromone_store.py"

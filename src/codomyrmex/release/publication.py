@@ -352,15 +352,36 @@ def prepare_publication_bundle(
         copied_receipts.append(destination)
 
     commit, dirty, status_sha256, status_lines = _git_state(project)
+    source_provenance: dict[str, str] = {}
+    variables_copy = root / "reproducibility" / "manuscript_variables.json"
+    if variables_copy.is_file():
+        try:
+            variables_payload = json.loads(variables_copy.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise ValueError(
+                "reproducibility/manuscript_variables.json is not valid JSON"
+            ) from exc
+        if not isinstance(variables_payload, dict):
+            raise ValueError(
+                "reproducibility/manuscript_variables.json must contain an object"
+            )
+        source_provenance = {
+            "rendered_commit": str(variables_payload.get("REPRO_GIT_COMMIT", "")),
+            "config_sha256": str(variables_payload.get("CONFIG_HASH", "")),
+            "kernel_source_sha256": str(
+                variables_payload.get("REPRO_KERNEL_SOURCE_HASH", "")
+            ),
+        }
     source_receipt_path = root / "receipts" / "source-state.json"
     _write_json(
         source_receipt_path,
         {
-            "schema_version": "1",
+            "schema_version": "2",
             "commit": commit,
             "dirty": dirty,
             "status_sha256": status_sha256,
             "status": list(status_lines),
+            **source_provenance,
         },
     )
     copied_receipts.append(source_receipt_path)

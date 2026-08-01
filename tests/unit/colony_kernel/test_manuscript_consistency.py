@@ -74,6 +74,7 @@ PUBLIC_CLAIM_FILES = [
     "docs/manuscript/08_active_inference.md",
     "docs/manuscript/09_research_roadmap.md",
     "docs/manuscript/10_formalism_code_crosswalk.md",
+    "docs/manuscript/11_supplemental_notation.md",
     "docs/manuscript/90_appendix_design_rationale.md",
     "docs/manuscript/manuscript.css",
     "docs/manuscript/preamble.md",
@@ -207,19 +208,19 @@ FORBIDDEN_CLAIMS = {
     ): "full-suite collection count must match the current inventory snapshot",
     re.compile(
         r"\b1,191\b"
-    ): "docs inventory is currently 1,200 Markdown files under docs/",
+    ): "docs inventory is currently 1,202 Markdown files under docs/",
     re.compile(
         r"\b1,192\b"
-    ): "docs inventory is currently 1,200 Markdown files under docs/",
+    ): "docs inventory is currently 1,202 Markdown files under docs/",
     re.compile(
         r"\b1,193\b"
-    ): "docs inventory is currently 1,200 Markdown files under docs/",
+    ): "docs inventory is currently 1,202 Markdown files under docs/",
     re.compile(
         r"\b1,194\b"
-    ): "docs inventory is currently 1,200 Markdown files under docs/",
+    ): "docs inventory is currently 1,202 Markdown files under docs/",
     re.compile(
         r"\b1,195\b"
-    ): "docs inventory is currently 1,200 Markdown files under docs/",
+    ): "docs inventory is currently 1,202 Markdown files under docs/",
     re.compile(
         r"\b35,122\b"
     ): "full-suite collection count must match the current inventory snapshot",
@@ -439,7 +440,7 @@ REQUIRED_CLAIMS = {
     "README.md": [
         "608 runtime MCP tools",
         "623 decorators",
-        "1,200",
+        "1,202",
         "35,783",
     ],
 }
@@ -487,6 +488,9 @@ def test_compiler_declares_scientific_narrative_order() -> None:
         "10_formalism_code_crosswalk.md"
     )
     assert names.index("10_formalism_code_crosswalk.md") < names.index(
+        "11_supplemental_notation.md"
+    )
+    assert names.index("11_supplemental_notation.md") < names.index(
         "90_appendix_design_rationale.md"
     )
     assert names[-1] == "99_references.md"
@@ -537,10 +541,11 @@ def test_manuscript_config_matches_kernel_contract() -> None:
             "contribution": "conceptual comments on pressure-aware gating / colony-control framing",
         }
     ]
-    assert publication["doi"] == ""
-    assert publication["doi_status"] == "not assigned"
-    assert publication["version_doi"] == ""
-    assert publication["version_record"] == ""
+    assert publication["doi"] == "10.5281/zenodo.21750800"
+    assert publication["doi_status"] == "assigned"
+    assert publication["version_doi"] == "10.5281/zenodo.21750801"
+    assert publication["version_record"] == "https://zenodo.org/records/21750801"
+    assert publication["release_tag"] == "v1.3.0-paper"
     assert "placeholder" not in str(publication).lower()
     assert experiment["gate_score_weights"] == {
         "budget": 0.30,
@@ -613,7 +618,8 @@ def test_source_publication_metadata_has_no_placeholders() -> None:
 
     assert source["paper"]["date"] == "auto"
     assert source["authors"][0]["orcid"] == "0000-0001-6232-9096"
-    assert source["publication"]["doi_status"] == "not assigned"
+    assert source["publication"]["doi_status"] == "assigned"
+    assert source["publication"]["release_tag"] == "v1.3.0-paper"
     assert "placeholder" not in str(source["publication"]).lower()
 
 

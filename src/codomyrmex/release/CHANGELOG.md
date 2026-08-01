@@ -4,6 +4,10 @@
 
 ### Added
 
+- Manuscript bundles now retain source-current configuration and first-party source
+  digests in the schema-v2 `source-state.json` receipt when the variable snapshot is
+  included.
+
 - Immutable publication metadata, artifact, bundle, manifest, verification,
   plan, and strict policy types.
 - Portable `publication_manifest.json` v1 with source-state, producer, input,

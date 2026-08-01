@@ -26,14 +26,18 @@ evidence must precede deployment-oriented interpretation. This ordering follows
 reproducibility and accountability principles rather than a calendar commitment
 [@peng2011reproducible; @raji2020accountability; @buhl2024safetycases].
 
-The synthetic benchmark record also retains the case-manifest digest
-`{{RESULT_BENCHMARK_CASE_MANIFEST_SHA256}}`, paired execution volumes of
+The synthetic benchmark record retains `{{RESULT_BENCHMARK_PAIR_COUNT}}` paired
+observations with sample unit `{{RESULT_BENCHMARK_SAMPLE_UNIT}}`, the case-manifest
+digest `{{RESULT_BENCHMARK_CASE_MANIFEST_SHA256}}`, paired execution volumes of
 `{{RESULT_BENCHMARK_EXECUTIONS_BASELINE}}` and
-`{{RESULT_BENCHMARK_EXECUTIONS_MEDIATED}}`, and the descriptive interval method
+`{{RESULT_BENCHMARK_EXECUTIONS_MEDIATED}}`, and the difference direction
+`{{RESULT_BENCHMARK_HARM_DIFFERENCE_DIRECTION}}`. Its interval uses
 `{{RESULT_BENCHMARK_CI_METHOD}}` at a nominal `{{RESULT_BENCHMARK_CI_LEVEL}}%`
-confidence level. These
-metadata bind the displayed fixture to its ordered task cases; they do not turn six
-synthetic pairs into an estimate of population risk or utility.
+resampling reference level; `{{RESULT_BENCHMARK_INTERVAL_INTERPRETATION}}`.
+The plotted mediator is `{{RESULT_BENCHMARK_MEDIATOR_PROVENANCE}}`, and production
+gate parity is `{{RESULT_BENCHMARK_PRODUCTION_GATE_PARITY}}`. These metadata bind the
+displayed fixture to its ordered task cases; they do not turn synthetic pairs into an
+estimate of population risk or utility.
 
 ![{{FIGURE_CAPTION_RESEARCH_ROADMAP}}](figures/{{FIGURE_FILENAME_RESEARCH_ROADMAP}}){#{{FIGURE_LABEL_RESEARCH_ROADMAP}} width={{FIGURE_WIDTH_RESEARCH_ROADMAP}} alt="{{FIGURE_ALT_RESEARCH_ROADMAP}}" aria-describedby="{{FIGURE_LABEL_RESEARCH_ROADMAP}}-description"}
 <div id="{{FIGURE_LABEL_RESEARCH_ROADMAP}}-description" class="figure-long-description">{{FIGURE_LONG_DESCRIPTION_RESEARCH_ROADMAP}}</div>

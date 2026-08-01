@@ -54,6 +54,9 @@ artifact construction from externally authorized publication.
   credentials.
 - It records source commit, dirty state and its digest, tool versions, input
   hashes, artifact roles and hashes, and validation outcomes.
+- When `manuscript_variables.json` is included, `receipts/source-state.json` also
+  records the rendered commit, manuscript configuration digest, and first-party
+  Colony Kernel/manuscript source digest.
 - The final distribution PDF hash appears only in the detached manifest and
   checksum files.
 - `verify_publication_bundle()` detects missing, malformed, moved, resized, or

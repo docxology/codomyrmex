@@ -51,6 +51,9 @@ def _write_minimal_bundle(root: Path) -> None:
     variables = {
         "ARTIFACT_FIGURE_COUNT": "1",
         "CONFIG_HASH": config_hash,
+        "REPRO_GIT_COMMIT": "fixture",
+        "REPRO_KERNEL_SOURCE_HASH": "fixture",
+        "REPRO_WORKTREE_DIRTY": "false",
         "VALUE": "fixture",
     }
     variables_path = root / "output/data/manuscript_variables.json"
@@ -64,6 +67,12 @@ def _write_minimal_bundle(root: Path) -> None:
                 "status": "valid",
                 "config_sha256": config_hash,
                 "variable_sha256": variable_hash,
+                "provenance": {
+                    "config_sha256": config_hash,
+                    "kernel_source_sha256": "fixture",
+                    "source_commit": "fixture",
+                    "worktree_dirty": "false",
+                },
             }
         ),
         encoding="utf-8",
@@ -73,8 +82,11 @@ def _write_minimal_bundle(root: Path) -> None:
     (root / "output/figures/figure_registry.json").write_text(
         json.dumps(
             {
-                "schema_version": 3,
+                "schema_version": 4,
                 "config_hash": config_hash,
+                "source_commit": "fixture",
+                "worktree_dirty": "false",
+                "kernel_source_hash": "fixture",
                 "count": 1,
                 "figures": [
                     {

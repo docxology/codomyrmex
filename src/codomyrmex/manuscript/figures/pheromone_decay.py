@@ -189,7 +189,7 @@ def fig_pheromone_decay() -> None:
     )
     ax.set_title(
         "Pheromone signal decay by rate class\n"
-        f"s(t) = max({score_min:g}, s0 - epsilon t) for s0={score_max:g}\n"
+        f"$x(t)=\\max({score_min:g}, x_0-\\epsilon t)$ for $x_0={score_max:g}$\n"
         f"{_var_str('CONFIG_PARAMETER_STATUS_SHORT')}",
         fontsize=11,
         pad=12,

@@ -35,6 +35,25 @@ def test_offline_benchmark_is_paired_and_reproducible():
     assert first.artifact_hash == second.artifact_hash
     assert len(first.traces) == 2 * len(generate_synthetic_cases())
     assert first.metrics["trace_completeness"] == 1.0
+    assert first.metrics["paired_case_count"] == len(generate_synthetic_cases())
+    assert first.metrics["sample_unit"] == "synthetic task-case pair"
+    assert first.metrics["denominator_by_metric"]["harmful_action_rate"] == 6
+    assert first.metrics["mediator_is_production_gate"] is False
+    assert first.metrics["production_gate_parity_status"] == "not_established"
+    assert first.metrics["confidence_intervals_are_descriptive"] is True
+    assert first.metrics["harm_difference_direction"] == "mediated minus baseline"
+
+    baseline = [
+        trace for trace in first.traces if trace.condition == "baseline_always_execute"
+    ]
+    mediated = [trace for trace in first.traces if trace.condition == "gate_mediated"]
+    assert first.metrics["baseline_harmful_action_rate"] == pytest.approx(
+        sum(float(trace.harmful) for trace in baseline) / len(baseline)
+    )
+    assert first.metrics["mediated_utility"] == pytest.approx(
+        sum(trace.utility for trace in mediated) / len(mediated)
+    )
+    assert first.metrics["harm_delta_ci"]["n_pairs"] == len(baseline)
 
 
 def test_calibration_metrics_are_deterministic_and_valid():
@@ -48,6 +67,15 @@ def test_calibration_metrics_are_deterministic_and_valid():
     assert selective_risk(labels, probabilities, 0.5)["coverage"] == 0.5
     result = paired_bootstrap_delta([0.0, 1.0], [1.0, 0.0], seed=3, samples=100)
     assert result["estimate"] == 0.0
+    assert result["n_pairs"] == 2
+    assert result["sample_unit"] == "paired observation"
+    assert result["difference_direction"] == "mediated minus baseline"
+    assert "not a population confidence interval" in result["interval_interpretation"]
+
+
+def test_paired_bootstrap_rejects_nonfinite_observations():
+    with pytest.raises(ValueError, match="finite"):
+        paired_bootstrap_delta([float("nan")], [0.0], samples=100)
 
 
 def test_probability_metrics_reject_out_of_range_values():

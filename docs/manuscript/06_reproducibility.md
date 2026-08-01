@@ -28,8 +28,15 @@ require additional evidence.
 | Bibliography audit | Pandoc citations separated from cross-references; cited primary locators resolved and unused records rejected | Registry resolution does not validate every argument made by a source |
 | Paired replay | Fixed-input semantic replay with repeat-run equality and JSON digest | External-actuation attestation, concurrency, restart durability, or external effectiveness |
 | Local attestation | Signed, hash-linked proposal/verdict/authorization/receipt/outcome fixture | Independent observation of external actuation or deployment safety |
-| Render | Hydrated Markdown, semantic HTML, content PDF, and bookended distribution PDF | Byte-identical output across machines and dates or PDF/UA conformance without external validation |
+| Render | Hydrated Markdown, semantic HTML, content PDF, and bookended distribution PDF | Byte-identical output across machines and dates |
+| PDF conformance | `qpdf --check` plus independent veraPDF PDF/UA validation receipts for the current content and distribution PDFs | Universal usability across assistive technologies, displays, print processes, or readers |
 : Scope of the reproducibility evidence. {#tbl:repro-scope}
+
+The current content and distribution PDFs have an independent veraPDF PDF/UA pass
+recorded in `output/validation/paper-content-pdf-validation.json` and
+`output/validation/paper-pdf-validation.json`. This is artifact-specific conformance
+evidence for the rendered files; it does not establish universal usability across
+assistive technologies, displays, print processes, or readers.
 
 The variable generator fails when the scoped pytest process, branch-coverage threshold,
 Ruff, or ty fails. Rendering normally invokes this generator before consuming the
@@ -47,6 +54,7 @@ into this render.
 | Configuration digest | `{{CONFIG_HASH}}` | Full SHA-256 over the raw bytes of `docs/manuscript/config.yaml` |
 | Experiment replay seed | `{{CONFIG_EXPERIMENT_SEED}}` | Explicit protocol input; the current paired replay uses no random draws |
 | Manuscript version | {{CONFIG_VERSION}} | `paper.version` in the same YAML file |
+| GitHub release tag | `{{CONFIG_RELEASE_TAG}}` | `publication.release_tag` in the same YAML file |
 | First author | {{CONFIG_FIRST_AUTHOR}} | First entry under `authors` |
 | Keywords | {{CONFIG_KEYWORDS}} | `keywords` list |
 | Generation time | {{GENERATION_TIMESTAMP}} | UTC time when the variable map was computed |
@@ -121,7 +129,9 @@ The project uses the following output conventions:
   bibliography used by the renderer;
 - `output/figures/` stores the {{ARTIFACT_FIGURE_COUNT}} generated PNG figures and
   `figure_registry.json`, whose entries record caption, concise alternative, extended
-  description, evidence class, byte size, and full SHA-256 for each PNG;
+  description, evidence class, byte size, and full SHA-256 for each PNG, while its
+  schema-level provenance records the source commit, dirty state, and Colony Kernel /
+  manuscript source digest;
 - `docs/manuscript/claim_ledger.yaml` records the active claim audit. The integrity
   validator checks that every listed source/evidence path exists and that cited
   bibliography keys resolve;
@@ -217,6 +227,8 @@ uv run --locked python -m codomyrmex.release publication prepare \
   --validation-receipt output/validation/paper-pdf-validation.json
 uv run --locked python -m codomyrmex.release publication verify \
   output/release/codomyrmex-{{CONFIG_VERSION}}
+uv run --locked python scripts/validate_manuscript_integrity.py \
+  --require-rendered --require-source-current
 uv run --locked python -m codomyrmex.release publication plan \
   output/release/codomyrmex-{{CONFIG_VERSION}} --target github
 uv run --locked python -m codomyrmex.release publication plan \

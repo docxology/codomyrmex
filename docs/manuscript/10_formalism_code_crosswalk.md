@@ -1,5 +1,9 @@
 # Formalism-to-Code Crosswalk and Translation Methods {#sec:formalism-code-crosswalk}
 
+The notation used in this crosswalk is fixed by [@sec:supplemental-notation]. In
+particular, symbols in this section are translations of the glossary rather than
+new local aliases.
+
 The repository uses several kinds of formal description: typed operational contracts,
 discrete recurrences, piecewise decision rules, executable invariants, AST-preservation
 rules, optional SMT obligations, and probabilistic inference components. These formalisms

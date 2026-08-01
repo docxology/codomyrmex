@@ -85,8 +85,11 @@ def _write_registry() -> None:
             }
         )
     registry = {
-        "schema_version": 3,
+        "schema_version": 4,
         "config_hash": _var_str("CONFIG_HASH"),
+        "source_commit": _var_str("REPRO_GIT_COMMIT"),
+        "worktree_dirty": _var_str("REPRO_WORKTREE_DIRTY"),
+        "kernel_source_hash": _var_str("REPRO_KERNEL_SOURCE_HASH"),
         "count": len(entries),
         "figures": entries,
     }

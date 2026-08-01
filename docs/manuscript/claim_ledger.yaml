@@ -4,6 +4,12 @@ description: >-
   statements by epistemic status and names the evidence and boundary required for
   a reader to interpret them. Numeric values belong in generated variables, not here.
 
+scholarship_audit:
+  status: "source-current audit complete"
+  method: "DOI, arXiv, and official-locator metadata and claim fit were checked against primary or authoritative records"
+  scope: "all cited records and literature-dependent claims in the active numbered manuscript sections"
+  limitation: "An access-limited official record remains explicitly flagged in the generated bibliography audit; this is not a systematic-review claim"
+
 source_audit:
   covered:
     - "docs/manuscript/00_abstract.md"
@@ -18,6 +24,7 @@ source_audit:
     - "docs/manuscript/08_active_inference.md"
     - "docs/manuscript/09_research_roadmap.md"
     - "docs/manuscript/10_formalism_code_crosswalk.md"
+    - "docs/manuscript/11_supplemental_notation.md"
     - "docs/manuscript/90_appendix_design_rationale.md"
   excluded:
     "docs/manuscript/00_00_cover.md": "publication metadata and title page only"
@@ -84,7 +91,7 @@ claims:
   - id: "C5"
     class: "local_measurement"
     status: "conditional"
-    statement: "The offline research harness executes paired synthetic baseline and mediated traces and computes descriptive safety, utility, refusal, and trace metrics."
+    statement: "The offline research harness executes paired synthetic baseline and independent-reference-gate-mediated traces and computes descriptive safety, utility, refusal, and trace metrics."
     source:
       - "docs/manuscript/09_research_roadmap.md"
       - "docs/manuscript/05_experimental_setup.md"
@@ -92,7 +99,7 @@ claims:
       - "src/codomyrmex/colony_kernel/research/benchmark.py"
       - "tests/unit/colony_kernel/test_research_harness.py"
       - "output/research/colony_kernel_offline.json"
-    boundary: "Synthetic cases demonstrate analysis plumbing only; they are not external benchmark, calibrated probability, or generalization evidence."
+    boundary: "Synthetic cases demonstrate analysis plumbing only; the independent reference gate is not the production ActuationGate, parity is not established, and the results are not external benchmark, calibrated probability, or generalization evidence."
     citations: []
 
   - id: "C6"
@@ -204,7 +211,9 @@ claims:
       - "src/codomyrmex/manuscript/figures/_common.py"
       - "scripts/validate_manuscript_integrity.py"
       - "tests/unit/manuscript/test_integrity.py"
-    boundary: "Metadata, contrast checks, and redundant encodings improve the inspectable design contract; they do not prove usability for every reader, assistive technology, display, or print process."
+      - "output/validation/paper-content-pdf-validation.json"
+      - "output/validation/paper-pdf-validation.json"
+    boundary: "Metadata, contrast checks, redundant encodings, and the current veraPDF PDF/UA-2 passes improve the inspectable artifact contract; they do not prove usability for every reader, assistive technology, display, or print process."
     citations:
       - "lundgard2022accessible"
       - "franconeri2021science"
@@ -226,3 +235,16 @@ claims:
     boundary: "A revision-string comparison is not a protocol conformance suite, interoperability test, or deployment compatibility guarantee."
     citations:
       - "mcp2026spec"
+
+  - id: "C15"
+    class: "implementation_contract"
+    status: "supported"
+    statement: "The supplemental notation section is the authoritative symbol contract for the manuscript's state, gate, trust, Active Inference, and paired-statistics formalisms."
+    source:
+      - "docs/manuscript/11_supplemental_notation.md"
+      - "docs/manuscript/10_formalism_code_crosswalk.md"
+    evidence:
+      - "tests/unit/colony_kernel/test_manuscript_consistency.py"
+      - "scripts/validate_manuscript_integrity.py"
+    boundary: "A notation contract prevents symbol drift; it does not prove that the translated formalism is a whole-program proof or an empirical result."
+    citations: []

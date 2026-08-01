@@ -1,175 +1,49 @@
-<!-- markdownlint-disable MD060 MD033 -->
-# Codomyrmex — TODO
+# Codomyrmex TODO — manuscript publication hardening
 
-**Version**: v1.3.0 | **Date**: 2026-07-22 | **Modules**: 130 | **Sprint**: 37 publication hardening
+**Version**: v1.3.0 technical report
+**Scope**: source-current manuscript, scholarly audit, statistics, formalism, figures,
+rendered QA, and release receipts.
 
-> **Current release**: v1.3.0 "Colony Kernel" (2026-06-30).
-> **Next release**: v1.3.1 (publication hardening)
-> **Archived**: v1.2.4–v1.2.8 → [CHANGELOG.md](CHANGELOG.md)
+This file contains only open publication blockers and explicitly scoped research
+work. Completed historical work belongs in [CHANGELOG.md](CHANGELOG.md). Numeric
+release values are evidence-bound outputs, not TODO snapshots.
 
----
+## Publication blockers
 
-## 📊 Measured Metrics (2026-07-29)
+| ID | Status | Artifact | Evidence required | Exit criterion |
+|:---|:---|:---|:---|:---|
+| P1 | Complete for current checkout | `output/data/manuscript_variables.json`, `output/figures/figure_registry.json`, `output/manuscript/`, `output/paper.html`, `output/paper-content.pdf`, `output/paper.pdf` | Producer-order regeneration from the current checkout and matching config/source hashes | `--require-source-current` passes after variables, figures, Markdown, HTML, PDFs, and receipts are regenerated |
+| P2 | Complete for current cited inventory | `docs/manuscript/references.bib`, `docs/manuscript/claim_ledger.yaml`, `docs/plans/manuscript-red-team-review-2026-08-01.md` | Source-current DOI/arXiv/official-locator checks and claim-by-claim fit review; preserve negative, conditional, and unrun claims | Online bibliography audit and claim-ledger coverage pass with access limitations recorded |
+| P3 | Complete for current synthetic fixture | `src/codomyrmex/colony_kernel/research/benchmark.py`, `research/metrics.py`, `tests/unit/colony_kernel/test_research_harness.py` | Independent recomputation of estimands, denominators, paired differences, resampling intervals, and mediator provenance | Focused tests pass and no synthetic fixture is described as population, calibration, or production-gate evidence |
+| P4 | Complete for current manuscript | `docs/manuscript/11_supplemental_notation.md` and all formal sections/captions | Symbol crosswalk review for indices, field state, hazard/gate, trust, Active Inference, and paired statistics | Notation regression tests pass and equations/captions resolve to one glossary without collisions |
+| P5 | Complete for current render | `docs/manuscript/config.yaml`, `src/codomyrmex/manuscript/figures/`, rendered HTML/PDF | Pixel-level review of all 18 figures, metadata, captions, alt text, long descriptions, ranges, contrast, print legibility, and evidence boundaries | Figure registry, HTML image-description checks, rendered-page inspection, and browser pass all pass |
+| P6 | Complete for current PDFs; usability remains bounded | `output/paper-content.pdf`, `output/paper.pdf`, `docs/manuscript/06_reproducibility.md` | `qpdf --check`, searchable text, renderer diagnostics, and independent veraPDF PDF/UA-2 validation | Current content and distribution PDFs pass veraPDF PDF/UA-2; retain the limitation that this does not establish universal assistive-technology, display, print, or reader usability |
+| P7 | Complete and published for v1.3.0 | `output/release/codomyrmex-1.3.0/`, Zenodo record `10.5281/zenodo.21750801`, and GitHub release `v1.3.0-paper` | Current source-state, config/source hashes, artifact hash agreement, validation receipts, detached manifest verification, and live-record checks | DOI-bearing bundle is source-current, Zenodo is published, and the GitHub release points to the same versioned artifacts |
 
-> All values below are **measured**, not estimated. Command and timestamp documented.
+## Explicitly scoped research items
 
-| Metric | Value | Command |
-| :--- | :--- | :--- |
-| **Tests collected** | **35,783** (0 collection errors) | Complete locked dependency profile; `uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest` |
-| **Ruff errors** | **0** | `uv run ruff check .` |
-| **ty diagnostics** | **0** | `uv run ty check --output-format concise src/` |
-| **Mock violations** | **0** | `rg -n "from unittest\\.mock" src --glob '*.py'` |
-| **MCP tool decorators** | **623** | `uv run python scripts/doc_inventory.py` (production tree; lines starting with `@mcp_tool`) |
-| **Top-level modules** | **130** | `uv run python scripts/doc_inventory.py --pytest` |
-| **pyproject.toml version** | **1.3.0** | `grep version pyproject.toml \| head -1` |
-| **AGENTS validation** | **1,339 / 1,339 valid** | `make docs-check` |
-| **Doc triple-check debt** | **0 files with issues; 0 broken links; 0 actionable placeholders; 0 completeness issues** | `make docs-check` |
-| **RASP doc gaps** | **0 dir-rows with gaps** (six configured roots) | `uv run python scripts/rasp_gap_report.py` |
+Each item remains a research question or evidence requirement, not a completed result.
 
----
+| ID | Status | Artifact | Evidence required | Exit criterion |
+|:---|:---|:---|:---|:---|
+| R2 | Open | External-actuation observation adapter and retained traces | Independently observed execution/outcomes, adverse cases, restart/concurrency evidence, and a declared baseline | Reproducible externally observed comparison with negative results retained |
+| R3 | Open | Adversarial workload adapter and threat-stratified analysis | External or independently curated hostile workloads, held-out protocol, paired assignment, and falsifiers | Predeclared safety/utility analysis is complete and bounded to the workload |
+| R4 | Open | Trust calibration study | Attested outcomes, calibration labels, missingness policy, calibration diagnostics, and held-out evaluation | Calibration status changes only after independent outcome evidence supports it |
+| R5 | Open | Persistence and concurrency study | Multi-process/restart traces, lock/transaction evidence, crash injection, and recovery analysis | Durability and concurrency claims are supported by retained replayable artifacts |
+| R6 | Open | External effectiveness and production-safety evaluation | Independent deployment-specific observation, safety case, rollback evidence, and operational review | No effectiveness or production-safety claim is made until the full evidence bundle passes |
+| F3 | Open formalism gap | `docs/manuscript/10_formalism_code_crosswalk.md` and formal bridge | Explicit state/transition mapping, proof obligations, solver assumptions, and failure semantics | Encoded obligations and their limits are independently reviewed; no whole-program proof is implied |
+| F5 | Open formalism gap | Active Inference crosswalk and research adapter | Declared observations, latent states, likelihoods, priors, posteriors, policies, preferences, inference procedure, and held-out checks | A probabilistic result is reported only after the model is executed and compared against the deterministic gate |
+| F6 | Open formalism gap | Runtime-assurance and attestation formalism | External observation model, authorization/actuation linkage, threat model, and assurance argument | A bounded assurance case is retained; local caller-reported state is not promoted to external safety |
 
-## ✅ v1.2.8.0 — Sprint 35 Core (Complete)
+## Working constraints
 
-| # | Deliverable | Module | Status | Technical Detail |
-| :--- | :--- | :--- | :--- | :--- |
-| v1.2.8.1 | **Hermes v0.4.0 FastMCP scaffolding** | `agents/hermes/` | ✅ Done | Integrated `optional-skills/mcp/fastmcp/scaffold_fastmcp.py` via `HermesClient.scaffold_fastmcp()` and MCP tool `hermes_fastmcp_scaffold` for Codomyrmex→Hermes MCP exposure |
-| v1.2.8.2 | **Hermes Session Race Guards** | `agents/hermes/session.py` | ✅ Done | `SessionRaceGuard` with context manager, `SessionGuardContext`, granular threading.Lock per session_id. Tests: 10 passing (zero-mock) |
-| v1.2.8.3 | **Webhook platform adapter** | `agents/hermes/gateway/platforms/webhook.py` | ✅ Done | `WebhookAdapter` with HMAC-SHA256 verification, GitHub PR/Commit/Issue payload parsing, prompt templates, implements `GatewayAdapter` protocol |
-| v1.2.8.4 | **Webhook config schema** | `agents/hermes/gateway/platforms/webhook.py` | ✅ Done | `WebhookConfig(port: int, routes: dict, host: str)`, `WebhookRoute(secret, prompt_template, handler)` matching schema requirements |
-| v1.2.8.5 | **Dynamic context window resolution** | `agents/hermes/_provider_router.py` | ✅ Done | `ModelContextRegistry` with OpenRouter API fallback, 11 known model defaults, thread-safe `get_context_length_safe()` |
-| v1.2.8.6 | **ContextCompressor token eviction** | `agents/hermes/_provider_router.py` | ✅ Done | `CAPACITY_THRESHOLD=0.8` (80%), model_id property setter with error handling, integrates with registry for dynamic max_tokens |
-
----
-
-## 🚀 v1.2.8 — Sprint 35 Unreleased
-
-> Items from `[Unreleased]` in [CHANGELOG.md](CHANGELOG.md), pending tag.
-
-| # | Deliverable | Module | Status | Technical Detail |
-| :--- | :--- | :--- | :--- | :--- |
-| v1.2.8.7 | **Hermes FastMCP scaffold lane** | `agents/hermes/` | ✅ Done | Bundled scaffold script at `optional-skills/mcp/fastmcp/scaffold_fastmcp.py` for Codomyrmex↔Hermes MCP exposure |
-| v1.2.8.8 | **DAF Paperclip v0.4.1** | `projects/daf-consulting` | ✅ Done | Health-attempt telemetry, bootstrap audit CLI, end-to-end zero-mock CLI coverage |
-| v1.2.8.9 | **Code Health sweep** | repo-wide | ✅ Done | 446 ruff diagnostics fixed, Zero-Mock enforcement (removed legacy `open_gauss` mock adapters) |
-| v1.2.8.10 | **Zero-Mock hardening** | `tests/` | ✅ Done | Eliminated 4 remaining `unittest.mock` imports across `test_cognilayer_bridge.py`, `test_mission_control_client.py`, `test_gateway_coverage_loop.py`, `test_rotation.py` |
-| v1.2.8.12 | **Hermes 0.4.0 Upstream Sync** | `agents/hermes/` | ✅ Done | Synchronized workspace with Hermes v0.4.0, upgraded dependencies via `uv lock --upgrade`, verified agent test stability. |
-| v1.2.8.13 | **Repo health orchestration sweep** | repo-wide | ✅ Done | Repaired Make/just docs targets, made `triple_check.py` repo-root aware, added Docusaurus module-link fixer, restored ignored-but-required docs, guarded optional submodule tests, and tightened `agents/pooling/FallbackChain` type behavior. |
-| v1.2.8.14 | **Type safety zero baseline** | repo-wide | ✅ Done | Burned down production and test `ty` diagnostics to 0 via typed dictionary shapes, optional SDK import guards, correct agent override signatures, safer monkeypatching, and explicit optional-result assertions. |
-| v1.2.8.15 | **Documentation placeholder burn-down** | repo-wide docs | ✅ Done | Tightened triple-check marker detection, skipped `.gitmodules` vendor trees, repaired 2,296 generated README/AGENTS generic purpose lines, and verified `make docs-check`: 0 placeholders, 0 broken links, 1,342/1,342 AGENTS valid. |
-| v1.2.8.16 | **Documentation completeness zero baseline** | repo-wide docs | ✅ Done | Added `repair_triple_check_completeness.py`, repaired 2,718 README/AGENTS/SPEC completeness gaps outside submodules, and verified `make docs-check`: 4,911 docs checked, 0 files with issues, 1,342/1,342 AGENTS valid. |
-
----
-
-## 🌱 Colony Kernel — v1.3.0 Sprint 36
-
-| # | Deliverable | Module | Status | Technical Detail |
-| :--- | :--- | :--- | :--- | :--- |
-| v1.3.0.1 | **Pheromone Store** | `colony_kernel/pheromone_store.py` | ✅ Done | Append-only pressure log: `emit(signal, intensity, source)` → eviction queue; `read_gradient(signal)` returns sorted `(timestamp, intensity, source)` tuples; SQLite-backed, thread-safe |
-| v1.3.0.2 | **Resource Ledger** | `colony_kernel/resource_ledger.py` | ✅ Done | Double-entry resource accounting: `credit/debit(resource, amount, agent_id)` → `LedgerEntry`; `balance(resource)` enforces non-negative invariant; persisted via `SQLiteStore` |
-| v1.3.0.3 | **Actuation Gate** | `colony_kernel/actuation_gate.py` | ✅ Done | Three-valued gate: `+1` (approve), `0` (defer), `-1` (veto); policy chain evaluates resource headroom + role clearance + consequence history; `ActuationDecision` dataclass with rationale |
-| v1.3.0.4 | **Consequence Memory** | `colony_kernel/consequence_memory.py` | ✅ Done | Action→outcome record: `record(action_id, outcome, delta_resources, signal_changes)`; `recall(action_type, k)` returns ranked `ConsequenceRecord` list for gate policy |
-| v1.3.0.5 | **Role Adapter** | `colony_kernel/role_adapter.py` | ✅ Done | Dynamic role assignment: `assign(agent_id, role, constraints)` with quorum check; `revoke`; `list_by_role`; roles carry clearance bitmask used by actuation gate |
-| v1.3.0.6 | **Pruning Daemon** | `colony_kernel/pruning_daemon.py` | ✅ Done | Background eviction: configurable TTL per signal class; runs as `asyncio.Task`; emits `pruned` event on removal; `stop()` is graceful with drain timeout |
-| v1.3.0.7 | **Falsification Worker** | `colony_kernel/falsification_worker.py` | ✅ Done | Conjecture stress-tester: pulls proposals from pheromone store, applies registered `Falsifier` callables, writes `FalsificationResult` to consequence memory; zero-mock (real callable chain) |
-| v1.3.0.8 | **Kernel + MCP Tools** | `colony_kernel/__init__.py` + `colony_kernel/mcp_tools.py` | ✅ Done | `ColonyKernel` assembles all 8 subsystems; 8 `@mcp_tool` decorators: `colony_propose_action`, `colony_record_outcome`, `colony_agent_profile`, `colony_status`, `colony_pheromone_query`, `colony_falsify_plan`, `colony_pruning_report`, `colony_tick` |
-
----
-
-## 🔭 v1.2.9+ — Horizon (Unscoped)
-
-> **Theme**: Cryptographic persistence, spatial world modeling, omnimodal processing.
-
-| # | Direction | Builds On | Concrete Next Step |
-| :--- | :--- | :--- | :--- |
-| R1 | **Spatial World Models** ✅ | `spatial/` | ✅ Done — `Trajectory4D`/`TrajectoryPoint4D` 4D time-series in `world_models/`, `render_agent_trial` + `summarize_trial` with quadray integration, `spatial_render_agent_trial` `@mcp_tool`; 41 new tests (zero-mock) |
-| R2 | ~~Self-Custody Wallet~~ | `wallet/` | ✅ Fixed — `zk_proof.py` with `ZKProofVerifier`, `SignedCapabilityProofBuilder`; 2 new `@mcp_tool` decorators (`wallet_generate_zk_proof`, `wallet_verify_zk_proof`); 44 tests pass |
-| R3 | ~~Identity & Persona~~ | `identity/` | ✅ Fixed — `HeartbeatValidator` with RMSSD/SDNN/mean_hr metrics + enrollment, `EEGFrequencyAnalyzer` with band power analysis, `PersonaRotation` system; 2 new `@mcp_tool` decorators; 22 tests pass |
-
----
-
-## 📋 Backlog — Unscoped / Triaging
-
-| # | Item | Module | Notes |
-| :--- | :--- | :--- | :--- |
-| B1 | ~~Tool versioning UI~~ | `model_context_protocol/` | ✅ Fixed — `deprecated_in` metadata now surfaced via `get_deprecated_tools()`, `get_deprecation_timeline()`, `get_deprecation_summary()` exported from `model_context_protocol.__init__` |
-| B2 | ~~Oversized files audit~~ | `orchestrator/` | ✅ Fixed — refactored `thin.py` (549→focused submodules: `_decorators.py`, `_shell_exec.py`, `_batch_chain.py`); largest file now 514 LOC (`workflow.py`); no files >800 LOC |
-| B3 | ~~Video module depth~~ | `video/` | ✅ Audited — video processor, extractor, analyzer, and transcription paths all implemented; 207 tests pass, 1 skip (optional dep) |
-| B4 | ~~Meme module MCP exposure~~ | `meme/` | ✅ Fixed — 5 `@mcp_tool` decorators in `mcp_tools.py` (dissect, fitness, synthesize, propagate, narrative); RASP docs present |
-| B5 | ~~Secure Cognitive Layer MCP~~ | `identity/`, `wallet/`, `defense/`, `market/`, `privacy/` | ✅ Fixed — PAI bridge module `pai_pm/secure_cognitive_bridge.py` registers all 15 MCP tools (3 per module × 5 modules); `register_secure_cognitive_tools()` + `get_secure_cognitive_tool_catalog()` |
-| B6 | ~~Test collection errors~~ | `tests/` | ✅ Fixed — 35,783 tests collect with 0 errors in the complete locked dependency profile via import guards and optional submodule skips |
-| B7 | ~~README / inventory metric drift watch~~ | root | ✅ Fixed — updated active surfaces to 130 modules, 608 runtime MCP tools, and 1,199 docs; manuscript consistency test updated |
-| B8 | ~~Coverage gate~~ | repo-wide | ✅ Verified — **60%** in `[tool.coverage.report] fail_under`; `meme/*` omitted from `[tool.coverage.run]`. Enforce with `make test` or `--cov-fail-under=60`. |
-| B9 | ~~Type safety burn-down~~ | repo-wide | ✅ Fixed — `uv run ty check --output-format concise src/` now reports 0 diagnostics. Keep this zero baseline in CI/local gates. |
-| B10 | ~~Documentation completeness burn-down~~ | `docs/`, `src/codomyrmex/**` | ✅ Fixed — `make docs-check` reports 5,423 quality docs, 0 actionable placeholders, 0 broken links, 0 completeness issues, and 1,339/1,339 AGENTS valid. |
-
----
-
-## 🎯 Release Criteria
-
-> **Strict Delivery Requirements** — All items must pass before tagging v1.3.1:
-
-| Requirement | Command | Threshold | Status |
-| :--- | :--- | :--- | :--- |
-| **Zero-Mock Policy** | `rg -n "from unittest\\.mock" src --glob '*.py'` | 0 `unittest.mock` imports | ✅ PASSED (0 violations) |
-| **Full Test Pass** | `uv run pytest` | Exit code 0 (default run has no `--cov`; does not check the 60% gate) | ✅ PASSED — host-capable coverage-gated sweep: 34,304 passed, 1,096 skipped, 60 deselected; 74.26% total coverage. |
-| **Code Health** | `uv run ruff check .` | 0 errors | ✅ PASSED (0 errors) |
-| **Type Safety** | `uv run ty check --output-format concise src/` | 0 diagnostics | ✅ PASSED (0 diagnostics) |
-| **Coverage Gate** | `make test` or `uv run pytest tests/ ... --cov-fail-under=60` | ≥60% | ✅ PASSED — `fail_under = 60` in `pyproject.toml`; `meme/*` omitted from coverage; colony_kernel scoped coverage at 75.5% branch in the current artifact |
-| **Documentation Parity** | `make docs-check` | AGENTS.md, README.md, SPEC.md, CHANGELOG.md aligned with pytest/coverage source of truth | ✅ PASSED (15,617 valid internal links, 0 broken, quality average 99.2/100, 0 actionable placeholders, 0 completeness issues, AGENTS validation passes) |
-
----
-
-## 📖 Reference
-
-### Navigation
-
-| Context | Link |
-| :--- | :--- |
-| **Project Root** | [README.md](README.md) |
-| **Agent Coordination** | [AGENTS.md](AGENTS.md) |
-| **Functional Spec** | [SPEC.md](SPEC.md) |
-| **Changelog** | [CHANGELOG.md](CHANGELOG.md) ← v1.2.4+ archived |
-| **Module Docs** | [docs/modules/](docs/modules/README.md) |
-
-### Commands
-
-| Task | Command |
-| :--- | :--- |
-| **Test** | `uv run pytest` (no coverage) · `make test` (with `--cov` + 60% gate) |
-| **Lint** | `uv run ruff check .` |
-| **Format** | `uv run ruff format .` |
-| **Type Check** | `uv run ty check --output-format concise src/` |
-| **Coverage** | `uv run pytest --cov=src/codomyrmex --cov-fail-under=60` |
-| **Build** | `uv build` |
-
-### Key Modules
-
-| Module | Purpose | Documentation |
-| :--- | :--- | :--- |
-| **agents/hermes** | Dual-backend agent (CLI + Ollama) | [docs/agents/hermes/](docs/agents/hermes/README.md) · [AGENTS](src/codomyrmex/agents/hermes/AGENTS.md) |
-| **orchestrator** | Workflow orchestration, swarm topologies | [AGENTS](src/codomyrmex/orchestrator/AGENTS.md) |
-| **agentic_memory** | Persistent memory, knowledge indexing | [AGENTS](src/codomyrmex/agentic_memory/AGENTS.md) |
-| **spatial** | 3D/4D world modeling | [AGENTS](src/codomyrmex/spatial/AGENTS.md) |
-| **identity** | Multi-persona, bio-verification | [AGENTS](src/codomyrmex/identity/AGENTS.md) |
-| **wallet** | Self-custody, recovery | [AGENTS](src/codomyrmex/wallet/AGENTS.md) |
-
----
-
-## 🗂️ Document Hierarchy
-
-```text
-codomyrmex/
-├── TODO.md              ← This file (project backlog)
-├── CHANGELOG.md         ← Historical releases (v1.2.4+)
-├── AGENTS.md            ← Agent coordination
-├── SPEC.md              ← Functional spec
-├── README.md            ← Overview
-├── SECURITY.md          ← Security policies
-├── PAI.md               ← Personal AI Infrastructure
-├── pyproject.toml       ← Package config (version: 1.3.0)
-└── src/codomyrmex/      ← 130 modules
-```
-
----
-
-*Last updated: 2026-07-09 — Sprint 37 publication hardening active.*
-*Version: 1.3.0-draft*
+- v1.3.0 publication is complete: concept DOI `10.5281/zenodo.21750800`, version DOI
+  `10.5281/zenodo.21750801`, and GitHub release tag `v1.3.0-paper`. Future manuscript
+  changes require a new version and a new source-bound release sequence.
+- Preserve the dirty `src/codomyrmex/agents/open_gauss` submodule as a separate ownership
+  boundary; no cleanup or edits are authorized.
+- Preserve failed gates, negative controls, `not_estimated` calibration status, and
+  conditional or `not_run` claims.
+- Regenerate in producer order: variables and coverage → figures/registry → hydrated
+  Markdown → HTML/content/distribution PDFs → bibliography audit → rendered/link checks
+  → release bundle preparation and verification.

@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import tomllib
 from pathlib import Path
@@ -33,12 +34,27 @@ def _project_metadata(project_root: Path) -> PublicationMetadata:
     repository = str(publication.get("github_repository", "")).strip()
     if repository and not repository.startswith(("http://", "https://")):
         repository = f"https://github.com/{repository}"
+    abstract_path = project_root / "output" / "manuscript" / "00_abstract.md"
+    abstract = ""
+    if abstract_path.is_file():
+        abstract = abstract_path.read_text(encoding="utf-8")
+        abstract = re.sub(
+            r"\A\s*#\s*Abstract\b[^\n]*\n?", "", abstract, count=1, flags=re.IGNORECASE
+        )
+        abstract = abstract.split("\n**Keywords:**", 1)[0]
+        abstract = re.sub(r"\[@[^\]]+\]", "", abstract)
+        abstract = re.sub(r"\{\{[^}]+\}\}", "", abstract)
+        abstract = re.sub(r"\*\*(.*?)\*\*", r"\1", abstract)
+        abstract = " ".join(
+            line.strip() for line in abstract.splitlines() if line.strip()
+        )
     return PublicationMetadata(
         title=str(paper["title"]),
         subtitle=str(paper.get("subtitle", "")),
         version=str(package["version"]),
         authors=tuple(str(author["name"]) for author in config["authors"]),
         publication_type=str(publication.get("type", "technical-report")),
+        abstract=abstract,
         keywords=tuple(str(keyword) for keyword in config.get("keywords", [])),
         repository_url=repository,
         license=str(config.get("metadata", {}).get("license", "MIT")),

@@ -24,7 +24,8 @@ This directory contains the Codomyrmex manuscript source files, configuration, a
 ## Key Files
 
 - `config.yaml` — Paper metadata and gate/trust/decay parameters.
-- `00_abstract.md` through `10_formalism_code_crosswalk.md` — Main manuscript sections.
+- `00_abstract.md` through `11_supplemental_notation.md` — Main manuscript sections.
+- `11_supplemental_notation.md` — Authoritative notation glossary and symbol crosswalk.
 - `90_appendix_design_rationale.md` — Design-rationale appendix.
 - `98_acknowledgements.md` — Configuration-injected, unnumbered acknowledgements.
 - `99_references.md` — Minimal citeproc bibliography anchor; no citation syntax prose.
@@ -83,6 +84,7 @@ Key facts agents must use when editing or cross-referencing this manuscript — 
 | `08_active_inference.md` | Explicitly non-equivalent Active Inference crosswalk and implementation agenda | `CONFIG_PARAMETER_STATUS_NOTE` | `fig:fep_correspondence` |
 | `09_research_roadmap.md` | Evidence-bound research milestones, promotion rules, and reproducibility bundle | `CONFIG_PARAMETER_STATUS_NOTE`, `CONFIG_RESEARCH_ROADMAP_STAGE_COUNT`, `RESULT_RESEARCH_ROADMAP_EVIDENCE_ROWS`, `RESULT_RESEARCH_ROADMAP_DECISION_ROWS` | `fig:research_roadmap` |
 | `10_formalism_code_crosswalk.md` | Formal objects, code anchors, translation mechanisms, evidence, and claim boundaries | `CONFIG_PARAMETER_STATUS_NOTE`, `CONFIG_FORMALISM_CROSSWALK_COUNT`, `RESULT_FORMALISM_CROSSWALK_ROWS`, `RESULT_FORMALISM_CROSSWALK_EVIDENCE_ROWS` | `fig:formalism_code_crosswalk` |
+| `11_supplemental_notation.md` | Authoritative indices, state variables, gate terms, trust variables, Active Inference symbols, and paired-statistics notation | None | None |
 | `90_appendix_design_rationale.md` | Auditable design choices, rejected alternatives, calibration boundaries, and generated figure text alternatives | `CONFIG_PARAMETER_STATUS_NOTE`, `RESULT_FIGURE_ACCESSIBILITY_ROWS` | None |
 | `98_acknowledgements.md` | Contributor credit | `CONFIG_ACKNOWLEDGEMENTS` | None |
 | `99_references.md` | Citeproc bibliography anchor; bibliography rendered from `references.bib` | None | None |
@@ -109,6 +111,7 @@ The categories are:
 - `ARTIFACT_*`: counts of versioned or generated artifacts that the reproducibility section reports.
 - `PYTHON_VERSION`, `PLATFORM`, `GENERATION_TIMESTAMP`, and `REPRO_ENVIRONMENT_HASH`: environment values captured at generation time.
 - `REPRO_*`: commit, worktree, environment, first-party source, project/lockfile, and authoritative inventory provenance for replay.
+- `11_supplemental_notation.md` is the authoritative glossary for indices, field state, gate/hazard terms, trust updates, Active Inference variables, and paired-statistics estimands. New equations and captions must link to it rather than minting local aliases.
 - Replay tokens: `ARTIFACT_REPLAY_PATH`, `RESULT_REPLAY_SEMANTIC_DIGEST`,
   `RESULT_REPLAY_RECORD_SHA256`, `RESULT_REPLAY_FILE_SHA256`,
   `RESULT_REPLAY_REPEATABLE`, `RESULT_REPLAY_SAME_TARGET_DECISION`,
@@ -186,6 +189,7 @@ Follow these steps in order whenever prose, parameters, or measured results chan
 7. When adding a table, figure, or display equation, add a stable `{#tbl:*}`, `{#fig:*}`, or `{#eq:*}` label and reference it in prose.
 8. Keep citation syntax examples in `SYNTAX.md`; do not put raw `[@key]` examples or citation-key inventories in `99_references.md`.
 9. Every active manuscript claim that could be mistaken for an empirical, causal, safety, calibration, or biological claim must have a class, status, evidence path, and explicit boundary in `claim_ledger.yaml`. Keep the ledger qualitative; drifting numbers belong in generated variables.
+10. Treat `11_supplemental_notation.md` as a consistency contract: use `x` for field state, `d` for deposits, `\epsilon` for evaporation, `M` for the cap, `h`/`\rho(h)` for hazard, `\tau`/`\Delta`/`f` for trust, and `m` for paired condition labels. Do not reuse `c` for both a gate component and a statistical condition.
 
 ## See also
 

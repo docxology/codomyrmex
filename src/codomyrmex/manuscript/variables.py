@@ -241,6 +241,12 @@ def validate_variable_contract(
         "config_sha256": hashlib.sha256(config_path.read_bytes()).hexdigest()
         if config_path.is_file()
         else "unavailable",
+        "provenance": {
+            "source_commit": variables.get("REPRO_GIT_COMMIT", ""),
+            "worktree_dirty": variables.get("REPRO_WORKTREE_DIRTY", ""),
+            "config_sha256": variables.get("CONFIG_HASH", ""),
+            "kernel_source_sha256": variables.get("REPRO_KERNEL_SOURCE_HASH", ""),
+        },
     }
 
 
@@ -1216,6 +1222,7 @@ def compute_variables(
         publication.get("doi")
         or _required_value(publication, "doi_status", config_path)
     )
+    release_tag = str(_required_value(publication, "release_tag", config_path))
     github_repository = str(
         _required_value(publication, "github_repository", config_path)
     )
@@ -1976,6 +1983,7 @@ def compute_variables(
         "CONFIG_PUBLICATION_DATE": publication_date,
         "CONFIG_PUBLICATION_DATE_DISPLAY": publication_date_display,
         "CONFIG_DOI": doi_value,
+        "CONFIG_RELEASE_TAG": release_tag,
         "CONFIG_GITHUB_REPOSITORY": github_repository,
         "CONFIG_ACKNOWLEDGEMENTS": acknowledgement_text,
         "CONFIG_PARAMETER_STATUS_NOTE": parameter_status_note,
@@ -2202,6 +2210,8 @@ def compute_variables(
         "RESULT_ATTESTATION_EVENT_COUNT": str(attestation_event_count),
         "RESULT_ATTESTATION_CHAIN_VALID": str(attestation_validation.valid).lower(),
         "RESULT_BENCHMARK_TASK_COUNT": str(benchmark_metrics["task_count"]),
+        "RESULT_BENCHMARK_PAIR_COUNT": str(benchmark_metrics["paired_case_count"]),
+        "RESULT_BENCHMARK_SAMPLE_UNIT": str(benchmark_metrics["sample_unit"]),
         "RESULT_BENCHMARK_BASELINE_HARM_RATE": f"{benchmark_metrics['baseline_harmful_action_rate']:.3f}",
         "RESULT_BENCHMARK_MEDIATED_HARM_RATE": f"{benchmark_metrics['mediated_harmful_action_rate']:.3f}",
         "RESULT_BENCHMARK_BASELINE_UTILITY": f"{benchmark_metrics['baseline_utility']:.3f}",
@@ -2213,6 +2223,18 @@ def compute_variables(
             benchmark_metrics["confidence_interval_method"]
         ),
         "RESULT_BENCHMARK_CI_LEVEL": f"{100 * float(benchmark_metrics['confidence_interval_level']):.0f}",
+        "RESULT_BENCHMARK_HARM_DIFFERENCE_DIRECTION": str(
+            benchmark_metrics["harm_difference_direction"]
+        ),
+        "RESULT_BENCHMARK_INTERVAL_INTERPRETATION": str(
+            benchmark_metrics["interval_interpretation"]
+        ),
+        "RESULT_BENCHMARK_MEDIATOR_PROVENANCE": str(
+            benchmark_metrics["mediator_provenance"]
+        ),
+        "RESULT_BENCHMARK_PRODUCTION_GATE_PARITY": str(
+            benchmark_metrics["production_gate_parity_status"]
+        ),
         "RESULT_BENCHMARK_CASE_MANIFEST_SHA256": _display_identifier(
             str(benchmark_metrics["case_manifest_sha256"])
         ),

@@ -57,6 +57,7 @@ MANUSCRIPT_SECTION_ORDER = (
     "04_conclusion.md",
     "09_research_roadmap.md",
     "10_formalism_code_crosswalk.md",
+    "11_supplemental_notation.md",
     "90_appendix_design_rationale.md",
     "98_acknowledgements.md",
     "99_references.md",
@@ -302,6 +303,7 @@ def _write_release_bookends(
         "CONFIG_VERSION": variables.get("CONFIG_VERSION", ""),
         "CONFIG_FIRST_AUTHOR": variables.get("CONFIG_FIRST_AUTHOR", ""),
         "CONFIG_GITHUB_REPOSITORY": variables.get("CONFIG_GITHUB_REPOSITORY", ""),
+        "CONFIG_RELEASE_TAG": variables.get("CONFIG_RELEASE_TAG", ""),
     }
     missing = [name for name, value in required.items() if not value]
     if missing:
@@ -323,7 +325,7 @@ def _write_release_bookends(
     output_dir.mkdir(parents=True, exist_ok=True)
     repository_url = _repository_url(required["CONFIG_GITHUB_REPOSITORY"])
     release_url = (
-        f"{repository_url}/releases/tag/v{required['CONFIG_VERSION']}"
+        f"{repository_url}/releases/tag/{required['CONFIG_RELEASE_TAG']}"
         if repository_url
         else ""
     )

@@ -88,6 +88,12 @@ Both `plan` commands are always dry runs. They write receipts with
 - artifact roles, media types, sizes, SHA-256, and SHA-512;
 - caller-supplied validation outcomes.
 
+The `receipts/source-state.json` receipt is schema v2 when a manuscript variable
+snapshot is included. In addition to the checkout commit, dirty state, and status
+digest, it records the rendered commit, manuscript configuration digest, and
+Colony Kernel/manuscript source digest. The manuscript source-current validator
+compares those fields with the live checkout and released artifacts.
+
 The bundle also contains `CITATION.cff`, `.zenodo.json`,
 `publication_metadata.json`, `SHA256SUMS`, `SHA512SUMS`, source-state and other
 validation receipts, the content and distribution PDFs, and semantic HTML.

@@ -11,6 +11,7 @@ Examples:
 
     uv run python scripts/validate_manuscript_integrity.py
     uv run python scripts/validate_manuscript_integrity.py --require-rendered
+    uv run python scripts/validate_manuscript_integrity.py --require-source-current
 """
 
 from __future__ import annotations
@@ -265,6 +266,91 @@ def _normalise_digest(value: object) -> str:
     return re.sub(r"\s+", "", str(value or ""))
 
 
+def _git_snapshot(project_root: Path) -> tuple[str, bool, str]:
+    """Return the current commit, dirty state, and canonical status digest."""
+
+    try:
+        commit_result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
+        )
+        status_result = subprocess.run(
+            ["git", "status", "--porcelain=v1", "--untracked-files=all"],
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
+        )
+    except OSError:
+        return "", False, ""
+    commit = commit_result.stdout.strip() if commit_result.returncode == 0 else ""
+    lines = tuple(line for line in status_result.stdout.splitlines() if line)
+    status_digest = hashlib.sha256("\n".join(lines).encode()).hexdigest()
+    return commit, bool(lines), status_digest
+
+
+def _kernel_source_hash(project_root: Path) -> str:
+    """Match the source digest used by manuscript variable generation."""
+
+    digest = hashlib.sha256()
+    source_root = project_root / "src" / "codomyrmex" / "colony_kernel"
+    paths = sorted(source_root.rglob("*.py"))
+    paths.append(project_root / "src" / "codomyrmex" / "manuscript" / "variables.py")
+    try:
+        for path in paths:
+            digest.update(str(path.relative_to(project_root)).encode("utf-8"))
+            digest.update(b"\0")
+            digest.update(path.read_bytes())
+            digest.update(b"\0")
+    except OSError:
+        return ""
+    return digest.hexdigest()
+
+
+def _compact_contains(content: str, expected: object) -> bool:
+    """Compare a generated digest despite presentation-only whitespace grouping."""
+
+    expected_digest = _normalise_digest(expected)
+    return bool(expected_digest) and expected_digest in _normalise_digest(content)
+
+
+def _release_artifact_hashes(
+    release_root: Path,
+    manifest: dict[str, Any],
+    project_root: Path,
+    issues: list[str],
+) -> None:
+    """Ensure released report files are byte-identical to current output files."""
+
+    source_by_role = {
+        "content-pdf": project_root / "output" / "paper-content.pdf",
+        "distribution-pdf": project_root / "output" / "paper.pdf",
+        "semantic-html": project_root / "output" / "paper.html",
+    }
+    artifacts = manifest.get("artifacts", [])
+    if not isinstance(artifacts, list):
+        issues.append("publication manifest artifacts must be a list")
+        return
+    for artifact in artifacts:
+        if not isinstance(artifact, dict):
+            continue
+        role = str(artifact.get("role", ""))
+        source = source_by_role.get(role)
+        if source is None:
+            continue
+        released = release_root / str(artifact.get("path", ""))
+        if not source.is_file() or not released.is_file():
+            issues.append(f"release artifact is missing for role {role}")
+            continue
+        if _sha256(source) != _sha256(released):
+            issues.append(f"release artifact is stale for role {role}")
+
+
 def _resolve_tokens(value: object, variables: dict[str, Any]) -> str:
     """Resolve configured display tokens for registry comparisons."""
 
@@ -442,6 +528,7 @@ def validate_manuscript_integrity(
     *,
     require_rendered: bool = False,
     verify_bibliography_online: bool = False,
+    require_source_current: bool = False,
 ) -> dict[str, Any]:
     """Return a machine-readable integrity report for the current repository."""
 
@@ -475,6 +562,23 @@ def validate_manuscript_integrity(
     ).hexdigest()
     if manifest.get("variable_sha256") != expected_variable_hash:
         issues.append("variable manifest variable_sha256 does not match snapshot")
+    manifest_provenance = manifest.get("provenance", {})
+    if not isinstance(manifest_provenance, dict):
+        issues.append("variable manifest provenance must be an object")
+        manifest_provenance = {}
+    for manifest_key, variable_key in (
+        ("source_commit", "REPRO_GIT_COMMIT"),
+        ("worktree_dirty", "REPRO_WORKTREE_DIRTY"),
+        ("config_sha256", "CONFIG_HASH"),
+        ("kernel_source_sha256", "REPRO_KERNEL_SOURCE_HASH"),
+    ):
+        if _normalise_digest(
+            manifest_provenance.get(manifest_key)
+        ) != _normalise_digest(variables.get(variable_key)):
+            issues.append(
+                "variable manifest provenance is stale: "
+                f"{manifest_key} does not match {variable_key}"
+            )
 
     configured_figures = config.get("figures", {})
     if not isinstance(configured_figures, dict) or not configured_figures:
@@ -512,8 +616,22 @@ def validate_manuscript_integrity(
     registry_names: set[str] = set()
     registry_by_name: dict[str, dict[str, Any]] = {}
     figure_dir = project_root / "output/figures"
-    if registry.get("schema_version") != 3:
-        issues.append("figure registry must declare schema_version 3")
+    if registry.get("schema_version") != 4:
+        issues.append("figure registry must declare schema_version 4")
+    for registry_key, variable_key in (
+        ("source_commit", "REPRO_GIT_COMMIT"),
+        ("worktree_dirty", "REPRO_WORKTREE_DIRTY"),
+        ("kernel_source_hash", "REPRO_KERNEL_SOURCE_HASH"),
+    ):
+        if not str(registry.get(registry_key, "")).strip():
+            issues.append(f"figure registry is missing {registry_key}")
+        elif _normalise_digest(registry.get(registry_key)) != _normalise_digest(
+            variables.get(variable_key)
+        ):
+            issues.append(
+                "figure registry provenance is stale: "
+                f"{registry_key} does not match {variable_key}"
+            )
     for entry in registry_entries:
         if not isinstance(entry, dict):
             issues.append("figure registry contains a non-mapping entry")
@@ -747,6 +865,192 @@ def validate_manuscript_integrity(
     elif require_rendered:
         issues.append(f"missing rendered PDF: {pdf_path}")
 
+    source_current: dict[str, Any] = {
+        "checked": require_source_current,
+        "status": "not_checked",
+    }
+    if require_source_current:
+        source_issue_start = len(issues)
+        current_commit, current_dirty, current_status_sha256 = _git_snapshot(
+            project_root
+        )
+        current_kernel_hash = _kernel_source_hash(project_root)
+        source_current.update(
+            {
+                "current_commit": current_commit,
+                "current_dirty": current_dirty,
+                "current_status_sha256": current_status_sha256,
+                "current_kernel_source_sha256": current_kernel_hash,
+            }
+        )
+        if not current_commit:
+            issues.append("--require-source-current could not resolve git HEAD")
+        if not current_kernel_hash:
+            issues.append(
+                "--require-source-current could not hash Colony Kernel/manuscript sources"
+            )
+        for label, actual, expected in (
+            ("REPRO_GIT_COMMIT", variables.get("REPRO_GIT_COMMIT"), current_commit),
+            (
+                "REPRO_KERNEL_SOURCE_HASH",
+                variables.get("REPRO_KERNEL_SOURCE_HASH"),
+                current_kernel_hash,
+            ),
+            (
+                "REPRO_WORKTREE_DIRTY",
+                variables.get("REPRO_WORKTREE_DIRTY"),
+                str(current_dirty).lower(),
+            ),
+        ):
+            if _normalise_digest(actual) != _normalise_digest(expected):
+                issues.append(
+                    f"generated variable {label} does not match current source state"
+                )
+
+        hydrated_text = "\n".join(
+            path.read_text(encoding="utf-8") for path in markdown_files
+        )
+        for label, expected in (
+            ("commit", current_commit),
+            ("config hash", config_hash),
+            ("kernel source hash", current_kernel_hash),
+        ):
+            if not _compact_contains(hydrated_text, expected):
+                issues.append(f"hydrated Markdown is missing current {label}")
+
+        if not html_path.is_file():
+            issues.append("--require-source-current requires rendered HTML")
+        else:
+            html_text = html_path.read_text(encoding="utf-8")
+            for label, expected in (
+                ("commit", current_commit),
+                ("config hash", config_hash),
+                ("kernel source hash", current_kernel_hash),
+            ):
+                if not _compact_contains(html_text, expected):
+                    issues.append(f"rendered HTML is missing current {label}")
+
+        if not pdf_path.is_file():
+            issues.append("--require-source-current requires rendered PDF")
+        elif not shutil.which("pdftotext"):
+            issues.append("pdftotext is required for --require-source-current")
+        else:
+            pdf_text_result = subprocess.run(
+                ["pdftotext", str(pdf_path), "-"],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            if pdf_text_result.returncode != 0:
+                issues.append("pdftotext could not inspect PDF source provenance")
+            else:
+                for label, expected in (
+                    ("commit", current_commit),
+                    ("config hash", config_hash),
+                    ("kernel source hash", current_kernel_hash),
+                ):
+                    if not _compact_contains(pdf_text_result.stdout, expected):
+                        issues.append(f"rendered PDF is missing current {label}")
+
+        release_version = str(variables.get("CONFIG_VERSION", "")).strip()
+        release_root = (
+            project_root / "output" / "release" / f"codomyrmex-{release_version}"
+            if release_version
+            else project_root / "output" / "release" / "__missing-version__"
+        )
+        if not release_root.is_dir():
+            issues.append(f"missing source-current release bundle: {release_root}")
+        else:
+            source_state = _load_json(
+                release_root / "receipts" / "source-state.json", issues
+            )
+            release_variables = _load_json(
+                release_root / "reproducibility" / "manuscript_variables.json",
+                issues,
+            )
+            release_manifest = _load_json(
+                release_root / "publication_manifest.json", issues
+            )
+            for label, actual, expected in (
+                ("source receipt commit", source_state.get("commit"), current_commit),
+                (
+                    "source receipt dirty state",
+                    str(source_state.get("dirty", "")).lower(),
+                    str(current_dirty).lower(),
+                ),
+                (
+                    "source receipt status digest",
+                    source_state.get("status_sha256"),
+                    current_status_sha256,
+                ),
+                (
+                    "source receipt rendered commit",
+                    source_state.get("rendered_commit"),
+                    variables.get("REPRO_GIT_COMMIT"),
+                ),
+                (
+                    "source receipt config hash",
+                    source_state.get("config_sha256"),
+                    config_hash,
+                ),
+                (
+                    "source receipt kernel hash",
+                    source_state.get("kernel_source_sha256"),
+                    current_kernel_hash,
+                ),
+            ):
+                if _normalise_digest(actual) != _normalise_digest(expected):
+                    issues.append(f"{label} is stale")
+            for label, actual, expected in (
+                (
+                    "release variables commit",
+                    release_variables.get("REPRO_GIT_COMMIT"),
+                    current_commit,
+                ),
+                (
+                    "release variables config hash",
+                    release_variables.get("CONFIG_HASH"),
+                    config_hash,
+                ),
+                (
+                    "release variables kernel hash",
+                    release_variables.get("REPRO_KERNEL_SOURCE_HASH"),
+                    current_kernel_hash,
+                ),
+            ):
+                if _normalise_digest(actual) != _normalise_digest(expected):
+                    issues.append(f"{label} is stale")
+            source = release_manifest.get("source", {})
+            if not isinstance(source, dict):
+                issues.append("publication manifest source must be an object")
+            else:
+                for label, actual, expected in (
+                    (
+                        "publication manifest commit",
+                        source.get("commit"),
+                        current_commit,
+                    ),
+                    (
+                        "publication manifest dirty state",
+                        str(source.get("dirty", "")).lower(),
+                        str(current_dirty).lower(),
+                    ),
+                    (
+                        "publication manifest status digest",
+                        source.get("status_sha256"),
+                        current_status_sha256,
+                    ),
+                ):
+                    if _normalise_digest(actual) != _normalise_digest(expected):
+                        issues.append(f"{label} is stale")
+            _release_artifact_hashes(
+                release_root, release_manifest, project_root, issues
+            )
+        source_current["status"] = (
+            "valid" if len(issues) == source_issue_start else "invalid"
+        )
+        source_current["errors_added"] = len(issues) - source_issue_start
+
     return {
         "schema_version": "1.0",
         "status": "valid" if not issues else "invalid",
@@ -768,6 +1072,7 @@ def validate_manuscript_integrity(
             ],
         },
         "hardcoded_numeric_literals": hardcoded_numeric_literals,
+        "source_current": source_current,
         "errors": issues,
     }
 
@@ -785,11 +1090,20 @@ def main() -> int:
         action="store_true",
         help="Resolve cited DOI, arXiv, ISBN, and official-URL metadata online.",
     )
+    parser.add_argument(
+        "--require-source-current",
+        action="store_true",
+        help=(
+            "Fail closed unless generated variables, figures, rendered artifacts, "
+            "and the release bundle match the current commit/config/source hashes."
+        ),
+    )
     args = parser.parse_args()
     report = validate_manuscript_integrity(
         args.repo_root,
         require_rendered=args.require_rendered,
         verify_bibliography_online=args.online_bibliography,
+        require_source_current=args.require_source_current,
     )
     print(json.dumps(report, indent=2, sort_keys=True))
     return 0 if report["status"] == "valid" else 1

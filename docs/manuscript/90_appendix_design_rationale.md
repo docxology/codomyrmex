@@ -15,12 +15,12 @@ After its early-return checks, `ActuationGate` computes the score in
 [@eq:appendix-gate-score]:
 
 $$
-g={{CONFIG_GATE_WEIGHT_BUDGET}}b+{{CONFIG_GATE_WEIGHT_RISK}}h
- +{{CONFIG_GATE_WEIGHT_TRUST}}t+{{CONFIG_GATE_WEIGHT_COMPLETENESS}}c,
+g={{CONFIG_GATE_WEIGHT_BUDGET}}b+{{CONFIG_GATE_WEIGHT_RISK}}\rho(h)
+ +{{CONFIG_GATE_WEIGHT_TRUST}}u+{{CONFIG_GATE_WEIGHT_COMPLETENESS}}c,
 $$ {#eq:appendix-gate-score}
 
-where $b$ is budget credit, $h$ is local hazard credit derived from the larger of
-RISK and FAILURE pressure, $t$ is tiered trust credit, and $c$ is proposal
+where $b$ is budget credit, $\rho(h)$ is local hazard credit derived from the larger of
+RISK and FAILURE pressure, $u$ is tiered trust credit, and $c$ is proposal
 completeness. The score is a routing policy, not a probability of safety or harm.
 
 [@tbl:gate-formula-tradeoffs] summarizes the relevant alternatives.
@@ -45,7 +45,7 @@ formula alone is insufficient to predict every gate result.
 Each trace stores an evaporation amount $\epsilon$ when deposited. A passive tick uses
 
 $$
-s_{n+1}=\max({{CONFIG_SCORE_MIN}},s_n-\epsilon),
+x_{j,t+1}=\max({{CONFIG_SCORE_MIN}},x_{j,t}-\epsilon_j),
 $$ {#eq:appendix-linear-decay}
 
 and removes a trace at zero. At the defaults, FAST, NORMAL, and SLOW subtract

@@ -270,15 +270,14 @@ def fig_gate_score_heatmap() -> None:
             },
         )
 
-    ax.set_xlabel("Agent trust score", fontsize=11.5)
-    ax.set_ylabel("Effective hazard = max(RISK, FAILURE)", fontsize=11.5)
+    ax.set_xlabel("Agent trust score τ", fontsize=11.5)
+    ax.set_ylabel("Effective hazard h = max(RISK, FAILURE)", fontsize=11.5)
     gate_title = (
         "Gate decision landscape — piecewise score bands and hard trust floor\n"
-        f"score = {w_budget:.2f}*budget + {w_risk:.2f}*risk_ok + "
-        f"{w_trust:.2f}*trust_ok + {w_completeness:.2f}*completeness\n"
-        f"(budget={score_max:.1f}, completeness={score_max:.1f}; "
-        f"trust_ok tiers at {trust_full_credit:.2f}; "
-        f"trust < {trust_hard_floor:.2f} forces score={score_min:.1f})\n"
+        f"g = {w_budget:.2f}b + {w_risk:.2f}ρ(h) + "
+        f"{w_trust:.2f}u + {w_completeness:.2f}c\n"
+        f"(b=c={score_max:.1f}; u full-credit at {trust_full_credit:.2f}; "
+        f"τ < {trust_hard_floor:.2f} forces g={score_min:.1f})\n"
         f"{_var_str('CONFIG_PARAMETER_STATUS_SHORT')}"
     )
     ax.set_title(gate_title, fontsize=9.5, pad=10)

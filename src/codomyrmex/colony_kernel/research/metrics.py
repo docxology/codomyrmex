@@ -69,11 +69,21 @@ def paired_bootstrap_delta(
     *,
     seed: int = 0,
     samples: int = 2000,
-) -> dict[str, float | int]:
+) -> dict[str, float | int | str]:
+    """Estimate the paired ``mediated - baseline`` difference.
+
+    This helper is intentionally descriptive.  The resampling unit is one
+    paired observation, and the returned interval is not a population
+    confidence interval for a six-case fixture or any other convenience
+    sample.  The legacy numeric keys are retained for callers that already
+    consume them; metadata keys make the estimand and interpretation explicit.
+    """
     if len(baseline) != len(mediated) or not baseline:
         raise ValueError("paired samples must be non-empty and equal length")
     if samples < 100:
         raise ValueError("samples must be >= 100")
+    if any(not math.isfinite(float(value)) for value in (*baseline, *mediated)):
+        raise ValueError("paired samples must contain finite numeric values")
     deltas = [b - a for a, b in zip(baseline, mediated, strict=True)]
     rng = random.Random(seed)
     boot = [
@@ -86,6 +96,14 @@ def paired_bootstrap_delta(
         "ci_high": high,
         "samples": samples,
         "seed": seed,
+        "n_pairs": len(deltas),
+        "sample_unit": "paired observation",
+        "difference_direction": "mediated minus baseline",
+        "interval_interpretation": (
+            "descriptive percentile-resampling interval; not a population "
+            "confidence interval"
+        ),
+        "confidence_level": 0.95,
     }
 
 
