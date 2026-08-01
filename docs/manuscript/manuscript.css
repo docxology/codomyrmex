@@ -49,6 +49,10 @@ figure img {
   margin: 0 0 3rem;
 }
 
+.manuscript-cover > * {
+  min-width: 0;
+}
+
 .manuscript-cover img {
   width: 100%;
   height: auto;
@@ -59,6 +63,7 @@ figure img {
   margin: 0;
   font-size: clamp(2.6rem, 8vw, 5.4rem);
   line-height: 0.92;
+  overflow-wrap: anywhere;
 }
 
 .cover-subtitle {
