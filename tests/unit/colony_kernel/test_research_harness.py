@@ -70,11 +70,7 @@ def test_calibration_metrics_are_deterministic_and_valid():
     assert result["n_pairs"] == 2
     assert result["sample_unit"] == "paired observation"
     assert result["difference_direction"] == "mediated minus baseline"
-    interval_interp = result["interval_interpretation"]
-    assert (
-        isinstance(interval_interp, str)
-        and "not a population confidence interval" in interval_interp
-    )
+    assert "not a population confidence interval" in result["interval_interpretation"]
 
 
 def test_paired_bootstrap_rejects_nonfinite_observations():

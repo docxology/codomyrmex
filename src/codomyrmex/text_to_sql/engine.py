@@ -182,7 +182,7 @@ class TextToSQLEngine:
         else:
             select_clause = ", ".join(columns)
 
-        sql = f"SELECT {select_clause} FROM {table}"
+        sql = f"SELECT {select_clause} FROM {table}"  # nosec B608 - table/columns are schema allowlisted and output is validated
 
         # Add WHERE if mentioned
         if re.search(r"\bwhere\b.*=", question_lower):

@@ -190,7 +190,7 @@ def recall_memory(
             else:
                 where_clauses = " OR ".join(["content LIKE ?"] * len(search_terms))
                 rows = conn.execute(
-                    f"SELECT * FROM memories WHERE {where_clauses} LIMIT ?",
+                    f"SELECT * FROM memories WHERE {where_clauses} LIMIT ?",  # nosec B608 - SQL structure is generated from a fixed column and placeholders
                     [*search_terms, top_k],
                 ).fetchall()
 

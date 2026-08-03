@@ -119,9 +119,9 @@ class ArchiveManager:
                     # Use data_filter (Python 3.12+) as defense in depth;
                     # retain the explicit validation for Python 3.11.
                     if hasattr(tarfile, "data_filter"):
-                        tf.extractall(output, filter="data")
+                        tf.extractall(output, filter="data")  # nosec B202 - preflight validation plus data filter
                     else:
-                        tf.extractall(output)
+                        tf.extractall(output)  # nosec B202 - explicit Python 3.11 preflight validation
                 return True
             raise ValueError(f"Unknown archive format: {archive.suffix}")
         except Exception as e:
