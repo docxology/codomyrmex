@@ -18,6 +18,15 @@ if TYPE_CHECKING:
 
 logger = get_logger(__name__)
 
+_TYPE_MAP: dict[str, tuple[type, ...]] = {
+    "string": (str,),
+    "integer": (int,),
+    "number": (int, float),
+    "boolean": (bool,),
+    "array": (list,),
+    "object": (dict,),
+}
+
 
 # ---------------------------------------------------------------------------
 # Result container
@@ -204,15 +213,6 @@ def _validate_builtin(
             errors.append(f"{req}: required field is missing")
 
     # Type checks
-    _TYPE_MAP: dict[str, tuple[type, ...]] = {
-        "string": (str,),
-        "integer": (int,),
-        "number": (int, float),
-        "boolean": (bool,),
-        "array": (list,),
-        "object": (dict,),
-    }
-
     for key, value in args.items():
         if key not in properties:
             # additionalProperties — skip unknown fields by default
