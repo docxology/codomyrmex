@@ -54,6 +54,22 @@ modules = call_tool("codomyrmex.list_modules")
 
 See [SKILL.md](SKILL.md) and [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md).
 
+## Inbound Webhook — `pai_webhook.py`
+
+The module exposes an inbound FastAPI router (`/pai/webhook`, `/pai/events`,
+`/pai/health`) that records incoming PAI events and publishes them to the
+internal EventBus as `EventType.CUSTOM` events.
+
+- **Event log is bounded** (default 10,000 entries) and the `GET /events`
+  `limit` parameter is clamped to `[0, 1000]`.
+- **Authentication is opt-in**: set `CODOMYRMEX_WEBHOOK_SECRET` to require an
+  `X-PAI-Signature` header equal to
+  `hmac_sha256(secret, request_body).hexdigest()` on `POST /webhook` and
+  `GET /events`; `/health` stays open.  When unset, the endpoints are open for
+  trusted/intranet deployments and expose no sensitive credentials.
+- The PAI client (`pai_client.py`) does not currently sign requests; enabling
+  a secret requires the sender to add the header.
+
 ## AI Strategy
 
 1. **Use `is_installed()` first**: Gate PAI-dependent logic on installation check

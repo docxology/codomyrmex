@@ -606,3 +606,23 @@ class TestTrustToolSingleToolFix:
 
         # Assert: aggregate level is now TRUSTED
         assert get_current_trust_level() == TrustLevel.TRUSTED
+
+    def test_malformed_ledger_structure_fails_closed(self, tmp_path):
+        """A valid-JSON but non-dict ledger resets to UNTRUSTED instead of crashing.
+
+        A tampered/foreign ledger written as a JSON array must not raise an
+        uncaught exception on load; it must fail closed to UNTRUSTED, matching
+        the documented tamper handling.
+        """
+        from codomyrmex.agents.pai.trust_gateway import TrustRegistry
+
+        ledger_path = tmp_path / "trust_ledger.json"
+        ledger_path.write_text("[]")
+
+        fresh = TrustRegistry()
+        fresh.configure_ledger_path(ledger_path, load_existing=True)
+
+        # No crash, and every known tool is UNTRUSTED (fail closed).
+        report = fresh.get_report()
+        assert report["counts"]["untrusted"] == report["total_tools"]
+        assert report["counts"]["trusted"] == 0

@@ -450,6 +450,15 @@ class TrustRegistry:
 
         try:
             raw_data = json.loads(self._ledger_path.read_text())
+            if not isinstance(raw_data, dict):
+                logger.warning(
+                    "Trust ledger has an invalid structure (%s) — "
+                    "resetting all tools to UNTRUSTED.",
+                    type(raw_data).__name__,
+                )
+                self._levels = dict.fromkeys(self._levels, TrustLevel.UNTRUSTED)
+                self._disk_loaded = True
+                return
             payload = _verify_ledger(raw_data)
             if payload is None:
                 logger.warning(
