@@ -1,0 +1,3 @@
+## 2026-07-13 - Added aria-labels to terminal, pipeline, and project modal
+**Learning:** Found several icon-only buttons (`variant="ghost"` with `size="icon-*"`) missing accessible names across major UI areas (Terminal toolbar, Pipeline tab, and Project Manager modal). Relying solely on SVG graphics without a `title` or `aria-label` makes these actions invisible to screen reader users.
+**Action:** Next time when working on custom icon-only actions or refactoring buttons with SVG children, I will consistently use `aria-label` or `title` on the `<Button>` component to explicitly communicate its purpose.
