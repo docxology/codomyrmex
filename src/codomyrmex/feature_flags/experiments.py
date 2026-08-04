@@ -164,7 +164,7 @@ class ExperimentManager:
         """Assign user to variant deterministically."""
         # Hash user_id + experiment_id for deterministic assignment
         hash_input = f"{experiment.id}:{user_id}"
-        hash_value = int(hashlib.sha256(hash_input.encode()).hexdigest(), 16)
+        hash_value = int.from_bytes(hashlib.sha256(hash_input.encode()).digest(), "big")
         bucket = (hash_value % 10000) / 10000.0
 
         cumulative = 0.0
@@ -183,7 +183,7 @@ class ExperimentManager:
     ) -> bool:
         """Check if user is in experiment traffic."""
         hash_input = f"{experiment_id}:traffic:{user_id}"
-        hash_value = int(hashlib.sha256(hash_input.encode()).hexdigest(), 16)
+        hash_value = int.from_bytes(hashlib.sha256(hash_input.encode()).digest(), "big")
         bucket = (hash_value % 10000) / 100.0
         return bucket < percentage
 

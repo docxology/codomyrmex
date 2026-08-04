@@ -41,8 +41,8 @@ class MinHash:
         for i in range(len(text) - self.shingle_size + 1):
             shingle = text[i : i + self.shingle_size]
             h = (
-                int(
-                    hashlib.md5(shingle.encode(), usedforsecurity=False).hexdigest(), 16
+                int.from_bytes(
+                    hashlib.md5(shingle.encode(), usedforsecurity=False).digest(), "big"
                 )
                 % self._p
             )
