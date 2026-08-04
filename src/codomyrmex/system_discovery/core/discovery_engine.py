@@ -32,6 +32,13 @@ from .dependency_analyzer import DependencyAnalyzer
 from .health_checker import SystemHealthChecker
 
 
+def default_serializer(obj: Any) -> str:
+    """Default JSON serializer for objects not serializable by default."""
+    if isinstance(obj, (Path, set)):
+        return str(list(obj) if isinstance(obj, set) else obj)
+    return str(obj)
+
+
 @dataclass
 class ModuleCapability:
     """A single discovered capability (function, class, method, or constant) within a module."""
@@ -145,11 +152,6 @@ class SystemDiscovery:
         """
         try:
             inventory = self.scan_system()
-
-            def default_serializer(obj):
-                if isinstance(obj, (Path, set)):
-                    return str(list(obj) if isinstance(obj, set) else obj)
-                return str(obj)
 
             with open(output_path, "w", encoding="utf-8") as f:
                 json.dump(inventory, f, indent=2, default=default_serializer)
