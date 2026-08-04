@@ -310,6 +310,13 @@ class ModelEvaluator:
         )
 
 
+_TASK_MAPPING = {
+    "binary": TaskType.BINARY_CLASSIFICATION,
+    "multiclass": TaskType.MULTICLASS_CLASSIFICATION,
+    "regression": TaskType.REGRESSION,
+}
+
+
 def create_evaluator(task_type_str: str) -> ModelEvaluator:
     """Factory function to create a ModelEvaluator from a task type string.
 
@@ -322,14 +329,9 @@ def create_evaluator(task_type_str: str) -> ModelEvaluator:
     Raises:
         ValueError: If the task type is not recognized.
     """
-    mapping = {
-        "binary": TaskType.BINARY_CLASSIFICATION,
-        "multiclass": TaskType.MULTICLASS_CLASSIFICATION,
-        "regression": TaskType.REGRESSION,
-    }
-    if task_type_str not in mapping:
+    if task_type_str not in _TASK_MAPPING:
         raise ValueError(f"Unknown task type: {task_type_str}")
-    return ModelEvaluator(mapping[task_type_str])
+    return ModelEvaluator(_TASK_MAPPING[task_type_str])
 
 
 __all__ = [
