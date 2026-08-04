@@ -6,12 +6,16 @@ from typing import Any
 
 from .base import TemplateEngine
 
+_VAR_PATTERN = re.compile(r"\{\{([#^/]?)(.+?)\}\}")
+_SECTION_PATTERN = re.compile(r"\{\{([#^])(.+?)\}\}(.*?)\{\{/\2\}\}", re.DOTALL)
+_EXPRESSION_PATTERN = re.compile(r"\{\{([^#^/].+?)\}\}")
+
 
 class MustacheEngine(TemplateEngine):
     """Mustache-style logic-less templates."""
 
     def __init__(self):
-        self._var_pattern = re.compile(r"\{\{([#^/]?)(.+?)\}\}")
+        self._var_pattern = _VAR_PATTERN
 
     def render(self, template: str, context: dict[str, Any]) -> str:
         """Render a Mustache template."""
@@ -59,7 +63,6 @@ class MustacheEngine(TemplateEngine):
 
     def _process_sections(self, template: str, context: dict[str, Any]) -> str:
         """Process {{#section}} and {{^section}} blocks."""
-        section_pattern = re.compile(r"\{\{([#^])(.+?)\}\}(.*?)\{\{/\2\}\}", re.DOTALL)
 
         def replace(match):
             section_type = match.group(1)
@@ -75,14 +78,13 @@ class MustacheEngine(TemplateEngine):
             # Inverted section
             return "" if value else self._render_internal(content, context)
 
-        while section_pattern.search(template):
-            template = section_pattern.sub(replace, template)
+        while _SECTION_PATTERN.search(template):
+            template = _SECTION_PATTERN.sub(replace, template)
 
         return template
 
     def _process_variables(self, template: str, context: dict[str, Any]) -> str:
         """Process {{variable}} expressions with optional triple-mustache or & unescaped."""
-        pattern = re.compile(r"\{\{([^#^/].+?)\}\}")
 
         def replace(match):
             name = match.group(1).strip()
@@ -100,7 +102,7 @@ class MustacheEngine(TemplateEngine):
                 return ""
             return html.escape(str(value))
 
-        return pattern.sub(replace, template)
+        return _EXPRESSION_PATTERN.sub(replace, template)
 
     def render_file(self, path: str, context: dict[str, Any]) -> str:
         """Render a template file."""
