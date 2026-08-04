@@ -559,7 +559,7 @@ class TestSupportedFormats:
 
     @pytest.mark.unit
     def test_extractor_formats(self) -> None:
-        from codomyrmex.video.extraction.frame_extractor import SUPPORTED_FORMATS
+        from codomyrmex.video._validation import SUPPORTED_FORMATS
 
         for ext in (".mp4", ".avi", ".mov"):
             assert ext in SUPPORTED_FORMATS
