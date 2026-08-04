@@ -15,3 +15,7 @@
 ## 2024-07-10 - Avoid shared mutable state when hoisting static dictionaries
 **Learning:** When hoisting static mapping dictionaries to module-level constants to avoid per-call overhead, if the values in the dictionary are mutable objects (like nested dicts `{"type": "string"}`), they can be accidentally modified by callers, leading to bugs. This happened when returning a schema dict that was later mutated with additional properties.
 **Action:** Store immutable primitive types (like strings) in the static dictionary, and construct the mutable objects freshly at the usage site (e.g. `{"type": _TYPE_MAPPING.get(field.type, "string")}`).
+
+## 2026-08-04 - Classify overlayfs mount failures as Docker setup errors
+**Learning:** In certain CI environments, Docker containers fail to start with `error response from daemon: failed to mount ... invalid argument` due to kernel and overlayfs compatibility issues. Previously, the framework classified this as a generic `execution_error`, causing tests that should have gracefully skipped to fail.
+**Action:** Add `"error response from daemon"` to `_DOCKER_SETUP_ERROR_MARKERS` in `codomyrmex/coding/sandbox/container.py` so that environment-specific container initialization failures correctly yield a `setup_error`.
