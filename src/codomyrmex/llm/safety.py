@@ -158,18 +158,18 @@ class SafetyFilter:
                 )
         return violations
 
+    _CODE_EXECUTION_PATTERNS: ClassVar[list] = [
+        (re.compile(r"(?i)eval\s*\("), "eval() call"),
+        (re.compile(r"(?i)exec\s*\("), "exec() call"),
+        (re.compile(r"(?i)os\.system\s*\("), "os.system() call"),
+        (re.compile(r"(?i)subprocess\.(run|call|Popen)\s*\("), "subprocess execution"),
+        (re.compile(r"(?i)__import__\s*\("), "dynamic import"),
+    ]
+
     def _check_code_execution(self, text: str) -> list[SafetyViolation]:
         """Detect dangerous code execution patterns."""
         violations = []
-        dangerous = [
-            (r"(?i)eval\s*\(", "eval() call"),
-            (r"(?i)exec\s*\(", "exec() call"),
-            (r"(?i)os\.system\s*\(", "os.system() call"),
-            (r"(?i)subprocess\.(run|call|Popen)\s*\(", "subprocess execution"),
-            (r"(?i)__import__\s*\(", "dynamic import"),
-        ]
-        for pattern_str, desc in dangerous:
-            pattern = re.compile(pattern_str)
+        for pattern, desc in self._CODE_EXECUTION_PATTERNS:
             for match in pattern.finditer(text):
                 violations.append(
                     SafetyViolation(
