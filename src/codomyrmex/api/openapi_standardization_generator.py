@@ -23,6 +23,15 @@ from .standardization.rest_api import APIEndpoint as StandardizationAPIEndpoint
 logger = get_logger(__name__)
 
 
+_TYPE_MAPPING = {
+    "String": "string",
+    "Int": "integer",
+    "Float": "number",
+    "Boolean": "boolean",
+    "ID": "string",
+}
+
+
 class StandardizationOpenAPIGenerator:
     """
     Generator for OpenAPI specifications from REST/GraphQL API instances.
@@ -306,15 +315,7 @@ class StandardizationOpenAPIGenerator:
         """
         if isinstance(field.type, str):
             # Built-in GraphQL type
-            type_mapping = {
-                "String": {"type": "string"},
-                "Int": {"type": "integer"},
-                "Float": {"type": "number"},
-                "Boolean": {"type": "boolean"},
-                "ID": {"type": "string"},
-            }
-
-            schema = type_mapping.get(field.type, {"type": "string"})
+            schema = {"type": _TYPE_MAPPING.get(field.type, "string")}
         else:
             # Custom type reference
             schema = {"$ref": f"#/components/schemas/{field.type.name}"}
