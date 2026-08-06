@@ -57,6 +57,8 @@ class MCPServer:
     - JSON-RPC over stdio or HTTP
     """
 
+    _TYPE_MAP = {str: "string", int: "integer", float: "number", bool: "boolean"}
+
     def __init__(
         self,
         config: MCPServerConfig | None = None,
@@ -141,7 +143,6 @@ class MCPServer:
 
             properties = {}
             required = []
-            type_map = {str: "string", int: "integer", float: "number", bool: "boolean"}
 
             for pname, param in sig.parameters.items():
                 if pname in ("self", "cls"):
@@ -149,7 +150,7 @@ class MCPServer:
 
                 ptype = hints.get(pname, str)
                 properties[pname] = {
-                    "type": type_map.get(ptype, "string"),
+                    "type": MCPServer._TYPE_MAP.get(ptype, "string"),
                     "description": f"{pname} parameter",
                 }
                 if param.default == inspect.Parameter.empty:
