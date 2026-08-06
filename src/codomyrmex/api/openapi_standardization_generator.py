@@ -31,6 +31,14 @@ class StandardizationOpenAPIGenerator:
     Used primarily by the standardization submodule.
     """
 
+    _GRAPHQL_TYPE_MAPPING = {
+        "String": {"type": "string"},
+        "Int": {"type": "integer"},
+        "Float": {"type": "number"},
+        "Boolean": {"type": "boolean"},
+        "ID": {"type": "string"},
+    }
+
     def __init__(
         self,
         title: str = "Codomyrmex API",
@@ -306,15 +314,7 @@ class StandardizationOpenAPIGenerator:
         """
         if isinstance(field.type, str):
             # Built-in GraphQL type
-            type_mapping = {
-                "String": {"type": "string"},
-                "Int": {"type": "integer"},
-                "Float": {"type": "number"},
-                "Boolean": {"type": "boolean"},
-                "ID": {"type": "string"},
-            }
-
-            schema = type_mapping.get(field.type, {"type": "string"})
+            schema = self._GRAPHQL_TYPE_MAPPING.get(field.type, {"type": "string"})
         else:
             # Custom type reference
             schema = {"$ref": f"#/components/schemas/{field.type.name}"}
