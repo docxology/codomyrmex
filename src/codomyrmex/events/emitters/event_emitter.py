@@ -31,6 +31,8 @@ class EventEmitter:
     correlation ID generation, metadata handling, and batch operations.
     """
 
+    _PRIORITY_MAP = {"info": 0, "warning": 1, "error": 2, "critical": 2}
+
     def __init__(self, source: str, event_bus: EventBus | None = None):
         """
         Initialize the event emitter.
@@ -361,8 +363,6 @@ class EventEmitter:
             threshold: Threshold value that triggered the alert
             current_value: Current value that exceeded threshold
         """
-        priority_map = {"info": 0, "warning": 1, "error": 2, "critical": 2}
-
         self.emit(
             EventType.ALERT_TRIGGERED,
             data={
@@ -372,7 +372,7 @@ class EventEmitter:
                 "threshold": threshold,
                 "current_value": current_value,
             },
-            priority=priority_map.get(level, 0),
+            priority=self._PRIORITY_MAP.get(level, 0),
         )
 
     def set_correlation_context(self, correlation_id: str) -> None:
