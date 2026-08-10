@@ -31,6 +31,19 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
+# Pre-allocated mapping for core dependencies to avoid re-creating the dictionary
+# on each check, providing a minor performance improvement in repetitive calls.
+_DEP_MAPPING = {
+    "python-dotenv": "dotenv",
+    "pydantic": "pydantic",
+    "openai": "openai",
+    "anthropic": "anthropic",
+    "matplotlib": "matplotlib",
+    "numpy": "numpy",
+    "pytest": "pytest",
+    "fastapi": "fastapi",
+}
+
 
 class SystemHealthChecker:
     """Checks system health, dependency status, git state, and runs demo workflows.
@@ -88,22 +101,11 @@ class SystemHealthChecker:
         """Attempt to import each core dependency and print pass/fail status."""
         print("\nCore Dependencies:")
 
-        dep_mapping = {
-            "python-dotenv": "dotenv",
-            "pydantic": "pydantic",
-            "openai": "openai",
-            "anthropic": "anthropic",
-            "matplotlib": "matplotlib",
-            "numpy": "numpy",
-            "pytest": "pytest",
-            "fastapi": "fastapi",
-        }
-
-        core_deps = list(dep_mapping.keys())
+        core_deps = list(_DEP_MAPPING.keys())
 
         for dep in core_deps:
             try:
-                import_name = dep_mapping[dep]
+                import_name = _DEP_MAPPING[dep]
                 importlib.import_module(import_name)
                 print(f"   OK {dep}")
             except ImportError:
@@ -170,17 +172,9 @@ class SystemHealthChecker:
             "git": {},
         }
 
-        dep_mapping = {
-            "python-dotenv": "dotenv",
-            "pydantic": "pydantic",
-            "openai": "openai",
-            "anthropic": "anthropic",
-            "matplotlib": "matplotlib",
-            "numpy": "numpy",
-            "pytest": "pytest",
-        }
-
-        for dep, import_name in dep_mapping.items():
+        for dep, import_name in _DEP_MAPPING.items():
+            if dep == "fastapi":
+                continue
             try:
                 importlib.import_module(import_name)
                 status["dependencies"][dep] = True
