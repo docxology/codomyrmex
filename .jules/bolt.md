@@ -8,3 +8,6 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+## 2026-08-10 - Avoid inline dictionaries for dependency mapping
+**Learning:** Recreating static dictionaries on every function call (e.g. `dep_mapping = {...}` inside `check_core_dependencies` and `get_system_status_dict`) adds unnecessary allocation overhead.
+**Action:** Move static mapping dictionaries to module-level constants (e.g. `_DEP_MAPPING`) to initialize them once and eliminate per-call allocation overhead.
