@@ -116,22 +116,24 @@ def tool_list_module_functions(*, module: str = "") -> dict[str, Any]:
 # Modules considered safe for runtime function invocation via
 # tool_call_module_function. Modules with I/O, subprocess, or volatile
 # side effects are excluded; add new entries only after a security review.
-_ALLOWED_MODULE_PREFIXES: frozenset[str] = frozenset({
-    "codomyrmex.encryption.",
-    "codomyrmex.validation.",
-    "codomyrmex.serialization.",
-    "codomyrmex.static_analysis.",
-    "codomyrmex.search.",
-    "codomyrmex.schemas.",
-    "codomyrmex.metrics.",
-    "codomyrmex.relations.",
-    "codomyrmex.strategy.",
-    "codomyrmex.skills.",
-    "codomyrmex.soul.",
-    "codomyrmex.text_to_sql.",
-    "codomyrmex.logging_monitoring.",
-    "codomyrmex.model_context_protocol.",
-})
+_ALLOWED_MODULE_PREFIXES: frozenset[str] = frozenset(
+    {
+        "codomyrmex.encryption.",
+        "codomyrmex.validation.",
+        "codomyrmex.serialization.",
+        "codomyrmex.static_analysis.",
+        "codomyrmex.search.",
+        "codomyrmex.schemas.",
+        "codomyrmex.metrics.",
+        "codomyrmex.relations.",
+        "codomyrmex.strategy.",
+        "codomyrmex.skills.",
+        "codomyrmex.soul.",
+        "codomyrmex.text_to_sql.",
+        "codomyrmex.logging_monitoring.",
+        "codomyrmex.model_context_protocol.",
+    }
+)
 
 
 def tool_call_module_function(
