@@ -142,14 +142,13 @@ def create_codomyrmex_mcp_server(
 
     from codomyrmex.agents.pai.trust_gateway import SecurityError, trusted_call_tool
 
-    def _wrap_with_trust(
-        tool_name: str, handler: Any
-    ) -> Any:
+    def _wrap_with_trust(tool_name: str, handler: Any) -> Any:
         """Wrap a raw handler to enforce trust level before execution.
 
         MCP protocol callers go through this wrapper; the direct Python
         API already routes through ``trusted_call_tool()``.
         """
+
         def _trusted_handler(**kwargs: Any) -> dict[str, Any]:
             try:
                 return trusted_call_tool(tool_name, **kwargs)
