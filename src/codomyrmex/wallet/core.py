@@ -5,6 +5,7 @@ Provides self-custody wallet management securely extending key management.
 
 import hashlib
 import hmac
+import secrets
 import uuid
 from datetime import UTC, datetime
 from pathlib import Path
@@ -57,7 +58,7 @@ class WalletManager:
             raise WalletError(f"User {user_id} already has a wallet")
 
         wallet_id = f"0x{uuid.uuid4().hex}"
-        secret_key = uuid.uuid4().bytes
+        secret_key = secrets.token_bytes(32)
 
         key_id = f"wallet_{user_id}_private"
         if self.key_manager.store_key(key_id, secret_key):
@@ -151,7 +152,7 @@ class WalletManager:
             raise WalletNotFoundError(f"User {user_id} has no wallet")
 
         new_wallet_id = f"0x{uuid.uuid4().hex}"
-        new_secret_key = uuid.uuid4().bytes
+        new_secret_key = secrets.token_bytes(32)
 
         key_id = f"wallet_{user_id}_private"
         if self.key_manager.store_key(key_id, new_secret_key):
