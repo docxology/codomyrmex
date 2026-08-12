@@ -18,7 +18,6 @@ from codomyrmex.model_context_protocol.schemas.mcp_schemas import (
     MCPToolRegistry,
 )
 
-
 # Optimization: Hoisted from tool decorator to avoid dictionary creation on every parameter inspection.
 # Impact: Marginally reduces latency during server tool initialization.
 _TYPE_MAP = {str: "string", int: "integer", float: "number", bool: "boolean"}
