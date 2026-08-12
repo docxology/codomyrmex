@@ -16,6 +16,18 @@ except ImportError:
     logger = logging.getLogger(__name__)
 
 
+# Optimization: Hoisted from _check_type to avoid per-call dictionary allocation overhead.
+# Impact: Reduces memory allocation and speeds up frequent validation paths.
+_TYPE_MAP = {
+    "str": str,
+    "int": int,
+    "float": float,
+    "bool": bool,
+    "list": list,
+    "dict": dict,
+}
+
+
 class ValidationSeverity(Enum):
     """Severity levels for validation issues."""
 
@@ -434,20 +446,11 @@ class ConfigValidator:
 
     def _check_type(self, value: Any, expected_type: str) -> bool:
         """Check if value matches expected type."""
-        type_map = {
-            "str": str,
-            "int": int,
-            "float": float,
-            "bool": bool,
-            "list": list,
-            "dict": dict,
-        }
-
         # Handle "any" type - accept everything
         if expected_type == "any":
             return True
 
-        type_class = type_map.get(expected_type)
+        type_class = _TYPE_MAP.get(expected_type)
         if type_class is not None:
             return isinstance(value, type_class)
 
