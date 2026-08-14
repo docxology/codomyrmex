@@ -22,19 +22,22 @@ if str(_project_root / "src") not in sys.path:
 
 from codomyrmex.utils import ScriptBase
 
+
 class DocumentationFixer(ScriptBase):
     def __init__(self):
         super().__init__(
             name="doc_fix",
             description="Fixes missing or stub documentation",
-            version="1.0.0"
+            version="1.0.0",
         )
         self.stub_threshold = 500
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "--target", type=Path, default=Path.cwd() / "src/codomyrmex",
-            help="Target directory to fix"
+            "--target",
+            type=Path,
+            default=Path.cwd() / "src/codomyrmex",
+            help="Target directory to fix",
         )
 
     def generate_pai(self, module_name: str) -> str:
@@ -147,41 +150,44 @@ class DocumentationFixer(ScriptBase):
 
     def fix_directory(self, path: Path) -> None:
         if self.config.verbose:
-             self.log_debug(f"Visiting {path}")
+            self.log_debug(f"Visiting {path}")
 
         if path.name.startswith(".") or path.name == "__pycache__":
             return
 
         # Check if it looks like a module
         if not (path / "__init__.py").exists():
-             # Only fix if it has python files
-             if not any(p.suffix == ".py" for p in path.iterdir()):
-                 return
+            # Only fix if it has python files
+            if not any(p.suffix == ".py" for p in path.iterdir()):
+                return
 
         module_name = path.name
-        
+
         # Files to check/generate
         generators = {
             "PAI.md": self.generate_pai,
             "SPEC.md": self.generate_spec,
             "AGENTS.md": self.generate_agents,
-            "README.md": self.generate_readme
+            "README.md": self.generate_readme,
         }
-        
+
         for filename, generator in generators.items():
             file_path = path / filename
             content = generator(module_name)
-            
+
             should_write = False
             action = ""
-            
+
             if not file_path.exists():
                 should_write = True
                 action = "Created"
-            elif filename == "README.md" and file_path.stat().st_size < self.stub_threshold:
+            elif (
+                filename == "README.md"
+                and file_path.stat().st_size < self.stub_threshold
+            ):
                 should_write = True
                 action = "Upgraded Stub"
-                
+
             if should_write:
                 if self.config and self.config.dry_run:
                     self.log_info(f"[DRY RUN] Would write {file_path}")
@@ -197,11 +203,13 @@ class DocumentationFixer(ScriptBase):
         for root, dirs, files in os.walk(self.target_dir):
             path = Path(root)
             self.fix_directory(path)
-            
+
         return {"status": "completed"}
+
 
 if __name__ == "__main__":
     import sys
+
     # Ensure src is in path for imports (file-relative for any working directory)
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
