@@ -11,3 +11,8 @@ Duplicate definitions across modules (e.g., repeating the `SecretType` definitio
 
 **Prevention:**
 Use descriptive suffixes or alternatives (e.g., changing `"password"` to `"password_type"`) for model or type definitions. Implement robust CI checks to enforce single-source-of-truth patterns rather than duplicating classes.
+
+## 2026-08-14 - Prevent Command Injection in subprocess
+**Vulnerability:** Found subprocess.run using shell=True with user-controlled input (filenames/model names) in local STT tool.
+**Learning:** Using shell=True with string interpolation enables command injection. shlex.quote alone with shell=True is sometimes brittle.
+**Prevention:** Always use shell=False with arguments passed as a list (via shlex.split if parsing a template string).
