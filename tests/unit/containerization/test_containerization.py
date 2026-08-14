@@ -1,5 +1,8 @@
 """Enhanced tests for containerization improvements."""
 
+import shutil
+import subprocess
+
 import pytest
 
 # Check Docker availability
@@ -16,9 +19,15 @@ def check_docker_available():
     if not DOCKER_AVAILABLE:
         return False
     try:
-        client = docker.from_env()
-        client.ping()
-        return True
+        if shutil.which("docker") is None:
+            return False
+        result = subprocess.run(
+            ["docker", "info", "--format", "{{.ServerVersion}}"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        return result.returncode == 0 and bool(result.stdout.strip())
     except Exception:
         return False
 

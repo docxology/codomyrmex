@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Module implementation, resources, and local coordination for Fine Tuning..
+Module implementation, resources, and local coordination for Fine Tuning.
 
 ## Active Components
 - `PAI.md` – Project file

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Agent Setup..
+Module implementation, resources, and local coordination for Agent Setup.
 
 ## Directory Contents
 - `PAI.md` – File

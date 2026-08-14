@@ -59,7 +59,7 @@ def test_execution_error_wrapped_structured():
     """Handler that raises gets wrapped in structured EXECUTION_ERROR."""
     # analyze_python on a nonexistent file should trigger an exception
     # that the bridge wraps in a structured envelope.
-    result = call_tool("codomyrmex.analyze_python", path="/nonexistent/path/abc.py")
+    result = call_tool("codomyrmex.analyze_python", path=".codomyrmex-missing-abc.py")
     # analyze_python may handle internally or raise — assert either format:
     if isinstance(result.get("error"), dict):
         assert result["error"]["code"] == MCPErrorCode.EXECUTION_ERROR.value
@@ -71,7 +71,7 @@ def test_execution_error_wrapped_structured():
 
 def test_handler_internal_error_preserved():
     """read_file catches errors internally and returns plain error string."""
-    result = call_tool("codomyrmex.read_file", path="/nonexistent/path/xyz123")
+    result = call_tool("codomyrmex.read_file", path=".codomyrmex-missing-xyz123")
     assert result.get("success") is False
     assert isinstance(result["error"], str)
     assert "not found" in result["error"].lower() or "nonexistent" in result["error"]
@@ -101,7 +101,7 @@ def test_structured_error_envelope_has_required_fields():
     """When a handler raises, the structured envelope has code, message, correlation_id."""
     # Use a tool that is likely to raise for this test.
     # checksum_file with nonexistent path raises:
-    result = call_tool("codomyrmex.checksum_file", path="/nonexistent/path/xyz")
+    result = call_tool("codomyrmex.checksum_file", path=".codomyrmex-missing-xyz")
     if isinstance(result.get("error"), dict):
         err = result["error"]
         assert "code" in err

@@ -24,7 +24,7 @@ crypto/protocols/
 |------|------|-------------|
 | `DHKeyPair` | dataclass | Diffie-Hellman key pair (private value, public value, parameters) |
 | `ECDHKeyPair` | dataclass | ECDH key pair (private key, public key, curve name) |
-| `dh_generate_parameters` | function | Generate DH group parameters (prime, generator) |
+| `dh_generate_parameters` | function | Load audited RFC 2409/7919 DH group parameters (prime, generator) for the requested minimum size |
 | `dh_generate_keypair` | function | Generate a DH key pair from parameters |
 | `dh_compute_shared_secret` | function | Compute shared secret from own private key and peer public key |
 | `ecdh_generate_keypair` | function | Generate an ECDH key pair on a named curve |
@@ -59,7 +59,8 @@ crypto/protocols/
 ## Constraints
 
 - Shamir threshold K must satisfy 2 <= K <= N.
-- DH parameter generation uses safe primes; minimum 2048-bit modulus.
+- DH parameter loading uses audited safe-prime groups; the default is the
+  RFC 7919 `ffdhe2048` group. X25519 is preferred for new protocols.
 - Schnorr proofs operate over a prime-order subgroup.
 
 ## Error Handling

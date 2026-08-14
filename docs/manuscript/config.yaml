@@ -1,7 +1,8 @@
 # Codomyrmex Manuscript Configuration
 # An Artificial Ecology for Agentic Software Development
 # This file serves as a meta-artifact linking the prose of the manuscript to the execution
-# layer. It is loaded by `yaml.safe_load` inside `scripts/compile_manuscript.py`
+# layer. It is loaded by the duplicate-key rejecting safe loader in
+# `src/codomyrmex/manuscript/variables.py` and by `scripts/compile_manuscript.py`
 # (manuscript metadata) and `scripts/z_generate_manuscript_variables.py`
 # (experiment parameters).
 
@@ -17,6 +18,14 @@ paper:
   pdf_margin: "0.58in"
   cover:
     image: "figures/cover.png"
+
+# The shared template is a versioned build dependency. Generation uses this
+# exact clean checkout when it is available and records an explicit local
+# successor mode for standalone clones where the sibling checkout is absent.
+template:
+  repository: "docxology/template"
+  revision: "0cb18ad052c1253c0b4e2f3b397fc67c75f6f0a0"
+  hydration_entrypoint: "infrastructure.rendering.manuscript_injection.write_resolved_manuscript_tree"
 
 # Figure metadata is the single source for manuscript captions, evidence class,
 # labels, and layout widths. Captions may contain {{TOKEN}} references; the
@@ -270,13 +279,13 @@ figures:
       for semantic equality; it is not an attestation, causal estimate, or external
       workload result. {{CONFIG_PARAMETER_STATUS_SHORT}}
     alt_text: >-
-      Three-stage paired-locality replay showing clear, failed-target, and recovered
-      decisions while an unrelated target remains unchanged.
+      Four-state paired-locality replay showing clear, failed-target, unrelated-target,
+      and recovered decisions while the unrelated target remains unchanged.
     long_description: >-
-      The first stage shows an EXECUTE decision for a clear target. After a
-      caller-reported failure, the same target moves to HOLD while a paired unrelated
-      target stays at EXECUTE. Passive decay then restores the original decision.
-      Stage order, decision words, score labels, and arrows carry the comparison;
+      Four ordered states show an EXECUTE decision for a clear target, a caller-reported
+      failure that moves the same target to HOLD, an unrelated target that remains at
+      EXECUTE, and passive decay that restores the original decision. State order,
+      decision words, score labels, and arrows carry the comparison;
       colours are redundant and the fixture is not causal or externally attested.
   attestation_event_chain:
     filename: "attestation_event_chain.png"
@@ -389,14 +398,15 @@ figures:
       bridge status and evidence anchors, not theorem coverage or semantic equivalence.
       Segment labels and position redundantly encode the status counts.
     alt_text: >-
-      Stacked status summary of the formalism inventory with implemented, partial,
-      and research counts printed in their respective segments.
+      Three vertical bars summarize implemented, partial, and research formalism
+      mappings, with counts printed above each bar.
     long_description: >-
-      One horizontal bar partitions all {{RESULT_FORMAL_CROSSWALK_TOTAL}} configured
-      formalism mappings by current bridge status. Each non-empty segment prints its
-      status and count, while a legend repeats the categories. Segment length, order,
-      text, and colour provide redundant encodings. The inventory counts documented
-      mappings, not proved theorems or semantic equivalences.
+      Three separate vertical bars partition all {{RESULT_FORMAL_CROSSWALK_TOTAL}}
+      configured formalism mappings into IMPLEMENTED, PARTIAL, and RESEARCH bridge
+      statuses. Each bar prints its status and count above the bar, while a legend
+      repeats the categories. Height, order, text, and colour provide redundant
+      encodings. The inventory counts documented mappings, not proved theorems or
+      semantic equivalences.
   research_status_matrix:
     filename: "research_status_matrix.png"
     label: "fig:research_status_matrix"

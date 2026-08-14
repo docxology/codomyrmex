@@ -151,6 +151,16 @@ class TestAgentMessageSerialization:
         assert len(msg.tool_calls) == 1
         assert msg.tool_calls[0].name == "search"
 
+    def test_from_dict_generates_missing_tool_call_id(self):
+        msg = AgentMessage.from_dict(
+            {
+                "role": "assistant",
+                "content": "call",
+                "tool_calls": [{"name": "search", "arguments": {}}],
+            }
+        )
+        assert msg.tool_calls[0].call_id
+
     def test_from_dict_with_tool_results(self):
         d = {
             "role": "tool",

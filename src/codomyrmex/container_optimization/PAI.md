@@ -15,10 +15,11 @@ from codomyrmex.container_optimization import ContainerOptimizer, ResourceTuner
 
 optimizer = ContainerOptimizer()
 analysis = optimizer.analyze_image("myapp:latest")
-suggestions = optimizer.suggest_optimizations(analysis)
+suggestions = optimizer.suggest_optimizations("myapp:latest")
 
 tuner = ResourceTuner()
-resources = tuner.tune(cpu_usage_history, memory_usage_history)
+usage = tuner.analyze_usage("container-id")
+resources = tuner.suggest_limits(usage)
 ```
 
 ## PAI Phase Mapping
@@ -38,7 +39,8 @@ resources = tuner.tune(cpu_usage_history, memory_usage_history)
 
 ## Integration Notes
 
-- No `mcp_tools.py` -- this module is not auto-discovered via MCP.
+- `mcp_tools.py` exposes image analysis, optimization reports, and resource tuning through MCP.
 - Requires `docker` optional SDK (`uv sync --extra containerization`).
-- Pairs with `containerization` module which handles build/run/scan operations.
+- A reachable Docker daemon is required for live image/container operations; constructors fail closed without opening a persistent SDK socket.
+- Pairs with the `containerization` module, which handles build/run/scan operations.
 - Call directly from Python for container optimization workflows.

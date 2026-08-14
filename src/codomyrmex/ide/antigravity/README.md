@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Antigravity..
+Module implementation, resources, and local coordination for Antigravity.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Strategies..
+Module implementation, resources, and local coordination for Strategies.
 
 ## Directory Contents
 - `PAI.md` – File

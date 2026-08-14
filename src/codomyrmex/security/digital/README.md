@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Digital..
+Module implementation, resources, and local coordination for Digital.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

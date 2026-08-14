@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Ai Gateway..
+Module implementation, resources, and local coordination for Ai Gateway.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

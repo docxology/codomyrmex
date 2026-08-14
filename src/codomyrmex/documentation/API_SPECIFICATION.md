@@ -96,7 +96,7 @@ repository's authoritative reader build is `make docs-check` with MkDocs.
 | Export | Behavior |
 | :--- | :--- |
 | `check_doc_environment()` | Returns whether Node.js and a supported package manager are available |
-| `install_dependencies(package_manager="npm")` | Runs the package-manager install command |
+| `install_dependencies(package_manager="npm", cwd=None)` | Runs the package-manager install command in the bundled documentation directory or the explicit `cwd` |
 | `start_dev_server(package_manager="npm")` | Starts the blocking Docusaurus development server |
 | `build_static_site(package_manager="npm")` | Builds the package-local Docusaurus site |
 | `serve_static_site(package_manager="npm")` | Serves a previously built package-local site |

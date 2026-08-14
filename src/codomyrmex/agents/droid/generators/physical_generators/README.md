@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Physical Generators..
+Module implementation, resources, and local coordination for Physical Generators.
 
 ## Directory Contents
 - `README.md` – File

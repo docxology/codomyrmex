@@ -100,10 +100,37 @@ jobs:
         run: |
           uv sync --locked --group docs --all-extras --dev
 
-      - name: Run comprehensive test suite
+      - name: Run source-bound release test evidence
         run: |
-          echo "🧪 Running comprehensive test suite for release..."
-          uv run pytest tests/unit/ -v --tb=short --cov=src/codomyrmex --cov-report=xml --cov-fail-under=60
+          echo "🧪 Running source-bound test evidence for release..."
+          # The unit tree includes optional-provider and infrastructure
+          # probes; every skip remains enumerated in the receipt.
+          uv run python -m codomyrmex.release.test_evidence \
+            --repo-root . \
+            --receipt release-test-evidence.json \
+            --test-path tests/unit/ \
+            --profile release \
+            --coverage-report coverage.xml \
+            --coverage-floor 60 \
+            --required-output-path coverage.xml \
+            --max-skips 600 \
+            --max-warnings 0 \
+            --require-clean \
+            --pytest-arg=-v \
+            --pytest-arg=--tb=short \
+            --pytest-arg=--cov=src/codomyrmex \
+            --pytest-arg=--cov-report=xml \
+            --pytest-arg=--cov-fail-under=60
+
+      - name: Upload source-bound release test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-test-evidence
+          path: |
+            release-test-evidence.json
+            coverage.xml
+          if-no-files-found: error
 
       - name: Run security checks
         run: |
@@ -398,6 +425,7 @@ jobs:
     if: needs.prepare-release.outputs.is_prerelease == 'false'
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

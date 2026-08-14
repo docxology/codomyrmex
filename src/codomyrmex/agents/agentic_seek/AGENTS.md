@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Module implementation, resources, and local coordination for Agentic Seek..
+Module implementation, resources, and local coordination for Agentic Seek.
 
 ## Active Components
 - `PAI.md` – Project file

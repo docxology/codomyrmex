@@ -96,15 +96,19 @@ manager.create("documentation_session")
 
 ## MCP Tools
 
-Three tools are auto-discovered via `@mcp_tool` from `agents/mcp_tools.py` and available through the PAI MCP bridge:
+The legacy tools are auto-discovered via `@mcp_tool` from `agents/mcp_tools.py` and available through the PAI MCP bridge. The navigation tools in `agents/navigation/mcp_tools.py` add a deterministic, read-only capability index:
 
 | Tool | Description | Trust Level | Category |
 |------|-------------|-------------|----------|
 | `execute_agent` | Execute an agent task using a specified provider and prompt | Safe | agents |
 | `list_agents` | List available agent providers and their capabilities | Safe | agents |
 | `get_agent_memory` | Retrieve conversation history for a named agent session | Safe | agents |
+| `list_agent_capabilities` | List stable agent, module, and optional MCP tool records | Safe | agents/navigation |
+| `search_agent_capabilities` | Search capability names and source metadata | Safe | agents/navigation |
+| `get_agent_capability` | Resolve one stable capability ID | Safe | agents/navigation |
+| `agent_operability_status` | Report declared clients without live probes | Safe | agents/navigation |
 
-**Note:** These tools expose the top-level `agents/` module via MCP. Sub-module specific tools (e.g., `think`, `get_last_trace`) are exposed by `agents/core/` separately.
+**Note:** Navigation metadata never includes API key values and never claims an integration is live merely because its client module exists. Sub-module specific tools (e.g., `think`, `get_last_trace`) are exposed by `agents/core/` separately.
 
 ## PAI Agent System Integration
 

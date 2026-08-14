@@ -11,8 +11,11 @@ This script drives the pipeline:
 
 from __future__ import annotations
 
+import argparse
 import json
+import os
 import sys
+import tempfile
 from pathlib import Path
 
 
@@ -34,7 +37,93 @@ def _ensure_src_on_path(project_root: Path) -> None:
 
 def _write_json(path: Path, data: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, indent=2, sort_keys=True), encoding="utf-8")
+    temporary = tempfile.NamedTemporaryFile(
+        mode="w",
+        encoding="utf-8",
+        dir=path.parent,
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+        delete=False,
+    )
+    temporary_path = Path(temporary.name)
+    try:
+        with temporary:
+            json.dump(data, temporary, indent=2, sort_keys=True)
+            temporary.write("\n")
+            temporary.flush()
+            os.fsync(temporary.fileno())
+        temporary_path.replace(path)
+    finally:
+        temporary_path.unlink(missing_ok=True)
+
+
+def _variable_registry(
+    variables: dict[str, str],
+    contract: dict[str, object],
+) -> dict[str, object]:
+    """Emit the typed render-boundary contract for every generated variable."""
+    references_value = contract.get("references", {})
+    references: dict[str, object]
+    if isinstance(references_value, dict):
+        references = {str(key): value for key, value in references_value.items()}
+    else:
+        references = {}
+
+    def source_type(name: str, value: str) -> str:
+        if name.endswith(("_HASH", "_SHA256", "_COMMIT", "_REVISION")):
+            return "identifier"
+        if value.lower() in {"true", "false"}:
+            return "boolean"
+        try:
+            float(value)
+        except ValueError:
+            return "markdown" if "\n" in value else "string"
+        return "number"
+
+    def unit(name: str, value: str) -> str:
+        if name.endswith(("_HASH", "_SHA256", "_COMMIT", "_REVISION")):
+            return "identifier"
+        if name.endswith(("_PCT", "_PERCENT")):
+            return "percent"
+        if name.endswith("_COUNT") or name.startswith(("ARTIFACT_", "RESULT_TEST")):
+            return "count"
+        if source_type(name, value) == "number":
+            return "configured-or-derived scalar"
+        return "text"
+
+    entries = []
+    for name, value in sorted(variables.items()):
+        consumers = references.get(name, [])
+        if not isinstance(consumers, list):
+            consumers = []
+        entries.append(
+            {
+                "name": name,
+                "rendered_value": value,
+                "source_type": source_type(name, value),
+                "render_type": "markdown-string",
+                "unit": unit(name, value),
+                "precision": "source-defined"
+                if source_type(name, value) == "number"
+                else None,
+                "missing_policy": "fail-closed",
+                "producer": "codomyrmex.manuscript.variables.compute_variables",
+                "source": (
+                    "docs/manuscript/config.yaml"
+                    if name.startswith("CONFIG_")
+                    else "runtime/source-derived"
+                ),
+                "consumers": sorted(str(path) for path in consumers),
+            }
+        )
+    return {
+        "schema_version": "1.0",
+        "status": contract.get("status", "invalid"),
+        "variable_sha256": contract.get("variable_sha256", ""),
+        "config_sha256": contract.get("config_sha256", ""),
+        "provenance": contract.get("provenance", {}),
+        "entries": entries,
+    }
 
 
 def _clean_output_dir(output_dir: Path) -> None:
@@ -45,6 +134,11 @@ def _clean_output_dir(output_dir: Path) -> None:
                 path.unlink()
 
 
+# Make direct script execution independent of whether the editable package has
+# already been installed into the invoking interpreter.
+_ensure_src_on_path(_find_project_root())
+
+
 from codomyrmex.manuscript.variables import (
     compute_variables,
     inject_manuscript_variables,
@@ -52,10 +146,38 @@ from codomyrmex.manuscript.variables import (
 )
 
 
-def main() -> int:
-    project_root = _find_project_root()
+def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Compute source-bound manuscript variables and hydrate the manuscript tree."
+    )
+    parser.add_argument(
+        "--project-root",
+        type=Path,
+        default=None,
+        help="Override the repository root (default: discover from this script).",
+    )
+    parser.add_argument(
+        "--config",
+        type=Path,
+        default=None,
+        help="Override the manuscript config path (default: <project-root>/docs/manuscript/config.yaml).",
+    )
+    return parser.parse_args(argv)
 
-    config_path = project_root / "docs" / "manuscript" / "config.yaml"
+
+def main(argv: list[str] | None = None) -> int:
+    args = _parse_args(argv)
+    project_root = (
+        args.project_root.expanduser().resolve()
+        if args.project_root is not None
+        else _find_project_root()
+    )
+
+    config_path = (
+        args.config.expanduser().resolve()
+        if args.config is not None
+        else project_root / "docs" / "manuscript" / "config.yaml"
+    )
     if not config_path.exists():
         print(f"ERROR: manuscript config not found: {config_path}", file=sys.stderr)
         return 1
@@ -92,12 +214,22 @@ def main() -> int:
     )
     _write_json(contract_out, contract)
     print(f"[z_generate] wrote {contract_out.relative_to(project_root)}")
+    registry_out = (
+        project_root / "output" / "data" / "manuscript_variable_registry.json"
+    )
+    _write_json(registry_out, _variable_registry(variables, contract))
+    print(f"[z_generate] wrote {registry_out.relative_to(project_root)}")
 
     # Inject into manuscript markdown files.
     output_manuscript = project_root / "output" / "manuscript"
     _clean_output_dir(output_manuscript)
 
-    written = inject_manuscript_variables(manuscript_dir, output_manuscript, variables)
+    written = inject_manuscript_variables(
+        manuscript_dir,
+        output_manuscript,
+        variables,
+        project_root=project_root,
+    )
     for path in written:
         print(f"[z_generate] injected → {path.relative_to(project_root)}")
 

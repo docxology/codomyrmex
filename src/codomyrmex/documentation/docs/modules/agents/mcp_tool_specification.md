@@ -97,6 +97,25 @@ No parameters required.
 
 ---
 
+## Navigation tools
+
+The navigation tools are read-only and return JSON-safe records. They do not
+run agent health probes, instantiate clients, or invoke handlers. Tool inventory
+scanning is opt-in because dynamic discovery can import optional provider
+modules.
+
+| Tool | Purpose |
+| :--- | :--- |
+| `list_agent_capabilities` | List stable agent/module/tool records, optionally filtered by kind |
+| `search_agent_capabilities` | Search capability names, descriptions, source paths, and tags |
+| `get_agent_capability` | Resolve an `agent:<name>`, `module:<name>`, or `tool:<name>` record |
+| `agent_operability_status` | Report declared and implementation-present agents without live probes |
+
+Each record includes a stable `id`, `status`, source, documentation path, trust
+classification, and non-secret implementation metadata. A status of
+`implementation_present` means the client module can be located; it does not
+claim that credentials, binaries, endpoints, or models are usable.
+
 ## Tool: `get_agent_memory`
 
 ### 1. Tool Purpose and Description

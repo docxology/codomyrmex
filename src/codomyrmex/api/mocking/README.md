@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Mocking..
+Module implementation, resources, and local coordination for Mocking.
 
 ## Directory Contents
 - `PAI.md` – File

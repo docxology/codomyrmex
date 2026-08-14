@@ -133,6 +133,8 @@ Type 'explore' to begin your foraging adventure!
 
     def emptyline(self):
         """Handle empty lines gracefully without repeating the last command."""
+        # ``False`` is the shell's established no-op sentinel and also
+        # prevents ``cmd.Cmd`` from repeating the previous command.
         return False
 
     def default(self, line):

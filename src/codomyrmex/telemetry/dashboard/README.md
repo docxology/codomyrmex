@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Dashboard..
+Module implementation, resources, and local coordination for Dashboard.
 
 ## Directory Contents
 - `PAI.md` – File

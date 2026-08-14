@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Cloud..
+Module implementation, resources, and local coordination for Cloud.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

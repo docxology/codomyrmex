@@ -1,10 +1,12 @@
 import base64
 import importlib
+import os
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 
+from codomyrmex.containerization.docker.client import _docker_daemon_available
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring import get_logger
 
@@ -92,13 +94,21 @@ class ContainerRegistry:
 
     def _initialize_clients(self):
         """Initialize Docker client and HTTP session."""
-        if DOCKER_AVAILABLE:
+        if DOCKER_AVAILABLE and _docker_daemon_available():
             try:
-                self._docker_client = docker.from_env()
+                self._docker_client = docker.from_env(
+                    version=os.environ.get("DOCKER_API_VERSION", "1.41")
+                )
                 logger.info("Docker client initialized")
-            except DockerException as e:
+            except Exception as e:
                 logger.warning("Failed to initialize Docker client: %s", e)
+                if self._docker_client is not None:
+                    self._docker_client.close()
                 self._docker_client = None
+        elif DOCKER_AVAILABLE:
+            logger.info(
+                "Docker daemon is not reachable; registry operations will simulate"
+            )
         else:
             logger.warning("Docker SDK not available")
 
@@ -108,6 +118,28 @@ class ContainerRegistry:
                 self._session.headers["Authorization"] = (
                     self.credentials.get_auth_header()
                 )
+
+    def close(self) -> None:
+        """Close owned Docker and HTTP resources."""
+        if self._docker_client is not None:
+            self._docker_client.close()
+            self._docker_client = None
+        if self._session is not None:
+            self._session.close()
+            self._session = None
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, _exc_type, _exc_value, _traceback) -> None:
+        self.close()
+
+    def __del__(self) -> None:
+        """Best-effort cleanup for callers that do not use a context manager."""
+        try:
+            self.close()
+        except Exception:
+            pass
 
     def is_available(self) -> bool:
         """Check if Docker is available."""

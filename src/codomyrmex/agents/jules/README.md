@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Jules..
+Module implementation, resources, and local coordination for Jules.
 
 ## Directory Contents
 - `PAI.md` – File

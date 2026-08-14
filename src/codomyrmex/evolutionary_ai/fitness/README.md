@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Fitness..
+Module implementation, resources, and local coordination for Fitness.
 
 ## Directory Contents
 - `PAI.md` – File

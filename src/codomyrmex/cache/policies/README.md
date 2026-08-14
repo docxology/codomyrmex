@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Policies..
+Module implementation, resources, and local coordination for Policies.
 
 ## Directory Contents
 - `PAI.md` – File

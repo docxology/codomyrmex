@@ -142,6 +142,18 @@ class TestEncryptorAESCBC:
         finally:
             ctx.__exit__(None, None, None)
 
+    def test_tampered_ciphertext_raises(self, enc, key):
+        """CBC compatibility payloads must reject modified ciphertext."""
+        ctx = _suppress_cbc_warning()
+        try:
+            ciphertext = bytearray(enc.encrypt(b"secret", key))
+        finally:
+            ctx.__exit__(None, None, None)
+
+        ciphertext[16] ^= 0x01
+        with pytest.raises(EncryptionError, match="integrity"):
+            enc.decrypt(bytes(ciphertext), key)
+
     def test_truncated_ciphertext_raises(self, enc, key):
         """Ciphertext shorter than 16 bytes (the IV) should raise."""
         with pytest.raises(EncryptionError):

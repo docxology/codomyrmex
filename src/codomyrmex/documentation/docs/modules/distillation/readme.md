@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Distillation..
+Module implementation, resources, and local coordination for Distillation.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

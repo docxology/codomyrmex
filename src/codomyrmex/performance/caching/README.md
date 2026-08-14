@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Caching..
+Module implementation, resources, and local coordination for Caching.
 
 ## Directory Contents
 - `PAI.md` – File

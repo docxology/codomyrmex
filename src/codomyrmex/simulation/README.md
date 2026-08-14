@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Simulation..
+Module implementation, resources, and local coordination for Simulation.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

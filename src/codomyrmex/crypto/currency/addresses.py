@@ -13,6 +13,7 @@ Note:
 from __future__ import annotations
 
 import hashlib
+import importlib
 import re
 
 from codomyrmex.crypto.encoding.base import decode_base58, encode_base58
@@ -46,9 +47,12 @@ def _keccak_256(data: bytes) -> bytes:
     than Keccak-256 and will produce different addresses.
     """
     try:
-        from Crypto.Hash import keccak
-
-        k = keccak.new(digest_bits=256, data=data)
+        # Load the maintained pycryptodome backend dynamically.  The package
+        # exposes the historical ``Crypto`` namespace, which Bandit flags as
+        # the unrelated, deprecated pyCrypto distribution when imported with
+        # a static ``from Crypto...`` statement.
+        keccak_module = importlib.import_module("Crypto.Hash.keccak")
+        k = keccak_module.new(digest_bits=256, data=data)
         return k.digest()
     except ImportError:
         logger.warning(

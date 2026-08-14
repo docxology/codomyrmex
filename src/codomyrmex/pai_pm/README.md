@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Pai Pm..
+Module implementation, resources, and local coordination for Pai Pm.
 
 ## Directory Contents
 - `PAI.md` – File

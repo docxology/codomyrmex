@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Process..
+Module implementation, resources, and local coordination for Process.
 
 ## Directory Contents
 - `README.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Cross Module..
+Module implementation, resources, and local coordination for Cross Module.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Bash..
+Module implementation, resources, and local coordination for Bash.
 
 ## Directory Contents
 - `README.md` – File

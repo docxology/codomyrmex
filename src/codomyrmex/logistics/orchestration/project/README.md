@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Project..
+Module implementation, resources, and local coordination for Project.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

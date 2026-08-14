@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Ideoscape..
+Module implementation, resources, and local coordination for Ideoscape.
 
 ## Directory Contents
 - `PAI.md` – File

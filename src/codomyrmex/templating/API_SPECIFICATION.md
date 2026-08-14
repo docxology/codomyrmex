@@ -113,10 +113,14 @@ List available templates.
 ##### get_template
 
 ```python
-def get_template(name: str) -> str
+def get_template(name: str) -> str | Template | None
 ```
 
-Get template content by name.
+Get the registered template by name. String registrations return their source;
+object registrations return the original ``Template`` instance so its engine
+and identity are preserved. Missing names return ``None``. The legacy module
+imports ``codomyrmex.templating.template_engine`` and
+``codomyrmex.templating.template_manager`` remain supported.
 
 ##### create_template
 

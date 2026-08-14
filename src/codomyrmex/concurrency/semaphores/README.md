@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Semaphores..
+Module implementation, resources, and local coordination for Semaphores.
 
 ## Directory Contents
 - `PAI.md` – File

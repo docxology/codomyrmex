@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Text To Speech..
+Module implementation, resources, and local coordination for Text To Speech.
 
 ## Directory Contents
 - `PAI.md` – File

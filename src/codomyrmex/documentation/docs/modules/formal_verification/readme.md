@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Formal Verification..
+Module implementation, resources, and local coordination for Formal Verification.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

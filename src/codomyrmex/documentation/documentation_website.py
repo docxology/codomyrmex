@@ -175,11 +175,18 @@ def check_doc_environment():
     return True
 
 
-def run_command_stream_output(command_parts, cwd):
+def run_command_stream_output(command_parts, cwd, timeout: float = 300.0):
     """
-    Helper to run a shell command and stream its output to the logger.
+    Helper to run a command and log its output.
+
+    ``readline()`` cannot be bounded by a later ``wait(timeout=...)`` call:
+    commands that keep stdout open can block forever before ``wait`` runs.
+    ``communicate(timeout=...)`` applies the deadline to both output capture
+    and process completion, then terminates the child on timeout.
+
     Returns True if successful, False otherwise.
     """
+    process = None
     try:
         logger.info("Running command: %s in %s", " ".join(command_parts), cwd)
         process = subprocess.Popen(
@@ -191,11 +198,9 @@ def run_command_stream_output(command_parts, cwd):
             bufsize=1,
         )
 
-        if process.stdout:
-            for line in iter(process.stdout.readline, ""):
-                logger.info(line.strip())
-
-        process.wait(timeout=300)
+        output, _ = process.communicate(timeout=timeout)
+        for line in output.splitlines():
+            logger.info(line.strip())
 
         if process.returncode == 0:
             logger.info("Command '%s' executed successfully.", " ".join(command_parts))
@@ -204,6 +209,18 @@ def run_command_stream_output(command_parts, cwd):
             "Command '%s' failed with return code %s.",
             " ".join(command_parts),
             process.returncode,
+        )
+        return False
+    except subprocess.TimeoutExpired:
+        if process is not None:
+            process.kill()
+            output, _ = process.communicate()
+            for line in output.splitlines():
+                logger.info(line.strip())
+        logger.error(
+            "Command '%s' timed out after %.1f seconds.",
+            " ".join(command_parts),
+            timeout,
         )
         return False
     except FileNotFoundError:
@@ -221,8 +238,13 @@ def run_command_stream_output(command_parts, cwd):
         return False
 
 
-def install_dependencies(package_manager="npm"):
-    """Installs Docusaurus dependencies."""
+def install_dependencies(package_manager="npm", cwd=None):
+    """Install documentation dependencies in an explicit working directory.
+
+    ``cwd`` is primarily useful for isolated validation and callers that keep
+    more than one documentation checkout.  The default remains the bundled
+    Docusaurus directory for the CLI path.
+    """
     logger.info("Attempting to install dependencies using %s...", package_manager)
     if package_manager == "yarn" and command_exists("yarn"):
         cmd = ["yarn", "install"]
@@ -234,7 +256,8 @@ def install_dependencies(package_manager="npm"):
         logger.error("Neither npm nor yarn found. Cannot install dependencies.")
         return False
 
-    return run_command_stream_output(cmd, DOCUSAURUS_ROOT_DIR)
+    working_dir = os.fspath(cwd) if cwd is not None else DOCUSAURUS_ROOT_DIR
+    return run_command_stream_output(cmd, working_dir)
 
 
 def start_dev_server(package_manager="npm"):

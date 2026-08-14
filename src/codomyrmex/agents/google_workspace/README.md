@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Google Workspace..
+Module implementation, resources, and local coordination for Google Workspace.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -1,9 +1,26 @@
-"""MCP tools for the orchestrator module."""
+"""MCP tools for the orchestrator module.
+
+MCP callers may select only the small, explicitly registered set of pure
+callables below.  Import paths are deliberately not treated as capabilities.
+"""
 
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 logger = get_logger(__name__)
+
+_SAFE_CALLABLES = {
+    "builtins.abs": abs,
+    "builtins.int": int,
+    "builtins.len": len,
+    "builtins.max": max,
+    "builtins.min": min,
+    "builtins.round": round,
+    "builtins.str": str,
+    "builtins.sum": sum,
+}
+_MAX_DAG_TASKS = 256
+_MAX_WORKERS = 32
 
 
 @mcp_tool(category="orchestrator")
@@ -48,39 +65,43 @@ def analyze_workflow_dependencies(tasks: list[dict]) -> dict:
     Returns:
         Validation result indicating if the workflow is a valid DAG.
     """
-    from codomyrmex.logistics.orchestration.project.task_orchestrator import Task
     from codomyrmex.orchestrator import CycleError, Workflow
 
     try:
+        if not isinstance(tasks, list) or not tasks:
+            raise ValueError("tasks must be a non-empty list")
+        if len(tasks) > _MAX_DAG_TASKS:
+            raise ValueError(f"tasks must contain at most {_MAX_DAG_TASKS} entries")
         workflow = Workflow(name="analysis_workflow")
+        seen: set[str] = set()
         for t in tasks:
-            task_id = t.get("id")
-            if not task_id:
-                continue
-            task = Task(name=task_id, action="", module="")
-            workflow.add_task(task)  # type: ignore
+            if not isinstance(t, dict) or not isinstance(t.get("id"), str):
+                raise ValueError("each task must have a string id")
+            task_id = t["id"].strip()
+            if not task_id or task_id in seen:
+                raise ValueError(f"task ids must be non-empty and unique: {task_id!r}")
+            dependencies = t.get("dependencies", [])
+            if not isinstance(dependencies, list) or not all(
+                isinstance(dep, str) and dep.strip() for dep in dependencies
+            ):
+                raise ValueError(f"dependencies for {task_id!r} must be a list of ids")
+            seen.add(task_id)
+            workflow.add_task(task_id, lambda: None, dependencies=dependencies)
 
-        # Add dependencies in a second pass
-        for t in tasks:
-            task_id = t.get("id")
-            deps = t.get("dependencies", [])
-            for dep in deps:
-                try:
-                    workflow.add_dependency(task_id, dep)
-                except (
-                    ValueError,
-                    RuntimeError,
-                    AttributeError,
-                    OSError,
-                    TypeError,
-                ) as e:
-                    logger.warning(
-                        "Failed to add dependency %s -> %s: %s", task_id, dep, e
-                    )
-
-        # Verification happens implicitly or through a topological sort check
-        # This will raise CycleError if a cycle exists
-        execution_order = workflow._get_execution_order()
+        workflow.validate()
+        remaining = {
+            name: set(task.dependencies) for name, task in workflow.tasks.items()
+        }
+        execution_order: list[str] = []
+        while remaining:
+            ready = sorted(name for name, deps in remaining.items() if not deps)
+            if not ready:
+                raise CycleError("Circular dependency detected")
+            execution_order.extend(ready)
+            for name in ready:
+                remaining.pop(name)
+            for deps in remaining.values():
+                deps.difference_update(ready)
 
         return {
             "status": "success",
@@ -104,9 +125,9 @@ def orchestrator_run_dag(
 
     Each task dict must include:
     - ``id``: unique task identifier
-    - ``fn_expr``: Python expression string evaluated to produce the task result
-      (e.g. ``"len('hello')"``).  Full callables are supported via ``fn`` key
-      that resolves to a dotted import path (``"module.function"``).
+    - ``fn_expr``: bounded expression using the documented pure builtins
+      (e.g. ``"len('hello')"``), or ``fn`` set to a key in the explicit
+      callable registry (for example ``"builtins.int"``).
     - Optional ``args``, ``kwargs`` for the callable.
 
     Args:
@@ -119,8 +140,6 @@ def orchestrator_run_dag(
         Aggregated result dict with per-task outputs, success/error counts.
     """
     try:
-        import importlib
-
         from codomyrmex.orchestrator.swarm_topology import (
             SwarmTopology,
             TaskSpec,
@@ -130,13 +149,18 @@ def orchestrator_run_dag(
         def _resolve_fn(task_dict: dict):
             """Resolve a callable from task dict."""
             if "fn" in task_dict:
-                # dotted import path e.g. "os.path.exists"
-                parts = task_dict["fn"].rsplit(".", 1)
-                if len(parts) == 2:
-                    mod = importlib.import_module(parts[0])
-                    return getattr(mod, parts[1])
+                fn_name = task_dict["fn"]
+                if fn_name not in _SAFE_CALLABLES:
+                    raise ValueError(
+                        f"callable {fn_name!r} is not in the orchestrator registry"
+                    )
+                return _SAFE_CALLABLES[fn_name]
             if "fn_expr" in task_dict:
                 expr = task_dict["fn_expr"]
+                if not isinstance(expr, str) or len(expr) > 256:
+                    raise ValueError(
+                        "fn_expr must be a string of at most 256 characters"
+                    )
                 if "__" in expr:
                     raise ValueError(
                         "Double underscores are not allowed in fn_expr for security reasons."
@@ -150,22 +174,48 @@ def orchestrator_run_dag(
                     "abs": abs,
                     "round": round,
                 }
-                return lambda *_a, **_kw: eval(  # nosec B307 - restricted expression DSL
+                return lambda *_a, **_kw: eval(  # nosec B307
                     expr, {"__builtins__": {}}, safe_locals
                 )
             # Default: identity (return args as-is)
             return lambda *a, **kw: {"args": a, "kwargs": kw}
 
-        specs = [
-            TaskSpec(
-                task_id=t.get("id", f"task_{i}"),
-                fn=_resolve_fn(t),
-                args=t.get("args", []),
-                kwargs=t.get("kwargs", {}),
-                metadata=t.get("metadata", {}),
+        if not isinstance(tasks, list) or not tasks:
+            raise ValueError("tasks must be a non-empty list")
+        if len(tasks) > _MAX_DAG_TASKS:
+            raise ValueError(f"tasks must contain at most {_MAX_DAG_TASKS} entries")
+        if not isinstance(max_workers, int) or not 1 <= max_workers <= _MAX_WORKERS:
+            raise ValueError(f"max_workers must be between 1 and {_MAX_WORKERS}")
+        seen_ids: set[str] = set()
+        specs = []
+        for i, task in enumerate(tasks):
+            if not isinstance(task, dict):
+                raise ValueError(f"task {i} must be an object")
+            task_id = task.get("id", f"task_{i}")
+            if (
+                not isinstance(task_id, str)
+                or not task_id.strip()
+                or task_id in seen_ids
+            ):
+                raise ValueError(
+                    f"task ids must be unique non-empty strings: {task_id!r}"
+                )
+            args = task.get("args", [])
+            kwargs = task.get("kwargs", {})
+            if not isinstance(args, list) or not isinstance(kwargs, dict):
+                raise ValueError(
+                    f"args must be a list and kwargs an object for {task_id!r}"
+                )
+            seen_ids.add(task_id)
+            specs.append(
+                TaskSpec(
+                    task_id=task_id,
+                    fn=_resolve_fn(task),
+                    args=args,
+                    kwargs=kwargs,
+                    metadata=task.get("metadata", {}),
+                )
             )
-            for i, t in enumerate(tasks)
-        ]
 
         topo = SwarmTopology(max_workers=max_workers)
         result = topo.run(
@@ -173,6 +223,7 @@ def orchestrator_run_dag(
             specs,
             broadcast_message=broadcast_message,
         )
-        return {"status": "success", "topology": topology, **result}
+        status = "success" if result.get("error_count", 0) == 0 else "failed"
+        return {"status": status, "topology": topology, **result}
     except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
         return {"status": "error", "message": f"DAG execution failed: {e}"}

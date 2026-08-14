@@ -1,6 +1,6 @@
 # Transport — Technical Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: August 2026
 
 ## Overview
 
@@ -9,8 +9,8 @@ Server and client implementations for MCP communication over stdio and HTTP tran
 ## Architecture
 
 - **Server**: `MCPServer` dispatches JSON-RPC methods (`initialize`, `tools/list`, `tools/call`, `resources/list`, `resources/read`, `prompts/list`, `prompts/get`) to internal handlers. Embeds `MCPToolRegistry` for tool management and `RateLimiter` for request throttling. HTTP mode uses FastAPI with Streamable HTTP at `/mcp` plus REST convenience endpoints.
-- **Client**: `MCPClient` uses pluggable `_Transport` implementations (`_StdioTransport`, `_HTTPTransport`) behind async context manager factories. Automatic retry with exponential backoff for transient errors.
-- **Entry point**: `main.py` late-loads Core-layer MCP tool modules to respect layer boundaries, registers their `@mcp_tool` functions, then starts the server.
+- **Client**: `MCPClient` uses pluggable `_Transport` implementations (`_StdioTransport`, `_HTTPTransport`) behind async context manager factories. Automatic retry with exponential backoff for transient errors; `tools/call` retries are disabled by default because a timed-out side effect may still be running.
+- **Entry point**: `main.py` delegates to the PAI bridge so CLI-launched servers share trust, path-capability, static-over-dynamic collision, and audit policy with direct callers.
 
 ## Key Classes
 
@@ -23,7 +23,7 @@ Server and client implementations for MCP communication over stdio and HTTP tran
 | `register_resource` | `uri, name, description, mime_type, content_provider` | `None` | Register a URI-addressable resource |
 | `register_file_resource` | `path: str` | `None` | Register a local file as a resource with auto-detected MIME type |
 | `register_prompt` | `name, description, arguments, template` | `None` | Register a prompt template with `{key}` substitution |
-| `handle_request` | `message: dict, correlation_id: str | None` | `dict None` Process a JSON-RPC message; returns `None` for notifications |
+| `handle_request` | `message: dict, correlation_id: str | None` | `dict None` Process a strictly validated JSON-RPC message; returns `None` for notifications |
 | `run_stdio` | — | `None` (async) | Read JSON-RPC from stdin, write responses to stdout |
 | `run_http` | `host="127.0.0.1", port=8080, allowed_origins=None, auth_token=None` | `None` (async) | Start FastAPI server with `/mcp`, `/tools`, `/resources`, `/prompts`, `/health`; non-loopback hosts require `auth_token` |
 | `run` | — | `None` | Synchronous entry point (runs stdio) |
@@ -65,6 +65,7 @@ Server and client implementations for MCP communication over stdio and HTTP tran
 | `max_retries` | `int` | `3` | Max retry attempts |
 | `retry_delay` | `float` | `0.5` | Base delay between retries (doubled each attempt) |
 | `connection_pool_size` | `int` | `10` | Max simultaneous HTTP connections |
+| `retry_tool_calls` | `bool` | `False` | Explicitly opt in to retrying potentially side-effecting `tools/call` requests |
 | `protocol_version` | `str` | `"2025-06-18"` | MCP protocol version to negotiate |
 
 ## Dependencies
@@ -78,6 +79,9 @@ Server and client implementations for MCP communication over stdio and HTTP tran
 - HTTP server transport requires `fastapi` and `uvicorn`.
 - `main.py` Core-layer modules (`coding`, `containerization`, `git_operations`, `search`) are loaded lazily to respect layer boundaries.
 - Tool execution uses `run_in_executor` for synchronous handlers with `asyncio.wait_for` timeout enforcement.
+- JSON-RPC requests require version `2.0`, a valid scalar request ID, a non-empty method, and object params. Stdio parse failures return `-32700`; malformed requests return `-32600`/`-32602` instead of being silently ignored.
+- Tool names must be non-empty strings. Registered `outputSchema` values are validated against the structured result before `structuredContent` is emitted.
+- Stdio request/response I/O is serialized and response IDs are correlated; mismatched or malformed responses fail closed.
 - Zero-mock: real network/process I/O only, `NotImplementedError` for unimplemented paths.
 
 ## Error Handling

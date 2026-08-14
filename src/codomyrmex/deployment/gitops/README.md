@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Gitops..
+Module implementation, resources, and local coordination for Gitops.
 
 ## Directory Contents
 - `PAI.md` – File

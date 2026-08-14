@@ -2,7 +2,7 @@
 
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
-A comprehensive guide to how agentic operations are deployed, orchestrated, and integrated within the Codomyrmex ecosystem — spanning **15+ agent providers**, **130** top-level Python modules, **623** production `@mcp_tool` decorators, **81 PAI skills**, and **15 Antigravity workflows**. Live counts: [reference/inventory.md](../reference/inventory.md).
+A comprehensive guide to how agentic operations are deployed, orchestrated, and integrated within the Codomyrmex ecosystem — spanning **15+ agent providers**, **130** top-level Python modules, **627** production `@mcp_tool` decorators, **81 PAI skills**, and **15 Antigravity workflows**. Live counts: [reference/inventory.md](../reference/inventory.md).
 
 ---
 
@@ -330,7 +330,7 @@ flowchart LR
 | **PAI Bridge** | `pai_bridge.py` | Discovery, validation — reads PAI's filesystem (read-only) |
 | **Trust Gateway** | `trust_gateway.py` | 3-tier security gating for tool execution |
 | **MCP Bridge** | `mcp_bridge.py` | JSON-RPC protocol for tool invocation |
-| **MCP Discovery** | `mcp/discovery.py` | Auto-discovers **150** `mcp_tools.py` files (non-test) |
+| **MCP Discovery** | `mcp/discovery.py` | Auto-discovers **151** `mcp_tools.py` files (non-test) |
 | **PAI Webhook** | `pai_webhook.py` | FastAPI router for bidirectional PAI ↔ Codomyrmex |
 | **PAI Client** | `pai_client.py` | HTTP client to push events to PAI |
 
@@ -399,11 +399,11 @@ sequenceDiagram
 
 ## 5. MCP Tool Integration
 
-Every module exposes functionality through `mcp_tools.py` files. **150** `mcp_tools.py` entry points back **623** production `@mcp_tool` lines in the Python tree (`uv run python scripts/doc_inventory.py`), plus **9** static proxy tools on the PAI bridge (counted separately; see [inventory](../reference/inventory.md)).
+Every module exposes functionality through `mcp_tools.py` files. **151** `mcp_tools.py` entry points back **627** production `@mcp_tool` lines in the Python tree (`uv run python scripts/doc_inventory.py`), plus **9** static proxy tools on the PAI bridge (counted separately; see [inventory](../reference/inventory.md)).
 
 ```mermaid
 pie title MCP-related surface (two layers)
-    "Python @mcp_tool lines" : 623
+    "Python @mcp_tool lines" : 627
     "PAI static proxy tools" : 9
 ```
 

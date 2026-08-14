@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Plugin System..
+Module implementation, resources, and local coordination for Plugin System.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

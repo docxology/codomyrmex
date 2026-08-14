@@ -1103,32 +1103,37 @@ class TestOpenCodeHandlersNoLiveCLI:
 
     def test_opencode_check_runs_without_crash(self, capsys):
         """handle_opencode_check always returns a bool regardless of CLI availability."""
-        args = _make_args()
+        args = _make_args(command="codomyrmex-unavailable-opencode")
         result = handle_opencode_check(args)
         assert isinstance(result, bool)
 
     def test_opencode_init_runs_without_crash(self, capsys):
         """handle_opencode_init with path=None runs without crashing."""
-        args = _make_args(path=None)
+        args = _make_args(
+            path=None,
+            command="codomyrmex-unavailable-opencode",
+        )
         result = handle_opencode_init(args)
         assert isinstance(result, bool)
 
     def test_opencode_version_runs_without_crash(self, capsys):
-        args = _make_args()
+        args = _make_args(command="codomyrmex-unavailable-opencode")
         result = handle_opencode_version(args)
         assert isinstance(result, bool)
 
     def test_opencode_execute_runs_without_crash(self, capsys):
-        import shutil
-
-        if not shutil.which("opencode"):
-            pytest.skip("opencode CLI not installed — skipping execute test")
-        args = _make_args(prompt="test")
+        args = _make_args(
+            prompt="test",
+            command="codomyrmex-unavailable-opencode",
+        )
         result = handle_opencode_execute(args)
         assert isinstance(result, bool)
 
     def test_opencode_stream_runs_without_crash(self, capsys):
-        args = _make_args(prompt="test")
+        args = _make_args(
+            prompt="test",
+            command="codomyrmex-unavailable-opencode",
+        )
         result = handle_opencode_stream(args)
         assert isinstance(result, bool)
 

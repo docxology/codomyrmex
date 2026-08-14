@@ -67,15 +67,35 @@ def validate_tool_arguments(
         ``valid=True`` with (optionally coerced) ``coerced_args`` on success,
         or ``valid=False`` with human-readable ``errors`` on failure.
     """
-    # Normalise None → empty dict
+    if arguments is not None and not isinstance(arguments, dict):
+        return ValidationResult(
+            valid=False,
+            errors=[f"{tool_name}: arguments must be a JSON object"],
+        )
     if arguments is None:
         arguments = {}
+
+    if not isinstance(schema, dict):
+        return ValidationResult(
+            valid=False,
+            errors=[f"{tool_name}: schema must be a JSON object"],
+        )
 
     # Extract the actual JSON Schema object
     input_schema = _extract_input_schema(schema)
     if input_schema is None:
+        if "inputSchema" in schema:
+            return ValidationResult(
+                valid=False,
+                errors=[f"{tool_name}: inputSchema must be a JSON object"],
+            )
         # No schema to validate against — pass through
         return ValidationResult(valid=True, coerced_args=dict(arguments))
+    if not isinstance(input_schema, dict):
+        return ValidationResult(
+            valid=False,
+            errors=[f"{tool_name}: inputSchema must be a JSON object"],
+        )
 
     working_args = dict(arguments)
 
@@ -179,6 +199,12 @@ def _validate_with_jsonschema(
 ) -> list[str]:
     """Validate using the ``jsonschema`` library."""
     import jsonschema
+
+    try:
+        jsonschema.Draft7Validator.check_schema(schema)
+    except jsonschema.exceptions.SchemaError as exc:
+        detail = getattr(exc, "message", str(exc))
+        return [f"{tool_name}: invalid JSON Schema: {detail}"]
 
     validator = jsonschema.Draft7Validator(schema)
     errors: list[str] = []

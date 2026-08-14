@@ -5,21 +5,10 @@ Zero-Mock compliant — uses simple stub classes instead of unittest.mock.
 
 import pytest
 
-try:
-    from codomyrmex.agents.core import AgentCapabilities, AgentRequest, AgentResponse
-    from codomyrmex.agents.core.config import (
-        AgentConfig,
-    )
-    from codomyrmex.agents.core.exceptions import AgentConfigurationError, AgentError
-    from codomyrmex.agents.generic import APIAgentBase
-
-    _HAS_AGENTS = True
-except ImportError:
-    _HAS_AGENTS = False
-
-if not _HAS_AGENTS:
-    pytest.skip("agents deps not available", allow_module_level=True)
-
+from codomyrmex.agents.core import AgentCapabilities, AgentRequest, AgentResponse
+from codomyrmex.agents.core.config import AgentConfig
+from codomyrmex.agents.core.exceptions import AgentConfigurationError, AgentError
+from codomyrmex.agents.generic import APIAgentBase
 
 # ---------------------------------------------------------------------------
 # Lightweight stubs replacing unittest.mock.Mock

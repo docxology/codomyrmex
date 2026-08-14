@@ -39,6 +39,11 @@ def main() -> int:
         type=Path,
         default=root / "output/data/manuscript_variable_manifest.json",
     )
+    parser.add_argument(
+        "--write",
+        action="store_true",
+        help="Persist the report to --manifest (default is read-only).",
+    )
     args = parser.parse_args()
 
     if not args.variables.is_file():
@@ -66,10 +71,11 @@ def main() -> int:
         variables=variables,
         figure_source_dir=args.figure_source,
     )
-    args.manifest.parent.mkdir(parents=True, exist_ok=True)
-    args.manifest.write_text(
-        json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    if args.write:
+        args.manifest.parent.mkdir(parents=True, exist_ok=True)
+        args.manifest.write_text(
+            json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
     print(json.dumps({"manifest": str(args.manifest), "status": report["status"]}))
     for error in report["errors"]:
         print(f"- {error}", file=sys.stderr)

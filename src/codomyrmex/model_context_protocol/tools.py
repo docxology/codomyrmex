@@ -446,7 +446,7 @@ def run_shell_command(
 
         result = subprocess.run(
             command,
-            shell=True,  # nosec B602 - explicit full-profile shell tool
+            shell=True,  # nosec B602
             cwd=Path(cwd).expanduser().resolve(),
             capture_output=True,
             text=True,

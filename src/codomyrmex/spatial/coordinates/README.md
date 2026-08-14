@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Coordinates..
+Module implementation, resources, and local coordination for Coordinates.
 
 ## Directory Contents
 - `PAI.md` – File

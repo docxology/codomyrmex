@@ -17,7 +17,9 @@ from codomyrmex.agents.specialized.improvement_report import (
     ImprovementReport,
     ProposedChange,
     ReviewVerdict,
-    TestSuiteResult,
+)
+from codomyrmex.agents.specialized.improvement_report import (
+    TestSuiteResult as ImprovementTestSuiteResult,
 )
 
 # ─── Anti-Pattern Detector ────────────────────────────────────────────
@@ -140,7 +142,7 @@ class TestImprovementReport:
                     anti_pattern="bare_except",
                 )
             ],
-            test_results=TestSuiteResult(total=1, passed=1),
+            test_results=ImprovementTestSuiteResult(total=1, passed=1),
             review_verdict=ReviewVerdict.APPROVE,
             overall_confidence=0.85,
         )
@@ -161,5 +163,5 @@ class TestImprovementReport:
         assert report.approved is True
 
     def test_test_suite_success_rate(self):
-        result = TestSuiteResult(total=10, passed=8, failed=2)
+        result = ImprovementTestSuiteResult(total=10, passed=8, failed=2)
         assert result.success_rate == pytest.approx(0.8)

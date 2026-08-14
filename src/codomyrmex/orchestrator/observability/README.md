@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Observability..
+Module implementation, resources, and local coordination for Observability.
 
 ## Directory Contents
 - `PAI.md` – File

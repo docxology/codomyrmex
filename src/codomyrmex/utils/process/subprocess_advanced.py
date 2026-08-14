@@ -8,14 +8,16 @@ run_command infrastructure:
 
 from __future__ import annotations
 
-import subprocess
+import subprocess  # nosec B404
 import sys
 import time
+from os import read as read_bytes
+from os import set_blocking
 from typing import TYPE_CHECKING, Any
 
 from codomyrmex.logging_monitoring import get_logger
 
-from .subprocess import (
+from .subprocess import (  # nosec B404
     SubprocessResult,
     _prepare_command,
     _prepare_environment,
@@ -132,21 +134,69 @@ def stream_command(
             prepared_command,
             cwd=cwd,
             env=prepared_env,
-            shell=shell,  # nosec B602 - caller explicitly selects trusted shell mode
+            shell=shell,  # nosec B602
             stdout=subprocess.PIPE,
             stderr=stderr_pipe,
-            text=True,
-            encoding=encoding,
-            errors=errors,
-            bufsize=1,
+            # POSIX streaming uses non-blocking byte reads below.  A text
+            # wrapper can block in readline() after select() reports a partial
+            # line, defeating the timeout and generator cancellation paths.
+            text=sys.platform == "win32",
+            encoding=encoding if sys.platform == "win32" else None,
+            errors=errors if sys.platform == "win32" else None,
+            bufsize=1 if sys.platform == "win32" else 0,
         )
 
-        deadline = time.perf_counter() + timeout if timeout else None
+        deadline = time.perf_counter() + timeout if timeout is not None else None
+        stream_buffers: dict[int, bytearray] = {}
+        if sys.platform != "win32":
+            for stream in (process.stdout, process.stderr):
+                if stream is not None and stream is not subprocess.STDOUT:
+                    fd = stream.fileno()
+                    set_blocking(fd, False)
+                    stream_buffers[fd] = bytearray()
+
+        def emit_available(stream: Any, *, is_stdout: bool) -> list[str]:
+            """Read available POSIX bytes and return complete decoded lines."""
+            if sys.platform == "win32":
+                line = stream.readline()
+                if not line:
+                    return []
+                return [line.rstrip("\n\r")]
+
+            try:
+                data = read_bytes(stream.fileno(), 65536)
+            except BlockingIOError:
+                return []
+            if not data:
+                return []
+            buffer = stream_buffers[stream.fileno()]
+            buffer.extend(data)
+            lines: list[str] = []
+            while b"\n" in buffer:
+                line, _, remainder = buffer.partition(b"\n")
+                buffer[:] = remainder
+                lines.append(line.rstrip(b"\r").decode(encoding, errors=errors))
+            return lines
+
+        def flush_buffers() -> None:
+            """Preserve final partial POSIX lines without blocking on EOF."""
+            if sys.platform == "win32":
+                return
+            for fd, buffer in stream_buffers.items():
+                if buffer:
+                    text = buffer.rstrip(b"\r").decode(encoding, errors=errors)
+                    stdout_fd = process.stdout.fileno() if process.stdout else None
+                    if fd == stdout_fd:
+                        stdout_lines.append(text)
+                    else:
+                        stderr_lines.append(text)
+                    buffer.clear()
 
         while True:
             # Timeout guard
-            if deadline and time.perf_counter() > deadline:
-                process.kill()
+            if deadline is not None and time.perf_counter() > deadline:
+                if process.poll() is None:
+                    process.kill()
                 return _build_error_result(
                     command,
                     stdout_lines,
@@ -159,38 +209,40 @@ def stream_command(
             poll_result = process.poll()
             readable = _poll_readable_streams(process, combine_streams)
 
-            # Yield stdout lines
+            # Yield available stdout/stderr lines.  POSIX reads are bounded to
+            # bytes currently available, so partial lines cannot block the
+            # timeout loop.  Windows retains the previous line-oriented path.
             if process.stdout and process.stdout in readable:
-                line = process.stdout.readline()
-                if line:
-                    line = line.rstrip("\n\r")
+                for line in emit_available(process.stdout, is_stdout=True):
                     stdout_lines.append(line)
                     yield line if combine_streams else f"stdout: {line}"
                     continue
 
-            # Yield stderr lines
             if not combine_streams and process.stderr and process.stderr in readable:
-                line = process.stderr.readline()
-                if line:
-                    line = line.rstrip("\n\r")
+                for line in emit_available(process.stderr, is_stdout=False):
                     stderr_lines.append(line)
                     yield f"stderr: {line}"
                     continue
 
             # Process finished — drain remaining output
             if poll_result is not None:
-                if process.stdout:
-                    remaining = process.stdout.read()
-                    if remaining:
-                        for line in remaining.rstrip("\n\r").split("\n"):
-                            stdout_lines.append(line)
-                            yield line if combine_streams else f"stdout: {line}"
-                if not combine_streams and process.stderr:
-                    remaining = process.stderr.read()
-                    if remaining:
-                        for line in remaining.rstrip("\n\r").split("\n"):
-                            stderr_lines.append(line)
-                            yield f"stderr: {line}"
+                # A descendant may inherit a pipe after the direct child exits.
+                # Drain only bytes already available; blocking until EOF would
+                # hang indefinitely on that inherited descriptor.
+                for stream, is_stdout in (
+                    ((process.stdout, True), (process.stderr, False))
+                    if not combine_streams
+                    else ((process.stdout, True),)
+                ):
+                    if stream is not None:
+                        for line in emit_available(stream, is_stdout=is_stdout):
+                            if is_stdout:
+                                stdout_lines.append(line)
+                                yield line if combine_streams else f"stdout: {line}"
+                            else:
+                                stderr_lines.append(line)
+                                yield f"stderr: {line}"
+                flush_buffers()
                 break
 
         return SubprocessResult(

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Serialization..
+Module implementation, resources, and local coordination for Serialization.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

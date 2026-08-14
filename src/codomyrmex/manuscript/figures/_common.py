@@ -42,7 +42,8 @@ _OI: dict[str, str] = {
 
 _COVER = {
     "bg": "#060b14",
-    "kernel": "#56B4E9",
+    # Dark enough for the white hub label to meet WCAG AA contrast.
+    "kernel": "#1B7099",
     "phero": "#E69F00",
     "ledger": "#0072B2",
     "gate": "#D55E00",

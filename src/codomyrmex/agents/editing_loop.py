@@ -202,6 +202,17 @@ class EditingOrchestrator:
             plan = self._plan(task, feedback)
             logger.info("[EditLoop] Plan generated (%s chars)", len(plan))
 
+            if not self.config.auto_apply_edits:
+                task.result = (
+                    "Edits not applied: auto_apply_edits is disabled. "
+                    "Review the generated plan and enable application explicitly."
+                )
+                task.review_notes.append(
+                    f"[iter {iteration}] edit skipped because auto_apply_edits=False"
+                )
+                logger.info("[EditLoop] Auto-apply disabled; stopping after plan")
+                return task
+
             # 2. Edit
             edit_summary = self._edit(task, plan)
             logger.info("[EditLoop] Edit applied: %s", edit_summary[:80])
@@ -356,6 +367,12 @@ class EditingOrchestrator:
         if not task.file_path:
             return "No file_path specified — plan generated but not applied"
 
+        if not self.config.auto_apply_edits:
+            return (
+                "Edits not applied: auto_apply_edits is disabled. "
+                "Review the plan and enable application explicitly."
+            )
+
         client = self._get_ag_client()
         if client is None:
             return f"Antigravity unavailable — plan:\n{plan[:500]}"
@@ -477,13 +494,26 @@ class EditingOrchestrator:
 
         req = AgentRequest(prompt=prompt)
         resp = self._reviewer.execute_with_session(req)
+        if hasattr(resp, "is_success") and not resp.is_success():
+            error = getattr(resp, "error", None) or "reviewer returned a failure"
+            return False, f"Reviewer failed: {error}", 0.0
         review_text = resp.content.strip() if hasattr(resp, "content") else str(resp)
 
         # Parse score and approval.
         score = self._parse_score(review_text)
+        decision_match = re.search(
+            r"APPROVED:\s*(yes|no)\b", review_text, re.IGNORECASE
+        )
+        decision = decision_match.group(1).lower() if decision_match else None
+        # An explicit rejection always wins.  An explicit approval still has
+        # to clear the configured score threshold; a score alone is accepted
+        # only when the reviewer omitted the structured decision.
         approved = (
-            "APPROVED: yes" in review_text.lower()
-            or score >= self.config.approval_threshold
+            False
+            if decision == "no"
+            else score >= self.config.approval_threshold
+            if decision in {None, "yes"}
+            else False
         )
         notes = self._parse_notes(review_text)
 

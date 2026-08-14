@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Physical..
+Module implementation, resources, and local coordination for Physical.
 
 ## Directory Contents
 - `PAI.md` – File

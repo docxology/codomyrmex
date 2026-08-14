@@ -2,12 +2,15 @@
 
 import importlib
 import logging
+import os
 import re
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Self
 
 from codomyrmex.container_optimization.optimizer import OptimizationSuggestion
 from codomyrmex.logging_monitoring import get_logger
+
+from .client import _docker_daemon_available
 
 # Import logging
 try:
@@ -80,9 +83,39 @@ class ImageOptimizer:
             return
 
         try:
-            self.client = docker.from_env()
+            if not _docker_daemon_available():
+                logger.info(
+                    "Docker daemon is not reachable; image analysis is disabled"
+                )
+                return
+            self.client = docker.from_env(
+                version=os.environ.get("DOCKER_API_VERSION", "1.41")
+            )
+            logger.info("Docker client configured")
         except Exception as e:
             logger.warning("Docker client not available: %s", e)
+            if self.client is not None:
+                self.client.close()
+            self.client = None
+
+    def close(self) -> None:
+        """Close the owned Docker client, if initialized."""
+        if self.client is not None:
+            self.client.close()
+            self.client = None
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, _exc_type, _exc_value, _traceback) -> None:
+        self.close()
+
+    def __del__(self) -> None:
+        """Best-effort cleanup for callers that do not use a context manager."""
+        try:
+            self.close()
+        except Exception:
+            pass
 
     def analyze_image(self, image_name: str) -> ImageAnalysis:
         """

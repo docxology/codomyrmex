@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Templates..
+Module implementation, resources, and local coordination for Templates.
 
 ## Directory Contents
 - `PAI.md` – File

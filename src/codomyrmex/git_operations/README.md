@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Git Operations..
+Module implementation, resources, and local coordination for Git Operations.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

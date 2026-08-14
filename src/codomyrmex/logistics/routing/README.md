@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Routing..
+Module implementation, resources, and local coordination for Routing.
 
 ## Directory Contents
 - `PAI.md` – File

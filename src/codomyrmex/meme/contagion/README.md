@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Contagion..
+Module implementation, resources, and local coordination for Contagion.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Backends..
+Module implementation, resources, and local coordination for Backends.
 
 ## Directory Contents
 - `PAI.md` – File

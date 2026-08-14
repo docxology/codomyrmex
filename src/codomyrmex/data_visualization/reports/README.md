@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Reports..
+Module implementation, resources, and local coordination for Reports.
 
 ## Directory Contents
 - `PAI.md` – File

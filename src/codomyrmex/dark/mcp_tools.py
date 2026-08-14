@@ -22,24 +22,13 @@ def dark_status() -> dict[str, Any]:
         dict with status, pdf_available flag, version, and available presets.
     """
     try:
-        from codomyrmex.dark import PDF_AVAILABLE, __version__
-
-        presets = []
-        if PDF_AVAILABLE:
-            try:
-                from codomyrmex.dark.pdf.dark_pdf_wrapper import DarkPDF
-
-                presets = (
-                    list(DarkPDF.PRESETS.keys()) if hasattr(DarkPDF, "PRESETS") else []
-                )
-            except (ImportError, AttributeError):
-                pass
+        from codomyrmex.dark import PDF_AVAILABLE, PDF_PRESETS, __version__
 
         return {
             "status": "success",
             "pdf_available": PDF_AVAILABLE,
             "version": __version__,
-            "presets": presets,
+            "presets": list(PDF_PRESETS),
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
@@ -56,7 +45,7 @@ def dark_list_presets() -> dict[str, Any]:
         dict with status and presets mapping (name -> filter params).
     """
     try:
-        from codomyrmex.dark import PDF_AVAILABLE
+        from codomyrmex.dark import PDF_AVAILABLE, PDF_PRESETS
 
         if not PDF_AVAILABLE:
             return {
@@ -66,19 +55,10 @@ def dark_list_presets() -> dict[str, Any]:
                 "install_hint": "uv sync --extra dark",
             }
 
-        from codomyrmex.dark.pdf.dark_pdf_wrapper import DarkPDF
-
-        presets = {}
-        if hasattr(DarkPDF, "PRESETS"):
-            for name, params in DarkPDF.PRESETS.items():
-                presets[name] = (
-                    dict(params.items()) if isinstance(params, dict) else str(params)
-                )
-
         return {
             "status": "success",
             "pdf_available": True,
-            "presets": presets,
+            "presets": {name: dict(params) for name, params in PDF_PRESETS.items()},
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}

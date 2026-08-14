@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Vscode..
+Module implementation, resources, and local coordination for Vscode.
 
 ## Directory Contents
 - `PAI.md` – File

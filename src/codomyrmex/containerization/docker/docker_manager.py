@@ -3,7 +3,7 @@ import os
 import sys
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
-from typing import Any
+from typing import Any, Self
 
 docker: Any
 try:
@@ -12,6 +12,8 @@ except ImportError:
     docker = None
 
 from codomyrmex.logging_monitoring import get_logger
+
+from .client import _docker_daemon_available
 
 """Docker Manager for Codomyrmex Containerization Module."""
 
@@ -74,18 +76,45 @@ class DockerManager:
     def _initialize_client(self):
         """Initialize Docker client."""
         try:
+            if not _docker_daemon_available(self.docker_host):
+                logger.info("Docker daemon is not reachable")
+                return
             if self.docker_host:
-                self.client = docker.DockerClient(base_url=self.docker_host)
+                self.client = docker.DockerClient(
+                    base_url=self.docker_host,
+                    version=os.environ.get("DOCKER_API_VERSION", "1.41"),
+                )
             else:
-                self.client = docker.from_env()
+                self.client = docker.from_env(
+                    version=os.environ.get("DOCKER_API_VERSION", "1.41")
+                )
 
-            # Test connection
-            self.client.ping()
-            logger.info("Docker client initialized successfully")
+            logger.info("Docker client configured successfully")
 
         except Exception as e:
             logger.error("Failed to initialize Docker client: %s", e)
+            if self.client is not None:
+                self.client.close()
             self.client = None
+
+    def close(self) -> None:
+        """Close the owned Docker client, if initialized."""
+        if self.client is not None:
+            self.client.close()
+            self.client = None
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, _exc_type, _exc_value, _traceback) -> None:
+        self.close()
+
+    def __del__(self) -> None:
+        """Best-effort cleanup for callers that do not use a context manager."""
+        try:
+            self.close()
+        except Exception:
+            pass
 
     def build_image(
         self,

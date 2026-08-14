@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Audio..
+Module implementation, resources, and local coordination for Audio.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

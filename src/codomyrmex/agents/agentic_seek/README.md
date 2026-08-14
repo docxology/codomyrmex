@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Agentic Seek..
+Module implementation, resources, and local coordination for Agentic Seek.
 
 ## Directory Contents
 - `PAI.md` – File

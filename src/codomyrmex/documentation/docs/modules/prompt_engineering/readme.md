@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Prompt Engineering..
+Module implementation, resources, and local coordination for Prompt Engineering.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

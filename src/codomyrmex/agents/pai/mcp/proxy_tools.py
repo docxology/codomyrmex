@@ -116,22 +116,24 @@ def tool_list_module_functions(*, module: str = "") -> dict[str, Any]:
 # Modules considered safe for runtime function invocation via
 # tool_call_module_function. Modules with I/O, subprocess, or volatile
 # side effects are excluded; add new entries only after a security review.
-_ALLOWED_MODULE_PREFIXES: frozenset[str] = frozenset({
-    "codomyrmex.encryption.",
-    "codomyrmex.validation.",
-    "codomyrmex.serialization.",
-    "codomyrmex.static_analysis.",
-    "codomyrmex.search.",
-    "codomyrmex.schemas.",
-    "codomyrmex.metrics.",
-    "codomyrmex.relations.",
-    "codomyrmex.strategy.",
-    "codomyrmex.skills.",
-    "codomyrmex.soul.",
-    "codomyrmex.text_to_sql.",
-    "codomyrmex.logging_monitoring.",
-    "codomyrmex.model_context_protocol.",
-})
+_ALLOWED_MODULE_PREFIXES: frozenset[str] = frozenset(
+    {
+        "codomyrmex.encryption.",
+        "codomyrmex.validation.",
+        "codomyrmex.serialization.",
+        "codomyrmex.static_analysis.",
+        "codomyrmex.search.",
+        "codomyrmex.schemas.",
+        "codomyrmex.metrics.",
+        "codomyrmex.relations.",
+        "codomyrmex.strategy.",
+        "codomyrmex.skills.",
+        "codomyrmex.soul.",
+        "codomyrmex.text_to_sql.",
+        "codomyrmex.logging_monitoring.",
+        "codomyrmex.model_context_protocol.",
+    }
+)
 
 
 def tool_call_module_function(
@@ -166,10 +168,14 @@ def tool_call_module_function(
     if not any(module_path.startswith(p) for p in _ALLOWED_MODULE_PREFIXES):
         return {
             "error": (
-                f"Module {module_path} is not in the allowed list for "
+                f"Function {func_name!r} is unavailable because module "
+                f"{module_path} is not in the allowed list for "
                 f"runtime function invocation. Allowed prefixes: "
                 f"{sorted(_ALLOWED_MODULE_PREFIXES)}"
             ),
+            # Keep the discovery response shape stable without importing an
+            # unreviewed module merely to enumerate its callables.
+            "available": [],
         }
 
     try:
@@ -269,12 +275,28 @@ def tool_run_tests(
     """Run pytest for a specific module or the whole project."""
     cmd = [sys.executable, "-m", "pytest"]
     if module:
-        # Map module name to test path
-        test_path = _PROJECT_ROOT / "src" / "codomyrmex" / "tests" / "unit" / module
-        if test_path.is_dir():
-            cmd.append(str(test_path))
-        else:
-            cmd.extend(["-k", module])
+        # ``tests`` is a repository-level surface, not a package below
+        # ``src/codomyrmex``. Accept dotted or slash-separated module names,
+        # but reject traversal and shell-like values before constructing a
+        # subprocess argument.
+        raw_module = module.strip().replace("\\", "/")
+        raw_parts = tuple(raw_module.split("/"))
+        if any(part in {".", ".."} for part in raw_parts):
+            return {"error": "module path traversal is not permitted"}
+        normalized_module = raw_module.replace(".", "/")
+        parts = tuple(part for part in normalized_module.split("/") if part)
+        if not parts or any(not part.isidentifier() for part in parts):
+            return {"error": "module must contain only Python identifier path parts"}
+        test_root = (_PROJECT_ROOT / "tests" / "unit").resolve()
+        test_path = test_root.joinpath(*parts).resolve()
+        if test_root not in test_path.parents and test_path != test_root:
+            return {"error": "module path escapes the repository test root"}
+        if not test_path.is_dir():
+            return {
+                "error": f"No unit-test directory found for module '{module}'",
+                "expected_path": str(test_path),
+            }
+        cmd.append(str(test_path))
     if verbose:
         cmd.append("-v")
     cmd.append("--tb=short")

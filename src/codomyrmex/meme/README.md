@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Meme..
+Module implementation, resources, and local coordination for Meme.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

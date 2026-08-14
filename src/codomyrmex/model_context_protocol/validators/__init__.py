@@ -41,6 +41,32 @@ class SchemaValidator:
         errors: list[str] = []
         warnings: list[str] = []
 
+        if "enum" in self.schema and data not in self.schema["enum"]:
+            errors.append(f"Value must be one of {self.schema['enum']!r}")
+        if "const" in self.schema and data != self.schema["const"]:
+            errors.append(f"Value must equal {self.schema['const']!r}")
+
+        for combinator in ("anyOf", "oneOf"):
+            variants = self.schema.get(combinator)
+            if variants:
+                variant_results = [
+                    SchemaValidator(variant).validate(data) for variant in variants
+                ]
+                valid_count = sum(result.valid for result in variant_results)
+                if (combinator == "anyOf" and valid_count == 0) or (
+                    combinator == "oneOf" and valid_count != 1
+                ):
+                    errors.append(
+                        f"Value must satisfy exactly one valid {combinator} branch"
+                    )
+                elif combinator == "anyOf":
+                    # A valid union branch already checked its nested
+                    # constraints; avoid applying an absent/overly broad root
+                    # type a second time.
+                    return ValidationResult(
+                        valid=not errors, errors=errors, warnings=warnings
+                    )
+
         schema_type = self.schema.get("type")
 
         if schema_type == "object":
@@ -56,6 +82,20 @@ class SchemaValidator:
         elif schema_type == "string":
             if not isinstance(data, str):
                 errors.append(f"Expected string, got {type(data).__name__}")
+            else:
+                min_length = self.schema.get("minLength")
+                max_length = self.schema.get("maxLength")
+                if min_length is not None and len(data) < min_length:
+                    errors.append(f"String length must be at least {min_length}")
+                if max_length is not None and len(data) > max_length:
+                    errors.append(f"String length must be at most {max_length}")
+                pattern = self.schema.get("pattern")
+                if pattern:
+                    try:
+                        if re.search(pattern, data) is None:
+                            errors.append(f"String does not match pattern {pattern!r}")
+                    except re.error:
+                        errors.append(f"Invalid schema pattern: {pattern!r}")
         elif schema_type == "integer":
             if not isinstance(data, int) or isinstance(data, bool):
                 errors.append(f"Expected integer, got {type(data).__name__}")
@@ -64,6 +104,14 @@ class SchemaValidator:
                 errors.append(f"Expected number, got {type(data).__name__}")
         elif schema_type == "boolean" and not isinstance(data, bool):
             errors.append(f"Expected boolean, got {type(data).__name__}")
+
+        if isinstance(data, (int, float)) and not isinstance(data, bool):
+            minimum = self.schema.get("minimum")
+            maximum = self.schema.get("maximum")
+            if minimum is not None and data < minimum:
+                errors.append(f"Value must be at least {minimum}")
+            if maximum is not None and data > maximum:
+                errors.append(f"Value must be at most {maximum}")
 
         return ValidationResult(
             valid=len(errors) == 0, errors=errors, warnings=warnings
@@ -89,6 +137,8 @@ class SchemaValidator:
                 result = prop_validator.validate(value)
                 for err in result.errors:
                     errors.append(f"{prop}: {err}")
+            elif self.schema.get("additionalProperties") is False:
+                errors.append(f"Unknown field: {prop}")
 
         return errors
 

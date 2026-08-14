@@ -747,6 +747,9 @@ class TestMissionControlServerLifecycle:
 
             os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
             proc.wait()
+            for stream in (proc.stdin, proc.stdout, proc.stderr):
+                if stream is not None:
+                    stream.close()
 
     def test_start_server_pnpm_not_found(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch

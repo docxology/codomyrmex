@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Protocols..
+Module implementation, resources, and local coordination for Protocols.
 
 ## Directory Contents
 - `PAI.md` – File

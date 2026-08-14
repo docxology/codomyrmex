@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Discovery..
+Module implementation, resources, and local coordination for Discovery.
 
 ## Directory Contents
 - `PAI.md` – File

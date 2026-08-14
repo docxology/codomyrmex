@@ -58,6 +58,7 @@ from .reliability.rate_limiter import RateLimiter, RateLimiterConfig
 from .schemas.mcp_schemas import (
     MCPErrorDetail,
     MCPMessage,
+    MCPRegistrationError,
     MCPToolCall,
     MCPToolRegistry,
     MCPToolResult,
@@ -122,6 +123,7 @@ __all__ = [
     "MCPErrorCode",
     "MCPErrorDetail",
     "MCPMessage",
+    "MCPRegistrationError",
     "MCPServer",
     "MCPServerConfig",
     "MCPToolCall",

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Profiling..
+Module implementation, resources, and local coordination for Profiling.
 
 ## Directory Contents
 - `PAI.md` – File

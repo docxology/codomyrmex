@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Secrets..
+Module implementation, resources, and local coordination for Secrets.
 
 ## Directory Contents
 - `PAI.md` – File

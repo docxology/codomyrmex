@@ -1,7 +1,7 @@
 """Tests for MCP proxy tools in codomyrmex.agents.pai.mcp.proxy_tools.
 
 All tests call the real implementations directly -- no mocks, no MagicMock,
-no monkeypatch.  External-service tests use @pytest.mark.skipif guards.
+no monkeypatch.  External-service behavior uses graceful local fallback.
 
 Coverage targets:
 - tool_list_modules   -- list_modules wrapper
@@ -15,8 +15,6 @@ Coverage targets:
 
 from __future__ import annotations
 
-from pathlib import Path
-
 import pytest
 from tests.support.repo_paths import PACKAGE_ROOT, REPO_ROOT
 
@@ -28,6 +26,7 @@ from codomyrmex.agents.pai.mcp.proxy_tools import (
     tool_module_info,
     tool_pai_awareness,
     tool_pai_status,
+    tool_run_tests,
 )
 
 # ---------------------------------------------------------------------------
@@ -80,6 +79,17 @@ class TestToolListModules:
         result = tool_list_modules()
         for mod in result["modules"][:10]:  # spot-check first 10
             assert isinstance(mod, str), f"Non-string module entry: {mod!r}"
+
+
+class TestToolRunTestsPathHandling:
+    def test_unknown_module_fails_at_the_real_test_root(self):
+        result = tool_run_tests(module="does_not_exist_xyz")
+        assert "error" in result
+        assert "/tests/unit/does_not_exist_xyz" in result["expected_path"]
+
+    def test_module_traversal_is_rejected(self):
+        result = tool_run_tests(module="../agents")
+        assert "error" in result
 
 
 # ---------------------------------------------------------------------------
@@ -249,12 +259,13 @@ class TestToolPaiAwareness:
             f"Unexpected result structure from tool_pai_awareness: {list(result.keys())}"
         )
 
-    @pytest.mark.skipif(
-        not (Path.home() / ".claude" / "PAI").exists(),
-        reason="PAI installation not present; awareness data requires PAI filesystem",
-    )
     def test_full_awareness_has_expected_keys(self):
-        """When PAI is installed, result must contain all major awareness keys."""
+        """Awareness always returns the stable local data contract.
+
+        The provider deliberately degrades to empty collections when the
+        optional user PAI installation is absent, so this test must not depend
+        on a private home-directory checkout.
+        """
         result = tool_pai_awareness()
         assert "error" not in result, f"Unexpected error with PAI installed: {result}"
         expected_keys = {"missions", "projects", "telos", "memory", "skills"}

@@ -1,6 +1,7 @@
 """MCP dynamic tool discovery."""
 
 import ast
+import copy
 import importlib
 import os
 import threading
@@ -21,16 +22,38 @@ def tool_invalidate_cache(module: str | None = None) -> dict[str, Any]:
                 If None, clears the entire cache.
     """
     if module:
+        if not isinstance(module, str) or not module.strip():
+            return {"error": "module must be a non-empty string", "failed": True}
+
+        # Never pass an arbitrary caller-controlled string to
+        # ``importlib.import_module``. Cache invalidation is an MCP tool, so
+        # its target must be constrained to Codomyrmex MCP source metadata.
+        canonical_modules = set(_find_mcp_tool_modules())
+        parent_modules = set(_find_mcp_modules())
+        if module in parent_modules:
+            scan_target = f"{module}.mcp_tools"
+        elif module in canonical_modules:
+            scan_target = module
+        else:
+            return {
+                "error": f"module is not an approved Codomyrmex MCP module: {module!r}",
+                "rescanned_module": module,
+                "failed": True,
+            }
+
         if _DISCOVERY_ENGINE is None:
             return {"error": "Discovery engine not initialized"}
 
-        scan_target = (
-            f"{module}.mcp_tools" if module in set(_find_mcp_modules()) else module
-        )
         report = _DISCOVERY_ENGINE.scan_module(scan_target)
 
         global _CACHE_EXPIRY
         _CACHE_EXPIRY = 0.0  # expired in the past → triggers refresh on next access
+
+        # The PAI bridge maintains a separate registry cache. Invalidate it
+        # as well so a refreshed source scan cannot leave stale handlers live.
+        from .server import invalidate_tool_registry
+
+        invalidate_tool_registry()
 
         return {
             "cleared": False,
@@ -69,10 +92,20 @@ _DISCOVERY_ENGINE: Any | None = None
 
 def invalidate_tool_cache() -> None:
     """Clear the dynamic tool discovery cache and its TTL."""
-    global _DYNAMIC_TOOLS_CACHE, _CACHE_EXPIRY
+    global _DYNAMIC_TOOLS_CACHE, _CACHE_EXPIRY, _DISCOVERY_ENGINE
     with _DYNAMIC_TOOLS_CACHE_LOCK:
         _DYNAMIC_TOOLS_CACHE = None
         _CACHE_EXPIRY = None
+        # Rebuild the engine too: its incremental registry otherwise retains
+        # tools that disappeared from source between full scans.
+        _DISCOVERY_ENGINE = None
+    try:
+        from .server import invalidate_tool_registry
+
+        invalidate_tool_registry()
+    except ImportError:
+        # Discovery is also usable without importing the PAI bridge.
+        pass
     logger.info("Dynamic tool cache invalidated")
 
 
@@ -203,7 +236,7 @@ def discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
         logger.debug("Discovery cache hit (expires in %.1fs)", _CACHE_EXPIRY - now)
         if _DISCOVERY_ENGINE:
             _DISCOVERY_ENGINE.record_cache_hit()
-        return _DYNAMIC_TOOLS_CACHE
+        return copy.deepcopy(_DYNAMIC_TOOLS_CACHE)
 
     if _DISCOVERY_ENGINE is None:
         from codomyrmex.model_context_protocol.discovery import MCPDiscovery
@@ -244,11 +277,11 @@ def discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
             and _CACHE_EXPIRY is not None
             and now2 < _CACHE_EXPIRY
         ):
-            return _DYNAMIC_TOOLS_CACHE
+            return copy.deepcopy(_DYNAMIC_TOOLS_CACHE)
         _DYNAMIC_TOOLS_CACHE = tools
         _CACHE_EXPIRY = now2 + _DEFAULT_CACHE_TTL
 
-    return tools
+    return copy.deepcopy(tools)
 
 
 def get_discovery_metrics() -> dict[str, Any] | None:

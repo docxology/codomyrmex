@@ -9,6 +9,7 @@ from __future__ import annotations
 from codomyrmex.agents.core.mcp_tools import (
     get_last_trace,
     get_thinking_depth,
+    react_step,
     set_thinking_depth,
     think,
 )
@@ -40,6 +41,14 @@ class TestThinkMCPTool:
         assert result["status"] == "success"
         assert result["depth"] == "normal"
 
+    def test_think_empty_prompt_is_error_and_has_no_stale_trace(self) -> None:
+        think("seed a trace")
+        result = think("   ")
+        assert result["status"] == "error"
+        assert result["error"] == "Prompt is required"
+        assert result["confidence"] == 0.0
+        assert get_last_trace()["status"] == "error"
+
 
 class TestGetThinkingDepth:
     """Tests for get_thinking_depth() MCP tool."""
@@ -48,6 +57,20 @@ class TestGetThinkingDepth:
         result = get_thinking_depth()
         assert result["status"] == "success"
         assert result["depth"] in ("shallow", "normal", "deep")
+
+
+class TestReactStep:
+    """ReAct MCP must distinguish planning from execution."""
+
+    def test_planning_only_result_is_not_success(self) -> None:
+        result = react_step("inspect the repository", ["search"])
+        assert result["status"] == "unavailable"
+        assert result["executed"] is False
+        assert result["action"] == "search"
+
+    def test_invalid_observation_is_rejected(self) -> None:
+        result = react_step("   ")
+        assert result["status"] == "error"
 
 
 class TestSetThinkingDepth:

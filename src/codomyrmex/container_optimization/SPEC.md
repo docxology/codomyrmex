@@ -16,6 +16,7 @@ The `container_optimization` module is designed to provide automated container o
 ### `ResourceTuner`
 - `analyze_usage(container_id: str) -> ResourceUsage`: Monitors and analyzes the CPU and memory usage of a running container.
 - `suggest_limits(usage: ResourceUsage) -> dict[str, str]`: Recommends resource limits based on historical usage.
+- Both classes probe the Docker CLI before constructing a client, avoid persistent sockets when the daemon is unavailable, and expose `close()` plus context-manager support for owned clients.
 
 ## Data Models
 - `ImageAnalysis`: Contains size, layer count, base image, and discovered optimizations.
@@ -25,7 +26,7 @@ The `container_optimization` module is designed to provide automated container o
 ## Requirements
 - `docker-py` for interacting with the Docker daemon.
 - `loguru` for logging.
-- `fire` for the CLI orchestrator.
+- Docker-dependent operations require a reachable Docker daemon; unavailable-daemon paths remain deterministic and do not create an SDK socket.
 
 ## Navigation
 

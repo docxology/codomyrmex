@@ -4,7 +4,7 @@ from codomyrmex.agents.core import AgentRequest, AgentResponse
 from codomyrmex.agents.hermes.client_pkg import HermesClient
 
 
-class TestFailedHermesClient(HermesClient):
+class _TestFailedHermesClient(HermesClient):
     """Test implementation of HermesClient simulating a recovered subprocess failure."""
 
     def __init__(self, db_path: str):
@@ -48,7 +48,7 @@ class TestFailedHermesClient(HermesClient):
 def test_recursive_retry_on_subprocess_failure(tmp_path):
     """Verify chat_session intercepts failed executions and dynamically prompts recovery."""
     db_path = str(tmp_path / "sessions.db")
-    client = TestFailedHermesClient(db_path)
+    client = _TestFailedHermesClient(db_path)
 
     response = client.chat_session(prompt="Run the data extraction script.")
 

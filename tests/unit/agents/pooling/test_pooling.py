@@ -7,21 +7,13 @@ import time
 
 import pytest
 
-try:
-    from codomyrmex.agents.pooling import (
-        AgentPool,
-        CircuitBreaker,
-        FallbackChain,
-        LoadBalanceStrategy,
-        PoolConfig,
-    )
-
-    _HAS_AGENTS = True
-except ImportError:
-    _HAS_AGENTS = False
-
-if not _HAS_AGENTS:
-    pytest.skip("agents deps not available", allow_module_level=True)
+from codomyrmex.agents.pooling import (
+    AgentPool,
+    CircuitBreaker,
+    FallbackChain,
+    LoadBalanceStrategy,
+    PoolConfig,
+)
 
 
 class MockAgent:

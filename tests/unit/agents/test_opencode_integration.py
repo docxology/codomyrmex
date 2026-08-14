@@ -130,11 +130,11 @@ class TestOpenCodeClient:
             # Expected if authentication fails or CLI error
             pytest.skip("OpenCode CLI authentication or execution failed")
 
-    def test_opencode_client_get_version(self):
-        """Test getting OpenCode version information."""
-        client = OpenCodeClient()
-        if not client.is_available():
-            pytest.skip("opencode command not available")
+    def test_opencode_client_get_version_when_cli_is_unavailable(self):
+        """Version reporting is deterministic when the configured CLI is absent."""
+        client = OpenCodeClient(
+            config={"opencode_command": "nonexistent-opencode-command-xyz"}
+        )
 
         version_info = client.get_opencode_version()
 
@@ -142,9 +142,8 @@ class TestOpenCodeClient:
         assert isinstance(version_info, dict)
         assert "available" in version_info
         assert "version" in version_info
-        # Available depends on whether opencode is installed
-        if OPENCODE_AVAILABLE:
-            assert version_info["available"] is True
+        assert version_info["available"] is False
+        assert version_info["exit_code"] == -1
 
     @pytest.mark.skipif(not OPENCODE_AVAILABLE, reason="opencode CLI not installed")
     def test_opencode_client_initialize_project(self):

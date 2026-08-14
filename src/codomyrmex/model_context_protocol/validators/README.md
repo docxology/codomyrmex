@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Validators..
+Module implementation, resources, and local coordination for Validators.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Pagination..
+Module implementation, resources, and local coordination for Pagination.
 
 ## Directory Contents
 - `PAI.md` – File

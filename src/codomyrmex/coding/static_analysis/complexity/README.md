@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Complexity..
+Module implementation, resources, and local coordination for Complexity.
 
 ## Directory Contents
 - `PAI.md` – File

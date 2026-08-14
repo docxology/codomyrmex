@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Loaders..
+Module implementation, resources, and local coordination for Loaders.
 
 ## Directory Contents
 - `PAI.md` – File

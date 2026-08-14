@@ -1,17 +1,14 @@
-import contextlib
-
-with contextlib.suppress(ImportError):
-    from codomyrmex.spatial.three_d import (
-        ARSession,
-        Camera3D,
-        Light3D,
-        Material3D,
-        Object3D,
-        RenderPipeline,
-        Scene3D,
-        Vector3D,
-        VRRenderer,
-    )
+from codomyrmex.spatial.three_d import (
+    ARSession,
+    Camera3D,
+    Light3D,
+    Material3D,
+    Object3D,
+    RenderPipeline,
+    Scene3D,
+    Vector3D,
+    VRRenderer,
+)
 
 
 def basic_scene_example():
@@ -21,7 +18,7 @@ def basic_scene_example():
     scene = Scene3D()
 
     # Create objects
-    cube = Object3D("Cube")
+    cube = Object3D(name="Cube")
     cube.set_position(0.0, 0.0, 0.0)
 
     # Add material
@@ -32,12 +29,12 @@ def basic_scene_example():
     scene.add_object(cube)
 
     # Setup camera
-    camera = Camera3D("MainCamera")
+    camera = Camera3D(name="MainCamera")
     camera.set_position(0.0, 0.0, 5.0)
     scene.add_camera(camera)
 
     # Add lighting
-    light = Light3D("KeyLight")
+    light = Light3D(name="KeyLight")
     light.set_position(-2.0, 2.0, 2.0)
     light.intensity = 1.5
     scene.add_light(light)

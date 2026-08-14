@@ -2,6 +2,8 @@
 
 import asyncio
 import os
+import shutil
+import subprocess
 from datetime import UTC, datetime
 
 import pytest
@@ -317,15 +319,23 @@ class TestDeploymentOrchestrator:
 
     def test_deploy_to_development_docker(self):
         """Test deployment to development environment with real Docker."""
-        try:
-            client = docker.from_env()
-            client.ping()
-            DOCKER_AVAILABLE = True
-        except Exception:
+        docker_cli = shutil.which("docker")
+        if not docker_cli:
             DOCKER_AVAILABLE = False
+        else:
+            probe = subprocess.run(
+                [docker_cli, "info", "--format", "{{.ServerVersion}}"],
+                capture_output=True,
+                text=True,
+                timeout=5,
+            )
+            DOCKER_AVAILABLE = probe.returncode == 0
 
         if not DOCKER_AVAILABLE:
             pytest.skip("Docker not available")
+
+        client = docker.from_env(version=os.environ.get("DOCKER_API_VERSION", "1.41"))
+        client.close()
 
         environment = Environment(
             name="dev", type=EnvironmentType.DEVELOPMENT, host="localhost"
@@ -383,13 +393,10 @@ class TestDeploymentOrchestrator:
             name="test", version="1.0.0", environment=environment, artifacts=[]
         )
 
-        # Execute hooks with real subprocess
-        try:
-            self.orchestrator._execute_hooks(deployment, "pre_deploy")
-            # Should complete without error
-        except Exception:
-            # May fail if hooks are not executable
-            pass
+        # Execute hooks with real subprocess. The orchestrator records hook
+        # failures in the deployment rather than raising them.
+        self.orchestrator._execute_hooks(deployment, "pre_deploy")
+        assert any("Hook executed" in entry for entry in deployment.logs)
 
     def test_perform_health_checks_http(self):
         """Test HTTP health check with real requests."""
@@ -415,13 +422,10 @@ class TestDeploymentOrchestrator:
             name="test", version="1.0.0", environment=environment, artifacts=[]
         )
 
-        # Try real HTTP check (may fail if endpoint not available)
-        try:
-            result = self.orchestrator._perform_health_checks(deployment)
-            assert isinstance(result, bool)
-        except Exception:
-            # Expected if endpoint not available
-            pytest.skip("Health check endpoint not available")
+        # The orchestrator converts endpoint failures into a false health
+        # result; the test should observe that result rather than skip it.
+        result = self.orchestrator._perform_health_checks(deployment)
+        assert result is False
 
     def test_perform_health_checks_http_failure(self):
         """Test HTTP health check failure with real requests."""

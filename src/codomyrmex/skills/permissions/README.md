@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Permissions..
+Module implementation, resources, and local coordination for Permissions.
 
 ## Directory Contents
 - `PAI.md` – File

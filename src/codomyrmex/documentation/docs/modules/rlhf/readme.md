@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Rlhf..
+Module implementation, resources, and local coordination for Rlhf.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

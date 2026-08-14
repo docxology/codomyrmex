@@ -129,7 +129,7 @@ Each module is self-contained with standard structure:
 - **Model Context Protocol (MCP)**: Standardized interface for AI/LLM integration across modules
 - **Upward dependencies only**: Higher layers depend on lower, preventing circular dependencies
 - **Lazy module loading**: Modules load on-demand to reduce startup time
-- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently **150** `mcp_tools.py` files are under `src/codomyrmex/` (non-test); see `docs/reference/inventory.md`.
+- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently **151** `mcp_tools.py` files are under `src/codomyrmex/` (non-test); see `docs/reference/inventory.md`.
 
 ### Extended Modules (auto-discovered via MCP)
 
@@ -166,7 +166,7 @@ Beyond the core layers above, these modules expose MCP tools via `@mcp_tool` dec
 Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielmiessler/Personal_AI_Infrastructure) (`~/.claude/PAI/`). Key integration points:
 
 - **Detection**: PAI is present when `~/.claude/PAI/SKILL.md` exists
-- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 9 static proxy tools + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; production sources contain **623** `@mcp_tool` lines and **150** `mcp_tools.py` files (**130** top-level packages). See `docs/reference/inventory.md`. The Codomyrmex PAI Skill surfaces dynamic tools with 3 resources and 10 prompts
+- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 9 static proxy tools + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; production sources contain **627** `@mcp_tool` lines and **151** `mcp_tools.py` files (**130** top-level packages). See `docs/reference/inventory.md`. The Codomyrmex PAI Skill surfaces dynamic tools with 3 resources and 10 prompts
 - **Trust Gateway**: `src/codomyrmex/agents/pai/trust_gateway.py` gates destructive tools (write, execute) behind explicit trust
 - **Workflows**: `/codomyrmexVerify` audits capabilities; `/codomyrmexTrust` enables destructive tools
 - **RASP Pattern**: Each module has `PAI.md` alongside `README.md`, `AGENTS.md`, `SPEC.md` — these describe AI capabilities the module offers
@@ -265,7 +265,7 @@ See [`/codomyrmexWorktree`](.agent/workflows/codomyrmexWorktree.md) for detailed
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **codomyrmex** (206665 symbols, 299707 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **codomyrmex** (207963 symbols, 302104 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > Index stale? Run `node .gitnexus/run.cjs analyze` from the project root — it auto-selects an available runner. No `.gitnexus/run.cjs` yet? `npx gitnexus analyze` (npm 11 crash → `npm i -g gitnexus`; #1939).
 

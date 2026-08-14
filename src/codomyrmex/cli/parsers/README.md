@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Parsers..
+Module implementation, resources, and local coordination for Parsers.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -140,7 +140,7 @@ def handle_quick_pipe(commands: list[str], stop_on_error: bool = True) -> bool:
 
         result = subprocess.run(
             cmd,
-            shell=True,  # nosec B602 - explicit trusted CLI pipe executor
+            shell=True,  # nosec B602
             capture_output=True,
             text=True,
             timeout=60,

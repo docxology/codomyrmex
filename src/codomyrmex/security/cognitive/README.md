@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Cognitive..
+Module implementation, resources, and local coordination for Cognitive.
 
 ## Directory Contents
 - `PAI.md` – File

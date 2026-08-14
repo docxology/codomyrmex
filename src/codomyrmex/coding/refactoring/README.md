@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Refactoring..
+Module implementation, resources, and local coordination for Refactoring.
 
 ## Directory Contents
 - `PAI.md` – File

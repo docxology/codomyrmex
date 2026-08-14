@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Inference..
+Module implementation, resources, and local coordination for Inference.
 
 ## Directory Contents
 - `PAI.md` – File

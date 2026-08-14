@@ -28,7 +28,7 @@ from __future__ import annotations
 import asyncio
 import os
 import shlex
-import subprocess
+import subprocess  # nosec B404
 import time
 from dataclasses import dataclass, field
 from enum import Enum
@@ -232,9 +232,11 @@ def _prepare_command(
         Prepared command.
     """
     if shell:
-        # For shell mode, ensure it's a string
+        # Shell mode remains explicitly opt-in, but list arguments must be
+        # quoted as one command. Joining raw values lets a metacharacter in a
+        # list element become shell syntax unexpectedly.
         if isinstance(command, list):
-            return " ".join(command)
+            return shlex.join(command)
         return command
     # For non-shell mode, ensure it's a list
     if isinstance(command, str):
@@ -393,7 +395,7 @@ def run_command(
             cwd=cwd,
             env=prepared_env,
             timeout=timeout,
-            shell=shell,  # nosec B602 - caller explicitly selects trusted shell mode
+            shell=shell,  # nosec B602
             capture_output=capture_output,
             text=True,
             input=input_data,
@@ -521,6 +523,8 @@ async def run_command_async(
         ...     print(result.stdout)
     """
     start_time = time.perf_counter()
+    process: asyncio.subprocess.Process | None = None
+    communication_task: asyncio.Task | None = None
 
     try:
         # Validate working directory
@@ -532,9 +536,11 @@ async def run_command_async(
         # Prepare input
         input_bytes = input_data.encode(encoding) if input_data else None
 
+        prepared_command = _prepare_command(command, shell)
+
         if shell:
-            # For shell mode, use string command
-            cmd_str = command if isinstance(command, str) else " ".join(command)
+            # For shell mode, use the safely prepared string command.
+            cmd_str = str(prepared_command)
             logger.debug("Running async shell command: %s", cmd_str)
 
             process = await asyncio.create_subprocess_shell(
@@ -546,10 +552,8 @@ async def run_command_async(
                 stdin=asyncio.subprocess.PIPE if input_bytes else None,
             )
         else:
-            # For non-shell mode, use list command
-            cmd_list = (
-                shlex.split(command) if isinstance(command, str) else list(command)
-            )
+            # For non-shell mode, use the safely prepared argument list.
+            cmd_list = list(prepared_command)
             logger.debug("Running async command: %s", " ".join(cmd_list))
 
             process = await asyncio.create_subprocess_exec(
@@ -562,15 +566,39 @@ async def run_command_async(
             )
 
         try:
+            communication_task = asyncio.create_task(
+                process.communicate(input=input_bytes)
+            )
             stdout_bytes, stderr_bytes = await asyncio.wait_for(
-                process.communicate(input=input_bytes),
+                asyncio.shield(communication_task),
                 timeout=timeout,
             )
             timed_out = False
         except TimeoutError:
-            process.kill()
+            if process.returncode is None:
+                process.kill()
+            # A descendant can inherit the parent's pipe and keep EOF from
+            # arriving. Close the transport before waiting: asyncio's process
+            # transport otherwise waits for every inherited pipe to close.
+            transport = getattr(process, "_transport", None)
+            if transport is not None:
+                transport.close()
             await process.wait()
-            stdout_bytes, stderr_bytes = b"", b""
+            if communication_task is None:
+                stdout_bytes, stderr_bytes = b"", b""
+            else:
+                try:
+                    stdout_bytes, stderr_bytes = await asyncio.wait_for(
+                        asyncio.shield(communication_task), timeout=0.1
+                    )
+                except (
+                    TimeoutError,
+                    BrokenPipeError,
+                    ConnectionResetError,
+                    RuntimeError,
+                ):
+                    communication_task.cancel()
+                    stdout_bytes, stderr_bytes = b"", b""
             timed_out = True
 
         duration = time.perf_counter() - start_time
@@ -631,6 +659,25 @@ async def run_command_async(
             command=command,
             error_message=error_msg,
         )
+
+    finally:
+        # A caller may cancel this coroutine while communicate() is waiting.
+        # Reap the child and drain its pipes before allowing cancellation to
+        # propagate; otherwise the child can outlive the task and emit resource
+        # warnings when its transports are finalized.
+        if process is not None and process.returncode is None:
+            process.kill()
+            transport = getattr(process, "_transport", None)
+            if transport is not None:
+                transport.close()
+            await process.wait()
+            cleanup_task = communication_task or asyncio.create_task(
+                process.communicate()
+            )
+            if not cleanup_task.done():
+                # The transport is already closed, so a reader waiting for EOF
+                # from an inherited descriptor cannot make further progress.
+                cleanup_task.cancel()
 
 
 def check_command_available(command: str) -> bool:

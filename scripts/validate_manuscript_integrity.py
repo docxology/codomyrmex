@@ -376,6 +376,170 @@ def _load_json(path: Path, issues: list[str]) -> dict[str, Any]:
     return value
 
 
+def _validate_render_receipts(
+    project_root: Path,
+    variables: dict[str, Any],
+    issues: list[str],
+    *,
+    require_current: bool,
+    require_rendered: bool,
+) -> None:
+    """Verify the ordered render inputs and output hashes as one co-snapshot."""
+    reports_dir = project_root / "output" / "reports"
+    composition = _load_json(reports_dir / "manuscript_composition.json", issues)
+    artifact_manifest = _load_json(reports_dir / "artifact_manifest.json", issues)
+    rendered = _load_json(reports_dir / "rendered_provenance.json", issues)
+    if not composition or not artifact_manifest or not rendered:
+        return
+
+    expected_values = {
+        "source_commit": variables.get("REPRO_GIT_COMMIT", ""),
+        "worktree_dirty": variables.get("REPRO_WORKTREE_DIRTY", ""),
+        "config_sha256": variables.get("CONFIG_HASH", ""),
+        "kernel_source_sha256": variables.get("REPRO_KERNEL_SOURCE_HASH", ""),
+        "template_repository": variables.get("REPRO_TEMPLATE_REPOSITORY", ""),
+        "template_revision": variables.get("REPRO_TEMPLATE_REVISION", ""),
+        "template_hydration_mode": variables.get("REPRO_TEMPLATE_HYDRATION_MODE", ""),
+    }
+    for artifact_name, artifact in (
+        ("composition", composition),
+        ("artifact manifest", artifact_manifest),
+        ("rendered provenance", rendered),
+    ):
+        for key, expected in expected_values.items():
+            if key in artifact and _normalise_digest(
+                artifact.get(key)
+            ) != _normalise_digest(expected):
+                issues.append(f"{artifact_name} is stale: {key}")
+
+    variables_digest = hashlib.sha256(
+        json.dumps(variables, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+    if composition.get("variable_sha256") != variables_digest:
+        issues.append("render composition variable snapshot is stale")
+    if rendered.get("variable_sha256") != variables_digest:
+        issues.append("rendered provenance variable snapshot is stale")
+
+    groups = composition.get("groups")
+    if not isinstance(groups, dict) or not groups:
+        issues.append("render composition has no ordered input groups")
+        groups = {}
+    for group_name, group in groups.items():
+        if not isinstance(group, dict) or not isinstance(group.get("files"), list):
+            issues.append(f"render composition group is invalid: {group_name}")
+            continue
+        current_entries: list[dict[str, Any]] = []
+        combined = hashlib.sha256()
+        for raw_entry in group["files"]:
+            if not isinstance(raw_entry, dict):
+                issues.append(
+                    f"render composition has invalid file entry: {group_name}"
+                )
+                continue
+            relative = str(raw_entry.get("path", ""))
+            candidate = (project_root / relative).resolve()
+            try:
+                candidate.relative_to(project_root.resolve())
+            except ValueError:
+                issues.append(f"render composition path escapes repository: {relative}")
+                continue
+            if not candidate.is_file():
+                issues.append(f"render composition input is missing: {relative}")
+                continue
+            content = candidate.read_bytes()
+            digest = hashlib.sha256(content).hexdigest()
+            current_entries.append(
+                {"path": relative, "bytes": len(content), "sha256": digest}
+            )
+            combined.update(relative.encode("utf-8"))
+            combined.update(b"\0")
+            combined.update(content)
+            combined.update(b"\0")
+        if current_entries != group["files"]:
+            issues.append(f"render composition inputs are stale: {group_name}")
+        if group.get("combined_sha256") != combined.hexdigest():
+            issues.append(f"render composition digest is stale: {group_name}")
+
+    composition_without_digest = dict(composition)
+    recorded_composition_digest = composition_without_digest.pop(
+        "composition_sha256", ""
+    )
+    recomputed_composition_digest = hashlib.sha256(
+        json.dumps(
+            composition_without_digest, sort_keys=True, separators=(",", ":")
+        ).encode()
+    ).hexdigest()
+    if recorded_composition_digest != recomputed_composition_digest:
+        issues.append("render composition self-digest is invalid")
+    if artifact_manifest.get("composition_sha256") != recorded_composition_digest:
+        issues.append("artifact manifest is bound to a different composition")
+    if rendered.get("composition_sha256") != recorded_composition_digest:
+        issues.append("rendered provenance is bound to a different composition")
+
+    artifact_entries = artifact_manifest.get("artifacts")
+    if not isinstance(artifact_entries, list):
+        issues.append("artifact manifest artifacts must be a list")
+        artifact_entries = []
+    roles = set()
+    for raw_entry in artifact_entries:
+        if not isinstance(raw_entry, dict):
+            issues.append("artifact manifest contains an invalid entry")
+            continue
+        role = str(raw_entry.get("role", ""))
+        roles.add(role)
+        relative = str(raw_entry.get("path", ""))
+        candidate = (project_root / relative).resolve()
+        try:
+            candidate.relative_to(project_root.resolve())
+        except ValueError:
+            issues.append(f"artifact manifest path escapes repository: {relative}")
+            continue
+        if not candidate.is_file():
+            issues.append(f"artifact manifest output is missing: {relative}")
+            continue
+        if raw_entry.get("bytes") != candidate.stat().st_size:
+            issues.append(f"artifact manifest byte count is stale: {relative}")
+        if raw_entry.get("sha256") != _sha256(candidate):
+            issues.append(f"artifact manifest SHA-256 is stale: {relative}")
+    if require_rendered and not {"html", "distribution_pdf"}.issubset(roles):
+        issues.append("artifact manifest lacks required rendered HTML/PDF outputs")
+    artifact_digest = _sha256(reports_dir / "artifact_manifest.json")
+    if rendered.get("artifact_manifest_sha256") != artifact_digest:
+        issues.append("rendered provenance artifact manifest digest is stale")
+
+    if require_current:
+        current_commit, current_dirty, current_status_sha256 = _git_snapshot(
+            project_root
+        )
+        current_kernel_hash = _kernel_source_hash(project_root)
+        current_config_hash = _sha256(project_root / "docs/manuscript/config.yaml")
+        for key, actual, expected in (
+            ("source_commit", composition.get("source_commit"), current_commit),
+            (
+                "worktree_dirty",
+                str(composition.get("worktree_dirty", "")).lower(),
+                str(current_dirty).lower(),
+            ),
+            ("config_sha256", composition.get("config_sha256"), current_config_hash),
+            (
+                "kernel_source_sha256",
+                composition.get("kernel_source_sha256"),
+                current_kernel_hash,
+            ),
+            (
+                "status_sha256",
+                variables.get("REPRO_STATUS_SHA256", ""),
+                current_status_sha256,
+            ),
+        ):
+            if _normalise_digest(actual) != _normalise_digest(expected):
+                issues.append(f"render composition is not current: {key}")
+        if variables.get("REPRO_TEMPLATE_HYDRATION_MODE") != "canonical-pinned":
+            issues.append(
+                "source-current render requires canonical-pinned template hydration"
+            )
+
+
 def _safe_path(root: Path, relative: object, issues: list[str]) -> Path | None:
     raw = Path(str(relative))
     if raw.is_absolute() or ".." in raw.parts:
@@ -529,6 +693,7 @@ def validate_manuscript_integrity(
     require_rendered: bool = False,
     verify_bibliography_online: bool = False,
     require_source_current: bool = False,
+    persist_bibliography_audit: bool = False,
 ) -> dict[str, Any]:
     """Return a machine-readable integrity report for the current repository."""
 
@@ -569,6 +734,7 @@ def validate_manuscript_integrity(
     for manifest_key, variable_key in (
         ("source_commit", "REPRO_GIT_COMMIT"),
         ("worktree_dirty", "REPRO_WORKTREE_DIRTY"),
+        ("status_sha256", "REPRO_STATUS_SHA256"),
         ("config_sha256", "CONFIG_HASH"),
         ("kernel_source_sha256", "REPRO_KERNEL_SOURCE_HASH"),
     ):
@@ -579,6 +745,44 @@ def validate_manuscript_integrity(
                 "variable manifest provenance is stale: "
                 f"{manifest_key} does not match {variable_key}"
             )
+
+    variable_registry_path = (
+        project_root / "output" / "data" / "manuscript_variable_registry.json"
+    )
+    if require_rendered or require_source_current:
+        variable_registry = _load_json(variable_registry_path, issues)
+        registry_entries = variable_registry.get("entries", [])
+        if not isinstance(registry_entries, list):
+            issues.append("typed variable registry entries must be a list")
+            registry_entries = []
+        registry_names = set()
+        for entry in registry_entries:
+            if not isinstance(entry, dict):
+                issues.append("typed variable registry contains an invalid entry")
+                continue
+            name = str(entry.get("name", ""))
+            registry_names.add(name)
+            for field in (
+                "source_type",
+                "render_type",
+                "unit",
+                "missing_policy",
+                "producer",
+                "consumers",
+            ):
+                if field not in entry:
+                    issues.append(
+                        f"typed variable registry entry {name!r} lacks {field}"
+                    )
+        if registry_names != set(variables):
+            issues.append(
+                "typed variable registry does not cover the variable snapshot"
+            )
+        expected_variable_hash = hashlib.sha256(
+            json.dumps(variables, sort_keys=True, separators=(",", ":")).encode()
+        ).hexdigest()
+        if variable_registry.get("variable_sha256") != expected_variable_hash:
+            issues.append("typed variable registry variable_sha256 is stale")
 
     configured_figures = config.get("figures", {})
     if not isinstance(configured_figures, dict) or not configured_figures:
@@ -762,10 +966,11 @@ def validate_manuscript_integrity(
         verify_online=verify_bibliography_online,
         workers=2,
     )
-    write_bibliography_audit(
-        project_root / "output/data/bibliography_audit.json",
-        bibliography_audit,
-    )
+    if persist_bibliography_audit:
+        write_bibliography_audit(
+            project_root / "output/data/bibliography_audit.json",
+            bibliography_audit,
+        )
     for field, label in (
         ("missing_citations", "missing bibliography citations"),
         ("unused_bibliography_keys", "unused bibliography keys"),
@@ -865,6 +1070,15 @@ def validate_manuscript_integrity(
     elif require_rendered:
         issues.append(f"missing rendered PDF: {pdf_path}")
 
+    if require_rendered or require_source_current:
+        _validate_render_receipts(
+            project_root,
+            variables,
+            issues,
+            require_current=require_source_current,
+            require_rendered=require_rendered,
+        )
+
     source_current: dict[str, Any] = {
         "checked": require_source_current,
         "status": "not_checked",
@@ -900,6 +1114,11 @@ def validate_manuscript_integrity(
                 "REPRO_WORKTREE_DIRTY",
                 variables.get("REPRO_WORKTREE_DIRTY"),
                 str(current_dirty).lower(),
+            ),
+            (
+                "REPRO_STATUS_SHA256",
+                variables.get("REPRO_STATUS_SHA256"),
+                current_status_sha256,
             ),
         ):
             if _normalise_digest(actual) != _normalise_digest(expected):
@@ -1098,12 +1317,18 @@ def main() -> int:
             "and the release bundle match the current commit/config/source hashes."
         ),
     )
+    parser.add_argument(
+        "--write-bibliography-audit",
+        action="store_true",
+        help="Persist bibliography_audit.json; validation is read-only by default.",
+    )
     args = parser.parse_args()
     report = validate_manuscript_integrity(
         args.repo_root,
         require_rendered=args.require_rendered,
         verify_bibliography_online=args.online_bibliography,
         require_source_current=args.require_source_current,
+        persist_bibliography_audit=args.write_bibliography_audit,
     )
     print(json.dumps(report, indent=2, sort_keys=True))
     return 0 if report["status"] == "valid" else 1

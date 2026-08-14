@@ -128,6 +128,10 @@ TrustLevel.TRUSTED    # "trusted"
 | `is_trusted` | `(tool_name: str) -> bool` | Check trust status |
 | `reset_trust` | `() -> None` | Reset all to UNTRUSTED |
 
+When confirmation mode is enabled for destructive tools, the first call
+returns a one-use confirmation token. The token is bound to the exact
+validated argument payload; reusing it with altered arguments is rejected.
+
 The `pai_status` and `pai_awareness` data is visualized in the PAI Dashboard's multiple views including the Integration tab:
 
 ![PAI Integration — GitHub repos, sync controls, diff preview, cleanup tools, and JSON/CSV data export for project data](screenshots/pai_integration.png)

@@ -48,6 +48,7 @@ Documentation for all AI agent integrations in the Codomyrmex ecosystem. This di
 | **Meta** | [meta/](meta/) | Self-reflection, strategy selection |
 | **Planner** | [planner/](planner/) | Goal decomposition, convergent planning |
 | **PAI** | [pai/](pai/) | Personal AI Infrastructure bridge |
+| **Navigation** | [navigation/](navigation/) | Deterministic read-only capability catalog and MCP navigation |
 
 ### Infrastructure
 

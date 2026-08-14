@@ -34,6 +34,7 @@ from codomyrmex.release import (
     prepare_publication_bundle,
     verify_publication_bundle,
 )
+from codomyrmex.release.test_evidence import ReleaseTestEvidence
 
 
 def _complete_validator(*, version: str = "1.2.3") -> ReleaseValidator:
@@ -140,6 +141,46 @@ class TestReleaseValidator:
         check = validator.check_tests(failures=0, total=0)
         assert check.status is CertificationStatus.FAIL
 
+    def test_skip_budget_is_enforced(self):
+        validator = ReleaseValidator()
+        check = validator.check_tests(
+            failures=0,
+            total=10,
+            max_skips=1,
+            skipped=2,
+        )
+        assert check.status is CertificationStatus.FAIL
+        assert "skipped" in check.value
+
+    def test_impossible_counts_and_percentages_fail_closed(self):
+        validator = ReleaseValidator()
+
+        assert (
+            validator.check_tests(failures=-1, total=10).status
+            is CertificationStatus.FAIL
+        )
+        assert (
+            validator.check_tests(failures=0, total=10, skipped=11).status
+            is CertificationStatus.FAIL
+        )
+        assert validator.check_coverage(overall=1000).status is CertificationStatus.FAIL
+        assert (
+            validator.check_coverage(overall=float("nan")).status
+            is CertificationStatus.FAIL
+        )
+
+    def test_evidence_types_are_not_truthiness_coerced(self):
+        validator = ReleaseValidator()
+
+        assert (
+            validator.check_documentation(complete="yes").status
+            is CertificationStatus.FAIL
+        )
+        assert (
+            validator.check_artifacts(verified="yes", artifact_count=1).status
+            is CertificationStatus.FAIL
+        )
+
     def test_relaxed_policy_preserves_warning_compatibility(self):
         validator = ReleaseValidator(
             policy=ReleasePolicy(strict=False),
@@ -162,6 +203,38 @@ class TestReleaseValidator:
         markdown = validator.to_markdown(certification)
         assert "NOT CERTIFIED" in markdown
         assert "Missing required evidence: testing" in markdown
+
+
+@pytest.mark.unit
+class TestReleaseEvidenceContract:
+    def test_release_receipt_requires_explicit_coverage_evidence(self):
+        evidence = ReleaseTestEvidence(
+            source_revision="a" * 40,
+            source_tree="b" * 40,
+            source_clean=True,
+            dirty_paths=(),
+            test_paths=("tests/unit",),
+            pytest_args=(),
+            command=("python", "-m", "pytest"),
+            exit_code=0,
+            total=1,
+            failures=0,
+            errors=0,
+            skipped=0,
+            skipped_tests=(),
+            warnings=(),
+            max_skips=0,
+            max_warnings=0,
+            require_clean_source=True,
+            junit_report_sha256="c" * 64,
+            profile="release",
+            coverage_floor_percent=60.0,
+        )
+
+        assert evidence.certified is False
+        assert any(
+            "missing a coverage report" in blocker for blocker in evidence.blockers
+        )
 
 
 @pytest.mark.unit
@@ -332,6 +405,34 @@ class TestPublicationBundle:
         assert result.valid is True
         assert result.errors == ()
         assert len(result.verified_artifacts) >= 8
+
+    def test_failed_validation_outcome_blocks_verification(
+        self, publication_bundle, tmp_path
+    ):
+        artifacts = {
+            artifact.role: publication_bundle.root / artifact.path
+            for artifact in publication_bundle.manifest.artifacts
+        }
+        failed = prepare_publication_bundle(
+            metadata=publication_bundle.manifest.metadata,
+            content_pdf=artifacts["content-pdf"],
+            distribution_pdf=artifacts["distribution-pdf"],
+            semantic_html=artifacts["semantic-html"],
+            output_dir=tmp_path / "failed-outcome",
+            project_root=Path.cwd(),
+            validation_outcomes=(("qpdf", False, "structure invalid"),),
+        )
+        result = verify_publication_bundle(failed)
+        assert result.valid is False
+        assert any(
+            "validation outcome failed" in error.lower() for error in result.errors
+        )
+
+    def test_empty_checksum_file_blocks_verification(self, publication_bundle):
+        (publication_bundle.root / "SHA256SUMS").write_text("\n", encoding="utf-8")
+        result = verify_publication_bundle(publication_bundle)
+        assert result.valid is False
+        assert any("checksum file is empty" in error.lower() for error in result.errors)
 
     def test_manifest_is_portable_and_detached(self, publication_bundle):
         raw = json.loads(publication_bundle.manifest_path.read_text(encoding="utf-8"))

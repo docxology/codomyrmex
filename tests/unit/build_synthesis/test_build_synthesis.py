@@ -671,18 +671,14 @@ if __name__ == "__main__":
         invalid_configs = [
             {"name": None},  # Invalid name
             {"build_commands": "not_a_list"},  # Invalid commands
-            {"artifacts": None},  # Invalid artifacts
+            {"artifacts": "not_a_list"},  # Invalid artifacts
         ]
 
         for config in invalid_configs:
-            try:
-                results = orchestrate_build_pipeline(config)
-                # Should handle gracefully
-                assert isinstance(results, dict)
-                assert "overall_success" in results
-            except Exception:
-                # Some errors might be raised, that's acceptable
-                pass
+            results = orchestrate_build_pipeline(config)
+            assert isinstance(results, dict)
+            assert results["overall_success"] is False
+            assert results["status"] == "invalid"
 
     def test_build_resource_limits(self):
         """Test build operations under resource constraints."""
@@ -767,12 +763,9 @@ if __name__ == "__main__":
         ]
 
         for config in edge_configs:
-            try:
-                results = orchestrate_build_pipeline(config)
-                assert isinstance(results, dict)
-            except Exception:
-                # Edge cases might raise exceptions, that's acceptable
-                pass
+            results = orchestrate_build_pipeline(config)
+            assert isinstance(results, dict)
+            assert "overall_success" in results
 
     def test_build_metrics_calculation(self):
         """Test build metrics calculation."""
@@ -819,10 +812,6 @@ if __name__ == "__main__":
         )
 
         for fmt in formats:
-            try:
-                report = export_build_report(test_data, fmt)
-                assert isinstance(report, str)
-                assert len(report) > 0
-            except Exception:
-                # Some formats might not be supported
-                pass
+            report = export_build_report(test_data, fmt)
+            assert isinstance(report, str)
+            assert len(report) > 0

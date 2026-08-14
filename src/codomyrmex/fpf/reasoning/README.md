@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Reasoning..
+Module implementation, resources, and local coordination for Reasoning.
 
 ## Directory Contents
 - `PAI.md` – File

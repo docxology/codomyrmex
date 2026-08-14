@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Git..
+Module implementation, resources, and local coordination for Git.
 
 ## Directory Contents
 - `PAI.md` – File

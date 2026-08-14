@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Algorithms..
+Module implementation, resources, and local coordination for Algorithms.
 
 ## Directory Contents
 - `PAI.md` – File

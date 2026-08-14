@@ -27,6 +27,7 @@ import hmac
 import json
 import logging
 import os
+import secrets
 import threading
 import time
 from datetime import UTC, datetime
@@ -40,6 +41,11 @@ from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.quality.validation import validate_tool_arguments
 
 from ._verification import run_verify_capabilities
+from .mcp.trust_metadata import (
+    DESTRUCTIVE_TOOL_NAME_PATTERNS,
+    EXPLICIT_DESTRUCTIVE_TOOLS,
+    is_destructive_tool,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -56,29 +62,71 @@ logger = get_logger(__name__)
 # backup restore) cannot forge a valid signature.
 
 
+_SIGNATURE_KEY: bytes | None = None
+_SIGNATURE_KEY_LOCK = threading.Lock()
+
+
 def _ledger_signing_key() -> bytes:
-    """Return a stable, machine-specific HMAC key for ledger signing."""
-    candidates = [
-        "/etc/machine-id",
-        "/var/lib/dbus/machine-id",
-    ]
-    for path in candidates:
+    """Return a private, persistent HMAC key for ledger signing.
+
+    Machine IDs and hostnames are identifiers, not secrets.  The key is
+    therefore generated randomly and stored with owner-only permissions.  If
+    the key cannot be persisted, an ephemeral key is used: existing ledgers
+    then fail closed rather than becoming forgeable from public host data.
+    """
+    key_path = Path(
+        os.environ.get(
+            "CODOMYRMEX_TRUST_KEY_PATH",
+            str(Path.home() / ".codomyrmex" / "trust_ledger.key"),
+        )
+    ).expanduser()
+    try:
+        key_path.parent.mkdir(parents=True, exist_ok=True)
+        if key_path.exists():
+            key = key_path.read_bytes()
+            if len(key) == 32:
+                try:
+                    key_path.chmod(0o600)
+                except OSError:
+                    pass
+                return key
+            # Never silently accept a malformed key or overwrite it.  A new
+            # ephemeral key invalidates any ledger signed by the bad value.
+            return secrets.token_bytes(32)
+
+        key = secrets.token_bytes(32)
+        flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+        fd = os.open(key_path, flags, 0o600)
         try:
-            return Path(path).read_text().strip().encode("utf-8")
-        except OSError:
-            continue
-    # Fallback: hostname (less stable but avoids a hard crash)
-    return os.uname().nodename.encode("utf-8")
+            with os.fdopen(fd, "wb") as stream:
+                stream.write(key)
+        except Exception:
+            # fdopen owns the descriptor after successful construction.
+            try:
+                os.close(fd)
+            except OSError:
+                pass
+            raise
+        return key
+    except OSError:
+        return secrets.token_bytes(32)
 
 
-_SIGNATURE_KEY = _ledger_signing_key()
+def _signature_key() -> bytes:
+    """Load the signing key once without doing filesystem work at import."""
+    global _SIGNATURE_KEY
+    if _SIGNATURE_KEY is None:
+        with _SIGNATURE_KEY_LOCK:
+            if _SIGNATURE_KEY is None:
+                _SIGNATURE_KEY = _ledger_signing_key()
+    return _SIGNATURE_KEY
 
 
 def _sign_ledger(data: dict[str, str]) -> dict[str, str]:
     """Return a copy of *data* with a ``_signature`` field."""
     payload = {k: v for k, v in data.items() if k != "_signature"}
     raw = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
-    sig = hmac.new(_SIGNATURE_KEY, raw, "sha256").hexdigest()
+    sig = hmac.new(_signature_key(), raw, "sha256").hexdigest()
     signed = dict(payload)
     signed["_signature"] = sig
     return signed
@@ -86,13 +134,20 @@ def _sign_ledger(data: dict[str, str]) -> dict[str, str]:
 
 def _verify_ledger(data: dict[str, str]) -> dict[str, str] | None:
     """Return the payload minus the signature if valid, or ``None``."""
-    sig = data.pop("_signature", None)
-    if sig is None:
+    # Verification is read-only: callers may reuse the parsed ledger or pass
+    # a dict they own directly.
+    signed_data = dict(data)
+    sig = signed_data.pop("_signature", None)
+    if not isinstance(sig, str):
         return None
-    payload = {k: v for k, v in data.items() if k != "_signature"}
+    payload = {k: v for k, v in signed_data.items() if k != "_signature"}
     raw = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
-    expected = hmac.new(_SIGNATURE_KEY, raw, "sha256").hexdigest()
-    if not hmac.compare_digest(expected, sig):
+    expected = hmac.new(_signature_key(), raw, "sha256").hexdigest()
+    try:
+        valid = hmac.compare_digest(expected, sig)
+    except (TypeError, ValueError):
+        return None
+    if not valid:
         return None
     return payload
 
@@ -114,15 +169,9 @@ class SecurityError(Exception):
     """Raised when a security policy is violated."""
 
 
-# Tools that can mutate state — require explicit TRUSTED promotion.
-DESTRUCTIVE_TOOLS: frozenset[str] = frozenset(
-    {
-        "codomyrmex.write_file",
-        "codomyrmex.run_command",
-        "codomyrmex.run_tests",
-        "codomyrmex.call_module_function",
-    }
-)
+# Public compatibility alias. The policy is defined in the dependency-free
+# metadata module so navigation and trust enforcement cannot drift apart.
+DESTRUCTIVE_TOOLS: frozenset[str] = EXPLICIT_DESTRUCTIVE_TOOLS
 
 # Audit Log
 _AUDIT_LOG_MAX_SIZE = 10000
@@ -178,8 +227,30 @@ def _log_audit_entry(
         _audit_log.append(entry)
 
 
+def _arguments_digest(args: dict[str, Any]) -> str:
+    """Return a stable digest for JSON-compatible tool arguments.
+
+    Confirmation tokens must authorize one exact action, not merely one tool
+    name. Rejecting non-JSON values here also keeps the confirmation binding
+    fail-closed instead of falling back to a collision-prone ``repr``.
+    """
+    try:
+        raw = json.dumps(
+            args,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=True,
+            allow_nan=False,
+        ).encode("utf-8")
+    except (TypeError, ValueError) as exc:
+        raise ValueError("Tool arguments must be JSON-serializable") from exc
+    return hashlib.sha256(raw).hexdigest()
+
+
 def set_require_confirmation(enabled: bool) -> None:
     """Enable or disable confirmation requirement for destructive tools."""
+    if not isinstance(enabled, bool):
+        raise ValueError("enabled must be a boolean")
     global _REQUIRE_CONFIRMATION
     _REQUIRE_CONFIRMATION = enabled
 
@@ -258,27 +329,8 @@ def clear_audit_log(before: datetime | None = None) -> int:
 
 
 # Patterns that indicate a tool may have side effects (for auto-discovered tools).
-_DESTRUCTIVE_PATTERNS: frozenset[str] = frozenset(
-    {
-        "write",
-        "delete",
-        "remove",
-        "execute",
-        "run",
-        "drop",
-        "create",
-        "update",
-        "modify",
-        "change",
-        "set",
-        "grant",
-        "revoke",
-        "reset",
-        "clear",
-        "kill",
-        "terminate",
-    }
-)
+# Private compatibility alias for callers that imported the old constant.
+_DESTRUCTIVE_PATTERNS = DESTRUCTIVE_TOOL_NAME_PATTERNS
 
 
 # Trust Escalation Hooks
@@ -330,14 +382,7 @@ def _trigger_trust_change(old_level: TrustLevel, new_level: TrustLevel) -> None:
 
 def _is_destructive(tool_name: str) -> bool:
     """Check if an auto-discovered tool name matches destructive patterns."""
-    if tool_name in DESTRUCTIVE_TOOLS:
-        return True
-    # Only apply pattern matching to auto-discovered tools (codomyrmex.module.func)
-    parts = tool_name.split(".")
-    if len(parts) >= 3:
-        func_name = parts[-1].lower()
-        return any(pattern in func_name for pattern in _DESTRUCTIVE_PATTERNS)
-    return False
+    return is_destructive_tool(tool_name)
 
 
 def _get_destructive_tools() -> frozenset[str]:
@@ -406,19 +451,19 @@ class TrustRegistry:
         *,
         load_existing: bool = True,
     ) -> None:
-        """Redirect persistence to *ledger_path* without rebuilding tool state.
+        """Switch to a fresh trust context at *ledger_path*.
 
         ``load_existing=False`` is useful for isolated test workers: it marks
         the new, empty ledger as loaded and guarantees no read from the user's
-        real home-directory ledger.
+        real home-directory ledger. Existing in-memory promotions are never
+        carried across a ledger-path change.
         """
         self._ledger_path = Path(ledger_path).expanduser()
+        self._levels = {}
+        self._levels_initialized = False
         self._disk_loaded = not load_existing
         if not load_existing:
-            # A new empty ledger is a new trust context, not merely a new
-            # destination for levels accumulated under the previous path.
-            self._levels = {}
-            self._levels_initialized = False
+            return
         if load_existing:
             self._load()
 
@@ -444,11 +489,9 @@ class TrustRegistry:
         self._ensure_levels()
         if getattr(self, "_disk_loaded", False):
             return
-        if not self._ledger_path.exists():
-            self._disk_loaded = True
-            return
-
         try:
+            if not self._ledger_path.exists():
+                return
             raw_data = json.loads(self._ledger_path.read_text())
             if not isinstance(raw_data, dict):
                 logger.warning(
@@ -457,7 +500,6 @@ class TrustRegistry:
                     type(raw_data).__name__,
                 )
                 self._levels = dict.fromkeys(self._levels, TrustLevel.UNTRUSTED)
-                self._disk_loaded = True
                 return
             payload = _verify_ledger(raw_data)
             if payload is None:
@@ -467,7 +509,6 @@ class TrustRegistry:
                     "Resetting all tools to UNTRUSTED."
                 )
                 self._levels = dict.fromkeys(self._levels, TrustLevel.UNTRUSTED)
-                self._disk_loaded = True
                 return
             for name, level_val in payload.items():
                 if name in self._levels:
@@ -480,21 +521,25 @@ class TrustRegistry:
                             name,
                             e,
                         )
-        except (json.JSONDecodeError, OSError, KeyError) as e:
+        except (json.JSONDecodeError, OSError, KeyError, TypeError, ValueError) as e:
             logger.warning("Failed to load trust ledger: %s", e)
-        self._disk_loaded = True
-        # One-time migration: restrict existing file permissions
-        try:
-            current_mode = self._ledger_path.stat().st_mode & 0o777
-            if current_mode != 0o600:
-                self._ledger_path.chmod(0o600)
-        except OSError:
-            pass
+            self._levels = dict.fromkeys(self._levels, TrustLevel.UNTRUSTED)
+        finally:
+            # Mark the attempted load complete even when the ledger is
+            # malformed. Permission migration must run for invalid and
+            # unsigned ledgers too; those files are still sensitive state.
+            self._disk_loaded = True
+            try:
+                current_mode = self._ledger_path.stat().st_mode & 0o777
+                if current_mode != 0o600:
+                    self._ledger_path.chmod(0o600)
+            except OSError:
+                pass
 
     def _save(self) -> None:
         """Save trust state to disk (atomic write + restricted permissions).
 
-        The ledger is signed with a machine-specific HMAC key so that
+        The ledger is signed with a private, randomly generated HMAC key so that
         tampering (e.g. an attacker writing ``{\"codomyrmex.run_command\": \"trusted\"}``
         directly into the file) is detected on the next load.
         """
@@ -735,6 +780,13 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
     if name not in known_tools:
         raise KeyError(f"Unknown tool: {name!r}. Available: {sorted(known_tools)}")
 
+    destructive = _is_destructive(name)
+    confirmation_token = None
+    if destructive and "confirmation_token" in kwargs:
+        confirmation_token = kwargs.pop("confirmation_token")
+        if not isinstance(confirmation_token, str) or not confirmation_token:
+            raise SecurityError("Confirmation token must be a non-empty string")
+
     # Validation Step (Secure by default)
     # We must validate before we even check trust, to catch malformed attacks early.
     tool_entry = registry.get(name)
@@ -742,10 +794,14 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
         val_result = validate_tool_arguments(name, kwargs, tool_entry["schema"])
         if not val_result.valid:
             raise ValueError(f"Tool argument validation failed: {val_result.errors}")
+        # Execute the same validated/coerced values that were authorized.
+        kwargs = val_result.coerced_args
+
+    args_digest = _arguments_digest(kwargs)
 
     # Trust check: safe tools need VERIFIED, destructive tools need TRUSTED
     current_level = _registry.level(name)
-    if _is_destructive(name):
+    if destructive:
         if not _registry.is_trusted(name):
             _log_audit_entry(name, kwargs, "blocked", current_level.name, 0.0)
             raise SecurityError(
@@ -760,16 +816,14 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
         )
 
     # Destructive Tool Confirmation
-    if _REQUIRE_CONFIRMATION and _is_destructive(name):
+    if _REQUIRE_CONFIRMATION and destructive:
         with _confirmations_lock:
             _cleanup_expired_confirmations_locked()
 
-            # Check for token
-            token = kwargs.pop("confirmation_token", None)
-
-            if token:
+            if confirmation_token is not None:
                 # Validate token
-                if token not in _pending_confirmations:
+                saved = _pending_confirmations.pop(confirmation_token, None)
+                if saved is None:
                     _log_audit_entry(
                         name,
                         kwargs,
@@ -780,7 +834,6 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
                     )
                     raise SecurityError("Invalid or expired confirmation token")
 
-                saved = _pending_confirmations[token]
                 if saved["tool_name"] != name:
                     _log_audit_entry(
                         name,
@@ -792,8 +845,18 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
                     )
                     raise SecurityError("Confirmation token does not match tool")
 
-                # Token valid, proceed. Remove used token.
-                del _pending_confirmations[token]
+                if not hmac.compare_digest(saved["args_digest"], args_digest):
+                    _log_audit_entry(
+                        name,
+                        kwargs,
+                        "blocked",
+                        _registry.level(name).name,
+                        0.0,
+                        error=SecurityError(
+                            "Confirmation token does not match arguments"
+                        ),
+                    )
+                    raise SecurityError("Confirmation token does not match arguments")
 
             else:
                 # Require confirmation
@@ -803,7 +866,7 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
                 _pending_confirmations[new_token] = {
                     "timestamp": time.monotonic(),
                     "tool_name": name,
-                    "args": kwargs,
+                    "args_digest": args_digest,
                 }
 
                 _log_audit_entry(

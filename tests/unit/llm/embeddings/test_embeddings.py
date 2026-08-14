@@ -9,11 +9,13 @@ from codomyrmex.llm.embeddings import (
     EmbeddingCache,
     EmbeddingIndex,
     EmbeddingService,
-    TestEmbeddingProvider,
     chunk_text,
     cosine_similarity,
     dot_product,
     euclidean_distance,
+)
+from codomyrmex.llm.embeddings import (
+    TestEmbeddingProvider as DeterministicEmbeddingProvider,
 )
 
 
@@ -65,7 +67,7 @@ class TestMockProvider:
 
     def test_embed_single(self):
         """Should generate embedding."""
-        provider = TestEmbeddingProvider(dimensions=128)
+        provider = DeterministicEmbeddingProvider(dimensions=128)
         emb = provider.embed("hello world")
 
         assert emb.dimensions == 128
@@ -73,7 +75,7 @@ class TestMockProvider:
 
     def test_embed_batch(self):
         """Should generate batch embeddings."""
-        provider = TestEmbeddingProvider()
+        provider = DeterministicEmbeddingProvider()
         embeddings = provider.embed_batch(["hello", "world"])
 
         assert len(embeddings) == 2
@@ -82,7 +84,7 @@ class TestMockProvider:
 
     def test_deterministic(self):
         """Same text should produce same embedding."""
-        provider = TestEmbeddingProvider()
+        provider = DeterministicEmbeddingProvider()
         emb1 = provider.embed("test text")
         emb2 = provider.embed("test text")
 
@@ -201,7 +203,7 @@ class TestEmbeddingService:
 
     def test_embed_with_cache(self):
         """Should use cache."""
-        provider = TestEmbeddingProvider()
+        provider = DeterministicEmbeddingProvider()
         service = EmbeddingService(provider=provider)
 
         # First call - cache miss
@@ -218,7 +220,7 @@ class TestEmbeddingService:
 
     def test_embed_texts_batch(self):
         """Should batch embed texts."""
-        provider = TestEmbeddingProvider()
+        provider = DeterministicEmbeddingProvider()
         service = EmbeddingService(provider=provider)
 
         embeddings = service.embed_texts(["a", "b", "c"])
@@ -228,7 +230,7 @@ class TestEmbeddingService:
 
     def test_cache_hit_rate(self):
         """Should calculate hit rate."""
-        provider = TestEmbeddingProvider()
+        provider = DeterministicEmbeddingProvider()
         service = EmbeddingService(provider=provider)
 
         service.embed("a")

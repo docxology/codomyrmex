@@ -83,11 +83,7 @@ class TestSecurityIntegrationWithOtherModules:
         test_file = tmp_path / "test.py"
         test_file.write_text("password = 'secret'", encoding="utf-8")
 
-        try:
-            # Scan for vulnerabilities
-            scan_vulnerabilities(str(tmp_path))
-            # Should not crash even if static_analysis not fully integrated
-            assert True  # May return None if not implemented
-        except Exception:
-            # If integration not fully implemented, that's okay
-            pass
+        # Scan for vulnerabilities. Unexpected scanner failures must fail the
+        # integration test rather than being mistaken for a successful run.
+        result = scan_vulnerabilities(str(tmp_path))
+        assert result is not None

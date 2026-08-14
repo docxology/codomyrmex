@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Infomaniak..
+Module implementation, resources, and local coordination for Infomaniak.
 
 ## Directory Contents
 - `PAI.md` – File

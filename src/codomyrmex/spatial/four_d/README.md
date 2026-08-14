@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Four D..
+Module implementation, resources, and local coordination for Four D.
 
 ## Directory Contents
 - `PAI.md` – File

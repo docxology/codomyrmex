@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Module implementation, resources, and local coordination for Workers..
+Module implementation, resources, and local coordination for Workers.
 
 ## Active Components
 - `README.md` – Project file

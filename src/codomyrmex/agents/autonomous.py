@@ -82,8 +82,14 @@ class AutonomousAgent:
     def start(self, background: bool = True) -> None:
         """Start the agent loop."""
         logger.info("[%s] Starting Autonomous Agent (%s)", self.identity, self.persona)
+        try:
+            self.endpoint.start()
+        except Exception:
+            # A failed endpoint start must not leave the public lifecycle
+            # flag claiming that the agent is running.
+            self.running = False
+            raise
         self.running = True
-        self.endpoint.start()
 
         if not background:
             try:
@@ -95,8 +101,14 @@ class AutonomousAgent:
     def stop(self) -> None:
         """Stop the agent loop."""
         logger.info("[%s] Stopping...", self.identity)
+        try:
+            self.endpoint.stop()
+        except Exception:
+            # Preserve the observable running state until shutdown actually
+            # succeeds; callers can retry or surface the failure.
+            self.running = True
+            raise
         self.running = False
-        self.endpoint.stop()
 
     def send(self, message: str) -> None:
         """Send a message to the channel."""
@@ -141,7 +153,12 @@ class AutonomousAgent:
             req = AgentRequest(prompt=prompt)
             resp = self.client.execute_with_session(req)
 
+            if hasattr(resp, "is_success") and not resp.is_success():
+                raise RuntimeError(resp.error or "provider returned a failure")
+
             reply = resp.content.strip()
+            if not reply:
+                raise RuntimeError("provider returned an empty response")
             self.send(reply)
 
             if self._scheduler is not None:

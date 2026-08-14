@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Softmax Opt..
+Module implementation, resources, and local coordination for Softmax Opt.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

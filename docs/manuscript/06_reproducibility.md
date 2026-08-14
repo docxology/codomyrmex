@@ -60,6 +60,16 @@ into this render.
 | Generation time | {{GENERATION_TIMESTAMP}} | UTC time when the variable map was computed |
 : Configuration identity embedded in the rendered manuscript. {#tbl:configuration_provenance}
 
+Hydration is also pinned as a build input rather than inferred from whichever
+template happens to be importable. The current snapshot records repository
+`{{REPRO_TEMPLATE_REPOSITORY}}`, revision
+`{{REPRO_TEMPLATE_REVISION}}`, and entrypoint
+`{{REPRO_TEMPLATE_HYDRATION_ENTRYPOINT}}`. The observed mode is
+**{{REPRO_TEMPLATE_HYDRATION_MODE}}** and the pinned checkout dirty-state
+flag is `{{REPRO_TEMPLATE_WORKTREE_DIRTY}}`. A canonical-pinned mode requires
+the recorded clean checkout; a standalone clone may use the project-local
+strict successor only when the sibling checkout is unavailable.
+
 Protocol compatibility is measured rather than inferred from the MCP name. The
 referenced official line is [revision {{CONFIG_MCP_OFFICIAL_REVISION}}]({{CONFIG_MCP_SPECIFICATION_URL}})
 [@mcp2026spec], while the current client and server sources advertise
@@ -100,6 +110,7 @@ newly created artifacts.
 |---|---|
 | Source commit | `{{REPRO_GIT_COMMIT}}` |
 | Worktree dirty | `{{REPRO_WORKTREE_DIRTY}}` |
+| Worktree status SHA-256 | `{{REPRO_STATUS_SHA256}}` |
 | Environment fingerprint | `{{REPRO_ENVIRONMENT_HASH}}` |
 | Colony Kernel/manuscript source SHA-256 | `{{REPRO_KERNEL_SOURCE_HASH}}` |
 | `pyproject.toml` SHA-256 | `{{REPRO_PYPROJECT_HASH}}` |

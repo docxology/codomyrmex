@@ -14,58 +14,26 @@ import logging
 
 from codomyrmex.logging_monitoring import get_logger
 
-from .server import MCPServer, MCPServerConfig
-
-# ---------------------------------------------------------------------------
-# Core-layer modules whose mcp_tools we want to register.
-# These are NOT imported at module level -- doing so would violate
-# the Foundation -> Core layer boundary. Instead, we use the MCPDiscovery
-# engine at runtime to dynamically scan the entire Codomyrmex package.
-# ---------------------------------------------------------------------------
-
 logger = get_logger(__name__)
 
 
 async def run_server() -> None:
-    """Run the MCP server."""
+    """Run the authorization-aware Codomyrmex MCP server over stdio.
+
+    There is one production registration path.  Delegating to the PAI bridge
+    keeps dynamic discovery, trust enforcement, audit logging, and static vs.
+    dynamic collision policy identical for the CLI and Python entrypoints.
+    """
     # Configure logging for the MCP server specifically if needed
     logging.basicConfig(level=logging.INFO)
 
-    config = MCPServerConfig(
+    from codomyrmex.agents.pai.mcp_bridge import create_codomyrmex_mcp_server
+
+    server = create_codomyrmex_mcp_server(
         name="codomyrmex-mcp",
-        version="0.1.2",
+        transport="stdio",
     )
-    server = MCPServer(config)
-
-    # Lazily scan and load ALL MCP tools across the entire project
-    from codomyrmex.model_context_protocol.discovery import MCPDiscovery
-
-    logger.info("Scanning for Codomyrmex MCP Tools...")
-    discovery = MCPDiscovery()
-    report = discovery.scan_package("codomyrmex")
-
-    for tool in report.tools:
-        if tool.available and tool.handler:
-            try:
-                server._tool_registry.register(
-                    tool_name=tool.name,
-                    schema=tool.parameters,
-                    handler=tool.handler,
-                )
-                logger.info("Registered tool: %s from %s", tool.name, tool.module_path)
-            except Exception as e:
-                logger.error("Failed to register tool %s: %s", tool.name, e)
-
-    tool_count = (
-        len(server._tool_registry.list_tools())
-        if hasattr(server._tool_registry, "list_tools")
-        else len(report.tools)
-    )
-    logger.info(
-        "Successfully loaded %d MCP tools (encountered %d isolated module import failures)",
-        tool_count,
-        len(report.failed_modules),
-    )
+    logger.info("Authorization-aware MCP server ready with %d tools", server.tool_count)
 
     await server.run_stdio()
 

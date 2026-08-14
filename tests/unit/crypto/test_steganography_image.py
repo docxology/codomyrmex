@@ -112,9 +112,9 @@ class TestEmbedAndExtract:
         embed_in_image(red_image, "test", output_path)
 
         # Should be openable as a valid PNG
-        img = Image.open(output_path)
-        assert img.format == "PNG"
-        assert img.size == (100, 100)
+        with Image.open(output_path) as img:
+            assert img.format == "PNG"
+            assert img.size == (100, 100)
 
     def test_extract_from_nonexistent_raises(self):
         with pytest.raises(SteganographyError):

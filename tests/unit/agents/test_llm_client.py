@@ -7,12 +7,7 @@ when no Ollama server is reachable.
 
 import pytest
 
-try:
-    from codomyrmex.agents.llm_client import AgentRequest, AgentResponse, OllamaClient
-
-    LLM_CLIENT_AVAILABLE = True
-except ImportError:
-    LLM_CLIENT_AVAILABLE = False
+from codomyrmex.agents.llm_client import AgentRequest, AgentResponse, OllamaClient
 
 pytestmark = pytest.mark.unit
 
@@ -22,7 +17,6 @@ pytestmark = pytest.mark.unit
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not LLM_CLIENT_AVAILABLE, reason="agents.llm_client not importable")
 class TestAgentRequest:
     """Tests for the AgentRequest dataclass."""
 
@@ -63,7 +57,6 @@ class TestAgentRequest:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not LLM_CLIENT_AVAILABLE, reason="agents.llm_client not importable")
 class TestAgentResponse:
     """Tests for the AgentResponse dataclass."""
 
@@ -96,7 +89,6 @@ class TestAgentResponse:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not LLM_CLIENT_AVAILABLE, reason="agents.llm_client not importable")
 class TestOllamaClientConstruction:
     """Tests for OllamaClient __init__ without requiring a running server."""
 

@@ -72,18 +72,19 @@ Precise, line-level pointers to every piece of integration code connecting Codom
 
 | Symbol | Lines | Purpose |
 |:---|:---:|:---|
-| `TrustLevel` | [L49-54](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Enum: UNTRUSTED, VERIFIED, TRUSTED |
-| `DESTRUCTIVE_TOOLS` | [L58-63](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Explicit destructive tool frozenset |
-| `_DESTRUCTIVE_PATTERNS` | [L66-71](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Pattern matching for auto-discovered tools |
-| `_is_destructive` | [L74-83](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Check if tool name matches destructive patterns |
-| `TrustRegistry` | [L206-333](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Persistent trust ledger singleton |
-| `TrustRegistry._load` | [L226-240](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Load from `~/.codomyrmex/trust_ledger.json` |
-| `TrustRegistry.verify_all_safe` | [L261-273](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Promote read-only tools → VERIFIED |
-| `TrustRegistry.trust_all` | [L288-301](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Promote all tools → TRUSTED |
-| `verify_capabilities` | [L344-472](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | `/codomyrmexVerify` backing function |
-| `trust_tool` | [L475-491](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Promote single tool to TRUSTED |
-| `trust_all` | [L494-505](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | `/codomyrmexTrust` backing function |
-| `trusted_call_tool` | [L518-557](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Gated tool execution with trust enforcement |
+| `TrustLevel` | [L113-118](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Enum: UNTRUSTED, VERIFIED, TRUSTED |
+| `DESTRUCTIVE_TOOLS` | [L125-127](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Explicit destructive tool frozenset |
+| `_DESTRUCTIVE_PATTERNS` | [L284-286](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Pattern matching for auto-discovered tools |
+| `_arguments_digest` | [L183-200](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Canonical binding for destructive confirmations |
+| `_is_destructive` | [L334-336](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Check if tool name matches destructive patterns |
+| `TrustRegistry` | [L371-637](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Persistent trust ledger singleton |
+| `TrustRegistry._load` | [L440-490](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Load and verify the durable trust ledger |
+| `TrustRegistry.verify_all_safe` | [L526-538](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Promote read-only tools → VERIFIED |
+| `TrustRegistry.trust_all` | [L554-567](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Promote all tools → TRUSTED |
+| `verify_capabilities` | [L648-661](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | `/codomyrmexVerify` backing function |
+| `trust_tool` | [L664-680](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Promote single tool to TRUSTED |
+| `trust_all` | [L683-697](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | `/codomyrmexTrust` backing function |
+| `trusted_call_tool` | [L710-854](../../../../src/codomyrmex/agents/pai/trust_gateway.py) | Gated execution with schema validation and argument-bound confirmation |
 
 ---
 

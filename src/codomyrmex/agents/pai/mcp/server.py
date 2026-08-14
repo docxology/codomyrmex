@@ -3,6 +3,7 @@
 import json
 import threading
 import time
+from copy import deepcopy
 from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
@@ -10,6 +11,7 @@ from codomyrmex.model_context_protocol.tool_tagging import manifest_tags
 
 from .definitions import PROMPT_DEFINITIONS, RESOURCE_DEFINITIONS, TOOL_DEFINITIONS
 from .discovery import discover_dynamic_tools
+from .path_policy import guard_tool_arguments
 from .proxy_tools import get_package_version, tool_pai_status
 
 logger = get_logger(__name__)
@@ -26,8 +28,20 @@ class _ToolRegistry:
         self._tools: dict[str, dict[str, Any]] = {}
 
     def register(self, *, tool_name: str, schema: dict[str, Any], handler: Any) -> None:
+        existing = self._tools.get(tool_name)
+        if existing is not None:
+            # Static definitions are the compatibility contract. Dynamic
+            # discovery must not silently replace one with a same-named,
+            # potentially different handler.
+            if existing["schema"] != schema or existing["handler"] is not handler:
+                logger.warning(
+                    "Ignoring duplicate MCP tool %s from %s; first registration wins",
+                    tool_name,
+                    getattr(handler, "__module__", type(handler).__name__),
+                )
+            return
         self._tools[tool_name] = {
-            "schema": schema,
+            "schema": deepcopy(schema),
             "handler": handler,
             "name": tool_name,
         }
@@ -36,7 +50,12 @@ class _ToolRegistry:
         return sorted(self._tools)
 
     def get(self, name: str) -> dict[str, Any] | None:
-        return self._tools.get(name)
+        tool = self._tools.get(name)
+        if tool is None:
+            return None
+        result = dict(tool)
+        result["schema"] = deepcopy(tool["schema"])
+        return result
 
 
 def _build_registry() -> "_ToolRegistry":
@@ -90,8 +109,10 @@ def get_tool_registry(ttl: float = 300.0) -> "_ToolRegistry":
 
 def invalidate_tool_registry() -> None:
     """Force the next :func:`get_tool_registry` call to rebuild the registry."""
-    global _REGISTRY_EXPIRY
-    _REGISTRY_EXPIRY = 0.0
+    global _REGISTRY_CACHE, _REGISTRY_EXPIRY
+    with _REGISTRY_LOCK:
+        _REGISTRY_CACHE = None
+        _REGISTRY_EXPIRY = 0.0
 
 
 def _modules_provider() -> str:
@@ -142,17 +163,17 @@ def create_codomyrmex_mcp_server(
 
     from codomyrmex.agents.pai.trust_gateway import SecurityError, trusted_call_tool
 
-    def _wrap_with_trust(
-        tool_name: str, handler: Any
-    ) -> Any:
+    def _wrap_with_trust(tool_name: str, handler: Any) -> Any:
         """Wrap a raw handler to enforce trust level before execution.
 
         MCP protocol callers go through this wrapper; the direct Python
         API already routes through ``trusted_call_tool()``.
         """
+
         def _trusted_handler(**kwargs: Any) -> dict[str, Any]:
             try:
-                return trusted_call_tool(tool_name, **kwargs)
+                guarded_kwargs = guard_tool_arguments(tool_name, kwargs)
+                return trusted_call_tool(tool_name, **guarded_kwargs)
             except SecurityError as exc:
                 raise
             except Exception as exc:
@@ -263,7 +284,8 @@ def call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
 
     with with_correlation():
         try:
-            return trusted_call_tool(name, **kwargs)
+            guarded_kwargs = guard_tool_arguments(name, kwargs)
+            return trusted_call_tool(name, **guarded_kwargs)
         except KeyError:
             all_static = sorted(t[0] for t in TOOL_DEFINITIONS)
             return {
@@ -350,12 +372,12 @@ def get_skill_manifest() -> dict[str, Any]:
             }
         )
 
-    # Deduplicate: dynamic tools override static when names collide
+    # Deduplicate: static definitions remain authoritative when names collide.
     seen: dict[str, dict[str, Any]] = {}
     for t in static_tools:
         seen[t["name"]] = t
     for t in dynamic_tools:
-        seen[t["name"]] = t  # dynamic wins
+        seen.setdefault(t["name"], t)
     all_tools = sorted(seen.values(), key=lambda t: t["name"])
 
     return {

@@ -187,6 +187,23 @@ class TestMCPDiscoveryEngine:
             )
         assert len(engine.list_tools()) == 5
 
+    def test_list_tools_returns_stable_name_order(self):
+        engine = MCPDiscovery()
+        for name in ("zeta", "alpha", "beta"):
+            engine.register_tool(
+                DiscoveredTool(
+                    name=name,
+                    description=name,
+                    module_path="m",
+                    callable_name=name,
+                )
+            )
+        assert [tool.name for tool in engine.list_tools()] == [
+            "alpha",
+            "beta",
+            "zeta",
+        ]
+
     def test_scan_module_with_decorated_functions(self):
         # Create a real module with a decorated function
         mod = types.ModuleType("test_scan_module")
@@ -274,6 +291,30 @@ class TestMCPDiscoveryEngine:
         engine.record_cache_hit()
         engine.record_cache_hit()
         assert engine.get_metrics().cache_hits == 2
+
+    def test_accessors_return_defensive_copies(self):
+        engine = MCPDiscovery()
+        tool = DiscoveredTool(
+            name="copy_tool",
+            description="copy",
+            module_path="test.module",
+            callable_name="copy_tool",
+            parameters={
+                "type": "object",
+                "properties": {"x": {"type": "string"}},
+            },
+        )
+        engine.register_tool(tool)
+
+        listed = engine.list_tools()
+        listed[0].parameters["properties"]["x"]["type"] = "integer"
+        fetched = engine.get_tool("copy_tool")
+        assert fetched is not None
+        assert fetched.parameters["properties"]["x"]["type"] == "string"
+
+        metrics = engine.get_metrics()
+        metrics.failed_modules.append("caller-mutation")
+        assert "caller-mutation" not in engine.get_metrics().failed_modules
 
 
 @pytest.mark.unit

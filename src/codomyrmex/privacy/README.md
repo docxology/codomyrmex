@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Privacy..
+Module implementation, resources, and local coordination for Privacy.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

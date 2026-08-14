@@ -40,26 +40,23 @@ jobs:
           docker pull python:3.9-slim
           docker pull bash:5.1
 
-      - name: Run integration tests
-        run: |
-          uv run pytest -m integration \
-            --timeout=120 \
-            --no-header \
-            -q \
-            --tb=short \
-            -x \
-            2>&1 || true
-        env:
-          CODOMYRMEX_ENV: ci
-          CODOMYRMEX_INTEGRATION: "1"
-
       - name: Run integration tests (strict)
         run: |
           uv run pytest tests/integration/ \
             --timeout=120 \
             --no-header \
             -q \
-            --tb=short
+            --tb=short \
+            -W error \
+            --junit-xml=junit-integration.xml
         env:
           CODOMYRMEX_ENV: ci
           CODOMYRMEX_INTEGRATION: "1"
+
+      - name: Upload integration test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-test-evidence
+          path: junit-integration.xml
+          if-no-files-found: error

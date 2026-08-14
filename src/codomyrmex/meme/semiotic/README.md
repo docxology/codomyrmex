@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Semiotic..
+Module implementation, resources, and local coordination for Semiotic.
 
 ## Directory Contents
 - `PAI.md` – File

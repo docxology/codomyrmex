@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Dependency Injection..
+Module implementation, resources, and local coordination for Dependency Injection.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

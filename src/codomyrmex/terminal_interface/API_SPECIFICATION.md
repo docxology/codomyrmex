@@ -61,6 +61,15 @@ result = function_name(param1="value")
 
 **Description**: Provides an interactive terminal interface for exploring and interacting with Codomyrmex modules and workflows.
 
+The shell owns a terminal-local `TerminalDiscoveryView`; it does not import the
+higher-layer `system_discovery` service. The compatibility import
+`codomyrmex.terminal_interface.interactive_shell` remains available.
+
+Operational behavior is deliberately non-destructive: an empty REPL line is
+a no-op (`False`), and `do_forage` reports limited mode and returns normally
+when discovery is unavailable. This keeps navigation usable in degraded
+environments without dereferencing a missing discovery service.
+
 #### Methods
 
 **`__init__(prompt: str = "codomyrmex> ", **kwargs)`**
@@ -120,6 +129,11 @@ result = function_name(param1="value")
 ### CommandRunner
 
 **Description**: Executes system commands with proper error handling and output capture.
+
+`run(command, *, cwd=None, timeout=None)` is the compatibility entry point for
+string or argv-list commands. String commands are tokenized with
+`shlex.split` and never passed through a shell. `run_command(argv, ...)` remains
+the explicit structured-argv API.
 
 #### Methods
 

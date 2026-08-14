@@ -412,7 +412,7 @@ run_all_tests(data: bytes) -> dict[str, TestResult]
 
 ```python
 dh_parameters(key_size: int = 2048) -> DHParameters
-    """Generate Diffie-Hellman parameters."""
+    """Load audited RFC DH parameters meeting the requested minimum size."""
 
 dh_keypair(parameters: DHParameters) -> tuple[DHPrivateKey, DHPublicKey]
     """Generate DH keypair from parameters."""

@@ -32,7 +32,7 @@ class TemplateManager:
 
     def __init__(self, engine: str = "jinja2") -> None:
         self.engine = TemplateEngine(engine=engine)
-        self._templates: dict[str, str] = {}  # name -> template source string
+        self._templates: dict[str, str | Template] = {}
         self._parents: dict[str, str] = {}  # child_name -> parent_name
 
     # ── Registration ────────────────────────────────────────────────
@@ -55,9 +55,9 @@ class TemplateManager:
     def add_template(self, name: str, template: str | Template) -> None:
         """Add a template."""
         if isinstance(template, Template):
-            self._templates[name] = (  # type: ignore
-                template.source if hasattr(template, "source") else str(template)
-            )
+            # Preserve object identity and the engine selected by the caller.
+            # Converting a Template to repr/text loses its render contract.
+            self._templates[name] = template
         else:
             self._templates[name] = template
         logger.info("Added template: %s", name)
@@ -80,8 +80,8 @@ class TemplateManager:
 
     # ── Retrieval ───────────────────────────────────────────────────
 
-    def get_template(self, name: str) -> str | None:
-        """Get template source by name. Returns None if not found."""
+    def get_template(self, name: str) -> str | Template | None:
+        """Get a registered template by name. Returns None if not found."""
         return self._templates.get(name)
 
     def get_parent(self, name: str) -> str | None:
@@ -106,19 +106,27 @@ class TemplateManager:
         Raises:
             ValueError: If template not found.
         """
-        source = self._templates.get(name)
-        if source is None:
+        template = self._templates.get(name)
+        if template is None:
             raise ValueError(f"Template not found: {name}")
 
         ctx = context or {}
-        rendered = self.engine.render(source, ctx)
+        rendered = (
+            template.render(ctx)
+            if isinstance(template, Template)
+            else self.engine.render(template, ctx)
+        )
 
         # Handle inheritance: inject into parent's {{ content }} block
         parent_name = self._parents.get(name)
         if parent_name and parent_name in self._templates:
             parent_source = self._templates[parent_name]
             parent_ctx = {**ctx, "content": rendered}
-            rendered = self.engine.render(parent_source, parent_ctx)
+            rendered = (
+                parent_source.render(parent_ctx)
+                if isinstance(parent_source, Template)
+                else self.engine.render(parent_source, parent_ctx)
+            )
 
         return rendered
 
@@ -182,11 +190,14 @@ class TemplateManager:
         Attempts to render with empty context. Returns (True, "") on success
         or (False, error_message) on failure.
         """
-        source = self._templates.get(name)
-        if source is None:
+        template = self._templates.get(name)
+        if template is None:
             return False, f"Template not found: {name}"
         try:
-            self.engine.render(source, {})
+            if isinstance(template, Template):
+                template.render({})
+            else:
+                self.engine.render(template, {})
             return True, ""
         except Exception as e:
             return False, str(e)

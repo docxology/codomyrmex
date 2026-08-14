@@ -146,7 +146,7 @@ class ShellSessionMixin:
                     shell=True,
                     capture_output=True,
                     text=True,
-                    timeout=300,  # nosec B602 - interactive shell session
+                    timeout=300,  # nosec B602
                 )
             else:
                 result = subprocess.run(

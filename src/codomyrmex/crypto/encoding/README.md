@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Encoding..
+Module implementation, resources, and local coordination for Encoding.
 
 ## Directory Contents
 - `PAI.md` – File

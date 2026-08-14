@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Pdf..
+Module implementation, resources, and local coordination for Pdf.
 
 ## Directory Contents
 - `PAI.md` – File

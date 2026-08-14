@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Invalidation..
+Module implementation, resources, and local coordination for Invalidation.
 
 ## Directory Contents
 - `PAI.md` – File

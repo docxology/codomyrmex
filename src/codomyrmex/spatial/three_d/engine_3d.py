@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -16,15 +18,15 @@ class Vector3D:
     y: float = 0.0
     z: float = 0.0
 
-    def __add__(self, other: "Vector3D") -> "Vector3D":
+    def __add__(self, other: Vector3D) -> Vector3D:
         """Add two vectors."""
         return Vector3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
-    def __sub__(self, other: "Vector3D") -> "Vector3D":
+    def __sub__(self, other: Vector3D) -> Vector3D:
         """Subtract two vectors."""
         return Vector3D(self.x - other.x, self.y - other.y, self.z - other.z)
 
-    def __mul__(self, scalar: float) -> "Vector3D":
+    def __mul__(self, scalar: float) -> Vector3D:
         """Multiply vector by scalar."""
         return Vector3D(self.x * scalar, self.y * scalar, self.z * scalar)
 
@@ -48,6 +50,13 @@ class Object3D:
     rotation: Quaternion = field(default_factory=Quaternion)
     scale: Vector3D = field(default_factory=lambda: Vector3D(1.0, 1.0, 1.0))
     animations: dict[str, Any] = field(default_factory=dict)
+    vertices: list[Vector3D] = field(default_factory=list)
+    faces: list[tuple[int, ...]] = field(default_factory=list)
+    material: Any | None = None
+
+    def set_position(self, x: float, y: float, z: float) -> None:
+        """Set the object position in world coordinates."""
+        self.position = Vector3D(float(x), float(y), float(z))
 
     def play_animation(self, name: str) -> None:
         """Play a specific animation."""
@@ -80,6 +89,11 @@ class Light3D:
     position: Vector3D = field(default_factory=Vector3D)
     color: tuple[float, float, float] = (1.0, 1.0, 1.0)
     intensity: float = 1.0
+    name: str = "Light"
+
+    def set_position(self, x: float, y: float, z: float) -> None:
+        """Set the light position in world coordinates."""
+        self.position = Vector3D(float(x), float(y), float(z))
 
 
 @dataclass
@@ -91,6 +105,20 @@ class Camera3D:
     field_of_view: float = 60.0
     near_plane: float = 0.1
     far_plane: float = 1000.0
+    name: str = "Camera"
+
+    @property
+    def fov(self) -> float:
+        """Compatibility alias for the API specification's ``fov`` field."""
+        return self.field_of_view
+
+    @fov.setter
+    def fov(self, value: float) -> None:
+        self.field_of_view = float(value)
+
+    def set_position(self, x: float, y: float, z: float) -> None:
+        """Set the camera position in world coordinates."""
+        self.position = Vector3D(float(x), float(y), float(z))
 
     def look_at(self, target: Vector3D) -> None:
         """Point camera at target."""
@@ -123,3 +151,21 @@ class Scene3D:
     objects: list[Object3D] = field(default_factory=list)
     lights: list[Light3D] = field(default_factory=list)
     camera: Camera3D = field(default_factory=Camera3D)
+
+    def add_object(self, obj: Object3D) -> None:
+        """Add an object to the scene."""
+        if not isinstance(obj, Object3D):
+            raise TypeError("scene objects must be Object3D instances")
+        self.objects.append(obj)
+
+    def add_camera(self, camera: Camera3D) -> None:
+        """Set the active scene camera."""
+        if not isinstance(camera, Camera3D):
+            raise TypeError("scene camera must be a Camera3D instance")
+        self.camera = camera
+
+    def add_light(self, light: Light3D) -> None:
+        """Add a light to the scene."""
+        if not isinstance(light, Light3D):
+            raise TypeError("scene lights must be Light3D instances")
+        self.lights.append(light)

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Rollback..
+Module implementation, resources, and local coordination for Rollback.
 
 ## Directory Contents
 - `PAI.md` – File

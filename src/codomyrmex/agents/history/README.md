@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for History..
+Module implementation, resources, and local coordination for History.
 
 ## Directory Contents
 - `PAI.md` – File

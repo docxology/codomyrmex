@@ -1,8 +1,19 @@
 """GCP integration submodule."""
 
+import warnings
 from typing import Any, Optional
 
-from google.cloud import storage
+with warnings.catch_warnings():
+    # google-api-core emits this optional-dependency ImportWarning while
+    # importing storage. The storage client remains usable without the
+    # enhanced grpc status helpers, and optional-import probes must stay quiet
+    # under the repository's warning-as-error test policy.
+    warnings.filterwarnings(
+        "ignore",
+        message="Please install grpcio-status.*",
+        category=ImportWarning,
+    )
+    from google.cloud import storage
 
 from codomyrmex.cloud.common import StorageClient
 from codomyrmex.cloud.gcp.vertex_ai import VertexAIClient

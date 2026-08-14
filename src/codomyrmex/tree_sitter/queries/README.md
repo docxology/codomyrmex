@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Queries..
+Module implementation, resources, and local coordination for Queries.
 
 ## Directory Contents
 - `PAI.md` – File

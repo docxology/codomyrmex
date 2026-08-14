@@ -43,6 +43,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Dependency security floors**: raised the direct `cryptography`, `GitPython`,
+  and `pypdf` constraints to patched releases and refreshed `uv.lock`; the
+  complete lock audit no longer accepts the eight advisories reported against
+  the previous pins.
+- **Authenticated legacy AES-CBC**: CBC payloads now carry an HMAC-SHA256
+  integrity tag and reject unauthenticated legacy ciphertext; AES-GCM remains
+  the preferred authenticated encryption mode.
 - **Downstream CI package and module routing**: the wheel smoke test now imports
   with the same project virtual-environment interpreter used for installation,
   and comprehensive testing targets the current `coding` unit-test tree after

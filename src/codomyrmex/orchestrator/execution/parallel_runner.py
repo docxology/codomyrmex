@@ -99,7 +99,10 @@ class ParallelRunner:
         self.default_timeout = default_timeout
         self.fail_fast = fail_fast
         self._cancelled = False
-        self._executor: concurrent.futures.ProcessPoolExecutor | None = None
+        # ``run_script`` already launches each target in an isolated subprocess.
+        # A second process pool adds no isolation and leaks multiprocessing IPC
+        # handles on macOS/Python 3.13 when callers mix sync and async runs.
+        self._executor: concurrent.futures.ThreadPoolExecutor | None = None
 
     def _emit_progress(
         self, script: str, status: str, details: dict[str, Any] | None = None
@@ -153,73 +156,82 @@ class ParallelRunner:
             "batch", "started", {"total": len(scripts), "workers": self.max_workers}
         )
 
-        with concurrent.futures.ProcessPoolExecutor(
+        # The worker threads only coordinate subprocesses; keeping the pool in
+        # this process avoids multiprocessing's inherited event-loop/IPC state
+        # while preserving one-process isolation per script.
+        with concurrent.futures.ThreadPoolExecutor(
             max_workers=self.max_workers
         ) as executor:
             self._executor = executor
-            futures = {}
+            try:
+                futures = {}
 
-            for script in scripts:
-                if self._cancelled:
-                    result.skipped += 1
-                    continue
+                for script in scripts:
+                    if self._cancelled:
+                        result.skipped += 1
+                        continue
 
-                config = configs.get(script.name, {})
-                future = executor.submit(
-                    run_script, script, timeout=timeout, env=env, cwd=cwd, config=config
-                )
-                futures[future] = script
-                self._emit_progress(script.name, "submitted", {})
-
-            for future in concurrent.futures.as_completed(futures):
-                if self._cancelled:
-                    break
-
-                script = futures[future]
-                try:
-                    script_result = future.result()
-                    result.results.append(script_result)
-
-                    status = script_result.get("status", "unknown")
-                    if status == "passed":
-                        result.passed += 1
-                    elif status == "failed":
-                        result.failed += 1
-                        if self.fail_fast:
-                            self._cancelled = True
-                    elif status == "timeout":
-                        result.timeout += 1
-                    else:
-                        result.failed += 1
-
-                    self._emit_progress(
-                        script.name,
-                        status,
-                        {"execution_time": script_result.get("execution_time", 0)},
+                    config = configs.get(script.name, {})
+                    future = executor.submit(
+                        run_script,
+                        script,
+                        timeout=timeout,
+                        env=env,
+                        cwd=cwd,
+                        config=config,
                     )
+                    futures[future] = script
+                    self._emit_progress(script.name, "submitted", {})
 
-                except concurrent.futures.CancelledError:
-                    result.skipped += 1
-                    self._emit_progress(script.name, "cancelled", {})
-                except (
-                    ValueError,
-                    RuntimeError,
-                    AttributeError,
-                    OSError,
-                    TypeError,
-                ) as e:
-                    result.failed += 1
-                    result.results.append(
-                        {
-                            "script": str(script),
-                            "name": script.name,
-                            "status": "error",
-                            "error": str(e),
-                        }
-                    )
-                    self._emit_progress(script.name, "error", {"error": str(e)})
+                for future in concurrent.futures.as_completed(futures):
+                    if self._cancelled:
+                        break
 
-            self._executor = None
+                    script = futures[future]
+                    try:
+                        script_result = future.result()
+                        result.results.append(script_result)
+
+                        status = script_result.get("status", "unknown")
+                        if status == "passed":
+                            result.passed += 1
+                        elif status == "failed":
+                            result.failed += 1
+                            if self.fail_fast:
+                                self._cancelled = True
+                        elif status == "timeout":
+                            result.timeout += 1
+                        else:
+                            result.failed += 1
+
+                        self._emit_progress(
+                            script.name,
+                            status,
+                            {"execution_time": script_result.get("execution_time", 0)},
+                        )
+
+                    except concurrent.futures.CancelledError:
+                        result.skipped += 1
+                        self._emit_progress(script.name, "cancelled", {})
+                    except (
+                        ValueError,
+                        RuntimeError,
+                        AttributeError,
+                        OSError,
+                        TypeError,
+                    ) as e:
+                        result.failed += 1
+                        result.results.append(
+                            {
+                                "script": str(script),
+                                "name": script.name,
+                                "status": "error",
+                                "error": str(e),
+                            }
+                        )
+                        self._emit_progress(script.name, "error", {"error": str(e)})
+            finally:
+                self._executor = None
 
         result.execution_time = time.time() - start_time
         self._emit_progress("batch", "completed", result.to_dict())

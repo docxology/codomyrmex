@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Adapters..
+Module implementation, resources, and local coordination for Adapters.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Compute..
+Module implementation, resources, and local coordination for Compute.
 
 ## Directory Contents
 - `PAI.md` – File

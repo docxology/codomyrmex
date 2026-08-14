@@ -5,6 +5,8 @@ This module tests all digital security functionality including
 vulnerability scanning, security monitoring, encryption, and certificate validation.
 """
 
+import ssl
+
 import pytest
 
 # Import cryptography conditionally
@@ -87,12 +89,11 @@ class TestVulnerabilityScanner:
 
         try:
             result = scan_vulnerabilities(str(tmp_path))
-            assert result is not None
-            assert isinstance(result, VulnerabilityReport)
-            assert hasattr(result, "valid")
-        except Exception as e:
-            # May fail if dependencies not available, that's okay
-            pytest.skip(f"Vulnerability scanning failed: {e}")
+        except (FileNotFoundError, OSError) as exc:
+            pytest.skip(f"vulnerability scanner executable unavailable: {exc}")
+        assert result is not None
+        assert isinstance(result, VulnerabilityReport)
+        assert hasattr(result, "valid")
 
     @pytest.mark.skipif(
         not VULNERABILITY_AVAILABLE, reason="Vulnerability scanner not available"
@@ -104,10 +105,10 @@ class TestVulnerabilityScanner:
 
         try:
             results = audit_code_security(str(tmp_path))
-            assert isinstance(results, list)
-            # Convenience function returns vulnerabilities list, which is correct
-        except Exception as e:
-            pytest.skip(f"Code security audit failed: {e}")
+        except (FileNotFoundError, OSError) as exc:
+            pytest.skip(f"security auditing executable unavailable: {exc}")
+        assert isinstance(results, list)
+        # Convenience function returns vulnerabilities list, which is correct
 
 
 class TestSecurityMonitor:
@@ -126,11 +127,8 @@ class TestSecurityMonitor:
     )
     def test_monitor_security_events(self):
         """Test monitoring security events."""
-        try:
-            monitor = monitor_security_events()
-            assert monitor is not None
-        except Exception as e:
-            pytest.skip(f"Security monitoring failed: {e}")
+        monitor = monitor_security_events()
+        assert monitor is not None
 
 
 class TestEncryptionManager:
@@ -151,22 +149,17 @@ class TestEncryptionManager:
         """Test encrypting and decrypting data."""
         test_data = "sensitive information"
 
-        try:
-            # Encrypt
-            encrypted_result = encrypt_sensitive_data(test_data)
-            assert encrypted_result is not None
-            assert "encrypted_data" in encrypted_result or "data" in encrypted_result
+        encrypted_result = encrypt_sensitive_data(test_data)
+        assert encrypted_result is not None
+        assert "encrypted_data" in encrypted_result or "data" in encrypted_result
 
-            # Decrypt if key available
-            if "key" in encrypted_result:
-                decrypted = decrypt_sensitive_data(
-                    encrypted_result.get("encrypted_data")
-                    or encrypted_result.get("data"),
-                    encrypted_result["key"],
-                )
-                assert decrypted == test_data
-        except Exception as e:
-            pytest.skip(f"Encryption/decryption failed: {e}")
+        # Decrypt if key available
+        if "key" in encrypted_result:
+            decrypted = decrypt_sensitive_data(
+                encrypted_result.get("encrypted_data") or encrypted_result.get("data"),
+                encrypted_result["key"],
+            )
+            assert decrypted == test_data
 
 
 class TestCertificateValidator:
@@ -188,7 +181,7 @@ class TestCertificateValidator:
         """Test SSL certificate validation."""
         try:
             result = validate_ssl_certificates("github.com", port=443, timeout=5.0)
-            assert result is not None
-            assert isinstance(result, dict)
-        except Exception as e:
-            pytest.skip(f"Certificate validation failed: {e}")
+        except (OSError, TimeoutError, ssl.SSLError) as exc:
+            pytest.skip(f"external certificate endpoint unavailable: {exc}")
+        assert result is not None
+        assert isinstance(result, dict)

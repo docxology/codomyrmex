@@ -229,6 +229,7 @@ jobs:
       - name: Full test suite with coverage floor
         run: |
           uv run pytest tests/ -q --tb=short \
+            -W error \
             -m "not performance and not benchmark and not bench" \
             --cov=src/codomyrmex \
             --cov-report=term-missing \
@@ -326,6 +327,7 @@ jobs:
       - name: Run unit tests
         run: >-
           uv run pytest tests/unit/ -v --tb=short
+          -W error
           --cov=src/codomyrmex
           --cov-report=xml
           --cov-report=html
@@ -336,7 +338,7 @@ jobs:
 
       - name: Run integration tests
         run: |
-          uv run pytest tests/integration/ -v --tb=short --junit-xml=junit-integration-${{ matrix.os }}-${{ matrix.python-version }}.xml
+          uv run pytest tests/integration/ -v --tb=short -W error --junit-xml=junit-integration-${{ matrix.os }}-${{ matrix.python-version }}.xml
 
       - name: Save coverage.json to root
         shell: bash
@@ -408,6 +410,7 @@ jobs:
       - name: Run blocking Windows portability contract
         run: >-
           uv run pytest -v --tb=short
+          -W error
           tests/unit/concurrency/test_distributed_lock.py
           tests/unit/coding/sandbox/test_sandbox_isolation.py
           tests/unit/environment_setup/
@@ -466,7 +469,7 @@ jobs:
 
       - name: Run comprehensive tests for ${{ matrix.test-suite }}
         run: |
-          uv run pytest tests/unit/${{ matrix.test-suite }}/ -v --tb=short --junit-xml=junit-comprehensive-${{ matrix.test-suite }}.xml
+          uv run pytest tests/unit/${{ matrix.test-suite }}/ -v --tb=short -W error --junit-xml=junit-comprehensive-${{ matrix.test-suite }}.xml
 
       - name: Upload comprehensive test results
         uses: actions/upload-artifact@v4
@@ -564,16 +567,23 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
 
           # Sum JUnit XML attributes using grep + awk (avoids multi-line Python in YAML)
+          junit_count=$(find test-results -type f -name 'junit-*.xml' | wc -l | tr -d ' ')
+          if [ "$junit_count" -eq 0 ]; then
+            echo "No JUnit evidence was downloaded; refusing to summarize test status."
+            exit 1
+          fi
           total_tests=$(grep -roh 'tests="[0-9]*"' test-results/ 2>/dev/null | sed 's/tests="//;s/"//' | awk '{s+=$1} END {print s+0}')
           failed_tests=$(grep -roh 'failures="[0-9]*"' test-results/ 2>/dev/null | sed 's/failures="//;s/"//' | awk '{s+=$1} END {print s+0}')
           error_tests=$(grep -roh 'errors="[0-9]*"' test-results/ 2>/dev/null | sed 's/errors="//;s/"//' | awk '{s+=$1} END {print s+0}')
-          passed=$((total_tests - failed_tests - error_tests))
+          skipped_tests=$(grep -roh 'skipped="[0-9]*"' test-results/ 2>/dev/null | sed 's/skipped="//;s/"//' | awk '{s+=$1} END {print s+0}')
+          passed=$((total_tests - failed_tests - error_tests - skipped_tests))
 
           echo "| Metric | Count |" >> $GITHUB_STEP_SUMMARY
           echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
           echo "| ✅ Passed | ${passed} |" >> $GITHUB_STEP_SUMMARY
           echo "| ❌ Failed | ${failed_tests} |" >> $GITHUB_STEP_SUMMARY
           echo "| 💥 Errors | ${error_tests} |" >> $GITHUB_STEP_SUMMARY
+          echo "| ⏭️ Skipped | ${skipped_tests} |" >> $GITHUB_STEP_SUMMARY
           echo "| 📋 Total  | ${total_tests} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 

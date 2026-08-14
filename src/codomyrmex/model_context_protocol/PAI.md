@@ -4,7 +4,7 @@
 
 ## Overview
 
-The Model Context Protocol (MCP) module is **the operational bridge** between the PAI system (`~/.claude/PAI/`) and codomyrmex. PAI is TypeScript/Bun; codomyrmex is Python. MCP is the JSON-RPC protocol that connects them. The measured merged runtime manifest currently contains 604 tools across file operations, code analysis, git, shell execution, memory, and module introspection; transport-specific profiles are enumerated at startup.
+The Model Context Protocol (MCP) module is **the operational bridge** between the PAI system (`~/.claude/PAI/`) and codomyrmex. PAI is TypeScript/Bun; codomyrmex is Python. MCP is the JSON-RPC protocol that connects them. The measured merged runtime manifest currently contains 612 tools across file operations, code analysis, git, shell execution, memory, and module introspection; transport-specific profiles are enumerated at startup.
 
 ## Architecture
 
@@ -76,7 +76,7 @@ The HTTP transport includes a self-contained **Web UI** at the root URL (`/`) wi
 | `/resources`         | GET    | List registered resources                                                    |
 | `/prompts`           | GET    | List registered prompt templates                                             |
 
-## Available Tools (608 merged runtime-manifest tools in the complete locked dependency profile)
+## Available Tools (612 merged runtime-manifest tools in the complete locked dependency profile)
 
 ### Built-in Transport Tools (15) — Fully Implemented
 
@@ -104,8 +104,8 @@ The standard transport provides common operations directly implemented in `tools
 
 The transport layer uses `MCPDiscovery.scan_package("codomyrmex")` to traverse the
 130 top-level modules and register eligible decorated tools at server boot. The source
-inventory currently contains 623 production `@mcp_tool` lines, while the merged PAI
-manifest exposes 608 runtime entries in the complete locked dependency profile. These
+inventory currently contains 627 production `@mcp_tool` lines, while the merged PAI
+manifest exposes 612 runtime entries in the complete locked dependency profile. These
 are intentionally separate measurements:
 wrappers, aliases, built-ins, profile filters, and registration eligibility can make
 the runtime registry smaller or otherwise different from the physical decorator count.

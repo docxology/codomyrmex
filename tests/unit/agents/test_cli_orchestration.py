@@ -229,14 +229,10 @@ class TestClaudeCommands:
         """Test claude execute request structure."""
         from codomyrmex.agents.claude import ClaudeClient
 
-        # May fail if anthropic not installed, but structure should work
-        try:
-            ClaudeClient()
-            request = AgentRequest(prompt="test prompt")
-            assert request.prompt == "test prompt"
-        except Exception:
-            # Expected if anthropic not installed
-            pass
+        client = ClaudeClient(config={"claude_api_key": "test-key"})
+        assert client.name == "claude"
+        request = AgentRequest(prompt="test prompt")
+        assert request.prompt == "test prompt"
 
 
 @pytest.mark.unit
@@ -256,14 +252,10 @@ class TestCodexCommands:
         """Test codex execute request structure."""
         from codomyrmex.agents.codex import CodexClient
 
-        # May fail if openai not installed, but structure should work
-        try:
-            CodexClient()
-            request = AgentRequest(prompt="test prompt")
-            assert request.prompt == "test prompt"
-        except Exception:
-            # Expected if openai not installed
-            pass
+        client = CodexClient(config={"codex_api_key": "test-key"})
+        assert client.name == "codex"
+        request = AgentRequest(prompt="test prompt")
+        assert request.prompt == "test prompt"
 
 
 @pytest.mark.unit
@@ -319,25 +311,17 @@ class TestGeminiCommands:
 
     def test_gemini_chat_operations(self):
         """Test gemini chat operations structure."""
+        from codomyrmex.agents.core.exceptions import GeminiError
         from codomyrmex.agents.gemini import GeminiClient
 
         client = GeminiClient()
 
-        # Test chat list - wrap in try/except since gemini may not be available
-        try:
-            result = client.list_chats()
-            assert isinstance(result, dict)
-        except Exception:
-            # Expected if gemini not available or times out
-            pass
-
-        # Test chat save structure (may fail if gemini not available)
-        try:
-            result = client.save_chat("test-tag", "test prompt")
-            assert isinstance(result, dict)
-        except Exception:
-            # Expected if gemini not available or times out
-            pass
+        if client.client is None:
+            with pytest.raises(GeminiError, match="not initialized"):
+                client.start_chat(history=[])
+        else:
+            chat = client.start_chat(history=[])
+            assert chat is not None
 
 
 @pytest.mark.unit
@@ -348,15 +332,11 @@ class TestDroidCommands:
         """Test droid controller creation."""
         from codomyrmex.agents.droid import create_default_controller
 
-        try:
-            controller = create_default_controller()
-            assert controller is not None
-            assert hasattr(controller, "status")
-            assert hasattr(controller, "config")
-            assert hasattr(controller, "metrics")
-        except Exception:
-            # May fail if dependencies not available
-            pass
+        controller = create_default_controller()
+        assert controller is not None
+        assert hasattr(controller, "status")
+        assert hasattr(controller, "config")
+        assert hasattr(controller, "metrics")
 
     def test_droid_config_structure(self):
         """Test droid config structure."""
@@ -380,23 +360,11 @@ class TestOrchestratorCommands:
         from codomyrmex.agents.generic import AgentOrchestrator
         from codomyrmex.agents.jules import JulesClient
 
-        try:
-            # Create a simple agent list
-            agents = []
-            try:
-                agents.append(JulesClient())
-            except Exception:
-                pass  # Skip if jules not available
-
-            if agents:
-                orchestrator = AgentOrchestrator(agents)
-                assert orchestrator is not None
-                assert hasattr(orchestrator, "execute_parallel")
-                assert hasattr(orchestrator, "execute_sequential")
-                assert hasattr(orchestrator, "execute_with_fallback")
-        except Exception:
-            # May fail if dependencies not available
-            pass
+        orchestrator = AgentOrchestrator([JulesClient()])
+        assert orchestrator is not None
+        assert hasattr(orchestrator, "execute_parallel")
+        assert hasattr(orchestrator, "execute_sequential")
+        assert hasattr(orchestrator, "execute_with_fallback")
 
     def test_agent_request_creation(self):
         """Test agent request creation with context."""
@@ -421,37 +389,27 @@ class TestTheoryCommands:
 
     def test_theory_architectures_available(self):
         """Test that theory architectures are available."""
-        try:
-            from codomyrmex.agents.theory import (
-                DeliberativeArchitecture,
-                HybridArchitecture,
-                ReactiveArchitecture,
-            )
+        from codomyrmex.agents.theory import (
+            DeliberativeArchitecture,
+            HybridArchitecture,
+            ReactiveArchitecture,
+        )
 
-            # Should be able to import
-            assert ReactiveArchitecture is not None
-            assert DeliberativeArchitecture is not None
-            assert HybridArchitecture is not None
-        except ImportError:
-            # May not be available
-            pass
+        assert ReactiveArchitecture is not None
+        assert DeliberativeArchitecture is not None
+        assert HybridArchitecture is not None
 
     def test_theory_reasoning_models_available(self):
         """Test that theory reasoning models are available."""
-        try:
-            from codomyrmex.agents.theory import (
-                HybridReasoningModel,
-                NeuralReasoningModel,
-                SymbolicReasoningModel,
-            )
+        from codomyrmex.agents.theory import (
+            HybridReasoningModel,
+            NeuralReasoningModel,
+            SymbolicReasoningModel,
+        )
 
-            # Should be able to import
-            assert SymbolicReasoningModel is not None
-            assert NeuralReasoningModel is not None
-            assert HybridReasoningModel is not None
-        except ImportError:
-            # May not be available
-            pass
+        assert SymbolicReasoningModel is not None
+        assert NeuralReasoningModel is not None
+        assert HybridReasoningModel is not None
 
 
 @pytest.mark.unit
@@ -551,18 +509,13 @@ class TestOrchestratorSelect:
     def test_select_agents_by_capability(self):
         """Test selecting agents by capability."""
         from codomyrmex.agents.generic import AgentOrchestrator
+        from codomyrmex.agents.jules import JulesClient
 
-        try:
-            from codomyrmex.agents.jules import JulesClient
+        agents = [JulesClient()]
+        orchestrator = AgentOrchestrator(agents)
 
-            agents = [JulesClient()]
-            orchestrator = AgentOrchestrator(agents)
-
-            selected = orchestrator.select_agent_by_capability("streaming", agents)
-            assert isinstance(selected, list)
-        except Exception:
-            # May fail if jules not available
-            pass
+        selected = orchestrator.select_agent_by_capability("streaming", agents)
+        assert isinstance(selected, list)
 
 
 # ============================================================================
@@ -576,8 +529,8 @@ class TestDroidEnhancements:
 
     def test_droid_config_save_load(self):
         """Test droid config save/load."""
-        import tempfile
         from pathlib import Path
+        from tempfile import NamedTemporaryFile
 
         from codomyrmex.agents.droid import (
             DroidConfig,
@@ -585,39 +538,32 @@ class TestDroidEnhancements:
             save_config_to_file,
         )
 
-        try:
-            config = DroidConfig()
-            with tempfile.NamedTemporaryFile(
-                mode="w", delete=False, suffix=".json"
-            ) as f:
-                temp_path = f.name
+        config = DroidConfig()
+        with NamedTemporaryFile(mode="w", delete=False, suffix=".json") as f:
+            temp_path = f.name
 
+        try:
             save_config_to_file(config, temp_path)
             assert Path(temp_path).exists()
 
             loaded_config = load_config_from_file(temp_path)
             assert loaded_config.identifier == config.identifier
             assert loaded_config.mode == config.mode
-
-            Path(temp_path).unlink()
-        except Exception:
-            # May fail if dependencies not available
-            pass
+        finally:
+            Path(temp_path).unlink(missing_ok=True)
 
     def test_droid_todo_manager(self):
         """Test droid TODO manager."""
-        import tempfile
         from pathlib import Path
+        from tempfile import NamedTemporaryFile
 
         from codomyrmex.agents.droid import TodoItem, TodoManager
 
-        try:
-            with tempfile.NamedTemporaryFile(
-                mode="w", delete=False, suffix=".txt"
-            ) as f:
-                temp_path = f.name
-                f.write("[TODO]\ntask1 | description1 | outcomes1\n")
+        with NamedTemporaryFile(mode="w", delete=False, suffix=".txt") as f:
+            temp_path = f.name
+            f.write("[TODO]\ntask1 | description1 | outcomes1\n")
 
+        try:
             manager = TodoManager(temp_path)
             todo_items, completed_items = manager.load()
 
@@ -625,11 +571,8 @@ class TestDroidEnhancements:
             assert isinstance(completed_items, list)
             if todo_items:
                 assert isinstance(todo_items[0], TodoItem)
-
-            Path(temp_path).unlink()
-        except Exception:
-            # May fail if dependencies not available
-            pass
+        finally:
+            Path(temp_path).unlink(missing_ok=True)
 
 
 # ============================================================================
@@ -645,36 +588,28 @@ class TestTaskPlannerCommands:
         """Test task planner creation."""
         from codomyrmex.agents.generic import TaskPlanner, TaskStatus
 
-        try:
-            planner = TaskPlanner()
-            assert planner is not None
+        planner = TaskPlanner()
+        assert planner is not None
 
-            task = planner.create_task("Test task")
-            assert task is not None
-            assert task.description == "Test task"
-            assert task.status == TaskStatus.PENDING
-        except Exception:
-            # May fail if dependencies not available
-            pass
+        task = planner.create_task("Test task")
+        assert task is not None
+        assert task.description == "Test task"
+        assert task.status == TaskStatus.PENDING
 
     def test_task_planner_operations(self):
         """Test task planner operations."""
         from codomyrmex.agents.generic import TaskPlanner
 
-        try:
-            planner = TaskPlanner()
+        planner = TaskPlanner()
 
-            task1 = planner.create_task("Task 1")
-            planner.create_task("Task 2", dependencies=[task1.id])
+        task1 = planner.create_task("Task 1")
+        planner.create_task("Task 2", dependencies=[task1.id])
 
-            ready_tasks = planner.get_ready_tasks()
-            assert len(ready_tasks) >= 1  # task1 should be ready
+        ready_tasks = planner.get_ready_tasks()
+        assert len(ready_tasks) >= 1
 
-            execution_order = planner.get_task_execution_order()
-            assert len(execution_order) == 2
-        except Exception:
-            # May fail if dependencies not available
-            pass
+        execution_order = planner.get_task_execution_order()
+        assert len(execution_order) == 2
 
     def test_task_status_enum(self):
         """Test task status enum."""
@@ -698,46 +633,33 @@ class TestMessageBusCommands:
         """Test message bus creation."""
         from codomyrmex.agents.generic import Message, MessageBus
 
-        try:
-            bus = MessageBus()
-            assert bus is not None
+        bus = MessageBus()
+        assert bus is not None
 
-            message = Message(
-                sender="test", message_type="test_type", content="test content"
-            )
-            assert message.sender == "test"
-            assert message.message_type == "test_type"
-        except Exception:
-            # May fail if dependencies not available
-            pass
+        message = Message(
+            sender="test", message_type="test_type", content="test content"
+        )
+        assert message.sender == "test"
+        assert message.message_type == "test_type"
 
     def test_message_bus_operations(self):
         """Test message bus operations."""
         from codomyrmex.agents.generic import MessageBus
 
-        try:
-            bus = MessageBus()
+        bus = MessageBus()
 
-            # Test subscribe
-            handler_called = []
+        handler_called = []
 
-            def test_handler(msg):
-                handler_called.append(msg)
+        def test_handler(msg):
+            handler_called.append(msg)
 
-            bus.subscribe("test_type", test_handler)
+        bus.subscribe("test_type", test_handler)
 
-            # Test publish
-            from codomyrmex.agents.generic import Message
+        from codomyrmex.agents.generic import Message
 
-            message = Message(sender="test", message_type="test_type", content="test")
-            bus.publish(message)
+        message = Message(sender="test", message_type="test_type", content="test")
+        bus.publish(message)
 
-            # Handler should have been called
-            assert len(handler_called) > 0
-
-            # Test history
-            history = bus.get_message_history()
-            assert len(history) > 0
-        except Exception:
-            # May fail if dependencies not available
-            pass
+        assert len(handler_called) > 0
+        history = bus.get_message_history()
+        assert len(history) > 0

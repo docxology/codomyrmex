@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Agentic Memory..
+Module implementation, resources, and local coordination for Agentic Memory.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

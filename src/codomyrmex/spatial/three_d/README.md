@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Three D..
+Module implementation, resources, and local coordination for Three D.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
@@ -16,6 +16,7 @@ Module implementation, resources, and local coordination for Three D..
 - `ar_vr_support.py` – File
 - `engine_3d.py` – File
 - `examples/` – Subdirectory
+- `materials.py` – Renderer-neutral materials and mesh loading
 - `py.typed` – File
 - `rendering_pipeline.py` – File
 

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Feature Flags..
+Module implementation, resources, and local coordination for Feature Flags.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

@@ -106,7 +106,9 @@ class AgentMessage:
             ToolCall(
                 name=tc["name"],
                 arguments=tc.get("arguments", {}),
-                call_id=tc.get("call_id", ""),
+                # Missing IDs must receive the same non-empty identity
+                # invariant as newly-created ToolCall instances.
+                call_id=tc.get("call_id") or uuid.uuid4().hex[:12],
             )
             for tc in data.get("tool_calls", [])
         ]

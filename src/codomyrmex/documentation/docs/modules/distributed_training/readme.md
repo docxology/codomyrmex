@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Distributed Training..
+Module implementation, resources, and local coordination for Distributed Training.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

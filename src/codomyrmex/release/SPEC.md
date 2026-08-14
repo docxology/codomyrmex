@@ -19,6 +19,26 @@ artifact construction from externally authorized publication.
 - Relaxed policy may downgrade typing and documentation failures to warnings,
   but must be explicitly selected.
 
+### Test evidence profiles
+
+- `run_release_test_evidence()` defaults to `profile="local"` so a developer
+  can collect truthful evidence from a dirty checkout without changing the
+  checkout or hiding skips and warnings.
+- `profile="release"` is fail-closed: it requires a clean source checkout and
+  `max_warnings=0`. The receipt records the profile, a SHA-256 digest of the
+  parsed JUnit report, every skipped test and warning, and named blockers. It
+  also requires a repository-local coverage XML report and explicit percentage
+  floor; the measured line rate and detached SHA-256 digest are recorded and
+  compared to that floor. The evidence invocation disables the
+  pytest-benchmark plugin; performance measurement is a separate opt-in lane.
+- `allowed_output_paths` only permits expected checkout mutations. It does not
+  prove that an artifact was generated. `required_output_paths` additionally
+  requires each report to be a repository-local file refreshed during the
+  invocation; release runs reject pre-existing required outputs to prevent
+  stale coverage reports from becoming green evidence.
+- A missing, empty, malformed, ambiguous, or count-inconsistent JUnit report is
+  an error. A zero-test report is never successful evidence.
+
 ### Package construction
 
 - `PackageBuilder` runs `uv build` in an isolated build environment.

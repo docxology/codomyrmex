@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Compression..
+Module implementation, resources, and local coordination for Compression.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

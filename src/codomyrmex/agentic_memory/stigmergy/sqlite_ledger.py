@@ -6,6 +6,8 @@ import json
 import sqlite3
 import threading
 import time
+from collections.abc import Iterator
+from contextlib import contextmanager
 from typing import Any
 
 from codomyrmex.agentic_memory.stigmergy.models import StigmergyConfig, TraceMarker
@@ -29,8 +31,21 @@ class SqliteTraceLedger:
         c.row_factory = sqlite3.Row
         return c
 
+    @contextmanager
+    def _connection(self) -> Iterator[sqlite3.Connection]:
+        """Yield a ledger connection and close it after the transaction."""
+        conn = self._conn()
+        try:
+            yield conn
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
+        finally:
+            conn.close()
+
     def _init_db(self) -> None:
-        with self._lock, self._conn() as conn:
+        with self._lock, self._connection() as conn:
             conn.execute(
                 """
                 CREATE TABLE IF NOT EXISTS stigmergy_traces (
@@ -57,7 +72,7 @@ class SqliteTraceLedger:
     ) -> TraceMarker:
         now = time.time()
         meta_json = json.dumps(metadata or {})
-        with self._lock, self._conn() as conn:
+        with self._lock, self._connection() as conn:
             row = conn.execute(
                 "SELECT strength, metadata FROM stigmergy_traces WHERE key = ?",
                 (key,),
@@ -94,7 +109,7 @@ class SqliteTraceLedger:
         )
 
     def reinforce(self, key: str) -> TraceMarker | None:
-        with self._lock, self._conn() as conn:
+        with self._lock, self._connection() as conn:
             row = conn.execute(
                 "SELECT strength, metadata FROM stigmergy_traces WHERE key = ?",
                 (key,),
@@ -119,7 +134,7 @@ class SqliteTraceLedger:
     def sense(self, key: str, *, reinforce: bool = False) -> TraceMarker | None:
         if reinforce:
             return self.reinforce(key)
-        with self._lock, self._conn() as conn:
+        with self._lock, self._connection() as conn:
             row = conn.execute(
                 "SELECT strength, updated_at, metadata FROM stigmergy_traces WHERE key = ?",
                 (key,),
@@ -140,7 +155,7 @@ class SqliteTraceLedger:
 
     def tick(self) -> int:
         removed = 0
-        with self._lock, self._conn() as conn:
+        with self._lock, self._connection() as conn:
             rows = conn.execute("SELECT key, strength FROM stigmergy_traces").fetchall()
             for row in rows:
                 key = row["key"]
@@ -156,7 +171,7 @@ class SqliteTraceLedger:
         return removed
 
     def top_k(self, k: int = 10) -> list[TraceMarker]:
-        with self._lock, self._conn() as conn:
+        with self._lock, self._connection() as conn:
             rows = conn.execute(
                 """SELECT key, strength, updated_at, metadata FROM stigmergy_traces
                    ORDER BY strength DESC LIMIT ?""",
@@ -180,6 +195,6 @@ class SqliteTraceLedger:
         return out
 
     def __len__(self) -> int:
-        with self._lock, self._conn() as conn:
+        with self._lock, self._connection() as conn:
             n = conn.execute("SELECT COUNT(*) FROM stigmergy_traces").fetchone()[0]
         return int(n)

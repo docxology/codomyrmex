@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Visualization..
+Module implementation, resources, and local coordination for Visualization.
 
 ## Directory Contents
 - `PAI.md` – File

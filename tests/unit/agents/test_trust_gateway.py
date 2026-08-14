@@ -96,10 +96,32 @@ class TestToolClassification:
         """Auto-discovered tools with write/delete/execute patterns are destructive."""
         assert _is_destructive("codomyrmex.encryption.write_key")
         assert _is_destructive("codomyrmex.cache.clear_cache")
+        assert _is_destructive("codomyrmex.git_reset")
+        assert _is_destructive("codomyrmex.execute_code")
         assert not _is_destructive("codomyrmex.encryption.generate_aes_key")
+
+    @pytest.mark.parametrize(
+        "tool_name",
+        [
+            "codomyrmex.git_commit",
+            "codomyrmex.git_push",
+            "codomyrmex.git_clone",
+            "codomyrmex.gmail_send_message",
+            "codomyrmex.memory_put",
+            "codomyrmex.invalidate_cache",
+            "push",
+        ],
+    )
+    def test_external_and_cache_side_effects_are_destructive(self, tool_name):
+        """Dynamic names with external side effects cannot be auto-verified."""
+        assert _is_destructive(tool_name)
 
     def test_read_file_is_safe(self):
         assert "codomyrmex.read_file" in SAFE_TOOLS
+
+    def test_pickle_deserialization_requires_trusted_level(self):
+        assert _is_destructive("codomyrmex.deserialize_data")
+        assert "codomyrmex.deserialize_data" not in SAFE_TOOLS
 
     def test_list_modules_is_safe(self):
         assert "codomyrmex.list_modules" in SAFE_TOOLS
@@ -171,6 +193,15 @@ class TestTrustRegistry:
 
         assert reg.level("codomyrmex.read_file") == TrustLevel.UNTRUSTED
         assert not (tmp_path / "second.json").exists()
+
+    def test_loaded_ledger_reconfiguration_does_not_reuse_old_trust(self, tmp_path):
+        reg = TrustRegistry(tmp_path / "first.json")
+        reg.trust_tool("codomyrmex.read_file")
+        assert reg.is_trusted("codomyrmex.read_file")
+
+        reg.configure_ledger_path(tmp_path / "second.json", load_existing=True)
+
+        assert reg.level("codomyrmex.read_file") == TrustLevel.UNTRUSTED
 
     def test_report_structure(self):
         reg = TrustRegistry()

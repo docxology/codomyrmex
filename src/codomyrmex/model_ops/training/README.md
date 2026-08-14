@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Training..
+Module implementation, resources, and local coordination for Training.
 
 ## Directory Contents
 - `PAI.md` – File

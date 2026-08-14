@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Telemetry..
+Module implementation, resources, and local coordination for Telemetry.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

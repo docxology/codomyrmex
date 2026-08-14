@@ -6,6 +6,8 @@ shared secret agreement, and error handling.
 
 from __future__ import annotations
 
+import warnings
+
 import pytest
 
 from codomyrmex.crypto.exceptions import ProtocolError
@@ -36,9 +38,15 @@ class TestDHKeyExchange:
         return dh_generate_parameters(key_size=1024)
 
     def test_generate_parameters_returns_parameters(self, dh_params) -> None:
-        from cryptography.hazmat.primitives.asymmetric import dh
+        parameter_numbers = dh_params.parameter_numbers()
+        assert parameter_numbers.g == 2
+        assert parameter_numbers.p.bit_length() == 1024
 
-        assert isinstance(dh_params, dh.DHParameters)
+    def test_generate_parameters_emits_no_deprecation_warning(self) -> None:
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            parameters = dh_generate_parameters(key_size=1024)
+        assert parameters.parameter_numbers().p.bit_length() == 1024
 
     def test_generate_keypair_returns_dh_keypair(self, dh_params) -> None:
         kp = dh_generate_keypair(dh_params)

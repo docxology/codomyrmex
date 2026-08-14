@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Providers..
+Module implementation, resources, and local coordination for Providers.
 
 ## Directory Contents
 - `PAI.md` – File

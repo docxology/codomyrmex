@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Mistral Vibe..
+Module implementation, resources, and local coordination for Mistral Vibe.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -22,10 +22,10 @@ def test_http_launcher_defaults_to_loopback_and_readonly() -> None:
     assert resolve_profile(args.transport, args.profile) == "readonly"
 
 
-def test_stdio_launcher_keeps_full_profile_for_local_clients() -> None:
+def test_stdio_launcher_defaults_to_readonly_profile() -> None:
     args = build_parser().parse_args(["--transport", "stdio"])
 
-    assert resolve_profile(args.transport, args.profile) == "full"
+    assert resolve_profile(args.transport, args.profile) == "readonly"
 
 
 def test_launcher_requires_explicit_profile_to_expose_full_http_tools() -> None:

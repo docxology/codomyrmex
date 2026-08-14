@@ -166,11 +166,22 @@ class HealthProviderMixin:
             return "Degraded", "warn"
         return "Operational", "ok"
 
-    def get_health_status(self) -> dict[str, Any]:
-        """Returns comprehensive system health for the Health tab."""
-        uptime_seconds = int(time.time() - self._start_time)
-        hours, remainder = divmod(uptime_seconds, 3600)
-        minutes, seconds = divmod(remainder, 60)
+    def get_health_status(self, *, include_runtime: bool = True) -> dict[str, Any]:
+        """Return comprehensive system health for the Health tab.
+
+        Runtime uptime is included for live API responses. Static site builds
+        can set ``include_runtime=False`` so repeated builds remain
+        deterministic; the browser refreshes the placeholder from
+        ``/api/health`` when a live server is available.
+        """
+        if include_runtime:
+            uptime_seconds = int(time.time() - self._start_time)
+            hours, remainder = divmod(uptime_seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            uptime = f"{hours}h {minutes}m {seconds}s"
+        else:
+            uptime_seconds = 0
+            uptime = "--"
 
         git_info = self._get_git_info()
         python_info = {
@@ -201,7 +212,7 @@ class HealthProviderMixin:
         status_text, status_class = self._compute_overall_status(modules, git_info)
 
         return {
-            "uptime": f"{hours}h {minutes}m {seconds}s",
+            "uptime": uptime,
             "uptime_seconds": uptime_seconds,
             "status_text": status_text,
             "status_class": status_class,

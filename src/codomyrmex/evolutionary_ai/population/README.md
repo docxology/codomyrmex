@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Population..
+Module implementation, resources, and local coordination for Population.
 
 ## Directory Contents
 - `PAI.md` – File

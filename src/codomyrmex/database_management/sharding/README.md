@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Sharding..
+Module implementation, resources, and local coordination for Sharding.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Serverless..
+Module implementation, resources, and local coordination for Serverless.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -10,7 +10,6 @@ import importlib.util
 import pathlib
 from dataclasses import dataclass
 
-import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 from tests.support.repo_paths import PACKAGE_ROOT, REPO_ROOT
@@ -98,13 +97,10 @@ class TestSerializationRoundTrips:
     @settings(max_examples=30, deadline=2000)
     def test_yaml_round_trip(self, data):
         """Any JSON-compatible value survives a YAML round-trip."""
-        try:
-            serialized = serialize(data, format="yaml")
-            assert isinstance(serialized, bytes)
-            result = deserialize(serialized, format="yaml")
-            assert result == data
-        except Exception:
-            pytest.skip("YAML serialization issue with this input")
+        serialized = serialize(data, format="yaml")
+        assert isinstance(serialized, bytes)
+        result = deserialize(serialized, format="yaml")
+        assert result == data
 
     @given(data=json_values)
     @settings(max_examples=30, deadline=2000)

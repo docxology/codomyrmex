@@ -38,7 +38,8 @@ No missing evidence, placeholder file, unsafe archive member, simulated
 upload, inferred DOI, or unverified copied artifact may be reported as release
 success. Archive paths must be relative and traversal-free; SCM markers,
 private environment files, cache directories, and content embedding the active
-checkout or user-home path are forbidden.
+checkout or user-home path are forbidden. Source-bound evidence disables the
+pytest-benchmark plugin; performance measurement is a separate opt-in lane.
 
 ## Navigation
 

@@ -1,6 +1,6 @@
 # PAI MCP Bridge — Technical Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: August 2026
 
 ## Overview
 
@@ -14,6 +14,7 @@ Four-file decomposition of the original monolithic `mcp_bridge.py`:
 2. **discovery.py**: TTL-cached dynamic tool scanner using `pkgutil.walk_packages` + `MCPDiscovery` engine. Thread-safe cache with configurable expiry.
 3. **proxy_tools.py**: Handler implementations for core tools (module introspection, PAI status, test runner, workflow listing).
 4. **server.py**: `_ToolRegistry` + `create_codomyrmex_mcp_server()` + `call_tool()` + `get_skill_manifest()`. Wires everything together.
+5. **path_policy.py**: Capability-root enforcement for path-like arguments at the PAI/MCP boundary. The current working tree is the default root; `CODOMYRMEX_MCP_ALLOWED_ROOTS` adds explicit roots.
 
 ## Key Classes and Functions
 
@@ -21,13 +22,14 @@ Four-file decomposition of the original monolithic `mcp_bridge.py`:
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `register` | `tool_name`, `schema`, `handler` | `None` | Register a tool with its schema and handler |
+| `register` | `tool_name`, `schema`, `handler` | `None` | Register a tool with its schema and handler; static first registration wins on collisions |
 | `list_tools` | — | `list[str]` | Sorted list of all registered tool names |
-| `get` | `name: str` | `dict or None` | Lookup tool entry by name |
+| `get` | `name: str` | `dict or None` | Lookup a defensive copy of a tool entry |
 
 ### `get_tool_registry()` (server.py)
 
 Returns a fully-populated `_ToolRegistry` with all static tools from `TOOL_DEFINITIONS` and all dynamically discovered module tools.
+The cache is invalidated atomically when discovery changes, and callers cannot mutate the cached schemas through `get()`.
 
 ### `create_codomyrmex_mcp_server()` (server.py)
 
@@ -69,6 +71,8 @@ Thread-safe, TTL-cached discovery. Uses `_find_mcp_modules()` to locate all pack
 ## Constraints
 
 - Cache TTL defaults to 300 seconds; configurable via `CODOMYRMEX_MCP_CACHE_TTL` environment variable.
+- Path-bearing arguments are resolved and constrained to configured capability roots before dispatch, including dynamically discovered tools with `path`, `cwd`, `directory`, `*_path`, `*_dir`, or related fields.
+- Trust ledger signatures use a randomly generated owner-only key at `~/.codomyrmex/trust_ledger.key` (or `CODOMYRMEX_TRUST_KEY_PATH`); public machine identifiers are never used as signing secrets.
 - `tool_call_module_function` blocks private function calls (names starting with `_`) and non-callable attributes.
 - `tool_run_tests` enforces a 120-second subprocess timeout.
 - Zero-mock: all tools perform real operations; `NotImplementedError` for unimplemented paths.
@@ -76,6 +80,7 @@ Thread-safe, TTL-cached discovery. Uses `_find_mcp_modules()` to locate all pack
 ## Error Handling
 
 - `call_tool()` catches `KeyError` (unknown tool), `SecurityError` (trust violation), `ValueError` (validation failure), `TimeoutError`, and generic `Exception`, returning structured error dicts.
+- Trust failures are surfaced as `ACCESS_DENIED`, not generic execution failures. Confirmation digests bind the authorization to the exact JSON arguments.
 - Proxy tools return `{"error": ...}` dicts rather than raising, ensuring MCP protocol compatibility.
 - Discovery failures for individual modules are logged and skipped; overall discovery continues.
 

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Tasks..
+Module implementation, resources, and local coordination for Tasks.
 
 ## Directory Contents
 - `README.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Ollama..
+Module implementation, resources, and local coordination for Ollama.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

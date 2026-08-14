@@ -8,7 +8,7 @@ Provides container registry management supporting Docker Hub, private registries
 
 ## Architecture
 
-Single-class design. `ContainerRegistry` initializes a docker-py client (`docker.from_env()`) and an HTTP `requests.Session` for registry API calls. Credentials are managed via the `RegistryCredentials` dataclass which provides `get_auth_header()` for Bearer or Basic auth. When Docker is unavailable, operations return simulated results.
+Single-class design. `ContainerRegistry` performs a bounded Docker CLI or raw endpoint preflight before creating a docker-py client with an explicit API-version floor, and uses an HTTP `requests.Session` for direct registry API calls. A missing daemon is treated as unavailable before SDK operations can open a failed Unix socket; `close()` and context-manager support release both resources. Credentials are managed via the `RegistryCredentials` dataclass which provides `get_auth_header()` for Bearer or Basic auth. When Docker is unavailable, operations return simulated results.
 
 ## Key Classes and Methods
 
@@ -65,7 +65,7 @@ Method `get_auth_header()` returns `"Bearer {token}"` if `token` is set, otherwi
 
 ## Error Handling
 
-- `_initialize_clients` catches `DockerException` for Docker client and silently skips if `requests` is unavailable.
+- `_initialize_clients` performs a bounded daemon preflight, catches client initialization failures, and silently skips if `requests` is unavailable.
 - `push_image`, `pull_image`, and `build_and_push` raise `CodomyrmexError` on Docker failures.
 - `pull_image` raises `CodomyrmexError` for `ImageNotFound`.
 - `list_images` catches `DockerException` and returns `[]`.

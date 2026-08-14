@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Logging Monitoring..
+Module implementation, resources, and local coordination for Logging Monitoring.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

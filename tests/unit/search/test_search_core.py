@@ -490,6 +490,14 @@ class TestHybridSearchEngine:
         results = engine.search("python", semantic_scores=None)
         assert isinstance(results, list)
 
+    def test_equal_scores_use_stable_document_id_order(self):
+        engine = self._make_engine()
+        results = engine.search(
+            "no keyword match",
+            semantic_scores={"d3": 1.0, "d1": 1.0, "d2": 1.0},
+        )
+        assert [result.doc_id for result in results] == ["d1", "d2", "d3"]
+
 
 # ---------------------------------------------------------------------------
 # MCP tools — real return shape verification

@@ -53,11 +53,11 @@ def calculate_capacity(image_path: str) -> int:
         SteganographyError: If the image cannot be opened.
     """
     try:
-        img = Image.open(image_path)
+        with Image.open(image_path) as img:
+            width, height = img.size
     except Exception as e:
         raise SteganographyError(f"Cannot open image: {e}") from e
 
-    width, height = img.size
     # 3 channels (R, G, B) per pixel, each channel stores 1 bit
     total_bits = width * height * 3
     # 4 bytes (32 bits) reserved for length header
@@ -93,66 +93,66 @@ def embed_in_image(image_path: str, message: str, output_path: str) -> bool:
             or if the image cannot be processed.
     """
     try:
-        img = Image.open(image_path)
+        with Image.open(image_path) as source:
+            img = source.convert("RGB") if source.mode != "RGB" else source.copy()
     except Exception as e:
         raise SteganographyError(f"Cannot open image: {e}") from e
 
-    # Convert to RGB if necessary (strip alpha, handle palette modes)
-    if img.mode != "RGB":
-        img = img.convert("RGB")
+    try:
+        width, height = img.size
+        pixels = img.load()
 
-    width, height = img.size
-    pixels = img.load()
+        # Prepare payload: 4-byte length header + message bytes
+        message_bytes = message.encode("utf-8")
+        length_header = struct.pack(">I", len(message_bytes))
+        payload = length_header + message_bytes
+        payload_bits = _message_to_bits(payload)
 
-    # Prepare payload: 4-byte length header + message bytes
-    message_bytes = message.encode("utf-8")
-    length_header = struct.pack(">I", len(message_bytes))
-    payload = length_header + message_bytes
-    payload_bits = _message_to_bits(payload)
+        max_bits = width * height * 3
+        if len(payload_bits) > max_bits:
+            raise SteganographyError(
+                f"Message too large: needs {len(payload_bits)} bits, "
+                f"image has {max_bits} bits available"
+            )
 
-    max_bits = width * height * 3
-    if len(payload_bits) > max_bits:
-        raise SteganographyError(
-            f"Message too large: needs {len(payload_bits)} bits, "
-            f"image has {max_bits} bits available"
-        )
+        # Embed bits into LSBs
+        bit_idx = 0
+        total_bits = len(payload_bits)
 
-    # Embed bits into LSBs
-    bit_idx = 0
-    total_bits = len(payload_bits)
+        for y in range(height):
+            for x in range(width):
+                if bit_idx >= total_bits:
+                    break
 
-    for y in range(height):
-        for x in range(width):
+                r, g, b = pixels[x, y]  # type: ignore
+
+                if bit_idx < total_bits:
+                    r = (r & 0xFE) | payload_bits[bit_idx]
+                    bit_idx += 1
+                if bit_idx < total_bits:
+                    g = (g & 0xFE) | payload_bits[bit_idx]
+                    bit_idx += 1
+                if bit_idx < total_bits:
+                    b = (b & 0xFE) | payload_bits[bit_idx]
+                    bit_idx += 1
+
+                pixels[x, y] = (r, g, b)  # type: ignore
+
             if bit_idx >= total_bits:
                 break
 
-            r, g, b = pixels[x, y]  # type: ignore
+        img.save(output_path, "PNG")
 
-            if bit_idx < total_bits:
-                r = (r & 0xFE) | payload_bits[bit_idx]
-                bit_idx += 1
-            if bit_idx < total_bits:
-                g = (g & 0xFE) | payload_bits[bit_idx]
-                bit_idx += 1
-            if bit_idx < total_bits:
-                b = (b & 0xFE) | payload_bits[bit_idx]
-                bit_idx += 1
-
-            pixels[x, y] = (r, g, b)  # type: ignore
-
-        if bit_idx >= total_bits:
-            break
-
-    img.save(output_path, "PNG")
-
-    logger.info(
-        "Embedded %d bytes in image (%dx%d), saved to %s",
-        len(message_bytes),
-        width,
-        height,
-        output_path,
-    )
-    return True
+        logger.info(
+            "Embedded %d bytes in image (%dx%d), saved to %s",
+            len(message_bytes),
+            width,
+            height,
+            output_path,
+        )
+        return True
+    finally:
+        img.close()
 
 
 def extract_from_image(image_path: str) -> str:
@@ -173,45 +173,49 @@ def extract_from_image(image_path: str) -> str:
             extracted data is invalid.
     """
     try:
-        img = Image.open(image_path)
+        with Image.open(image_path) as source:
+            img = source.convert("RGB") if source.mode != "RGB" else source.copy()
     except Exception as e:
         raise SteganographyError(f"Cannot open image: {e}") from e
 
-    if img.mode != "RGB":
-        img = img.convert("RGB")
-
-    width, height = img.size
-    pixels = img.load()
-
-    # Extract all LSBs
-    bits: list[int] = []
-    for y in range(height):
-        for x in range(width):
-            r, g, b = pixels[x, y]  # type: ignore
-            bits.append(r & 1)
-            bits.append(g & 1)
-            bits.append(b & 1)
-
-    # Read length header (first 32 bits = 4 bytes)
-    if len(bits) < 32:
-        raise SteganographyError("Image too small to contain a message")
-
-    length_bytes = _bits_to_bytes(bits[:32])
-    message_length = struct.unpack(">I", length_bytes)[0]
-
-    total_available = (len(bits) - 32) // 8
-    if message_length > total_available:
-        raise SteganographyError(
-            f"Invalid message length {message_length} (only {total_available} bytes available)"
-        )
-
-    message_bits = bits[32 : 32 + message_length * 8]
-    message_bytes = _bits_to_bytes(message_bits)
-
     try:
-        message = message_bytes.decode("utf-8")
-    except UnicodeDecodeError as e:
-        raise SteganographyError(f"Extracted data is not valid UTF-8: {e}") from e
+        width, height = img.size
+        pixels = img.load()
 
-    logger.info("Extracted %d bytes from image (%dx%d)", message_length, width, height)
-    return message
+        # Extract all LSBs
+        bits: list[int] = []
+        for y in range(height):
+            for x in range(width):
+                r, g, b = pixels[x, y]  # type: ignore
+                bits.append(r & 1)
+                bits.append(g & 1)
+                bits.append(b & 1)
+
+        # Read length header (first 32 bits = 4 bytes)
+        if len(bits) < 32:
+            raise SteganographyError("Image too small to contain a message")
+
+        length_bytes = _bits_to_bytes(bits[:32])
+        message_length = struct.unpack(">I", length_bytes)[0]
+
+        total_available = (len(bits) - 32) // 8
+        if message_length > total_available:
+            raise SteganographyError(
+                f"Invalid message length {message_length} "
+                f"(only {total_available} bytes available)"
+            )
+
+        message_bits = bits[32 : 32 + message_length * 8]
+        message_bytes = _bits_to_bytes(message_bits)
+
+        try:
+            message = message_bytes.decode("utf-8")
+        except UnicodeDecodeError as e:
+            raise SteganographyError(f"Extracted data is not valid UTF-8: {e}") from e
+
+        logger.info(
+            "Extracted %d bytes from image (%dx%d)", message_length, width, height
+        )
+        return message
+    finally:
+        img.close()

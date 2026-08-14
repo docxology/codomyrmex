@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Agentmail..
+Module implementation, resources, and local coordination for Agentmail.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

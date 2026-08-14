@@ -62,7 +62,9 @@ class WebsiteGenerator:
             "config_files": self.data_provider.get_config_files(),
             "doc_tree": self.data_provider.get_doc_tree(),
             "pipelines": self.data_provider.get_pipeline_status(),
-            "health": self.data_provider.get_health_status(),
+            # Do not bake process uptime into static HTML. The live API and
+            # browser refresh provide runtime health when a server is running.
+            "health": self.data_provider.get_health_status(include_runtime=False),
             "awareness": self.data_provider.get_pai_awareness_data(),
         }
 

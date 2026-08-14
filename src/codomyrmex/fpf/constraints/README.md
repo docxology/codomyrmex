@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Constraints..
+Module implementation, resources, and local coordination for Constraints.
 
 ## Directory Contents
 - `PAI.md` – File

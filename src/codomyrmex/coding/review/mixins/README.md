@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Mixins..
+Module implementation, resources, and local coordination for Mixins.
 
 ## Directory Contents
 - `README.md` – File

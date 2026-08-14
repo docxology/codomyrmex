@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Extractors..
+Module implementation, resources, and local coordination for Extractors.
 
 ## Directory Contents
 - `PAI.md` – File

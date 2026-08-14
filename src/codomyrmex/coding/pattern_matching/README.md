@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Pattern Matching..
+Module implementation, resources, and local coordination for Pattern Matching.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

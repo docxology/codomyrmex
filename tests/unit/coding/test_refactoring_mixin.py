@@ -16,6 +16,9 @@ from codomyrmex.coding.review.models import (
 class TestableRefactoring(RefactoringMixin):
     """Minimal host: supplies analyze_* methods RefactoringMixin depends on."""
 
+    # This is a fixture subject, not a pytest test class.
+    __test__ = False
+
     def __init__(self) -> None:
         self._complexity: list[ComplexityReductionSuggestion] = []
         self._dead: list[DeadCodeFinding] = []

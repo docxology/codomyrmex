@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Resilience..
+Module implementation, resources, and local coordination for Resilience.
 
 ## Directory Contents
 - `PAI.md` – File

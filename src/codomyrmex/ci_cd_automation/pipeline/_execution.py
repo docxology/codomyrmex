@@ -138,7 +138,7 @@ class PipelineExecutionMixin:
 
                 result = subprocess.run(
                     command,
-                    shell=True,  # nosec B602 - trusted pipeline command contract
+                    shell=True,  # nosec B602
                     capture_output=True,
                     text=True,
                     timeout=timeout,

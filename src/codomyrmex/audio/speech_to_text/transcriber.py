@@ -48,7 +48,7 @@ class Transcriber:
     def __init__(
         self,
         provider: str = "whisper",
-        model_size: WhisperModelSize = WhisperModelSize.BASE,
+        model_size: WhisperModelSize | str = WhisperModelSize.BASE,
         device: str = "auto",
         compute_type: str = "auto",
         **kwargs: object,
@@ -57,7 +57,9 @@ class Transcriber:
 
         Args:
             provider: STT provider to use ("whisper")
-            model_size: Model size for Whisper provider
+            model_size: Model size for Whisper provider, as a
+                ``WhisperModelSize`` value or its string value (for example,
+                ``"tiny"``)
             device: Device to run on ("auto", "cpu", "cuda")
             compute_type: Computation type ("auto", "float16", "int8")
             **kwargs: Additional provider-specific arguments
@@ -66,12 +68,25 @@ class Transcriber:
             ProviderNotAvailableError: If provider dependencies are missing
 
         """
+        try:
+            normalized_model_size = (
+                model_size
+                if isinstance(model_size, WhisperModelSize)
+                else WhisperModelSize(model_size)
+            )
+        except ValueError as exc:
+            valid_sizes = ", ".join(size.value for size in WhisperModelSize)
+            raise ValueError(
+                f"Unknown Whisper model size {model_size!r}; "
+                f"choose one of: {valid_sizes}"
+            ) from exc
+
         self._provider_name = provider
-        self.model_size = model_size
+        self.model_size = normalized_model_size
 
         self._provider: STTProvider = get_provider(
             provider,
-            model_size=model_size,
+            model_size=normalized_model_size,
             device=device,
             compute_type=compute_type,
             **kwargs,

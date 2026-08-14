@@ -215,8 +215,7 @@ class TestTrustStateMachine:
         """verify_all_safe() promotes eligible safe tools from UNTRUSTED to VERIFIED."""
         from codomyrmex.agents.pai.trust_gateway import SAFE_TOOLS
 
-        if not SAFE_TOOLS:
-            pytest.skip("No safe tools registered in this environment")
+        assert SAFE_TOOLS, "the local trust registry must expose safe tools"
         safe_tool = next(iter(SAFE_TOOLS))
         reg = _make_isolated_registry({safe_tool: TrustLevel.UNTRUSTED})
         promoted = reg.verify_all_safe()
@@ -227,8 +226,7 @@ class TestTrustStateMachine:
         """verify_all_safe() leaves TRUSTED tools unchanged."""
         from codomyrmex.agents.pai.trust_gateway import SAFE_TOOLS
 
-        if not SAFE_TOOLS:
-            pytest.skip("No safe tools registered in this environment")
+        assert SAFE_TOOLS, "the local trust registry must expose safe tools"
         tool = next(iter(SAFE_TOOLS))
         reg = _make_isolated_registry({tool: TrustLevel.TRUSTED})
         promoted = reg.verify_all_safe()
@@ -239,8 +237,7 @@ class TestTrustStateMachine:
         """trust_tool() raises a tool from VERIFIED to TRUSTED."""
         from codomyrmex.agents.pai.trust_gateway import SAFE_TOOLS
 
-        if not SAFE_TOOLS:
-            pytest.skip("No safe tools registered in this environment")
+        assert SAFE_TOOLS, "the local trust registry must expose safe tools"
         tool = next(iter(SAFE_TOOLS))
         reg = _make_isolated_registry({tool: TrustLevel.VERIFIED})
         result = reg.trust_tool(tool)

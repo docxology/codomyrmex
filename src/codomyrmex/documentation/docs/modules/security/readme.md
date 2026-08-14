@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Security..
+Module implementation, resources, and local coordination for Security.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

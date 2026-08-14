@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Scrape..
+Module implementation, resources, and local coordination for Scrape.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

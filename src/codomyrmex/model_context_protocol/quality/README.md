@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Quality..
+Module implementation, resources, and local coordination for Quality.
 
 ## Directory Contents
 - `PAI.md` – File

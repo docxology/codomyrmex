@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Notification..
+Module implementation, resources, and local coordination for Notification.
 
 ## Directory Contents
 - `PAI.md` – File

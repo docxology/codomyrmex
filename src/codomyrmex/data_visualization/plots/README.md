@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Plots..
+Module implementation, resources, and local coordination for Plots.
 
 ## Directory Contents
 - `PAI.md` – File

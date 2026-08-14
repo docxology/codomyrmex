@@ -6,19 +6,12 @@ for exploring the Codomyrmex ecosystem.
 Zero-mock policy: all objects are real; no MagicMock, patch, or monkeypatch.
 """
 
-import importlib.util
 import io
 import sys
 
 import pytest
 
-# Skip the entire module if required dependencies are missing.
-_has_numpy = importlib.util.find_spec("numpy") is not None
-
-pytestmark = [
-    pytest.mark.unit,
-    pytest.mark.skipif(not _has_numpy, reason="Requires numpy"),
-]
+pytestmark = pytest.mark.unit
 
 
 # ---------------------------------------------------------------------------
@@ -77,7 +70,7 @@ class TestInteractiveShellInit:
 
     def test_constructor_has_discovery(self):
         shell, _ = _make_shell()
-        # discovery should be a SystemDiscovery instance (not None)
+        # The shell owns a terminal-facing discovery adapter (not None).
         assert shell.discovery is not None
 
     def test_constructor_prints_intro(self):
@@ -307,14 +300,9 @@ class TestDoForage:
     def test_forage_no_discovery(self):
         shell, _ = _make_shell()
         shell.discovery = None
-        # This will fail because it tries self.discovery._discover_modules()
-        # on None, but the code checks "not self.discovery or not self.discovery.modules"
-        # If discovery is None, it tries to call None._discover_modules()
-        # Actually let's look: `if not self.discovery or not self.discovery.modules:`
-        # then `self.discovery._discover_modules()` -- this would fail if discovery is None
-        # This is a code bug but we test the behavior
-        with pytest.raises(AttributeError):
-            _run_cmd(shell, "do_forage", "")
+        output, result = _run_cmd(shell, "do_forage", "")
+        assert result is None
+        assert "not available" in output.lower()
 
     def test_forage_search_no_results(self):
         shell, _ = _make_shell()

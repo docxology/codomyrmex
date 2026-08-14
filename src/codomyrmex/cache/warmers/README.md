@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Warmers..
+Module implementation, resources, and local coordination for Warmers.
 
 ## Directory Contents
 - `PAI.md` – File

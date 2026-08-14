@@ -266,15 +266,8 @@ class TestHandleTestsRun:
 
         APIHandler._test_running = False
         APIHandler._test_lock = threading.Lock()
-        try:
-            h.handle_tests_run()
-        except Exception:
-            # May fail on WebsiteServer import; that's acceptable for this path
-            pass
-        # Either 400 response or an import error — the guard logic is tested
-        # If response was recorded, verify status
-        if h.responses:
-            assert h.responses[0]["status"] == 400
+        h.handle_tests_run()
+        assert h.responses[0]["status"] == 400
 
     def test_no_data_provider_with_valid_body_returns_error(self):
         body = json.dumps({"module": "agents"}).encode()
@@ -287,10 +280,8 @@ class TestHandleTestsRun:
 
         APIHandler._test_running = False
         APIHandler._test_lock = threading.Lock()
-        with contextlib.suppress(Exception):
-            h.handle_tests_run()
-        if h.errors:
-            assert h.errors[0][0] == 500
+        h.handle_tests_run()
+        assert h.errors[0][0] == 500
 
 
 # ── handle_pai_action ─────────────────────────────────────────────────────

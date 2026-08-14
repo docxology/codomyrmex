@@ -1,9 +1,15 @@
+import asyncio
+import inspect
 from collections.abc import Callable
+from copy import deepcopy
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.model_context_protocol.quality.validation import (
+    validate_tool_arguments,
+)
 
 logger = get_logger(__name__)
 
@@ -15,6 +21,7 @@ class MCPErrorDetail(BaseModel):
         ...,
         description="A unique code or type for the error (e.g., ValidationError, FileNotFoundError).",
     )
+
     error_message: str = Field(
         ..., description="A descriptive message explaining the error."
     )
@@ -22,6 +29,10 @@ class MCPErrorDetail(BaseModel):
         None,
         description="Optional structured details or a string containing more info about the error.",
     )
+
+
+class MCPRegistrationError(ValueError):
+    """Raised when a tool registration would create an unsafe conflict."""
 
 
 class MCPToolCall(BaseModel):
@@ -159,9 +170,28 @@ class MCPToolRegistry:
             schema: JSON Schema describing the tool's arguments
             handler: Optional callable to handle tool invocations
         """
+        if not isinstance(tool_name, str) or not tool_name.strip():
+            raise MCPRegistrationError("tool_name must be a non-empty string")
+        if tool_name != tool_name.strip() or any(char.isspace() for char in tool_name):
+            raise MCPRegistrationError("tool_name must not contain whitespace")
+        if not isinstance(schema, dict):
+            raise MCPRegistrationError("tool schema must be a dictionary")
+        if handler is not None and not callable(handler):
+            raise MCPRegistrationError("tool handler must be callable or None")
+
+        existing = self._tools.get(tool_name)
+        if existing is not None:
+            if existing["schema"] != schema:
+                raise MCPRegistrationError(
+                    f"tool '{tool_name}' is already registered with a different schema"
+                )
+            # Idempotent registration: do not silently replace the handler or
+            # metadata selected by the first registration.
+            return
+
         self._tools[tool_name] = {
             "name": tool_name,
-            "schema": schema,
+            "schema": deepcopy(schema),
             "handler": handler,
         }
         logger.debug("Registered tool: %s", tool_name)
@@ -192,7 +222,12 @@ class MCPToolRegistry:
         Returns:
             Tool metadata dict or None
         """
-        return self._tools.get(tool_name)
+        tool = self._tools.get(tool_name)
+        if tool is None:
+            return None
+        result = dict(tool)
+        result["schema"] = deepcopy(tool["schema"])
+        return result
 
     def list_tools(self) -> list[str]:
         """
@@ -201,7 +236,7 @@ class MCPToolRegistry:
         Returns:
             list of tool names
         """
-        return list(self._tools.keys())
+        return sorted(self._tools)
 
     def validate_call(self, tool_call: MCPToolCall) -> tuple[bool, str | None]:
         """
@@ -217,8 +252,13 @@ class MCPToolRegistry:
         if not tool:
             return False, f"Unknown tool: {tool_call.tool_name}"
 
-        # Basic schema validation could be added here
-        # For now, just check tool exists
+        validation = validate_tool_arguments(
+            tool_call.tool_name,
+            tool_call.arguments,
+            tool.get("schema", {}),
+        )
+        if not validation.valid:
+            return False, "; ".join(validation.errors)
         return True, None
 
     def execute(self, tool_call: MCPToolCall) -> MCPToolResult:
@@ -241,8 +281,23 @@ class MCPToolRegistry:
                 ),
             )
 
+        validation = validate_tool_arguments(
+            tool_call.tool_name,
+            tool_call.arguments,
+            tool.get("schema", {}),
+        )
+        if not validation.valid:
+            return MCPToolResult(
+                status="failure",
+                error=MCPErrorDetail(
+                    error_type="ValidationError",
+                    error_message="; ".join(validation.errors)
+                    or "Tool arguments are invalid",
+                ),
+            )
+
         handler = tool.get("handler")
-        if not handler:
+        if handler is None:
             return MCPToolResult(
                 status="failure",
                 error=MCPErrorDetail(
@@ -252,7 +307,45 @@ class MCPToolRegistry:
             )
 
         try:
-            result = handler(**tool_call.arguments)
+            result = handler(**validation.coerced_args)
+            if inspect.isawaitable(result):
+                # The transport invokes this method in a worker thread, so an
+                # async handler can be completed without leaking an
+                # un-awaited coroutine into serialization. Direct callers
+                # already running an event loop receive a deterministic
+                # failure and should use an async transport entrypoint.
+                try:
+                    asyncio.get_running_loop()
+                except RuntimeError:
+                    result = asyncio.run(result)
+                else:
+                    if inspect.iscoroutine(result):
+                        result.close()
+                    raise RuntimeError(
+                        "async MCP handlers require an async execution context"
+                    )
+            if isinstance(result, MCPToolResult):
+                return result
+            if isinstance(result, dict):
+                result_status = str(result.get("status", "")).lower()
+                has_error = bool(result.get("error"))
+                if (
+                    result_status
+                    and result_status not in {"success", "ok", "no_change_needed"}
+                ) or has_error:
+                    message = str(
+                        result.get("message")
+                        or result.get("error")
+                        or "Tool returned a logical failure"
+                    )
+                    return MCPToolResult(
+                        status="failure",
+                        error=MCPErrorDetail(
+                            error_type="ToolResultError",
+                            error_message=message,
+                            error_details=result,
+                        ),
+                    )
             return MCPToolResult(status="success", data={"result": result})
         except Exception as e:
             logger.error("Tool execution failed: %s", e)

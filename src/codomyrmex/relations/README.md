@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Relations..
+Module implementation, resources, and local coordination for Relations.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

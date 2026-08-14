@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Networking..
+Module implementation, resources, and local coordination for Networking.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

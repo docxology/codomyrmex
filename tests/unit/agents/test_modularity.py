@@ -6,23 +6,15 @@ that implements BaseAgent interface for testing, not a mock.
 
 import pytest
 
-try:
-    from codomyrmex.agents.core import (
-        AgentCapabilities,
-        AgentRequest,
-        AgentResponse,
-        BaseAgent,
-    )
-    from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
-    from codomyrmex.agents.jules import JulesClient, JulesIntegrationAdapter
-    from codomyrmex.agents.opencode import OpenCodeClient, OpenCodeIntegrationAdapter
-
-    _HAS_AGENTS = True
-except ImportError:
-    _HAS_AGENTS = False
-
-if not _HAS_AGENTS:
-    pytest.skip("agents deps not available", allow_module_level=True)
+from codomyrmex.agents.core import (
+    AgentCapabilities,
+    AgentRequest,
+    AgentResponse,
+    BaseAgent,
+)
+from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
+from codomyrmex.agents.jules import JulesClient, JulesIntegrationAdapter
+from codomyrmex.agents.opencode import OpenCodeClient, OpenCodeIntegrationAdapter
 
 
 class StubAgent(BaseAgent):

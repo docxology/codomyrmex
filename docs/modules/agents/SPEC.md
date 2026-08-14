@@ -135,6 +135,10 @@ graph TD
 
 ### Core Capabilities
 
+2. **Capability Navigation**: `agents.navigation` provides a stable, bounded,
+   read-only catalog of declared agents, runtime modules, and optionally MCP
+   tools. Catalog status is intentionally distinct from live health and trust.
+
 1. **Agent Framework Integration**: Integrate with multiple agent frameworks:
    - CLI-based: Jules, Gemini, OpenCode, OpenClaw, Mistral Vibe, Every Code
    - API-based: Claude, Codex, O1, DeepSeek, Qwen

@@ -1,4 +1,7 @@
 import contextlib
+import os
+import shutil
+import subprocess
 import time
 
 import pytest
@@ -20,12 +23,28 @@ from codomyrmex.container_optimization.resource_tuner import (
 @pytest.fixture(scope="session")
 def docker_client():
     """Provides a Docker client for tests."""
+    docker_path = shutil.which("docker")
+    if docker_path is None:
+        pytest.skip("Docker CLI is not available")
     try:
-        client = docker.from_env()
+        probe = subprocess.run(
+            [docker_path, "info", "--format", "{{.ServerVersion}}"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        if probe.returncode != 0 or not probe.stdout.strip():
+            pytest.skip("Docker daemon unavailable")
+        client = docker.from_env(version=os.environ.get("DOCKER_API_VERSION", "1.41"))
         client.ping()
-    except docker_errors.DockerException as exc:
+    except (OSError, subprocess.TimeoutExpired, docker_errors.DockerException) as exc:
+        if "client" in locals():
+            client.close()
         pytest.skip(f"Docker daemon unavailable: {exc}")
-    return client
+    try:
+        yield client
+    finally:
+        client.close()
 
 
 @pytest.fixture(scope="module")

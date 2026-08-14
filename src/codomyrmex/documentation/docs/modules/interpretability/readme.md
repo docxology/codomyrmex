@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Interpretability..
+Module implementation, resources, and local coordination for Interpretability.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

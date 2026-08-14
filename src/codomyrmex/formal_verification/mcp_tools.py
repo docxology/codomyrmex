@@ -213,7 +213,10 @@ def verify_code_change(
         verifier = CodeChangeVerifier()
         result = verifier.verify(proposal)
         return {
-            "status": "success",
+            # Invocation succeeded, but the verification outcome is a
+            # contract result. Do not report a failed proof as a successful
+            # MCP operation.
+            "status": "success" if result.passed else "failure",
             "passed": result.passed,
             "summary": result.summary,
             "rule_results": [

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Rendering..
+Module implementation, resources, and local coordination for Rendering.
 
 ## Directory Contents
 - `PAI.md` – File

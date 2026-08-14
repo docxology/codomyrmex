@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Calendar Integration..
+Module implementation, resources, and local coordination for Calendar Integration.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

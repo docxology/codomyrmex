@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Completions..
+Module implementation, resources, and local coordination for Completions.
 
 ## Directory Contents
 - `PAI.md` – File

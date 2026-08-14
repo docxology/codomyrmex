@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Context..
+Module implementation, resources, and local coordination for Context.
 
 ## Directory Contents
 - `PAI.md` – File

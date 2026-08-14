@@ -385,6 +385,7 @@ class CLIAgentBase(BaseAgent):
             },
         )
 
+        process: subprocess.Popen[str] | None = None
         try:
             process = subprocess.Popen(
                 cmd,
@@ -486,6 +487,20 @@ class CLIAgentBase(BaseAgent):
                 extra={"command": " ".join(cmd), "error": str(e)},
             )
             yield f"Error: {e!s}"
+        finally:
+            if process is not None:
+                if process.poll() is None:
+                    process.kill()
+                    try:
+                        process.wait(timeout=10)
+                    except subprocess.TimeoutExpired:
+                        self.logger.warning(
+                            "CLI stream process did not exit during cleanup",
+                            extra={"command": " ".join(cmd)},
+                        )
+                for stream in (process.stdin, process.stdout, process.stderr):
+                    if stream is not None:
+                        stream.close()
 
     def _build_response_from_result(
         self,

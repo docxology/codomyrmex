@@ -4,7 +4,7 @@
 
 ## Overview
 
-Executable examples and demonstrations for Demos..
+Executable examples and demonstrations for Demos.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

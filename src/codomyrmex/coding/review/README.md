@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Review..
+Module implementation, resources, and local coordination for Review.
 
 ## Directory Contents
 - `PAI.md` – File

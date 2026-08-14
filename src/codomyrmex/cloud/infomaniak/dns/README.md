@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Dns..
+Module implementation, resources, and local coordination for Dns.
 
 ## Directory Contents
 - `PAI.md` – File

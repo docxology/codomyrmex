@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Rag..
+Module implementation, resources, and local coordination for Rag.
 
 ## Directory Contents
 - `PAI.md` – File

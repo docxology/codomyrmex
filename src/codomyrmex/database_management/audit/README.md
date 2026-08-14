@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Audit..
+Module implementation, resources, and local coordination for Audit.
 
 ## Directory Contents
 - `PAI.md` – File

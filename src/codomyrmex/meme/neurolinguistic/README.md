@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Neurolinguistic..
+Module implementation, resources, and local coordination for Neurolinguistic.
 
 ## Directory Contents
 - `PAI.md` – File

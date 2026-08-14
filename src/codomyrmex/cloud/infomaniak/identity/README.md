@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Identity..
+Module implementation, resources, and local coordination for Identity.
 
 ## Directory Contents
 - `PAI.md` – File

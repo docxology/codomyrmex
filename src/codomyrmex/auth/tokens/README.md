@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Tokens..
+Module implementation, resources, and local coordination for Tokens.
 
 ## Directory Contents
 - `PAI.md` – File

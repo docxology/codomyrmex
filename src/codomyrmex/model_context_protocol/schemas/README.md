@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Schemas..
+Module implementation, resources, and local coordination for Schemas.
 
 ## Directory Contents
 - `PAI.md` – File

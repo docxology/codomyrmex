@@ -342,7 +342,9 @@ class TestCLITesting:
         assert callable(handle_module_test)
 
         # Try to run tests (may fail if module doesn't exist or tests fail)
-        result = handle_module_test("data_visualization")
+        # Use a compact real module suite so this unit test does not recursively
+        # launch the repository's largest visualization suite.
+        result = handle_module_test("concurrency")
 
         # Should return True or False (not raise exception)
         assert isinstance(result, bool)
@@ -354,6 +356,10 @@ class TestCLITesting:
 
         # Should return False or handle gracefully
         assert isinstance(result, bool)
+
+    def test_handle_module_test_rejects_path_like_module_names(self):
+        """Module testing must not accept path traversal input."""
+        assert handle_module_test("../pyproject.toml") is False
 
 
 @pytest.mark.unit

@@ -35,7 +35,7 @@ This security policy applies only to the `Encryption` module within the Codomyrm
 
 ### Cryptographic Algorithms
 
-- **AES-256-CBC**: Symmetric encryption using 256-bit keys with CBC mode and PKCS7 padding.
+- **AES-256-CBC (compatibility)**: Legacy CBC encryption with PKCS7 padding plus an HMAC-SHA256 integrity tag; new code must use AES-GCM.
 - **AES-256-GCM**: Authenticated encryption providing both confidentiality and integrity.
 - **RSA-OAEP**: Asymmetric encryption using 2048-bit keys with OAEP padding and SHA-256.
 - **Digital Signatures**: RSA-PSS with SHA-256 for data integrity verification.

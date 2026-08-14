@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Genomics..
+Module implementation, resources, and local coordination for Genomics.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -84,6 +84,7 @@ def test_configured_figures_have_distinct_text_alternatives() -> None:
 
 def test_shared_palette_and_in_fill_text_meet_contrast_floor() -> None:
     from codomyrmex.manuscript.figures._common import (
+        _COVER,
         _OI,
         _contrast_ratio,
         _text_color_on,
@@ -93,6 +94,7 @@ def test_shared_palette_and_in_fill_text_meet_contrast_floor() -> None:
     for role, color in _OI.items():
         assert _contrast_ratio(color, background) >= 4.5, role
         assert _contrast_ratio(_text_color_on(color), color) >= 4.5, role
+    assert _contrast_ratio("#FFFFFF", _COVER["kernel"]) >= 4.5
 
 
 def test_all_configured_figure_generators_write_pngs(

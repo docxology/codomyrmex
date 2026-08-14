@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import hmac
 import os
 import warnings
 from typing import TYPE_CHECKING
@@ -33,8 +34,14 @@ class Encryptor:
     """Encryptor for various algorithms (AES-CBC and RSA).
 
     Note:
-        For authenticated symmetric encryption, use AESGCMEncryptor instead.
+        AES-CBC is retained for compatibility, but new code should use
+        :class:`AESGCMEncryptor`. CBC payloads produced here carry an HMAC
+        integrity tag so wrong keys and tampering fail closed before padding
+        is examined.
     """
+
+    _CBC_IV_SIZE = 16
+    _CBC_TAG_SIZE = hashlib.sha256().digest_size
 
     def __init__(self, algorithm: str = "AES"):
         """Initialize encryptor.
@@ -199,8 +206,9 @@ class Encryptor:
     def _encrypt_aes_cbc(self, data: bytes, key: bytes) -> bytes:
         """Encrypt using AES-256-CBC."""
         warnings.warn(
-            "AES-CBC mode does not provide authentication. "
-            "Consider using AESGCMEncryptor for authenticated encryption.",
+            "AES-CBC is a legacy mode; use AESGCMEncryptor for new data. "
+            "This compatibility path adds an HMAC integrity tag, but does not "
+            "provide the misuse resistance of an AEAD construction.",
             DeprecationWarning,
             stacklevel=3,
         )
@@ -217,18 +225,30 @@ class Encryptor:
         padded_data = padder.update(data) + padder.finalize()
 
         encrypted = encryptor.update(padded_data) + encryptor.finalize()
-        return iv + encrypted
+        # CBC itself cannot detect a wrong key or modified ciphertext. Bind
+        # the IV and ciphertext to the normalized key before returning so
+        # decryption verifies integrity before attempting PKCS7 unpadding.
+        tag = hmac.new(key, iv + encrypted, hashlib.sha256).digest()
+        return iv + encrypted + tag
 
     def _decrypt_aes_cbc(self, data: bytes, key: bytes) -> bytes:
-        """Decrypt using AES-256-CBC."""
-        if len(data) < 16:
-            raise ValueError("Ciphertext too short for AES-CBC (missing IV).")
+        """Decrypt an HMAC-protected AES-256-CBC payload."""
+        minimum_size = self._CBC_IV_SIZE + 16 + self._CBC_TAG_SIZE
+        if len(data) < minimum_size:
+            raise ValueError(
+                "Ciphertext too short for authenticated AES-CBC "
+                "(missing IV, block, or integrity tag)."
+            )
 
         if len(key) != 32:
             key = hashlib.sha256(key).digest()
 
-        iv = data[:16]
-        encrypted = data[16:]
+        iv = data[: self._CBC_IV_SIZE]
+        encrypted = data[self._CBC_IV_SIZE : -self._CBC_TAG_SIZE]
+        received_tag = data[-self._CBC_TAG_SIZE :]
+        expected_tag = hmac.new(key, iv + encrypted, hashlib.sha256).digest()
+        if not hmac.compare_digest(received_tag, expected_tag):
+            raise ValueError("AES-CBC integrity verification failed.")
 
         cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend())
         decryptor = cipher.decryptor()

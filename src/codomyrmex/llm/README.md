@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Llm..
+Module implementation, resources, and local coordination for Llm.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

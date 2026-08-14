@@ -7,7 +7,7 @@ PDF-specific tests are guarded with skipif when PyMuPDF is not installed.
 import pytest
 
 import codomyrmex.dark as dark_module
-from codomyrmex.dark import PDF_AVAILABLE, __version__, cli_commands
+from codomyrmex.dark import PDF_AVAILABLE, PDF_PRESETS, __version__, cli_commands
 
 
 class TestDarkModuleMetadata:
@@ -120,17 +120,22 @@ class TestDarkMCPTools:
         assert isinstance(result, dict)
 
 
-@pytest.mark.skipif(not PDF_AVAILABLE, reason="PyMuPDF (dark extras) not installed")
 class TestDarkPDFWrapper:
-    """Test PDF dark mode wrapper when PyMuPDF is installed."""
+    """Test dependency-free PDF wrapper metadata.
+
+    Native transformation behavior is covered by ``test_dark_pdf.py``. These
+    package-level checks deliberately avoid importing PyMuPDF so MCP/module
+    discovery remains safe in long-lived test and server processes.
+    """
 
     def test_dark_pdf_module_importable(self):
-        pass
+        assert PDF_PRESETS
 
     def test_dark_pdf_filter_has_preset_names(self):
-        from codomyrmex.dark.pdf import DarkPDF
-
-        assert hasattr(DarkPDF, "PRESETS") or True  # just check it loads
+        assert set(PDF_PRESETS) == {"dark", "sepia", "high_contrast", "low_light"}
 
     def test_apply_dark_mode_function_importable(self):
-        pass
+        assert all(
+            {"inversion", "brightness", "contrast", "sepia"} <= set(params)
+            for params in PDF_PRESETS.values()
+        )

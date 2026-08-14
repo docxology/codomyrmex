@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Cost Tracking..
+Module implementation, resources, and local coordination for Cost Tracking.
 
 ## Directory Contents
 - `PAI.md` – File

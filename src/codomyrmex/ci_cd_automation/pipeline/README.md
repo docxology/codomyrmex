@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Pipeline..
+Module implementation, resources, and local coordination for Pipeline.
 
 ## Directory Contents
 - `PAI.md` – File

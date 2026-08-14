@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Linux..
+Module implementation, resources, and local coordination for Linux.
 
 ## Directory Contents
 - `README.md` – File

@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 import sqlite3
 import threading
+from collections.abc import Iterator
+from contextlib import contextmanager
 
 from codomyrmex.agentic_memory.core.models import Memory, MemoryImportance, MemoryType
 
@@ -27,10 +29,28 @@ class SQLiteStore:
         conn.row_factory = sqlite3.Row
         return conn
 
+    @contextmanager
+    def _connection(self) -> Iterator[sqlite3.Connection]:
+        """Yield a connection and always close it after the transaction.
+
+        ``sqlite3.Connection``'s context manager commits or rolls back but
+        does not close the handle. Centralizing both behaviors prevents every
+        CRUD call from leaking native connections until garbage collection.
+        """
+        conn = self._get_connection()
+        try:
+            yield conn
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
+        finally:
+            conn.close()
+
     def _init_db(self) -> None:
         """Initialise the database schema if it does not exist."""
         with self._lock:
-            with self._get_connection() as conn:
+            with self._connection() as conn:
                 conn.execute(
                     """
                     CREATE TABLE IF NOT EXISTS memories (
@@ -54,7 +74,7 @@ class SQLiteStore:
     def save(self, memory: Memory) -> None:
         """Upsert a memory entry."""
         with self._lock:
-            with self._get_connection() as conn:
+            with self._connection() as conn:
                 conn.execute(
                     """
                     INSERT INTO memories
@@ -90,7 +110,7 @@ class SQLiteStore:
         empty defaults rather than raising ``JSONDecodeError``.
         """
         with self._lock:
-            with self._get_connection() as conn:
+            with self._connection() as conn:
                 row = conn.execute(
                     "SELECT * FROM memories WHERE id = ?", (memory_id,)
                 ).fetchone()
@@ -124,7 +144,7 @@ class SQLiteStore:
         # For strict thread-safety and simplicity in this implementation, we re-save it.
         # But we don't want to re-enter the lock recursively if we just call self.save().
         # So we write directly.
-        with self._lock, self._get_connection() as update_conn:
+        with self._lock, self._connection() as update_conn:
             update_conn.execute(
                 "UPDATE memories SET access_count = ?, last_accessed = ? WHERE id = ?",
                 (mem.access_count, mem.last_accessed, mem.id),
@@ -134,7 +154,7 @@ class SQLiteStore:
 
     def delete(self, memory_id: str) -> bool:
         """Remove a memory. Returns ``True`` if it existed."""
-        with self._lock, self._get_connection() as conn:
+        with self._lock, self._connection() as conn:
             cursor = conn.execute("DELETE FROM memories WHERE id = ?", (memory_id,))
             return cursor.rowcount > 0
 
@@ -142,7 +162,7 @@ class SQLiteStore:
         """Return every stored memory."""
         memories = []
         with self._lock:
-            with self._get_connection() as conn:
+            with self._connection() as conn:
                 rows = conn.execute(
                     "SELECT * FROM memories ORDER BY created_at ASC"
                 ).fetchall()

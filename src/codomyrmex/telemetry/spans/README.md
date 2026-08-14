@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Spans..
+Module implementation, resources, and local coordination for Spans.
 
 ## Directory Contents
 - `PAI.md` – File

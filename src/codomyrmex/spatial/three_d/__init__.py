@@ -15,6 +15,7 @@ from .engine_3d import (
     Vector3D,
 )
 from .geodesic_bvh import BVHNode, build_bvh, ray_intersect_bvh
+from .materials import Material3D, MeshData, MeshLoader
 from .rendering_pipeline import RenderPipeline, ShaderManager, TextureManager
 from .scene_graph import AABB, RayHit, SceneGraph, SceneNode
 
@@ -28,6 +29,9 @@ __all__ = [
     "BVHNode",
     "Camera3D",
     "Light3D",
+    "Material3D",
+    "MeshData",
+    "MeshLoader",
     "Object3D",
     "PhysicsEngine",
     "Quaternion",

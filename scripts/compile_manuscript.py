@@ -25,6 +25,7 @@ import argparse
 import hashlib
 import html as html_lib
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -94,14 +95,22 @@ def _extract_latex_from_preamble(preamble_md: Path) -> str:
 
 
 def _load_variables(project_root: Path) -> dict[str, str]:
-    """Load manuscript_variables.json; return empty dict on failure."""
+    """Load a valid manuscript snapshot or raise a fail-closed error."""
     json_path = project_root / "output" / "data" / "manuscript_variables.json"
     if not json_path.exists():
-        return {}
+        raise RuntimeError(f"manuscript variable snapshot not found: {json_path}")
     try:
-        return json.loads(json_path.read_text(encoding="utf-8"))
-    except Exception:
-        return {}
+        variables = json.loads(json_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"cannot read manuscript variable snapshot: {exc}") from exc
+    if not isinstance(variables, dict) or not all(
+        isinstance(key, str) and isinstance(value, str)
+        for key, value in variables.items()
+    ):
+        raise RuntimeError(
+            "manuscript variable snapshot must be a string-to-string JSON object"
+        )
+    return variables
 
 
 def _run_generate_variables(project_root: Path) -> bool:
@@ -275,6 +284,199 @@ def _hash_file(path: Path, algorithm: str = "sha256") -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def _write_json_atomically(path: Path, payload: dict[str, object]) -> None:
+    """Write a JSON receipt through a same-directory temporary file."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = tempfile.NamedTemporaryFile(
+        mode="w",
+        encoding="utf-8",
+        dir=path.parent,
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+        delete=False,
+    )
+    temporary_path = Path(temporary.name)
+    try:
+        with temporary:
+            json.dump(payload, temporary, indent=2, sort_keys=True)
+            temporary.write("\n")
+            temporary.flush()
+            os.fsync(temporary.fileno())
+        temporary_path.replace(path)
+    finally:
+        temporary_path.unlink(missing_ok=True)
+
+
+def _composition_group(paths: list[Path], project_root: Path) -> dict[str, object]:
+    """Record ordered source hashes and a boundary-safe combined digest."""
+    entries: list[dict[str, object]] = []
+    combined = hashlib.sha256()
+    for path in paths:
+        content = path.read_bytes()
+        relative = path.resolve().relative_to(project_root.resolve()).as_posix()
+        digest = hashlib.sha256(content).hexdigest()
+        entries.append({"path": relative, "bytes": len(content), "sha256": digest})
+        combined.update(relative.encode("utf-8"))
+        combined.update(b"\0")
+        combined.update(content)
+        combined.update(b"\0")
+    return {"files": entries, "combined_sha256": combined.hexdigest()}
+
+
+def _write_render_receipts(
+    project_root: Path,
+    variables: dict[str, str],
+    input_groups: dict[str, list[Path]],
+    outputs: dict[str, Path],
+) -> None:
+    """Bind ordered hydrated inputs to every rendered artifact."""
+    composition_groups = {
+        name: _composition_group(paths, project_root)
+        for name, paths in input_groups.items()
+    }
+    composition: dict[str, object] = {
+        "schema_version": "1.0",
+        "source_commit": variables.get("REPRO_GIT_COMMIT", ""),
+        "worktree_dirty": variables.get("REPRO_WORKTREE_DIRTY", ""),
+        "config_sha256": variables.get("CONFIG_HASH", ""),
+        "kernel_source_sha256": variables.get("REPRO_KERNEL_SOURCE_HASH", ""),
+        "variable_sha256": hashlib.sha256(
+            json.dumps(variables, sort_keys=True, separators=(",", ":")).encode()
+        ).hexdigest(),
+        "template_repository": variables.get("REPRO_TEMPLATE_REPOSITORY", ""),
+        "template_revision": variables.get("REPRO_TEMPLATE_REVISION", ""),
+        "template_hydration_mode": variables.get("REPRO_TEMPLATE_HYDRATION_MODE", ""),
+        "groups": composition_groups,
+    }
+    composition_json = json.dumps(composition, sort_keys=True, separators=(",", ":"))
+    composition["composition_sha256"] = hashlib.sha256(
+        composition_json.encode()
+    ).hexdigest()
+
+    artifact_entries: list[dict[str, object]] = []
+    for role, path in outputs.items():
+        if not path.is_file():
+            continue
+        artifact_entries.append(
+            {
+                "role": role,
+                "path": path.resolve().relative_to(project_root.resolve()).as_posix(),
+                "bytes": path.stat().st_size,
+                "sha256": _hash_file(path),
+            }
+        )
+    artifact_manifest: dict[str, object] = {
+        "schema_version": "1.0",
+        "source_commit": variables.get("REPRO_GIT_COMMIT", ""),
+        "config_sha256": variables.get("CONFIG_HASH", ""),
+        "composition_sha256": composition["composition_sha256"],
+        "artifacts": artifact_entries,
+    }
+    reports_dir = project_root / "output" / "reports"
+    composition_path = reports_dir / "manuscript_composition.json"
+    artifact_path = reports_dir / "artifact_manifest.json"
+    provenance_path = reports_dir / "rendered_provenance.json"
+    _write_json_atomically(composition_path, composition)
+    _write_json_atomically(artifact_path, artifact_manifest)
+    _write_json_atomically(
+        provenance_path,
+        {
+            "schema_version": "1.0",
+            "status": "valid",
+            "source_commit": variables.get("REPRO_GIT_COMMIT", ""),
+            "worktree_dirty": variables.get("REPRO_WORKTREE_DIRTY", ""),
+            "config_sha256": variables.get("CONFIG_HASH", ""),
+            "kernel_source_sha256": variables.get("REPRO_KERNEL_SOURCE_HASH", ""),
+            "variable_sha256": composition["variable_sha256"],
+            "template_repository": variables.get("REPRO_TEMPLATE_REPOSITORY", ""),
+            "template_revision": variables.get("REPRO_TEMPLATE_REVISION", ""),
+            "template_hydration_mode": variables.get(
+                "REPRO_TEMPLATE_HYDRATION_MODE", ""
+            ),
+            "composition_sha256": composition["composition_sha256"],
+            "artifact_manifest_sha256": _hash_file(artifact_path),
+        },
+    )
+
+
+def _validate_snapshot_for_check(
+    project_root: Path,
+    variables: dict[str, str],
+) -> list[str]:
+    """Validate source/currentness prerequisites without writing any artifact."""
+    errors: list[str] = []
+    manifest_path = (
+        project_root / "output" / "data" / "manuscript_variable_manifest.json"
+    )
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        return [f"cannot read variable manifest: {exc}"]
+    if not isinstance(manifest, dict) or manifest.get("status") != "valid":
+        errors.append("variable manifest is missing or invalid")
+    variable_hash = hashlib.sha256(
+        json.dumps(variables, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+    if manifest.get("variable_sha256") != variable_hash:
+        errors.append("variable manifest does not match the variable snapshot")
+    config_path = project_root / "docs" / "manuscript" / "config.yaml"
+    config_hash = _hash_file(config_path) if config_path.is_file() else ""
+    if variables.get("CONFIG_HASH", "").replace(" ", "") != config_hash:
+        errors.append("variable snapshot CONFIG_HASH is stale")
+
+    commit_result = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=project_root,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    current_commit = (
+        commit_result.stdout.strip() if commit_result.returncode == 0 else ""
+    )
+    status_result = subprocess.run(
+        ["git", "status", "--porcelain=v1"],
+        cwd=project_root,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    current_dirty = str(bool(status_result.stdout.strip())).lower()
+    if variables.get("REPRO_GIT_COMMIT") != current_commit:
+        errors.append("variable snapshot commit is stale")
+    if variables.get("REPRO_WORKTREE_DIRTY") != current_dirty:
+        errors.append("variable snapshot dirty-state is stale")
+
+    from codomyrmex.manuscript.variables import _kernel_source_hash
+
+    current_kernel_hash = _kernel_source_hash(project_root)
+    if (
+        variables.get("REPRO_KERNEL_SOURCE_HASH", "").replace(" ", "")
+        != current_kernel_hash
+    ):
+        errors.append("variable snapshot Colony Kernel source hash is stale")
+
+    source_dir = project_root / "docs" / "manuscript"
+    output_dir = project_root / "output" / "manuscript"
+    token_pattern = re.compile(r"\{\{([A-Z0-9_]+)\}\}")
+    for source in sorted(source_dir.glob("[0-9]*.md")):
+        destination = output_dir / source.name
+        if not destination.is_file():
+            errors.append(f"hydrated manuscript is missing {destination.name}")
+            continue
+        source_text = source.read_text(encoding="utf-8")
+        try:
+            expected = token_pattern.sub(
+                lambda match: variables[match.group(1)], source_text
+            )
+        except KeyError as exc:
+            errors.append(f"hydration variable is missing {exc.args[0]}")
+            continue
+        if destination.read_text(encoding="utf-8") != expected:
+            errors.append(f"hydrated manuscript is stale: {destination.name}")
+    return errors
 
 
 def _display_path(path: Path, project_root: Path) -> str:
@@ -751,7 +953,10 @@ def main() -> int:
     parser.add_argument(
         "--check",
         action="store_true",
-        help="Only check for unresolved {{TOKEN}} patterns and exit (exit 1 if any found)",
+        help=(
+            "Read-only source-current check for the variable snapshot and hydrated "
+            "manuscript"
+        ),
     )
     parser.add_argument(
         "--bookends",
@@ -829,6 +1034,32 @@ def main() -> int:
     if not sections:
         print(f"ERROR: no section files found in {manuscript_dir}", file=sys.stderr)
         return 1
+
+    if args.check:
+        print("Checking for unresolved {{TOKEN}} patterns...")
+        token_findings = _check_unresolved_tokens(sections)
+        if token_findings:
+            print("UNRESOLVED TOKENS FOUND:", file=sys.stderr)
+            for path, tokens in token_findings:
+                print(
+                    f"  {path.name}: {', '.join(sorted(set(tokens)))}",
+                    file=sys.stderr,
+                )
+            return 1
+        try:
+            variables = _load_variables(project_root)
+        except RuntimeError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+        freshness_errors = _validate_snapshot_for_check(project_root, variables)
+        if freshness_errors:
+            print("--check failed: snapshot is not source-current:", file=sys.stderr)
+            for error in freshness_errors:
+                print(f"  - {error}", file=sys.stderr)
+            return 1
+        print("--check passed: source-current snapshot and hydration are valid.")
+        return 0
+
     sections = _sections_with_contents_at(
         sections,
         output_dir / "generated-manuscript" / GENERATED_CONTENTS_NAME,
@@ -848,10 +1079,6 @@ def main() -> int:
         return 1
     print("  No unresolved tokens found.")
 
-    if args.check:
-        print("--check passed: no unresolved tokens.")
-        return 0
-
     # Locate supporting files
     bibliography = manuscript_dir / "references.bib"
     if not bibliography.exists():
@@ -861,7 +1088,14 @@ def main() -> int:
     preamble = manuscript_dir / "preamble.md"
 
     # Load variables for metadata
-    variables = _load_variables(project_root)
+    try:
+        variables = _load_variables(project_root)
+    except RuntimeError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
+
+    input_groups: dict[str, list[Path]] = {"html": sections}
+    rendered_outputs: dict[str, Path] = {"html": output_dir / "paper.html"}
 
     # Step 4: Compile HTML
     html_out = output_dir / "paper.html"
@@ -920,6 +1154,10 @@ def main() -> int:
                 return 1
             front, back = bookends
             distribution_out = output_dir / "paper.pdf"
+            input_groups["content_pdf"] = sections
+            input_groups["distribution_pdf"] = [front, *sections, back]
+            rendered_outputs["content_pdf"] = content_out
+            rendered_outputs["distribution_pdf"] = distribution_out
             distribution_ok = _run_pandoc_pdf(
                 sections=[front, *sections, back],
                 output_path=distribution_out,
@@ -953,6 +1191,16 @@ def main() -> int:
                 receipt_dir=validation_dir,
             ):
                 return 1
+            input_groups["distribution_pdf"] = sections
+            rendered_outputs["distribution_pdf"] = pdf_out
+
+    _write_render_receipts(
+        project_root,
+        variables,
+        input_groups,
+        rendered_outputs,
+    )
+    print("  Wrote source-bound render receipts to output/reports/")
 
     print("Done.")
     return 0

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Operators..
+Module implementation, resources, and local coordination for Operators.
 
 ## Directory Contents
 - `PAI.md` – File

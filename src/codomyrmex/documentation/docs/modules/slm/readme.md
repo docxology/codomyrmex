@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Slm..
+Module implementation, resources, and local coordination for Slm.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

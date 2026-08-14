@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Containerization..
+Module implementation, resources, and local coordination for Containerization.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

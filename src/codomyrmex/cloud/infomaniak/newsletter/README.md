@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Newsletter..
+Module implementation, resources, and local coordination for Newsletter.
 
 ## Directory Contents
 - `PAI.md` – File

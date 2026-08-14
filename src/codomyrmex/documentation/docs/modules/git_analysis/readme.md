@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Git Analysis..
+Module implementation, resources, and local coordination for Git Analysis.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

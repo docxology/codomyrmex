@@ -88,7 +88,6 @@ class TestHermesClientExecution:
         assert isinstance(result, dict)
         assert "success" in result
 
-    @pytest.mark.skipif(HAS_HERMES, reason="hermes CLI is installed")
     def test_hermes_missing_error(self, monkeypatch) -> None:
         """Test that missing hermes command returns an error response."""
         monkeypatch.setenv("OPENROUTER_API_KEY", "test-key")

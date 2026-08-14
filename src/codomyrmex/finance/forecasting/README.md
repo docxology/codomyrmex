@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Forecasting..
+Module implementation, resources, and local coordination for Forecasting.
 
 ## Directory Contents
 - `PAI.md` – File

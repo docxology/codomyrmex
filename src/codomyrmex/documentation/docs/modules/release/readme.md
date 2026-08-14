@@ -12,6 +12,8 @@ The module has four cooperating surfaces:
 
 - `ReleaseValidator` requires explicit test, coverage, typing, security,
   documentation, and artifact evidence under the default strict policy.
+- `test_evidence` runs source-bound pytest evidence, preserves skipped-test and
+  warning detail, and fails closed on stale or mutated checkout state.
 - `PackageBuilder` runs an isolated `uv build`, inspects wheel and sdist
   metadata and member paths, rejects traversal, absolute, SCM, cache, and
   private-environment entries plus checkout-specific content, and records each
@@ -36,7 +38,7 @@ from codomyrmex.release import (
 )
 
 validator = ReleaseValidator(version="1.3.0")
-validator.check_tests(failures=0, total=1)
+validator.check_tests(failures=0, total=1, skipped=0)
 validator.check_coverage(overall=60.0)
 validator.check_type_safety(errors=0)
 validator.check_security(cve_count=0, secrets_found=0)
@@ -87,6 +89,12 @@ Both `plan` commands are always dry runs. They write receipts with
 - reproducibility-input identities;
 - artifact roles, media types, sizes, SHA-256, and SHA-512;
 - caller-supplied validation outcomes.
+
+The `receipts/source-state.json` receipt is schema v2 when a manuscript variable
+snapshot is included. In addition to the checkout commit, dirty state, and status
+digest, it records the rendered commit, manuscript configuration digest, and
+Colony Kernel/manuscript source digest. The manuscript source-current validator
+compares those fields with the live checkout and released artifacts.
 
 The bundle also contains `CITATION.cff`, `.zenodo.json`,
 `publication_metadata.json`, `SHA256SUMS`, `SHA512SUMS`, source-state and other

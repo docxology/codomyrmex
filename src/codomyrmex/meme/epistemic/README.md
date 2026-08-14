@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Epistemic..
+Module implementation, resources, and local coordination for Epistemic.
 
 ## Directory Contents
 - `PAI.md` – File

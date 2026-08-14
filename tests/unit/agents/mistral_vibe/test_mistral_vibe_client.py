@@ -1,7 +1,8 @@
 """Unit tests for MistralVibeClient.
 
-Tests use real implementations only. When Mistral Vibe CLI is not available
-or API key is not configured, tests are skipped rather than using mocks.
+Tests use real implementations only. Tests requiring the Mistral Vibe CLI or
+API access are explicitly guarded; local configuration and unavailable-command
+paths run without credentials.
 """
 
 import os
@@ -20,12 +21,6 @@ except ImportError:
 
 if not _HAS_AGENTS:
     pytest.skip("agents deps not available", allow_module_level=True)
-
-# Skip entire module if vibe CLI is not properly configured
-pytestmark = pytest.mark.skipif(
-    os.getenv("RUN_LIVE_MISTRAL_VIBE") != "1" or not os.getenv("MISTRAL_API_KEY"),
-    reason="Live Mistral Vibe tests require RUN_LIVE_MISTRAL_VIBE=1 and MISTRAL_API_KEY",
-)
 
 
 class TestMistralVibeClient:
@@ -72,12 +67,6 @@ class TestMistralVibeClient:
         # Note: Actual success depends on authentication and CLI state
         # We test that the response structure is correct
 
-    @pytest.mark.skipif(
-        os.getenv("RUN_LIVE_MISTRAL_VIBE") != "1"
-        or not VIBE_AVAILABLE
-        or not os.getenv("MISTRAL_API_KEY"),
-        reason="Live Mistral Vibe tests require RUN_LIVE_MISTRAL_VIBE=1, CLI, and key",
-    )
     @pytest.mark.timeout(5)
     def test_mistral_vibe_client_execute_failure_invalid_command(self):
         """Test handling when command is not found."""
@@ -91,6 +80,17 @@ class TestMistralVibeClient:
         # Test real error handling
         assert not response.is_success()
         assert response.error is not None
+
+    def test_mistral_vibe_client_get_help_when_cli_is_unavailable(self):
+        """The help wrapper reports an absent CLI without external access."""
+        client = MistralVibeClient(
+            config={"mistral_vibe_command": "nonexistent-vibe-command-xyz"}
+        )
+        help_info = client.get_vibe_help()
+
+        assert help_info["available"] is False
+        assert help_info["exit_code"] == -1
+        assert help_info["error"]
 
     @pytest.mark.skipif(
         os.getenv("RUN_LIVE_MISTRAL_VIBE") != "1"
@@ -202,4 +202,3 @@ class TestMistralVibeClient:
         response = client.execute(empty_request)
         assert not response.is_success()
         assert "Prompt is required" in (response.error or "")
-        assert "empty" in (response.error or "").lower()

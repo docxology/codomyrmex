@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Transport..
+Module implementation, resources, and local coordination for Transport.
 
 ## Directory Contents
 - `PAI.md` – File

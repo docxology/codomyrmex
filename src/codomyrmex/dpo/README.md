@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Dpo..
+Module implementation, resources, and local coordination for Dpo.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

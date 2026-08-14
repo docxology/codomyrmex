@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Ai Safety..
+Module implementation, resources, and local coordination for Ai Safety.
 
 ## Directory Contents
 - `PAI.md` – File

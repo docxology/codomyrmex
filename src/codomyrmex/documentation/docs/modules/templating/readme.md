@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Templating..
+Module implementation, resources, and local coordination for Templating.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Hyperreality..
+Module implementation, resources, and local coordination for Hyperreality.
 
 ## Directory Contents
 - `PAI.md` – File

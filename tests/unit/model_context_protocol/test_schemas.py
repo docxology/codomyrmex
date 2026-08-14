@@ -31,6 +31,7 @@ from codomyrmex.model_context_protocol.schemas import (
 )
 from codomyrmex.model_context_protocol.schemas.mcp_schemas import (
     MCPMessage,
+    MCPRegistrationError,
     MCPToolCall,
     MCPToolRegistry,
 )
@@ -321,6 +322,50 @@ class TestRequestResponse:
 class TestMCPToolRegistry:
     """Tests for the MCPToolRegistry class."""
 
+    def test_registration_is_idempotent_and_conflicts_fail_closed(self):
+        registry = MCPToolRegistry()
+        schema = {"name": "stable", "inputSchema": {"type": "object"}}
+        first = lambda: "first"
+        second = lambda: "second"
+
+        registry.register("stable", schema, handler=first)
+        registry.register("stable", schema, handler=second)
+
+        result = registry.execute(MCPToolCall(tool_name="stable", arguments={}))
+        assert result.status == "success"
+        assert result.data == {"result": "first"}
+
+        with pytest.raises(MCPRegistrationError, match="different schema"):
+            registry.register(
+                "stable",
+                {"name": "stable", "inputSchema": {"type": "array"}},
+                handler=second,
+            )
+
+    def test_registration_validates_names_and_handlers(self):
+        registry = MCPToolRegistry()
+        with pytest.raises(MCPRegistrationError, match="non-empty"):
+            registry.register("", {})
+        with pytest.raises(MCPRegistrationError, match="whitespace"):
+            registry.register("bad name", {})
+        with pytest.raises(MCPRegistrationError, match="callable"):
+            registry.register("bad_handler", {}, handler=object())
+
+    def test_list_tools_is_sorted_and_schema_isolated(self):
+        registry = MCPToolRegistry()
+        schema = {"name": "zeta", "inputSchema": {"type": "object"}}
+        registry.register("zeta", schema)
+        registry.register("alpha", {"name": "alpha"})
+
+        schema["inputSchema"]["type"] = "array"
+        exposed = registry.get("zeta")
+        assert registry.list_tools() == ["alpha", "zeta"]
+        assert exposed is not None
+        assert exposed["schema"]["inputSchema"]["type"] == "object"
+
+        exposed["schema"]["inputSchema"]["type"] = "string"
+        assert registry.get("zeta")["schema"]["inputSchema"]["type"] == "object"
+
     def test_register_and_list_tools(self):
         registry = MCPToolRegistry()
         registry.register("my_tool", {"name": "my_tool", "description": "Test"})
@@ -363,6 +408,39 @@ class TestMCPToolRegistry:
         assert valid is False
         assert "Unknown tool" in error  # type: ignore
 
+    def test_validate_call_rejects_invalid_arguments(self):
+        registry = MCPToolRegistry()
+        registry.register(
+            "needs_text",
+            {
+                "name": "needs_text",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {"text": {"type": "string"}},
+                    "required": ["text"],
+                },
+            },
+            handler=lambda text: text,
+        )
+        call = MCPToolCall(tool_name="needs_text", arguments={})
+        valid, error = registry.validate_call(call)
+        assert valid is False
+        assert "required" in (error or "")
+
+    def test_execute_preserves_logical_error_envelope(self):
+        registry = MCPToolRegistry()
+        registry.register(
+            "logical_failure",
+            {"name": "logical_failure"},
+            handler=lambda: {"status": "error", "message": "not completed"},
+        )
+        result = registry.execute(
+            MCPToolCall(tool_name="logical_failure", arguments={})
+        )
+        assert result.status == "failure"
+        assert result.error is not None
+        assert result.error.error_message == "not completed"
+
     def test_execute_with_handler(self):
         registry = MCPToolRegistry()
         registry.register(
@@ -374,6 +452,22 @@ class TestMCPToolRegistry:
         result = registry.execute(call)
         assert result.status == "success"
         assert result.data["result"] == 5
+
+    def test_execute_accepts_falsey_callable(self):
+        class FalseyHandler:
+            def __bool__(self):
+                return False
+
+            def __call__(self):
+                return "called"
+
+        registry = MCPToolRegistry()
+        registry.register("falsey", {"name": "falsey"}, handler=FalseyHandler())
+
+        result = registry.execute(MCPToolCall(tool_name="falsey", arguments={}))
+
+        assert result.status == "success"
+        assert result.data == {"result": "called"}
 
     def test_execute_without_handler_returns_failure(self):
         registry = MCPToolRegistry()

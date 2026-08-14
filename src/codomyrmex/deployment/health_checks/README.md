@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Health Checks..
+Module implementation, resources, and local coordination for Health Checks.
 
 ## Directory Contents
 - `PAI.md` – File

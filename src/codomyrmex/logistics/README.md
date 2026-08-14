@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Logistics..
+Module implementation, resources, and local coordination for Logistics.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

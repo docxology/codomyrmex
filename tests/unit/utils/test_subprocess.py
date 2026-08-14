@@ -12,6 +12,7 @@ import asyncio
 import os
 import sys
 import tempfile
+import time
 
 import pytest
 
@@ -239,6 +240,10 @@ class TestPrepareCommand:
         result = _prepare_command(["echo", "hello"], shell=True)
         assert result == "echo hello"
 
+    def test_shell_list_quotes_metacharacters(self):
+        result = _prepare_command(["echo", "$(touch should-not-exist)"], shell=True)
+        assert result == "echo '$(touch should-not-exist)'"
+
     def test_shell_string_passthrough(self):
         result = _prepare_command("echo hello", shell=True)
         assert result == "echo hello"
@@ -320,6 +325,12 @@ class TestRunCommand:
         result = run_command("echo $HOME", shell=True)
         assert result.success
         assert len(result.stdout.strip()) > 0
+
+    def test_shell_list_does_not_interpret_argument_metacharacters(self, tmp_path):
+        marker = tmp_path / "should-not-exist"
+        result = run_command(["echo", f"$(touch {marker})"], shell=True)
+        assert result.success
+        assert not marker.exists()
 
     def test_nonzero_exit_code(self):
         result = run_command([sys.executable, "-c", "import sys; sys.exit(42)"])
@@ -470,6 +481,49 @@ class TestRunCommandAsync:
         assert result.timed_out
         assert not result.success
 
+    def test_timeout_drains_output_pipes(self):
+        result = self._run(
+            run_command_async(
+                [
+                    sys.executable,
+                    "-c",
+                    "import sys,time; print('before', flush=True); time.sleep(30)",
+                ],
+                timeout=0.3,
+            )
+        )
+        assert result.timed_out
+        assert "before" in result.stdout
+
+    def test_timeout_does_not_wait_for_inherited_pipe(self, tmp_path):
+        marker = tmp_path / "grandchild.pid"
+        grandchild_code = (
+            f"import os,time; open({str(marker)!r}, 'w').write(str(os.getpid())); "
+            "time.sleep(30)"
+        )
+        parent_code = (
+            "import subprocess,sys,time; "
+            f"subprocess.Popen([sys.executable, '-c', {grandchild_code!r}]); "
+            "print('ready', flush=True); time.sleep(30)"
+        )
+        started = time.monotonic()
+        try:
+            result = self._run(
+                run_command_async(
+                    [sys.executable, "-c", parent_code],
+                    timeout=0.3,
+                )
+            )
+            assert time.monotonic() - started < 2
+            assert result.timed_out
+        finally:
+            if marker.exists():
+                pid = int(marker.read_text())
+                try:
+                    os.kill(pid, 9)
+                except ProcessLookupError:
+                    pass
+
     def test_command_not_found(self):
         result = self._run(run_command_async(["nonexistent_binary_xyz_abc_123"]))
         assert not result.success
@@ -495,6 +549,32 @@ class TestRunCommandAsync:
         )
         assert result.success
         assert "async_piped" in result.stdout
+
+    def test_cancellation_reaps_child_process(self, tmp_path):
+        pid_path = tmp_path / "child.pid"
+        script = (
+            "import os, time\n"
+            f"open({str(pid_path)!r}, 'w', encoding='utf-8').write(str(os.getpid()))\n"
+            "time.sleep(30)\n"
+        )
+
+        async def exercise():
+            task = asyncio.create_task(
+                run_command_async([sys.executable, "-c", script])
+            )
+            for _ in range(100):
+                if pid_path.exists():
+                    break
+                await asyncio.sleep(0.01)
+            assert pid_path.exists()
+            task.cancel()
+            with pytest.raises(asyncio.CancelledError):
+                await task
+
+        self._run(exercise())
+        child_pid = int(pid_path.read_text(encoding="utf-8"))
+        with pytest.raises(ProcessLookupError):
+            os.kill(child_pid, 0)
 
 
 # ---------------------------------------------------------------------------
@@ -539,6 +619,21 @@ class TestStreamCommand:
         prefixed = any(line.startswith("stdout:") for line in lines)
         assert not prefixed
 
+    def test_captures_stdout_and_stderr_without_blocking(self):
+        gen = stream_command(
+            [
+                sys.executable,
+                "-c",
+                "import sys; print('out'); print('err', file=sys.stderr)",
+            ]
+        )
+        lines, result = self._exhaust_generator(gen)
+        assert result.success
+        assert "out" in result.stdout
+        assert "err" in result.stderr
+        assert any(line.startswith("stdout:") for line in lines)
+        assert any(line.startswith("stderr:") for line in lines)
+
     def test_command_not_found(self):
         gen = stream_command(["nonexistent_binary_xyz_abc_123"])
         _lines, result = self._exhaust_generator(gen)
@@ -562,6 +657,61 @@ class TestStreamCommand:
         _lines, result = self._exhaust_generator(gen)
         assert result.timed_out
         assert not result.success
+
+    def test_timeout_does_not_block_on_partial_line(self):
+        started = time.monotonic()
+        gen = stream_command(
+            [
+                sys.executable,
+                "-c",
+                "import sys,time; sys.stdout.write('partial'); "
+                "sys.stdout.flush(); time.sleep(30)",
+            ],
+            timeout=0.3,
+        )
+        _lines, result = self._exhaust_generator(gen)
+        assert time.monotonic() - started < 2
+        assert result.timed_out
+        assert not result.success
+
+    def test_zero_timeout_is_enforced(self):
+        started = time.monotonic()
+        _lines, result = self._exhaust_generator(
+            stream_command(
+                [sys.executable, "-c", "import time; time.sleep(30)"],
+                timeout=0,
+            )
+        )
+        assert time.monotonic() - started < 2
+        assert result.timed_out
+        assert not result.success
+
+    def test_finished_process_does_not_wait_for_inherited_pipe(self, tmp_path):
+        marker = tmp_path / "grandchild.pid"
+        grandchild_code = (
+            f"import os,time; open({str(marker)!r}, 'w').write(str(os.getpid())); "
+            "time.sleep(30)"
+        )
+        parent_code = (
+            "import subprocess,sys,time; "
+            f"subprocess.Popen([sys.executable, '-c', {grandchild_code!r}]); "
+            "print('done', flush=True); time.sleep(0.05)"
+        )
+        started = time.monotonic()
+        try:
+            _lines, result = self._exhaust_generator(
+                stream_command([sys.executable, "-c", parent_code], timeout=1)
+            )
+            assert time.monotonic() - started < 2
+            assert result.success
+            assert "done" in result.stdout
+        finally:
+            if marker.exists():
+                pid = int(marker.read_text())
+                try:
+                    os.kill(pid, 9)
+                except ProcessLookupError:
+                    pass
 
 
 # ---------------------------------------------------------------------------

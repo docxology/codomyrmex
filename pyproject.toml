@@ -43,7 +43,7 @@ dependencies = [
     "radon>=6.0.0",
     "lizard>=1.17.0",
     # For git operations
-    "GitPython>=3.1.0",
+    "GitPython>=3.1.58",
     # For specific tutorials/recipes
     "unidiff>=0.7.0",
     "requests>=2.31.0",
@@ -69,7 +69,7 @@ dependencies = [
     "beautifulsoup4>=4.14.3",
     "markdownify>=1.2.2",
     # For encryption module
-    "cryptography>=41.0.0",
+    "cryptography>=50.0.0",
     # For templating module
     "mako>=1.2.0",
     "aiohttp>=3.13.3",
@@ -182,7 +182,7 @@ physical_management = [
 ]
 
 security_audit = [
-    "cryptography>=41.0.0",
+    "cryptography>=50.0.0",
     "jinja2>=3.1.0",
     "pip-audit>=2.10.1",
     "pyopenssl>=23.0.0",
@@ -209,7 +209,7 @@ crypto = [
 
 documents = [
     "chardet>=5.0.0",
-    "pypdf>=3.0.0",
+    "pypdf>=6.15.0",
 ]
 
 audio = [
@@ -423,6 +423,8 @@ asyncio_default_fixture_loop_scope = "function"
 # [tool.coverage.report] fail_under still applies whenever pytest runs with --cov.
 addopts = [
     "--import-mode=importlib",
+    "-p",
+    "pytest_pymupdf",
     "--verbose",
     "--tb=short",
     "--timeout=300",
@@ -464,8 +466,8 @@ filterwarnings = [
     "ignore:builtin type Swig.*has no __module__ attribute:DeprecationWarning",
     "ignore:The verify_requirements argument is now a no-op:DeprecationWarning",
     "ignore:datetime\\.datetime\\.utcnow\\(\\) is deprecated:DeprecationWarning",
-    "ignore::ResourceWarning",
-    "ignore::pytest.PytestCollectionWarning",
+    # Resource and collection warnings are actionable test failures.  Keep
+    # only narrow third-party compatibility exceptions below.
     # requests warns on import when urllib3/chardet pins drift; do not use category path (imports requests during parse).
     "ignore:.*doesn't match a supported version.*:Warning",
     # google.api_core without grpcio-status; optional for storage client import chains during test collection.

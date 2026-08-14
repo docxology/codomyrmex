@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Graph Rag..
+Module implementation, resources, and local coordination for Graph Rag.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

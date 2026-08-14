@@ -636,6 +636,26 @@ class TestHTTPTransport:
         data = resp.json()
         assert "content" in data
 
+    def test_production_http_routes_reject_malformed_json(self, server):
+        from starlette.testclient import TestClient
+
+        production_client = TestClient(server._create_http_app())
+        rest = production_client.post(
+            "/tools/list_tools/call",
+            content=b"{not-json",
+            headers={"content-type": "application/json"},
+        )
+        assert rest.status_code == 400
+        assert "Malformed JSON" in rest.json()["error"]
+
+        mcp = production_client.post(
+            "/mcp",
+            content=b"{not-json",
+            headers={"content-type": "application/json"},
+        )
+        assert mcp.status_code == 400
+        assert mcp.json()["error"]["code"] == -32700
+
     def test_mcp_jsonrpc_endpoint(self, client):
         resp = client.post(
             "/mcp",

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Dark..
+Module implementation, resources, and local coordination for Dark.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

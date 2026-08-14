@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Handlers..
+Module implementation, resources, and local coordination for Handlers.
 
 ## Directory Contents
 - `PAI.md` – File

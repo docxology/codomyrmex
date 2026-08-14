@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Mermaid..
+Module implementation, resources, and local coordination for Mermaid.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Physical Management..
+Module implementation, resources, and local coordination for Physical Management.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

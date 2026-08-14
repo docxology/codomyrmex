@@ -21,11 +21,15 @@ class TestReleaseValidate:
             artifacts_verified=True,
             artifact_count=2,
         )
-        assert result["status"] == "success"
-        assert result["certified"] is True
+        assert result["status"] == "blocked"
+        assert result["certified"] is False
+        assert result["evidence_mode"] == "diagnostic-untrusted"
+        assert any(
+            "Source-bound release evidence" in item for item in result["blockers"]
+        )
         assert result["version"] == "2.0.0"
         assert result["pass_rate"] > 0
-        assert len(result["blockers"]) == 0
+        assert len(result["blockers"]) == 1
 
     def test_validate_with_failures(self):
         from codomyrmex.release.mcp_tools import release_validate
@@ -42,7 +46,7 @@ class TestReleaseValidate:
             artifacts_verified=False,
             artifact_count=2,
         )
-        assert result["status"] == "success"
+        assert result["status"] == "blocked"
         assert result["certified"] is False
         assert len(result["blockers"]) > 0
 
@@ -50,10 +54,28 @@ class TestReleaseValidate:
         from codomyrmex.release.mcp_tools import release_validate
 
         result = release_validate()
-        assert result["status"] == "success"
+        assert result["status"] == "blocked"
         assert result["certified"] is False
         assert any("Missing required evidence" in item for item in result["blockers"])
         assert "checks" in result
+
+    def test_validate_rejects_impossible_coverage(self):
+        from codomyrmex.release.mcp_tools import release_validate
+
+        result = release_validate(
+            test_failures=0,
+            test_total=1,
+            coverage_overall=1000,
+            type_errors=0,
+            cve_count=0,
+            secrets_found=0,
+            docs_complete=True,
+            artifacts_verified=True,
+            artifact_count=1,
+        )
+
+        assert result["status"] == "blocked"
+        assert result["certified"] is False
 
 
 class TestReleaseBuild:
@@ -82,7 +104,7 @@ class TestReleaseBuild:
             version=real_package.metadata.version,
             source_dir=str(real_package.root),
         )
-        assert result["status"] == "success"
+        assert result["status"] == "failed"
         assert result["success"] is False
         assert len(result["warnings"]) > 0
 
@@ -105,8 +127,9 @@ class TestReleaseCertificationReport:
             artifacts_verified=True,
             artifact_count=2,
         )
-        assert result["status"] == "success"
-        assert result["certified"] is True
+        assert result["status"] == "blocked"
+        assert result["certified"] is False
+        assert result["evidence_mode"] == "diagnostic-untrusted"
         assert "markdown" in result
         assert "3.0.0" in result["markdown"]
 
@@ -119,5 +142,5 @@ class TestReleaseCertificationReport:
             test_total=100,
             coverage_overall=40.0,
         )
-        assert result["status"] == "success"
+        assert result["status"] == "blocked"
         assert result["certified"] is False

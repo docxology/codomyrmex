@@ -29,17 +29,60 @@ Quick Start:
 """
 
 import contextlib
+import importlib
+from importlib.util import find_spec
 
 __version__ = "0.1.0"
 
-# PDF submodule uses optional dependencies
-try:
-    from . import pdf
+# PDF uses native optional dependencies. Do not import it while loading the
+# parent package: MCP discovery imports ``dark.mcp_tools`` for metadata, and
+# eagerly loading PyMuPDF there can crash the interpreter on otherwise valid
+# installations. The real submodule is loaded only when a caller asks for it.
+# PyMuPDF's supported import name is ``pymupdf``. The historical ``fitz``
+# alias loads an extra compatibility package and is prone to native crashes
+# after other extension modules have been imported in a long-lived process.
+PDF_AVAILABLE = find_spec("pymupdf") is not None and find_spec("PIL") is not None
 
-    # FILTERS_AVAILABLE is False when PyMuPDF isn't installed
-    PDF_AVAILABLE = getattr(pdf, "FILTERS_AVAILABLE", False)
-except ImportError:
-    PDF_AVAILABLE = False
+# Keep capability metadata independent from the native PDF implementation.
+# MCP discovery and health checks must be able to answer without importing
+# PyMuPDF, which is an optional native dependency and can be unsafe to load
+# repeatedly in a long-lived discovery process.
+PDF_PRESETS: dict[str, dict[str, float]] = {
+    "dark": {
+        "inversion": 0.90,
+        "brightness": 0.90,
+        "contrast": 0.90,
+        "sepia": 0.10,
+    },
+    "sepia": {
+        "inversion": 0.85,
+        "brightness": 0.95,
+        "contrast": 0.90,
+        "sepia": 0.40,
+    },
+    "high_contrast": {
+        "inversion": 1.0,
+        "brightness": 1.0,
+        "contrast": 1.3,
+        "sepia": 0.0,
+    },
+    "low_light": {
+        "inversion": 0.80,
+        "brightness": 0.70,
+        "contrast": 0.85,
+        "sepia": 0.05,
+    },
+}
+
+
+def __getattr__(name: str):
+    """Lazily load the optional PDF submodule on explicit access."""
+    if name == "pdf":
+        module = importlib.import_module(".pdf", __name__)
+        globals()[name] = module
+        return module
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
 
 # Shared schemas for cross-module interop
 with contextlib.suppress(ImportError):
@@ -70,6 +113,7 @@ def cli_commands():
 
 __all__ = [
     "PDF_AVAILABLE",
+    "PDF_PRESETS",
     "__version__",
     # CLI integration
     "cli_commands",

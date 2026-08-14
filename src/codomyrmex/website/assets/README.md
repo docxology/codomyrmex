@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Assets..
+Module implementation, resources, and local coordination for Assets.
 
 ## Directory Contents
 - `PAI.md` – File

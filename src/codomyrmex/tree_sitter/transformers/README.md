@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Transformers..
+Module implementation, resources, and local coordination for Transformers.
 
 ## Directory Contents
 - `PAI.md` – File

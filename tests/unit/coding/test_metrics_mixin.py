@@ -62,6 +62,9 @@ class TestableMetrics(MetricsMixin):
     implemented here with real, deterministic logic.
     """
 
+    # This is a fixture subject, not a pytest test class.
+    __test__ = False
+
     def __init__(self, project_root: str, pyscn_analyzer: SimplePyscnAnalyzer):
         self.project_root = project_root
         self.pyscn_analyzer = pyscn_analyzer

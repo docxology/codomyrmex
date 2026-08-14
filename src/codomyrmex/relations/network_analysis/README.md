@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Network Analysis..
+Module implementation, resources, and local coordination for Network Analysis.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Generators..
+Module implementation, resources, and local coordination for Generators.
 
 ## Directory Contents
 - `README.md` – File

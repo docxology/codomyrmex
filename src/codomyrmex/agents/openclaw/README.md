@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Openclaw..
+Module implementation, resources, and local coordination for Openclaw.
 
 ## Directory Contents
 - `PAI.md` – File

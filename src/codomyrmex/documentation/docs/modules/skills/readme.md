@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Skills..
+Module implementation, resources, and local coordination for Skills.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Validation..
+Module implementation, resources, and local coordination for Validation.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

@@ -25,6 +25,7 @@ from codomyrmex.agents.orchestrator import (
     FileContext,
     extract_todo_items,
 )
+from codomyrmex.ide.antigravity.agent_relay import AgentRelay
 
 _RUN_LIVE_OLLAMA = os.environ.get("RUN_LIVE_OLLAMA") == "1"
 
@@ -48,6 +49,32 @@ SKIP_NO_OLLAMA = pytest.mark.skipif(
     not OLLAMA_AVAILABLE,
     reason="Ollama not reachable at localhost:11434",
 )
+
+
+class _SessionResponse:
+    """Small real test adapter for provider response semantics."""
+
+    def __init__(self, *, content: str = "", error: str | None = None) -> None:
+        self.content = content
+        self.error = error
+
+    def is_success(self) -> bool:
+        """Expose the response protocol used by the orchestrator."""
+        return self.error is None
+
+
+class _FailingSessionClient:
+    """Provider adapter that deterministically exercises retry handling."""
+
+    def __init__(self, error: str) -> None:
+        self.error = error
+        self.calls = 0
+
+    def execute_with_session(self, request: object) -> _SessionResponse:
+        """Return a provider failure while recording the request count."""
+        del request
+        self.calls += 1
+        return _SessionResponse(error=self.error)
 
 
 # ── ConversationTurn tests ───────────────────────────────────────────
@@ -604,3 +631,34 @@ class TestConversationOrchestratorLifecycle:
                 relay_dir=tmpdir,
             )
             assert orch.seed_prompt == "Custom seed for testing."
+
+
+class TestConversationOrchestratorProviderFailures:
+    """Provider failures must be retried and recorded as explicit turns."""
+
+    @pytest.mark.unit
+    def test_execute_turn_retries_response_level_failure(self, tmp_path):
+        client = _FailingSessionClient("provider unavailable")
+        orchestrator = object.__new__(ConversationOrchestrator)
+        orchestrator.clients = {"agent": client}
+        orchestrator.context_files = []
+        orchestrator.todo_items = []
+        orchestrator.max_retries = 1
+        orchestrator.log = ConversationLog(
+            channel_id="failure-test",
+            started_at="2026-02-26T00:00:00Z",
+            agents=["agent"],
+        )
+        orchestrator.relay = AgentRelay("failure-test", relay_dir=tmp_path)
+
+        turn = orchestrator._execute_turn(
+            AgentSpec(identity="agent", persona="tester"),
+            "previous context",
+            round_num=1,
+            max_tokens=32,
+        )
+
+        assert client.calls == 2
+        assert turn.content == "[Error after 2 attempts: provider unavailable]"
+        messages = orchestrator.relay.poll_messages()
+        assert messages[-1].content == turn.content

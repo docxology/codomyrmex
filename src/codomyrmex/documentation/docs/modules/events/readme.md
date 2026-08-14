@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Events..
+Module implementation, resources, and local coordination for Events.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

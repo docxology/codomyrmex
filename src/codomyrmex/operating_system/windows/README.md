@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Windows..
+Module implementation, resources, and local coordination for Windows.
 
 ## Directory Contents
 - `README.md` – File

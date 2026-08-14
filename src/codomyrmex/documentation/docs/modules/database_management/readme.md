@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Database Management..
+Module implementation, resources, and local coordination for Database Management.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

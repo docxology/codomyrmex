@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Soul..
+Module implementation, resources, and local coordination for Soul.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

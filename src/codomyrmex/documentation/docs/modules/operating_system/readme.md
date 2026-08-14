@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Operating System..
+Module implementation, resources, and local coordination for Operating System.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

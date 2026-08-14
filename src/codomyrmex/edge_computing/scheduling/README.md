@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Scheduling..
+Module implementation, resources, and local coordination for Scheduling.
 
 ## Directory Contents
 - `PAI.md` – File

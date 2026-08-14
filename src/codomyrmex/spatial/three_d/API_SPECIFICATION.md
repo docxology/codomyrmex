@@ -17,6 +17,23 @@
   - `scale: Vector3D`
   - `material: Optional[Material3D]`
 
+### Material3D
+- **Purpose**: Renderer-neutral surface properties
+- **Properties**:
+  - `name: str`
+  - `diffuse_color: Vector3D`
+  - `specular_color: Vector3D`
+  - `shininess: float`
+  - `texture_name: Optional[str]`
+
+### MeshLoader
+- **Purpose**: Load validated headless geometry without a graphics backend
+- **Methods**:
+  - `load(path: str | Path) -> MeshData` for OBJ and JSON meshes
+
+### MeshData
+- **Purpose**: Immutable vertices and polygon face indices consumed by renderers
+
 ### Camera3D
 - **Purpose**: Camera for viewing 3D scenes
 - **Properties**:

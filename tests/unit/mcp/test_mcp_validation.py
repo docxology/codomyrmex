@@ -248,3 +248,39 @@ def test_bare_json_schema_detected():
     }
     result = validate_tool_arguments(TOOL, {"name": "ok"}, bare)
     assert result.valid
+
+
+def test_invalid_argument_container_fails_closed():
+    result = validate_tool_arguments(TOOL, ["not", "an", "object"], {})
+
+    assert not result.valid
+    assert result.errors == ["test_tool: arguments must be a JSON object"]
+
+
+def test_invalid_schema_container_fails_closed():
+    result = validate_tool_arguments(TOOL, {}, {"inputSchema": ["not", "an", "object"]})
+
+    assert not result.valid
+    assert result.errors == ["test_tool: inputSchema must be a JSON object"]
+
+
+def test_null_input_schema_fails_closed():
+    result = validate_tool_arguments(TOOL, {}, {"inputSchema": None})
+
+    assert not result.valid
+    assert result.errors == ["test_tool: inputSchema must be a JSON object"]
+
+
+def test_malformed_json_schema_fails_closed_without_raising():
+    malformed_schemas = (
+        {"inputSchema": {"type": "not-a-json-type"}},
+        {"inputSchema": {"required": "not-a-list"}},
+        {"inputSchema": {"properties": []}},
+    )
+
+    for schema in malformed_schemas:
+        result = validate_tool_arguments(TOOL, {}, schema)
+
+        assert not result.valid
+        assert result.errors
+        assert result.errors[0].startswith("test_tool: invalid JSON Schema:")

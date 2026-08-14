@@ -9,7 +9,7 @@ Upstream reference: https://github.com/danielmiessler/Personal_AI_Infrastructure
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from pathlib import Path
 
 import pytest
 
@@ -27,34 +27,91 @@ from codomyrmex.agents.pai import (
     PAIToolInfo,
 )
 
-if TYPE_CHECKING:
-    from pathlib import Path
-
 # =====================================================================
 # Fixtures
 # =====================================================================
 
 
 @pytest.fixture
-def bridge() -> PAIBridge:
-    """Bridge configured against real PAI installation."""
-    b = PAIBridge()
-    if not b.is_installed():
-        pytest.skip("PAI not installed at ~/.claude/PAI/")
-    return b
+def bridge(tmp_path: Path) -> PAIBridge:
+    """Bridge configured against a complete local PAI-shaped fixture.
+
+    The bridge is a filesystem adapter, so its unit contract does not require
+    the developer's private ``~/.claude`` installation.  Building the layout
+    in ``tmp_path`` keeps the test deterministic while still exercising the
+    real discovery code and file parsers.
+    """
+    pai_root = tmp_path / "PAI"
+    claude_root = tmp_path / ".claude"
+
+    (pai_root / "Tools").mkdir(parents=True)
+    (pai_root / "PAISECURITYSYSTEM").mkdir(parents=True)
+    (pai_root / "Components").mkdir(parents=True)
+    (claude_root / "skills" / "Research" / "Tools").mkdir(parents=True)
+    (claude_root / "skills" / "Research" / "Workflows").mkdir()
+    (claude_root / "agents").mkdir(parents=True)
+    (claude_root / "hooks").mkdir(parents=True)
+    (claude_root / "MEMORY" / "LEARNING").mkdir(parents=True)
+    (claude_root / "MEMORY" / "STATE").mkdir()
+    (claude_root / "MEMORY" / "RESEARCH").mkdir()
+    (claude_root / "USER").mkdir(parents=True)
+
+    (pai_root / "SKILL.md").write_text(
+        "# The Algorithm\n\nVersion v0.2.25\n", encoding="utf-8"
+    )
+    (pai_root / "Tools" / "Observe.ts").write_text(
+        "export const observe = true;\n", encoding="utf-8"
+    )
+    (claude_root / "skills" / "Research" / "SKILL.md").write_text(
+        "# Research skill\n", encoding="utf-8"
+    )
+    (claude_root / "skills" / "Research" / "Tools" / "Search.ts").write_text(
+        "export const search = true;\n", encoding="utf-8"
+    )
+    (claude_root / "agents" / "Engineer.md").write_text(
+        "# Engineer\n", encoding="utf-8"
+    )
+    (claude_root / "agents" / "Architect.md").write_text(
+        "# Architect\n", encoding="utf-8"
+    )
+    (claude_root / "agents" / "Pentester.md").write_text(
+        "# Pentester\n", encoding="utf-8"
+    )
+    (claude_root / "hooks" / "Session.hook.ts").write_text(
+        "export const session = true;\n", encoding="utf-8"
+    )
+    (claude_root / "hooks" / "Archive.hook.ts-archived").write_text(
+        "export const archive = true;\n", encoding="utf-8"
+    )
+    for store in ("LEARNING", "STATE", "RESEARCH"):
+        (claude_root / "MEMORY" / store / "entry.md").write_text(
+            f"# {store}\n", encoding="utf-8"
+        )
+    (claude_root / "USER" / "MISSION.md").write_text("# Mission\n", encoding="utf-8")
+    (pai_root / "PAISECURITYSYSTEM" / "patterns.yaml").write_text(
+        '{"safe": ["read"], "dangerous": ["write"]}\n', encoding="utf-8"
+    )
+    (pai_root / "Components" / "README.md").write_text(
+        "# Components\n", encoding="utf-8"
+    )
+    (claude_root / "settings.json").write_text(
+        '{"env": {"PAI_TEST_MODE": "1"}}\n', encoding="utf-8"
+    )
+    (claude_root / "claude_desktop_config.json").write_text(
+        '{"mcpServers": {"codomyrmex": {"command": "local"}}}\n',
+        encoding="utf-8",
+    )
+
+    return PAIBridge(config=PAIConfig(pai_root=pai_root, claude_root=claude_root))
 
 
 @pytest.fixture
 def complete_memory_bridge(bridge: PAIBridge) -> PAIBridge:
-    """Require the optional upstream memory stores for that contract test."""
+    """Provide the complete deterministic memory-store fixture."""
     expected = {"LEARNING", "STATE", "RESEARCH"}
     available = {store.name for store in bridge.list_memory_stores()}
     missing = expected - available
-    if missing:
-        pytest.skip(
-            "local PAI installation does not provide the complete memory-store "
-            f"contract; missing {sorted(missing)}"
-        )
+    assert not missing, f"fixture is missing memory stores: {sorted(missing)}"
     return bridge
 
 
@@ -105,7 +162,7 @@ class TestModuleExports:
 
 
 class TestDiscovery:
-    """Test PAI discovery against the real installation."""
+    """Test PAI discovery against the deterministic local fixture."""
 
     def test_is_installed(self, bridge: PAIBridge) -> None:
         # PAI SKILL.md should exist on this machine
@@ -194,7 +251,7 @@ class TestAlgorithm:
 
 
 class TestSkills:
-    """Test skill discovery against real PAI installation."""
+    """Test skill discovery against the deterministic local fixture."""
 
     def test_list_skills_returns_list(self, bridge: PAIBridge) -> None:
         skills = bridge.list_skills()
@@ -227,7 +284,7 @@ class TestSkills:
 
 
 class TestTools:
-    """Test tool discovery against real PAI installation."""
+    """Test tool discovery against the deterministic local fixture."""
 
     def test_list_tools_returns_list(self, bridge: PAIBridge) -> None:
         tools = bridge.list_tools()
@@ -244,8 +301,7 @@ class TestTools:
     def test_get_tool_info(self, bridge: PAIBridge) -> None:
         """get_tool_info returns a PAIToolInfo for a real tool name."""
         tools = bridge.list_tools()
-        if not tools:
-            pytest.skip("No tools found in PAI installation")
+        assert tools, "fixture must provide at least one PAI tool"
         first = tools[0]
         result = bridge.get_tool_info(first.name)
         assert result is not None
@@ -261,7 +317,7 @@ class TestTools:
 
 
 class TestHooks:
-    """Test hook discovery against real PAI installation."""
+    """Test hook discovery against the deterministic local fixture."""
 
     def test_list_hooks_returns_list(self, bridge: PAIBridge) -> None:
         hooks = bridge.list_hooks()
@@ -284,8 +340,7 @@ class TestHooks:
     def test_get_hook_info(self, bridge: PAIBridge) -> None:
         """get_hook_info returns a PAIHookInfo for a real hook name."""
         hooks = bridge.list_hooks()
-        if not hooks:
-            pytest.skip("No hooks found in PAI installation")
+        assert hooks, "fixture must provide at least one PAI hook"
         first = hooks[0]
         result = bridge.get_hook_info(first.name)
         assert result is not None

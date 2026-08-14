@@ -2,24 +2,8 @@
 
 import pytest
 
-try:
-    from codomyrmex.agents.core import (
-        AgentCapabilities,
-        AgentResponse,
-        BaseAgent,
-    )
-    from codomyrmex.agents.core.config import (
-        AgentConfig,
-        get_config,
-        set_config,
-    )
-
-    _HAS_AGENTS = True
-except ImportError:
-    _HAS_AGENTS = False
-
-if not _HAS_AGENTS:
-    pytest.skip("agents deps not available", allow_module_level=True)
+from codomyrmex.agents.core import AgentCapabilities, AgentResponse, BaseAgent
+from codomyrmex.agents.core.config import AgentConfig, get_config, set_config
 
 
 class StubAgent(BaseAgent):

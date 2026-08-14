@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Model Merger..
+Module implementation, resources, and local coordination for Model Merger.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

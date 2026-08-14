@@ -8,35 +8,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from codomyrmex.dark import PDF_PRESETS
+
 from .filters import DarkPDFFilter
 
-# Preset configurations matching common use cases
-_PRESETS: dict[str, dict[str, float]] = {
-    "dark": {
-        "inversion": 0.90,
-        "brightness": 0.90,
-        "contrast": 0.90,
-        "sepia": 0.10,
-    },
-    "sepia": {
-        "inversion": 0.85,
-        "brightness": 0.95,
-        "contrast": 0.90,
-        "sepia": 0.40,
-    },
-    "high_contrast": {
-        "inversion": 1.0,
-        "brightness": 1.0,
-        "contrast": 1.3,
-        "sepia": 0.0,
-    },
-    "low_light": {
-        "inversion": 0.80,
-        "brightness": 0.70,
-        "contrast": 0.85,
-        "sepia": 0.05,
-    },
-}
+# Keep the implementation and dependency-free MCP metadata on one contract.
+_PRESETS: dict[str, dict[str, float]] = PDF_PRESETS
 
 
 class DarkPDF:
@@ -131,7 +108,7 @@ class DarkPDF:
     @property
     def page_count(self) -> int:
         """Return the number of pages in the input PDF."""
-        import fitz
+        import pymupdf as fitz
 
         doc = fitz.open(str(self.input_path))
         count = len(doc)

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Ruby..
+Module implementation, resources, and local coordination for Ruby.
 
 ## Directory Contents
 - `README.md` – File

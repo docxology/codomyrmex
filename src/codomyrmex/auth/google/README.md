@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Google..
+Module implementation, resources, and local coordination for Google.
 
 ## Directory Contents
 - `PAI.md` – File

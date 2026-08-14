@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Containers..
+Module implementation, resources, and local coordination for Containers.
 
 ## Directory Contents
 - `PAI.md` – File

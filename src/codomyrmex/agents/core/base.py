@@ -259,6 +259,8 @@ class BaseAgent(AgentInterface):
             self._validate_request(request)
             with with_correlation(request.trace_id):
                 response = self._execute_impl(request, max_tokens=max_tokens)
+                if request.id is not None:
+                    response.request_id = request.id
                 response.trace_id = request.trace_id
                 return response
         except Exception as e:
@@ -268,6 +270,7 @@ class BaseAgent(AgentInterface):
                 error=str(e),
                 metadata={"error_type": type(e).__name__},
                 request_id=request.id,
+                trace_id=request.trace_id,
             )
 
     def stream(self, request: AgentRequest) -> Iterator[str]:

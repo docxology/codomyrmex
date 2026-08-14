@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Cultural Dynamics..
+Module implementation, resources, and local coordination for Cultural Dynamics.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Filters..
+Module implementation, resources, and local coordination for Filters.
 
 ## Directory Contents
 - `PAI.md` – File

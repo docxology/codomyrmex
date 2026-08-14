@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Gmail..
+Module implementation, resources, and local coordination for Gmail.
 
 ## Directory Contents
 - `PAI.md` – File

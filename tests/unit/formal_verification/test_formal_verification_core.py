@@ -546,3 +546,14 @@ class TestFormalVerificationMcpTools:
         result = clear_model()
         assert "status" in result
         assert result["status"] in ("success", "error")
+
+    def test_verify_code_change_reports_failed_verification(self):
+        from codomyrmex.formal_verification.mcp_tools import verify_code_change
+
+        result = verify_code_change(
+            file_path="example.py",
+            original_source="def kept():\n    return 1\n",
+            modified_source="def changed():\n    return 1\n",
+        )
+        assert result["passed"] is False
+        assert result["status"] == "failure"

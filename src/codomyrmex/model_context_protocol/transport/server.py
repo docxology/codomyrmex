@@ -46,6 +46,33 @@ class MCPServerConfig:
     warm_up: bool = True
 
 
+def _validate_output_schema(tool_name: str, output: Any, schema: Any) -> list[str]:
+    """Return output-schema violations without publishing invalid content."""
+    if not isinstance(schema, dict):
+        return [f"{tool_name}: outputSchema must be a JSON object"]
+    try:
+        import jsonschema
+    except ImportError:
+        return [f"{tool_name}: output-schema validation dependency is unavailable"]
+
+    try:
+        jsonschema.Draft7Validator.check_schema(schema)
+    except jsonschema.exceptions.SchemaError as exc:
+        return [
+            f"{tool_name}: invalid outputSchema: {getattr(exc, 'message', str(exc))}"
+        ]
+
+    validator = jsonschema.Draft7Validator(schema)
+    errors: list[str] = []
+    for error in sorted(
+        validator.iter_errors(output),
+        key=lambda item: tuple(str(part) for part in item.path),
+    ):
+        path = ".".join(str(part) for part in error.absolute_path) or "<root>"
+        errors.append(f"{path}: {error.message}")
+    return errors
+
+
 class MCPServer:
     """
     Full MCP server implementation.
@@ -268,12 +295,48 @@ class MCPServer:
     # =========================================================================
 
     async def handle_request(
-        self, message: dict[str, Any], correlation_id: str | None = None
+        self, message: Any, correlation_id: str | None = None
     ) -> dict[str, Any] | None:
-        """Handle incoming JSON-RPC message."""
-        method = message.get("method", "")
-        params = message.get("params", {})
+        """Handle one JSON-RPC message with strict boundary validation."""
+        if not isinstance(message, dict):
+            return {
+                "jsonrpc": "2.0",
+                "id": None,
+                "error": {"code": -32600, "message": "Invalid Request"},
+            }
+        if message.get("jsonrpc") != "2.0":
+            return {
+                "jsonrpc": "2.0",
+                "id": message.get("id"),
+                "error": {"code": -32600, "message": "Invalid Request"},
+            }
         request_id = message.get("id")
+        if "id" in message and (
+            isinstance(request_id, bool)
+            or (
+                request_id is not None and not isinstance(request_id, (str, int, float))
+            )
+        ):
+            return {
+                "jsonrpc": "2.0",
+                "id": None,
+                "error": {"code": -32600, "message": "Invalid Request"},
+            }
+        method = message.get("method")
+        if not isinstance(method, str) or not method.strip():
+            return {
+                "jsonrpc": "2.0",
+                "id": request_id,
+                "error": {"code": -32600, "message": "Invalid Request"},
+            }
+        if "params" in message and not isinstance(message["params"], dict):
+            return {
+                "jsonrpc": "2.0",
+                "id": request_id,
+                "error": {"code": -32602, "message": "Invalid params"},
+            }
+
+        params = message.get("params", {})
 
         with with_correlation(correlation_id):
             # Notifications have no id
@@ -384,10 +447,34 @@ class MCPServer:
         tool_name = params.get("name", "")
         arguments = params.get("arguments", {})
 
+        if not isinstance(tool_name, str) or not tool_name.strip():
+            return validation_error(
+                tool_name=str(tool_name),
+                message="Tool name must be a non-empty string",
+                field_errors=[
+                    FieldError(field="name", constraint="must be a non-empty string")
+                ],
+            ).to_mcp_response()
+
         # ── Look up the tool ──────────────────────────────────────────
         tool_entry = self._tool_registry.get(tool_name) if tool_name else None
         if not tool_entry:
             return not_found_error(tool_name).to_mcp_response()
+
+        if not isinstance(arguments, dict):
+            return validation_error(
+                tool_name=tool_name,
+                message=(
+                    f"Validation failed for tool {tool_name!r}: "
+                    "arguments must be an object"
+                ),
+                field_errors=[
+                    FieldError(
+                        field="arguments",
+                        constraint="must be an object",
+                    )
+                ],
+            ).to_mcp_response()
 
         # ── Rate-limit check ──────────────────────────────────────────
         if not self._rate_limiter.allow(tool_name):
@@ -443,6 +530,20 @@ class MCPServer:
             return execution_error(tool_name, exc).to_mcp_response()
 
         if result.status == "success":
+            if "outputSchema" in tool_schema:
+                output_errors = _validate_output_schema(
+                    tool_name, result.data, tool_schema["outputSchema"]
+                )
+                if output_errors:
+                    return MCPToolError(
+                        code=MCPErrorCode.VALIDATION_ERROR,
+                        message=(
+                            f"Tool {tool_name!r} returned invalid structured output: "
+                            "; ".join(output_errors)
+                        ),
+                        tool_name=tool_name,
+                        module="OutputSchema",
+                    ).to_mcp_response()
             content = [{"type": "text", "text": json.dumps(result.data)}]
             response: dict[str, Any] = {"content": content}
 
@@ -454,8 +555,13 @@ class MCPServer:
         # MCPToolResult error wrapping.
         err_msg = result.error.error_message if result.error else "Unknown error"
         err_type = result.error.error_type if result.error else "Unknown"
+        error_code = (
+            MCPErrorCode.ACCESS_DENIED
+            if err_type in {"SecurityError", "AccessDeniedError", "TrustError"}
+            else MCPErrorCode.EXECUTION_ERROR
+        )
         return MCPToolError(
-            code=MCPErrorCode.EXECUTION_ERROR,
+            code=error_code,
             message=err_msg,
             tool_name=tool_name,
             module=err_type,
@@ -559,7 +665,18 @@ class MCPServer:
                     print(output, flush=True)
 
             except json.JSONDecodeError:
-                continue
+                # JSON-RPC parse failures are protocol errors, not silent
+                # success. Stdio has no request ID to correlate, so use null.
+                print(
+                    json.dumps(
+                        {
+                            "jsonrpc": "2.0",
+                            "id": None,
+                            "error": {"code": -32700, "message": "Parse error"},
+                        }
+                    ),
+                    flush=True,
+                )
             except KeyboardInterrupt:
                 break
             except Exception as e:
@@ -646,7 +763,17 @@ class MCPServer:
         # --- MCP JSON-RPC endpoint (Streamable HTTP) ---
         @app.post("/mcp")
         async def mcp_endpoint(request: Request) -> JSONResponse:
-            body = await request.json()
+            try:
+                body = await request.json()
+            except (json.JSONDecodeError, ValueError):
+                return JSONResponse(
+                    content={
+                        "jsonrpc": "2.0",
+                        "id": None,
+                        "error": {"code": -32700, "message": "Parse error"},
+                    },
+                    status_code=400,
+                )
             cid = request.headers.get("x-correlation-id") or request.headers.get(
                 "X-Correlation-ID"
             )
@@ -682,8 +809,16 @@ class MCPServer:
         async def call_tool(tool_name: str, request: Request) -> JSONResponse:
             try:
                 body = await request.json()
-            except Exception:
-                body = {}
+            except (json.JSONDecodeError, ValueError):
+                return JSONResponse(
+                    content={"error": "Malformed JSON request body"},
+                    status_code=400,
+                )
+            if not isinstance(body, dict):
+                return JSONResponse(
+                    content={"error": "Tool arguments must be a JSON object"},
+                    status_code=400,
+                )
 
             cid = request.headers.get("x-correlation-id") or request.headers.get(
                 "X-Correlation-ID"

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Orchestrator..
+Module implementation, resources, and local coordination for Orchestrator.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

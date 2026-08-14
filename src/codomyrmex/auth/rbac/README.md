@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Rbac..
+Module implementation, resources, and local coordination for Rbac.
 
 ## Directory Contents
 - `PAI.md` – File

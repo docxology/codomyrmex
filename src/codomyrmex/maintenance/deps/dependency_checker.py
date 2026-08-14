@@ -1,7 +1,9 @@
 import argparse
+import importlib
 import json
 import subprocess
 import sys
+import warnings
 from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
@@ -19,6 +21,13 @@ Usage:
     # Example usage here
 """
 logger = get_logger(__name__)
+
+# Package metadata and import names differ for a few dependencies.  Keeping
+# this mapping here makes the runtime check report the package name while
+# importing the module users actually consume.
+_IMPORT_NAME_OVERRIDES = {
+    "python_dotenv": "dotenv",
+}
 
 __all__ = [
     "check_dependencies",
@@ -91,7 +100,19 @@ def check_dependencies() -> dict[str, Any]:
         results[category] = {}
         for package in packages:
             try:
-                __import__(package.replace(".", "_").replace("-", "_"))
+                import_name = _IMPORT_NAME_OVERRIDES.get(package, package)
+                # Bandit currently imports stevedore with a deprecated,
+                # no-op verify_requirements argument.  This is a known
+                # dependency-boundary warning; keep the project-wide warning
+                # policy strict for every other warning.
+                with warnings.catch_warnings():
+                    warnings.filterwarnings(
+                        "ignore",
+                        message=("^The verify_requirements argument is now a no-op"),
+                        category=DeprecationWarning,
+                        module=r"^stevedore\.extension$",
+                    )
+                    importlib.import_module(import_name)
                 results[category][package] = {"installed": True, "status": "ok"}
             except ImportError:
                 results[category][package] = {"installed": False, "status": "missing"}

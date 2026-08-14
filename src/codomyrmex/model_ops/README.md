@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Model Ops..
+Module implementation, resources, and local coordination for Model Ops.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Data..
+Module implementation, resources, and local coordination for Data.
 
 ## Directory Contents
 - `README.md` – File

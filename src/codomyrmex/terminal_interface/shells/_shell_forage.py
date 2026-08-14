@@ -37,7 +37,11 @@ class ShellForageMixin:
         print()
         self.session_data["commands_run"] += 1
 
-        if not self.discovery or not self.discovery.modules:
+        if self.discovery is None:
+            print("❌ Discovery system not available - running in limited mode")
+            return
+
+        if not self.discovery.modules:
             print("📡 First scanning for modules...")
             self.discovery._discover_modules()
 

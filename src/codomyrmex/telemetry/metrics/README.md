@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Metrics..
+Module implementation, resources, and local coordination for Metrics.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Rhizome..
+Module implementation, resources, and local coordination for Rhizome.
 
 ## Directory Contents
 - `PAI.md` – File

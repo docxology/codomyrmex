@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Specialized..
+Module implementation, resources, and local coordination for Specialized.
 
 ## Directory Contents
 - `PAI.md` – File

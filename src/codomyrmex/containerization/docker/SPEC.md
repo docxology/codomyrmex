@@ -8,7 +8,7 @@ Provides Docker container lifecycle management, multi-stage Dockerfile generatio
 
 ## Architecture
 
-Three-class design across three files. `DockerManager` wraps `docker.from_env()` (or a custom `docker_host` URL) for image build, push, container run/stop/remove, and listing. `BuildGenerator` produces `MultiStageBuild` configurations with language-specific templates (Python, Node, Java, Go, generic). `ImageOptimizer` inspects local images via docker-py and generates `OptimizationSuggestion` objects.
+Three-class design across three files. `DockerManager` wraps docker-py with an explicit API-version floor (or a custom `docker_host` URL) for image build, push, container run/stop/remove, and listing. `DockerManager` and `ImageOptimizer` expose `close()` plus context-manager support and close failed clients, preventing Unix-socket leaks when no daemon is running. `BuildGenerator` produces `MultiStageBuild` configurations with language-specific templates (Python, Node, Java, Go, generic). `ImageOptimizer` inspects local images via docker-py and generates `OptimizationSuggestion` objects.
 
 ## Key Classes and Methods
 
@@ -16,7 +16,7 @@ Three-class design across three files. `DockerManager` wraps `docker.from_env()`
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `__init__` | `docker_host: str or None` | -- | Initialize client via `docker.from_env()` or custom host |
+| `__init__` | `docker_host: str or None` | -- | Initialize client via explicit-version docker-py or custom host |
 | `build_image` | `config: ContainerConfig, push: bool, registry_auth` | `dict` | Build image; optionally push after build |
 | `push_image` | `image_name: str, auth_config: dict` | `dict` | Push image to registry with auth |
 | `run_container` | `config: ContainerConfig, detach: bool` | `dict` | Run container with env, ports, volumes, networks, restart policy |
@@ -75,7 +75,7 @@ Dataclass configuring image builds and container runs.
 
 ## Constraints
 
-- `DockerManager._initialize_client` calls `client.ping()` to verify connectivity; sets `self.client = None` on failure.
+- `DockerManager._initialize_client` performs a bounded Docker CLI or raw endpoint preflight before creating the SDK client; it sets `self.client = None` when the daemon is unreachable and never uses docker-py's failed HTTP probe for availability.
 - `run_container` uses only the first network from `config.networks`.
 - `build_image` always sets `rm=True` and `pull=True` for builds.
 - `BuildGenerator.create_multi_stage_build` dispatches by `build_type` key: `python`, `node`, `java`, `go`, or generic.

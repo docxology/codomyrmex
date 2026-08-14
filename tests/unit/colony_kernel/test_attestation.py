@@ -107,6 +107,14 @@ def test_event_serialization_is_stable(tmp_path):
     assert event.event_hash == event.computed_hash()
 
 
+def test_ledger_context_closes_idempotently(tmp_path):
+    with _ledger(tmp_path) as ledger:
+        ledger.record_proposal("run-1", "agent-a", {"proposal_id": "p"})
+
+    # Explicit cleanup remains safe after the context manager has closed it.
+    ledger.close()
+
+
 def test_ed25519_public_verifier_is_independent_when_available():
     signer = Ed25519Signer.generate(key_id="research")
     verifier = Ed25519Verifier(signer.public_key_bytes(), key_id="research")

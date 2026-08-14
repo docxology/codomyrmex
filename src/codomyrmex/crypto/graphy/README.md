@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Graphy..
+Module implementation, resources, and local coordination for Graphy.
 
 ## Directory Contents
 - `PAI.md` – File

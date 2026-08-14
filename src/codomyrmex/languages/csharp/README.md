@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Csharp..
+Module implementation, resources, and local coordination for Csharp.
 
 ## Directory Contents
 - `README.md` – File

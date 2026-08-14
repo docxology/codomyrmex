@@ -8,10 +8,7 @@ This module tests all components of the terminal interface functionality:
 
 import pytest
 
-try:
-    from codomyrmex.terminal_interface.interactive_shell import InteractiveShell
-except ImportError:
-    pytest.skip("terminal_interface module not available", allow_module_level=True)
+from codomyrmex.terminal_interface.interactive_shell import InteractiveShell
 
 
 @pytest.mark.unit
@@ -61,14 +58,6 @@ class TestInteractiveShell:
 
     def test_do_explore_overview(self):
         """Test explore command overview functionality with real discovery."""
-        try:
-            from codomyrmex.system_discovery import SystemDiscovery
-
-            discovery = SystemDiscovery()
-            self.shell.discovery = discovery
-        except ImportError:
-            pytest.skip("SystemDiscovery not available")
-
         initial_commands = self.shell.session_data["commands_run"]
         self.shell.do_explore("")
 
@@ -77,14 +66,6 @@ class TestInteractiveShell:
 
     def test_do_explore_specific_module(self):
         """Test explore command for specific module with real discovery."""
-        try:
-            from codomyrmex.system_discovery import SystemDiscovery
-
-            discovery = SystemDiscovery()
-            self.shell.discovery = discovery
-        except ImportError:
-            pytest.skip("SystemDiscovery not available")
-
         # Test with a real module name
         self.shell.do_explore("logging_monitoring")
 
@@ -102,14 +83,6 @@ class TestInteractiveShell:
 
     def test_do_status_with_discovery(self):
         """Test status command with discovery available."""
-        try:
-            from codomyrmex.system_discovery import SystemDiscovery
-
-            discovery = SystemDiscovery()
-            self.shell.discovery = discovery
-        except ImportError:
-            pytest.skip("SystemDiscovery not available")
-
         self.shell.do_status("")
         # Should complete without error
 
@@ -126,14 +99,6 @@ class TestInteractiveShell:
 
     def test_do_demo_with_discovery(self):
         """Test demo command with discovery available."""
-        try:
-            from codomyrmex.system_discovery import SystemDiscovery
-
-            discovery = SystemDiscovery()
-            self.shell.discovery = discovery
-        except ImportError:
-            pytest.skip("SystemDiscovery not available")
-
         self.shell.do_demo("")
         # Should complete without error
 
@@ -195,14 +160,6 @@ class TestInteractiveShell:
 
     def test_do_dive(self):
         """Test dive command with real discovery."""
-        try:
-            from codomyrmex.system_discovery import SystemDiscovery
-
-            discovery = SystemDiscovery()
-            self.shell.discovery = discovery
-        except ImportError:
-            pytest.skip("SystemDiscovery not available")
-
         # Test with a real module
         self.shell.do_dive("logging_monitoring")
         # Should complete without error
@@ -252,14 +209,6 @@ class TestInteractiveShell:
 
     def test_complete_explore(self):
         """Test command completion for explore with real discovery."""
-        try:
-            from codomyrmex.system_discovery import SystemDiscovery
-
-            discovery = SystemDiscovery()
-            self.shell.discovery = discovery
-        except ImportError:
-            pytest.skip("SystemDiscovery not available")
-
         # Test completion
         completions = self.shell.complete_explore(
             "log", line="explore log", begidx=8, endidx=11
@@ -292,15 +241,7 @@ class TestInteractiveShell:
         """Test that session data is properly tracked."""
         initial_commands = self.shell.session_data["commands_run"]
 
-        # Run a command
-        try:
-            from codomyrmex.system_discovery import SystemDiscovery
-
-            discovery = SystemDiscovery()
-            self.shell.discovery = discovery
-        except ImportError:
-            self.shell.discovery = None
-
+        # Run a command through the production discovery adapter.
         self.shell.do_explore("")
 
         # Should increment command count
@@ -323,22 +264,22 @@ class TestShellIntegration:
 
     def test_shell_initialization_with_discovery(self):
         """Test shell initialization with working discovery."""
-        try:
-            from codomyrmex.system_discovery import SystemDiscovery
+        from codomyrmex.terminal_interface.shells._shell_discovery import (
+            TerminalDiscoveryView,
+        )
 
-            shell = InteractiveShell()
-            # Discovery may or may not be available
-            assert shell.discovery is None or isinstance(
-                shell.discovery, SystemDiscovery
-            )
-        except ImportError:
-            pytest.skip("SystemDiscovery not available")
+        shell = InteractiveShell()
+        assert isinstance(shell.discovery, TerminalDiscoveryView)
 
     def test_shell_initialization_without_discovery(self):
-        """Test shell initialization when discovery import fails."""
+        """Test shell initialization stays on the terminal-local boundary."""
+        from codomyrmex.terminal_interface.shells._shell_discovery import (
+            TerminalDiscoveryView,
+        )
+
         shell = InteractiveShell()
-        # Discovery may be None if import fails
-        assert shell.discovery is None or shell.discovery is not None
+        assert isinstance(shell.discovery, TerminalDiscoveryView)
+        assert shell.discovery.modules == {}
 
     def test_command_execution_flow(self, capsys):
         """Test complete command execution flow."""
@@ -393,10 +334,10 @@ class TestCommandValidation:
         """Test handling of empty commands."""
         # Empty command should not cause issues
         result = self.shell.onecmd("")
-        assert result is None
+        assert result is False
 
         result = self.shell.onecmd("   ")
-        assert result is None
+        assert result is False
 
 
 @pytest.mark.unit

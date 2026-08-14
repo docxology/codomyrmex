@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Linting..
+Module implementation, resources, and local coordination for Linting.
 
 ## Directory Contents
 - `PAI.md` – File

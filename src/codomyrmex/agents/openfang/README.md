@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Openfang..
+Module implementation, resources, and local coordination for Openfang.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

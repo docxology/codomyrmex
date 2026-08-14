@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Authentication..
+Module implementation, resources, and local coordination for Authentication.
 
 ## Directory Contents
 - `PAI.md` – File

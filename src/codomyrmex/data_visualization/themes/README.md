@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Themes..
+Module implementation, resources, and local coordination for Themes.
 
 ## Directory Contents
 - `PAI.md` – File

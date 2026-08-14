@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Fine Tuning..
+Module implementation, resources, and local coordination for Fine Tuning.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -24,7 +24,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import StrEnum
 from pathlib import Path
-from typing import Any, Protocol
+from typing import Any, Protocol, Self
 
 LEDGER_SCHEMA_VERSION = "1.0"
 
@@ -353,6 +353,7 @@ class AttestationLedger:
         self._signer = signer or HMACSigner(os.urandom(32), key_id="ephemeral")
         self._clock = clock or time.time
         self._lock = threading.RLock()
+        self._closed = False
         self._conn = sqlite3.connect(
             os.fspath(db_path), check_same_thread=False, isolation_level=None
         )
@@ -366,8 +367,32 @@ class AttestationLedger:
         return self._signer
 
     def close(self) -> None:
+        """Close the SQLite connection exactly once."""
         with self._lock:
+            if self._closed:
+                return
             self._conn.close()
+            self._closed = True
+
+    def __del__(self) -> None:
+        """Release an unclosed connection during garbage collection.
+
+        Callers should still use :meth:`close` or the context-manager interface;
+        this finalizer is a last-resort guard for short-lived ledgers and keeps
+        Python 3.13 strict ResourceWarning runs from treating abandoned native
+        handles as test failures.
+        """
+        try:
+            self.close()
+        except Exception:
+            # Finalizers must never mask the exception that caused collection.
+            pass
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, *_: Any) -> None:
+        self.close()
 
     def _next_sequence(self, run_id: str) -> tuple[int, str]:
         row = self._conn.execute(

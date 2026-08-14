@@ -480,15 +480,27 @@ def _read_manifest(path: Path) -> PublicationManifest:
     )
 
 
-def _verify_checksum_file(root: Path, filename: str, algorithm: str) -> list[str]:
+def _verify_checksum_file(
+    root: Path,
+    filename: str,
+    algorithm: str,
+    *,
+    expected_paths: set[str] | None = None,
+) -> list[str]:
     path = root / filename
     if not path.is_file():
         return [f"Missing checksum file: {filename}"]
     errors: list[str] = []
-    for line_number, line in enumerate(
-        path.read_text(encoding="utf-8").splitlines(),
-        start=1,
-    ):
+    seen: set[str] = set()
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except (OSError, UnicodeError) as exc:
+        return [f"Unable to read checksum file {filename}: {exc}"]
+    if not any(line.strip() for line in lines):
+        return [f"Checksum file is empty: {filename}"]
+    expected_length = hashlib.new(algorithm).digest_size * 2
+    root_resolved = root.resolve()
+    for line_number, line in enumerate(lines, start=1):
         if not line.strip():
             continue
         try:
@@ -496,11 +508,35 @@ def _verify_checksum_file(root: Path, filename: str, algorithm: str) -> list[str
         except ValueError:
             errors.append(f"{filename}:{line_number}: malformed checksum line")
             continue
-        target = root / relative
+        relative = relative.strip()
+        relative_path = Path(relative)
+        if relative_path.is_absolute() or ".." in relative_path.parts:
+            errors.append(f"{filename}:{line_number}: non-portable path {relative}")
+            continue
+        if len(expected) != expected_length or any(
+            character not in "0123456789abcdefABCDEF" for character in expected
+        ):
+            errors.append(f"{filename}:{line_number}: malformed digest for {relative}")
+            continue
+        if relative in seen:
+            errors.append(f"{filename}:{line_number}: duplicate entry for {relative}")
+            continue
+        seen.add(relative)
+        target = root / relative_path
+        try:
+            target.resolve().relative_to(root_resolved)
+        except ValueError:
+            errors.append(f"{filename}:{line_number}: path escapes bundle: {relative}")
+            continue
         if not target.is_file():
             errors.append(f"{filename}:{line_number}: missing {relative}")
-        elif _hash_file(target, algorithm) != expected:
+        elif _hash_file(target, algorithm) != expected.lower():
             errors.append(f"{filename}:{line_number}: digest mismatch for {relative}")
+    if expected_paths is not None:
+        missing = sorted(expected_paths - seen)
+        unexpected = sorted(seen - expected_paths)
+        errors.extend(f"{filename}: missing expected entry {item}" for item in missing)
+        errors.extend(f"{filename}: unexpected entry {item}" for item in unexpected)
     return errors
 
 
@@ -555,6 +591,26 @@ def verify_publication_bundle(
     for role in sorted(required_roles - roles):
         errors.append(f"Missing required artifact role: {role}")
 
+    outcome_names: set[str] = set()
+    for name, passed, detail in manifest.validation_outcomes:
+        normalized_name = name.strip()
+        if not normalized_name:
+            errors.append("Validation outcome has an empty name")
+            continue
+        if normalized_name in outcome_names:
+            errors.append(f"Duplicate validation outcome: {normalized_name}")
+            continue
+        outcome_names.add(normalized_name)
+        if not isinstance(passed, bool):
+            errors.append(
+                f"Validation outcome {normalized_name} has a non-boolean status"
+            )
+        elif not passed:
+            errors.append(
+                f"Validation outcome failed: {normalized_name}"
+                + (f" ({detail})" if detail else "")
+            )
+
     for artifact in manifest.artifacts:
         relative = Path(artifact.path)
         if relative.is_absolute() or ".." in relative.parts:
@@ -575,8 +631,24 @@ def verify_publication_bundle(
             continue
         verified.append(artifact.path)
 
-    errors.extend(_verify_checksum_file(root, "SHA256SUMS", "sha256"))
-    errors.extend(_verify_checksum_file(root, "SHA512SUMS", "sha512"))
+    checksum_paths = {artifact.path for artifact in manifest.artifacts}
+    checksum_paths.add("publication_manifest.json")
+    errors.extend(
+        _verify_checksum_file(
+            root,
+            "SHA256SUMS",
+            "sha256",
+            expected_paths=checksum_paths,
+        )
+    )
+    errors.extend(
+        _verify_checksum_file(
+            root,
+            "SHA512SUMS",
+            "sha512",
+            expected_paths=checksum_paths,
+        )
+    )
 
     content = next(
         (artifact for artifact in manifest.artifacts if artifact.role == "content-pdf"),

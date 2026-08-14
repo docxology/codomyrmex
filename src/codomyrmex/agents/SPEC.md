@@ -135,6 +135,11 @@ graph TD
 
 ### Core Capabilities
 
+2. **Capability Navigation**: The `navigation/` package provides a stable,
+   read-only catalog of declared agents, runtime modules, and optionally
+   discovered MCP tools. It separates metadata discovery from live probes and
+   execution so agents can plan against an explicit, bounded surface.
+
 1. **Agent Framework Integration**: Integrate with multiple agent frameworks:
    - CLI-based: Jules, Gemini, OpenCode, OpenClaw, Mistral Vibe, Every Code (OpenClaw via `agents/openclaw/`)
    - API-based: Claude, Codex, O1, DeepSeek, Qwen

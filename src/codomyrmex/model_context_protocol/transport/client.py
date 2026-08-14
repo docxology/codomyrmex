@@ -38,6 +38,8 @@ class MCPClientConfig:
         retry_delay: Base delay (seconds) between retries (doubled each attempt).
         health_check_interval: Seconds between health pings (0 = disabled).
         connection_pool_size: Max simultaneous HTTP connections.
+        retry_tool_calls: Permit retries for ``tools/call`` requests. Disabled
+            by default because a timed-out side effect may still be running.
     """
 
     name: str = "codomyrmex-mcp-client"
@@ -48,6 +50,7 @@ class MCPClientConfig:
     retry_delay: float = 0.5
     health_check_interval: float = 0.0
     connection_pool_size: int = 10
+    retry_tool_calls: bool = False
 
 
 class MCPClient:
@@ -135,7 +138,11 @@ class MCPClient:
         effective_timeout = timeout or self.config.timeout_seconds
         last_exc: Exception | None = None
 
-        for attempt in range(1, self.config.max_retries + 1):
+        max_attempts = self.config.max_retries
+        if method == "tools/call" and not self.config.retry_tool_calls:
+            max_attempts = 1
+
+        for attempt in range(1, max_attempts + 1):
             try:
                 response = await self._transport.send(msg, timeout=effective_timeout)
                 if "error" in response:
@@ -145,13 +152,13 @@ class MCPClient:
                 return response.get("result", {})
             except (TimeoutError, OSError, ConnectionError) as exc:
                 last_exc = exc
-                if attempt < self.config.max_retries:
+                if attempt < max_attempts:
                     delay = self.config.retry_delay * (2 ** (attempt - 1))
                     logger.warning(
                         "MCP request %s attempt %d/%d failed (%s), retrying in %.1fs",
                         method,
                         attempt,
-                        self.config.max_retries,
+                        max_attempts,
                         exc,
                         delay,
                     )
@@ -160,11 +167,11 @@ class MCPClient:
                     logger.error(
                         "MCP request %s failed after %d attempts: %s",
                         method,
-                        self.config.max_retries,
+                        max_attempts,
                         exc,
                     )
         raise MCPClientError(
-            f"Request {method} failed after {self.config.max_retries} retries: {last_exc}"
+            f"Request {method} failed after {max_attempts} retries: {last_exc}"
         )
 
     async def _notify(self, method: str, params: dict[str, Any] | None = None) -> None:
@@ -360,23 +367,37 @@ class _StdioTransport(_Transport):
 
     def __init__(self, process: asyncio.subprocess.Process) -> None:
         self._process = process
+        self._io_lock = asyncio.Lock()
 
     async def send(
         self, message: dict[str, Any], *, timeout: float = 30.0
     ) -> dict[str, Any]:
-        line = json.dumps(message) + "\n"
-        self._process.stdin.write(line.encode())
-        await self._process.stdin.drain()
-        raw = await asyncio.wait_for(
-            self._process.stdout.readline(),
-            timeout=timeout,
-        )
-        return json.loads(raw.decode().strip())
+        async with self._io_lock:
+            line = json.dumps(message) + "\n"
+            self._process.stdin.write(line.encode())
+            await self._process.stdin.drain()
+            raw = await asyncio.wait_for(
+                self._process.stdout.readline(),
+                timeout=timeout,
+            )
+            try:
+                response = json.loads(raw.decode().strip())
+            except json.JSONDecodeError as exc:
+                raise MCPClientError("MCP stdio returned invalid JSON") from exc
+
+            expected_id = message.get("id")
+            if expected_id is not None and response.get("id") != expected_id:
+                raise MCPClientError(
+                    f"MCP stdio response ID mismatch: expected {expected_id!r}, "
+                    f"got {response.get('id')!r}"
+                )
+            return response
 
     async def send_notification(self, message: dict[str, Any]) -> None:
-        line = json.dumps(message) + "\n"
-        self._process.stdin.write(line.encode())
-        await self._process.stdin.drain()
+        async with self._io_lock:
+            line = json.dumps(message) + "\n"
+            self._process.stdin.write(line.encode())
+            await self._process.stdin.drain()
 
     async def close(self) -> None:
         if self._process.returncode is None:

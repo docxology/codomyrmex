@@ -81,6 +81,19 @@ def _create_agent_request(prompt: str, args: Any) -> AgentRequest:
     )
 
 
+def _cli_client_config(client_name: str, args: Any) -> dict[str, Any] | None:
+    """Build a deterministic CLI override for diagnostics and tests.
+
+    The normal CLI parser does not set ``command``.  A caller that needs to
+    exercise an unavailable-command path can provide it explicitly without
+    mutating global configuration or accidentally invoking a live provider.
+    """
+    command = getattr(args, "command", None)
+    if not command:
+        return None
+    return {f"{client_name.lower()}_command": str(command)}
+
+
 def _handle_agent_execute(client_class, client_name: str, args: Any) -> bool:
     """Handle execute command for any agent."""
     try:
@@ -93,7 +106,8 @@ def _handle_agent_execute(client_class, client_name: str, args: Any) -> bool:
         prompt = args.prompt
         logger.debug("Executing %s request: %s...", client_name, prompt[:50])
 
-        client = client_class()
+        config = _cli_client_config(client_name, args)
+        client = client_class(config=config) if config else client_class()
         request = _create_agent_request(prompt, args)
         response = client.execute(request)
 
@@ -132,7 +146,8 @@ def _handle_agent_stream(client_class, client_name: str, args: Any) -> bool:
         prompt = args.prompt
         logger.debug("Streaming %s response: %s...", client_name, prompt[:50])
 
-        client = client_class()
+        config = _cli_client_config(client_name, args)
+        client = client_class(config=config) if config else client_class()
         request = _create_agent_request(prompt, args)
 
         print_section(f"{client_name} Streaming Response")
@@ -210,7 +225,8 @@ def _handle_cli_agent_check(client_class, client_name: str, args: Any) -> bool:
             )
             return False
 
-        client = client_class()
+        config = _cli_client_config(client_name, args)
+        client = client_class(config=config) if config else client_class()
         available = client.is_available()
 
         print_section(f"{client_name} Availability Check")
@@ -393,7 +409,8 @@ def handle_opencode_init(args):
             print_error("OpenCode client not available", context="Module not imported")
             return False
 
-        client = OpenCodeClient()
+        config = _cli_client_config("OpenCode", args)
+        client = OpenCodeClient(config=config) if config else OpenCodeClient()
         project_path = getattr(args, "path", None)
 
         label = project_path or "current directory"
@@ -426,7 +443,8 @@ def handle_opencode_version(args):
             print_error("OpenCode client not available", context="Module not imported")
             return False
 
-        client = OpenCodeClient()
+        config = _cli_client_config("OpenCode", args)
+        client = OpenCodeClient(config=config) if config else OpenCodeClient()
         version_info = client.get_opencode_version()
 
         print_section("OpenCode Version")

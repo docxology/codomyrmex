@@ -22,6 +22,8 @@ The `terminal_interface` module provides rich CLI capabilities: colored output, 
 1. **Interactive Shell**: A REPL for system commands.
 2. **Output Formatting**: Tables, messages, progress bars.
 3. **Input Handling**: Prompts, menus, validation.
+4. **Degraded Operation**: Empty input is a no-op, and discovery-dependent
+   commands report limited mode instead of crashing when discovery is absent.
 
 ## Interface Contracts
 

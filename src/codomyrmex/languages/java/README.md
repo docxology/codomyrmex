@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Java..
+Module implementation, resources, and local coordination for Java.
 
 ## Directory Contents
 - `README.md` – File

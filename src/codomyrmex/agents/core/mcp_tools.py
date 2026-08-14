@@ -55,13 +55,16 @@ def think(prompt: str, depth: str = "normal") -> dict:
 
     response = agent.execute(AgentRequest(prompt=prompt))
 
-    trace = agent.last_trace
+    trace = agent.last_trace if response.is_success() else None
     return {
-        "status": "success",
+        "status": "success" if response.is_success() else "error",
         "content": response.content,
+        "error": response.error,
         "confidence": trace.total_confidence if trace else 0.0,
         "steps": trace.step_count if trace else 0,
         "depth": td.value,
+        "request_id": response.request_id,
+        "trace_id": response.trace_id,
     }
 
 
@@ -160,49 +163,29 @@ def react_step(
         dict with: thought (str), action (str), action_input (str),
                    is_final (bool), step_number (int).
     """
-    try:
-        from codomyrmex.agents.core.react import ReActAgent
-        from codomyrmex.agents.core.registry import ToolRegistry
+    if not observation.strip():
+        return {"status": "error", "message": "Observation is required"}
+    if max_steps < 1:
+        return {"status": "error", "message": "max_steps must be at least 1"}
 
-        tools = available_tools or ["search", "think", "calculate", "conclude"]
-
-        # Build a lightweight registry with the named tools
-        registry = ToolRegistry()
-        for tool_name in tools:
-            # Register a no-op function for each tool name so the agent
-            # can plan with them even though they aren't wired up here.
-            registry.register_function(
-                lambda **kw: kw,
-                name=tool_name,
-                description=f"Tool: {tool_name}",
-            )
-
-        agent = ReActAgent(
-            name="react_mcp",
-            tool_registry=registry,
-            max_steps=max_steps,
-        )
-
-        from codomyrmex.agents.core.base import AgentRequest
-
-        response = agent.execute(AgentRequest(prompt=observation))
-
-        return {
-            "status": "success",
-            "thought": f"Given observation '{observation}', considering available actions: {tools}",
-            "action": tools[0] if tools else "think",
-            "action_input": observation,
-            "is_final": response.is_success(),
-            "step_number": response.metadata.get("steps_taken", 1)
-            if response.metadata
-            else 1,
-            "content": response.content,
-        }
-    except Exception as e:
-        return {
-            "status": "error",
-            "message": str(e),
-        }
+    tools = available_tools or ["search", "think", "calculate", "conclude"]
+    # This MCP surface has no injected LLM or executable tool resolver. A
+    # no-op lambda is not an action, so expose the result as planning-only
+    # instead of claiming that a tool ran successfully.
+    return {
+        "status": "unavailable",
+        "message": (
+            "ReAct planning is available, but execution requires an injected "
+            "LLM client and real tool registry. No action was executed."
+        ),
+        "thought": f"Considering available actions: {tools}",
+        "action": tools[0] if tools else "think",
+        "action_input": observation,
+        "is_final": False,
+        "step_number": 0,
+        "content": "",
+        "executed": False,
+    }
 
 
 __all__ = [

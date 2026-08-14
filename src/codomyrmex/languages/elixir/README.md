@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Elixir..
+Module implementation, resources, and local coordination for Elixir.
 
 ## Directory Contents
 - `README.md` – File

@@ -1024,6 +1024,20 @@ class TestDeadLetterQueueReplay:
         finally:
             path.unlink(missing_ok=True)
 
+    def test_replay_same_entry_is_not_executed_twice(self):
+        dlq, path = _tmp_dlq()
+        try:
+            eid = dlq.add(operation="op", error="err")
+            calls = []
+            first = dlq.replay(eid, callback=lambda op, args: calls.append(op))
+            second = dlq.replay(eid, callback=lambda op, args: calls.append(op))
+            assert first["success"] is True
+            assert second["success"] is False
+            assert "already replayed" in second["error"]
+            assert calls == ["op"]
+        finally:
+            path.unlink(missing_ok=True)
+
     def test_replay_not_found(self):
         dlq, path = _tmp_dlq()
         try:

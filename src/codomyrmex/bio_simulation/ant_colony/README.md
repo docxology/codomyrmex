@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Ant Colony..
+Module implementation, resources, and local coordination for Ant Colony.
 
 ## Directory Contents
 - `PAI.md` – File

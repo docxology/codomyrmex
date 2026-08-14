@@ -705,6 +705,44 @@ class TestStructuredContentResponse:
         # structuredContent should be the raw data from MCPToolResult
         assert result["structuredContent"]["result"] is not None
 
+    def test_invalid_structured_output_returns_validation_error(self):
+        out_schema = {
+            "type": "object",
+            "properties": {"result": {"type": "integer"}},
+            "required": ["result"],
+        }
+        srv = MCPServer(MCPServerConfig(name="bad-struct-content", version="0.1.0"))
+
+        srv.register_tool(
+            name="bad_structured_out",
+            schema={
+                "name": "bad_structured_out",
+                "description": "Returns invalid structured output",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {},
+                    "required": [],
+                },
+                "outputSchema": out_schema,
+            },
+            handler=lambda: "not-an-integer",
+        )
+
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 2,
+                    "method": "tools/call",
+                    "params": {"name": "bad_structured_out", "arguments": {}},
+                }
+            )
+        )
+        result = resp["result"]
+        assert result.get("isError") is True
+        error_data = json.loads(result["content"][0]["text"])
+        assert error_data["code"] == "VALIDATION_ERROR"
+
     def test_tool_without_output_schema_has_no_structured_content(self):
         srv = MCPServer(MCPServerConfig(name="no-struct", version="0.1.0"))
 
@@ -799,6 +837,70 @@ class TestToolExecutionErrorWrapping:
         assert result.get("isError") is True
         error_data = json.loads(result["content"][0]["text"])
         assert error_data["code"] == "EXECUTION_ERROR"
+
+    def test_non_object_arguments_return_validation_error(self):
+        srv = MCPServer(MCPServerConfig(name="bad-arguments", version="0.1.0"))
+
+        @srv.tool(name="expects_object", description="Needs object arguments")
+        def expects_object(value: str = "ok") -> str:
+            return value
+
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 2,
+                    "method": "tools/call",
+                    "params": {"name": "expects_object", "arguments": "bad"},
+                }
+            )
+        )
+        result = resp["result"]
+        assert result.get("isError") is True
+        error_data = json.loads(result["content"][0]["text"])
+        assert error_data["code"] == "VALIDATION_ERROR"
+
+    def test_non_string_tool_name_returns_validation_error(self):
+        srv = MCPServer(MCPServerConfig(name="bad-tool-name", version="0.1.0"))
+
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 3,
+                    "method": "tools/call",
+                    "params": {"name": [], "arguments": {}},
+                }
+            )
+        )
+        result = resp["result"]
+        assert result.get("isError") is True
+        error_data = json.loads(result["content"][0]["text"])
+        assert error_data["code"] == "VALIDATION_ERROR"
+
+    def test_security_error_is_access_denied(self):
+        from codomyrmex.agents.pai.trust_gateway import SecurityError
+
+        srv = MCPServer(MCPServerConfig(name="access-denied", version="0.1.0"))
+
+        @srv.tool(name="protected", description="Always denies access")
+        def protected() -> str:
+            raise SecurityError("trust required")
+
+        resp = _run(
+            srv.handle_request(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 4,
+                    "method": "tools/call",
+                    "params": {"name": "protected", "arguments": {}},
+                }
+            )
+        )
+        result = resp["result"]
+        assert result.get("isError") is True
+        error_data = json.loads(result["content"][0]["text"])
+        assert error_data["code"] == "ACCESS_DENIED"
 
 
 # =========================================================================
@@ -941,7 +1043,7 @@ class TestUnknownMethodDispatch:
             )
         )
         assert "error" in resp
-        assert resp["error"]["code"] == -32603
+        assert resp["error"]["code"] == -32600
 
 
 # =========================================================================
@@ -1106,7 +1208,7 @@ class TestRateLimitPath:
 class TestToolNotFoundPath:
     """Tests for tool not found error path (lines 352-354)."""
 
-    def test_empty_tool_name_returns_not_found(self):
+    def test_empty_tool_name_returns_validation_error(self):
         srv = MCPServer(MCPServerConfig(name="not-found", version="0.1.0"))
 
         resp = _run(
@@ -1122,7 +1224,7 @@ class TestToolNotFoundPath:
         result = resp["result"]
         assert result.get("isError") is True
         error_data = json.loads(result["content"][0]["text"])
-        assert error_data["code"] == "NOT_FOUND"
+        assert error_data["code"] == "VALIDATION_ERROR"
 
 
 # =========================================================================

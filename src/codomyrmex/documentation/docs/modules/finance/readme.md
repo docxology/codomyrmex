@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Finance..
+Module implementation, resources, and local coordination for Finance.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

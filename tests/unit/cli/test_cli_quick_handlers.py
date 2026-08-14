@@ -462,9 +462,6 @@ class TestHandleQuickWorkflow:
         result, _output = _capture_stdout(handle_quick_workflow, str(defn))
         assert result is False
 
-    @pytest.mark.skipif(
-        True, reason="requires pyyaml and workflow orchestration infrastructure"
-    )
     def test_workflow_malformed_yaml(self, tmp_path):
         """Malformed YAML file should return False."""
         bad = tmp_path / "bad.yaml"
@@ -472,7 +469,6 @@ class TestHandleQuickWorkflow:
         result, _output = _capture_stdout(handle_quick_workflow, str(bad))
         assert result is False
 
-    @pytest.mark.skipif(True, reason="requires orchestration engine infrastructure")
     def test_workflow_valid_json_definition(self, tmp_path):
         """Valid JSON workflow definition attempts execution."""
         defn = tmp_path / "workflow.json"
@@ -487,7 +483,6 @@ class TestHandleQuickWorkflow:
         result, _output = _capture_stdout(handle_quick_workflow, str(defn))
         assert isinstance(result, bool)
 
-    @pytest.mark.skipif(True, reason="requires orchestration engine infrastructure")
     def test_workflow_with_params(self, tmp_path):
         """Params dict passed to workflow engine."""
         defn = tmp_path / "paramwf.json"

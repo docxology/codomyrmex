@@ -18,6 +18,7 @@ returns the complete, validated map.
 from __future__ import annotations
 
 import hashlib
+import importlib
 import inspect
 import json
 import math
@@ -35,16 +36,262 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import yaml  # stdlib-compatible: PyYAML
+from yaml.resolver import BaseResolver
 
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
 
 
+class _UniqueKeyLoader(yaml.SafeLoader):
+    """Safe YAML loader that rejects duplicate mapping keys."""
+
+
+def _construct_unique_mapping(
+    loader: _UniqueKeyLoader,
+    node: yaml.nodes.MappingNode,
+    deep: bool = False,
+) -> dict[Any, Any]:
+    mapping: dict[Any, Any] = {}
+    for key_node, value_node in node.value:
+        key = loader.construct_object(key_node, deep=deep)
+        if key in mapping:
+            line = key_node.start_mark.line + 1
+            raise RuntimeError(f"Duplicate YAML key {key!r} at line {line}")
+        mapping[key] = loader.construct_object(value_node, deep=deep)
+    return mapping
+
+
+_UniqueKeyLoader.add_constructor(
+    BaseResolver.DEFAULT_MAPPING_TAG,
+    _construct_unique_mapping,
+)
+
+
+def _load_yaml_without_duplicate_keys(payload: bytes | str, source: Path) -> Any:
+    """Load trusted project YAML while failing closed on duplicate keys."""
+    try:
+        # _UniqueKeyLoader inherits SafeLoader; the explicit loader is needed
+        # only to add duplicate-key rejection to PyYAML's safe construction.
+        return yaml.load(payload, Loader=_UniqueKeyLoader)  # noqa: S506
+    except yaml.YAMLError as exc:
+        raise RuntimeError(f"Invalid YAML in {source}: {exc}") from exc
+
+
+_TEMPLATE_HYDRATION_ENTRYPOINT = (
+    "infrastructure.rendering.manuscript_injection.write_resolved_manuscript_tree"
+)
+_TEMPLATE_REVISION_PATTERN = re.compile(r"[0-9a-f]{40}")
+
+
+def _template_hydration_contract(
+    config: dict[str, Any],
+    config_path: Path,
+    project_root: Path,
+) -> tuple[dict[str, str], Path | None]:
+    """Resolve the pinned template contract and an available clean checkout.
+
+    A configured template checkout is never treated as interchangeable with an
+    arbitrary adjacent directory.  If a checkout is present but its revision or
+    worktree does not match the recorded contract, generation fails closed.  A
+    standalone clone without the adjacent template may use the project-local
+    strict successor and records that fallback explicitly in the snapshot.
+    """
+    template = _required_mapping(config, "template", config_path)
+    repository = str(_required_value(template, "repository", config_path)).strip()
+    revision = str(_required_value(template, "revision", config_path)).strip().lower()
+    entrypoint = str(
+        _required_value(template, "hydration_entrypoint", config_path)
+    ).strip()
+    if not _TEMPLATE_REVISION_PATTERN.fullmatch(revision):
+        raise RuntimeError(
+            f"template.revision must be a 40-character commit SHA in {config_path}"
+        )
+    if entrypoint != _TEMPLATE_HYDRATION_ENTRYPOINT:
+        raise RuntimeError(
+            "template.hydration_entrypoint must remain the pinned canonical "
+            f"entrypoint {_TEMPLATE_HYDRATION_ENTRYPOINT!r}"
+        )
+
+    configured_root = os.environ.get("TEMPLATE_REPO_ROOT", "").strip()
+    if configured_root:
+        raw_root = Path(configured_root).expanduser()
+        template_root = (
+            raw_root if raw_root.is_absolute() else project_root / raw_root
+        ).resolve()
+        source_label = "TEMPLATE_REPO_ROOT"
+    else:
+        template_root = (project_root.parent / "template").resolve()
+        source_label = "adjacent template checkout"
+
+    metadata = {
+        "REPRO_TEMPLATE_REPOSITORY": repository,
+        "REPRO_TEMPLATE_REVISION": revision,
+        "REPRO_TEMPLATE_HYDRATION_ENTRYPOINT": entrypoint,
+    }
+    if not template_root.is_dir():
+        if configured_root:
+            raise RuntimeError(
+                f"{source_label} does not identify a directory: {template_root}"
+            )
+        metadata.update(
+            {
+                "REPRO_TEMPLATE_HYDRATION_MODE": "project-local-strict-successor",
+                "REPRO_TEMPLATE_WORKTREE_DIRTY": "unavailable",
+            }
+        )
+        return metadata, None
+
+    try:
+        revision_result = subprocess.run(
+            ["git", "-C", str(template_root), "rev-parse", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
+        )
+        status_result = subprocess.run(
+            ["git", "-C", str(template_root), "status", "--porcelain=v1"],
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
+        )
+    except (OSError, subprocess.SubprocessError) as exc:
+        raise RuntimeError(
+            f"Could not inspect the pinned template checkout {template_root}"
+        ) from exc
+    actual_revision = revision_result.stdout.strip().lower()
+    if revision_result.returncode != 0 or actual_revision != revision:
+        raise RuntimeError(
+            "Pinned template revision mismatch: "
+            f"expected {revision}, found {actual_revision or 'unavailable'} at "
+            f"{template_root}"
+        )
+    if status_result.returncode != 0:
+        raise RuntimeError(
+            f"Could not inspect template worktree state: {template_root}"
+        )
+    if status_result.stdout.strip():
+        raise RuntimeError(
+            f"Pinned template checkout is dirty and cannot provide reproducible "
+            f"hydration: {template_root}"
+        )
+    module_path = (
+        template_root / "infrastructure" / "rendering" / "manuscript_injection.py"
+    )
+    if not module_path.is_file():
+        raise RuntimeError(
+            f"Pinned template checkout is missing the hydration module: {module_path}"
+        )
+    metadata.update(
+        {
+            "REPRO_TEMPLATE_HYDRATION_MODE": "canonical-pinned",
+            "REPRO_TEMPLATE_WORKTREE_DIRTY": "false",
+        }
+    )
+    return metadata, template_root
+
+
+def _load_canonical_template_hydrator(template_root: Path) -> Any:
+    """Load the pinned template hydrator without making it a package dependency."""
+    template_root_text = str(template_root)
+    inserted = template_root_text not in sys.path
+    if inserted:
+        sys.path.insert(0, template_root_text)
+    try:
+        importlib.invalidate_caches()
+        module = importlib.import_module(
+            "infrastructure.rendering.manuscript_injection"
+        )
+        hydrator = getattr(module, "write_resolved_manuscript_tree", None)
+        if not callable(hydrator):
+            raise RuntimeError(
+                "Pinned template hydration module does not expose "
+                f"{_TEMPLATE_HYDRATION_ENTRYPOINT}"
+            )
+        return hydrator
+    except (ImportError, ModuleNotFoundError) as exc:
+        raise RuntimeError(
+            "Could not import the pinned template hydration entrypoint "
+            f"{_TEMPLATE_HYDRATION_ENTRYPOINT} from {template_root}"
+        ) from exc
+    finally:
+        if inserted:
+            sys.path.remove(template_root_text)
+
+
+def _strict_canonical_injection(
+    manuscript_dir: Path,
+    output_dir: Path,
+    variables: dict[str, str],
+    project_root: Path,
+    template_root: Path,
+) -> list[Path]:
+    """Run the pinned template hydrator and promote warnings to hard failures."""
+    expected_output = (project_root / "output" / "manuscript").resolve()
+    if output_dir.resolve() != expected_output:
+        raise RuntimeError(
+            "Canonical template hydration requires the project output/manuscript "
+            f"directory, not {output_dir}"
+        )
+    hydrator = _load_canonical_template_hydrator(template_root)
+    resolved_dir = Path(hydrator(project_root, variables)).resolve()
+    if resolved_dir != expected_output:
+        raise RuntimeError(
+            "Pinned template hydration returned an unexpected output directory: "
+            f"{resolved_dir}"
+        )
+    # The pinned template treats ``preamble.md`` as an auxiliary copied verbatim,
+    # while this project intentionally keeps LaTeX metadata tokens in that file.
+    # Resolve that one auxiliary through the same strict project contract rather
+    # than allowing a valid-looking but unusable PDF header to escape.
+    source_preamble = manuscript_dir / "preamble.md"
+    resolved_preamble = resolved_dir / "preamble.md"
+    if source_preamble.is_file():
+        resolved_preamble.write_text(
+            _render_template(
+                source_preamble.read_text(encoding="utf-8"),
+                variables,
+                source_label=str(source_preamble),
+            ),
+            encoding="utf-8",
+        )
+    unresolved = sorted(
+        {
+            token
+            for path in sorted(resolved_dir.glob("*.md"))
+            for token in re.findall(
+                r"\{\{([A-Z0-9_]+)\}\}", path.read_text(encoding="utf-8")
+            )
+        }
+    )
+    if unresolved:
+        raise RuntimeError(
+            "Pinned template hydration left unresolved manuscript variables: "
+            + ", ".join(unresolved)
+        )
+    source_names = {
+        path.name
+        for path in manuscript_dir.glob("*.md")
+        if path.name not in {"AGENTS.md", "README.md", "SYNTAX.md"}
+    }
+    resolved_names = {path.name for path in resolved_dir.glob("*.md")}
+    missing = sorted(source_names - resolved_names)
+    if missing:
+        raise RuntimeError(
+            "Pinned template hydration omitted manuscript sources: "
+            + ", ".join(missing)
+        )
+    return sorted(resolved_dir.glob("*.md"))
+
+
 def inject_manuscript_variables(
     manuscript_dir: Path,
     output_dir: Path,
     variables: dict[str, str],
+    *,
+    project_root: Path | None = None,
 ) -> list[Path]:
     """Resolve every source token before atomically writing hydrated sections.
 
@@ -52,6 +299,41 @@ def inject_manuscript_variables(
     orchestrator. Undefined and unresolved tokens fail before any section is
     written; this prevents partially hydrated manuscript trees.
     """
+    project_root = project_root or manuscript_dir.resolve().parents[1]
+    hydration_mode = variables.get("REPRO_TEMPLATE_HYDRATION_MODE", "")
+    if hydration_mode == "canonical-pinned":
+        revision = variables.get("REPRO_TEMPLATE_REVISION", "")
+        if not revision:
+            raise RuntimeError("Canonical template hydration is missing its revision")
+        contract, template_root = _template_hydration_contract(
+            {
+                "template": {
+                    "repository": variables.get("REPRO_TEMPLATE_REPOSITORY", ""),
+                    "revision": revision,
+                    "hydration_entrypoint": variables.get(
+                        "REPRO_TEMPLATE_HYDRATION_ENTRYPOINT", ""
+                    ),
+                }
+            },
+            project_root / "docs" / "manuscript" / "config.yaml",
+            project_root,
+        )
+        if contract != {key: variables.get(key, "") for key in contract}:
+            raise RuntimeError(
+                "Template provenance changed between computation and hydration"
+            )
+        if template_root is None:
+            raise RuntimeError("Canonical template hydration checkout is unavailable")
+        return _strict_canonical_injection(
+            manuscript_dir,
+            output_dir,
+            variables,
+            project_root,
+            template_root,
+        )
+    if hydration_mode not in {"", "project-local-strict-successor"}:
+        raise RuntimeError(f"Unknown manuscript hydration mode: {hydration_mode!r}")
+
     sources = sorted(manuscript_dir.glob("[0-9]*.md"))
     preamble = manuscript_dir / "preamble.md"
     if preamble.exists():
@@ -244,6 +526,7 @@ def validate_variable_contract(
         "provenance": {
             "source_commit": variables.get("REPRO_GIT_COMMIT", ""),
             "worktree_dirty": variables.get("REPRO_WORKTREE_DIRTY", ""),
+            "status_sha256": variables.get("REPRO_STATUS_SHA256", ""),
             "config_sha256": variables.get("CONFIG_HASH", ""),
             "kernel_source_sha256": variables.get("REPRO_KERNEL_SOURCE_HASH", ""),
         },
@@ -761,8 +1044,8 @@ def _display_identifier(value: str) -> str:
     return value
 
 
-def _git_snapshot(project_root: Path) -> tuple[str, bool]:
-    """Capture commit identity and tracked/untracked worktree state."""
+def _git_snapshot(project_root: Path) -> tuple[str, bool, str]:
+    """Capture commit identity, dirty state, and canonical status digest."""
     commit_result = subprocess.run(
         ["git", "rev-parse", "HEAD"],
         cwd=project_root,
@@ -772,7 +1055,7 @@ def _git_snapshot(project_root: Path) -> tuple[str, bool]:
         timeout=30,
     )
     status_result = subprocess.run(
-        ["git", "status", "--porcelain=v1"],
+        ["git", "status", "--porcelain=v1", "--untracked-files=all"],
         cwd=project_root,
         capture_output=True,
         text=True,
@@ -782,7 +1065,9 @@ def _git_snapshot(project_root: Path) -> tuple[str, bool]:
     commit = (
         commit_result.stdout.strip() if commit_result.returncode == 0 else "unknown"
     )
-    return commit or "unknown", bool(status_result.stdout.strip())
+    status_lines = tuple(line for line in status_result.stdout.splitlines() if line)
+    status_sha256 = hashlib.sha256("\n".join(status_lines).encode()).hexdigest()
+    return commit or "unknown", bool(status_lines), status_sha256
 
 
 def _authoritative_inventory(project_root: Path) -> dict[str, int]:
@@ -1168,10 +1453,13 @@ def compute_variables(
     # 1. Load config.yaml
     # ------------------------------------------------------------------
     raw_config_bytes = config_path.read_bytes()
-    loaded = yaml.safe_load(raw_config_bytes)
+    loaded = _load_yaml_without_duplicate_keys(raw_config_bytes, config_path)
     if not isinstance(loaded, dict):
         raise RuntimeError(f"Manuscript configuration is not a mapping: {config_path}")
     config: dict[str, Any] = loaded
+    template_metadata, _template_root = _template_hydration_contract(
+        config, config_path, project_root
+    )
 
     paper = _required_mapping(config, "paper", config_path)
     authors_list = _required_list(config, "authors", config_path)
@@ -1524,7 +1812,12 @@ def compute_variables(
     )
 
     kernel_config_path = project_root / "config" / "colony_kernel" / "kernel.yaml"
-    kernel_config = yaml.safe_load(kernel_config_path.read_text(encoding="utf-8")) or {}
+    kernel_config = (
+        _load_yaml_without_duplicate_keys(
+            kernel_config_path.read_text(encoding="utf-8"), kernel_config_path
+        )
+        or {}
+    )
     kernel_budget = kernel_config.get("budget", {})
     if not isinstance(kernel_budget, dict):
         raise RuntimeError(f"budget mapping missing from {kernel_config_path}")
@@ -1766,7 +2059,7 @@ def compute_variables(
     )
 
     config_hash: str = hashlib.sha256(raw_config_bytes).hexdigest()
-    git_commit, worktree_dirty = _git_snapshot(project_root)
+    git_commit, worktree_dirty, status_sha256 = _git_snapshot(project_root)
     inventory_payload = {
         **inventory,
         "inventory_script_sha256": _sha256_file(
@@ -1783,6 +2076,7 @@ def compute_variables(
     replay_record["provenance"] = {
         "git_commit": git_commit,
         "worktree_dirty": worktree_dirty,
+        "status_sha256": status_sha256,
         "config_sha256": config_hash,
         "environment_sha256": environment_hash,
         "pyproject_sha256": pyproject_hash,
@@ -2185,6 +2479,7 @@ def compute_variables(
         "CONFIG_EXPERIMENT_SEED": str(experiment_seed),
         "REPRO_GIT_COMMIT": _display_identifier(git_commit),
         "REPRO_WORKTREE_DIRTY": str(worktree_dirty).lower(),
+        "REPRO_STATUS_SHA256": _display_identifier(status_sha256),
         "REPRO_ENVIRONMENT_HASH": _display_identifier(environment_hash),
         "REPRO_KERNEL_SOURCE_HASH": _display_identifier(kernel_source_hash),
         "REPRO_PYPROJECT_HASH": _display_identifier(pyproject_hash),
@@ -2194,6 +2489,18 @@ def compute_variables(
         "REPRO_INVENTORY_MCP_FILE_COUNT": str(inventory["mcp_tools_py"]),
         "REPRO_INVENTORY_MCP_DECORATOR_COUNT": str(inventory["mcp_decorators"]),
         "REPRO_INVENTORY_WORKFLOW_COUNT": str(inventory["workflow_count"]),
+        # Pinned template hydration provenance
+        "REPRO_TEMPLATE_REPOSITORY": template_metadata["REPRO_TEMPLATE_REPOSITORY"],
+        "REPRO_TEMPLATE_REVISION": template_metadata["REPRO_TEMPLATE_REVISION"],
+        "REPRO_TEMPLATE_HYDRATION_ENTRYPOINT": template_metadata[
+            "REPRO_TEMPLATE_HYDRATION_ENTRYPOINT"
+        ],
+        "REPRO_TEMPLATE_HYDRATION_MODE": template_metadata[
+            "REPRO_TEMPLATE_HYDRATION_MODE"
+        ],
+        "REPRO_TEMPLATE_WORKTREE_DIRTY": template_metadata[
+            "REPRO_TEMPLATE_WORKTREE_DIRTY"
+        ],
         # RESULT tokens
         "RESULT_TEST_COUNT": str(test_count),
         # CONFIG_TEST_COUNT maps to the same live pytest-collected count used by
@@ -2275,7 +2582,7 @@ def compute_variables(
         "ARTIFACT_CONFIG_FILES": str(config_files_found),
         "ARTIFACT_MCP_TOOLS": str(mcp_tools_artifact),
         "ARTIFACT_FIGURE_COUNT": str(figure_count),
-        "ARTIFACT_COMBINED_PDF_PATH": (f"output/pdf/{project_root.name}_combined.pdf"),
+        "ARTIFACT_COMBINED_PDF_PATH": "output/paper.pdf",
         # Platform tokens
         "PYTHON_VERSION": python_version,
         "PLATFORM": platform_name,

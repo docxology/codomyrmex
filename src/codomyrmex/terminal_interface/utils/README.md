@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Utils..
+Module implementation, resources, and local coordination for Utils.
 
 ## Directory Contents
 - `PAI.md` – File

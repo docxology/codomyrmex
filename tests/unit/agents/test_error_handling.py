@@ -6,29 +6,16 @@ that implements BaseAgent interface for testing error scenarios, not a mock.
 
 import pytest
 
-try:
-    from codomyrmex.agents.core import (
-        AgentCapabilities,
-        AgentRequest,
-        AgentResponse,
-        BaseAgent,
-    )
-    from codomyrmex.agents.core.config import (
-        AgentConfig,
-    )
-    from codomyrmex.agents.core.exceptions import (
-        AgentError,
-        AgentTimeoutError,
-    )
-    from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
-    from codomyrmex.agents.opencode import OpenCodeClient
-
-    _HAS_AGENTS = True
-except ImportError:
-    _HAS_AGENTS = False
-
-if not _HAS_AGENTS:
-    pytest.skip("agents deps not available", allow_module_level=True)
+from codomyrmex.agents.core import (
+    AgentCapabilities,
+    AgentRequest,
+    AgentResponse,
+    BaseAgent,
+)
+from codomyrmex.agents.core.config import AgentConfig
+from codomyrmex.agents.core.exceptions import AgentError, AgentTimeoutError
+from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
+from codomyrmex.agents.opencode import OpenCodeClient
 
 
 class FailingAgent(BaseAgent):
@@ -58,6 +45,18 @@ class FailingAgent(BaseAgent):
         if self.failure_type == "exception":
             raise AgentError("Stream exception")
         yield "test"
+
+
+@pytest.mark.unit
+def test_failed_execution_preserves_request_trace_id():
+    """Error responses remain correlated with the originating request."""
+    trace_id = "trace-red-team-regression"
+    response = FailingAgent("failing", failure_type="exception").execute(
+        AgentRequest(prompt="trigger", trace_id=trace_id)
+    )
+    assert response.error is not None
+    assert response.error.endswith("Simulated exception")
+    assert response.trace_id == trace_id
 
 
 @pytest.mark.unit

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Charts..
+Module implementation, resources, and local coordination for Charts.
 
 ## Directory Contents
 - `PAI.md` – File

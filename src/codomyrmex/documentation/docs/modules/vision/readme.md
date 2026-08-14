@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Vision..
+Module implementation, resources, and local coordination for Vision.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

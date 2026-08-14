@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Mac..
+Module implementation, resources, and local coordination for Mac.
 
 ## Directory Contents
 - `README.md` – File

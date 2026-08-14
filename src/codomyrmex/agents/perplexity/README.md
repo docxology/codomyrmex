@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Perplexity..
+Module implementation, resources, and local coordination for Perplexity.
 
 ## Directory Contents
 - `PAI.md` – File

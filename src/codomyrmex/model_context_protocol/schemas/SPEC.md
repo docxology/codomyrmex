@@ -65,10 +65,10 @@ Dual-model design:
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `register` | `tool_name, schema, handler` | `None` | Register a tool with schema and handler |
+| `register` | `tool_name, schema, handler` | `None` | Register a tool with schema and handler; identical repeats are idempotent and conflicting schemas raise `MCPRegistrationError` |
 | `unregister` | `tool_name: str` | `bool` | Remove a tool; returns `True` if found |
 | `get` | `tool_name: str` | `dict | None` Look up tool metadata |
-| `list_tools` | — | `list[str]` | List all registered tool names |
+| `list_tools` | — | `list[str]` | List all registered tool names in deterministic lexical order |
 | `validate_call` | `tool_call: MCPToolCall` | `tuple[bool, str | None]` Check if tool exists |
 | `execute` | `tool_call: MCPToolCall` | `MCPToolResult` | Dispatch to handler; wrap exceptions in error result |
 

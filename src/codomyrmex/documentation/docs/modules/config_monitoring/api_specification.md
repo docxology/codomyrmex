@@ -9,7 +9,7 @@ This document describes the public Python and MCP interfaces for `codomyrmex.con
 ## Python API
 
 | Symbol | Type | Purpose |
-| :--- | :--- | :--- |
+|:---|:---|:---|
 | `ConfigurationMonitor` | Class | Detects configuration changes, stores snapshots, and summarizes monitoring state |
 | `ConfigWatcher` | Class | Polls a configuration file and invokes a callback when it changes |
 | `ConfigChange` | Dataclass | Describes a detected created, modified, or deleted configuration file |
@@ -20,9 +20,9 @@ This document describes the public Python and MCP interfaces for `codomyrmex.con
 ## MCP Tools
 
 | Tool | Parameters | Returns |
-| :--- | :--- | :--- |
-| `config_monitoring_detect_changes` | `config_paths: list[str]`, `workspace_dir: str \| None` | Status, checked path count, detected changes, and per-change details |
-| `config_monitoring_summary` | `workspace_dir: str \| None` | Status and aggregate monitoring summary |
+|:---|:---|:---|
+| `config_monitoring_detect_changes` | `config_paths: list[str]`, `workspace_dir: str | None` | Status, checked path count, detected changes, and per-change details |
+| `config_monitoring_summary` | `workspace_dir: str | None` | Status and aggregate monitoring summary |
 | `config_monitoring_hash_file` | `file_path: str` | Status, file path, and SHA-256 hash |
 
 ## Error Shape

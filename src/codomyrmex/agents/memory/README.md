@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Memory..
+Module implementation, resources, and local coordination for Memory.
 
 ## Directory Contents
 - `PAI.md` – File

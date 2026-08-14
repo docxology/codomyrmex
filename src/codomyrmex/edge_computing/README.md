@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Edge Computing..
+Module implementation, resources, and local coordination for Edge Computing.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

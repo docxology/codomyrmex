@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Ledger..
+Module implementation, resources, and local coordination for Ledger.
 
 ## Directory Contents
 - `PAI.md` – File

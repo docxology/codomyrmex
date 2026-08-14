@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Replication..
+Module implementation, resources, and local coordination for Replication.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Quantum..
+Module implementation, resources, and local coordination for Quantum.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

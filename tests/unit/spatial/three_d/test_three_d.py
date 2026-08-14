@@ -1,6 +1,7 @@
 """Unit tests for spatial.three_d module."""
 
 import pytest
+from tests.support.repo_paths import REPO_ROOT
 
 
 @pytest.mark.unit
@@ -81,11 +82,9 @@ class TestThreeD:
             pytest.fail(f"Failed to import Light3D: {e}")
 
     def test_material3d_import(self, code_dir):
-        """Test that Material3D class can be imported if available."""
+        """Test that the documented Material3D class is available."""
         from codomyrmex.spatial import three_d
 
-        if not hasattr(three_d, "Material3D"):
-            pytest.skip("Material3D not yet implemented")
         assert three_d.Material3D is not None
 
     def test_ar_session_import(self, code_dir):
@@ -134,11 +133,9 @@ class TestThreeD:
             pytest.fail(f"Failed to import ShaderManager: {e}")
 
     def test_mesh_loader_import(self, code_dir):
-        """Test that MeshLoader class can be imported if available."""
+        """Test that the documented MeshLoader class is available."""
         from codomyrmex.spatial import three_d
 
-        if not hasattr(three_d, "MeshLoader"):
-            pytest.skip("MeshLoader not yet implemented")
         assert three_d.MeshLoader is not None
 
     def test_three_d_version(self, code_dir):
@@ -169,11 +166,8 @@ class TestThreeD:
         for export in core_exports:
             assert hasattr(three_d, export), f"Missing export: {export}"
 
-        # Optional exports (not yet implemented)
-        optional_exports = ["Material3D", "MeshLoader"]
-        for export in optional_exports:
-            if not hasattr(three_d, export):
-                pass  # Expected: not yet implemented
+        for export in ("Material3D", "MeshData", "MeshLoader"):
+            assert hasattr(three_d, export), f"Missing documented export: {export}"
 
     def test_agents_md_exists(self, code_dir):
         """Test that AGENTS.md exists for three_d module."""
@@ -186,10 +180,10 @@ class TestThreeD:
         assert readme_path.exists()
 
     def test_docs_directory_exists(self, code_dir):
-        """Test that docs directory exists for three_d module if created."""
-        docs_path = code_dir / "codomyrmex" / "spatial" / "three_d" / "docs"
-        if not docs_path.exists():
-            pytest.skip("docs/ directory not yet created for three_d module")
+        """Test the authoritative spatial documentation surface."""
+        docs_path = REPO_ROOT / "docs" / "modules" / "spatial"
+        assert docs_path.is_dir()
+        assert (docs_path / "README.md").is_file()
 
     def test_examples_directory_exists(self, code_dir):
         """Test that examples directory exists for three_d module."""
@@ -198,7 +192,6 @@ class TestThreeD:
         assert examples_path.is_dir()
 
     def test_tests_directory_exists(self, code_dir):
-        """Test that tests directory exists for three_d module if created."""
-        tests_path = code_dir / "codomyrmex" / "spatial" / "three_d" / "tests"
-        if not tests_path.exists():
-            pytest.skip("tests/ directory not yet created for three_d module")
+        """Test the authoritative unit-test surface for three_d."""
+        tests_path = REPO_ROOT / "tests" / "unit" / "spatial" / "three_d"
+        assert tests_path.is_dir()

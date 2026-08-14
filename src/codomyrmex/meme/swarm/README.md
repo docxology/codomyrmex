@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Swarm..
+Module implementation, resources, and local coordination for Swarm.
 
 ## Directory Contents
 - `PAI.md` – File

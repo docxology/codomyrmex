@@ -79,19 +79,24 @@ def log_performance(
 
 
 def run_async(coro):
-    """Run an async function from sync context."""
-    try:
-        loop = asyncio.get_event_loop()
-        if loop.is_running():
-            # Create new loop in thread for nested async
-            import concurrent.futures
+    """Run a coroutine from synchronous code without leaking event loops.
 
-            with concurrent.futures.ThreadPoolExecutor() as pool:
-                future = pool.submit(asyncio.run, coro)
-                return future.result()
-        return loop.run_until_complete(coro)
+    ``asyncio.run`` owns and closes the loop when called from synchronous code.
+    If the caller is already inside a running loop, execute the coroutine in a
+    short-lived worker thread because nested ``asyncio.run`` calls are invalid.
+    """
+    try:
+        asyncio.get_running_loop()
     except RuntimeError:
         return asyncio.run(coro)
+
+    # Create a new loop in a worker thread for nested async calls. The worker
+    # owns the loop and asyncio.run closes it before the thread exits.
+    import concurrent.futures
+
+    with concurrent.futures.ThreadPoolExecutor() as pool:
+        future = pool.submit(asyncio.run, coro)
+        return future.result()
 
 
 async def gather_with_concurrency(

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Kubernetes..
+Module implementation, resources, and local coordination for Kubernetes.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -157,6 +157,43 @@ class TestAgentRegistry:
         assert agents1 is not agents2
         assert len(agents1) == len(agents2)
 
+    def test_get_descriptor_normalizes_provider_name(self):
+        registry = AgentRegistry()
+        descriptor = registry.get_descriptor("  CLAUDE ")
+        assert descriptor is not None
+        assert descriptor.name == "claude"
+
+    def test_descriptor_serialization_does_not_expose_probe_callable(self):
+        descriptor = AgentRegistry().get_descriptor("codex")
+        assert descriptor is not None
+        serialized = descriptor.to_dict()
+        assert serialized["client_path"] == "codomyrmex.agents.codex.CodexClient"
+        assert all(not callable(value) for value in serialized.values())
+
+    def test_create_agent_unknown_is_actionable(self):
+        registry = AgentRegistry()
+        try:
+            registry.create_agent("not-a-real-agent")
+        except ValueError as exc:
+            assert "Unknown agent" in str(exc)
+        else:
+            raise AssertionError("unknown agent construction unexpectedly succeeded")
+
+    def test_create_agent_ollama_has_executable_client(self):
+        registry = AgentRegistry()
+        client = registry.create_agent(
+            "ollama",
+            config={
+                "model": "test-model",
+                "base_url": "http://127.0.0.1:11434",
+            },
+        )
+        assert client.model == "test-model"
+        assert client.base_url == "http://127.0.0.1:11434"
+        descriptor = registry.get_descriptor("ollama")
+        assert descriptor is not None
+        assert descriptor.to_dict()["client_path"].endswith("OllamaClient")
+
     def test_probe_unknown_agent(self):
         registry = AgentRegistry()
         result = registry.probe_agent("nonexistent_agent_xyz")

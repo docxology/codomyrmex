@@ -23,7 +23,7 @@ import numpy as np
 from PIL import Image
 
 try:
-    import fitz  # PyMuPDF
+    import pymupdf as fitz  # PyMuPDF's supported import name
 except ImportError as e:
     raise ImportError(
         "PyMuPDF is required for PDF dark mode filters. "

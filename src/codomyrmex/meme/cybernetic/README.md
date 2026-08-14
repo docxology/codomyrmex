@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Cybernetic..
+Module implementation, resources, and local coordination for Cybernetic.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Webhooks..
+Module implementation, resources, and local coordination for Webhooks.
 
 ## Directory Contents
 - `PAI.md` – File

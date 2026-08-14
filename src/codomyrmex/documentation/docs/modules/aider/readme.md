@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Aider..
+Module implementation, resources, and local coordination for Aider.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

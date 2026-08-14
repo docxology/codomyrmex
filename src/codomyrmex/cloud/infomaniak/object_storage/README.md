@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Object Storage..
+Module implementation, resources, and local coordination for Object Storage.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Physics..
+Module implementation, resources, and local coordination for Physics.
 
 ## Directory Contents
 - `PAI.md` – File

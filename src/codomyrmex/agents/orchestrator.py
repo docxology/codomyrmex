@@ -632,9 +632,13 @@ class ConversationOrchestrator:
         for attempt in range(1, self.max_retries + 2):  # +2 because range is [1, max+2)
             try:
                 resp = client.execute_with_session(req)
+                if hasattr(resp, "is_success") and not resp.is_success():
+                    raise RuntimeError(resp.error or "provider returned a failure")
                 content = (
                     resp.content.strip() if hasattr(resp, "content") else str(resp)
                 )
+                if not content:
+                    raise RuntimeError("provider returned an empty response")
                 last_error = None
                 break
             except Exception as exc:

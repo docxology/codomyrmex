@@ -323,6 +323,7 @@ class HermesExecutionMixin:
         ollama_bin = shutil.which("ollama") or "ollama"
         cmd = [ollama_bin, "run", self._ollama_model, request.prompt]
 
+        process: subprocess.Popen[str] | None = None
         try:
             process = subprocess.Popen(
                 cmd,
@@ -332,6 +333,8 @@ class HermesExecutionMixin:
                 bufsize=1,
                 env={**os.environ, "NO_COLOR": "1"},
             )
+            if process.stdout is None:
+                raise HermesError("Ollama stream did not expose stdout")
             for line in iter(process.stdout.readline, ""):
                 if line:
                     yield line.rstrip()
@@ -339,3 +342,16 @@ class HermesExecutionMixin:
         except Exception as e:
             self.logger.error("Ollama streaming failed: %s", e, exc_info=True)
             yield f"Error: {e}"
+        finally:
+            if process is not None:
+                if process.poll() is None:
+                    process.kill()
+                    try:
+                        process.wait(timeout=10)
+                    except subprocess.TimeoutExpired:
+                        self.logger.warning(
+                            "Ollama stream process did not exit during cleanup"
+                        )
+                for stream in (process.stdin, process.stdout, process.stderr):
+                    if stream is not None:
+                        stream.close()

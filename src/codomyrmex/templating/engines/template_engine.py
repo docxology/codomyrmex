@@ -131,7 +131,7 @@ class TemplateEngine:
         """Render using Jinja2."""
         try:
             # CWE-79: Enable autoescape to prevent XSS
-            env = Environment(  # nosec B701 - secure default; trusted opt-out is explicit
+            env = Environment(  # nosec B701
                 autoescape=self.autoescape
             )
             # Register custom filters
@@ -150,7 +150,7 @@ class TemplateEngine:
         try:
             path_obj = Path(path)
             # CWE-79: Use select_autoescape for file-based templates
-            env = Environment(  # nosec B701 - secure default; trusted opt-out is explicit
+            env = Environment(  # nosec B701
                 loader=FileSystemLoader(str(path_obj.parent)),
                 autoescape=select_autoescape() if self.autoescape else False,
             )
@@ -172,7 +172,7 @@ class TemplateEngine:
             # consistent with the Jinja2 path; callers rendering trusted HTML
             # can explicitly opt out with ``autoescape=False``.
             default_filters = ["h"] if self.autoescape else []
-            template_obj = MakoTemplate(  # nosec B702 - default_filters applies HTML escaping
+            template_obj = MakoTemplate(  # nosec B702
                 template, default_filters=default_filters
             )
             return template_obj.render(**context)
@@ -185,7 +185,7 @@ class TemplateEngine:
         """Load template using Mako."""
         try:
             default_filters = ["h"] if self.autoescape else []
-            return MakoTemplate(  # nosec B702 - default_filters applies HTML escaping
+            return MakoTemplate(  # nosec B702
                 filename=path, default_filters=default_filters
             )
         except ImportError:

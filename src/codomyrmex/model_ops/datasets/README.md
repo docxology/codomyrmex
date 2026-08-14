@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Datasets..
+Module implementation, resources, and local coordination for Datasets.
 
 ## Directory Contents
 - `PAI.md` – File

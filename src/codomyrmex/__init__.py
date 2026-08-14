@@ -37,8 +37,16 @@ def get_module_path() -> Path:
 
 
 def list_modules() -> list[str]:
-    """list all available submodules in the package."""
-    return [name for _, name, _ in pkgutil.iter_modules([str(get_module_path())])]
+    """Return sorted importable package modules, excluding loose files.
+
+    The package root is a navigation surface for agents, so a top-level
+    ``conftest.py`` or other support file must not be advertised as a module.
+    """
+    return sorted(
+        name
+        for _, name, is_package in pkgutil.iter_modules([str(get_module_path())])
+        if is_package
+    )
 
 
 # Explicitly export major submodules for easier access
@@ -75,6 +83,7 @@ _submodules = [
     "data_curation",
     "data_lineage",
     "data_visualization",
+    "defense",
     "database_management",
     "demos",
     "dependency_injection",
@@ -86,6 +95,7 @@ _submodules = [
     "documents",
     "dpo",
     "edge_computing",
+    "embodiment",
     "email",
     "encryption",
     "environment_setup",
@@ -114,6 +124,7 @@ _submodules = [
     "logit_processor",
     "lora",
     "maintenance",
+    "manuscript",
     "market",
     "matmul_kernel",
     "meme",
@@ -160,7 +171,6 @@ _submodules = [
     "templating",
     "terminal_interface",
     "testing",
-    "tests",
     "text_to_sql",
     "tokenizer",
     "tool_use",
@@ -232,6 +242,7 @@ __all__ = [
     "data_lineage",
     "data_visualization",
     "database_management",
+    "defense",
     "demos",
     "dependency_injection",
     "deployment",
@@ -243,6 +254,7 @@ __all__ = [
     "dpo",
     "edge_computing",
     "email",
+    "embodiment",
     "encryption",
     "environment_setup",
     "eval_harness",
@@ -273,6 +285,7 @@ __all__ = [
     "logit_processor",
     "lora",
     "maintenance",
+    "manuscript",
     "market",
     "matmul_kernel",
     "meme",

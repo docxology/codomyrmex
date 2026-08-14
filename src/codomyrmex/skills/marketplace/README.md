@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Marketplace..
+Module implementation, resources, and local coordination for Marketplace.
 
 ## Directory Contents
 - `PAI.md` – File

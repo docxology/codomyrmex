@@ -205,32 +205,42 @@ class TestRunCommandStreamOutput:
 class TestInstallDependencies:
     """Tests for install_dependencies (behaviour depends on npm/yarn availability)."""
 
-    def test_returns_bool_with_npm(self):
+    def test_returns_bool_with_npm(self, tmp_path):
         from codomyrmex.documentation.documentation_website import (
             install_dependencies,
         )
 
-        # This will actually try to run npm install in DOCUSAURUS_ROOT_DIR.
-        # It may fail (no package.json), but must return a bool.
-        result = install_dependencies("npm")
+        (tmp_path / "package.json").write_text(
+            '{"name":"codomyrmex-test-docs","private":true,"version":"1.0.0"}',
+            encoding="utf-8",
+        )
+        result = install_dependencies("npm", cwd=tmp_path)
         assert isinstance(result, bool)
 
-    def test_returns_bool_with_yarn(self):
+    def test_returns_bool_with_yarn(self, tmp_path):
         from codomyrmex.documentation.documentation_website import (
             install_dependencies,
         )
 
-        result = install_dependencies("yarn")
+        (tmp_path / "package.json").write_text(
+            '{"name":"codomyrmex-test-docs","private":true,"version":"1.0.0"}',
+            encoding="utf-8",
+        )
+        result = install_dependencies("yarn", cwd=tmp_path)
         assert isinstance(result, bool)
 
-    def test_yarn_fallback_to_npm(self):
+    def test_yarn_fallback_to_npm(self, tmp_path):
         """When yarn is requested but not available, should fall back to npm."""
         from codomyrmex.documentation.documentation_website import (
             install_dependencies,
         )
 
-        # Regardless of which PM is available, we get a bool back
-        result = install_dependencies("yarn")
+        (tmp_path / "package.json").write_text(
+            '{"name":"codomyrmex-test-docs","private":true,"version":"1.0.0"}',
+            encoding="utf-8",
+        )
+        # Regardless of which PM is available, we get a bool back.
+        result = install_dependencies("yarn", cwd=tmp_path)
         assert isinstance(result, bool)
 
 

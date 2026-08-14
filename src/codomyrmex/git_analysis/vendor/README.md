@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Vendor..
+Module implementation, resources, and local coordination for Vendor.
 
 ## Directory Contents
 - `README.md` – File

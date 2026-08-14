@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Analysis..
+Module implementation, resources, and local coordination for Analysis.
 
 ## Directory Contents
 - `README.md` – File

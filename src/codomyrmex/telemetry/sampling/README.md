@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Sampling..
+Module implementation, resources, and local coordination for Sampling.
 
 ## Directory Contents
 - `PAI.md` – File

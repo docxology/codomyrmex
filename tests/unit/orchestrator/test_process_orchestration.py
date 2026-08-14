@@ -214,7 +214,7 @@ class TestWorkflow:
 
         wf = Workflow("test-wf")
         wf.add_task("greet", action=lambda: "hello")
-        results = asyncio.new_event_loop().run_until_complete(wf.run())
+        results = asyncio.run(wf.run())
         assert "greet" in results
         assert results["greet"] == "hello"
 
@@ -225,7 +225,7 @@ class TestWorkflow:
         wf.add_task("step1", action=lambda: 10)
         wf.add_task("step2", action=lambda: 20, dependencies=["step1"])
         wf.add_task("step3", action=lambda: 30, dependencies=["step2"])
-        results = asyncio.new_event_loop().run_until_complete(wf.run())
+        results = asyncio.run(wf.run())
         assert len(results) == 3
 
     def test_parallel_tasks(self):
@@ -235,7 +235,7 @@ class TestWorkflow:
         wf.add_task("a", action=lambda: 1)
         wf.add_task("b", action=lambda: 2)
         wf.add_task("c", action=lambda: 3, dependencies=["a", "b"])
-        results = asyncio.new_event_loop().run_until_complete(wf.run())
+        results = asyncio.run(wf.run())
         assert "c" in results
 
     def test_validation_missing_dep(self):
@@ -244,7 +244,7 @@ class TestWorkflow:
         wf = Workflow("bad")
         wf.add_task("a", action=lambda: 1, dependencies=["nonexistent"])
         try:
-            asyncio.new_event_loop().run_until_complete(wf.run())
+            asyncio.run(wf.run())
             # If no exception, check results for failure
         except (WorkflowError, Exception):
             pass  # Expected
@@ -256,7 +256,7 @@ class TestWorkflow:
         wf.add_task("a", action=lambda: 1, dependencies=["b"])
         wf.add_task("b", action=lambda: 2, dependencies=["a"])
         try:
-            asyncio.new_event_loop().run_until_complete(wf.run())
+            asyncio.run(wf.run())
         except (CycleError, Exception):
             pass  # Expected
 
@@ -268,7 +268,7 @@ class TestWorkflow:
 
         wf = Workflow("fail-test", fail_fast=True)
         wf.add_task("bad", action=fail)
-        results = asyncio.new_event_loop().run_until_complete(wf.run())
+        results = asyncio.run(wf.run())
         # Failure may be expressed as None value or exception info
         assert "bad" in results
 
@@ -277,7 +277,7 @@ class TestWorkflow:
 
         wf = Workflow("summary-test")
         wf.add_task("a", action=lambda: 1)
-        asyncio.new_event_loop().run_until_complete(wf.run())
+        asyncio.run(wf.run())
         summary = wf.get_summary()
         assert isinstance(summary, dict)
 
@@ -286,7 +286,7 @@ class TestWorkflow:
 
         wf = Workflow("result-test")
         wf.add_task("x", action=lambda: 99)
-        asyncio.new_event_loop().run_until_complete(wf.run())
+        asyncio.run(wf.run())
         wf.get_task_result("x")
         # May return a TaskResult or None depending on implementation
         assert True  # Just exercise the method
@@ -301,7 +301,7 @@ class TestWorkflow:
             action=lambda: 2,
             condition=lambda results: False,  # Never runs
         )
-        results = asyncio.new_event_loop().run_until_complete(wf.run())
+        results = asyncio.run(wf.run())
         assert "a" in results
 
     def test_progress_callback(self):
@@ -315,6 +315,6 @@ class TestWorkflow:
             ),
         )
         wf.add_task("a", action=lambda: 1)
-        asyncio.new_event_loop().run_until_complete(wf.run())
+        asyncio.run(wf.run())
         # Progress events may or may not fire depending on impl
         assert isinstance(events, list)

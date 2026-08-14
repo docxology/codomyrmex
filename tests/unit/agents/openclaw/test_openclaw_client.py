@@ -131,19 +131,19 @@ class TestOpenClawClient:
             # Expected if authentication fails or CLI error
             pytest.skip("OpenClaw CLI authentication or execution failed")
 
-    @pytest.mark.skipif(not OPENCLAW_AVAILABLE, reason="openclaw CLI not installed")
-    def test_openclaw_client_get_version(self):
-        """Test getting OpenClaw version information."""
-        client = OpenClawClient()
+    def test_openclaw_client_get_version_when_cli_is_unavailable(self):
+        """Version reporting is deterministic when the configured CLI is absent."""
+        client = OpenClawClient(
+            config={"openclaw_command": "nonexistent-openclaw-command-xyz"}
+        )
         version_info = client.get_openclaw_version()
 
         # Test real result structure
         assert isinstance(version_info, dict)
         assert "available" in version_info
         assert "version" in version_info
-        # Available depends on whether openclaw is installed
-        if OPENCLAW_AVAILABLE:
-            assert version_info["available"] is True
+        assert version_info["available"] is False
+        assert version_info["exit_code"] == -1
 
     @pytest.mark.skipif(not OPENCLAW_AVAILABLE, reason="openclaw CLI not installed")
     def test_openclaw_client_run_doctor(self):

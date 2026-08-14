@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Sanitizers..
+Module implementation, resources, and local coordination for Sanitizers.
 
 ## Directory Contents
 - `PAI.md` – File

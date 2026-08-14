@@ -1,7 +1,7 @@
 """Tests for agents.hermes.client_pkg — HermesClient dual-backend.
 
 Zero-Mock: Tests verify real client instantiation and method signatures.
-Backend-dependent tests use skipif for Ollama availability.
+Backend-dependent behavior is exercised with deterministic local command paths.
 """
 
 from __future__ import annotations
@@ -57,22 +57,31 @@ class TestHermesClientMethods:
         assert isinstance(result, dict)
         assert "success" in result
 
-    @pytest.mark.skipif(
-        HermesClient().active_backend == "none",
-        reason="No Hermes backend available",
-    )
-    def test_execute_returns_response(self) -> None:
-        """Execute a simple prompt if a backend is available.
+    def test_execute_returns_error_response_for_unavailable_provider(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Execute remains observable when the configured CLI fails locally.
 
-        Note: HermesClient.execute() requires an AgentRequest object,
-        not a plain string. This test validates the end-to-end flow.
+        A test must not depend on whether a developer has a live Hermes
+        installation or provider credentials.  ``false`` is a deterministic
+        POSIX command: it exercises the CLI response/error boundary without
+        starting a model, contacting a provider, or waiting on a timeout.
         """
         from codomyrmex.agents.core.base import AgentRequest
 
-        client = HermesClient()
-        request = AgentRequest(prompt="What is 2+2?")
+        monkeypatch.setenv("OPENROUTER_API_KEY", "test-only-not-a-credential")
+        client = HermesClient(
+            config={
+                "hermes_backend": "cli",
+                "hermes_command": "false",
+                "hermes_timeout": 2,
+            }
+        )
+        request = AgentRequest(prompt="offline deterministic execution")
         response = client.execute(request)
         assert response is not None
+        assert response.error is not None
+        assert "Hermes CLI failed" in response.error
 
 
 class TestHermesClientSessionManagement:

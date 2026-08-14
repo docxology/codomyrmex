@@ -30,6 +30,11 @@ def _make_registry(tmp_path: Path):
     registry = TrustRegistry()
     # Redirect ledger to tmp_path so tests don't touch ~/.codomyrmex
     registry._ledger_path = tmp_path / ".codomyrmex" / "trust_ledger.json"
+    # Permission and atomicity tests do not exercise tool enumeration. Seed an
+    # empty, initialized state so they remain isolated from optional native
+    # modules imported by the dynamic MCP discovery pass.
+    registry._levels = {}
+    registry._levels_initialized = True
     registry._disk_loaded = True  # prevent re-load from original path
     return registry
 

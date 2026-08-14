@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Service Mesh..
+Module implementation, resources, and local coordination for Service Mesh.
 
 ## Directory Contents
 - `PAI.md` – File

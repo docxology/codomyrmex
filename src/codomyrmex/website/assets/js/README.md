@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Js..
+Module implementation, resources, and local coordination for Js.
 
 ## Directory Contents
 - `PAI.md` – File

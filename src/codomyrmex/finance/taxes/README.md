@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Taxes..
+Module implementation, resources, and local coordination for Taxes.
 
 ## Directory Contents
 - `PAI.md` – File

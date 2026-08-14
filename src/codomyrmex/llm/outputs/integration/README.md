@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Integration..
+Module implementation, resources, and local coordination for Integration.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Cpp..
+Module implementation, resources, and local coordination for Cpp.
 
 ## Directory Contents
 - `README.md` – File

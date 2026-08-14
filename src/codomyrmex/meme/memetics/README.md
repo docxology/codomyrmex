@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Memetics..
+Module implementation, resources, and local coordination for Memetics.
 
 ## Directory Contents
 - `PAI.md` – File

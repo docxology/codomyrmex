@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Qwen..
+Module implementation, resources, and local coordination for Qwen.
 
 ## Directory Contents
 - `PAI.md` – File

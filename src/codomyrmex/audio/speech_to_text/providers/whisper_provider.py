@@ -187,7 +187,7 @@ class WhisperProvider(STTProvider):
 
     def __init__(
         self,
-        model_size: WhisperModelSize = WhisperModelSize.BASE,
+        model_size: WhisperModelSize | str = WhisperModelSize.BASE,
         device: str = "auto",
         compute_type: str = "auto",
         download_root: str | None = None,
@@ -215,8 +215,21 @@ class WhisperProvider(STTProvider):
                 missing_packages=["faster-whisper"],
             )
 
+        try:
+            normalized_model_size = (
+                model_size
+                if isinstance(model_size, WhisperModelSize)
+                else WhisperModelSize(model_size)
+            )
+        except ValueError as exc:
+            valid_sizes = ", ".join(size.value for size in WhisperModelSize)
+            raise ValueError(
+                f"Unknown Whisper model size {model_size!r}; "
+                f"choose one of: {valid_sizes}"
+            ) from exc
+
         super().__init__()
-        self.model_size = model_size
+        self.model_size = normalized_model_size
         self.device = device
         self.compute_type = compute_type
         self._download_root = download_root

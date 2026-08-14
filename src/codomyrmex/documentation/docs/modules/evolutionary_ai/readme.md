@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Evolutionary Ai..
+Module implementation, resources, and local coordination for Evolutionary Ai.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

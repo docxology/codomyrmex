@@ -2,12 +2,28 @@
 
 from __future__ import annotations
 
+import math
 import time
 from dataclasses import dataclass, field
 from enum import Enum
 
 PROJECT_COVERAGE_FLOOR = 60.0
 TIER1_COVERAGE_FLOOR = 80.0
+
+
+def _is_nonnegative_int(value: object) -> bool:
+    """Return whether *value* is a real, non-negative integer evidence count."""
+    return isinstance(value, int) and not isinstance(value, bool) and value >= 0
+
+
+def _is_percentage(value: object) -> bool:
+    """Return whether *value* is a finite percentage in the inclusive range."""
+    return (
+        isinstance(value, (int, float))
+        and not isinstance(value, bool)
+        and math.isfinite(float(value))
+        and 0 <= float(value) <= 100
+    )
 
 
 class CertificationStatus(Enum):
@@ -100,20 +116,31 @@ class ReleaseValidator:
         failures: int,
         total: int,
         max_skips: int = 50,
+        *,
+        skipped: int = 0,
     ) -> CertificationCheck:
-        """Record executed test evidence."""
-        del max_skips
-        passed = total > 0 and failures == 0
+        """Record executed test evidence and enforce the skip budget."""
+        passed = (
+            _is_nonnegative_int(failures)
+            and _is_nonnegative_int(total)
+            and _is_nonnegative_int(skipped)
+            and _is_nonnegative_int(max_skips)
+            and total > 0
+            and failures == 0
+            and failures <= total
+            and skipped <= total
+            and skipped <= max_skips
+        )
         check = CertificationCheck(
             name="Test Suite",
             category="testing",
             status=CertificationStatus.PASS if passed else CertificationStatus.FAIL,
-            value=f"{failures} failures / {total} tests",
-            threshold="at least 1 test and 0 failures",
+            value=f"{failures} failures / {total} tests / {skipped} skipped",
+            threshold=f"at least 1 test, 0 failures, and at most {max_skips} skips",
             message=(
                 "PASS"
                 if passed
-                else "Test evidence is absent or includes one or more failures"
+                else "Test evidence is absent, failed, or exceeds the skip budget"
             ),
         )
         self._checks.append(check)
@@ -121,8 +148,12 @@ class ReleaseValidator:
 
     def check_coverage(self, overall: float, tier1: float = 0) -> CertificationCheck:
         """Record repository coverage evidence."""
-        passed = overall >= self._policy.coverage_floor
-        if tier1 > 0:
+        valid_overall = _is_percentage(overall)
+        valid_tier1 = _is_percentage(tier1)
+        passed = (
+            valid_overall and valid_tier1 and overall >= self._policy.coverage_floor
+        )
+        if valid_tier1 and tier1 > 0:
             passed = passed and tier1 >= self._policy.tier1_coverage_floor
         check = CertificationCheck(
             name="Code Coverage",
@@ -139,7 +170,9 @@ class ReleaseValidator:
 
     def check_type_safety(self, errors: int) -> CertificationCheck:
         """Record type-check evidence."""
-        if errors == 0:
+        if not _is_nonnegative_int(errors):
+            status = CertificationStatus.FAIL
+        elif errors == 0:
             status = CertificationStatus.PASS
         else:
             status = (
@@ -159,7 +192,12 @@ class ReleaseValidator:
 
     def check_security(self, cve_count: int, secrets_found: int) -> CertificationCheck:
         """Record dependency and secret-scan evidence."""
-        passed = cve_count == 0 and secrets_found == 0
+        passed = (
+            _is_nonnegative_int(cve_count)
+            and _is_nonnegative_int(secrets_found)
+            and cve_count == 0
+            and secrets_found == 0
+        )
         check = CertificationCheck(
             name="Security",
             category="security",
@@ -172,8 +210,10 @@ class ReleaseValidator:
 
     def check_documentation(self, complete: bool) -> CertificationCheck:
         """Record strict documentation-build evidence."""
-        if complete:
+        if complete is True:
             status = CertificationStatus.PASS
+        elif not isinstance(complete, bool):
+            status = CertificationStatus.FAIL
         else:
             status = (
                 CertificationStatus.FAIL
@@ -197,7 +237,12 @@ class ReleaseValidator:
         artifact_count: int,
     ) -> CertificationCheck:
         """Record wheel, sdist, and publication artifact verification."""
-        passed = verified and artifact_count > 0
+        passed = (
+            isinstance(verified, bool)
+            and verified
+            and _is_nonnegative_int(artifact_count)
+            and artifact_count > 0
+        )
         check = CertificationCheck(
             name="Artifact Verification",
             category="artifacts",

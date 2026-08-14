@@ -41,6 +41,10 @@ python scripts/model_context_protocol/run_mcp_server.py --list-tools
 
 # Start in stdio mode (required for Claude Desktop/Code integration)
 python scripts/model_context_protocol/run_mcp_server.py --transport stdio
+
+# The launcher is read-only by default. Explicitly opt into mutation and
+# command execution only from a separately reviewed local client:
+# python scripts/model_context_protocol/run_mcp_server.py --transport stdio --profile full
 ```
 
 You should see tool categories: file operations, code analysis, shell execution, memory/knowledge, module info.

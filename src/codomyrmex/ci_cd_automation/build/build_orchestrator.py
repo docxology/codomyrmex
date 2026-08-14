@@ -329,10 +329,12 @@ def validate_build_config(config: dict[str, Any]) -> tuple[bool, list[str]]:
     errors: list[str] = []
     if not isinstance(config, dict):
         return False, ["Build configuration must be a mapping"]
-    if "name" in config and not isinstance(config["name"], str):
-        errors.append("name must be a string")
-    if "name" in config and not config["name"].strip():
-        errors.append("name must not be empty")
+    if "name" in config:
+        name = config["name"]
+        if not isinstance(name, str):
+            errors.append("name must be a string")
+        elif not name.strip():
+            errors.append("name must not be empty")
     commands = config.get("build_commands", [])
     if commands is not None and not isinstance(commands, list):
         errors.append("build_commands must be a list")

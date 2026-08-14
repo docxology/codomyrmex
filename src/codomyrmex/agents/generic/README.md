@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Generic..
+Module implementation, resources, and local coordination for Generic.
 
 ## Directory Contents
 - `PAI.md` – File

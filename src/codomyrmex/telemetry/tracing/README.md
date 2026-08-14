@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Tracing..
+Module implementation, resources, and local coordination for Tracing.
 
 ## Directory Contents
 - `PAI.md` – File

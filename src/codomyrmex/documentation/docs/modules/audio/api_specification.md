@@ -15,7 +15,7 @@ The main interface for speech-to-text transcription.
 ```python
 Transcriber(
     provider: str = "whisper",
-    model_size: WhisperModelSize = WhisperModelSize.BASE,
+    model_size: WhisperModelSize | str = WhisperModelSize.BASE,
     device: str = "auto",
     compute_type: str = "auto",
     **kwargs
@@ -24,7 +24,7 @@ Transcriber(
 
 **Parameters:**
 - `provider`: STT provider name (currently "whisper")
-- `model_size`: Whisper model size enum
+- `model_size`: Whisper model size enum or string value such as `"tiny"`
 - `device`: Compute device ("auto", "cpu", "cuda")
 - `compute_type`: Precision ("auto", "float16", "int8", "float32")
 

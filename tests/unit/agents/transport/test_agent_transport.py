@@ -86,6 +86,20 @@ class TestAgentDeserializer:
         with pytest.raises(IntegrityError):
             deserializer.verify_signed(tampered, sig, key="secret")
 
+    def test_verify_requires_expected_signature(self):
+        """The convenience verifier fails closed without a signature."""
+        serializer = AgentSerializer()
+        deserializer = AgentDeserializer()
+        data = serializer.serialize(serializer.snapshot(agent_id="a"))
+
+        assert deserializer.verify(data, key="secret") is False
+        signature = deserializer.sign(data, key="secret")
+        assert deserializer.verify(data, key="secret", signature=signature) is True
+        assert (
+            deserializer.verify(data + b"tampered", key="secret", signature=signature)
+            is False
+        )
+
     def test_deserialize_verified(self):
         """deserialize_verified round-trips with HMAC check."""
         serializer = AgentSerializer()

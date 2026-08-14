@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Ssm..
+Module implementation, resources, and local coordination for Ssm.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

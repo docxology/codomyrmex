@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Fractals..
+Module implementation, resources, and local coordination for Fractals.
 
 `WorkspaceManager.init_workspace()` creates its synthetic initial commit with a
 command-scoped bootstrap identity, so clean environments do not need global Git

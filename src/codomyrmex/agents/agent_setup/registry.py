@@ -7,6 +7,7 @@ credential, and a probe function that returns a ``ProbeResult``.
 
 from __future__ import annotations
 
+import importlib
 import os
 import shutil
 import time
@@ -52,6 +53,23 @@ class AgentDescriptor:
     config_key: str  # AgentConfig field for the key/url
     default_model: str
     probe: Callable[[], ProbeResult] = field(repr=False)
+    client_module: str | None = None
+    client_class: str | None = None
+
+    def to_dict(self) -> dict[str, str | None]:
+        """Return a JSON-safe descriptor without exposing the probe callable."""
+        client_path = None
+        if self.client_module and self.client_class:
+            client_path = f"{self.client_module}.{self.client_class}"
+        return {
+            "name": self.name,
+            "display_name": self.display_name,
+            "agent_type": self.agent_type,
+            "env_var": self.env_var,
+            "config_key": self.config_key,
+            "default_model": self.default_model,
+            "client_path": client_path,
+        }
 
 
 # ---------------------------------------------------------------------------
@@ -154,6 +172,69 @@ class AgentRegistry:
         """Return all known agent descriptors."""
         return list(self._descriptors)
 
+    def get_descriptor(self, name: str) -> AgentDescriptor | None:
+        """Return a descriptor by stable name, or ``None`` when unknown."""
+        normalized = name.strip().lower()
+        return next(
+            (
+                descriptor
+                for descriptor in self._descriptors
+                if descriptor.name == normalized
+            ),
+            None,
+        )
+
+    def create_agent(
+        self, name: str, config: dict[str, object] | None = None
+    ) -> object:
+        """Instantiate a registered agent client without running a live probe.
+
+        Construction is deliberately separate from :meth:`probe_agent`: a probe
+        answers "is the integration configured?", while this method resolves the
+        actual client used by ``execute_agent``. Provider constructors are allowed
+        to fail with their normal configuration error so callers can report an
+        actionable dispatch failure instead of claiming success.
+        """
+        descriptor = self.get_descriptor(name)
+        if descriptor is None:
+            raise ValueError(f"Unknown agent '{name}'.")
+
+        # OllamaClient is a lightweight local client with a deliberately
+        # different constructor (model/base_url rather than config).  Keep it
+        # in the same executable catalog as the other providers instead of
+        # advertising a descriptor that root MCP dispatch cannot instantiate.
+        if descriptor.name == "ollama":
+            from codomyrmex.agents.llm_client import OllamaClient
+
+            supplied = config or {}
+            model = str(supplied.get("model", descriptor.default_model))
+            base_url = str(supplied.get("base_url", self._ollama_base_url))
+            return OllamaClient(model=model, base_url=base_url)
+
+        if not descriptor.client_module or not descriptor.client_class:
+            raise RuntimeError(
+                f"Agent '{descriptor.name}' is catalogued but has no executable client."
+            )
+
+        try:
+            module = importlib.import_module(descriptor.client_module)
+            client_class = getattr(module, descriptor.client_class)
+        except (ImportError, AttributeError) as exc:
+            raise RuntimeError(
+                f"Agent '{descriptor.name}' client is unavailable: {exc}"
+            ) from exc
+
+        if not callable(client_class):
+            raise RuntimeError(
+                f"Agent '{descriptor.name}' client target is not callable."
+            )
+        try:
+            return client_class(config=config or {})
+        except TypeError as exc:
+            raise RuntimeError(
+                f"Agent '{descriptor.name}' client could not be constructed: {exc}"
+            ) from exc
+
     def probe_agent(self, name: str) -> ProbeResult:
         """Probe a single agent by name."""
         for desc in self._descriptors:
@@ -196,6 +277,8 @@ class AgentRegistry:
                 config_key="claude_api_key",
                 default_model="claude-3-opus-20240229",
                 probe=lambda: _probe_api_key_env("claude", "ANTHROPIC_API_KEY"),
+                client_module="codomyrmex.agents.claude",
+                client_class="ClaudeClient",
             ),
             AgentDescriptor(
                 name="codex",
@@ -205,6 +288,8 @@ class AgentRegistry:
                 config_key="codex_api_key",
                 default_model="code-davinci-002",
                 probe=lambda: _probe_api_key_env("codex", "OPENAI_API_KEY"),
+                client_module="codomyrmex.agents.codex",
+                client_class="CodexClient",
             ),
             AgentDescriptor(
                 name="o1",
@@ -214,6 +299,8 @@ class AgentRegistry:
                 config_key="o1_api_key",
                 default_model="o1",
                 probe=lambda: _probe_api_key_env("o1", "OPENAI_API_KEY"),
+                client_module="codomyrmex.agents.o1",
+                client_class="O1Client",
             ),
             AgentDescriptor(
                 name="deepseek",
@@ -223,6 +310,8 @@ class AgentRegistry:
                 config_key="deepseek_api_key",
                 default_model="deepseek-coder",
                 probe=lambda: _probe_api_key_env("deepseek", "DEEPSEEK_API_KEY"),
+                client_module="codomyrmex.agents.deepseek",
+                client_class="DeepSeekClient",
             ),
             AgentDescriptor(
                 name="qwen",
@@ -232,6 +321,8 @@ class AgentRegistry:
                 config_key="qwen_api_key",
                 default_model="qwen-coder-plus",
                 probe=lambda: _probe_api_key_env("qwen", "DASHSCOPE_API_KEY"),
+                client_module="codomyrmex.agents.qwen",
+                client_class="QwenClient",
             ),
             AgentDescriptor(
                 name="perplexity",
@@ -241,6 +332,8 @@ class AgentRegistry:
                 config_key="perplexity_api_key",
                 default_model="sonar",
                 probe=lambda: _probe_api_key_env("perplexity", "PERPLEXITY_API_KEY"),
+                client_module="codomyrmex.agents.perplexity",
+                client_class="PerplexityClient",
             ),
             # ── CLI agents ────────────────────────────────────────────
             AgentDescriptor(
@@ -251,6 +344,8 @@ class AgentRegistry:
                 config_key="jules_command",
                 default_model="n/a",
                 probe=lambda: _probe_cli_binary("jules", "jules"),
+                client_module="codomyrmex.agents.jules",
+                client_class="JulesClient",
             ),
             AgentDescriptor(
                 name="opencode",
@@ -260,6 +355,8 @@ class AgentRegistry:
                 config_key="opencode_command",
                 default_model="n/a",
                 probe=lambda: _probe_cli_binary("opencode", "opencode"),
+                client_module="codomyrmex.agents.opencode",
+                client_class="OpenCodeClient",
             ),
             AgentDescriptor(
                 name="gemini",
@@ -269,6 +366,8 @@ class AgentRegistry:
                 config_key="gemini_command",
                 default_model="gemini-2.0-flash",
                 probe=lambda: _probe_cli_binary("gemini", "gemini"),
+                client_module="codomyrmex.agents.gemini",
+                client_class="GeminiClient",
             ),
             AgentDescriptor(
                 name="mistral_vibe",
@@ -278,6 +377,8 @@ class AgentRegistry:
                 config_key="mistral_vibe_command",
                 default_model="n/a",
                 probe=lambda: _probe_cli_binary("mistral_vibe", "vibe"),
+                client_module="codomyrmex.agents.mistral_vibe",
+                client_class="MistralVibeClient",
             ),
             AgentDescriptor(
                 name="hermes",
@@ -287,6 +388,8 @@ class AgentRegistry:
                 config_key="hermes_command",
                 default_model="n/a",
                 probe=lambda: _probe_cli_binary("hermes", "hermes"),
+                client_module="codomyrmex.agents.hermes",
+                client_class="HermesClient",
             ),
             AgentDescriptor(
                 name="every_code",
@@ -296,6 +399,8 @@ class AgentRegistry:
                 config_key="every_code_command",
                 default_model="n/a",
                 probe=lambda: _probe_cli_binary("every_code", "code"),
+                client_module="codomyrmex.agents.every_code",
+                client_class="EveryCodeClient",
             ),
             # ── Local / Ollama ────────────────────────────────────────
             AgentDescriptor(
@@ -306,5 +411,7 @@ class AgentRegistry:
                 config_key="ollama_base_url",
                 default_model="llama3.2",
                 probe=lambda: _probe_ollama(url),
+                client_module="codomyrmex.agents.llm_client",
+                client_class="OllamaClient",
             ),
         ]

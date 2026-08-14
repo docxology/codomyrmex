@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Cli..
+Module implementation, resources, and local coordination for Cli.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

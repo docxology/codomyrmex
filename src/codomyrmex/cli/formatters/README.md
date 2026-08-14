@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Formatters..
+Module implementation, resources, and local coordination for Formatters.
 
 ## Directory Contents
 - `PAI.md` – File

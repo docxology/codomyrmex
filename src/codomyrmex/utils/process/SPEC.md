@@ -51,6 +51,8 @@ utils/process/
 - Use `asyncio.create_subprocess_exec` (non-shell) or
   `asyncio.create_subprocess_shell` (shell mode).
 - Timeout via `asyncio.wait_for`; kill process on expiry.
+- Cancellation kills and reaps the child before propagating
+  `asyncio.CancelledError`.
 - Return `SubprocessResult` with `timed_out=True` on timeout.
 
 ### FR-3: Streaming Output (`stream_command`)
@@ -159,8 +161,9 @@ class ScriptConfig:
 
 ## Constraints
 
-- Shell mode (`shell=True`) requires the command to be a string; list commands
-  are joined with spaces.
+- Shell mode (`shell=True`) accepts a string for intentional shell syntax. A
+  list is quoted with `shlex.join`, so list elements remain arguments instead
+  of becoming unexpected shell syntax.
 - `stream_command` reads stdout/stderr line-by-line; binary output is not
   supported.
 - `ScriptBase` requires `yaml` at import time; a fallback is provided when

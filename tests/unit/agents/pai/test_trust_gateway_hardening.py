@@ -73,7 +73,9 @@ def _pick_safe_tool() -> str:
             input_schema = schema.get("inputSchema", schema)
             if not input_schema.get("required"):
                 return name
-    pytest.skip("No safe tools without required arguments found")
+    raise AssertionError(
+        "the local MCP registry must provide a safe no-argument tool fixture"
+    )
 
 
 def _pick_destructive_tool() -> str:
@@ -83,7 +85,9 @@ def _pick_destructive_tool() -> str:
     for name in sorted(DESTRUCTIVE_TOOLS):
         if name in all_tools:
             return name
-    pytest.skip("No destructive tools available in the registry")
+    raise AssertionError(
+        "the local MCP registry must provide a destructive tool fixture"
+    )
 
 
 # Map of required kwargs for destructive tools so schema validation passes.
@@ -92,6 +96,7 @@ _DESTRUCTIVE_TOOL_KWARGS: dict[str, dict[str, object]] = {
     "codomyrmex.run_command": {"command": "true"},
     "codomyrmex.run_tests": {},
     "codomyrmex.call_module_function": {"function": "noop"},
+    "codomyrmex.deserialize_data": {"data": "e30=", "format": "pickle"},
 }
 
 
@@ -187,8 +192,9 @@ class TestAuditLog:
         registry = get_tool_registry()
         available = set(registry.list_tools())
         candidates = [n for n in NO_ARGS_SAFE if n in available]
-        if len(candidates) < 2:
-            pytest.skip("Need at least 2 safe no-args tools for filtering test")
+        assert len(candidates) >= 2, (
+            "the local MCP registry must provide two safe no-argument tools"
+        )
 
         tool_a, tool_b = candidates[0], candidates[1]
 
@@ -289,6 +295,23 @@ class TestTrustHooks:
 class TestTrustRegistry:
     """Direct state-based tests on the TrustRegistry singleton."""
 
+    def test_ledger_verification_does_not_mutate_signed_payload(self):
+        from codomyrmex.agents.pai.trust_gateway import _sign_ledger, _verify_ledger
+
+        signed = _sign_ledger({"codomyrmex.read_file": "trusted"})
+        verified = _verify_ledger(signed)
+        assert verified == {"codomyrmex.read_file": "trusted"}
+        assert "_signature" in signed
+
+    @pytest.mark.parametrize("signature", [None, 1, [], {"value": "bad"}])
+    def test_malformed_signature_fails_closed(self, signature):
+        from codomyrmex.agents.pai.trust_gateway import _verify_ledger
+
+        assert (
+            _verify_ledger({"codomyrmex.read_file": "trusted", "_signature": signature})
+            is None
+        )
+
     def test_reset_sets_all_untrusted(self):
         """After reset(), every tool should be UNTRUSTED."""
         trust_all()
@@ -365,6 +388,11 @@ class TestDestructiveConfirmation:
         assert isinstance(result, dict)
         assert "confirmation_required" not in result
 
+    def test_confirmation_setting_rejects_implicit_truthiness(self):
+        """Configuration must not turn on by accepting a truthy string."""
+        with pytest.raises(ValueError, match="enabled must be a boolean"):
+            set_require_confirmation("yes")
+
     def test_destructive_tool_requires_confirmation(self, confirmation_enabled):
         """Destructive tool returns a confirmation dict on first call."""
         destructive = _pick_destructive_tool()
@@ -408,6 +436,22 @@ class TestDestructiveConfirmation:
             "Token was not consumed; still in confirmation loop"
         )
 
+    def test_token_is_bound_to_exact_arguments(self, confirmation_enabled):
+        """A token for one destructive payload cannot authorize another."""
+        destructive = "codomyrmex.write_file"
+        kwargs = {"path": "/dev/null", "content": "first"}
+
+        first = trusted_call_tool(destructive, **kwargs)
+        assert first.get("confirmation_required") is True
+
+        altered = {"path": "/dev/null", "content": "altered"}
+        altered["confirmation_token"] = first["confirm_token"]
+        with pytest.raises(
+            trust_gateway.SecurityError,
+            match="Confirmation token does not match arguments",
+        ):
+            trusted_call_tool(destructive, **altered)
+
     def test_invalid_token_fails(self, confirmation_enabled):
         """An invalid confirmation token must raise SecurityError."""
         destructive = _pick_destructive_tool()
@@ -428,10 +472,9 @@ class TestDestructiveConfirmation:
         # Find two destructive tools that are both in DESTRUCTIVE_TOOLS and
         # in the registry.
         candidates = sorted(name for name in DESTRUCTIVE_TOOLS if name in all_tools)
-        if len(candidates) < 2:
-            pytest.skip(
-                "Need at least 2 destructive tools in DESTRUCTIVE_TOOLS for mismatch test"
-            )
+        assert len(candidates) >= 2, (
+            "the local MCP registry must provide two destructive tools"
+        )
 
         tool_a, tool_b = candidates[0], candidates[1]
 

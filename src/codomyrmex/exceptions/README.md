@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Exceptions..
+Module implementation, resources, and local coordination for Exceptions.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

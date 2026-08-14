@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Alerting..
+Module implementation, resources, and local coordination for Alerting.
 
 ## Directory Contents
 - `PAI.md` – File

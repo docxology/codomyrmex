@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Git Agent..
+Module implementation, resources, and local coordination for Git Agent.
 
 ## Directory Contents
 - `PAI.md` – File

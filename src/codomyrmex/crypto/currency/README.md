@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Currency..
+Module implementation, resources, and local coordination for Currency.
 
 ## Directory Contents
 - `PAI.md` – File

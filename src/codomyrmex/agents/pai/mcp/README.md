@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Mcp..
+Module implementation, resources, and local coordination for Mcp.
 
 ## Directory Contents
 - `README.md` – File

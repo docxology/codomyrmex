@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Droid..
+Module implementation, resources, and local coordination for Droid.
 
 ## Directory Contents
 - `PAI.md` – File

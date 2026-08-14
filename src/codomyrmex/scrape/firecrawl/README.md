@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Firecrawl..
+Module implementation, resources, and local coordination for Firecrawl.
 
 ## Directory Contents
 - `PAI.md` – File

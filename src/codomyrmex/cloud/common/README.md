@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Common..
+Module implementation, resources, and local coordination for Common.
 
 ## Directory Contents
 - `PAI.md` – File

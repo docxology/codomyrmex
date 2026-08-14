@@ -524,7 +524,7 @@ class DataProvider:
 | `get_doc_tree()` | `dict[str, Any]` | Tree of `.md` documentation files under `docs/` and `src/` |
 | `get_doc_content(doc_path: str)` | `str` | Content of a documentation file (`.md` only, traversal protected) |
 | `get_pipeline_status()` | `list[dict[str, Any]]` | CI/CD workflow definitions from `.github/workflows/*.yml` |
-| `get_health_status()` | `dict[str, Any]` | Comprehensive health: uptime, python, git, module coverage, architecture layers |
+| `get_health_status(*, include_runtime=True)` | `dict[str, Any]` | Comprehensive health: uptime, python, git, module coverage, architecture layers; static builds pass `include_runtime=False` for deterministic output |
 | `run_tests(module: str \| None = None)` | `dict[str, Any]` | Run pytest and return structured results (passed/failed/skipped/errors) |
 | `get_pai_missions()` | `list[dict[str, Any]]` | PAI missions from `~/.claude/MEMORY/STATE/missions/` |
 | `get_pai_projects()` | `list[dict[str, Any]]` | PAI projects from `~/.claude/MEMORY/STATE/projects/` |

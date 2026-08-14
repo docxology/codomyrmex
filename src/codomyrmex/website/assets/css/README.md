@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Css..
+Module implementation, resources, and local coordination for Css.
 
 ## Directory Contents
 - `PAI.md` – File

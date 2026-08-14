@@ -19,20 +19,38 @@ def execute_agent(agent_name: str, prompt: str) -> dict:
 
     # 1. Look up agent in registry
     registry = AgentRegistry()
-    config = registry.get_agent_config(agent_name)
-    if not config:
-        return {"status": "error", "message": f"Agent '{agent_name}' not found."}
+    descriptor = registry.get_descriptor(agent_name)
+    if descriptor is None:
+        return {
+            "status": "error",
+            "error_code": "AGENT_NOT_FOUND",
+            "message": f"Agent '{agent_name}' not found.",
+        }
 
     # 2. Instantiate and execute
     try:
         agent = registry.create_agent(agent_name)
         request = AgentRequest(prompt=prompt)
         response = agent.execute(request)
-        return {"status": "success", "content": response.content}
-    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+        return {
+            "status": "success" if response.is_success() else "error",
+            "agent": descriptor.name,
+            "content": response.content,
+            "error": response.error,
+            "metadata": response.metadata or {},
+            "execution_time": response.execution_time,
+            "tokens_used": response.tokens_used,
+            "cost": response.cost,
+            "request_id": response.request_id,
+            "trace_id": response.trace_id,
+        }
+    except Exception as e:
         return {
             "status": "error",
+            "error_code": "AGENT_EXECUTION_FAILED",
+            "agent": descriptor.name,
             "message": f"Failed to execute agent {agent_name}: {e}",
+            "error_type": type(e).__name__,
         }
 
 
@@ -47,7 +65,11 @@ def list_agents() -> dict:
 
     registry = AgentRegistry()
     agents = registry.list_agents()
-    return {"status": "success", "agents": agents, "count": len(agents)}
+    return {
+        "status": "success",
+        "agents": [descriptor.to_dict() for descriptor in agents],
+        "count": len(agents),
+    }
 
 
 @mcp_tool(category="agents")

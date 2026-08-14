@@ -3,8 +3,6 @@ name: gitnexus-refactoring
 description: "Use when the user wants to rename, extract, split, move, or restructure code safely. Examples: \"Rename this function\", \"Extract this into a module\", \"Refactor this class\", \"Move this to a separate file\""
 ---
 
-<!-- markdownlint-disable MD040 MD060 -->
-
 # Refactoring with GitNexus
 
 ## When to Use

@@ -43,6 +43,7 @@ LLM provider integrations and agent implementations for Claude, Codex, Gemini, O
 - `mcp_tools.py` – MCP tool implementations — tool handlers and schemas
 - `memory/` – memory module implementation
 - `meta/` – meta module implementation
+- `navigation/` – deterministic read-only capability catalog and MCP navigation
 - `mission_control/` – mission control module implementation (builderz-labs/mission-control dashboard)
 - `pi/` – Directory containing pi coding agent components (pi.dev terminal agent)
 - `mistral_vibe/` – mistral vibe module implementation

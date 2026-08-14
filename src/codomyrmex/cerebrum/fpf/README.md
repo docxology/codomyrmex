@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Fpf..
+Module implementation, resources, and local coordination for Fpf.
 
 ## Directory Contents
 - `INTEGRATION_SUMMARY.md` – File

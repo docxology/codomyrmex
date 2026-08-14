@@ -50,6 +50,7 @@ The `agents` module is the core framework for AI agent integration in Codomyrmex
 - **`AgentBenchmark`** (`evaluation/`): Scoring, test cases, composite metrics
 - **`ConversationManager`** (`history/`): In-memory, file, SQLite stores
 - **`AgentRegistry`** (`agent_setup/`): Declarative catalog, live probes, YAML persistence
+- **`CapabilityCatalog`** (`navigation/`): Stable read-only index of agents, modules, and MCP tools
 
 ### 2.4 Utilities
 
@@ -97,6 +98,13 @@ from codomyrmex.agents.agent_setup import AgentRegistry
 registry = AgentRegistry()
 for result in registry.probe_all():
     print(f"{result.name}: {result.status}")
+
+# Navigation never performs live health probes or executes handlers.
+from codomyrmex.agents.navigation import build_capability_catalog
+
+catalog = build_capability_catalog(include_tools=True)
+for capability in catalog.search("dispatch", kind="agent"):
+    print(capability.id, capability.status)
 ```
 
 ### Setup wizard

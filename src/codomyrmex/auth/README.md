@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Auth..
+Module implementation, resources, and local coordination for Auth.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

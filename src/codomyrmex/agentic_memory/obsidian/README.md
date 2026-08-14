@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Obsidian..
+Module implementation, resources, and local coordination for Obsidian.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Io..
+Module implementation, resources, and local coordination for Io.
 
 ## Directory Contents
 - `PAI.md` – File

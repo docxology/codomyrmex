@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Curriculum..
+Module implementation, resources, and local coordination for Curriculum.
 
 ## Directory Contents
 - `PAI.md` – File

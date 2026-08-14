@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Prompt Templates..
+Module implementation, resources, and local coordination for Prompt Templates.
 
 ## Directory Contents
 - `PAI.md` – File

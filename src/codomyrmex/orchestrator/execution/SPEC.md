@@ -4,13 +4,13 @@
 
 ## Overview
 
-The execution submodule provides four execution strategies: synchronous subprocess-based script running, process-pool parallel execution, native asyncio parallel execution, and async job scheduling with priority ordering.
+The execution submodule provides four execution strategies: synchronous subprocess-based script running, threaded coordination of isolated subprocesses, native asyncio parallel execution, and async job scheduling with priority ordering.
 
 ## Architecture
 
 Two parallel stacks coexist:
 
-1. **Process-based** (`runner.py`, `parallel_runner.py`) -- uses `subprocess.run` and `ProcessPoolExecutor` for script-level isolation.
+1. **Subprocess-based** (`runner.py`, `parallel_runner.py`) -- uses `subprocess.run` for script-level isolation and a bounded `ThreadPoolExecutor` only to coordinate concurrent subprocesses.
 2. **Asyncio-based** (`async_runner.py`, `async_scheduler.py`) -- uses `asyncio.TaskGroup`, `Semaphore`, and priority heaps for coroutine-level concurrency.
 
 ## Key Classes
@@ -31,7 +31,7 @@ Returns a dict with keys: `script`, `name`, `status`, `exit_code`, `stdout`, `st
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `run_scripts` | `scripts: list[Path], timeout, cwd, env, configs` | `ExecutionResult` | Run scripts via `ProcessPoolExecutor` |
+| `run_scripts` | `scripts: list[Path], timeout, cwd, env, configs` | `ExecutionResult` | Run isolated subprocesses concurrently via a bounded `ThreadPoolExecutor` |
 | `run_scripts_async` | same as above | `ExecutionResult` | Async wrapper around `run_scripts` |
 | `cancel` | none | `None` | Cancel running execution |
 
@@ -53,7 +53,7 @@ Returns a dict with keys: `script`, `name`, `status`, `exit_code`, `stdout`, `st
 ## Dependencies
 
 - **Internal**: `codomyrmex.logging_monitoring`, `codomyrmex.events.core.event_schema` (optional)
-- **External**: Standard library (`asyncio`, `subprocess`, `concurrent.futures`, `multiprocessing`, `resource`)
+- **External**: Standard library (`asyncio`, `subprocess`, `concurrent.futures`, `resource`)
 
 ## Constraints
 

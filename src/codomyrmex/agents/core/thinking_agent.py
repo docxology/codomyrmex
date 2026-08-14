@@ -81,6 +81,7 @@ class ThinkingAgent(AgentInterface):
             max_tokens=self._thinking_config.max_context_tokens,
         )
         self._traces: list[ReasoningTrace] = []
+        self._last_trace: ReasoningTrace | None = None
         self._knowledge_retriever = knowledge_retriever
 
     # ── AgentInterface implementation ─────────────────────────────
@@ -112,6 +113,16 @@ class ThinkingAgent(AgentInterface):
         import time
 
         t0 = time.monotonic()
+        self._last_trace = None
+
+        if not request.prompt or not request.prompt.strip():
+            return AgentResponse(
+                content="",
+                error="Prompt is required",
+                execution_time=time.monotonic() - t0,
+                request_id=request.id,
+                trace_id=request.trace_id,
+            )
 
         # 1. Observe — add request to context
         self._context.add_message("user", request.prompt)
@@ -165,10 +176,20 @@ class ThinkingAgent(AgentInterface):
         )
 
         # 2. Think — run CoT pipeline
-        trace = self._cot.think(
-            prompt=request.prompt,
-            context=context_data,
-        )
+        try:
+            trace = self._cot.think(
+                prompt=request.prompt,
+                context=context_data,
+            )
+        except Exception as exc:
+            logger.exception("ThinkingAgent reasoning failed")
+            return AgentResponse(
+                content="",
+                error=f"Reasoning failed: {exc}",
+                execution_time=time.monotonic() - t0,
+                request_id=request.id,
+                trace_id=request.trace_id,
+            )
 
         # 3. Reason — extract the conclusion
         if not trace.is_complete or trace.conclusion is None:
@@ -176,6 +197,8 @@ class ThinkingAgent(AgentInterface):
                 content="Unable to reach a conclusion.",
                 error="Reasoning incomplete",
                 execution_time=time.monotonic() - t0,
+                request_id=request.id,
+                trace_id=request.trace_id,
             )
 
         conclusion = trace.conclusion
@@ -216,6 +239,8 @@ class ThinkingAgent(AgentInterface):
             content=response_content,
             execution_time=elapsed,
             tokens_used=trace.token_count,
+            request_id=request.id,
+            trace_id=request.trace_id,
             metadata={
                 "trace_id": trace.trace_id,
                 "confidence": trace.total_confidence,
@@ -226,7 +251,8 @@ class ThinkingAgent(AgentInterface):
 
     def stream(self, request: AgentRequest) -> Any:
         """Stream is not supported — falls back to execute."""
-        yield self.execute(request)
+        response = self.execute(request)
+        yield response.content if response.is_success() else f"Error: {response.error}"
 
     def setup(self) -> None:
         """No external setup required."""
@@ -250,8 +276,9 @@ class ThinkingAgent(AgentInterface):
     def observe(self, response: AgentResponse) -> dict[str, Any]:
         """Observe the result of an action."""
         return {
-            "success": response.is_success,
+            "success": response.is_success(),
             "content_length": len(response.content),
+            "error": response.error,
         }
 
     # ── Trace management ──────────────────────────────────────────
@@ -259,7 +286,7 @@ class ThinkingAgent(AgentInterface):
     @property
     def last_trace(self) -> ReasoningTrace | None:
         """Return the most recent reasoning trace."""
-        return self._traces[-1] if self._traces else None
+        return self._last_trace
 
     @property
     def all_traces(self) -> list[ReasoningTrace]:
@@ -294,6 +321,7 @@ class ThinkingAgent(AgentInterface):
     def _store_trace(self, trace: ReasoningTrace) -> None:
         """Store a trace, respecting the max_traces limit."""
         self._traces.append(trace)
+        self._last_trace = trace
         while len(self._traces) > self._thinking_config.max_traces:
             self._traces.pop(0)
 

@@ -26,7 +26,8 @@ class AgentDeserializer:
 
         deserializer = AgentDeserializer()
         snapshot = deserializer.deserialize(data)
-        if not deserializer.verify(data, key="secret"):
+        signature = deserializer.sign(data, key="secret")
+        if not deserializer.verify(data, key="secret", signature=signature):
             raise IntegrityError("Tampered!")
     """
 
@@ -44,18 +45,28 @@ class AgentDeserializer:
         """
         return self._serializer.deserialize_snapshot(data)
 
-    def verify(self, data: bytes, key: str) -> bool:
+    def verify(
+        self,
+        data: bytes,
+        key: str,
+        signature: str | None = None,
+    ) -> bool:
         """Verify HMAC-SHA256 integrity of serialized data.
 
         Args:
             data: The serialized payload bytes.
             key: Secret key used for signing.
+            signature: Expected HMAC digest.  It is required; omitting it
+                fails closed because a digest computed from the same payload
+                cannot establish integrity.
 
         Returns:
             True if the signature matches.
         """
-        self._compute_hmac(data, key)
-        return True  # Verification passes for raw data
+        if not signature:
+            return False
+        computed = self._compute_hmac(data, key)
+        return hmac.compare_digest(computed, signature)
 
     def sign(self, data: bytes, key: str) -> str:
         """Compute HMAC-SHA256 signature for data.

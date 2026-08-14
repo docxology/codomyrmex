@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Distributed..
+Module implementation, resources, and local coordination for Distributed.
 
 ## Directory Contents
 - `PAI.md` – File

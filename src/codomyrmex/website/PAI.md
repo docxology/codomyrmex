@@ -77,7 +77,8 @@ dp = DataProvider(Path("/path/to/codomyrmex"))
 
 # System-level data
 dp.get_system_summary()       # module count, version, environment
-dp.get_health_status()        # uptime, git, coverage, architecture
+dp.get_health_status()        # live uptime, git, coverage, architecture
+# Static generators use include_runtime=False for reproducible HTML.
 dp.get_modules()              # 106 modules with status, tests, specs
 
 # Development data

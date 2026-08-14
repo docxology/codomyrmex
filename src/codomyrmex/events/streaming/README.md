@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Streaming..
+Module implementation, resources, and local coordination for Streaming.
 
 ## Directory Contents
 - `PAI.md` – File

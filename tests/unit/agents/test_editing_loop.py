@@ -660,6 +660,24 @@ class TestEditMethod:
         assert isinstance(result, str)
 
 
+@pytest.mark.unit
+class TestEditSafetyControls:
+    """Safety controls must be enforceable without live provider services."""
+
+    def test_auto_apply_disabled_prevents_edit_invocation(self, tmp_path):
+        target = tmp_path / "protected.py"
+        target.write_text("value = 1\n")
+        orch = EditingOrchestrator(config=EditingConfig(auto_apply_edits=False))
+
+        result = orch._edit(
+            EditTask(description="change value", file_path=str(target)),
+            "STEP 1: change value\nFIND: value = 1\nREPLACE: value = 2",
+        )
+
+        assert "auto_apply_edits is disabled" in result
+        assert target.read_text() == "value = 1\n"
+
+
 # =====================================================================
 # _review method tests (requires Ollama for real call)
 # =====================================================================

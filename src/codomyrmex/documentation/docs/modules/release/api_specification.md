@@ -32,7 +32,7 @@ ReleaseValidator(
 
 | Method | Result |
 |---|---|
-| `check_tests(failures, total, max_skips=50)` | requires at least one executed test and zero failures |
+| `check_tests(failures, total, max_skips=50, *, skipped=0)` | requires at least one test, zero failures, and no more than the configured skip budget |
 | `check_coverage(overall, tier1=0)` | enforces policy coverage floors |
 | `check_type_safety(errors)` | blocking in strict mode; warning otherwise |
 | `check_security(cve_count, secrets_found)` | blocks any supplied CVE or secret |

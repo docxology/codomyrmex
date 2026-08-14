@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Keys..
+Module implementation, resources, and local coordination for Keys.
 
 ## Directory Contents
 - `PAI.md` – File

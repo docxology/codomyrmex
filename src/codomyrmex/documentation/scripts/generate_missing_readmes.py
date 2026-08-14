@@ -37,6 +37,10 @@ def parse_agents_file(agents_path):
     purpose = (
         purpose_match.group(1).strip() if purpose_match else "No purpose specified"
     )
+    # Older generated AGENTS.md files may contain a duplicated terminal
+    # period.  Normalize at the parser boundary so future README generation
+    # cannot reintroduce the documentation-audit warning.
+    purpose = purpose.rstrip(".") + "."
 
     # Extract active components
     components_match = re.search(

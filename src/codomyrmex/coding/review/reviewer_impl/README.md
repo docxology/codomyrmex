@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Reviewer Impl..
+Module implementation, resources, and local coordination for Reviewer Impl.
 
 ## Directory Contents
 - `README.md` – File

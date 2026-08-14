@@ -147,6 +147,14 @@ class TestGetHealthStatus:
         assert isinstance(result["uptime_seconds"], int)
         assert result["uptime_seconds"] >= 0
 
+    def test_static_health_uses_deterministic_uptime(self, tmp_path):
+        """Static rendering must not embed process-relative runtime state."""
+        provider = DataProvider(tmp_path)
+        result = provider.get_health_status(include_runtime=False)
+
+        assert result["uptime"] == "--"
+        assert result["uptime_seconds"] == 0
+
     def test_python_info_has_required_keys(self, tmp_path):
         """python sub-dict has version, executable, platform."""
         provider = DataProvider(tmp_path)

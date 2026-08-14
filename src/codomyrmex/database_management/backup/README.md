@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Backup..
+Module implementation, resources, and local coordination for Backup.
 
 ## Directory Contents
 - `README.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Communication..
+Module implementation, resources, and local coordination for Communication.
 
 ## Directory Contents
 - `PAI.md` – File

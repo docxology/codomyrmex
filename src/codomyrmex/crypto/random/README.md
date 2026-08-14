@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Random..
+Module implementation, resources, and local coordination for Random.
 
 ## Directory Contents
 - `PAI.md` – File

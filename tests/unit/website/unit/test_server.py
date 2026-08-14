@@ -145,12 +145,15 @@ class _LiveServer:
         path: str,
         payload: dict | None = None,
         origin: str | None = "http://127.0.0.1:8787",
-        timeout: int = 10,
+        timeout: int = 30,
     ) -> tuple[int, dict]:
         """Make a POST request and return (status, parsed_json).
 
         Uses http.client for reliability with POST requests to avoid
-        ConnectionResetError issues with urllib.request.
+        ConnectionResetError issues with urllib.request. The 30-second
+        default matches GET requests and accommodates the first request in a
+        worker, which may initialize Ollama configuration or discover MCP
+        tools before sending its response.
         """
         body_bytes = json.dumps(payload or {}).encode()
         conn = http.client.HTTPConnection("127.0.0.1", self.port, timeout=timeout)

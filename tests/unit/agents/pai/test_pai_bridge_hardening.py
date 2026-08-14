@@ -268,6 +268,13 @@ def testtool_invalidate_cache_module():
     assert result["tools_found"] >= 0
 
 
+def testtool_invalidate_cache_rejects_arbitrary_import_target():
+    """Cache invalidation must not become an arbitrary import primitive."""
+    result = tool_invalidate_cache(module="json")
+    assert result["failed"] is True
+    assert "approved Codomyrmex MCP module" in result["error"]
+
+
 # ── Test: @mcp_tool versioning and requirements ───────────────────────
 
 

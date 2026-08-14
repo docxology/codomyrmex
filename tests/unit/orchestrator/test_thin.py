@@ -230,7 +230,7 @@ class TestBatch:
             try:
                 result = batch(scripts, workers=2, timeout=30)
             except PermissionError:
-                pytest.skip("ProcessPoolExecutor not available in sandbox")
+                pytest.skip("subprocess workers not available in sandbox")
             # ExecutionResult has success_count, failed_count, etc.
             assert isinstance(result, (ExecutionResult, dict))
 

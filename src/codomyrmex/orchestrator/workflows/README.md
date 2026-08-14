@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Workflows..
+Module implementation, resources, and local coordination for Workflows.
 
 ## Directory Contents
 - `PAI.md` – File

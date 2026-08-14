@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Module implementation, resources, and local coordination for Three D..
+Module implementation, resources, and local coordination for Three D.
 
 ## Active Components
 - `API_SPECIFICATION.md` – Project file
@@ -15,6 +15,7 @@ Module implementation, resources, and local coordination for Three D..
 - `ar_vr_support.py` – Project file
 - `engine_3d.py` – Project file
 - `examples/` – Directory containing examples components
+- `materials.py` – Renderer-neutral materials and mesh loading
 - `py.typed` – Project file
 - `rendering_pipeline.py` – Project file
 
@@ -34,6 +35,7 @@ Module implementation, resources, and local coordination for Three D..
 - `__init__.py`
 - `ar_vr_support.py`
 - `engine_3d.py`
+- `materials.py`
 - `py.typed`
 - `rendering_pipeline.py`
 

@@ -43,6 +43,11 @@ class TestTranscriberInterface:
         with pytest.raises(ValueError, match="Unknown provider"):
             Transcriber(provider="invalid_provider")
 
+    def test_invalid_model_size_is_rejected_before_provider_loading(self):
+        """Validate model-size strings before an optional model is loaded."""
+        with pytest.raises(ValueError, match="Unknown Whisper model size"):
+            Transcriber(provider="invalid_provider", model_size="not-a-model")
+
     @pytest.mark.skipif(not WHISPER_AVAILABLE, reason="Whisper not available")
     def test_transcribe_nonexistent_file(self):
         """Test that transcribing a nonexistent file raises TranscriptionError."""

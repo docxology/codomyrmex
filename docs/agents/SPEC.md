@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Defines the structure and behavioral standards for agent coordination documentation within the Codomyrmex ecosystem. This directory documents **40 agent packages** under `src/codomyrmex/agents/`, organized into five categories (plus [`rules/`](rules/) here as docs-only).
+Defines the structure and behavioral standards for agent coordination documentation within the Codomyrmex ecosystem. This directory documents **41 agent packages** under `src/codomyrmex/agents/`, organized into five categories (plus [`rules/`](rules/) here as docs-only).
 
 ## Documentation Structure
 
@@ -39,7 +39,7 @@ Large integrations (e.g. **Hermes**) add deep-dive pages under `docs/agents/<age
 |:---|---:|:---|
 | CLI-based | 12 | Jules, Gemini, Hermes, Open Gauss, Paperclip, Every Code |
 | API-based | 6 | Claude, Codex, O1, DeepSeek, Qwen, Perplexity |
-| Core Infrastructure | 8 | Core, Droid, Planner, Memory, Meta, Learning |
+| Core Infrastructure | 9 | Core, Droid, Planner, Memory, Meta, Learning, Navigation |
 | Infrastructure | 9 | Agent Setup, CLI, Context, Pooling, Transport |
 | Specialized | 5 | Git Agent, Google Workspace, Mission Control, Specialized, Theory |
 

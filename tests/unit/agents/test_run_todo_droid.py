@@ -16,7 +16,6 @@ Covers:
 from __future__ import annotations
 
 import json
-import sys
 import textwrap
 from types import SimpleNamespace
 from typing import TYPE_CHECKING
@@ -495,22 +494,22 @@ class TestTodoIntegration:
 
 
 # ===========================================================================
-# 9. get_todo_count_interactive() -- skip if no TTY
+# 9. get_todo_count_interactive() -- deterministic empty-queue path
 # ===========================================================================
 
 
-@pytest.mark.skipif(
-    not sys.stdin.isatty(),
-    reason="get_todo_count_interactive requires an interactive TTY",
-)
 class TestGetTodoCountInteractive:
-    """Tests that require interactive input; skipped in CI."""
+    """Exercise the non-interactive branch using the real local TODO file.
+
+    The checked-in TODO fixture currently has no pending entries, so the
+    function returns before reading stdin.  This verifies the unavailable-work
+    path without requiring a terminal or an input mock.
+    """
 
     def test_interactive_count_returns_int(self):
         from codomyrmex.agents.droid.run_todo_droid import get_todo_count_interactive
 
-        # Would need actual interactive input -- skipped in CI
-        assert callable(get_todo_count_interactive)
+        assert get_todo_count_interactive() == 0
 
 
 # ===========================================================================

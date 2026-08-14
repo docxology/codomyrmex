@@ -51,6 +51,25 @@ class TestThinkingAgent:
         assert response.execution_time is not None
         assert response.execution_time > 0
 
+    def test_execute_rejects_empty_prompt_and_clears_last_trace(self) -> None:
+        agent = ThinkingAgent()
+        successful = agent.execute(AgentRequest(prompt="first", id="req-1"))
+        assert successful.is_success()
+        assert agent.last_trace is not None
+
+        failed = agent.execute(AgentRequest(prompt="  ", id="req-2"))
+        assert failed.is_success() is False
+        assert failed.request_id == "req-2"
+        assert failed.trace_id is not None
+        assert agent.last_trace is None
+        assert len(agent.all_traces) == 1
+
+    def test_execute_preserves_request_identity(self) -> None:
+        agent = ThinkingAgent()
+        response = agent.execute(AgentRequest(prompt="identity", id="req-7"))
+        assert response.request_id == "req-7"
+        assert response.trace_id is not None
+
     def test_execute_stores_trace(self) -> None:
         agent = ThinkingAgent()
         agent.execute(AgentRequest(prompt="Test prompt"))
@@ -122,6 +141,16 @@ class TestThinkingAgent:
         obs = agent.observe(AgentResponse(content="Done"))
         assert "success" in obs
         assert obs["success"]
+
+        failed = agent.observe(AgentResponse(content="", error="provider down"))
+        assert failed["success"] is False
+        assert failed["error"] == "provider down"
+
+    def test_stream_yields_text_contract(self) -> None:
+        agent = ThinkingAgent()
+        chunks = list(agent.stream(AgentRequest(prompt="stream me")))
+        assert chunks
+        assert all(isinstance(chunk, str) for chunk in chunks)
 
     def test_max_traces_limited(self) -> None:
         cfg = ThinkingAgentConfig(max_traces=3)

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for World Models..
+Module implementation, resources, and local coordination for World Models.
 
 ## Directory Contents
 - `PAI.md` – File

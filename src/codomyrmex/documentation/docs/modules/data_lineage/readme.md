@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Data Lineage..
+Module implementation, resources, and local coordination for Data Lineage.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

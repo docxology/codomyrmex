@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Gemini..
+Module implementation, resources, and local coordination for Gemini.
 
 ## Directory Contents
 - `PAI.md` – File

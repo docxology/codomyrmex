@@ -10,7 +10,7 @@ The `encryption` module provides secure cryptographic primitives for Codomyrmex.
 
 ### 2.1 `Encryptor`
 
-Main encryption class supporting AES-CBC and RSA algorithms.
+Main encryption class supporting HMAC-protected AES-CBC compatibility payloads and RSA algorithms. AES-GCM is preferred for new symmetric data.
 
 ```python
 class Encryptor:

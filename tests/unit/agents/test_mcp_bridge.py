@@ -108,9 +108,7 @@ class TestCallToolDiscovery:
 
     def test_list_modules(self):
         result = call_tool("codomyrmex.list_modules")
-        if "error" in result and "TrustRegistry" in str(result["error"]):
-            pytest.skip(f"TrustRegistry internal: {result['error']}")
-
+        assert "error" not in result, f"local trust-gated call failed: {result}"
         assert "modules" in result
         assert "count" in result
         assert isinstance(result["modules"], list)

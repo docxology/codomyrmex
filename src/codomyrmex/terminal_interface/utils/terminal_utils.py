@@ -1,7 +1,7 @@
 import io
 import os
 import shutil
-import subprocess
+import subprocess  # nosec B404
 import sys
 from pathlib import Path
 from typing import Any
@@ -297,6 +297,29 @@ class CommandRunner:
         """Initialize command runner."""
         self.formatter = formatter or TerminalFormatter()
 
+    def run(
+        self,
+        command: str | list[str],
+        *,
+        cwd: Path | None = None,
+        timeout: int | None = None,
+    ) -> dict[str, Any]:
+        """Run a command using the safe, non-shell compatibility path.
+
+        Older callers supplied a command string through ``run``.  Preserve
+        that API without reintroducing shell interpretation: strings are
+        tokenized with :func:`shlex.split` and delegated to ``run_command``.
+        """
+        import shlex
+
+        argv = shlex.split(command) if isinstance(command, str) else list(command)
+        return self.run_command(
+            argv,
+            cwd=cwd,
+            show_output=False,
+            timeout=timeout,
+        )
+
     def run_command(
         self,
         command: list[str],
@@ -322,7 +345,7 @@ class CommandRunner:
         try:
             if show_output:
                 # Run with real-time output
-                process = subprocess.Popen(
+                process = subprocess.Popen(  # nosec B603
                     command,
                     cwd=cwd,
                     stdout=subprocess.PIPE,
@@ -359,7 +382,7 @@ class CommandRunner:
 
             else:
                 # Run without real-time output
-                result = subprocess.run(
+                result = subprocess.run(  # nosec B603
                     command, cwd=cwd, capture_output=True, text=True, timeout=timeout
                 )
 

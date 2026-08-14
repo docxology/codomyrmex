@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Encryption..
+Module implementation, resources, and local coordination for Encryption.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

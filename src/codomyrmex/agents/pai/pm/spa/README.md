@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Spa..
+Module implementation, resources, and local coordination for Spa.
 
 ## Directory Contents
 - `README.md` – File

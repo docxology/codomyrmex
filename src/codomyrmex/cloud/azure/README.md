@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Azure..
+Module implementation, resources, and local coordination for Azure.
 
 ## Directory Contents
 - `PAI.md` – File

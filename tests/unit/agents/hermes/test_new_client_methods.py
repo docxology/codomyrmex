@@ -67,15 +67,13 @@ class TestGetModelInfo:
         assert result.get("provider") == "unknown"
         assert "model_id" in result
 
-    @pytest.mark.skipif(
-        not _HERMES_AVAILABLE,
-        reason="Live Hermes tests require RUN_LIVE_HERMES=1 and the CLI",
-    )
-    def test_nemotron_info_real(self, client: HermesClient) -> None:
-        """Integration: real model lookup for the current default model."""
+    def test_nemotron_info_without_cli(self) -> None:
+        """Model metadata lookup remains structured without the CLI."""
+        client = HermesClient(
+            config={"hermes_command": "nonexistent-hermes-command-xyz"}
+        )
         result = client.get_model_info("nvidia/nemotron-3-super-120b-a12b:free")
         assert "model_id" in result
-        # We just ensure it doesn't crash; context_length may or may not be populated
         assert isinstance(result.get("context_length", 0), int)
 
 

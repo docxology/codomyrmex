@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Image..
+Module implementation, resources, and local coordination for Image.
 
 ## Directory Contents
 - `PAI.md` – File

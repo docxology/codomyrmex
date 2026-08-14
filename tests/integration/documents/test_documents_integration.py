@@ -116,14 +116,9 @@ class TestCrossFormatOperations:
         json_doc = read_document(json_file, format=DocumentFormat.JSON)
         assert isinstance(json_doc.content, dict)
 
-        # Write as YAML (if conversion available)
-        try:
-            tmp_path / "data.yaml"
-            # For now, just test that we can read JSON
-            assert json_doc.content == data
-        except Exception:
-            # YAML conversion may not be fully implemented
-            pass
+        # The current cross-format contract preserves parsed JSON content;
+        # YAML conversion is covered by the optional transformation workflow.
+        assert json_doc.content == data
 
 
 class TestErrorPropagation:

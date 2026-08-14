@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Market..
+Module implementation, resources, and local coordination for Market.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

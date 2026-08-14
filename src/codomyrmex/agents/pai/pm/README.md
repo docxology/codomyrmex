@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Pm..
+Module implementation, resources, and local coordination for Pm.
 
 ## Directory Contents
 - `AddTask.ts` – File

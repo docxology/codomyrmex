@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Planner..
+Module implementation, resources, and local coordination for Planner.
 
 ## Directory Contents
 - `PAI.md` – File

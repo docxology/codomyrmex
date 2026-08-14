@@ -276,7 +276,16 @@ TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
         "codomyrmex.list_workflows",
         "list available Claude Code workflows",
         tool_list_workflows,
-        {"type": "object", "properties": {}},
+        {
+            "type": "object",
+            "properties": {
+                "project_root": {
+                    "type": "string",
+                    "description": "Optional repository root, constrained to configured MCP roots",
+                }
+            },
+            "additionalProperties": False,
+        },
     ),
     (
         "codomyrmex.invalidate_cache",

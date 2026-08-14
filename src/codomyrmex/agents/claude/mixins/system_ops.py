@@ -161,7 +161,7 @@ class SystemOpsMixin:
         try:
             result = subprocess.run(
                 command,
-                shell=True,  # nosec B602 - trusted agent shell executor API
+                shell=True,  # nosec B602
                 cwd=cwd,
                 capture_output=capture_output,
                 text=True,

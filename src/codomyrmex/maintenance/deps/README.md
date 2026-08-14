@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Deps..
+Module implementation, resources, and local coordination for Deps.
 
 ## Directory Contents
 - `PAI.md` – File

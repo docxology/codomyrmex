@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Theory..
+Module implementation, resources, and local coordination for Theory.
 
 ## Directory Contents
 - `PAI.md` – File

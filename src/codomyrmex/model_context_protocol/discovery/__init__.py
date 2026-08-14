@@ -11,7 +11,9 @@ import importlib
 import importlib.util
 import inspect
 import pkgutil
+import threading
 import time
+from copy import deepcopy
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timezone
 from pathlib import Path
@@ -25,6 +27,18 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 logger = get_logger(__name__)
+
+
+def _synchronized(method: Any) -> Any:
+    """Serialize access to a discovery engine while preserving its API."""
+
+    def wrapper(self: MCPDiscovery, *args: Any, **kwargs: Any) -> Any:
+        with self._lock:
+            return method(self, *args, **kwargs)
+
+    wrapper.__name__ = getattr(method, "__name__", "synchronized")
+    wrapper.__doc__ = getattr(method, "__doc__", None)
+    return wrapper
 
 
 # =====================================================================
@@ -129,12 +143,15 @@ class MCPDiscovery:
     """
 
     def __init__(self) -> None:
+        self._lock = threading.RLock()
         self._registry: dict[str, DiscoveredTool] = {}
+        self._module_tools: dict[str, set[str]] = {}
         self._failed_modules: list[FailedModule] = []
         self._metrics = DiscoveryMetrics()
 
     # ── Full package scan (error-isolated) ───────────────────────
 
+    @_synchronized
     def scan_package(self, package_name: str) -> DiscoveryReport:
         """Scan a Python package for MCP tools with error isolation.
 
@@ -147,6 +164,7 @@ class MCPDiscovery:
         discovered_tools: list[DiscoveredTool] = []
         failed_modules: list[FailedModule] = []
         modules_scanned = 0
+        scanned_module_names: set[str] = set()
 
         # Import the root package first
         try:
@@ -167,15 +185,14 @@ class MCPDiscovery:
 
         for _, name, _ in pkgutil.walk_packages(path, prefix=f"{package_name}."):
             modules_scanned += 1
+            scanned_module_names.add(name)
             try:
                 # Import module in isolation
                 module = importlib.import_module(name)
                 # Scan correctly imported module
                 module_tools = self._scan_module(module)
                 discovered_tools.extend(module_tools)
-                # Update main registry incrementally
-                for tool in module_tools:
-                    self._registry[tool.name] = tool
+                self._replace_module_tools(name, module_tools)
 
             except Exception as e:
                 # Isolate failure
@@ -184,6 +201,15 @@ class MCPDiscovery:
                 self._failed_modules.append(
                     FailedModule(name, str(e), type(e).__name__)
                 )
+                self._remove_module_tools(name)
+
+        # A full package refresh must also remove modules that disappeared
+        # from the package walk; otherwise removed tools remain callable.
+        package_prefix = f"{package_name}."
+        for module_name in tuple(self._module_tools):
+            if module_name == package_name or module_name.startswith(package_prefix):
+                if module_name not in scanned_module_names:
+                    self._remove_module_tools(module_name)
 
         duration = (time.perf_counter() - start_time) * 1000.0
         report = DiscoveryReport(
@@ -197,6 +223,7 @@ class MCPDiscovery:
 
     # ── Incremental single-module scan ───────────────────────────
 
+    @_synchronized
     def scan_module(self, module_name: str) -> DiscoveryReport:
         """Scan a single module for MCP tools (incremental refresh).
 
@@ -216,9 +243,7 @@ class MCPDiscovery:
             module = importlib.import_module(module_name)
             tools = self._scan_module(module)
 
-            # Update registry
-            for tool in tools:
-                self._registry[tool.name] = tool
+            self._replace_module_tools(module_name, tools)
 
             duration = (time.perf_counter() - start_time) * 1000.0
             report = DiscoveryReport(
@@ -231,6 +256,7 @@ class MCPDiscovery:
 
         except Exception as e:
             duration = (time.perf_counter() - start_time) * 1000.0
+            self._remove_module_tools(module_name)
             fail = FailedModule(module_name, str(e), type(e).__name__)
             self._failed_modules.append(fail)
             # Update metrics even on failure
@@ -242,6 +268,31 @@ class MCPDiscovery:
                 scan_duration_ms=duration,
                 modules_scanned=1,
             )
+
+    def _remove_module_tools(self, module_name: str) -> None:
+        """Remove the tools last owned by *module_name* from the registry."""
+        names = self._module_tools.pop(module_name, set())
+        for name in names:
+            current = self._registry.get(name)
+            if current is not None and current.module_path == module_name:
+                self._registry.pop(name, None)
+
+    def _replace_module_tools(
+        self, module_name: str, tools: list[DiscoveredTool]
+    ) -> None:
+        """Atomically replace one module's discovered tool contribution."""
+        self._remove_module_tools(module_name)
+        owned_names: set[str] = set()
+        for tool in tools:
+            # Deterministic last-writer ownership prevents a stale owner from
+            # deleting a replacement during a later module refresh.
+            for names in self._module_tools.values():
+                if tool.name in names:
+                    names.discard(tool.name)
+            self._registry[tool.name] = tool
+            owned_names.add(tool.name)
+        if owned_names:
+            self._module_tools[module_name] = owned_names
 
     # ── Private helpers ──────────────────────────────────────────
 
@@ -310,32 +361,45 @@ class MCPDiscovery:
 
     # ── Registry accessors ───────────────────────────────────────
 
+    @_synchronized
     def register_tool(self, tool: DiscoveredTool) -> None:
         """Manually register a tool."""
         self._registry[tool.name] = tool
 
+    @_synchronized
     def get_tool(self, name: str) -> DiscoveredTool | None:
-        return self._registry.get(name)
+        tool = self._registry.get(name)
+        return deepcopy(tool) if tool is not None else None
 
+    @_synchronized
     def list_tools(self, tag: str | None = None) -> list[DiscoveredTool]:
         """list all discovered tools, optionally filtered by tag."""
-        if tag:
-            return [t for t in self._registry.values() if tag in t.tags]
-        return list(self._registry.values())
+        tools = (
+            (tool for tool in self._registry.values() if tag in tool.tags)
+            if tag
+            else self._registry.values()
+        )
+        return [
+            deepcopy(tool)
+            for tool in sorted(tools, key=lambda tool: (tool.name, tool.module_path))
+        ]
 
     @property
     def tool_count(self) -> int:
-        return len(self._registry)
+        with self._lock:
+            return len(self._registry)
 
+    @_synchronized
     def record_cache_hit(self) -> None:
         """Increment cache-hit counter (called by bridge cache logic)."""
         self._metrics.cache_hits += 1
 
     # ── Metrics ──────────────────────────────────────────────────
 
+    @_synchronized
     def get_metrics(self) -> DiscoveryMetrics:
-        """Return current discovery metrics."""
-        return self._metrics
+        """Return a defensive copy of current discovery metrics."""
+        return deepcopy(self._metrics)
 
 
 # =====================================================================

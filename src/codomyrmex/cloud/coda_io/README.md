@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Coda Io..
+Module implementation, resources, and local coordination for Coda Io.
 
 ## Directory Contents
 - `PAI.md` – File

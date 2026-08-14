@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Models..
+Module implementation, resources, and local coordination for Models.
 
 ## Directory Contents
 - `PAI.md` – File

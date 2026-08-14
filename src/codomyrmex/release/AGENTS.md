@@ -41,8 +41,9 @@ published.
 | `package_builder.py` | real isolated wheel/sdist build and inspection |
 | `distribution.py` | verified local copy; remote dry-run receipts |
 | `publication.py` | immutable publication records, manifest v1, verification, plans |
+| `test_evidence.py` | source-bound pytest/JUnit/warning receipt and release gate |
 | `__main__.py` | `publication prepare`, `verify`, and `plan` |
-| `mcp_tools.py` | `release_validate`, `release_build`, `release_certification_report` |
+| `mcp_tools.py` | Diagnostic release validation/build/report tools; MCP scalar evidence never certifies a release |
 
 ## Validation
 

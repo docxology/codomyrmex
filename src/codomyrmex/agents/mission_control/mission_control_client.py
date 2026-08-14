@@ -394,6 +394,13 @@ class MissionControlClient:
 
     # ── Server Lifecycle ─────────────────────────────────────────
 
+    @staticmethod
+    def _close_server_pipes(process: subprocess.Popen[bytes]) -> None:
+        """Close inherited server pipes after a child process exits."""
+        for stream in (process.stdin, process.stdout, process.stderr):
+            if stream is not None:
+                stream.close()
+
     def start_server(self) -> dict[str, Any]:
         """Start the Mission Control dev server.
 
@@ -425,6 +432,10 @@ class MissionControlClient:
                 "pid": self._server_process.pid,
             }
 
+        if self._server_process:
+            self._close_server_pipes(self._server_process)
+            self._server_process = None
+
         try:
             self._server_process = subprocess.Popen(
                 ["pnpm", "dev"],
@@ -451,16 +462,20 @@ class MissionControlClient:
         if not self._server_process:
             return {"status": "not_running"}
 
-        if self._server_process.poll() is not None:
+        process = self._server_process
+        if process.poll() is not None:
+            self._close_server_pipes(process)
             self._server_process = None
             return {"status": "already_stopped"}
 
         try:
             # Send SIGTERM to the process group
-            os.killpg(os.getpgid(self._server_process.pid), signal.SIGTERM)
-            self._server_process.wait(timeout=10)
-            pid = self._server_process.pid
+            os.killpg(os.getpgid(process.pid), signal.SIGTERM)
+            process.wait(timeout=10)
+            pid = process.pid
             self._server_process = None
             return {"status": "stopped", "pid": pid}
         except Exception as exc:
             return {"status": "error", "message": str(exc)}
+        finally:
+            self._close_server_pipes(process)

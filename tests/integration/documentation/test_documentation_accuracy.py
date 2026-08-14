@@ -98,8 +98,6 @@ class TestDocumentationAccuracy:
         """Test that documented code execution functions exist."""
         from codomyrmex.coding.execution.executor import execute_code
 
-        return
-
         # Verify function signatures match documentation
         exec_sig = inspect.signature(execute_code)
         expected_params = ["code", "language", "timeout", "session_id", "stdin"]
@@ -171,13 +169,10 @@ class TestDocumentationAccuracy:
         in_uv_env = is_uv_environment()
         assert isinstance(in_uv_env, bool)
 
-        # Test that ensure_dependencies_installed doesn't crash
-        try:
-            result = ensure_dependencies_installed()
-            # Function should complete without raising exceptions
-            assert result is None or result is not None
-        except Exception as e:
-            pytest.skip(f"Dependencies check failed in test environment: {e}")
+        # The checker reports availability; it does not install or mutate the
+        # environment as part of this documentation contract.
+        result = ensure_dependencies_installed()
+        assert isinstance(result, bool)
 
     def test_build_synthesis_api_exists(self):
         """Test that documented build synthesis functions exist."""
@@ -308,22 +303,19 @@ class TestDocumentationAccuracy:
             result = PyreflyResult(success=True, issues=[], files_analyzed=0)
             assert isinstance(result.issues, list)
 
-            # 2. Test code execution (may fail if Docker not available, so skip gracefully)
-            try:
-                execution_result = execute_code(
-                    code="result = 2 + 2\nprint(f'Result: {result}')",
-                    language="python",
-                    timeout=10,
-                )
-                # Check if execution was successful or if Docker is not available
-                if execution_result.get("status") == "success":
-                    assert "Result: 4" in execution_result.get(
-                        "stdout", ""
-                    ) or "Result: 4" in execution_result.get("output", "")
-                elif execution_result.get("status") == "setup_error":
-                    pass  # Docker not available, continue with other tests
-            except Exception:
-                pass  # Code execution not available, continue
+            # 2. Test code execution. Docker/sandbox availability is an
+            # explicit environment boundary; all other failures are real.
+            execution_result = execute_code(
+                code="result = 2 + 2\nprint(f'Result: {result}')",
+                language="python",
+                timeout=10,
+            )
+            if execution_result.get("status") == "setup_error":
+                pytest.skip("Docker/sandbox not available for workflow test")
+            assert execution_result.get("status") == "success"
+            assert "Result: 4" in execution_result.get(
+                "stdout", ""
+            ) or "Result: 4" in execution_result.get("output", "")
 
             # 3. Test visualization
             viz_result = create_line_plot(

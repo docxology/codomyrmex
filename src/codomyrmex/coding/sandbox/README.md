@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Sandbox..
+Module implementation, resources, and local coordination for Sandbox.
 
 ## Directory Contents
 - `PAI.md` – File

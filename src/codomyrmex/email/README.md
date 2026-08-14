@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Email..
+Module implementation, resources, and local coordination for Email.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

@@ -9,9 +9,10 @@ import numpy as np
 import pytest
 from PIL import Image
 
-# Try importing fitz for PDF tests
+# Try importing PyMuPDF using its supported import name. The legacy ``fitz``
+# compatibility package can crash after other native extensions are loaded.
 try:
-    import fitz
+    import pymupdf as fitz
 
     FITZ_AVAILABLE = True
 except ImportError:

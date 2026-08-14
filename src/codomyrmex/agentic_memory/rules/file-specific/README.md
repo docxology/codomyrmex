@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for File Specific..
+Module implementation, resources, and local coordination for File Specific.
 
 ## Directory Contents
 - `CHANGELOG.cursorrules` – File

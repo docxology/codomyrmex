@@ -15,41 +15,32 @@ def _get_agent_imports():
     """Import agent core modules via the installed package.
 
     Uses standard importlib.import_module so that relative imports
-    within the agents.core package work correctly.
+    within the agents.core package work correctly.  These are required local
+    production modules, so an import failure must fail collection rather than
+    silently turning the entire file into skipped coverage.
     """
-    try:
-        import importlib
+    import importlib
 
-        base_module = importlib.import_module("codomyrmex.agents.core.base")
-        registry_module = importlib.import_module("codomyrmex.agents.core.registry")
-        react_module = importlib.import_module("codomyrmex.agents.core.react")
+    base_module = importlib.import_module("codomyrmex.agents.core.base")
+    registry_module = importlib.import_module("codomyrmex.agents.core.registry")
+    react_module = importlib.import_module("codomyrmex.agents.core.react")
 
-        return {
-            "AgentCapabilities": base_module.AgentCapabilities,
-            "AgentRequest": base_module.AgentRequest,
-            "AgentResponse": base_module.AgentResponse,
-            "BaseAgent": base_module.BaseAgent,
-            "AgentInterface": base_module.AgentInterface,
-            "ToolRegistry": registry_module.ToolRegistry,
-            "ReActAgent": react_module.ReActAgent,
-            "available": True,
-        }
-    except Exception as e:
-        return {
-            "available": False,
-            "error": str(e),
-        }
+    return {
+        "AgentCapabilities": base_module.AgentCapabilities,
+        "AgentRequest": base_module.AgentRequest,
+        "AgentResponse": base_module.AgentResponse,
+        "BaseAgent": base_module.BaseAgent,
+        "AgentInterface": base_module.AgentInterface,
+        "ToolRegistry": registry_module.ToolRegistry,
+        "ReActAgent": react_module.ReActAgent,
+        "available": True,
+    }
 
 
 @pytest.fixture
 def agent_modules():
     """Fixture that provides agent modules if available."""
-    modules = _get_agent_imports()
-    if not modules["available"]:
-        pytest.skip(
-            f"Agent core modules not available: {modules.get('error', 'Unknown')}"
-        )
-    return modules
+    return _get_agent_imports()
 
 
 @pytest.mark.unit

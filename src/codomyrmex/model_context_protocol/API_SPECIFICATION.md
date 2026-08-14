@@ -115,7 +115,7 @@ from codomyrmex.model_context_protocol.schemas.mcp_schemas import MCPToolCall, M
 
 ## Data Models
 
-The Pydantic models (`MCPErrorDetail`, `MCPToolCall`, `MCPToolResult`, `MCPMessage`, `MCPToolRegistry`) described above are the primary data models provided by this module's API. Additionally, the module exports `MCPServer` and `MCPServerConfig` for running an MCP server, and the `mcp_tool` decorator from `decorators.py` for registering functions as MCP tools.
+The Pydantic models (`MCPErrorDetail`, `MCPToolCall`, `MCPToolResult`, `MCPMessage`, `MCPToolRegistry`) and `MCPRegistrationError` described above are the primary data models and registration contract provided by this module's API. Registry listing is deterministic; repeated registration with an identical schema is idempotent, while conflicting schemas fail closed. Additionally, the module exports `MCPServer` and `MCPServerConfig` for running an MCP server, and the `mcp_tool` decorator from `decorators.py` for registering functions as MCP tools.
 
 ## Authentication & Authorization
 

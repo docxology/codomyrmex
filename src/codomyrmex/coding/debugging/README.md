@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Debugging..
+Module implementation, resources, and local coordination for Debugging.
 
 ## Directory Contents
 - `PAI.md` – File

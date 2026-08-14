@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Selection..
+Module implementation, resources, and local coordination for Selection.
 
 ## Directory Contents
 - `PAI.md` – File

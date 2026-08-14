@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Standardization..
+Module implementation, resources, and local coordination for Standardization.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

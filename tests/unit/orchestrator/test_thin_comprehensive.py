@@ -305,7 +305,7 @@ class TestBatchEdgeCases:
             # Only one existing script, so total should be 1
             assert result.total == 1
         except PermissionError:
-            pytest.skip("ProcessPoolExecutor not available in sandbox")
+            pytest.skip("subprocess workers not available in sandbox")
         finally:
             os.unlink(existing)
 

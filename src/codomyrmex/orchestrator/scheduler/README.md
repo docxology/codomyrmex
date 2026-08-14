@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Scheduler..
+Module implementation, resources, and local coordination for Scheduler.
 
 ## Directory Contents
 - `PAI.md` – File

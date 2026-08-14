@@ -5,16 +5,30 @@ Docker-dependent tools are skipped if Docker is not available.
 
 from __future__ import annotations
 
+import shutil
+import subprocess
+
 import pytest
 
-try:
-    import docker
 
-    _client = docker.from_env()
-    _client.ping()
-    DOCKER_AVAILABLE = True
-except Exception:
-    DOCKER_AVAILABLE = False
+def _docker_daemon_available() -> bool:
+    """Probe Docker through the CLI without leaking a failed SDK socket."""
+    docker_path = shutil.which("docker")
+    if docker_path is None:
+        return False
+    try:
+        result = subprocess.run(
+            [docker_path, "info", "--format", "{{.ServerVersion}}"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+    return result.returncode == 0 and bool(result.stdout.strip())
+
+
+DOCKER_AVAILABLE = _docker_daemon_available()
 
 
 class TestContainerOptimizationAnalyze:

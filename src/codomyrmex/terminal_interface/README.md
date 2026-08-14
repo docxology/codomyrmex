@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Terminal Interface..
+Module implementation, resources, and local coordination for Terminal Interface.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

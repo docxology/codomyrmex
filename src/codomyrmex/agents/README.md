@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Agents..
+Module implementation, resources, and local coordination for Agents.
 
 ## Directory Contents
 - `AGENT_COMPARISON.md` – File
@@ -43,6 +43,7 @@ Module implementation, resources, and local coordination for Agents..
 - `mcp_tools.py` – File
 - `memory/` – Subdirectory
 - `meta/` – Subdirectory
+- `navigation/` – Read-only capability catalog and MCP navigation
 - `mistral_vibe/` – Subdirectory
 - `o1/` – Subdirectory
 - `openclaw/` – Subdirectory

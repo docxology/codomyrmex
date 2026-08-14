@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Compliance..
+Module implementation, resources, and local coordination for Compliance.
 
 ## Directory Contents
 - `PAI.md` – File

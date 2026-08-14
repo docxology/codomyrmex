@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Health..
+Module implementation, resources, and local coordination for Health.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -1,16 +1,8 @@
 import pytest
 
-try:
-    from codomyrmex.agents.core.base import AgentRequest
-    from codomyrmex.agents.core.react import ReActAgent
-    from codomyrmex.agents.core.registry import ToolRegistry
-
-    _HAS_AGENTS = True
-except ImportError:
-    _HAS_AGENTS = False
-
-if not _HAS_AGENTS:
-    pytest.skip("agents deps not available", allow_module_level=True)
+from codomyrmex.agents.core.base import AgentRequest
+from codomyrmex.agents.core.react import ReActAgent
+from codomyrmex.agents.core.registry import ToolRegistry
 
 
 def dummy_tool(x: int) -> int:

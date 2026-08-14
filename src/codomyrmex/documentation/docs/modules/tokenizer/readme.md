@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Tokenizer..
+Module implementation, resources, and local coordination for Tokenizer.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

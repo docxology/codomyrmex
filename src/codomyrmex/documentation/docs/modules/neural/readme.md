@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Neural..
+Module implementation, resources, and local coordination for Neural.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

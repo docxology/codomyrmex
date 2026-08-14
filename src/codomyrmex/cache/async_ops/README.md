@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Async Ops..
+Module implementation, resources, and local coordination for Async Ops.
 
 ## Directory Contents
 - `PAI.md` – File

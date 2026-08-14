@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Locks..
+Module implementation, resources, and local coordination for Locks.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for File System..
+Module implementation, resources, and local coordination for File System.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

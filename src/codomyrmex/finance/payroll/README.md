@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Payroll..
+Module implementation, resources, and local coordination for Payroll.
 
 ## Directory Contents
 - `PAI.md` – File

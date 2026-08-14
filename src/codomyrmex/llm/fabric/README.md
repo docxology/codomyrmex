@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Fabric..
+Module implementation, resources, and local coordination for Fabric.
 
 ## Directory Contents
 - `PAI.md` – File

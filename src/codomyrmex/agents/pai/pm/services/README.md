@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Services..
+Module implementation, resources, and local coordination for Services.
 
 ## Directory Contents
 - `README.md` – File

@@ -62,7 +62,7 @@ Key facts agents must use when editing or cross-referencing this manuscript — 
 | MCP tools exposed | **generated count** | live decorators in `src/codomyrmex/colony_kernel/mcp_tools.py` |
 | Falsification attack vector (import-cycle) | **`CIRCULAR_ARCHITECTURE`** | `AttackVector` enum in `falsification/models.py` — not `CIRCULAR_DEPS` |
 | Transmission bookends | **enabled** | `config.yaml` → `publication.transmission_bookends.enabled: true` |
-| Token injection pipeline | 3-step: compute → persist → render | `scripts/z_generate_manuscript_variables.py` → `output/data/manuscript_variables.json` → `output/manuscript/*.md` |
+| Token injection pipeline | compute → persist → pinned-template hydrate → render | `scripts/z_generate_manuscript_variables.py` → `output/data/manuscript_variables.json` → `output/manuscript/*.md` |
 | Contents page | **generated after cover** | `scripts/compile_manuscript.py` writes `output/manuscript/00_01_contents.md` before render |
 | Citation and reference pipeline | **pandoc-crossref then citeproc** | `scripts/compile_manuscript.py`; HTML math uses MathML |
 
@@ -110,7 +110,7 @@ The categories are:
 - `RESULT_*`: live repository measurements and deterministic simulation outputs used by the paper.
 - `ARTIFACT_*`: counts of versioned or generated artifacts that the reproducibility section reports.
 - `PYTHON_VERSION`, `PLATFORM`, `GENERATION_TIMESTAMP`, and `REPRO_ENVIRONMENT_HASH`: environment values captured at generation time.
-- `REPRO_*`: commit, worktree, environment, first-party source, project/lockfile, and authoritative inventory provenance for replay.
+- `REPRO_*`: commit, worktree, environment, first-party source, project/lockfile, authoritative inventory, and pinned-template provenance for replay.
 - `11_supplemental_notation.md` is the authoritative glossary for indices, field state, gate/hazard terms, trust updates, Active Inference variables, and paired-statistics estimands. New equations and captions must link to it rather than minting local aliases.
 - Replay tokens: `ARTIFACT_REPLAY_PATH`, `RESULT_REPLAY_SEMANTIC_DIGEST`,
   `RESULT_REPLAY_RECORD_SHA256`, `RESULT_REPLAY_FILE_SHA256`,
@@ -130,13 +130,14 @@ The categories are:
 
 Numeric values that come from configuration or analysis outputs **must** use `{{VARIABLE_NAME}}` syntax. Hardcoding a value that will change when `config.yaml` is edited or the codebase evolves is the primary cause of manuscript drift.
 
-**The 3-step injection pipeline:**
+**The injection pipeline:**
 
 1. **Compute** — `scripts/z_generate_manuscript_variables.py` calls `src/codomyrmex/manuscript/variables.py::compute_variables()`. It reads manuscript metadata, runtime configuration, and live source/test facts; executes the scoped pytest/coverage, Ruff, and ty gates; and fails instead of reusing stale coverage when any gate fails.
 
 2. **Persist** — The script writes the complete `{TOKEN: value}` mapping to `output/data/manuscript_variables.json`. This JSON file is the auditable record of every value injected into the rendered manuscript.
 
-3. **Render** — The script writes resolved copies of each `docs/manuscript/*.md` template to `output/manuscript/*.md`, substituting every `{{TOKEN}}` with its resolved string value. Figure filenames, labels, widths, evidence classes, captions, concise alternatives, and extended descriptions are also generated from the `figures:` registry in `config.yaml`. `scripts/compile_manuscript.py --pdf` inserts generated contents after the cover and renders the **substituted** copies from `output/manuscript/`, never the source templates.
+3. **Hydrate** — When the clean checkout recorded under `template.revision` is available, the script calls the pinned `{{REPRO_TEMPLATE_HYDRATION_ENTRYPOINT}}`; unresolved tokens are promoted from warnings to hard failures. A standalone clone may use the documented project-local strict successor only when that sibling checkout is unavailable, and the mode is recorded in the variable snapshot.
+4. **Render** — The script writes resolved copies of each `docs/manuscript/*.md` template to `output/manuscript/*.md`, substituting every `{{TOKEN}}` with its resolved string value. Figure filenames, labels, widths, evidence classes, captions, concise alternatives, and extended descriptions are also generated from the `figures:` registry in `config.yaml`. `scripts/compile_manuscript.py --pdf` inserts generated contents after the cover and renders the **substituted** copies from `output/manuscript/`, never the source templates.
 
 **Adding a new token:**
 

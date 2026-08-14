@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Exporters..
+Module implementation, resources, and local coordination for Exporters.
 
 ## Directory Contents
 - `PAI.md` – File

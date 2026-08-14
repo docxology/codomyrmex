@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Swift..
+Module implementation, resources, and local coordination for Swift.
 
 ## Directory Contents
 - `README.md` – File

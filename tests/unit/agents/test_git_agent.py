@@ -6,20 +6,9 @@ calls where possible, with skip markers for external dependencies.
 
 import pytest
 
-try:
-    from codomyrmex.agents.core.base import AgentCapabilities, AgentRequest
-    from codomyrmex.agents.git_agent import GitAgent
-    from codomyrmex.git_operations.core.repository import (
-        RepositoryManager,
-    )
-
-    _HAS_AGENTS = True
-except ImportError:
-    _HAS_AGENTS = False
-
-if not _HAS_AGENTS:
-    pytest.skip("agents deps not available", allow_module_level=True)
-
+from codomyrmex.agents.core.base import AgentCapabilities, AgentRequest
+from codomyrmex.agents.git_agent import GitAgent
+from codomyrmex.git_operations.core.repository import RepositoryManager
 
 # ---------------------------------------------------------------------------
 # Stub RepositoryManager (replaces MagicMock(spec=RepositoryManager))

@@ -395,7 +395,7 @@ compiler support is supplied through an explicit `build_commands` entry.  Set
 
 ```python
 def check_doc_environment() -> dict
-def install_dependencies(package_manager: str = "npm") -> bool
+def install_dependencies(package_manager: str = "npm", cwd: str | os.PathLike[str] | None = None) -> bool
 def start_dev_server(package_manager: str = "npm") -> bool
 def build_static_site(package_manager: str = "npm") -> bool
 def serve_static_site(package_manager: str = "npm") -> bool

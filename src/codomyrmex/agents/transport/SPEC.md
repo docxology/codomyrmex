@@ -32,6 +32,7 @@ Four-component design:
 |--------|-----------|---------|-------------|
 | `deserialize` | `data: bytes` | `AgentSnapshot` | Reconstruct snapshot from bytes |
 | `sign` | `data: bytes`, `key: str` | `str` | Compute HMAC-SHA256 hex digest |
+| `verify` | `data: bytes`, `key: str`, `signature: str` | `bool` | Compare against a caller-supplied HMAC; returns `False` when omitted or mismatched |
 | `verify_signed` | `data: bytes`, `signature: str`, `key: str` | `bool` | Verify HMAC; raises `IntegrityError` on mismatch |
 | `deserialize_verified` | `data`, `signature`, `key` | `AgentSnapshot` | Deserialize with mandatory HMAC verification |
 

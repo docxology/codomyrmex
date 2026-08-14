@@ -1,7 +1,11 @@
+import contextlib
 import importlib
+import os
 import re
+import shutil
+import subprocess
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Self
 
 from loguru import logger
 
@@ -17,6 +21,23 @@ try:
         _DOCKER_IMAGE_NOT_FOUND = (docker_image_not_found,)
 except ImportError:
     docker = None
+
+
+def _docker_daemon_available() -> bool:
+    """Check Docker availability without opening a persistent SDK socket."""
+    docker_path = shutil.which("docker")
+    if docker_path is None:
+        return False
+    try:
+        result = subprocess.run(
+            [docker_path, "info", "--format", "{{.ServerVersion}}"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+    return result.returncode == 0 and bool(result.stdout.strip())
 
 
 @dataclass
@@ -82,18 +103,51 @@ class ContainerOptimizer:
 
     def __init__(self, client: Any | None = None):
         """Initialize the image optimizer."""
-        if docker is None and client is None:
-            logger.warning(
-                "Docker library not available, image optimization features will be limited"
+        self.client = client
+        self._owns_client = False
+        if client is not None:
+            return
+        if docker is None:
+            logger.debug(
+                "Docker library not available; image optimization features are limited"
             )
-            self.client = None
+            return
+        if not _docker_daemon_available():
+            logger.debug("Docker daemon unavailable; image optimization is disabled")
             return
 
+        candidate = None
         try:
-            self.client = client or docker.from_env()
+            candidate = docker.from_env(
+                version=os.environ.get("DOCKER_API_VERSION", "1.41")
+            )
+            candidate.ping()
+            self.client = candidate
+            self._owns_client = True
         except Exception as e:
-            logger.warning("Could not connect to Docker: %s", e)
+            if candidate is not None:
+                with contextlib.suppress(Exception):
+                    candidate.close()
+            logger.debug("Could not connect to Docker: %s", e)
             self.client = None
+
+    def close(self) -> None:
+        """Close a Docker client created by this optimizer."""
+        if self._owns_client and self.client is not None:
+            with contextlib.suppress(Exception):
+                self.client.close()
+            self.client = None
+            self._owns_client = False
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, *_exc: object) -> None:
+        self.close()
+
+    def __del__(self) -> None:
+        with contextlib.suppress(Exception):
+            self.close()
 
     def analyze_image(self, image_name: str) -> ImageAnalysis:
         """

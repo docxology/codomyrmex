@@ -6,6 +6,15 @@ import time
 import pytest
 
 
+def _run(coro):
+    """Run a coroutine in an explicitly owned and closed event loop."""
+    loop = asyncio.new_event_loop()
+    try:
+        return loop.run_until_complete(coro)
+    finally:
+        loop.close()
+
+
 @pytest.mark.unit
 class TestTimingDecorator:
     """Tests for timing_decorator."""
@@ -204,7 +213,7 @@ class TestAsyncRetry:
         async def succeed():
             return "async_ok"
 
-        result = asyncio.new_event_loop().run_until_complete(succeed())
+        result = _run(succeed())
         assert result == "async_ok"
 
     def test_async_retries_then_succeeds(self):
@@ -220,7 +229,7 @@ class TestAsyncRetry:
                 raise OSError("retry me")
             return "recovered"
 
-        result = asyncio.new_event_loop().run_until_complete(flaky())
+        result = _run(flaky())
         assert result == "recovered"
         assert call_count == 2
 
@@ -232,4 +241,4 @@ class TestAsyncRetry:
             raise OSError("async boom")
 
         with pytest.raises(OSError, match="async boom"):
-            asyncio.new_event_loop().run_until_complete(always_fail())
+            _run(always_fail())

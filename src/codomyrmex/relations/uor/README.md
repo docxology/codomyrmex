@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Uor..
+Module implementation, resources, and local coordination for Uor.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Concurrency..
+Module implementation, resources, and local coordination for Concurrency.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

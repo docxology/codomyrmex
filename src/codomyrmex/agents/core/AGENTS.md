@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
-Module implementation, resources, and local coordination for Core..
+Module implementation, resources, and local coordination for Core.
 
 ## Active Components
 - `MCP_TOOL_SPECIFICATION.md` – Project file

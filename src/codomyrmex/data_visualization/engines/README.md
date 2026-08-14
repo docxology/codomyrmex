@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Engines..
+Module implementation, resources, and local coordination for Engines.
 
 ## Directory Contents
 - `PAI.md` – File

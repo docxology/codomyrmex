@@ -215,8 +215,15 @@ class DeploymentOrchestrator:
         """Initialize Docker and Kubernetes clients."""
         if docker:
             try:
-                self.docker_client = docker.from_env()
-                logger.info("Docker client initialized")
+                # Construct the client without the SDK's default ``auto``
+                # version probe.  The probe opens a connection during every
+                # orchestrator construction and can leak a socket when the
+                # daemon is intentionally unavailable; actual Docker
+                # operations remain lazy and report their own connectivity
+                # errors.
+                docker_api_version = os.environ.get("DOCKER_API_VERSION", "1.41")
+                self.docker_client = docker.from_env(version=docker_api_version)
+                logger.info("Docker client configured")
             except Exception as e:
                 logger.warning("Failed to initialize Docker client: %s", e)
 
@@ -564,7 +571,7 @@ class DeploymentOrchestrator:
 
                 result = subprocess.run(
                     hook,
-                    shell=True,  # nosec B602 - deployment hooks are trusted workflow configuration
+                    shell=True,  # nosec B602
                     capture_output=True,
                     text=True,
                     cwd=os.getcwd(),
@@ -628,8 +635,8 @@ class DeploymentOrchestrator:
             logger.warning("Requests module not available, HTTP health check skipped")
             return False
         try:
-            response = requests.get(endpoint, timeout=timeout)
-            return response.status_code >= 200 and response.status_code < 400
+            with requests.get(endpoint, timeout=timeout) as response:
+                return 200 <= response.status_code < 400
         except Exception as e:
             logger.debug("HTTP health check failed for %s: %s", endpoint, e)
             return False

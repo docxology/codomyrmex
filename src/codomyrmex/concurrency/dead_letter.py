@@ -17,6 +17,7 @@ Usage::
 from __future__ import annotations
 
 import json
+import os
 import threading
 import uuid
 from datetime import UTC, datetime
@@ -46,7 +47,24 @@ class DeadLetterQueue:
         """
         self._path = Path(path)
         self._lock = threading.Lock()
+        self._replay_lock = threading.Lock()
+        self._active_replays: set[str] = set()
         self._path.parent.mkdir(parents=True, exist_ok=True)
+
+    def _atomic_write(self, content: str) -> None:
+        """Replace the JSONL file atomically after writing complete content."""
+        temporary = self._path.with_name(f".{self._path.name}.{uuid.uuid4().hex}.tmp")
+        try:
+            with temporary.open("w", encoding="utf-8") as handle:
+                handle.write(content)
+                handle.flush()
+                os.fsync(handle.fileno())
+            os.replace(temporary, self._path)
+        finally:
+            try:
+                temporary.unlink()
+            except FileNotFoundError:
+                pass
 
     def add(
         self,
@@ -150,6 +168,29 @@ class DeadLetterQueue:
         target = next((e for e in entries if e["id"] == entry_id), None)
         if target is None:
             return {"success": False, "error": f"Entry {entry_id} not found"}
+        if target.get("replayed"):
+            return {"success": False, "error": f"Entry {entry_id} already replayed"}
+
+        with self._replay_lock:
+            if entry_id in self._active_replays:
+                return {
+                    "success": False,
+                    "error": f"Entry {entry_id} replay in progress",
+                }
+            refreshed = next(
+                (
+                    entry
+                    for entry in self.list_entries(include_replayed=True)
+                    if entry.get("id") == entry_id
+                ),
+                None,
+            )
+            if refreshed is None:
+                return {"success": False, "error": f"Entry {entry_id} not found"}
+            if refreshed.get("replayed"):
+                return {"success": False, "error": f"Entry {entry_id} already replayed"}
+            target = refreshed
+            self._active_replays.add(entry_id)
 
         try:
             result = callback(target["operation"], target.get("args", {}))
@@ -157,6 +198,9 @@ class DeadLetterQueue:
             return {"success": True, "result": result}
         except Exception as exc:
             return {"success": False, "error": str(exc)}
+        finally:
+            with self._replay_lock:
+                self._active_replays.discard(entry_id)
 
     def _mark_replayed(self, entry_id: str) -> None:
         """Mark an entry as replayed by rewriting the file.
@@ -180,7 +224,7 @@ class DeadLetterQueue:
                     new_lines.append(json.dumps(entry))
                 except json.JSONDecodeError:
                     new_lines.append(line)
-            self._path.write_text("\n".join(new_lines) + "\n", encoding="utf-8")
+            self._atomic_write("\n".join(new_lines) + "\n")
 
     def purge(self, *, before: datetime | None = None) -> int:
         """Remove entries from the queue.
@@ -201,7 +245,7 @@ class DeadLetterQueue:
             lines = self._path.read_text(encoding="utf-8").splitlines()
             if before is None:
                 count = len([line for line in lines if line.strip()])
-                self._path.write_text("", encoding="utf-8")
+                self._atomic_write("")
                 return count
 
             keep: list[str] = []
@@ -218,7 +262,5 @@ class DeadLetterQueue:
                         keep.append(line)
                 except json.JSONDecodeError:
                     keep.append(line)
-            self._path.write_text(
-                "\n".join(keep) + "\n" if keep else "", encoding="utf-8"
-            )
+            self._atomic_write("\n".join(keep) + "\n" if keep else "")
             return removed

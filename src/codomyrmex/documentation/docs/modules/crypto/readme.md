@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Crypto..
+Module implementation, resources, and local coordination for Crypto.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

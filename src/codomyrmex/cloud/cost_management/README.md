@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Cost Management..
+Module implementation, resources, and local coordination for Cost Management.
 
 ## Directory Contents
 - `README.md` – File

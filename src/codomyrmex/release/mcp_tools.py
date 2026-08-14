@@ -17,6 +17,28 @@ def _get_validator(version: str = "1.0.0"):
     return ReleaseValidator(version=version)
 
 
+def _mark_mcp_evidence_diagnostic_only(validator: Any) -> None:
+    """Keep caller-entered MCP metrics from becoming release attestation."""
+    from codomyrmex.release.release_validator import (
+        CertificationCheck,
+        CertificationStatus,
+    )
+
+    validator.add_custom_check(
+        CertificationCheck(
+            name="Source-bound release evidence",
+            category="provenance",
+            status=CertificationStatus.FAIL,
+            value="caller-supplied MCP metrics",
+            threshold="verified source-bound release receipts",
+            message=(
+                "MCP scalar inputs are diagnostic only; use the source-bound "
+                "release evidence workflow for certification"
+            ),
+        )
+    )
+
+
 def _get_builder():
     """Lazy import of PackageBuilder and PackageMetadata."""
     from codomyrmex.release.package_builder import PackageBuilder, PackageMetadata
@@ -32,6 +54,8 @@ def release_validate(
     version: str = "1.3.0",
     test_failures: int | None = None,
     test_total: int | None = None,
+    test_skipped: int = 0,
+    max_test_skips: int = 50,
     coverage_overall: float | None = None,
     coverage_tier1: float = 0.0,
     type_errors: int | None = None,
@@ -59,7 +83,12 @@ def release_validate(
     try:
         validator = _get_validator(version)
         if test_failures is not None and test_total is not None:
-            validator.check_tests(failures=test_failures, total=test_total)
+            validator.check_tests(
+                failures=test_failures,
+                total=test_total,
+                skipped=test_skipped,
+                max_skips=max_test_skips,
+            )
         if coverage_overall is not None:
             validator.check_coverage(overall=coverage_overall, tier1=coverage_tier1)
         if type_errors is not None:
@@ -74,9 +103,11 @@ def release_validate(
                 artifact_count=artifact_count,
             )
 
+        _mark_mcp_evidence_diagnostic_only(validator)
         cert = validator.certify()
         return {
-            "status": "success",
+            "status": "certified" if cert.certified else "blocked",
+            "evidence_mode": "diagnostic-untrusted",
             "certified": cert.certified,
             "version": cert.version,
             "pass_rate": cert.pass_rate,
@@ -130,7 +161,7 @@ def release_build(
         )
         report = builder.build()
         return {
-            "status": "success",
+            "status": "success" if report.success else "failed",
             "success": report.success,
             "artifacts": [
                 {
@@ -158,6 +189,8 @@ def release_certification_report(
     version: str = "1.3.0",
     test_failures: int | None = None,
     test_total: int | None = None,
+    test_skipped: int = 0,
+    max_test_skips: int = 50,
     coverage_overall: float | None = None,
     type_errors: int | None = None,
     cve_count: int | None = None,
@@ -180,7 +213,12 @@ def release_certification_report(
     try:
         validator = _get_validator(version)
         if test_failures is not None and test_total is not None:
-            validator.check_tests(failures=test_failures, total=test_total)
+            validator.check_tests(
+                failures=test_failures,
+                total=test_total,
+                skipped=test_skipped,
+                max_skips=max_test_skips,
+            )
         if coverage_overall is not None:
             validator.check_coverage(overall=coverage_overall)
         if type_errors is not None:
@@ -194,10 +232,12 @@ def release_certification_report(
                 verified=artifacts_verified,
                 artifact_count=artifact_count,
             )
+        _mark_mcp_evidence_diagnostic_only(validator)
         cert = validator.certify()
         md = validator.to_markdown(cert)
         return {
-            "status": "success",
+            "status": "certified" if cert.certified else "blocked",
+            "evidence_mode": "diagnostic-untrusted",
             "markdown": md,
             "certified": cert.certified,
         }

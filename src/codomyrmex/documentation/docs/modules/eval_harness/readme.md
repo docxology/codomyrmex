@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Eval Harness..
+Module implementation, resources, and local coordination for Eval Harness.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

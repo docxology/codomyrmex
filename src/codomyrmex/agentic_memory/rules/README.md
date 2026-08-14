@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Rules..
+Module implementation, resources, and local coordination for Rules.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

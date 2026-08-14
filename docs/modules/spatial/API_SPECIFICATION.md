@@ -15,9 +15,8 @@ The `spatial` module provides advanced modeling capabilities for 3D and 4D envir
 ## 3. Usage Example
 
 ```python
-from codomyrmex.spatial.three_d import Mesh, Vector3
+from codomyrmex.spatial.three_d import MeshLoader
 
-p1 = Vector3(0, 0, 0)
-p2 = Vector3(1, 1, 1)
-print(p1.distance_to(p2))
+mesh = MeshLoader().load("triangle.obj")
+print(len(mesh.vertices), len(mesh.faces))
 ```

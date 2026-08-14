@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Guardrails..
+Module implementation, resources, and local coordination for Guardrails.
 
 ## Directory Contents
 - `PAI.md` – File

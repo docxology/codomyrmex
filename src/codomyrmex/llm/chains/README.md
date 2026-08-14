@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Chains..
+Module implementation, resources, and local coordination for Chains.
 
 ## Directory Contents
 - `PAI.md` – File

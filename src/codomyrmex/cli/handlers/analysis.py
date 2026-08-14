@@ -1,4 +1,6 @@
 import json
+import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -7,6 +9,30 @@ from codomyrmex.cli.utils import print_error, print_success
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
+
+_MODULE_NAME_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_]*$")
+_DEFAULT_MODULE_TEST_TIMEOUT = 120.0
+
+
+def _module_test_timeout() -> float:
+    """Return a bounded module-test timeout from the environment."""
+    raw_timeout = os.environ.get("CODOMYRMEX_MODULE_TEST_TIMEOUT", "120")
+    try:
+        timeout = float(raw_timeout)
+    except ValueError:
+        logger.warning(
+            "Invalid CODOMYRMEX_MODULE_TEST_TIMEOUT=%r; using %.1fs",
+            raw_timeout,
+            _DEFAULT_MODULE_TEST_TIMEOUT,
+        )
+        return _DEFAULT_MODULE_TEST_TIMEOUT
+    if timeout <= 0:
+        logger.warning(
+            "CODOMYRMEX_MODULE_TEST_TIMEOUT must be positive; using %.1fs",
+            _DEFAULT_MODULE_TEST_TIMEOUT,
+        )
+        return _DEFAULT_MODULE_TEST_TIMEOUT
+    return min(timeout, 900.0)
 
 
 def handle_code_analysis(path: str, output_dir: str | None) -> bool:
@@ -75,10 +101,15 @@ def handle_git_analysis(repo_path: str) -> bool:
 def handle_module_test(module_name: str) -> bool:
     """Handle module testing command."""
     try:
+        if not isinstance(module_name, str) or not _MODULE_NAME_RE.fullmatch(
+            module_name
+        ):
+            print_error(f"Invalid module name: {module_name!r}")
+            return False
+
         # Try a few common test locations
         test_locations = [
             Path("src/codomyrmex") / module_name / "tests",
-            Path("tests/unit") / module_name,
             Path("tests/unit") / module_name,
         ]
 
@@ -101,12 +132,12 @@ def handle_module_test(module_name: str) -> bool:
                 "-m",
                 "pytest",
                 str(test_path),
-                "-v",
+                "-q",
                 "--no-cov",  # Disable coverage for quick runs
             ],
             capture_output=True,
             text=True,
-            timeout=300,
+            timeout=_module_test_timeout(),
         )
 
         print(result.stdout)
@@ -122,6 +153,17 @@ def handle_module_test(module_name: str) -> bool:
 
         return result.returncode == 0
 
+    except subprocess.TimeoutExpired as e:
+        logger.warning(
+            "Module tests timed out after %.1fs: %s",
+            _module_test_timeout(),
+            module_name,
+        )
+        print_error(
+            f"Tests timed out for module '{module_name}' "
+            f"after {_module_test_timeout():.1f}s"
+        )
+        return False
     except Exception as e:
         logger.error("Error testing module: %s", e, exc_info=True)
         print_error(f"Error testing module: {e!s}")

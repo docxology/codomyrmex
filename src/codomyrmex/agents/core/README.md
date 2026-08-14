@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Core..
+Module implementation, resources, and local coordination for Core.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

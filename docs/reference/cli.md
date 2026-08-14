@@ -133,6 +133,11 @@ codomyrmex module demo <module_name>
 - `test` — run the module's tests.
 - `demo` — execute the module's demo routine when available.
 
+Module names are single package identifiers (for example, `concurrency`),
+not filesystem paths. Test execution is bounded to 120 seconds by default;
+set `CODOMYRMEX_MODULE_TEST_TIMEOUT` to a positive value when a larger local
+budget is needed (values above 900 seconds are capped).
+
 ---
 
 **Version**: 0.1.0  

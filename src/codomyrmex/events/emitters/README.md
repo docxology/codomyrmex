@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Emitters..
+Module implementation, resources, and local coordination for Emitters.
 
 ## Directory Contents
 - `PAI.md` – File

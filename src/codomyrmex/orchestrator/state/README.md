@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for State..
+Module implementation, resources, and local coordination for State.
 
 ## Directory Contents
 - `PAI.md` – File

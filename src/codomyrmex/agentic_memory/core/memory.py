@@ -8,6 +8,7 @@ for turn-based dialogue and factual knowledge respectively.
 
 from __future__ import annotations
 
+import os
 import time
 import uuid
 from typing import TYPE_CHECKING, Any
@@ -24,13 +25,29 @@ if TYPE_CHECKING:
     from codomyrmex.agentic_memory.core.stores import InMemoryStore
     from codomyrmex.vector_store import VectorStore
 
-SentenceTransformer: type[Any] | None
-try:
-    from sentence_transformers import SentenceTransformer as _SentenceTransformer
+SentenceTransformer: type[Any] | None = None
 
+
+def _load_sentence_transformer(*, enabled: bool = False) -> type[Any] | None:
+    """Load the optional embedding runtime only for vector-memory callers.
+
+    Importing ``sentence_transformers`` initializes torch, scipy, and native
+    tokenizers.  It must not happen while importing ordinary ``AgentMemory``
+    or while MCP discovery is inspecting tool metadata.  A failed optional
+    import degrades to deterministic token-overlap search.
+    """
+    global SentenceTransformer
+    if not enabled:
+        return None
+    if SentenceTransformer is not None:
+        return SentenceTransformer
+    try:
+        from sentence_transformers import SentenceTransformer as _SentenceTransformer
+    except ImportError:
+        return None
     SentenceTransformer = _SentenceTransformer
-except ImportError:
-    SentenceTransformer = None
+    return SentenceTransformer
+
 
 # ── helpers ──────────────────────────────────────────────────────────
 
@@ -186,7 +203,15 @@ class VectorStoreMemory:
         store: Any = None,
         vector_store: VectorStore | None = None,
         embedding_model: str = "all-MiniLM-L6-v2",
+        enable_embeddings: bool | None = None,
     ) -> None:
+        """Initialize memory with optional semantic embeddings.
+
+        ``enable_embeddings`` defaults to the explicit
+        ``CODOMYRMEX_ENABLE_SENTENCE_TRANSFORMERS`` environment flag. The
+        default is off so importing or using deterministic memory does not
+        initialize the heavyweight torch/tokenizer native stack.
+        """
         self.store = store or SQLiteStore()
         self._agent = AgentMemory(self.store)
 
@@ -201,10 +226,16 @@ class VectorStoreMemory:
             except (ValueError, ImportError):
                 self.vector_store = create_vector_store(backend="namespaced")
 
+        if enable_embeddings is None:
+            enable_embeddings = os.environ.get(
+                "CODOMYRMEX_ENABLE_SENTENCE_TRANSFORMERS", ""
+            ).strip().lower() in {"1", "true", "yes", "on"}
+
         self._embedder = None
         if self.vector_store is not None:
-            if SentenceTransformer is not None:
-                self._embedder = SentenceTransformer(embedding_model)
+            transformer = _load_sentence_transformer(enabled=enable_embeddings)
+            if transformer is not None:
+                self._embedder = transformer(embedding_model)
             else:
                 # If sentence-transformers is missing, we don't raise error here.
                 # Methods like remember() and search() will gracefully degrade

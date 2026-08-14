@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Workers..
+Module implementation, resources, and local coordination for Workers.
 
 ## Directory Contents
 - `README.md` – File

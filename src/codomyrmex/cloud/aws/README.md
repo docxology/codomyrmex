@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Aws..
+Module implementation, resources, and local coordination for Aws.
 
 ## Directory Contents
 - `PAI.md` – File

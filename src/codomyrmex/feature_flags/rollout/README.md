@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Rollout..
+Module implementation, resources, and local coordination for Rollout.
 
 ## Directory Contents
 - `PAI.md` – File

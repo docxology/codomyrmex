@@ -1,7 +1,9 @@
 """Shared pytest fixtures and configuration for Codomyrmex testing."""
 
+import asyncio
 import contextlib
 import functools
+import gc
 import hashlib
 import json
 import os
@@ -16,6 +18,19 @@ from pathlib import Path
 # pytest_configure.
 os.environ["HYPOTHESIS_NO_NPY"] = "1"
 
+# Tests create figures for assertions and must never initialize the macOS GUI
+# backend.  The GUI backend opens native transports that can outlive a test
+# and become PytestUnraisableExceptionWarning failures under strict warnings.
+# Applications remain free to select an interactive backend before importing
+# Codomyrmex's visualization modules.
+os.environ["MPLBACKEND"] = "Agg"
+try:
+    import matplotlib as mpl
+
+    mpl.use("Agg", force=True)
+except ImportError:
+    pass
+
 # Collection can instantiate clients in marker expressions before function
 # fixtures exist. Give every pytest worker a process-local persistence root,
 # then narrow it to ``tmp_path`` inside the autouse fixture below.
@@ -29,6 +44,13 @@ os.environ["CODOMYRMEX_TRUST_LEDGER_PATH"] = str(
 os.environ["CODOMYRMEX_HERMES_SESSION_DB"] = str(
     _PROCESS_TEST_STATE / "hermes-sessions.db"
 )
+
+# pytest-asyncio 1.3 briefly swaps event-loop policies around each async test.
+# On Python 3.13, its compatibility lookup creates an idle loop when no loop
+# is installed and restores that loop without owning its cleanup.  Keep one
+# explicitly owned idle loop available for that hand-off and close it at the
+# end of the session so strict ResourceWarning runs remain deterministic.
+_TEST_BOOTSTRAP_LOOP: asyncio.AbstractEventLoop | None = None
 
 
 def _patch_hypothesis_is_local_module_file() -> None:
@@ -58,27 +80,88 @@ _patch_hypothesis_is_local_module_file()
 import subprocess
 
 import pytest
+import yaml
 
-try:
-    import yaml
-
-    YAML_AVAILABLE = True
-except ImportError:
-    YAML_AVAILABLE = False
-
-with contextlib.suppress(ImportError):
-    from codomyrmex.logging_monitoring import get_logger, setup_logging
+from codomyrmex.logging_monitoring import get_logger, setup_logging
 
 
 def pytest_configure(config):
     """Register custom pytest markers."""
     os.environ["HYPOTHESIS_NO_NPY"] = "1"
+    global _TEST_BOOTSTRAP_LOOP
+    try:
+        asyncio.get_event_loop()
+    except RuntimeError:
+        _TEST_BOOTSTRAP_LOOP = asyncio.new_event_loop()
+        asyncio.set_event_loop(_TEST_BOOTSTRAP_LOOP)
     config.addinivalue_line("markers", "unit: Unit tests")
     config.addinivalue_line("markers", "integration: Integration tests")
     config.addinivalue_line("markers", "slow: Slow running tests")
     config.addinivalue_line("markers", "bench: Opt-in benchmark and timing tests")
     config.addinivalue_line("markers", "benchmark: Opt-in pytest-benchmark tests")
     config.addinivalue_line("markers", "performance: Performance test suite")
+
+
+def _close_event_loop(candidate: asyncio.AbstractEventLoop) -> None:
+    """Close a test-created loop, tolerating partially closed selectors."""
+    if candidate.is_closed() or candidate.is_running():
+        return
+    try:
+        candidate.close()
+    except (OSError, ValueError):
+        # A third-party runner can close an event loop's self-pipe before
+        # marking the loop closed. Finish the cleanup at the selector level
+        # so pytest teardown itself does not become the source of a failure.
+        selector = getattr(candidate, "_selector", None)
+        if selector is not None:
+            with contextlib.suppress(OSError, ValueError):
+                selector.close()
+        candidate._closed = True
+
+
+def _close_orphaned_event_loops() -> None:
+    """Close idle loops left behind by synchronous test helpers/plugins."""
+    for candidate in gc.get_objects():
+        candidate_type = type(candidate)
+        if asyncio.BaseEventLoop not in candidate_type.__mro__:
+            continue
+        if candidate is _TEST_BOOTSTRAP_LOOP:
+            continue
+        _close_event_loop(candidate)
+
+
+@pytest.hookimpl(tryfirst=True)
+def pytest_runtest_setup(item: pytest.Item) -> None:
+    """Close idle sync-test loops before pytest checks unraisable warnings."""
+    if item.get_closest_marker("asyncio") is None:
+        _close_orphaned_event_loops()
+
+
+@pytest.hookimpl(tryfirst=True)
+def pytest_runtest_teardown(item: pytest.Item, nextitem: pytest.Item | None) -> None:
+    """Close orphaned sync-test loops before pytest collects unraisable warnings."""
+    if item.get_closest_marker("asyncio") is None:
+        _close_orphaned_event_loops()
+    if _TEST_BOOTSTRAP_LOOP is not None and not _TEST_BOOTSTRAP_LOOP.is_closed():
+        asyncio.set_event_loop(_TEST_BOOTSTRAP_LOOP)
+
+
+def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:
+    """Close the loop owned by the test harness before pytest unconfigures."""
+    try:
+        current_loop = asyncio.get_running_loop()
+    except RuntimeError:
+        current_loop = None
+    for candidate in gc.get_objects():
+        candidate_type = type(candidate)
+        if asyncio.BaseEventLoop not in candidate_type.__mro__:
+            continue
+        if candidate.is_closed() or candidate.is_running() or candidate is current_loop:
+            continue
+        _close_event_loop(candidate)
+    if _TEST_BOOTSTRAP_LOOP is not None and not _TEST_BOOTSTRAP_LOOP.is_closed():
+        _TEST_BOOTSTRAP_LOOP.close()
+    asyncio.set_event_loop(None)
 
 
 _TESTS_ROOT = Path(__file__).parent.resolve()
@@ -156,9 +239,9 @@ items:
 @pytest.fixture
 def sample_yaml_file_with_yaml(tmp_path):
     """Fixture providing a sample YAML file (requires yaml library)."""
-    if not YAML_AVAILABLE:
-        pytest.skip("YAML not available")
-    return sample_yaml_file(tmp_path)
+    yaml_file = sample_yaml_file(tmp_path)
+    yaml.safe_load(yaml_file.read_text(encoding="utf-8"))
+    return yaml_file
 
 
 @pytest.fixture
@@ -263,9 +346,6 @@ def setup_test_environment(request: pytest.FixtureRequest):
 @pytest.fixture
 def real_logger_fixture(tmp_path):
     """Create a real logger instance with actual file output."""
-    if get_logger is None or setup_logging is None:
-        pytest.skip("logging_monitoring module not available")
-
     # set up real logging configuration
     log_file = tmp_path / "test.log"
     os.environ["CODOMYRMEX_LOG_FILE"] = str(log_file)
@@ -300,11 +380,11 @@ if __name__ == "__main__":
 
     (project_dir / "tests" / "__init__.py").write_text("")
     (project_dir / "tests" / "test_main.py").write_text("""
-import pytest
+from src.main import main
 
 
 def test_main():
-    pytest.skip("placeholder — add real tests here")
+    assert callable(main)
 """)
 
     (project_dir / "README.md").write_text(

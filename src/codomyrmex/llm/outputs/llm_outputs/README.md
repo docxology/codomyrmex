@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Llm Outputs..
+Module implementation, resources, and local coordination for Llm Outputs.
 
 ## Directory Contents
 - `PAI.md` – File

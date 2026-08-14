@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Commands..
+Module implementation, resources, and local coordination for Commands.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,6 +4,7 @@ import sys
 import time
 
 import pytest
+from tests.support.repo_paths import REPO_ROOT
 
 
 @pytest.mark.unit
@@ -199,12 +200,10 @@ class TestPhysicalManagement:
         assert readme_path.exists()
 
     def test_docs_directory_exists(self, code_dir):
-        """Test that docs directory exists for physical_management module."""
-        docs_path = code_dir / "codomyrmex" / "physical_management" / "docs"
-        if not docs_path.exists():
-            pytest.skip(
-                "docs/ directory not yet created for physical_management module"
-            )
+        """Test the authoritative physical-management documentation surface."""
+        docs_path = REPO_ROOT / "docs" / "modules" / "physical_management"
+        assert docs_path.is_dir()
+        assert (docs_path / "README.md").is_file()
 
     def test_examples_directory_exists(self, code_dir):
         """Test that examples directory exists for physical_management module."""
@@ -213,12 +212,9 @@ class TestPhysicalManagement:
         assert examples_path.is_dir()
 
     def test_tests_directory_exists(self, code_dir):
-        """Test that tests directory exists for physical_management module."""
-        tests_path = code_dir / "codomyrmex" / "physical_management" / "tests"
-        if not tests_path.exists():
-            pytest.skip(
-                "tests/ directory not yet created for physical_management module"
-            )
+        """Test the authoritative physical-management unit-test surface."""
+        tests_path = REPO_ROOT / "tests" / "unit" / "physical_management"
+        assert tests_path.is_dir()
 
 
 # From test_coverage_boost_r3.py

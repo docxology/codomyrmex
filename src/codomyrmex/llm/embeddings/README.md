@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Embeddings..
+Module implementation, resources, and local coordination for Embeddings.
 
 ## Directory Contents
 - `PAI.md` – File

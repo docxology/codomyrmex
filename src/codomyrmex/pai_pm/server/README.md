@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Server..
+Module implementation, resources, and local coordination for Server.
 
 ## Directory Contents
 - `AddTask.ts` – File

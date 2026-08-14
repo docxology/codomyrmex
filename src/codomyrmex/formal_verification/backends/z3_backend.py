@@ -130,7 +130,7 @@ class Z3Backend(SolverBackend):
         try:
             for idx, item in enumerate(self._items):
                 try:
-                    exec(item, namespace)  # nosec B102 - validated Z3 model DSL
+                    exec(item, namespace)  # nosec B102
                 except Exception as exc:
                     raise ModelBuildError(
                         f"Error executing item {idx}: {item!r}: {exc}"

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Contracts..
+Module implementation, resources, and local coordination for Contracts.
 
 ## Directory Contents
 - `PAI.md` – File

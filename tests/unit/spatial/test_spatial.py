@@ -18,6 +18,42 @@ from codomyrmex.spatial.three_d.engine_3d import (
     Scene3D,
     Vector3D,
 )
+from codomyrmex.spatial.three_d.materials import Material3D, MeshData, MeshLoader
+
+
+@pytest.mark.unit
+class TestMaterialsAndMeshes:
+    """Behavioural coverage for renderer-neutral 3D assets."""
+
+    def test_material_defaults_are_isolated(self):
+        first = Material3D()
+        second = Material3D()
+
+        first.diffuse_color.x = 0.25
+
+        assert second.diffuse_color.x == 1.0
+
+    def test_material_rejects_invalid_shininess(self):
+        with pytest.raises(ValueError, match="shininess"):
+            Material3D(shininess=-1.0)
+
+    def test_obj_loader_reads_vertices_and_faces(self, tmp_path):
+        path = tmp_path / "triangle.obj"
+        path.write_text(
+            "# triangle\nv 0 0 0\nv 1 0 0\nv 0 1 0\nf 1 2 3\n",
+            encoding="utf-8",
+        )
+
+        mesh = MeshLoader().load(path)
+
+        assert isinstance(mesh, MeshData)
+        assert len(mesh.vertices) == 3
+        assert mesh.faces == ((0, 1, 2),)
+
+    def test_mesh_data_rejects_out_of_range_face(self):
+        with pytest.raises(ValueError, match="outside"):
+            MeshData(vertices=(Vector3D(),), faces=((0, 1, 2),))
+
 
 # ---------------------------------------------------------------
 # Vector3D

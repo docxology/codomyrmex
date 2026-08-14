@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Task..
+Module implementation, resources, and local coordination for Task.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Triggers..
+Module implementation, resources, and local coordination for Triggers.
 
 ## Directory Contents
 - `PAI.md` – File

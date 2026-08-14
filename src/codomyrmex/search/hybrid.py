@@ -54,7 +54,7 @@ class BM25Index:
             score = self._bm25_score(query_tokens, doc_tokens, doc_id)
             if score > 0:
                 scores[doc_id] = score
-        sorted_results = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+        sorted_results = sorted(scores.items(), key=lambda x: (-x[1], x[0]))
         return sorted_results[:top_k]
 
     def _bm25_score(
@@ -137,5 +137,8 @@ class HybridSearchEngine:
                 )
             )
 
-        results.sort(key=lambda r: r.score, reverse=True)
+        # Stable tie-breaking is part of the search contract: callers use
+        # result order for navigation and pagination, so hash-seed/set
+        # iteration must never change equal-score results.
+        results.sort(key=lambda r: (-r.score, r.doc_id))
         return results[:top_k]

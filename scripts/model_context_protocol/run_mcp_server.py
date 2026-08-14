@@ -461,7 +461,7 @@ Examples:
         "--profile",
         choices=["full", "readonly"],
         default=None,
-        help="Tool exposure profile (HTTP defaults to readonly; stdio defaults to full)",
+        help="Tool exposure profile (readonly by default; full requires explicit opt-in)",
     )
     parser.add_argument(
         "--auth-token",
@@ -478,8 +478,13 @@ Examples:
 
 
 def resolve_profile(transport: str, profile: str | None) -> str:
-    """Resolve the safe default tool profile for a selected transport."""
-    return profile or ("readonly" if transport == "http" else "full")
+    """Resolve the safe default tool profile for a selected transport.
+
+    The transport does not change the authorization default: every launcher
+    starts read-only, and callers must explicitly request ``--profile full``.
+    This keeps stdio clients from receiving an implicit write/execute surface.
+    """
+    return profile or "readonly"
 
 
 def main():

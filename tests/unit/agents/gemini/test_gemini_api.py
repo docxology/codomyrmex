@@ -53,12 +53,8 @@ class TestGeminiClientInit:
             if original_value is not None:
                 os.environ["GEMINI_API_KEY"] = original_value
 
-    @pytest.mark.skipif(
-        not _HAS_GEMINI_KEY,
-        reason="Live Gemini tests require RUN_LIVE_GEMINI=1 and GEMINI_API_KEY",
-    )
     def test_default_model(self):
-        """GeminiClient uses the default model from config or env."""
+        """GeminiClient exposes its default model without API access."""
         client = GeminiClient()
         assert client.default_model is not None
         assert isinstance(client.default_model, str)

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Go..
+Module implementation, resources, and local coordination for Go.
 
 ## Directory Contents
 - `README.md` – File

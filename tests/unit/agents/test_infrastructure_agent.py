@@ -16,27 +16,14 @@ import json
 
 import pytest
 
-# Guard: the entire agents package may fail to import if optional
-# dependencies (google.genai, etc.) are missing.
-try:
-    from codomyrmex.agents.core.base import AgentCapabilities, AgentRequest
-    from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
-    from codomyrmex.agents.infrastructure.tool_factory import (
-        CloudToolFactory,
-        Tool,
-        _is_public_method,
-        _method_to_args_schema,
-    )
-
-    _AGENTS_AVAILABLE = True
-except ImportError:
-    _AGENTS_AVAILABLE = False
-
-pytestmark = pytest.mark.skipif(
-    not _AGENTS_AVAILABLE,
-    reason="agents package has unresolved imports (e.g., google.genai)",
+from codomyrmex.agents.core.base import AgentCapabilities, AgentRequest
+from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
+from codomyrmex.agents.infrastructure.tool_factory import (
+    CloudToolFactory,
+    Tool,
+    _is_public_method,
+    _method_to_args_schema,
 )
-
 
 # ---------------------------------------------------------------------------
 # Lightweight stub client classes (replace MagicMock)

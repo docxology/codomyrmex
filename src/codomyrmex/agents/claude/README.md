@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Claude..
+Module implementation, resources, and local coordination for Claude.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

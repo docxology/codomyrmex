@@ -4,7 +4,7 @@ from codomyrmex.agents.core import AgentRequest, AgentResponse
 from codomyrmex.agents.hermes.client_pkg import HermesClient
 
 
-class TestHermesClient(HermesClient):
+class _TestHermesClient(HermesClient):
     """Test implementation of HermesClient simulating task orchestration."""
 
     def __init__(self, db_path: str):
@@ -59,7 +59,7 @@ class TestHermesClient(HermesClient):
 def test_hermes_autonomous_loop(tmp_path, monkeypatch):
     """Verify chat_session loops until tasks are completed."""
     db_path = str(tmp_path / "sessions.db")
-    client = TestHermesClient(db_path)
+    client = _TestHermesClient(db_path)
 
     # Make sure tools running in execute modify the specific DB path
     from codomyrmex.agents.hermes.mcp_tools_pkg import _client as client_module

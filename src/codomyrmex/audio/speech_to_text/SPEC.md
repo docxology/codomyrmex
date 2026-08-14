@@ -16,6 +16,7 @@ Speech-to-text (STT) transcription module.
 | Component | Type | Description |
 |-----------|------|-------------|
 | `WhisperModelSize` | Class | Available Whisper model sizes. |
+| `Transcriber` | Class | High-level transcription interface; accepts `WhisperModelSize` values or their string values. |
 | `Word` | Class | A single word with timing information. |
 | `Segment` | Class | A transcription segment (typically a sentence or phrase). |
 | `TranscriptionResult` | Class | Complete transcription result. |

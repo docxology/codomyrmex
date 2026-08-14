@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Tree Sitter..
+Module implementation, resources, and local coordination for Tree Sitter.
 
 ## Directory Contents
 - `API_SPECIFICATION.md` – File

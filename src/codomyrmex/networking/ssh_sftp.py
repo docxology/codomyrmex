@@ -40,7 +40,7 @@ class SSHClient:
                 "and vulnerable to man-in-the-middle attacks",
                 hostname,
             )
-            self.client.set_missing_host_key_policy(  # nosec B507 - explicit unsafe opt-in
+            self.client.set_missing_host_key_policy(  # nosec B507
                 paramiko.WarningPolicy()
             )
         else:

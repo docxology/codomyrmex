@@ -2,6 +2,8 @@
 Tests for LLM RAG Module
 """
 
+import hashlib
+
 import pytest
 
 from codomyrmex.llm.rag import (
@@ -231,11 +233,20 @@ class TestRAGPipeline:
 
     @pytest.fixture
     def mock_embed_fn(self):
-        """Create mock embedding function."""
+        """Create a deterministic, non-zero embedding function."""
 
         def embed(texts):
-            # Simple deterministic embeddings
-            return [[hash(t) % 100 / 100 for _ in range(10)] for t in texts]
+            # Python's built-in hash is process-randomized and can produce a
+            # zero vector, which makes cosine retrieval intentionally return
+            # no results. Use stable digest bytes so this contract test is
+            # reproducible across processes and platforms.
+            return [
+                [
+                    ((byte + 1) / 256)
+                    for byte in hashlib.sha256(t.encode()).digest()[:10]
+                ]
+                for t in texts
+            ]
 
         return embed
 

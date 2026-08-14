@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Logit Processor..
+Module implementation, resources, and local coordination for Logit Processor.
 
 ## Directory Contents
 - `MCP_TOOL_SPECIFICATION.md` – File

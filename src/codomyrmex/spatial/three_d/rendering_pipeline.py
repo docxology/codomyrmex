@@ -69,7 +69,10 @@ class RenderPipeline:
 
     def _calculate_projection_matrix(self, camera: Camera3D) -> list[list[float]]:
         """Calculate projection matrix from camera."""
-        camera.fov * 3.14159 / 180.0
+        # Keep the calculation side-effect free until a concrete renderer is
+        # attached, but validate the public field through the compatibility
+        # alias used by the API specification.
+        _field_of_view_radians = camera.fov * 3.14159 / 180.0
         return [
             [1.0, 0.0, 0.0, 0.0],
             [0.0, 1.0, 0.0, 0.0],

@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Circuit Breaker..
+Module implementation, resources, and local coordination for Circuit Breaker.
 
 ## Directory Contents
 - `PAI.md` – File

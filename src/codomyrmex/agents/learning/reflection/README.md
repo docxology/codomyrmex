@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Reflection..
+Module implementation, resources, and local coordination for Reflection.
 
 ## Directory Contents
 - `PAI.md` – File

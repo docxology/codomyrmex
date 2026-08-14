@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Pooling..
+Module implementation, resources, and local coordination for Pooling.
 
 ## Directory Contents
 - `PAI.md` – File

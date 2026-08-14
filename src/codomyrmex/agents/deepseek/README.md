@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Deepseek..
+Module implementation, resources, and local coordination for Deepseek.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -4,10 +4,12 @@ import json
 import re
 from pathlib import Path
 
+import pytest
 import yaml
 
 from codomyrmex.manuscript.variables import (
     _canonical_sqlite_sha256,
+    _load_yaml_without_duplicate_keys,
     _run_colony_kernel_coverage,
     validate_variable_contract,
 )
@@ -150,3 +152,11 @@ def test_variable_contract_fails_on_undefined_and_unclassified_unused(tmp_path: 
     assert report["status"] == "invalid"
     assert "MISSING" in report["undefined_tokens"]
     assert "DRIFT" in report["unused_variables"]
+
+
+def test_manuscript_yaml_rejects_duplicate_keys(tmp_path: Path) -> None:
+    config_path = tmp_path / "config.yaml"
+    config_path.write_text("paper:\n  version: 1\n  version: 2\n", encoding="utf-8")
+
+    with pytest.raises(RuntimeError, match="Duplicate YAML key 'version'"):
+        _load_yaml_without_duplicate_keys(config_path.read_text(), config_path)

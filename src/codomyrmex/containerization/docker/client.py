@@ -1,14 +1,87 @@
 """DockerClient for interacting with Docker daemon."""
 
 import json
+import os
+import shutil
+import socket
 import subprocess
 from collections.abc import Iterator
+from pathlib import Path
+from urllib.parse import unquote, urlparse
 
 from codomyrmex.logging_monitoring import get_logger
 
 from .models import ContainerConfig, ContainerInfo, ImageInfo
 
 logger = get_logger(__name__)
+
+
+def _probe_docker_endpoint(docker_host: str | None, timeout: float) -> bool:
+    """Probe a Docker endpoint without creating an HTTP client socket."""
+    endpoint = docker_host or os.environ.get("DOCKER_HOST")
+    if not endpoint:
+        socket_path = Path("/var/run/docker.sock")
+        if not socket_path.exists():
+            return False
+        try:
+            with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+                sock.settimeout(timeout)
+                sock.connect(str(socket_path))
+            return True
+        except OSError:
+            return False
+
+    parsed = urlparse(endpoint)
+    if parsed.scheme == "unix":
+        socket_path = Path(unquote(parsed.path))
+        try:
+            with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+                sock.settimeout(timeout)
+                sock.connect(str(socket_path))
+            return True
+        except OSError:
+            return False
+
+    if parsed.scheme in {"tcp", "http", "https"} and parsed.hostname:
+        try:
+            port = parsed.port or (443 if parsed.scheme == "https" else 80)
+            with socket.create_connection((parsed.hostname, port), timeout=timeout):
+                return True
+        except OSError:
+            return False
+
+    return False
+
+
+def _docker_daemon_available(
+    docker_host: str | None = None, timeout: float = 5.0
+) -> bool:
+    """Return whether a Docker daemon is reachable without leaking sockets.
+
+    The Docker CLI understands contexts and transports that are not safely
+    probeable through docker-py's lazy HTTP client. Prefer it when present;
+    fall back to a short-lived raw socket probe for SDK-only installations.
+    """
+    docker_path = shutil.which("docker")
+    if docker_path:
+        probe_env = os.environ.copy()
+        if docker_host is not None:
+            probe_env["DOCKER_HOST"] = docker_host
+            probe_env.pop("DOCKER_CONTEXT", None)
+        try:
+            result = subprocess.run(
+                [docker_path, "info", "--format", "{{.ServerVersion}}"],
+                capture_output=True,
+                text=True,
+                timeout=timeout,
+                env=probe_env,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            pass
+        else:
+            return result.returncode == 0 and bool(result.stdout.strip())
+
+    return _probe_docker_endpoint(docker_host, timeout)
 
 
 class DockerClient:

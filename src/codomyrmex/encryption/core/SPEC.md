@@ -4,7 +4,7 @@
 
 ## Purpose
 
-The `encryption/core` submodule provides the primary `Encryptor` class and key-generation helper for symmetric (AES-256-CBC) and asymmetric (RSA-OAEP) encryption, digital signatures (RSA-PSS), file encryption, and hashing. AES-CBC is unauthenticated and emits a deprecation warning; prefer `encryption/algorithms` (AES-GCM) for new code.
+The `encryption/core` submodule provides the primary `Encryptor` class and key-generation helper for symmetric (AES-256-CBC) and asymmetric (RSA-OAEP) encryption, digital signatures (RSA-PSS), file encryption, and hashing. The compatibility AES-CBC format includes an HMAC-SHA256 integrity tag and emits a deprecation warning; prefer `encryption/algorithms` (AES-GCM) for new code.
 
 ## 3.1 Interface / API
 
@@ -52,7 +52,7 @@ No external configuration is required. The module depends on the `cryptography` 
 
 ## Deprecation Notice
 
-AES-CBC mode (used by `Encryptor(algorithm="AES")`) does not provide authentication and emits a `DeprecationWarning`. Use `encryption.algorithms.AESGCMEncryptor` for authenticated encryption in new code.
+AES-CBC mode (used by `Encryptor(algorithm="AES")`) is a legacy construction. New ciphertexts are encoded as `IV || ciphertext || HMAC-SHA256(key, IV || ciphertext)` and emit a `DeprecationWarning`; use `encryption.algorithms.AESGCMEncryptor` for new code. Payloads without the integrity tag are rejected rather than decrypted ambiguously.
 
 ## Navigation
 

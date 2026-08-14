@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Archives..
+Module implementation, resources, and local coordination for Archives.
 
 ## Directory Contents
 - `PAI.md` – File

@@ -14,7 +14,7 @@ thin command-line entry points.
 | Component | File | Purpose |
 | :--- | :--- | :--- |
 | `compute_variables()` | `variables.py` | Compute manuscript token variables from repo state |
-| `inject_manuscript_variables()` | `variables.py` | Inject computed variables into the manuscript build |
+| `inject_manuscript_variables()` | `variables.py` | Hydrate through the pinned template entrypoint, with an explicit strict local successor for standalone clones |
 | `validate_variable_contract()` | `variables.py` | Detect undefined, unresolved, stale, and unused publication tokens |
 | `figures.main()` | `figures/orchestrator.py` | Run every figure generator |
 | `FIGURES` registry | `figures/__init__.py` | Registry of `fig_*()` generators |
@@ -25,6 +25,12 @@ prose token, table value, caption, figure annotation, and accessibility string
 must resolve from that snapshot or be explicitly classified as mathematical
 notation, a citation year, or provenance metadata. The manifest is a contract
 check, not evidence that a scientific hypothesis has been supported.
+
+The hydration contract is recorded in `docs/manuscript/config.yaml`. When the
+adjacent clean checkout of `docxology/template` matches the pinned revision,
+the generator calls `infrastructure.rendering.manuscript_injection.write_resolved_manuscript_tree`.
+If that checkout is unavailable, the project-local strict renderer is used and
+the fallback is recorded rather than being presented as the canonical template.
 
 ## Quick Start
 

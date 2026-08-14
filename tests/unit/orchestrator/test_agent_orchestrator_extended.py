@@ -117,6 +117,36 @@ def test_orchestrator_run_dag_safe_eval_blocks_malicious_code() -> None:
     assert result2["results"][0]["output"] == 5
 
 
+def test_orchestrator_run_dag_rejects_unregistered_import_callable() -> None:
+    from codomyrmex.orchestrator.mcp_tools import orchestrator_run_dag
+
+    result = orchestrator_run_dag("fan_out", [{"id": "cwd", "fn": "os.getcwd"}])
+    assert result["status"] == "error"
+    assert "not in the orchestrator registry" in result["message"]
+
+
+def test_analyze_workflow_dependencies_validates_order_and_cycles() -> None:
+    from codomyrmex.orchestrator.mcp_tools import analyze_workflow_dependencies
+
+    valid = analyze_workflow_dependencies(
+        [
+            {"id": "build", "dependencies": []},
+            {"id": "test", "dependencies": ["build"]},
+        ]
+    )
+    assert valid["status"] == "success"
+    assert valid["execution_order"] == ["build", "test"]
+
+    cycle = analyze_workflow_dependencies(
+        [
+            {"id": "a", "dependencies": ["b"]},
+            {"id": "b", "dependencies": ["a"]},
+        ]
+    )
+    assert cycle["status"] == "error"
+    assert cycle["valid_dag"] is False
+
+
 # ── EventStore-backed IntegrationBus durability ───────────────────────────────
 
 
@@ -202,44 +232,45 @@ def test_receive_timeout_does_not_block_indefinitely() -> None:
 def test_fts5_search_returns_bm25_ranked_results() -> None:
     from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 
-    store = SQLiteSessionStore()  # :memory:
+    with SQLiteSessionStore() as store:  # :memory:
+        s1 = HermesSession(session_id="s-bm25")
+        s1.add_message("user", "Explain the BM25 ranking algorithm.")
+        s1.add_message(
+            "assistant",
+            "BM25 scores documents using term frequency and inverse document frequency.",
+        )
+        store.save(s1)
 
-    s1 = HermesSession(session_id="s-bm25")
-    s1.add_message("user", "Explain the BM25 ranking algorithm.")
-    s1.add_message(
-        "assistant",
-        "BM25 scores documents using term frequency and inverse document frequency.",
-    )
-    store.save(s1)
+        s2 = HermesSession(session_id="s-other")
+        s2.add_message("user", "How does Docker work?")
+        s2.add_message(
+            "assistant",
+            "Docker packages applications in containers using layered filesystems.",
+        )
+        store.save(s2)
 
-    s2 = HermesSession(session_id="s-other")
-    s2.add_message("user", "How does Docker work?")
-    s2.add_message(
-        "assistant",
-        "Docker packages applications in containers using layered filesystems.",
-    )
-    store.save(s2)
-
-    results = store.search_fts("BM25 ranking", limit=5)
-    assert len(results) >= 1
-    assert results[0]["session_id"] == "s-bm25"
+        results = store.search_fts("BM25 ranking", limit=5)
+        assert len(results) >= 1
+        assert results[0]["session_id"] == "s-bm25"
 
 
 def test_fts5_search_empty_returns_empty() -> None:
     from codomyrmex.agents.hermes.session import SQLiteSessionStore
 
-    store = SQLiteSessionStore()
-    results = store.search_fts("zzznomatch")
-    assert results == []
+    with SQLiteSessionStore() as store:
+        results = store.search_fts("zzznomatch")
+        assert results == []
 
 
 def test_fts5_search_snippet_contains_highlighted_term() -> None:
     from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 
-    store = SQLiteSessionStore()
-    s = HermesSession(session_id="s-snippet")
-    s.add_message("assistant", "The quicksort algorithm divides arrays recursively.")
-    store.save(s)
+    with SQLiteSessionStore() as store:
+        s = HermesSession(session_id="s-snippet")
+        s.add_message(
+            "assistant", "The quicksort algorithm divides arrays recursively."
+        )
+        store.save(s)
 
-    results = store.search_fts("quicksort")
-    assert any("<b>" in r["messages_snippet"] for r in results)
+        results = store.search_fts("quicksort")
+        assert any("<b>" in r["messages_snippet"] for r in results)

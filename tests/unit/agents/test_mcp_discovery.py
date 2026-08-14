@@ -245,8 +245,7 @@ class TestDiscoverDynamicTools:
         """Each tool tuple should be (name:str, description:str, handler, params:dict)."""
         invalidate_tool_cache()
         tools = discover_dynamic_tools()
-        if not tools:
-            pytest.skip("No dynamic tools discovered (may require full install)")
+        assert tools, "the local source tree must provide dynamic MCP tools"
         for name, description, handler, params in tools:
             assert isinstance(name, str), f"Tool name should be str, got {type(name)}"
             assert isinstance(description, str), "Description should be str"
@@ -262,13 +261,15 @@ class TestDiscoverDynamicTools:
         # At minimum a few core tools should be found
         assert len(tool_names) > 0, "No dynamic tools discovered"
 
-    def test_cache_hit_returns_same_result(self):
-        """Second call within TTL should return cached result."""
+    def test_cache_hit_returns_defensive_copy(self):
+        """Cache hits cannot expose the mutable shared cache."""
         invalidate_tool_cache()
         tools_first = discover_dynamic_tools()
         tools_second = discover_dynamic_tools()
-        # Same object (cache hit)
-        assert tools_first is tools_second
+        assert tools_first == tools_second
+        assert tools_first is not tools_second
+        tools_first.clear()
+        assert discover_dynamic_tools()
 
     def test_cache_invalidation_triggers_rescan(self):
         """After invalidation, next call should rescan."""
@@ -317,8 +318,7 @@ class TestGetDiscoveryMetrics:
         invalidate_tool_cache()
         discover_dynamic_tools()  # Ensure engine is initialized
         result = get_discovery_metrics()
-        if result is None:
-            pytest.skip("Discovery engine not initialized")
+        assert result is not None, "discovery must initialize its metrics engine"
         assert "failed_modules" in result
         assert "scan_duration_ms" in result
         assert "last_scan_time" in result
@@ -327,16 +327,14 @@ class TestGetDiscoveryMetrics:
         invalidate_tool_cache()
         discover_dynamic_tools()
         result = get_discovery_metrics()
-        if result is None:
-            pytest.skip("Discovery engine not initialized")
+        assert result is not None, "discovery must initialize its metrics engine"
         assert isinstance(result["failed_modules"], list)
 
     def test_scan_duration_is_float(self):
         invalidate_tool_cache()
         discover_dynamic_tools()
         result = get_discovery_metrics()
-        if result is None:
-            pytest.skip("Discovery engine not initialized")
+        assert result is not None, "discovery must initialize its metrics engine"
         assert isinstance(result["scan_duration_ms"], float)
         assert result["scan_duration_ms"] >= 0.0
 

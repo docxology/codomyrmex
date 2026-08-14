@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Shells..
+Module implementation, resources, and local coordination for Shells.
 
 ## Directory Contents
 - `PAI.md` – File

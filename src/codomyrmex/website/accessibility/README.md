@@ -4,7 +4,7 @@
 
 ## Overview
 
-Module implementation, resources, and local coordination for Accessibility..
+Module implementation, resources, and local coordination for Accessibility.
 
 ## Directory Contents
 - `PAI.md` – File

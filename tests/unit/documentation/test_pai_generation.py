@@ -651,6 +651,30 @@ class TestPlaceholderCheckFixGeneric:
         assert "Test files and validation suites." not in result
 
 
+@pytest.mark.unit
+class TestMissingReadmeGeneration:
+    """Generated README parsing keeps terminal punctuation canonical."""
+
+    def test_parse_agents_file_normalizes_legacy_double_period(self, tmp_path: Path):
+        from codomyrmex.documentation.scripts.generate_missing_readmes import (
+            parse_agents_file,
+        )
+
+        agents_path = tmp_path / "AGENTS.md"
+        agents_path.write_text(
+            "# Example\n\n## Purpose\n"
+            "Module implementation, resources, and local coordination for Example..\n\n"
+            "## Active Components\n- `README.md`\n",
+            encoding="utf-8",
+        )
+
+        parsed = parse_agents_file(agents_path)
+
+        assert parsed is not None
+        assert parsed["purpose"].endswith(".")
+        assert not parsed["purpose"].endswith("..")
+
+
 # ---------------------------------------------------------------------------
 # scripts/global_doc_auditor.py
 # ---------------------------------------------------------------------------
