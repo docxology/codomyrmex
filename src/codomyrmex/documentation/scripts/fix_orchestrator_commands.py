@@ -12,9 +12,8 @@ to the corresponding AGENTS.md files.
 """
 
 
-
-
 logger = get_logger(__name__)
+
 
 class OrchestratorCommandFixer:
     """Fix orchestrator commands in AGENTS.md files."""
@@ -29,19 +28,21 @@ class OrchestratorCommandFixer:
             return []
 
         try:
-            content = script_path.read_text(encoding='utf-8')
+            content = script_path.read_text(encoding="utf-8")
 
             # Look for subparsers.add_parser calls
             commands = []
-            for line in content.split('\n'):
+            for line in content.split("\n"):
                 # Match: subparsers.add_parser("command_name"
-                match = re.search(r'subparsers\.add_parser\(\s*["\']([^"\']+)["\']', line)
+                match = re.search(
+                    r'subparsers\.add_parser\(\s*["\']([^"\']+)["\']', line
+                )
                 if match:
                     command = match.group(1)
                     commands.append(command)
 
             # Also check for simple add_parser calls
-            for line in content.split('\n'):
+            for line in content.split("\n"):
                 match = re.search(r'add_parser\(\s*["\']([^"\']+)["\']', line)
                 if match:
                     command = match.group(1)
@@ -54,14 +55,19 @@ class OrchestratorCommandFixer:
             print(f"Error reading {script_path}: {e}")
             return []
 
-    def fix_orchestrator_commands(self, agents_file: Path, dry_run: bool = True) -> bool:
+    def fix_orchestrator_commands(
+        self, agents_file: Path, dry_run: bool = True
+    ) -> bool:
         """Fix orchestrator commands in a single AGENTS.md file."""
         directory = agents_file.parent
 
         # Look for orchestrate.py or similar orchestrator scripts
         orchestrator_files = []
         for script_file in directory.glob("*.py"):
-            if "orchestrate" in script_file.name.lower() or script_file.name in ["cli.py", "__main__.py"]:
+            if "orchestrate" in script_file.name.lower() or script_file.name in [
+                "cli.py",
+                "__main__.py",
+            ]:
                 orchestrator_files.append(script_file)
 
         if not orchestrator_files:
@@ -77,14 +83,14 @@ class OrchestratorCommandFixer:
             return True  # No commands found
 
         # Check if commands are already documented
-        content = agents_file.read_text(encoding='utf-8')
+        content = agents_file.read_text(encoding="utf-8")
 
         # Look for commands in Active Components
         documented_commands = set()
-        for line in content.split('\n'):
+        for line in content.split("\n"):
             line = line.strip()
-            if line.startswith('- `') and '`' in line:
-                item = line.split('`')[1]
+            if line.startswith("- `") and "`" in line:
+                item = line.split("`")[1]
                 documented_commands.add(item)
 
         missing_commands = all_commands - documented_commands
@@ -93,18 +99,20 @@ class OrchestratorCommandFixer:
             return True  # All commands already documented
 
         if dry_run:
-            print(f"🔧 Would fix {agents_file.relative_to(self.repo_root)}: Add {len(missing_commands)} orchestrator commands")
+            print(
+                f"🔧 Would fix {agents_file.relative_to(self.repo_root)}: Add {len(missing_commands)} orchestrator commands"
+            )
             for cmd in sorted(missing_commands):
                 print(f"   + {cmd}")
             return False
 
         # Add missing commands to Active Components
-        lines = content.split('\n')
+        lines = content.split("\n")
 
         # Find Active Components section
         active_start = -1
         for i, line in enumerate(lines):
-            if line.strip() == '## Active Components':
+            if line.strip() == "## Active Components":
                 active_start = i
                 break
 
@@ -115,23 +123,27 @@ class OrchestratorCommandFixer:
         # Find end of Active Components section
         active_end = len(lines)
         for i in range(active_start + 1, len(lines)):
-            if lines[i].startswith('## '):
+            if lines[i].startswith("## "):
                 active_end = i
                 break
 
         # Add orchestrator commands section
-        command_lines = ['### CLI Commands']
+        command_lines = ["### CLI Commands"]
         for cmd in sorted(missing_commands):
-            command_lines.append(f'- `{cmd}` – Command-line interface for {cmd.replace("-", " ")}')
+            command_lines.append(
+                f"- `{cmd}` – Command-line interface for {cmd.replace('-', ' ')}"
+            )
 
         # Insert before the end of Active Components
         insert_pos = active_end
-        lines[insert_pos:insert_pos] = [''] + command_lines + ['']
+        lines[insert_pos:insert_pos] = [""] + command_lines + [""]
 
         # Write back
-        agents_file.write_text('\n'.join(lines), encoding='utf-8')
+        agents_file.write_text("\n".join(lines), encoding="utf-8")
 
-        print(f"✅ Fixed {agents_file.relative_to(self.repo_root)}: Added {len(missing_commands)} CLI commands")
+        print(
+            f"✅ Fixed {agents_file.relative_to(self.repo_root)}: Added {len(missing_commands)} CLI commands"
+        )
         self.fixed_count += 1
         return True
 
@@ -139,19 +151,15 @@ class OrchestratorCommandFixer:
         """Fix orchestrator commands in all AGENTS.md files."""
         agents_files = list(self.repo_root.rglob("AGENTS.md"))
 
-        results = {
-            'total': len(agents_files),
-            'fixed': 0,
-            'already_good': 0
-        }
+        results = {"total": len(agents_files), "fixed": 0, "already_good": 0}
 
         for agents_file in agents_files:
             try:
                 fixed = self.fix_orchestrator_commands(agents_file, dry_run=dry_run)
                 if fixed:
-                    results['already_good'] += 1
+                    results["already_good"] += 1
                 elif not dry_run:
-                    results['fixed'] += 1
+                    results["fixed"] += 1
             except Exception as e:
                 print(f"❌ Error fixing orchestrator commands in {agents_file}: {e}")
 
@@ -161,13 +169,21 @@ class OrchestratorCommandFixer:
 def main():
     """Main entry point."""
 
-    parser = argparse.ArgumentParser(description='Fix orchestrator commands in AGENTS.md files')
-    parser.add_argument('--repo-root', type=Path, default=Path.cwd(),
-                       help='Repository root directory')
-    parser.add_argument('--dry-run', action='store_true', default=True,
-                       help='Show what would be fixed without making changes')
-    parser.add_argument('--fix', action='store_true',
-                       help='Actually fix the orchestrator commands')
+    parser = argparse.ArgumentParser(
+        description="Fix orchestrator commands in AGENTS.md files"
+    )
+    parser.add_argument(
+        "--repo-root", type=Path, default=Path.cwd(), help="Repository root directory"
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        default=True,
+        help="Show what would be fixed without making changes",
+    )
+    parser.add_argument(
+        "--fix", action="store_true", help="Actually fix the orchestrator commands"
+    )
 
     args = parser.parse_args()
 
@@ -196,11 +212,11 @@ def main():
     if not args.dry_run:
         print(f"Fixed: {results['fixed']}")
 
-    if args.dry_run and results['total'] > results['already_good']:
+    if args.dry_run and results["total"] > results["already_good"]:
         print()
         print("Files needing fixes:")
         fixer.fix_all_orchestrator_commands(dry_run=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

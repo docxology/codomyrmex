@@ -8,9 +8,8 @@ Fix all generic [Parent] references in AGENTS.md files with descriptive labels.
 """
 
 
-
-
 logger = get_logger(__name__)
+
 
 def determine_parent_label(file_path: Path, repo_root: Path) -> str:
     """Determine the appropriate parent label based on file location."""
@@ -33,37 +32,40 @@ def determine_parent_label(file_path: Path, repo_root: Path) -> str:
     # Capitalize and format nicely
     if parent_dir:
         # Handle special cases
-        if parent_dir == 'codomyrmex':
+        if parent_dir == "codomyrmex":
             return "Source Root"
-        elif parent_dir == 'src':
+        elif parent_dir == "src":
             return "Source Root"
-        elif parent_dir == 'docs':
+        elif parent_dir == "docs":
             return "Documentation Root"
-        elif parent_dir == 'scripts':
+        elif parent_dir == "scripts":
             return "Scripts Root"
-        elif parent_dir == 'examples':
+        elif parent_dir == "examples":
             return "Examples Root"
-        elif parent_dir == 'output':
+        elif parent_dir == "output":
             return "Output Root"
-        elif parent_dir == 'config':
+        elif parent_dir == "config":
             return "Configuration Root"
-        elif parent_dir == 'cursorrules':
+        elif parent_dir == "cursorrules":
             return "Cursor Rules Root"
-        elif parent_dir == 'projects':
+        elif parent_dir == "projects":
             return "Projects Root"
-        elif parent_dir == 'testing':
+        elif parent_dir == "testing":
             return "Testing Root"
-        elif parent_dir == 'plugins':
+        elif parent_dir == "plugins":
             return "Plugins Root"
         else:
             # Use parent directory name, capitalized
-            return parent_dir.replace('_', ' ').title()
+            return parent_dir.replace("_", " ").title()
 
     return "Parent Directory"
 
-def fix_parent_reference(content: str, file_path: Path, repo_root: Path) -> tuple[str, bool]:
+
+def fix_parent_reference(
+    content: str, file_path: Path, repo_root: Path
+) -> tuple[str, bool]:
     """Fix parent reference in content. Returns (new_content, was_changed)."""
-    pattern = r'- \*\*Parent\*\*: \[Parent\]\(([^)]+)\)'
+    pattern = r"- \*\*Parent\*\*: \[Parent\]\(([^)]+)\)"
     match = re.search(pattern, content)
 
     if not match:
@@ -74,9 +76,10 @@ def fix_parent_reference(content: str, file_path: Path, repo_root: Path) -> tupl
         # No parent (root level)
         return content, False
 
-    new_reference = f'- **Parent**: [{parent_label}]({match.group(1)})'
-    new_content = content[:match.start()] + new_reference + content[match.end():]
+    new_reference = f"- **Parent**: [{parent_label}]({match.group(1)})"
+    new_content = content[: match.start()] + new_reference + content[match.end() :]
     return new_content, True
+
 
 def main():
     """Main function to fix all parent references."""
@@ -94,11 +97,13 @@ def main():
     fixed_count = 0
     for agents_file in sorted(agents_files):
         try:
-            content = agents_file.read_text(encoding='utf-8')
-            new_content, was_changed = fix_parent_reference(content, agents_file, repo_root)
+            content = agents_file.read_text(encoding="utf-8")
+            new_content, was_changed = fix_parent_reference(
+                content, agents_file, repo_root
+            )
 
             if was_changed:
-                agents_file.write_text(new_content, encoding='utf-8')
+                agents_file.write_text(new_content, encoding="utf-8")
                 fixed_count += 1
                 print(f"  Fixed: {agents_file.relative_to(repo_root)}")
         except Exception as e:
@@ -106,5 +111,6 @@ def main():
 
     print(f"\nFixed {fixed_count} files")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

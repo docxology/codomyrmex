@@ -47,12 +47,13 @@ This module contains the **automation scripts** and **CLI entry points** for the
 - **Library Spec**: [../../src/codomyrmex/{module_name}/SPEC.md](../../src/codomyrmex/{module_name}/SPEC.md)
 """
 
+
 def fix_script_specs(root_dir):
     root = Path(root_dir)
     count = 0
 
     for path in root.iterdir():
-        if path.is_dir() and not path.name.startswith(('.', '__')):
+        if path.is_dir() and not path.name.startswith((".", "__")):
             spec_path = path / "SPEC.md"
             module_name = path.name
 
@@ -62,19 +63,20 @@ def fix_script_specs(root_dir):
                 print(f"Missing SPEC.md in {module_name}")
                 should_fix = True
             else:
-                content = spec_path.read_text(encoding='utf-8')
+                content = spec_path.read_text(encoding="utf-8")
                 if "Functional requirements for" in content and len(content) < 2000:
                     should_fix = True
-                elif len(content) < 500: # Very small files
+                elif len(content) < 500:  # Very small files
                     should_fix = True
 
             if should_fix:
                 print(f"Fixing {module_name} SPEC.md...")
                 new_content = WRAPPER_TEMPLATE.format(module_name=module_name)
-                spec_path.write_text(new_content, encoding='utf-8')
+                spec_path.write_text(new_content, encoding="utf-8")
                 count += 1
 
     print(f"Fixed {count} files.")
+
 
 if __name__ == "__main__":
     fix_script_specs("scripts")
