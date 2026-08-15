@@ -38,6 +38,15 @@ The `manuscript/` directory contains raw Markdown files rendered by `scripts/com
 
 The renderer requires `pandoc-crossref` and Pandoc citeproc. Cross-reference labels (`sec`, `fig`, `tbl`, `eq`) are resolved before citations, and citations/cross-references are linked in both PDF and HTML outputs. Citation syntax guidance lives in [SYNTAX.md](SYNTAX.md), not in the rendered paper.
 
+The online bibliography audit is source-bound and fail-closed. DOI records are
+checked through Crossref; arXiv and official URLs are resolved directly; and ISBN
+records first use the exact Open Library edition endpoint. If that endpoint is
+temporarily unavailable, the audit retries the documented Open Library search API
+and then the public Google Books feed, accepting a fallback only when the returned
+record contains the requested ISBN itself. A title search or a reachable landing
+page without the identifier is not treated as a resolved citation. The audit receipt
+records the selected resolution source and any access limitation.
+
 The numbered Markdown files and `preamble.md` are Pandoc inputs, not MkDocs
 pages, so `mkdocs.yml` excludes them from site rendering. A strict site build
 requires `output/paper.html`, validates its semantic figure relationships, and

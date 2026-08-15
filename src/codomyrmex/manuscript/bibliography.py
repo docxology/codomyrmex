@@ -8,6 +8,7 @@ import re
 import urllib.error
 import urllib.parse
 import urllib.request
+import xml.etree.ElementTree as ET
 from collections.abc import Iterable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass
@@ -178,8 +179,9 @@ def _request_json(url: str, timeout: float) -> tuple[int, dict[str, Any], str]:
         url,
         headers={
             "User-Agent": (
-                "CodomyrmexBibliographyAudit/1.0 "
-                "(https://github.com/docxology/codomyrmex)"
+                "CodomyrmexBibliographyAudit/1.1 "
+                "(https://github.com/docxology/codomyrmex; "
+                "mailto:daniel@activeinference.institute)"
             )
         },
     )
@@ -194,14 +196,202 @@ def _request_url(url: str, timeout: float) -> tuple[int, str]:
         url,
         headers={
             "User-Agent": (
-                "CodomyrmexBibliographyAudit/1.0 "
-                "(https://github.com/docxology/codomyrmex)"
+                "CodomyrmexBibliographyAudit/1.1 "
+                "(https://github.com/docxology/codomyrmex; "
+                "mailto:daniel@activeinference.institute)"
             )
         },
     )
     with urllib.request.urlopen(request, timeout=timeout) as response:
         response.read(1024)
         return int(response.status), response.geturl()
+
+
+def _request_text(url: str, timeout: float) -> tuple[int, str, str]:
+    request = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": (
+                "CodomyrmexBibliographyAudit/1.1 "
+                "(https://github.com/docxology/codomyrmex; "
+                "mailto:daniel@activeinference.institute)"
+            )
+        },
+    )
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        status = int(response.status)
+        payload = response.read(2 * 1024 * 1024).decode("utf-8")
+        return status, payload, response.geturl()
+
+
+def _isbn_search_title(payload: dict[str, Any], locator: str) -> str | None:
+    """Return the title for a search result containing the requested ISBN.
+
+    Open Library's exact ``/isbn`` endpoint is occasionally rate-limited or
+    unavailable while its documented search endpoint remains available.  The
+    ISBN must be present in the returned edition identifiers; a non-empty
+    search response alone is not sufficient evidence for a resolution.
+    """
+    compact_locator = re.sub(r"[^0-9Xx]", "", locator).upper()
+    documents = payload.get("docs", [])
+    if not isinstance(documents, list):
+        return None
+    for document in documents:
+        if not isinstance(document, dict):
+            continue
+        identifiers = document.get("isbn", [])
+        if not isinstance(identifiers, list):
+            continue
+        compact_identifiers = {
+            re.sub(r"[^0-9Xx]", "", str(identifier)).upper()
+            for identifier in identifiers
+        }
+        if compact_locator in compact_identifiers:
+            title = document.get("title", "")
+            return str(title) if title else ""
+    return None
+
+
+def _google_books_feed_title(xml_text: str, locator: str) -> str | None:
+    """Return a title from a Google Books feed entry containing the ISBN."""
+    atom_namespace = "{http://www.w3.org/2005/Atom}"
+    dc_namespaces = (
+        "{http://purl.org/dc/terms}",
+        "{http://purl.org/dc/terms/}",
+    )
+    compact_locator = re.sub(r"[^0-9Xx]", "", locator).upper()
+    try:
+        root = ET.fromstring(xml_text)
+    except ET.ParseError:
+        return None
+    for entry in root.findall(f"{atom_namespace}entry"):
+        identifiers = [
+            (element.text or "").strip()
+            for namespace in dc_namespaces
+            for element in entry.findall(f"{namespace}identifier")
+        ]
+        if any(
+            re.sub(r"[^0-9Xx]", "", identifier.removeprefix("ISBN:")).upper()
+            == compact_locator
+            for identifier in identifiers
+        ):
+            title = entry.find(f"{atom_namespace}title")
+            return (title.text or "").strip() if title is not None else ""
+    return None
+
+
+def _resolve_isbn_record(
+    locator: str,
+    result: dict[str, Any],
+    *,
+    timeout: float,
+) -> dict[str, Any]:
+    """Resolve an ISBN through the exact endpoint, then the search API.
+
+    The exact edition endpoint is preferred because it preserves the original
+    lookup semantics.  The search fallback is still source-bound: it only
+    succeeds when the response contains the requested ISBN, which avoids
+    treating a loose title search or an HTTP 200 landing page as evidence.
+    """
+    primary_url = f"https://openlibrary.org/isbn/{locator}.json"
+    primary_error = ""
+    try:
+        status, resolved_url = _request_url(primary_url, timeout)
+        result.update(
+            {
+                "resolved": 200 <= status < 400,
+                "http_status": status,
+                "resolved_url": resolved_url,
+                "resolution_source": "openlibrary-isbn",
+            }
+        )
+        if result["resolved"]:
+            return result
+        primary_error = f"HTTP status {status}"
+    except (
+        OSError,
+        TimeoutError,
+        ValueError,
+        json.JSONDecodeError,
+        urllib.error.HTTPError,
+        urllib.error.URLError,
+    ) as exc:
+        primary_error = f"{type(exc).__name__}: {exc}"
+        if isinstance(exc, urllib.error.HTTPError):
+            result["http_status"] = exc.code
+            result["resolved_url"] = exc.geturl()
+
+    query = urllib.parse.urlencode(
+        {"isbn": locator, "limit": 5, "fields": "key,title,isbn"}
+    )
+    search_url = f"https://openlibrary.org/search.json?{query}"
+    fallback_error = ""
+    for _attempt in range(2):
+        try:
+            status, payload, resolved_url = _request_json(search_url, timeout)
+            registry_title = _isbn_search_title(payload, locator)
+            result.update(
+                {
+                    "resolved": status == 200 and registry_title is not None,
+                    "http_status": status,
+                    "resolved_url": resolved_url,
+                    "registry_title": registry_title or "",
+                    "resolution_source": "openlibrary-search-isbn",
+                }
+            )
+            if result["resolved"]:
+                result["error"] = ""
+                return result
+            fallback_error = "search fallback returned no matching edition"
+        except (
+            OSError,
+            TimeoutError,
+            ValueError,
+            json.JSONDecodeError,
+            urllib.error.HTTPError,
+            urllib.error.URLError,
+        ) as exc:
+            fallback_error = f"search fallback failed ({type(exc).__name__}: {exc})"
+            if isinstance(exc, urllib.error.HTTPError):
+                result["http_status"] = exc.code
+                result["resolved_url"] = exc.geturl()
+    google_query = urllib.parse.urlencode({"q": f"isbn:{locator}"})
+    google_url = f"https://books.google.com/books/feeds/volumes?{google_query}"
+    google_error = ""
+    try:
+        status, xml_text, resolved_url = _request_text(google_url, timeout)
+        registry_title = _google_books_feed_title(xml_text, locator)
+        result.update(
+            {
+                "resolved": status == 200 and registry_title is not None,
+                "http_status": status,
+                "resolved_url": resolved_url,
+                "registry_title": registry_title or "",
+                "resolution_source": "google-books-isbn-feed",
+            }
+        )
+        if result["resolved"]:
+            result["error"] = ""
+            return result
+        google_error = "Google Books feed returned no matching edition"
+    except (
+        OSError,
+        TimeoutError,
+        ValueError,
+        UnicodeDecodeError,
+        ET.ParseError,
+        urllib.error.HTTPError,
+        urllib.error.URLError,
+    ) as exc:
+        google_error = f"Google Books feed failed ({type(exc).__name__}: {exc})"
+        if isinstance(exc, urllib.error.HTTPError):
+            result["http_status"] = exc.code
+            result["resolved_url"] = exc.geturl()
+    result["error"] = (
+        f"exact ISBN lookup failed ({primary_error}); {fallback_error}; "
+        f"{google_error}"
+    )
+    return result
 
 
 def _resolve_record(
@@ -223,11 +413,14 @@ def _resolve_record(
         "title_similarity": None,
         "title_match": None,
         "access_limited": False,
+        "resolution_source": "",
         "error": "",
     }
     if kind == "missing":
         result["error"] = "no DOI, arXiv identifier, official URL, or ISBN"
         return result
+    if kind == "isbn":
+        return _resolve_isbn_record(locator, result, timeout=timeout)
     try:
         if kind == "doi":
             encoded = urllib.parse.quote(locator, safe="")
@@ -261,13 +454,13 @@ def _resolve_record(
                     "registry_title": registry_title,
                     "title_similarity": round(similarity, 4),
                     "title_match": title_match,
+                    "resolution_source": "crossref",
                 }
             )
         else:
             urls = {
                 "arxiv": f"https://arxiv.org/abs/{locator}",
                 "official-url": locator,
-                "isbn": f"https://openlibrary.org/isbn/{locator}.json",
             }
             status, resolved_url = _request_url(urls[kind], timeout)
             result.update(
@@ -275,6 +468,7 @@ def _resolve_record(
                     "resolved": 200 <= status < 400,
                     "http_status": status,
                     "resolved_url": resolved_url,
+                    "resolution_source": kind,
                 }
             )
     except (
@@ -343,6 +537,7 @@ def audit_bibliography(
                     "title_similarity": None,
                     "title_match": None,
                     "access_limited": False,
+                    "resolution_source": "",
                     "error": (
                         "no DOI, arXiv identifier, official URL, or ISBN"
                         if kind == "missing"

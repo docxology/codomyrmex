@@ -139,6 +139,9 @@ The project uses the following output conventions:
   semantic assertions, provenance, and digests;
 - `output/data/bibliography_audit.json` stores cited/unused/missing inventories,
   primary locators, registry title checks, and any access-limited resolution;
+  online mode also records the resolution source. ISBN checks use exact Open
+  Library edition metadata first, then an identifier-checked Open Library search
+  retry and Google Books feed fallback; a loose title match is never sufficient;
 - `output/manuscript/` stores token-resolved section copies plus `config.yaml` and the
   bibliography used by the renderer;
 - `output/figures/` stores the {{ARTIFACT_FIGURE_COUNT}} generated PNG figures and

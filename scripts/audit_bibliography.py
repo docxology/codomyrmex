@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Audit manuscript citations and resolve bibliography source metadata.
 
+Online ISBN checks prefer an exact Open Library edition lookup and use bounded,
+identifier-checked Open Library search and Google Books feed fallbacks when a
+provider is transiently unavailable.
+
 Examples:
     uv run --locked python scripts/audit_bibliography.py
     uv run --locked python scripts/audit_bibliography.py --online
