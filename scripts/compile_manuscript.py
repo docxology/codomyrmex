@@ -14,7 +14,8 @@ Workflow:
     4. Render semantic HTML from the unbookended report
     5. With ``--pdf --bookends``, render and hash the content PDF, generate
        visible QR/text bookends, then render the final PDF in one Pandoc pass
-    6. Require qpdf structural validation and record pdfinfo/veraPDF evidence
+    6. Require qpdf structural validation and, for a requested PDF standard,
+       fail closed on PDF tagging and the matching veraPDF conformance profile
 """
 
 # SIZE_OK: Renderer orchestration stays single-file for artifact auditability.
@@ -64,6 +65,13 @@ MANUSCRIPT_SECTION_ORDER = (
     "99_references.md",
     "99_zz_transmission_end.md",
 )
+PDF_CONFORMANCE_FLAVOURS = {
+    "ua-1": "ua1",
+    "ua-2": "ua2",
+    "a-2b": "2b",
+    "a-3b": "3b",
+    "a-4f": "4f",
+}
 TOKEN_PATTERN = re.compile(r"\{\{[A-Z0-9_]+\}\}")
 HEADING_PATTERN = re.compile(
     r"^(?P<level>#{1,3})\s+(?P<title>.+?)(?:\s+\{(?P<attrs>[^}]*)\})?\s*$"
@@ -611,13 +619,63 @@ def _write_release_bookends(
     return front, back
 
 
+def _parse_pdfinfo_fields(output: str) -> dict[str, str]:
+    """Parse the stable ``pdfinfo`` key/value lines used by the PDF gate."""
+    fields: dict[str, str] = {}
+    for line in output.splitlines():
+        if ":" not in line:
+            continue
+        key, value = line.split(":", 1)
+        fields[key.strip().casefold()] = value.strip()
+    return fields
+
+
+def _parse_verapdf_compliance(stdout: str) -> bool | None:
+    """Return whether every veraPDF validation result is explicitly compliant."""
+    try:
+        payload = json.loads(stdout)
+        if not isinstance(payload, dict):
+            return None
+        report = payload.get("report")
+        if not isinstance(report, dict):
+            return None
+        jobs = report.get("jobs", [])
+        if not isinstance(jobs, list):
+            return None
+        validation_results: list[dict[str, object]] = []
+        for job in jobs:
+            if not isinstance(job, dict):
+                return None
+            results = job.get("validationResult", [])
+            if not isinstance(results, list):
+                return None
+            for result in results:
+                if not isinstance(result, dict):
+                    return None
+                validation_results.append(result)
+    except (AttributeError, TypeError, json.JSONDecodeError):
+        return None
+    if not validation_results:
+        return False
+    return all(result.get("compliant") is True for result in validation_results)
+
+
 def _validate_pdf(
     pdf_path: Path,
     *,
     receipt_dir: Path,
+    pdf_standard: str = "none",
 ) -> bool:
-    """Require qpdf structural validity and record optional conformance evidence."""
+    """Validate structure and enforce the requested PDF standard fail-closed."""
     receipt_dir.mkdir(parents=True, exist_ok=True)
+    conformance_required = pdf_standard != "none"
+    vera_flavour = PDF_CONFORMANCE_FLAVOURS.get(pdf_standard)
+    if conformance_required and vera_flavour is None:
+        print(
+            f"ERROR: unsupported PDF standard for validation: {pdf_standard}",
+            file=sys.stderr,
+        )
+        return False
     qpdf = shutil.which("qpdf")
     if qpdf is None:
         print("ERROR: qpdf is required for PDF validation.", file=sys.stderr)
@@ -630,8 +688,14 @@ def _validate_pdf(
         check=False,
     )
     receipt: dict[str, object] = {
-        "schema_version": "1",
+        "schema_version": "2",
         "artifact": pdf_path.name,
+        "requirements": {
+            "pdf_standard": pdf_standard,
+            "conformance_required": conformance_required,
+            "tagged_required": conformance_required,
+            "verapdf_flavour": vera_flavour,
+        },
         "qpdf": {
             "command": ["qpdf", "--check", pdf_path.name],
             "exit_code": qpdf_result.returncode,
@@ -650,33 +714,75 @@ def _validate_pdf(
             text=True,
             check=False,
         )
+        info_fields = _parse_pdfinfo_fields(info_result.stdout)
+        tagged = info_fields.get("tagged", "").casefold() == "yes"
+        suspects_clear = info_fields.get("suspects", "").casefold() == "no"
+        pdfinfo_passed = info_result.returncode == 0 and (
+            not conformance_required or (tagged and suspects_clear)
+        )
         receipt["pdfinfo"] = {
+            "command": ["pdfinfo", pdf_path.name],
             "exit_code": info_result.returncode,
             "output": info_result.stdout,
+            "fields": info_fields,
+            "tagged": tagged,
+            "suspects": info_fields.get("suspects"),
+            "passed": pdfinfo_passed,
         }
     else:
-        receipt["pdfinfo"] = {"status": "not-installed"}
+        pdfinfo_passed = not conformance_required
+        receipt["pdfinfo"] = {
+            "status": "not-installed",
+            "passed": pdfinfo_passed,
+        }
 
     verapdf = shutil.which("verapdf")
     if verapdf:
+        vera_command = [verapdf, "--format", "json"]
+        if vera_flavour is not None:
+            vera_command.extend(["--flavour", vera_flavour])
+        vera_command.append(pdf_path.name)
+        verapdf_environment = os.environ.copy()
+        java_opts = verapdf_environment.get("JAVA_OPTS", "").split()
+        final_field_option = "--enable-final-field-mutation=ALL-UNNAMED"
+        if final_field_option not in java_opts:
+            java_opts.append(final_field_option)
+        verapdf_environment["JAVA_OPTS"] = " ".join(java_opts)
         vera_result = subprocess.run(
-            [verapdf, "--format", "json", pdf_path.name],
+            vera_command,
             cwd=pdf_path.parent,
             capture_output=True,
             text=True,
             check=False,
+            env=verapdf_environment,
+        )
+        vera_compliant = _parse_verapdf_compliance(vera_result.stdout)
+        vera_passed = vera_result.returncode == 0 and (
+            not conformance_required or vera_compliant is True
         )
         receipt["verapdf"] = {
+            "command": [
+                Path(part).name if part == verapdf else part for part in vera_command
+            ],
             "exit_code": vera_result.returncode,
-            "passed": vera_result.returncode == 0,
+            "flavour": vera_flavour,
+            "compliant": vera_compliant,
+            "passed": vera_passed,
             "stdout": vera_result.stdout,
             "stderr": vera_result.stderr,
         }
     else:
+        vera_passed = not conformance_required
         receipt["verapdf"] = {
             "status": "not-installed",
-            "conformance": "not-claimed",
+            "flavour": vera_flavour,
+            "compliant": None,
+            "passed": vera_passed,
         }
+
+    receipt["passed"] = bool(
+        qpdf_result.returncode == 0 and pdfinfo_passed and vera_passed
+    )
 
     receipt_path = receipt_dir / f"{pdf_path.stem}-pdf-validation.json"
     receipt_path.write_text(
@@ -688,6 +794,33 @@ def _validate_pdf(
             f"ERROR: qpdf rejected {_display_path(pdf_path, pdf_path.parent)}",
             file=sys.stderr,
         )
+        return False
+    if not pdfinfo_passed:
+        if conformance_required:
+            print(
+                f"ERROR: {pdf_standard} requires pdfinfo Tagged: yes and "
+                f"Suspects: no for {_display_path(pdf_path, pdf_path.parent)}",
+                file=sys.stderr,
+            )
+        else:
+            print(
+                f"ERROR: pdfinfo could not inspect {_display_path(pdf_path, pdf_path.parent)}",
+                file=sys.stderr,
+            )
+        return False
+    if not vera_passed:
+        if conformance_required:
+            print(
+                f"ERROR: veraPDF {vera_flavour} conformance failed for "
+                f"{_display_path(pdf_path, pdf_path.parent)}",
+                file=sys.stderr,
+            )
+        else:
+            print(
+                f"ERROR: veraPDF inspection failed for "
+                f"{_display_path(pdf_path, pdf_path.parent)}",
+                file=sys.stderr,
+            )
         return False
     return True
 
@@ -1130,7 +1263,11 @@ def main() -> int:
                     file=sys.stderr,
                 )
                 return 1
-            if not _validate_pdf(content_out, receipt_dir=validation_dir):
+            if not _validate_pdf(
+                content_out,
+                receipt_dir=validation_dir,
+                pdf_standard=args.pdf_standard,
+            ):
                 return 1
             content_sha256 = _hash_file(content_out)
             content_receipt = {
@@ -1170,7 +1307,11 @@ def main() -> int:
             )
             if not distribution_ok or not distribution_out.is_file():
                 return 1
-            if not _validate_pdf(distribution_out, receipt_dir=validation_dir):
+            if not _validate_pdf(
+                distribution_out,
+                receipt_dir=validation_dir,
+                pdf_standard=args.pdf_standard,
+            ):
                 return 1
             if not _validate_bookend_placement(distribution_out, content_sha256):
                 return 1
@@ -1189,6 +1330,7 @@ def main() -> int:
             if not pdf_ok or not _validate_pdf(
                 pdf_out,
                 receipt_dir=validation_dir,
+                pdf_standard=args.pdf_standard,
             ):
                 return 1
             input_groups["distribution_pdf"] = sections

@@ -6,6 +6,8 @@ as MCP tools, enabling agents to schedule, read, and manage events.
 
 import json
 import os
+from collections.abc import Iterator
+from contextlib import contextmanager
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -104,6 +106,23 @@ def _get_provider() -> Any:
         raise RuntimeError(f"Google Calendar is not authenticated: {exc}") from exc
 
 
+@contextmanager
+def _provider_session() -> Iterator[Any]:
+    """Yield a provider and close its network transport after each MCP call."""
+    provider = _get_provider()
+    try:
+        yield provider
+    finally:
+        close = getattr(provider, "close", None)
+        if callable(close):
+            try:
+                close()
+            except Exception:
+                logger.warning(
+                    "calendar: provider transport cleanup failed", exc_info=True
+                )
+
+
 @mcp_tool(
     category="calendar",
     description="list upcoming events from the calendar.",
@@ -122,27 +141,27 @@ def calendar_list_events(days_ahead: int = 7) -> dict[str, Any]:
         ``result["status"]`` before accessing other keys.
     """
     try:
-        provider = _get_provider()
-        now = datetime.now(UTC)
-        future = now + timedelta(days=days_ahead)
+        with _provider_session() as provider:
+            now = datetime.now(UTC)
+            future = now + timedelta(days=days_ahead)
 
-        events = provider.list_events(time_min=now, time_max=future)
-        return {
-            "status": "success",
-            "events": [
-                {
-                    "id": e.id,
-                    "summary": e.summary,
-                    "start_time": e.start_time.isoformat(),
-                    "end_time": e.end_time.isoformat(),
-                    "description": e.description,
-                    "location": e.location,
-                    "attendees": e.attendees,
-                    "html_link": e.html_link,
-                }
-                for e in events
-            ],
-        }
+            events = provider.list_events(time_min=now, time_max=future)
+            return {
+                "status": "success",
+                "events": [
+                    {
+                        "id": e.id,
+                        "summary": e.summary,
+                        "start_time": e.start_time.isoformat(),
+                        "end_time": e.end_time.isoformat(),
+                        "description": e.description,
+                        "location": e.location,
+                        "attendees": e.attendees,
+                        "html_link": e.html_link,
+                    }
+                    for e in events
+                ],
+            }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
@@ -183,17 +202,21 @@ def calendar_create_event(
         ``{"status": "error", "message": "<message>"}`` on failure.
     """
     try:
-        provider = _get_provider()
-        evt = CalendarEvent(
-            summary=summary,
-            description=description,
-            start_time=datetime.fromisoformat(start_time),
-            end_time=datetime.fromisoformat(end_time),
-            location=location,
-            attendees=_with_default_attendee(attendees),
-        )
-        created = provider.create_event(evt)
-        return {"status": "success", "event_id": created.id, "link": created.html_link}
+        with _provider_session() as provider:
+            evt = CalendarEvent(
+                summary=summary,
+                description=description,
+                start_time=datetime.fromisoformat(start_time),
+                end_time=datetime.fromisoformat(end_time),
+                location=location,
+                attendees=_with_default_attendee(attendees),
+            )
+            created = provider.create_event(evt)
+            return {
+                "status": "success",
+                "event_id": created.id,
+                "link": created.html_link,
+            }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
@@ -217,21 +240,21 @@ def calendar_get_event(event_id: str) -> dict[str, Any]:
         or on API failure.
     """
     try:
-        provider = _get_provider()
-        e = provider.get_event(event_id)
-        return {
-            "status": "success",
-            "event": {
-                "id": e.id,
-                "summary": e.summary,
-                "start_time": e.start_time.isoformat(),
-                "end_time": e.end_time.isoformat(),
-                "description": e.description,
-                "location": e.location,
-                "attendees": e.attendees,
-                "html_link": e.html_link,
-            },
-        }
+        with _provider_session() as provider:
+            e = provider.get_event(event_id)
+            return {
+                "status": "success",
+                "event": {
+                    "id": e.id,
+                    "summary": e.summary,
+                    "start_time": e.start_time.isoformat(),
+                    "end_time": e.end_time.isoformat(),
+                    "description": e.description,
+                    "location": e.location,
+                    "attendees": e.attendees,
+                    "html_link": e.html_link,
+                },
+            }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
@@ -252,9 +275,9 @@ def calendar_delete_event(event_id: str) -> dict[str, Any]:
         or on API failure.
     """
     try:
-        provider = _get_provider()
-        provider.delete_event(event_id)
-        return {"status": "success", "deleted": True}
+        with _provider_session() as provider:
+            provider.delete_event(event_id)
+            return {"status": "success", "deleted": True}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
@@ -298,20 +321,20 @@ def calendar_update_event(
         or on API failure.
     """
     try:
-        provider = _get_provider()
-        evt = CalendarEvent(
-            summary=summary,
-            description=description,
-            start_time=datetime.fromisoformat(start_time),
-            end_time=datetime.fromisoformat(end_time),
-            location=location,
-            attendees=_with_default_attendee(attendees),
-        )
-        updated_event = provider.update_event(event_id, evt)
-        return {
-            "status": "success",
-            "event_id": updated_event.id,
-            "link": updated_event.html_link,
-        }
+        with _provider_session() as provider:
+            evt = CalendarEvent(
+                summary=summary,
+                description=description,
+                start_time=datetime.fromisoformat(start_time),
+                end_time=datetime.fromisoformat(end_time),
+                location=location,
+                attendees=_with_default_attendee(attendees),
+            )
+            updated_event = provider.update_event(event_id, evt)
+            return {
+                "status": "success",
+                "event_id": updated_event.id,
+                "link": updated_event.html_link,
+            }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}

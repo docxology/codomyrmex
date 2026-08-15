@@ -11,6 +11,8 @@
 ### FR-2: Google Calendar Provider
 - `GoogleCalendar` shall implement `CalendarProvider` using the Google Calendar API.
 - Shall support OAuth2 credential-based authentication.
+- `GoogleCalendar.close()` shall release its provider-owned HTTP transport; MCP calls
+  shall close short-lived provider sessions after each request.
 - Gracefully unavailable when `google-api-python-client` is not installed.
 
 ### FR-3: Event Model

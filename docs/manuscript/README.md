@@ -83,10 +83,10 @@ graph LR
 # From repository root
 
 # 1. Hydrate manuscript variables from live build artifacts
-uv run python scripts/z_generate_manuscript_variables.py
+uv run --locked --group docs python scripts/z_generate_manuscript_variables.py
 
 # 2. Generate the provenance-stamped visual assets
-uv run python scripts/generate_manuscript_figures.py
+uv run --locked --group docs python scripts/generate_manuscript_figures.py
 
 # 3. Render linked HTML, content PDF, visible bookends, and final PDF
 uv run --locked --group docs python scripts/compile_manuscript.py \
@@ -94,9 +94,24 @@ uv run --locked --group docs python scripts/compile_manuscript.py \
   --pdf --bookends --pdf-engine lualatex --pdf-standard ua-2 --skip-generate
 
 # 4. Verify source, bibliography, figure, claim-ledger, HTML, and PDF integrity
-uv run --locked python scripts/validate_manuscript_integrity.py \
+uv run --locked --group docs python scripts/validate_manuscript_integrity.py \
   --require-rendered --online-bibliography
 ```
+
+The locked `docs` dependency group includes the QR and Code128 helpers used by the
+source-bound transmission manifest/bookend stage, so generation does not silently
+skip the integrity strip.
+
+When `--pdf-standard` is not `none`, the compiler requires `qpdf`, `pdfinfo`, and
+`verapdf`: it fails if `pdfinfo` does not report `Tagged: yes` and `Suspects: no`, or
+if the matching veraPDF profile (for example `ua2`) is not compliant. The validation
+receipts preserve the exact profile, parsed tagging fields, validator output, and
+overall pass state. A passing PDF/UA receipt is conformance evidence for that rendered
+artifact, not a guarantee of universal assistive-technology, display, print, or reader
+usability. When the installed veraPDF launcher uses a recent JVM, the compiler also
+passes the launcher’s final-field compatibility option so a known JVM runtime warning
+does not obscure the validator result; the raw validator stdout/stderr remain in the
+receipt.
 
 ## AI Agent Directives
 

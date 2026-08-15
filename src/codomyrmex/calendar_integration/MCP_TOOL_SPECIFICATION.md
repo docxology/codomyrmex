@@ -39,7 +39,8 @@ List upcoming events from Google Calendar.
 }
 ```
 
-On error: `{"status": "error", "error": "<message>"}`
+On error: `{"status": "error", "message": "<message>"}`. The short-lived provider
+session is closed after the request, including when the API call fails.
 
 ---
 
@@ -70,7 +71,8 @@ Create a new event in Google Calendar.
 }
 ```
 
-On error: `{"status": "error", "error": "<message>"}`
+On error: `{"status": "error", "message": "<message>"}`. The short-lived provider
+session is closed after the request, including when the API call fails.
 
 ---
 
@@ -102,7 +104,8 @@ Get details of a specific calendar event by its provider ID.
 }
 ```
 
-On error: `{"status": "error", "error": "<message>"}`
+On error: `{"status": "error", "message": "<message>"}`. The short-lived provider
+session is closed after the request, including when the API call fails.
 
 ---
 
@@ -125,7 +128,8 @@ Permanently delete a calendar event by ID.
 }
 ```
 
-On error: `{"status": "error", "error": "<message>"}`
+On error: `{"status": "error", "message": "<message>"}`. The short-lived provider
+session is closed after the request, including when the API call fails.
 
 ---
 
@@ -157,4 +161,5 @@ Update an existing calendar event (PUT semantics — all fields replaced).
 }
 ```
 
-On error: `{"status": "error", "error": "<message>"}`
+On error: `{"status": "error", "message": "<message>"}`. The short-lived provider
+session is closed after the request, including when the API call fails.

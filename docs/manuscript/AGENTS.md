@@ -38,6 +38,9 @@ This directory contains the Codomyrmex manuscript source files, configuration, a
 - `src/codomyrmex/manuscript/variables.py` — Token computation (`compute_variables()`).
 - `scripts/z_generate_manuscript_variables.py` — Token injection orchestrator.
 - `pandoc-crossref` — required filter for section, figure, table, and equation references; the renderer fails closed if it is missing.
+- `qpdf`, `pdfinfo`, and `verapdf` — required PDF validators when `--pdf-standard` is
+  not `none`; the compiler fails closed unless the PDF is tagged, has no suspects,
+  and passes the matching veraPDF profile (`ua1`, `ua2`, `2b`, `3b`, or `4f`).
 
 ## Development Guidelines
 
@@ -166,7 +169,7 @@ Follow these steps in order whenever prose, parameters, or measured results chan
 2. **Update tests** — add or extend assertions in `tests/unit/colony_kernel/test_manuscript_consistency.py` for any reviewer-sensitive token; update functional tests in `tests/unit/colony_kernel/` if behavior changed.
 3. **Regenerate variables** — re-run the injection orchestrator to recompute all tokens and produce updated substituted copies:
    ```bash
-   uv run python scripts/z_generate_manuscript_variables.py
+   uv run --locked --group docs python scripts/z_generate_manuscript_variables.py
    ```
 4. **Verify all tokens resolved:**
    ```bash

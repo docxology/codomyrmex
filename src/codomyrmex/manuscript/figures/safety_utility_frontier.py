@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import math
+
 import matplotlib.pyplot as plt
 
 from codomyrmex.colony_kernel.research.benchmark import run_paired_benchmark
@@ -53,6 +55,8 @@ def fig_safety_utility_frontier() -> None:
         row for row in frontier if row["condition"] == "baseline_always_execute"
     )
     mediated = next(row for row in frontier if row["condition"] == "gate_mediated")
+    max_utility = max(float(row["utility"]) for row in frontier)
+    display_upper = min(1.0, max(0.6, math.ceil((max_utility + 0.2) * 10) / 10))
     arrow_y = max(baseline["utility"], mediated["utility"]) + 0.06
     ax.annotate(
         "",
@@ -79,10 +83,11 @@ def fig_safety_utility_frontier() -> None:
     ax.set_xlabel("Harmful-action rate (lower is better)")
     ax.set_ylabel("Mean utility per task case (fixture score; 0–1)")
     ax.set_title(
-        f"Deterministic paired safety–utility fixture · N={run.metrics['paired_case_count']} cases · seed={seed}"
+        f"Deterministic paired safety–utility fixture · N={run.metrics['paired_case_count']} cases · seed={seed}\n"
+        f"score scale 0–1; displayed utility range 0–{display_upper:.1f}"
     )
     ax.set_xlim(0, 1.0)
-    ax.set_ylim(0, 1.05)
+    ax.set_ylim(0, display_upper)
     ax.grid(alpha=0.25)
     ax.legend(frameon=False, loc="lower right", title="Condition")
     ax.text(

@@ -6,6 +6,11 @@
 
 Documentation tooling, generated references, and publishing assets for Calendar Integration.
 
+The concrete `GoogleCalendar` provider can be initialized from credentials or a
+pre-built service. Short-lived MCP sessions close the provider-owned HTTP transport
+after every request, including failed probes; direct provider callers should call
+`close()` when finished.
+
 ## Directory Contents
 - `PAI.md` – File
 - `README.md` – File

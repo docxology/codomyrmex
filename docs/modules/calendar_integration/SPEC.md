@@ -43,13 +43,18 @@ The `CalendarProvider` is an `abc.ABC` defining the contract that all specific p
 - `EventNotFoundError`: Raised during get/update/delete operations if the event is inaccessible or does not exist.
 - `InvalidEventError`: Raised when mapping from the provider's native format to `CalendarEvent` fails, or if the provided input is missing mandatory constraints.
 
+`GoogleCalendar` owns the Google API HTTP transport it creates. Its `close()` method
+releases that transport; the MCP wrappers use a short-lived provider session and call
+`close()` after every request so failed probes and API errors do not leave sockets for
+garbage collection.
+
 ### 2.4 MCP Tools Integration (`mcp_tools.py`)
 
 The calendar module exposes operations directly to compatible agents via the Model Context Protocol (MCP) using the `@mcp_tool` decorator.
 
 Available tools:
 
-- `calendar_list_events(days_ahead: int)`: Lists events occurring within the next specified number of days.
+- `calendar_list_events(days_ahead: int)`: Lists events occurring within the next specified number of days; its failure response uses `{"status": "error", "message": "<message>"}`.
 - `calendar_create_event(...)`: Creates a new event. Automatically injects `FristonBlanket@gmail.com` (or `CODOMYRMEX_CALENDAR_ATTENDEE` env var) into the `attendees` array to guarantee bidirectional synchronization between PAI/agents and the primary calendar.
 - `calendar_get_event(event_id: str)`: Retrieves specific event details.
 - `calendar_update_event(...)`: Updates an existing event. Enforces the same attendee injection rule.
@@ -62,7 +67,10 @@ These tools inherently require a valid `.codomyrmex/gcal_token.json` payload gen
 - **Dependency:** Relies on `google-api-python-client`.
 - **Initialization:** Requires a valid `google.oauth2.credentials.Credentials` object or an authenticated `Resource` object.
 - **Timezone Handling:** Converts all datetime inputs to ISO-8601 strings, appending 'Z' explicitly if the datetime is naive (though naive datetimes are discouraged).
-- **Graceful Parsing:** Defaults to `(No title)` for missing summaries, handling both date ('date') and datetime ('dateTime') boundaries to accommodate all-day events. All parsed datetimes are converted to aware `datetime` objects in UTC.
+- **Graceful Parsing:** Defaults to `(No title)` for missing summaries, handling both date ('date') and datetime ('dateTime') boundaries to accommodate all-day events.
+- **All-day boundaries:** A Google `date` field is parsed as a date-midnight value
+  without timezone information. Callers must apply the relevant calendar timezone
+  before treating it as an instant; the adapter does not invent one.
 
 ## Navigation
 

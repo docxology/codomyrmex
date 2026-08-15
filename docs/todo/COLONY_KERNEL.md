@@ -24,7 +24,7 @@
 The scoped suite and branch-coverage values are generated rather than maintained as
 hand-set claims. Read `RESULT_TEST_COUNT` and `RESULT_COVERAGE_PCT` from
 `output/data/manuscript_variables.json`, or regenerate them with
-`uv run python scripts/z_generate_manuscript_variables.py`; the project gate remains
+`uv run --locked --group docs python scripts/z_generate_manuscript_variables.py`; the project gate remains
 60%. Run `uv run pytest tests/unit/colony_kernel/` for a fresh local measurement.
 
 The per-subsystem row counts above predate `test_config_loader.py`, `test_manuscript_consistency.py`, and `test_property_stress_integration.py` plus organic growth in the other files, and are not re-derived here to avoid stapling on unverified precision — see the live token or `uv run pytest tests/unit/colony_kernel/ --collect-only -q` for current per-file counts.

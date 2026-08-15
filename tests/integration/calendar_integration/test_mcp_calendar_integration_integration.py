@@ -27,7 +27,8 @@ if _TOKEN_EXISTS:
     if _probe.get("status") != "success":
         _GCAL_AVAILABLE = False
         _GCAL_SKIP_REASON = (
-            f"GCal token exists but API probe failed: {_probe.get('error', 'unknown')}"
+            "GCal token exists but API probe failed: "
+            f"{_probe.get('message') or _probe.get('error', 'unknown')}"
         )
     else:
         _GCAL_AVAILABLE = True
@@ -113,7 +114,9 @@ def test_calendar_attendee_injection(monkeypatch):
 
     try:
         res_get = calendar_get_event(event_id)
-        assert res_get["status"] == "success", f"Get failed: {res_get.get('error')}"
+        assert res_get["status"] == "success", (
+            f"Get failed: {res_get.get('message') or res_get.get('error')}"
+        )
         attendees = res_get["event"].get("attendees", [])
         attendees_lower = [a.lower() for a in attendees]
         assert test_attendee.lower() in attendees_lower, (

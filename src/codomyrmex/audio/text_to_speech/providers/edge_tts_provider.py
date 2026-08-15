@@ -15,6 +15,7 @@ Requirements:
 """
 
 import asyncio
+import socket
 import time
 from pathlib import Path
 
@@ -94,13 +95,37 @@ class EdgeTTSProvider(TTSProvider):
         self._voices: list[VoiceInfo] = []
         self._voices_loaded = False
 
+    @staticmethod
+    def _new_http_connector():
+        """Create a connector with deterministic, drainable socket cleanup.
+
+        ``edge-tts`` delegates connection setup to ``aiohttp``. On macOS,
+        Happy-Eyeballs can leave an in-flight IPv6 transport behind when the
+        remote service is unavailable; the transport is then reported as an
+        unclosed resource when ``asyncio.run`` closes the loop. The service
+        supports IPv4, so using an explicit IPv4 connector avoids that
+        platform-specific leak while retaining normal proxy support.
+        """
+        import aiohttp
+
+        return aiohttp.TCPConnector(family=socket.AF_INET)
+
+    @staticmethod
+    async def _close_http_connector(connector) -> None:
+        """Close a connector and give SSL transports time to finish closing."""
+        await connector.close(abort_ssl=True)
+        # aiohttp documents a short event-loop drain after SSL session close;
+        # without it asyncio.run can report transports during loop teardown.
+        await asyncio.sleep(0.25)
+
     async def _load_voices(self) -> None:
         """Load available voices from Edge TTS service."""
         if self._voices_loaded:
             return
 
+        connector = self._new_http_connector()
         try:
-            voices = await edge_tts.list_voices()
+            voices = await edge_tts.list_voices(connector=connector)
             self._voices = []
 
             for voice in voices:
@@ -135,6 +160,8 @@ class EdgeTTSProvider(TTSProvider):
             self._voices_loaded = True
         except Exception as e:
             raise SynthesisError(f"Failed to load voices: {e}") from e
+        finally:
+            await self._close_http_connector(connector)
 
     def synthesize(
         self,
@@ -201,20 +228,25 @@ class EdgeTTSProvider(TTSProvider):
             pitch_pct = int((config.pitch - 1.0) * 50)  # pitch is more sensitive
             pitch_str = f"+{pitch_pct}Hz" if pitch_pct >= 0 else f"{pitch_pct}Hz"
 
+            connector = self._new_http_connector()
             # Create communicate instance
             communicate = edge_tts.Communicate(
                 text,
                 voice=voice,
                 rate=rate_str,
                 pitch=pitch_str,
+                connector=connector,
             )
 
             # Collect audio data
             audio_chunks: list[bytes] = []
 
-            async for chunk in communicate.stream():
-                if chunk["type"] == "audio":
-                    audio_chunks.append(chunk["data"])
+            try:
+                async for chunk in communicate.stream():
+                    if chunk["type"] == "audio":
+                        audio_chunks.append(chunk["data"])
+            finally:
+                await self._close_http_connector(connector)
 
             if not audio_chunks:
                 raise SynthesisError("No audio data generated")
@@ -273,13 +305,18 @@ class EdgeTTSProvider(TTSProvider):
         rate_pct = int((config.rate - 1.0) * 100)
         rate_str = f"+{rate_pct}%" if rate_pct >= 0 else f"{rate_pct}%"
 
-        communicate = edge_tts.Communicate(
-            text,
-            voice=voice,
-            rate=rate_str,
-        )
+        connector = self._new_http_connector()
+        try:
+            communicate = edge_tts.Communicate(
+                text,
+                voice=voice,
+                rate=rate_str,
+                connector=connector,
+            )
 
-        await communicate.save(str(output_path))
+            await communicate.save(str(output_path))
+        finally:
+            await self._close_http_connector(connector)
         return output_path
 
     def list_voices(

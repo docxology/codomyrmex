@@ -16,6 +16,9 @@ Universal protocols specific to this module:
 4. **MCP Alignment**: All new integrations must be mapped securely into `mcp_tools.py` using standard `@mcp_tool` abstractions and robust error catching.
 5. **Provider Resilience**: `ProviderRouter` must resolve credentials from environment → `.env` → auto-discovery, with fallback on failure.
 6. **Discord Voice Security**: Native `VoiceReceiver` handles RTP DAVE E2EE per-user keys securely.
+7. **Accessible Evolution Reports**: `evolution/generate_report.py` must render
+   semantic source through the tagged-PDF path and fail closed on qpdf,
+   `pdfinfo`, or veraPDF PDF/UA-2 failures.
 
 ## Key Sub-components
 

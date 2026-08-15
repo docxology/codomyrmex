@@ -14,7 +14,7 @@
 | Metric          | Baseline                                                                                                                                     | Target       | Gate                                            |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ----------------------------------------------- |
 | Line coverage   | varies per run                                                                                                                               | 60%+ stretch | CI fails below **60%** floor (`pyproject.toml`) |
-| Tests collected | 35,858 (August 2026; complete locked dependency profile; `uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest`) | growing      | `uv run pytest tests --collect-only -q`         |
+| Tests collected | 36,024 (August 2026; complete locked dependency profile; `uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest`) | growing      | `uv run pytest tests --collect-only -q`         |
 | Skipped         | varies                                                                                                                                       | minimize     | —                                               |
 | Failures        | 0                                                                                                                                            | 0            | Blocks merge                                    |
 

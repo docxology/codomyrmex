@@ -29,14 +29,17 @@ require additional evidence.
 | Paired replay | Fixed-input semantic replay with repeat-run equality and JSON digest | External-actuation attestation, concurrency, restart durability, or external effectiveness |
 | Local attestation | Signed, hash-linked proposal/verdict/authorization/receipt/outcome fixture | Independent observation of external actuation or deployment safety |
 | Render | Hydrated Markdown, semantic HTML, content PDF, and bookended distribution PDF | Byte-identical output across machines and dates |
-| PDF conformance | `qpdf --check` plus independent veraPDF PDF/UA validation receipts for the current content and distribution PDFs | Universal usability across assistive technologies, displays, print processes, or readers |
+| PDF conformance | `qpdf --check`, `pdfinfo` tagging fields, and the matching veraPDF PDF/UA validation profile are required by the compiler for the current content and distribution PDFs | Universal usability across assistive technologies, displays, print processes, or readers |
 : Scope of the reproducibility evidence. {#tbl:repro-scope}
 
 The current content and distribution PDFs have an independent veraPDF PDF/UA pass
 recorded in `output/validation/paper-content-pdf-validation.json` and
-`output/validation/paper-pdf-validation.json`. This is artifact-specific conformance
-evidence for the rendered files; it does not establish universal usability across
-assistive technologies, displays, print processes, or readers.
+`output/validation/paper-pdf-validation.json`. The compiler treats this as a required
+gate whenever a non-`none` `--pdf-standard` is requested: a receipt must show
+`Tagged: yes`, `Suspects: no`, the matching veraPDF flavour, a compliant validation
+result, and an overall `passed` value. This is artifact-specific conformance evidence
+for the rendered files; it does not establish universal usability across assistive
+technologies, displays, print processes, or readers.
 
 The variable generator fails when the scoped pytest process, branch-coverage threshold,
 Ruff, or ty fails. Rendering normally invokes this generator before consuming the
@@ -197,15 +200,15 @@ The supported route begins at the Codomyrmex repository root:
 
 ```bash
 uv sync --locked --group docs
-uv run --locked python scripts/z_generate_manuscript_variables.py
-uv run --locked python scripts/generate_manuscript_figures.py
+uv run --locked --group docs python scripts/z_generate_manuscript_variables.py
+uv run --locked --group docs python scripts/generate_manuscript_figures.py
 uv run --locked --group docs python scripts/compile_manuscript.py \
   --manuscript-dir output/manuscript --output-dir output \
   --check --skip-generate
 uv run --locked --group docs python scripts/compile_manuscript.py \
   --manuscript-dir output/manuscript --output-dir output \
   --pdf --bookends --pdf-engine lualatex --pdf-standard ua-2 --skip-generate
-uv run --locked python scripts/validate_manuscript_integrity.py \
+uv run --locked --group docs python scripts/validate_manuscript_integrity.py \
   --require-rendered --online-bibliography
 ```
 
@@ -238,7 +241,7 @@ uv run --locked python -m codomyrmex.release publication prepare \
   --validation-receipt output/validation/paper-pdf-validation.json
 uv run --locked python -m codomyrmex.release publication verify \
   output/release/codomyrmex-{{CONFIG_VERSION}}
-uv run --locked python scripts/validate_manuscript_integrity.py \
+uv run --locked --group docs python scripts/validate_manuscript_integrity.py \
   --require-rendered --require-source-current
 uv run --locked python -m codomyrmex.release publication plan \
   output/release/codomyrmex-{{CONFIG_VERSION}} --target github
@@ -262,8 +265,8 @@ manuscript without inventing cross-platform certification.
 | `uv.lock` | Repository lockfile | Pins Python package resolution |
 | pytest / pytest-cov | Development dependencies | Executes tests and branch coverage |
 | Ruff / ty | Development dependencies | Executes scoped static gates |
-| Pandoc / LuaLaTeX | Host tools | Produce semantic HTML and attempt tagged PDF; versions can affect layout |
-| qpdf / veraPDF | Host validators | qpdf is structural; veraPDF findings determine whether conformance may be claimed |
+| Pandoc / LuaLaTeX | Host tools | Produce semantic HTML and the requested tagged PDF standard; versions can affect layout |
+| qpdf / pdfinfo / veraPDF | Host validators | qpdf checks structure; pdfinfo checks tagging metadata; veraPDF checks the requested conformance profile |
 | SQLite | Python standard-library binding | Exercises consequence storage where configured |
 : Software inputs relevant to reproduction. {#tbl:software_versions}
 

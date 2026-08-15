@@ -267,14 +267,14 @@ explicit paths avoid relying on a template project or an untracked wrapper:
 
 ```bash
 uv sync --locked --group docs
-uv run --locked python scripts/z_generate_manuscript_variables.py
-uv run --locked python scripts/generate_manuscript_figures.py
+uv run --locked --group docs python scripts/z_generate_manuscript_variables.py
+uv run --locked --group docs python scripts/generate_manuscript_figures.py
 uv run --locked --group docs python scripts/compile_manuscript.py \
   --manuscript-dir output/manuscript --output-dir output --check --skip-generate
 uv run --locked --group docs python scripts/compile_manuscript.py \
   --manuscript-dir output/manuscript --output-dir output \
   --pdf --bookends --pdf-engine lualatex --pdf-standard ua-2 --skip-generate
-uv run --locked python scripts/validate_manuscript_integrity.py \
+uv run --locked --group docs python scripts/validate_manuscript_integrity.py \
   --require-rendered --online-bibliography
 ```
 

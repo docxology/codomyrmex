@@ -18,6 +18,7 @@ Adapter pattern: `GoogleCalendar` wraps the `google-api-python-client` service o
 |--------|-----------|---------|-------------|
 | `__init__` | `credentials: Credentials or None, service: Resource or None` | -- | Initialize with Google credentials or pre-built service |
 | `from_env` | *(classmethod)* | `GoogleCalendar` | Create from env vars, token file, or ADC |
+| `close` | -- | `None` | Close the provider-owned Google API HTTP transport; safe to call after each request |
 | `list_events` | `time_min: datetime, time_max: datetime, calendar_id: str` | `list[CalendarEvent]` | List events in a time range (max 2500) |
 | `create_event` | `event: CalendarEvent, calendar_id: str` | `CalendarEvent` | Create a new event |
 | `get_event` | `event_id: str, calendar_id: str` | `CalendarEvent` | Fetch a specific event by ID |
@@ -46,8 +47,9 @@ Tries sources in order:
 ## Constraints
 
 - `dateTime` strings with `Z` suffix are normalized to `+00:00` for `datetime.fromisoformat()` compatibility.
-- All-day events use `date` field instead of `dateTime`; resulting `CalendarEvent.start_time` will lack timezone info.
+- All-day events use `date` field instead of `dateTime`; resulting `CalendarEvent.start_time` and `end_time` are date-midnight values without timezone info, so callers must apply an explicit calendar timezone before treating them as instants.
 - Optional fields (`description`, `location`, `attendees`) are omitted from API requests when `None` or empty.
+- MCP callers close each short-lived provider session after the request so Google API sockets are not left for garbage collection.
 - Zero-mock: real API calls only, `ImportError` when Google libraries are missing.
 
 ## Error Handling

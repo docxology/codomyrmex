@@ -27,6 +27,9 @@ Strategy pattern: `TTSProvider` (ABC) defines the contract; two concrete provide
 ### `EdgeTTSProvider` (`edge_tts_provider.py`)
 
 Neural TTS via Microsoft Edge service. Outputs MP3 at 24kHz. Default voice: `en-US-AriaNeural`.
+Each remote operation uses a provider-owned IPv4 `aiohttp` connector and
+awaited cleanup so failed or interrupted requests do not leave transports
+behind during event-loop shutdown.
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|

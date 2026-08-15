@@ -82,6 +82,14 @@ _TEMPLATE_HYDRATION_ENTRYPOINT = (
     "infrastructure.rendering.manuscript_injection.write_resolved_manuscript_tree"
 )
 _TEMPLATE_REVISION_PATTERN = re.compile(r"[0-9a-f]{40}")
+_TEMPLATE_PROJECT_CONFIG_SCHEMA = {
+    "template": dict,
+    "figures": dict,
+    "acknowledgements": list,
+    "protocols": dict,
+    "research_roadmap": dict,
+    "formalism_code_crosswalk": dict,
+}
 
 
 def _template_hydration_contract(
@@ -204,6 +212,12 @@ def _load_canonical_template_hydrator(template_root: Path) -> Any:
         module = importlib.import_module(
             "infrastructure.rendering.manuscript_injection"
         )
+        schema_module = importlib.import_module("infrastructure.core.config.schema")
+        register_extension = getattr(
+            schema_module, "register_project_schema_extension", None
+        )
+        if callable(register_extension):
+            register_extension("", _TEMPLATE_PROJECT_CONFIG_SCHEMA)
         hydrator = getattr(module, "write_resolved_manuscript_tree", None)
         if not callable(hydrator):
             raise RuntimeError(

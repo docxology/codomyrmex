@@ -2,7 +2,7 @@
 
 Single source of truth for counts used in documentation and marketing copy. **Refresh** after large changes to modules, tools, documentation, or tests. Values below are a measured snapshot, not a timeless project invariant.
 
-**Last updated:** 2026-08-13
+**Last updated:** 2026-08-15
 
 ## Definitions
 
@@ -13,7 +13,7 @@ Single source of truth for counts used in documentation and marketing copy. **Re
 | **`@mcp_tool` count** | Physical lines starting with `@mcp_tool` in `.py` files under `src/codomyrmex/`, excluding paths containing `tests/`. Matches `uv run python scripts/doc_inventory.py`. |
 | **`mcp_tools.py` files** | Files named `mcp_tools.py` under `src/codomyrmex/`, excluding `*/tests/*`. |
 | **Runtime MCP tools** | Tool entries in the generated PAI runtime manifest. This can differ from the raw decorator-line count or standalone launcher profile when decorators share wrappers, aliases, built-in registrations, or optional dependencies. |
-| **Collected tests** | Items reported by `uv run python scripts/doc_inventory.py --pytest` when collection completes without errors. Collection varies with the installed dependency profile. |
+| **Collected tests** | Items reported by `uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest` when collection completes without errors. Collection varies with the installed dependency profile. |
 
 Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/agents/hermes/codomyrmex_integration.md](../agents/hermes/codomyrmex_integration.md) for Hermes-specific counts.
 
@@ -26,7 +26,7 @@ Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/a
 | `mcp_tools.py` files (non-test) | 151 |
 | Runtime MCP tools | 612 (PAI merged manifest in the complete locked dependency profile; other launcher profiles are enumerated at startup) |
 | Production `@mcp_tool` decorators | 627 |
-| Pytest tests collected | 35,858 (`uv run python scripts/doc_inventory.py --pytest` in the complete locked dependency profile) |
+| Pytest tests collected | 36,024 (`uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest` in the complete locked dependency profile) |
 | GitHub Actions workflow files (`.github/workflows/*.yml`) | 37 |
 | Markdown files under `docs/` | 1,204 (`find docs -name '*.md' -type f \| wc -l`) |
 

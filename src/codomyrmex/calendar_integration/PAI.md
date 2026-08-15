@@ -29,6 +29,7 @@ created = provider.create_event(event)
 # List upcoming events
 now = datetime.now(timezone.utc)
 events = provider.list_events(time_min=now, time_max=now + timedelta(days=7))
+provider.close()
 ```
 
 ## Key Exports

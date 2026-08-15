@@ -44,6 +44,8 @@ Calendar integration with Google Calendar provider, event management, and schedu
 - Follow the universal agent protocols defined in the root `AGENTS.md`.
 - Adhere to the Python PEP 8 style guide and project-specific linting rules.
 - Ensure all new features are accompanied by corresponding tests (zero-mock policy).
+- Close provider-owned Google API transports after short-lived requests; add a real
+  lifecycle test for any new network-backed provider path.
 
 ## Navigation Links
 - **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation

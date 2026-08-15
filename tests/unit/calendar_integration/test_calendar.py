@@ -218,6 +218,30 @@ class TestCalendarAvailabilityFlag:
         assert cal_module.GoogleCalendar is not None
 
 
+class TestGoogleCalendarResourceLifecycle:
+    """Verify that provider-owned HTTP transports can be released explicitly."""
+
+    def test_close_releases_http_transport(self):
+        class Transport:
+            def __init__(self):
+                self.closed = False
+
+            def close(self):
+                self.closed = True
+
+        class Service:
+            def __init__(self, transport):
+                self._http = transport
+
+        transport = Transport()
+        provider = object.__new__(cal_module.GoogleCalendar)
+        provider.service = Service(transport)
+
+        provider.close()
+
+        assert transport.closed is True
+
+
 # ── Exception hierarchy ───────────────────────────────────────────────
 
 

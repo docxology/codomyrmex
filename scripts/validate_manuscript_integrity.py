@@ -376,6 +376,65 @@ def _load_json(path: Path, issues: list[str]) -> dict[str, Any]:
     return value
 
 
+def _validate_pdf_validation_receipt(
+    project_root: Path, pdf_path: Path, issues: list[str]
+) -> None:
+    """Require the compiler's tagged PDF/UA-2 receipt for a rendered artifact."""
+    receipt_path = (
+        project_root / "output" / "validation" / f"{pdf_path.stem}-pdf-validation.json"
+    )
+    receipt = _load_json(receipt_path, issues)
+    if not receipt:
+        return
+    if receipt.get("schema_version") != "2":
+        issues.append(f"PDF validation receipt is not schema-v2: {receipt_path}")
+    if receipt.get("artifact") != pdf_path.name:
+        issues.append(
+            f"PDF validation receipt names the wrong artifact: {receipt_path}"
+        )
+    if receipt.get("passed") is not True:
+        issues.append(f"PDF validation receipt does not pass: {receipt_path}")
+
+    requirements = receipt.get("requirements")
+    if not isinstance(requirements, dict):
+        issues.append(f"PDF validation receipt lacks requirements: {receipt_path}")
+    else:
+        if requirements.get("pdf_standard") != "ua-2":
+            issues.append(f"PDF validation receipt is not PDF/UA-2: {receipt_path}")
+        if requirements.get("tagged_required") is not True:
+            issues.append(
+                f"PDF validation receipt does not require tagging: {receipt_path}"
+            )
+        if requirements.get("verapdf_flavour") != "ua2":
+            issues.append(
+                f"PDF validation receipt uses the wrong veraPDF flavour: {receipt_path}"
+            )
+
+    qpdf = receipt.get("qpdf")
+    if not isinstance(qpdf, dict) or qpdf.get("passed") is not True:
+        issues.append(f"PDF validation receipt lacks a qpdf pass: {receipt_path}")
+    pdfinfo = receipt.get("pdfinfo")
+    if (
+        not isinstance(pdfinfo, dict)
+        or pdfinfo.get("passed") is not True
+        or pdfinfo.get("tagged") is not True
+        or str(pdfinfo.get("suspects", "")).casefold() != "no"
+    ):
+        issues.append(
+            f"PDF validation receipt lacks tagged/no-suspects evidence: {receipt_path}"
+        )
+    verapdf = receipt.get("verapdf")
+    if (
+        not isinstance(verapdf, dict)
+        or verapdf.get("passed") is not True
+        or verapdf.get("flavour") != "ua2"
+        or verapdf.get("compliant") is not True
+    ):
+        issues.append(
+            f"PDF validation receipt lacks a veraPDF ua2 pass: {receipt_path}"
+        )
+
+
 def _validate_render_receipts(
     project_root: Path,
     variables: dict[str, Any],
@@ -1052,6 +1111,18 @@ def validate_manuscript_integrity(
             pdf_pages = int(page_match.group(1)) if page_match else 0
             if info.returncode != 0 or pdf_pages <= 0:
                 issues.append(f"pdfinfo could not validate rendered PDF: {pdf_path}")
+            if require_rendered:
+                tagged_match = re.search(
+                    r"^Tagged:\s+yes\s*$", info.stdout, re.MULTILINE
+                )
+                suspects_match = re.search(
+                    r"^Suspects:\s+no\s*$", info.stdout, re.MULTILINE
+                )
+                if info.returncode != 0 or not tagged_match or not suspects_match:
+                    issues.append(
+                        "rendered PDF must report Tagged: yes and Suspects: no: "
+                        f"{pdf_path}"
+                    )
         elif require_rendered:
             issues.append("pdfinfo is required for --require-rendered")
         if shutil.which("pdftotext"):
@@ -1067,8 +1138,41 @@ def validate_manuscript_integrity(
                 issues.append("rendered PDF contains unresolved manuscript tokens")
         elif require_rendered:
             issues.append("pdftotext is required for --require-rendered")
+        if require_rendered:
+            _validate_pdf_validation_receipt(project_root, pdf_path, issues)
     elif require_rendered:
         issues.append(f"missing rendered PDF: {pdf_path}")
+
+    content_pdf_path = project_root / "output" / "paper-content.pdf"
+    if require_rendered:
+        if not content_pdf_path.is_file():
+            issues.append(f"missing rendered content PDF: {content_pdf_path}")
+        elif shutil.which("pdfinfo"):
+            content_info = subprocess.run(
+                ["pdfinfo", str(content_pdf_path)],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            content_tagged = re.search(
+                r"^Tagged:\s+yes\s*$", content_info.stdout, re.MULTILINE
+            )
+            content_suspects = re.search(
+                r"^Suspects:\s+no\s*$", content_info.stdout, re.MULTILINE
+            )
+            if (
+                content_info.returncode != 0
+                or not content_tagged
+                or not content_suspects
+            ):
+                issues.append(
+                    "rendered content PDF must report Tagged: yes and Suspects: no: "
+                    f"{content_pdf_path}"
+                )
+        else:
+            issues.append("pdfinfo is required for rendered content PDF tagging")
+        if content_pdf_path.is_file():
+            _validate_pdf_validation_receipt(project_root, content_pdf_path, issues)
 
     if require_rendered or require_source_current:
         _validate_render_receipts(

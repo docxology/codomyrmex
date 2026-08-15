@@ -67,6 +67,13 @@ class GoogleCalendar(CalendarProvider):
                 f"Failed to initialize Google Calendar API service: {e}"
             ) from e
 
+    def close(self) -> None:
+        """Close the owned Google API HTTP transport, if it exposes ``close``."""
+        http = getattr(self.service, "_http", None)
+        close = getattr(http, "close", None)
+        if callable(close):
+            close()
+
     @classmethod
     def from_env(cls) -> "GoogleCalendar":
         """Create a GoogleCalendar from environment variables.

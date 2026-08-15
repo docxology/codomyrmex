@@ -360,6 +360,7 @@ docs = [
     "mkdocstrings>=1.0.3",
     "mkdocstrings-python>=2.0.3",
     "qrcode[pil]>=8.0",
+    "python-barcode>=0.15",
 ]
 lint = ["ruff>=0.11.0", "ty"]
 test = [

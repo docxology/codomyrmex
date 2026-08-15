@@ -6,6 +6,11 @@
 
 Module implementation, resources, and local coordination for Calendar Integration.
 
+`GoogleCalendar` supports credential-backed or pre-built Google API services. MCP
+operations use a short-lived provider session and close its HTTP transport after each
+request, including failed authentication/API probes. Direct provider users should call
+`provider.close()` when finished.
+
 ## Directory Contents
 - `API_SPECIFICATION.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File

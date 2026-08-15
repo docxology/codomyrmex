@@ -44,7 +44,7 @@ uv sync --extra calendar
 
 ### 2.3 Concrete Provider
 
-- **`GoogleCalendar`**: Implements `CalendarProvider` via the Google Calendar API v3. Initialized with `google.oauth2.credentials.Credentials`. The `credentials` argument is required.
+- **`GoogleCalendar`**: Implements `CalendarProvider` via the Google Calendar API v3. Initialize with `google.oauth2.credentials.Credentials` or an already-built service resource. Call `close()` when the provider is no longer needed to release its HTTP transport.
 
 ### 2.4 Exception Hierarchy (`exceptions.py`)
 
@@ -98,4 +98,5 @@ if CALENDAR_AVAILABLE:
     )
     created = cal.create_event(new_event)
     print(f"Created: {created.id} — {created.html_link}")
+    cal.close()
 ```

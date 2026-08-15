@@ -332,7 +332,8 @@ figures:
       parity is {{RESULT_BENCHMARK_PRODUCTION_GATE_PARITY}}. This fixture demonstrates
       analysis plumbing, not calibration or generalization to external agents or
       workloads. Marker shape, direct labels, and colour redundantly identify the two
-      conditions.
+      conditions. The utility axis uses a fixture-focused display window while
+      retaining the 0–1 score definition so the observed points remain legible.
     alt_text: >-
       Scatter plot comparing directly labelled always-execute and independent-reference-gate
       conditions on harmful-action rate and fixture utility, using different marker shapes.
@@ -342,9 +343,11 @@ figures:
       represents the always-execute baseline and a differently shaped labelled point
       represents the independent ReferenceGate-mediated condition; an arrow annotates
       the paired mediated-minus-baseline harm difference and its descriptive interval.
-      The points come from deterministic synthetic cases. The mediator is not the
-      production ActuationGate, parity is not established, and the interval does not
-      imply population generalization or calibration.
+      The points come from deterministic synthetic cases. The utility display window
+      is narrower than the full 0–1 score domain, but the printed point labels retain
+      the exact score values. The mediator is not the production ActuationGate, parity
+      is not established, and the interval does not imply population generalization
+      or calibration.
   calibration_reliability:
     filename: "calibration_reliability.png"
     label: "fig:calibration_reliability"

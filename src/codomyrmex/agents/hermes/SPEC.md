@@ -61,6 +61,9 @@ graph TD
 9. **Discord Voice Support (v2.2.0)**: `VoiceReceiver` for RTP capture and DAVE E2EE decryption.
 10. **Standard Subclassing**: Inherits from `CLIAgentBase`.
 11. **Zero-Mock Policy**: All tests must execute functional logic (e.g., use `echo` as proxy, not `MagicMock`).
+12. **Accessible validation report**: The Phase 1 evolution report is rendered
+    from semantic Markdown through Pandoc/LuaLaTeX and must pass qpdf,
+    `Tagged: yes`/`Suspects: no` metadata checks, and veraPDF's `ua2` profile.
 
 ## Model Context Protocol (MCP) Interface
 
