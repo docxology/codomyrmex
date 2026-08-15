@@ -24,6 +24,15 @@ except ImportError:
     POPULAR_VOICES = {}
 
 
+# Hoisted static mapping to prevent per-call allocation overhead
+_PROVIDERS = {
+    "pyttsx3": Pyttsx3Provider,
+    "edge-tts": EdgeTTSProvider,
+    "edge_tts": EdgeTTSProvider,
+    "edgetts": EdgeTTSProvider,
+}
+
+
 def get_provider(
     provider_name: str = "pyttsx3",
     **kwargs: object,
@@ -42,14 +51,7 @@ def get_provider(
         ProviderNotAvailableError: If provider dependencies are missing
 
     """
-    providers = {
-        "pyttsx3": Pyttsx3Provider,
-        "edge-tts": EdgeTTSProvider,
-        "edge_tts": EdgeTTSProvider,
-        "edgetts": EdgeTTSProvider,
-    }
-
-    provider_class = providers.get(provider_name.lower())
+    provider_class = _PROVIDERS.get(provider_name.lower())
     if provider_class is None:
         raise ValueError(
             f"Unknown provider: {provider_name}. Available providers: pyttsx3, edge-tts"

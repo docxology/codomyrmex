@@ -22,6 +22,12 @@ except ImportError:
     WHISPER_AVAILABLE = False
 
 
+# Hoisted static mapping to prevent per-call allocation overhead
+_PROVIDERS = {
+    "whisper": WhisperProvider,
+}
+
+
 def get_provider(
     provider_name: str = "whisper",
     **kwargs: object,
@@ -40,15 +46,11 @@ def get_provider(
         ProviderNotAvailableError: If provider dependencies are missing
 
     """
-    providers = {
-        "whisper": WhisperProvider,
-    }
-
-    provider_class = providers.get(provider_name.lower())
+    provider_class = _PROVIDERS.get(provider_name.lower())
     if provider_class is None:
         raise ValueError(
             f"Unknown provider: {provider_name}. "
-            f"Available providers: {list(providers.keys())}"
+            f"Available providers: {list(_PROVIDERS.keys())}"
         )
 
     return provider_class(**kwargs)
