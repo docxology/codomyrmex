@@ -1506,7 +1506,7 @@
   },
   {
     "file": "README.md",
-    "link": "https://img.shields.io/badge/tests-36%2C027-brightgreen?style=flat-square\"",
+    "link": "https://img.shields.io/badge/tests-36%2C028-brightgreen?style=flat-square\"",
     "line": 22,
     "status": "external",
     "message": "External link (not validated)"
@@ -5413,28 +5413,28 @@
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:11434/api/embed`",
-    "line": 230,
+    "line": 238,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:11434\"",
-    "line": 230,
+    "line": 238,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:3100`",
-    "line": 236,
+    "line": 244,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:8080/`",
-    "line": 1165,
+    "line": 1173,
     "status": "external",
     "message": "External link (not validated)"
   },
@@ -52277,7 +52277,7 @@
   },
   {
     "file": ".github/README.md",
-    "link": "https://img.shields.io/badge/tests-36%2C027-brightgreen?style=flat-square\"",
+    "link": "https://img.shields.io/badge/tests-36%2C028-brightgreen?style=flat-square\"",
     "line": 25,
     "status": "external",
     "message": "External link (not validated)"
@@ -90785,42 +90785,42 @@
   {
     "file": "docs/development/documentation.md",
     "link": "../reference/inventory.md",
-    "line": 152,
+    "line": 165,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/documentation.md",
     "link": "README.md",
-    "line": 241,
+    "line": 254,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/documentation.md",
     "link": "testing-strategy.md",
-    "line": 242,
+    "line": 255,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/documentation.md",
     "link": "../reference/inventory.md",
-    "line": 243,
+    "line": 256,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/documentation.md",
     "link": "../plans/readme_agents_hand_pass.md",
-    "line": 244,
+    "line": 257,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/documentation.md",
     "link": "../../AGENTS.md",
-    "line": 245,
+    "line": 258,
     "status": "ok",
     "message": "File exists"
   },
@@ -100368,28 +100368,28 @@
   {
     "file": "scripts/README.md",
     "link": "AGENTS.md",
-    "line": 56,
+    "line": 62,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/README.md",
     "link": "documentation/README.md",
-    "line": 57,
+    "line": 63,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/README.md",
     "link": "../docs/development/documentation.md",
-    "line": 58,
+    "line": 64,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/README.md",
     "link": "../README.md",
-    "line": 59,
+    "line": 65,
     "status": "ok",
     "message": "File exists"
   },
