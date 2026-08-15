@@ -452,7 +452,7 @@ def _validate_snapshot_for_check(
         check=False,
     )
     current_dirty = str(bool(status_result.stdout.strip())).lower()
-    if variables.get("REPRO_GIT_COMMIT") != current_commit:
+    if variables.get("REPRO_GIT_COMMIT", "").replace(" ", "") != current_commit:
         errors.append("variable snapshot commit is stale")
     if variables.get("REPRO_WORKTREE_DIRTY") != current_dirty:
         errors.append("variable snapshot dirty-state is stale")
