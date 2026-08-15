@@ -116,7 +116,12 @@ def pytest_collect_count(root: Path) -> int | None:
             cwd=root,
             capture_output=True,
             text=True,
-            timeout=120,
+            # The complete locked profile now collects more than 36,000 tests.
+            # When this probe runs inside the manuscript coverage gate, the
+            # outer coverage process can make collection exceed two minutes;
+            # use the repository's five-minute pytest timeout rather than
+            # reporting a false "unavailable" inventory.
+            timeout=300,
             check=False,
         )
     except (subprocess.TimeoutExpired, OSError):
