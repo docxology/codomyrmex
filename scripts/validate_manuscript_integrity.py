@@ -392,6 +392,10 @@ def _validate_pdf_validation_receipt(
         issues.append(
             f"PDF validation receipt names the wrong artifact: {receipt_path}"
         )
+    if receipt.get("size_bytes") != pdf_path.stat().st_size:
+        issues.append(f"PDF validation receipt size is stale: {receipt_path}")
+    if receipt.get("sha256") != _sha256(pdf_path):
+        issues.append(f"PDF validation receipt hash is stale: {receipt_path}")
     if receipt.get("passed") is not True:
         issues.append(f"PDF validation receipt does not pass: {receipt_path}")
 

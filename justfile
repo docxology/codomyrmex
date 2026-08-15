@@ -134,6 +134,10 @@ docs-check:
 manuscript-check:
     uv run --locked --group docs python scripts/validate_manuscript_integrity.py
 
+# Require source-current rendered HTML and tagged PDF/UA-2 receipts.
+manuscript-pdf-check:
+    uv run --locked --group docs python scripts/validate_manuscript_integrity.py --require-rendered --require-source-current
+
 # Generate missing documentation
 docs-generate:
     @echo "Explicitly generating missing documentation (do not run during a hand-pass freeze)..."

@@ -300,8 +300,13 @@ def start_dev_server(package_manager="npm"):
         return False
 
 
-def build_static_site(package_manager="npm"):
-    """Builds the static Docusaurus site."""
+def build_static_site(package_manager="npm", docs_root=None):
+    """Build the static Docusaurus site.
+
+    ``docs_root`` is an optional explicit working directory for isolated
+    validation and alternate documentation checkouts.  The package-local
+    Docusaurus root remains the default CLI behavior.
+    """
     logger.info("Attempting to build static site using %s...", package_manager)
     if package_manager == "yarn" and command_exists("yarn"):
         cmd = ["yarn", "build"]
@@ -313,21 +318,28 @@ def build_static_site(package_manager="npm"):
         logger.error("Neither npm nor yarn found. Cannot build site.")
         return False
 
-    success = run_command_stream_output(cmd, DOCUSAURUS_ROOT_DIR)
+    working_dir = os.fspath(docs_root) if docs_root is not None else DOCUSAURUS_ROOT_DIR
+    success = run_command_stream_output(cmd, working_dir)
     if success:
         logger.info(
             "Static site built successfully in '%s'",
-            os.path.join(DOCUSAURUS_ROOT_DIR, "build"),
+            os.path.join(working_dir, "build"),
         )
     return success
 
 
-def serve_static_site(package_manager="npm"):
-    """Serves the built static Docusaurus site."""
+def serve_static_site(package_manager="npm", docs_root=None):
+    """Serve a previously built static Docusaurus site.
+
+    ``docs_root`` is an optional explicit working directory for isolated
+    validation and alternate documentation checkouts.  The package-local
+    Docusaurus root remains the default CLI behavior.
+    """
     logger.info(
         "Attempting to serve the built static site using %s...", package_manager
     )
-    build_dir = os.path.join(DOCUSAURUS_ROOT_DIR, "build")
+    working_dir = os.fspath(docs_root) if docs_root is not None else DOCUSAURUS_ROOT_DIR
+    build_dir = os.path.join(working_dir, "build")
     if not os.path.exists(build_dir) or not os.listdir(build_dir):
         logger.error(
             "Build directory '%s' does not exist or is empty. Please build the site first using the 'build' action.",
@@ -382,7 +394,7 @@ def serve_static_site(package_manager="npm"):
             "Try opening your browser at %s if it doesn't open automatically.",
             EFFECTIVE_DOCS_URL,
         )
-        subprocess.run(cmd, cwd=DOCUSAURUS_ROOT_DIR, check=False, timeout=300)
+        subprocess.run(cmd, cwd=working_dir, check=False, timeout=300)
         logger.info("Static site server process finished or was stopped.")
         return True
     except FileNotFoundError:

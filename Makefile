@@ -1,7 +1,7 @@
 # Codomyrmex Development Makefile
 # Common development tasks and workflows
 
-.PHONY: help dev install setup submodules test lint lint-imports format format-check type-check security audit-lock clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast verify-release dev-server docs-check manuscript-check docs-generate serve-docs
+.PHONY: help dev install setup submodules test lint lint-imports format format-check type-check security audit-lock clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast verify-release dev-server docs-check manuscript-check manuscript-pdf-check docs-generate serve-docs
 
 # Hypothesis loads its pytest plugin (and may bind NumPy RNG) before any conftest runs.
 # Export for all subprocesses so `uv run pytest` sees it even when not using a shell wrapper.
@@ -31,7 +31,8 @@ help:
 	@echo "  security     - Run security scanning"
 	@echo "  audit-lock   - Audit all locked groups and extras"
 	@echo "  docs         - Generate and check documentation"
-	@echo "  manuscript-check - Validate generated manuscript, figures, claims, and provenance"
+	@echo "  manuscript-check - Validate manuscript source, figures, claims, and provenance"
+	@echo "  manuscript-pdf-check - Require current rendered HTML and PDF/UA-2 evidence"
 	@echo "  serve-docs   - Serve documentation locally"
 	@echo "  dev-server   - Start development server placeholder"
 	@echo "  clean        - Clean build artifacts and caches"
@@ -158,6 +159,10 @@ docs-check:
 manuscript-check:
 	@echo "Checking manuscript evidence integrity..."
 	uv run --locked --group docs python scripts/validate_manuscript_integrity.py
+
+manuscript-pdf-check:
+	@echo "Checking source-current rendered manuscript and PDF/UA-2 evidence..."
+	uv run --locked --group docs python scripts/validate_manuscript_integrity.py --require-rendered --require-source-current
 
 docs-generate:
 	@echo "Explicitly generating missing documentation (do not run during a hand-pass freeze)..."

@@ -17,7 +17,7 @@ claims must be verified against current source or generated receipts.
 | `output/` and `site/` | Generated receipts and builds; never edit as source |
 | Git submodules | Upstream-owned worktrees with their own instructions and history |
 
-Raw manuscript sections under `docs/manuscript/sections/` are Pandoc sources.
+Raw manuscript sections under `docs/manuscript/` are Pandoc sources.
 They are excluded from direct MkDocs rendering. The publication pipeline
 produces the semantic HTML report consumed by the documentation build.
 
@@ -48,6 +48,19 @@ publication artifacts change:
 ```bash
 make manuscript-check
 ```
+
+After rendering a release candidate, require the stronger source-current and
+PDF/UA-2 gate as well:
+
+```bash
+make manuscript-pdf-check
+```
+
+This strict target requires the rendered HTML, tagged content/distribution PDFs,
+qpdf/pdfinfo/veraPDF receipts, current source/configuration hashes, and a
+source-current release bundle. It is intentionally separate from the lighter
+input/provenance check because generated publication artifacts are not checked
+into the source tree.
 
 ## README and AGENTS contracts
 

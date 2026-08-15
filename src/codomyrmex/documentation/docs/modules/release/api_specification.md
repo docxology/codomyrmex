@@ -45,6 +45,31 @@ ReleaseValidator(
 The default strict policy requires categories `testing`, `coverage`, `typing`,
 `security`, `documentation`, and `artifacts`.
 
+### Source-bound test evidence
+
+`run_release_test_evidence()` accepts `profile="local"` or
+`profile="release"`. Local runs remain usable on dirty developer checkouts,
+but a dirty local receipt is diagnostic and never certifies. The release
+profile requires `require_clean_source=True`, `max_warnings=0`, an explicit
+`coverage_report_path`, and a `coverage_floor_percent`.
+
+```python
+run_release_test_evidence(
+    repo_root=".",
+    test_paths=("tests/unit/",),
+    profile="release",
+    coverage_report_path="coverage.xml",
+    coverage_floor_percent=60.0,
+    required_output_paths=("coverage.xml",),
+)
+```
+
+JUnit XML is parsed from the invocation-owned temporary report; missing,
+empty, malformed, zero-test, count-inconsistent, or unexplained-skip reports
+fail closed. Every skip and warning is retained in the receipt. Required
+outputs must be newly refreshed, coverage XML is parsed and detached with a
+SHA-256 digest, and output allow-lists cannot overlap tracked source files.
+
 ## Package-Build API
 
 ### `PackageMetadata`

@@ -10,8 +10,12 @@ tool publishes remotely or prepares a technical-report bundle.
 ## `release_validate`
 
 Accepts optional evidence fields for tests, coverage, typing, security,
-documentation, and artifact verification. Omitted required categories remain
-missing and therefore block certification under the default strict policy.
+documentation, and artifact verification. These scalar fields are diagnostic
+only at the MCP trust boundary; they are never release attestation. The tool
+therefore reports `status: "blocked"` and `certified: false` until a separate
+source-bound release workflow has produced and verified the required receipts.
+Omitted required categories also remain missing and block certification under
+the default strict policy.
 
 Important response fields are `certified`, `pass_rate`, `blockers`, and the
 per-check `category`, `status`, and `value`.
@@ -35,9 +39,10 @@ stage; neither are files embedding the active source or user-home path.
 
 ## `release_certification_report`
 
-Accepts the same evidence categories as `release_validate` and returns the
-fail-closed certification result as Markdown. Missing categories remain visible
-as blockers.
+Accepts the same diagnostic categories as `release_validate` and returns the
+fail-closed result as Markdown. Missing categories and the absence of verified
+source-bound receipts remain visible as blockers; caller-entered metrics cannot
+certify a release.
 
 ## Publication Interface Boundary
 

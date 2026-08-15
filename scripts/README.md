@@ -34,7 +34,13 @@ uv run --locked python scripts/src_structure_audit.py --json
 uv run --locked python scripts/rasp_gap_report.py --repo-root . --check
 make docs-check
 make manuscript-check
+make manuscript-pdf-check
 ```
+
+`manuscript-check` validates the source-bound inputs and evidence without
+requiring generated publication outputs. `manuscript-pdf-check` is the strict
+release-candidate gate: it requires source-current HTML, both tagged PDF/UA-2
+artifacts, qpdf/pdfinfo/veraPDF receipts, and the matching release bundle.
 
 Use each script's `--help` only after confirming that help parsing is
 side-effect free. Maintained mutators should require explicit dry-run or apply

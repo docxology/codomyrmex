@@ -40,6 +40,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fail-closed documentation maintenance**: module enrichment and placeholder
   repair now require explicit preview or apply modes, protect curated files,
   and carry zero-mock subprocess regression coverage.
+- **Byte-bound manuscript validation**: PDF validation receipts now record and
+  verify the exact current PDF size and SHA-256 digest, preventing a stale
+  valid receipt from being paired with a replaced artifact. The new
+  `make manuscript-pdf-check` and `just manuscript-pdf-check` release-candidate
+  gates require source-current rendered manuscript evidence.
+- **Documentation-gate dependency alignment**: documentation and offline
+  research workflows now install the locked `docs` dependency group, and the
+  offline manuscript job performs the source-current compile check explicitly.
 
 ### Fixed
 

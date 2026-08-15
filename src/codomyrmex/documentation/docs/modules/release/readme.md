@@ -12,8 +12,14 @@ The module has four cooperating surfaces:
 
 - `ReleaseValidator` requires explicit test, coverage, typing, security,
   documentation, and artifact evidence under the default strict policy.
-- `test_evidence` runs source-bound pytest evidence, preserves skipped-test and
-  warning detail, and fails closed on stale or mutated checkout state.
+- `test_evidence` runs source-bound pytest evidence, preserves every skipped-test
+  and warning detail, records an explicit `local` or `release` profile, and
+  fails closed on stale or mutated checkout state. Required report outputs must
+  be freshly produced by the invocation; merely allowing a path does not make
+  a stale coverage report valid. The evidence invocation disables the
+  pytest-benchmark plugin; performance measurements remain a separate opt-in
+  lane so xdist cannot turn release evidence into a warning-producing benchmark
+  run.
 - `PackageBuilder` runs an isolated `uv build`, inspects wheel and sdist
   metadata and member paths, rejects traversal, absolute, SCM, cache, and
   private-environment entries plus checkout-specific content, and records each
@@ -110,6 +116,11 @@ the manifest.
 - The default `ReleasePolicy` is strict. Missing evidence, nonzero typing
   diagnostics, incomplete documentation, and failed artifact verification now
   block certification.
+- `run_release_test_evidence()` defaults to the usable `local` profile. The
+  `release` profile requires a clean checkout, zero warnings, a parsed JUnit
+  report with a digest, an explicitly validated coverage XML report and floor,
+  and any required output refreshed during the same run. A local receipt is not
+  release evidence merely because its tests pass.
 - Remote `DistributionManager.publish()` calls default to dry-run receipts.
   Passing `dry_run=False` for a remote target fails.
 - Local publication requires an explicit destination and verifies the copied

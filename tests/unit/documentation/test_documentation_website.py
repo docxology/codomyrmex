@@ -9,7 +9,7 @@ Zero-mock policy: All tests use real objects, tmp_path, and real subprocesses.
 """
 
 import os
-import shutil
+import subprocess
 import sys
 
 import pytest
@@ -119,24 +119,52 @@ class TestCheckDocEnvironment:
         result = check_doc_environment()
         assert isinstance(result, bool)
 
-    @pytest.mark.skipif(shutil.which("node") is None, reason="Node.js not installed")
-    def test_passes_when_node_available(self):
-        from codomyrmex.documentation.documentation_website import (
-            check_doc_environment,
+    def test_passes_when_node_and_npm_are_available(self, code_dir, tmp_path):
+        for command in ("node", "npm"):
+            executable = tmp_path / command
+            executable.write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+            executable.chmod(0o755)
+
+        env = os.environ.copy()
+        env["PATH"] = str(tmp_path)
+        env["PYTHONPATH"] = str(code_dir)
+        probe = subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                (
+                    "from codomyrmex.documentation.documentation_website "
+                    "import check_doc_environment; "
+                    "raise SystemExit(0 if check_doc_environment() else 1)"
+                ),
+            ],
+            env=env,
+            capture_output=True,
+            text=True,
+            check=False,
         )
+        assert probe.returncode == 0, probe.stderr
 
-        # Node exists and at least npm or yarn should be present
-        result = check_doc_environment()
-        assert result is True
-
-    @pytest.mark.skipif(shutil.which("node") is not None, reason="Node.js IS installed")
-    def test_fails_when_node_missing(self):
-        from codomyrmex.documentation.documentation_website import (
-            check_doc_environment,
+    def test_fails_when_node_missing(self, code_dir, tmp_path):
+        env = os.environ.copy()
+        env["PATH"] = str(tmp_path)
+        env["PYTHONPATH"] = str(code_dir)
+        probe = subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                (
+                    "from codomyrmex.documentation.documentation_website "
+                    "import check_doc_environment; "
+                    "raise SystemExit(0 if not check_doc_environment() else 1)"
+                ),
+            ],
+            env=env,
+            capture_output=True,
+            text=True,
+            check=False,
         )
-
-        result = check_doc_environment()
-        assert result is False
+        assert probe.returncode == 0, probe.stderr
 
 
 # ---------------------------------------------------------------------------

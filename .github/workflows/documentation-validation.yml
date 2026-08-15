@@ -41,7 +41,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --locked --all-extras --dev
+          uv sync --locked --group docs --all-extras --dev
 
       - name: Create output directory
         run: mkdir -p output
@@ -105,7 +105,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --locked --all-extras --dev
+          uv sync --locked --group docs --all-extras --dev
 
       - name: Create output directory
         run: mkdir -p output
@@ -174,7 +174,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --locked --all-extras --dev
+          uv sync --locked --group docs --all-extras --dev
 
       - name: Create output directory
         run: mkdir -p output
@@ -236,7 +236,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --locked --all-extras --dev
+          uv sync --locked --group docs --all-extras --dev
 
       - name: Create output directory
         run: mkdir -p output
@@ -297,7 +297,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --locked --all-extras --dev
+          uv sync --locked --group docs --all-extras --dev
 
       - name: Create output directory
         run: mkdir -p output

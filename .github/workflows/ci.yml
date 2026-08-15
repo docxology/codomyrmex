@@ -184,7 +184,7 @@ jobs:
         run: uv python install ${{ env.PYTHON_VERSION }}
 
       - name: Install dependencies
-        run: uv sync --locked --all-extras --dev
+        run: uv sync --locked --group docs --all-extras --dev
 
       - name: Run documentation gates
         run: make docs-check
@@ -253,7 +253,7 @@ jobs:
         run: uv python install ${{ env.PYTHON_VERSION }}
 
       - name: Install dependencies
-        run: uv sync --locked --all-extras --dev
+        run: uv sync --locked --group docs --all-extras --dev
 
       - name: Run offline research and contract suites
         run: |
@@ -273,6 +273,7 @@ jobs:
           uv run python scripts/z_generate_manuscript_variables.py
           uv run python scripts/validate_manuscript_contract.py
           uv run python scripts/generate_manuscript_figures.py
+          uv run --locked --group docs python scripts/compile_manuscript.py --check --skip-generate
           uv run python scripts/validate_manuscript_integrity.py
           uv run pytest -q \
             tests/unit/manuscript/test_integrity.py \

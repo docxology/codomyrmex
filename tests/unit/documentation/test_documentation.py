@@ -78,8 +78,21 @@ class TestDocumentation:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        # This actually runs npm install — skip in unit test context
-        pytest.skip("Skipping: runs real npm install (use -m slow to include)")
+        from codomyrmex.documentation.documentation_website import (
+            command_exists,
+            install_dependencies,
+        )
+
+        (tmp_path / "package.json").write_text(
+            '{"name":"codomyrmex-test-docs","private":true,"version":"1.0.0"}',
+            encoding="utf-8",
+        )
+        result = install_dependencies("npm", cwd=tmp_path)
+        if command_exists("npm"):
+            assert result is True
+            assert (tmp_path / "package-lock.json").exists()
+        else:
+            assert result is False
 
     @pytest.mark.slow
     def test_run_command_stream_output(self, code_dir, tmp_path):
@@ -87,8 +100,16 @@ class TestDocumentation:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        # This runs a real subprocess — skip in unit test context
-        pytest.skip("Skipping: runs real subprocess (use -m slow to include)")
+        from codomyrmex.documentation.documentation_website import (
+            run_command_stream_output,
+        )
+
+        result = run_command_stream_output(
+            [sys.executable, "-c", "print('documentation subprocess')"],
+            cwd=tmp_path,
+            timeout=10,
+        )
+        assert result is True
 
     def test_main_full_cycle(self, code_dir):
         """Test main function structure."""
@@ -128,7 +149,12 @@ class TestDocumentation:
     @pytest.mark.slow
     def test_serve_static_site_build_missing(self, code_dir, tmp_path):
         """Test serve_static_site when build directory doesn't exist."""
-        pytest.skip("Skipping: runs real npx serve (use -m slow to include)")
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.documentation.documentation_website import serve_static_site
+
+        assert serve_static_site("npm", docs_root=tmp_path) is False
 
     def test_constants_and_paths(self, code_dir):
         """Test that module constants are properly defined."""
@@ -151,9 +177,14 @@ class TestDocumentation:
         assert "localhost:3000" in EFFECTIVE_DOCS_URL
 
     @pytest.mark.slow
-    def test_build_static_site_error_handling(self, code_dir):
+    def test_build_static_site_error_handling(self, code_dir, tmp_path):
         """Test build_static_site error handling with real implementation."""
-        pytest.skip("Skipping: runs real npm build (use -m slow to include)")
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.documentation.documentation_website import build_static_site
+
+        assert build_static_site("npm", docs_root=tmp_path) is False
 
 
 # Coverage push — documentation/scripts

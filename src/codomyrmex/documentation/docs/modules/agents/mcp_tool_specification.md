@@ -1,159 +1,56 @@
-# Agents - MCP Tool Specification
+# Agents MCP tool specification
 
-This document outlines the specification for tools within the Agents module that are integrated with the Model Context Protocol (MCP).
+This document is the source-of-truth inventory for the stable MCP surface in
+the `agents` module. Runtime dynamic tools are discovered separately and are
+not represented as a fixed provider count here.
 
-## 1. Overview
+## Agent tools
 
-The `agents` module is the core framework for AI agent integration in Codomyrmex. It provides abstract interfaces, concrete client implementations for 14 providers (6 API, 7 CLI, 1 local), parsing utilities, and discovery/health-probing via `AgentRegistry`.
+| Invocation | Required input | Behavior |
+| :--- | :--- | :--- |
+| `execute_agent` | `agent_name`, `prompt` | Execute one registered agent request and return response metadata. |
+| `list_agents` | none | Return registry descriptors and their declared capabilities. |
+| `get_agent_memory` | `session_id` | Return the most recent messages for a persisted agent session. |
 
-- **Configuration**: Agents may require API keys, model configurations, and capability settings.
-
----
-
-## Tool: `execute_agent`
-
-### 1. Tool Purpose and Description
-
-Executes a request through a specified AI agent, returning the agent's response content.
-
-### 2. Invocation Name
-
-`execute_agent`
-
-### 3. Input Schema (Parameters)
-
-| Parameter Name | Type     | Required | Description                                                   | Example Value                                                 |
-| :------------- | :------- | :------- | :------------------------------------------------------------ | :------------------------------------------------------------ |
-| `agent_name`   | `string` | Yes      | Name of the agent to use (e.g., "claude", "gemini", "ollama") | `"claude"`                                                    |
-| `prompt`       | `string` | Yes      | The prompt or instruction for the agent                       | `"Generate a Python function to calculate fibonacci numbers"` |
-
-### 4. Output Schema (Return Value)
-
-| Field Name | Type     | Description                   | Example Value             |
-| :--------- | :------- | :---------------------------- | :------------------------ |
-| `status`   | `string` | `"success"` or `"error"`      | `"success"`               |
-| `content`  | `string` | Generated content or response | `"def fibonacci(n): ..."` |
-| `message`  | `string` | Error message if `"error"`    | `null`                    |
-
-### 5. Error Handling
-
-- **Agent Not Found**: Returns `{"status": "error", "message": "Agent '<name>' not found."}`
-- **Execution Failure**: Returns `{"status": "error", "message": "Failed to execute agent <name>: <details>"}`
-
-### 6. Idempotency
-
-- **Idempotent**: No, responses may vary for the same prompt due to model non-determinism
-
-### 7. Usage Examples
-
-```json
-{
-  "tool_name": "execute_agent",
-  "arguments": {
-    "agent_name": "claude",
-    "prompt": "Explain the difference between async and sync programming"
-  }
-}
-```
-
-### 8. Security Considerations
-
-- **API Key Management**: Agent API keys should be stored securely and never logged
-- **Input Sanitization**: Prompts should be validated to prevent injection attacks
-- **Rate Limiting**: Implement rate limiting to prevent API abuse
-- **Output Filtering**: Consider filtering responses for sensitive content
-
----
-
-## Tool: `list_agents`
-
-### 1. Tool Purpose and Description
-
-Lists all available AI agents registered in the `AgentRegistry`, returning their descriptions and capabilities.
-
-### 2. Invocation Name
-
-`list_agents`
-
-### 3. Input Schema (Parameters)
-
-No parameters required.
-
-### 4. Output Schema (Return Value)
-
-| Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
-| `status` | `string` | `"success"` | `"success"` |
-| `agents` | `array[object]` | List of available agents | See below |
-| `count` | `integer` | Total number of agents | `11` |
-
-### 5. Error Handling
-
-- Returns empty list if no agents are configured
-
-### 6. Idempotency
-
-- **Idempotent**: Yes
-
----
+The decorated runtime names are the function names above. Older names such as
+`execute_agent_request`, `list_available_agents`, `probe_agent_status`, and
+`register_tool_with_agent` are not registered by this module and must not be
+used for capability routing.
 
 ## Navigation tools
 
-The navigation tools are read-only and return JSON-safe records. They do not
-run agent health probes, instantiate clients, or invoke handlers. Tool inventory
-scanning is opt-in because dynamic discovery can import optional provider
-modules.
+The navigation surface is read-only metadata. It does not construct clients,
+probe credentials, invoke handlers, or claim endpoint operability:
 
 | Tool | Purpose |
 | :--- | :--- |
-| `list_agent_capabilities` | List stable agent/module/tool records, optionally filtered by kind |
-| `search_agent_capabilities` | Search capability names, descriptions, source paths, and tags |
-| `get_agent_capability` | Resolve an `agent:<name>`, `module:<name>`, or `tool:<name>` record |
-| `agent_operability_status` | Report declared and implementation-present agents without live probes |
+| `list_agent_capabilities` | List bounded agent, module, and tool records. |
+| `search_agent_capabilities` | Search the complete catalog without page-limit false negatives. |
+| `get_agent_capability` | Resolve an exact or unambiguous capability ID. |
+| `agent_operability_status` | Report implementation metadata without live probes. |
 
-Each record includes a stable `id`, `status`, source, documentation path, trust
-classification, and non-secret implementation metadata. A status of
-`implementation_present` means the client module can be located; it does not
-claim that credentials, binaries, endpoints, or models are usable.
+Use `agent:<name>`, `module:<name>`, or `tool:<qualified-name>` IDs. A status
+of `implementation_present` means only that the client module can be located;
+credentials, network access, and live service health remain unverified.
 
-## Tool: `get_agent_memory`
+## Operational and security contract
 
-### 1. Tool Purpose and Description
+- Tool arguments are validated against their declared JSON Schema before a
+  handler runs.
+- MCP/PAI entrypoints apply trust classification and audit logging. Dynamic
+  names containing mutation, VCS, deployment, or external-communication verbs
+  require elevated trust.
+- MCP filesystem paths are constrained to the current working tree by
+  default. Additional roots must be explicitly listed in
+  `CODOMYRMEX_MCP_ALLOWED_ROOTS`.
+- Confirmation tokens for destructive calls are one-use and bound to the
+  exact validated argument payload.
+- Dynamic discovery and static definitions use a first-registration-wins
+  collision policy so a discovered handler cannot silently replace a stable
+  contract.
 
-Retrieve the interaction logs and memory for a specific agent session. Returns the most recent messages (up to 50) from the session history.
+## Navigation links
 
-### 2. Invocation Name
-
-`get_agent_memory`
-
-### 3. Input Schema (Parameters)
-
-| Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `session_id` | `string` | Yes | The session ID to retrieve memory for | `"sess_abc123"` |
-
-### 4. Output Schema (Return Value)
-
-| Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
-| `status` | `string` | `"success"` or `"error"` | `"success"` |
-| `session_id` | `string` | The queried session ID | `"sess_abc123"` |
-| `logs` | `array[object]` | List of `{role, content}` message dicts | `[{"role": "user", "content": "..."}]` |
-
-### 5. Error Handling
-
-- **Session Not Found**: Returns `{"status": "error", "message": "Session <id> not found."}`
-- **Retrieval Failure**: Returns `{"status": "error", "message": "Failed to retrieve memory for <id>: <details>"}`
-
-### 6. Idempotency
-
-- **Idempotent**: Yes
-
----
-
-## Navigation Links
-
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+- Parent: [Agents module README](README.md)
+- Module index: [All modules](../AGENTS.md)
+- Root coordination: [AGENTS.md](../../../AGENTS.md)

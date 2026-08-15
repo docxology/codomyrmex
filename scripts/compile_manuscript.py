@@ -666,7 +666,7 @@ def _validate_pdf(
     receipt_dir: Path,
     pdf_standard: str = "none",
 ) -> bool:
-    """Validate structure and enforce the requested PDF standard fail-closed."""
+    """Validate structure and bind the receipt to the exact PDF bytes."""
     receipt_dir.mkdir(parents=True, exist_ok=True)
     conformance_required = pdf_standard != "none"
     vera_flavour = PDF_CONFORMANCE_FLAVOURS.get(pdf_standard)
@@ -690,6 +690,8 @@ def _validate_pdf(
     receipt: dict[str, object] = {
         "schema_version": "2",
         "artifact": pdf_path.name,
+        "size_bytes": pdf_path.stat().st_size,
+        "sha256": _hash_file(pdf_path),
         "requirements": {
             "pdf_standard": pdf_standard,
             "conformance_required": conformance_required,
@@ -785,10 +787,7 @@ def _validate_pdf(
     )
 
     receipt_path = receipt_dir / f"{pdf_path.stem}-pdf-validation.json"
-    receipt_path.write_text(
-        json.dumps(receipt, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
+    _write_json_atomically(receipt_path, receipt)
     if qpdf_result.returncode != 0:
         print(
             f"ERROR: qpdf rejected {_display_path(pdf_path, pdf_path.parent)}",

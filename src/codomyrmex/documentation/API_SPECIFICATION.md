@@ -98,8 +98,8 @@ repository's authoritative reader build is `make docs-check` with MkDocs.
 | `check_doc_environment()` | Returns whether Node.js and a supported package manager are available |
 | `install_dependencies(package_manager="npm", cwd=None)` | Runs the package-manager install command in the bundled documentation directory or the explicit `cwd` |
 | `start_dev_server(package_manager="npm")` | Starts the blocking Docusaurus development server |
-| `build_static_site(package_manager="npm")` | Builds the package-local Docusaurus site |
-| `serve_static_site(package_manager="npm")` | Serves a previously built package-local site |
+| `build_static_site(package_manager="npm", docs_root=None)` | Builds the package-local Docusaurus site, or an explicit documentation checkout |
+| `serve_static_site(package_manager="npm", docs_root=None)` | Serves a previously built package-local site, or an explicit documentation checkout |
 | `assess_site()` | Opens the configured URL and prints a manual checklist |
 | `aggregate_docs(source_root=None, dest_root=None)` | Copies recognized module docs and may replace destination subtrees |
 | `validate_doc_versions()` | Returns `(valid, errors, warnings)` for source/aggregate comparisons |
