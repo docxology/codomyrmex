@@ -388,7 +388,8 @@ def _resolve_isbn_record(
             result["http_status"] = exc.code
             result["resolved_url"] = exc.geturl()
     result["error"] = (
-        f"exact ISBN lookup failed ({primary_error}); {fallback_error}; {google_error}"
+        f"exact ISBN lookup failed ({primary_error}); {fallback_error}; "
+        f"{google_error}"
     )
     return result
 

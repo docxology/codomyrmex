@@ -1,5 +1,3 @@
-# Sentinel Journal
-
 ## 2026-03-01 - Fix Hardcoded Secret Vulnerability in Models
 
 **Vulnerability:**
