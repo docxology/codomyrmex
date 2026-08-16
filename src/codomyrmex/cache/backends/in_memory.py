@@ -48,18 +48,17 @@ class InMemoryCache(Cache):
 
     def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
         """set a value in the cache."""
-        # Evict if at max size
-        if len(self._cache) >= self.max_size and key not in self._cache:
-            # Remove oldest entry
+        # Update existing key or prepare for new insert
+        if key in self._cache:
+            del self._cache[key]
+        elif len(self._cache) >= self.max_size:
+            # Remove oldest entry (first in insertion order)
             # ⚡ O(1) eviction relying on dict insertion order instead of O(N) min()
-            oldest_key = next(iter(self._cache.keys()))
+            oldest_key = next(iter(self._cache))
             del self._cache[oldest_key]
             self._stats.size -= 1
 
         ttl = ttl or self.default_ttl
-        # Delete existing key before re-inserting to maintain insertion order by update time
-        if key in self._cache:
-            del self._cache[key]
         self._cache[key] = (value, time.time(), ttl)
         self._stats.size = len(self._cache)
         return True
