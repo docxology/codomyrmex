@@ -51,11 +51,15 @@ class InMemoryCache(Cache):
         # Evict if at max size
         if len(self._cache) >= self.max_size and key not in self._cache:
             # Remove oldest entry
-            oldest_key = min(self._cache.keys(), key=lambda k: self._cache[k][1])
+            # ⚡ O(1) eviction relying on dict insertion order instead of O(N) min()
+            oldest_key = next(iter(self._cache.keys()))
             del self._cache[oldest_key]
             self._stats.size -= 1
 
         ttl = ttl or self.default_ttl
+        # Delete existing key before re-inserting to maintain insertion order by update time
+        if key in self._cache:
+            del self._cache[key]
         self._cache[key] = (value, time.time(), ttl)
         self._stats.size = len(self._cache)
         return True
