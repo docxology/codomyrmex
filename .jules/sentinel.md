@@ -11,3 +11,7 @@ Duplicate definitions across modules (e.g., repeating the `SecretType` definitio
 
 **Prevention:**
 Use descriptive suffixes or alternatives (e.g., changing `"password"` to `"password_type"`) for model or type definitions. Implement robust CI checks to enforce single-source-of-truth patterns rather than duplicating classes.
+## 2024-08-16 - Command Injection in STT Tools
+**Vulnerability:** `subprocess.run` used `shell=True` with an environment-provided string template for local STT transcription commands. An attacker controlling the environment variable could inject arbitrary shell commands.
+**Learning:** Even if variables interpolated into a command template are safely quoted via `shlex.quote`, the template itself can be dangerous if it is executed with `shell=True` and sourced externally. Always use `shell=False` by processing the template string with `shlex.split` after interpolation, allowing `subprocess.run` to safely execute the command as a list.
+**Prevention:** Prohibit `shell=True` globally. Ensure all subprocess commands are passed as lists. For templated shell commands, interpolate safely quoted variables and then parse the result with `shlex.split()` before execution.
