@@ -341,16 +341,20 @@ class FIFOPolicy(EvictionPolicy[K, V]):
         return len(self._cache)
 
 
+# PERFORMANCE OPTIMIZATION:
+# Hoisting the policy dictionary to module level avoids per-call allocation
+# overhead during cache policy instantiation.
+_POLICIES = {
+    "lru": LRUPolicy,
+    "lfu": LFUPolicy,
+    "ttl": TTLPolicy,
+    "fifo": FIFOPolicy,
+}
+
+
 def create_policy(policy_name: str, max_size: int, **kwargs) -> EvictionPolicy:
     """Factory function to create eviction policies."""
-    policies = {
-        "lru": LRUPolicy,
-        "lfu": LFUPolicy,
-        "ttl": TTLPolicy,
-        "fifo": FIFOPolicy,
-    }
-
-    policy_class = policies.get(policy_name.lower())
+    policy_class = _POLICIES.get(policy_name.lower())
     if not policy_class:
         raise ValueError(f"Unknown policy: {policy_name}")
 
