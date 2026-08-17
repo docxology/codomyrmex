@@ -1,3 +1,5 @@
+# Bolt Learnings
+
 ## 2026-03-10 - Refactored Synchronous API Wrappers for asyncio Completeness
 
 **Vulnerability/Performance Issue:** Synchronous blocking `time.sleep` calls were present in retry loops during API interaction logic. When the framework executes in an event loop environment, these synchronous blocking calls could stall the event loop. Furthermore, maintaining split implementation blocks (sync vs async) introduced duplication and bugs.
@@ -10,5 +12,6 @@
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
 
 ## 2025-08-17 - Dictionary Allocation Overhead in Hot Paths
+
 **Learning:** In highly trafficked factory functions (like `create_policy` in cache policies), re-creating the same static dictionary mapping strings to classes on every single invocation introduces measurable Python object allocation and garbage collection overhead.
 **Action:** When a dictionary maps static keys to constant values (like classes or functions), hoist it out of the function body into a module-level or class-level constant to make the lookup O(1) in both time and allocation cost.
