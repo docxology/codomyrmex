@@ -2,8 +2,8 @@
 In-memory cache backend.
 """
 
-import time
 import collections
+import time
 from typing import Any
 
 from codomyrmex.cache.cache import Cache
@@ -23,7 +23,9 @@ class InMemoryCache(Cache):
             max_size: Maximum number of items
             default_ttl: Default time-to-live in seconds
         """
-        self._cache: collections.OrderedDict[str, tuple[Any, float, int | None]] = collections.OrderedDict()
+        self._cache: collections.OrderedDict[str, tuple[Any, float, int | None]] = (
+            collections.OrderedDict()
+        )
         self.max_size = max_size
         self.default_ttl = default_ttl
         self._stats = CacheStats(max_size=max_size)
