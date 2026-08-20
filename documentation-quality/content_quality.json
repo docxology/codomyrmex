@@ -64,10 +64,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 4,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 803,
+      "word_count": 459,
       "link_count": 1
     }
   },
@@ -47823,7 +47823,7 @@
       "heading_count": 34,
       "placeholder_count": 0,
       "code_block_count": 15,
-      "word_count": 3901,
+      "word_count": 3991,
       "link_count": 0
     }
   },
