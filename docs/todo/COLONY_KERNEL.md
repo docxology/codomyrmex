@@ -1,10 +1,9 @@
 # Colony Kernel — Scope Document
 
-> **Status:** Core proposal-governance contract implemented and tested; external
-> attestation, comparative evaluation, persistence/concurrency, and probabilistic
-> research phases remain open.
-> **Phase target:** R0 implemented across 8 subsystems; R1–R5 are evidence-gated roadmap
-> milestones rather than completed phases.
+> **Status:** Core proposal-governance contract implemented and tested; research adapters
+> for external actuation (R2), adversarial evaluation (R3), trust calibration (R4),
+> persistence/concurrency (R5), and active inference (F5/R6) implemented in `research/`.
+> **Phase target:** R0 implemented across 8 core subsystems; R2–R5 harnesses and formal bridges available.
 > **Location:** `src/codomyrmex/colony_kernel/`
 
 ## Implementation Status
@@ -20,6 +19,12 @@
 | PruningDaemon | `pruning_daemon.py` | Implemented | Covered by the live scoped suite |
 | FalsificationWorker | `falsification/worker.py` | Implemented | Covered by the live scoped suite |
 | ColonyKernel + MCP | `kernel.py` + `mcp_tools.py` | Implemented | Covered by the live scoped suite |
+| Attestation Ledger | `attestation.py` | Implemented | Covered by `test_attestation.py` |
+| Research: Actuation Adapter (R2) | `research/actuation_adapter.py` | Implemented | Covered by `test_external_actuation.py` |
+| Research: Adversarial Workload (R3) | `research/adversarial_workload.py` | Implemented | Covered by `test_adversarial_workload.py` |
+| Research: Trust Calibration (R4) | `research/calibration_study.py` | Implemented | Covered by `test_calibration_study.py` |
+| Research: Concurrency & Durability (R5) | `research/concurrency_study.py` | Implemented | Covered by `test_concurrency_study.py` |
+| Research: Active Inference (F5/R6) | `research/active_inference_adapter.py` | Implemented | Covered by `test_active_inference_adapter.py` |
 
 The scoped suite and branch-coverage values are generated rather than maintained as
 hand-set claims. Read `RESULT_TEST_COUNT` and `RESULT_COVERAGE_PCT` from

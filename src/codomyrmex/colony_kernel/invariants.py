@@ -241,6 +241,30 @@ def check_enum_values_no_conflict() -> bool:
 
 
 # ---------------------------------------------------------------------------
+# Gate-decision threshold invariant
+# ---------------------------------------------------------------------------
+
+from codomyrmex.colony_kernel.actuation_gate import (
+    _GATE_SCORE_EXECUTE,
+    _GATE_SCORE_HOLD,
+)
+
+
+def check_gate_thresholds_ordered(
+    execute_thresh: float | None = None,
+    hold_thresh: float | None = None,
+) -> bool:
+    """Return True iff 0.0 <= hold_threshold < execute_threshold <= 1.0.
+
+    Ensures the gate decision space is strictly partitioned into [0, hold),
+    [hold, execute), and [execute, 1] without overlapping or inverted regions.
+    """
+    ex = _GATE_SCORE_EXECUTE if execute_thresh is None else float(execute_thresh)
+    hd = _GATE_SCORE_HOLD if hold_thresh is None else float(hold_thresh)
+    return 0.0 <= hd < ex <= 1.0
+
+
+# ---------------------------------------------------------------------------
 # Composite health check
 # ---------------------------------------------------------------------------
 
@@ -265,6 +289,7 @@ def all_invariants_hold(
     """
     return {
         "gate_weights_sum_to_one": check_gate_weights_sum_to_one(),
+        "gate_thresholds_ordered": check_gate_thresholds_ordered(),
         "trust_score_in_range": check_trust_score_in_range(profiles),
         "pheromone_strength_bounds": check_pheromone_strength_bounds(strengths),
         "role_ladder_monotonic": check_role_ladder_monotonic(),
@@ -279,6 +304,7 @@ def all_invariants_hold(
 __all__ = [
     "all_invariants_hold",
     "check_enum_values_no_conflict",
+    "check_gate_thresholds_ordered",
     "check_gate_weights_sum_to_one",
     "check_pheromone_strength_bounds",
     "check_role_ladder_monotonic",

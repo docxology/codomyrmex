@@ -1,49 +1,45 @@
-# Codomyrmex TODO — manuscript publication hardening
+# Codomyrmex TODO — Post-v1.3.0 Engineering & Research Backlog
 
-**Version**: v1.3.0 technical report
-**Scope**: source-current manuscript, scholarly audit, statistics, formalism, figures,
-rendered QA, and release receipts.
+**Version**: v1.3.1+ (Development)
+**Scope**: Advanced research adapters, formal bridge extensions, adversarial robustness, concurrency & durability guarantees, type safety, and test suite performance.
 
-This file contains only open publication blockers and explicitly scoped research
-work. Completed historical work belongs in [CHANGELOG.md](CHANGELOG.md). Numeric
-release values are evidence-bound outputs, not TODO snapshots.
+This file tracks open research items, formal gaps, and architectural improvements following the published v1.3.0 technical report (concept DOI `10.5281/zenodo.21750800`, version DOI `10.5281/zenodo.21750801`). Completed publication blockers (P1–P7) are archived in [CHANGELOG.md](CHANGELOG.md).
 
-## Publication blockers
+---
 
-| ID | Status | Artifact | Evidence required | Exit criterion |
-|:---|:---|:---|:---|:---|
-| P1 | Complete for current checkout | `output/data/manuscript_variables.json`, `output/figures/figure_registry.json`, `output/manuscript/`, `output/paper.html`, `output/paper-content.pdf`, `output/paper.pdf` | Producer-order regeneration from the current checkout and matching config/source hashes | `--require-source-current` passes after variables, figures, Markdown, HTML, PDFs, and receipts are regenerated |
-| P2 | Complete for current cited inventory | `docs/manuscript/references.bib`, `docs/manuscript/claim_ledger.yaml`, `docs/plans/manuscript-red-team-review-2026-08-01.md` | Source-current DOI/arXiv/official-locator checks and claim-by-claim fit review; preserve negative, conditional, and unrun claims | Online bibliography audit and claim-ledger coverage pass with access limitations recorded |
-| P3 | Complete for current synthetic fixture | `src/codomyrmex/colony_kernel/research/benchmark.py`, `research/metrics.py`, `tests/unit/colony_kernel/test_research_harness.py` | Independent recomputation of estimands, denominators, paired differences, resampling intervals, and mediator provenance | Focused tests pass and no synthetic fixture is described as population, calibration, or production-gate evidence |
-| P4 | Complete for current manuscript | `docs/manuscript/11_supplemental_notation.md` and all formal sections/captions | Symbol crosswalk review for indices, field state, hazard/gate, trust, Active Inference, and paired statistics | Notation regression tests pass and equations/captions resolve to one glossary without collisions |
-| P5 | Complete for current render | `docs/manuscript/config.yaml`, `src/codomyrmex/manuscript/figures/`, rendered HTML/PDF | Pixel-level review of all 18 figures, metadata, captions, alt text, long descriptions, ranges, contrast, print legibility, and evidence boundaries | Figure registry, HTML image-description checks, rendered-page inspection, and browser pass all pass |
-| P6 | Complete for current PDFs; usability remains bounded | `output/paper-content.pdf`, `output/paper.pdf`, `docs/manuscript/06_reproducibility.md`, `scripts/compile_manuscript.py` | `qpdf --check`, searchable text, renderer diagnostics, `pdfinfo` tagging fields, and independent veraPDF PDF/UA-2 validation enforced by the compiler | Current content and distribution PDFs pass the enforced tagged-PDF/PDF/UA-2 gate; retain the limitation that this does not establish universal assistive-technology, display, print, or reader usability |
-| P7 | Complete and published for v1.3.0 | `output/release/codomyrmex-1.3.0/`, Zenodo record `10.5281/zenodo.21750801`, and GitHub release `v1.3.0-paper` | Current source-state, config/source hashes, artifact hash agreement, validation receipts, detached manifest verification, and live-record checks | DOI-bearing bundle is source-current, Zenodo is published, and the GitHub release points to the same versioned artifacts |
+## Major Items (Foundational Adapters & Workload Harnesses)
 
-## Explicitly scoped research items
+| ID | Title | Scope & Artifacts | Acceptance Criteria |
+|:---|:------|:------------------|:--------------------|
+| **R2** | **External-Actuation Observation Adapter** | `src/codomyrmex/colony_kernel/research/actuation_adapter.py`, `tests/unit/colony_kernel/test_external_actuation.py` | Independent runtime observation harness distinguishing external actuation from caller-reported lifecycle events, with tamper-proof receipt verification, replay rejection, and execution verification. |
+| **R3** | **Adversarial Workload Evaluation Adapter** | `src/codomyrmex/colony_kernel/research/adversarial_workload.py`, `tests/unit/colony_kernel/test_adversarial_workload.py` | Implementation of threat-stratified benchmark adapter (AgentDojo, InjecAgent, ToolEmu protocols) with paired assignments, attack success metrics, and safety-utility frontier analysis. |
+| **F5 / R6** | **Active Inference Research Adapter & Formal Bridge** | `src/codomyrmex/colony_kernel/research/active_inference_adapter.py`, `src/codomyrmex/colony_kernel/research/probabilistic.py`, `tests/unit/colony_kernel/test_active_inference_adapter.py` | End-to-end active inference decision loop bridging `cerebrum` and `colony_kernel`, evaluating expected free energy against deterministic gates under declared generative model assumptions. |
 
-Each item remains a research question or evidence requirement, not a completed result.
+---
 
-| ID | Status | Artifact | Evidence required | Exit criterion |
-|:---|:---|:---|:---|:---|
-| R2 | Open | External-actuation observation adapter and retained traces | Independently observed execution/outcomes, adverse cases, restart/concurrency evidence, and a declared baseline | Reproducible externally observed comparison with negative results retained |
-| R3 | Open | Adversarial workload adapter and threat-stratified analysis | External or independently curated hostile workloads, held-out protocol, paired assignment, and falsifiers | Predeclared safety/utility analysis is complete and bounded to the workload |
-| R4 | Open | Trust calibration study | Attested outcomes, calibration labels, missingness policy, calibration diagnostics, and held-out evaluation | Calibration status changes only after independent outcome evidence supports it |
-| R5 | Open | Persistence and concurrency study | Multi-process/restart traces, lock/transaction evidence, crash injection, and recovery analysis | Durability and concurrency claims are supported by retained replayable artifacts |
-| R6 | Open | External effectiveness and production-safety evaluation | Independent deployment-specific observation, safety case, rollback evidence, and operational review | No effectiveness or production-safety claim is made until the full evidence bundle passes |
-| F3 | Open formalism gap | `docs/manuscript/10_formalism_code_crosswalk.md` and formal bridge | Explicit state/transition mapping, proof obligations, solver assumptions, and failure semantics | Encoded obligations and their limits are independently reviewed; no whole-program proof is implied |
-| F5 | Open formalism gap | Active Inference crosswalk and research adapter | Declared observations, latent states, likelihoods, priors, posteriors, policies, preferences, inference procedure, and held-out checks | A probabilistic result is reported only after the model is executed and compared against the deterministic gate |
-| F6 | Open formalism gap | Runtime-assurance and attestation formalism | External observation model, authorization/actuation linkage, threat model, and assurance argument | A bounded assurance case is retained; local caller-reported state is not promoted to external safety |
+## Medium Items (Empirical Studies & Formalism Crosswalk)
 
-## Working constraints
+| ID | Title | Scope & Artifacts | Acceptance Criteria |
+|:---|:------|:------------------|:--------------------|
+| **R4** | **Trust Calibration Study Harness** | `src/codomyrmex/colony_kernel/research/calibration_study.py`, `tests/unit/colony_kernel/test_calibration_study.py` | Multi-method calibration analysis (Brier score, ECE, Platt scaling, reliability diagrams) on synthetic and attested traces with formal missingness handling. |
+| **R5** | **Persistence and Concurrency Study Harness** | `src/codomyrmex/colony_kernel/research/concurrency_study.py`, `tests/unit/colony_kernel/test_concurrency_study.py` | Multi-worker concurrent load testing, crash injection across transaction boundaries, WAL persistence verification, and race condition auditing. |
+| **F3** | **Formalism-to-Code Runtime Invariant Crosswalk** | `src/codomyrmex/colony_kernel/invariants.py`, `tests/unit/colony_kernel/test_invariants.py` | Extended runtime invariant predicates validating budget monotonicity, gate decision space closure, consequence trust bounds, and cross-subsystem invariant suites. |
 
-- v1.3.0 publication is complete: concept DOI `10.5281/zenodo.21750800`, version DOI
-  `10.5281/zenodo.21750801`, and GitHub release tag `v1.3.0-paper`. Future manuscript
-  changes require a new version and a new source-bound release sequence.
-- Preserve the dirty `src/codomyrmex/agents/open_gauss` submodule as a separate ownership
-  boundary; no cleanup or edits are authorized.
-- Preserve failed gates, negative controls, `not_estimated` calibration status, and
-  conditional or `not_run` claims.
-- Regenerate in producer order: variables and coverage → figures/registry → hydrated
-  Markdown → HTML/content/distribution PDFs → bibliography audit → rendered/link checks
-  → release bundle preparation and verification.
+---
+
+## Minor Items (Typing, Documentation & Performance)
+
+| ID | Title | Scope & Artifacts | Acceptance Criteria |
+|:---|:------|:------------------|:--------------------|
+| **M1** | **Type Safety & `py.typed` Markers** | `src/codomyrmex/colony_kernel/research/py.typed`, `src/codomyrmex/colony_kernel/falsification/py.typed`, strict type annotations | Package markers present, zero unsafe type ignores in core kernel packages, full stub parity. |
+| **M2** | **Docs Crosswalk & Inventory Audit** | `docs/reference/inventory.md`, `docs/todo/COLONY_KERNEL.md` | Inventory counters, module links, and roadmap alignment fully verified with live code tree. |
+| **M3** | **Test Speed & Suite Optimization** | `pyproject.toml`, test runner configs | Benchmark/xdist isolation, deterministic execution without timeout stalls across unit test suites. |
+
+---
+
+## Working Constraints
+
+- Preserve all v1.3.0 release receipts and Zenodo metadata bindings in historical logs.
+- Preserve the dirty `src/codomyrmex/agents/open_gauss` submodule as a separate ownership boundary; no cleanup or edits are authorized.
+- Preserve failed gates, negative controls, `not_estimated` calibration status, and conditional or `not_run` claims.
+- Zero-Mock Policy: All test suites must exercise authentic functional implementations.

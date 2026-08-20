@@ -39,6 +39,7 @@ def test_composite_invariant_report_is_true_for_live_defaults() -> None:
 
     assert report == {
         "gate_weights_sum_to_one": True,
+        "gate_thresholds_ordered": True,
         "trust_score_in_range": True,
         "pheromone_strength_bounds": True,
         "role_ladder_monotonic": True,
