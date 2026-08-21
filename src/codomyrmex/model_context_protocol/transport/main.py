@@ -27,7 +27,11 @@ async def run_server() -> None:
     # Configure logging for the MCP server specifically if needed
     logging.basicConfig(level=logging.INFO)
 
-    from codomyrmex.agents.pai.mcp_bridge import create_codomyrmex_mcp_server
+    import importlib
+
+    create_codomyrmex_mcp_server = importlib.import_module(
+        "codomyrmex.agents.pai.mcp_bridge"
+    ).create_codomyrmex_mcp_server
 
     server = create_codomyrmex_mcp_server(
         name="codomyrmex-mcp",
