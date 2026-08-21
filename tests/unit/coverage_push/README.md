@@ -7,6 +7,7 @@
 Validation coverage, fixtures, and regression checks for Coverage Push.
 
 ## Directory Contents
+- `AGENTS.md` – File
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
