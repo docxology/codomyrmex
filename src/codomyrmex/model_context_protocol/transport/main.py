@@ -28,7 +28,8 @@ async def run_server() -> None:
     logging.basicConfig(level=logging.INFO)
 
     import importlib
-    pai_mcp_bridge = importlib.import_module('codomyrmex.agents.pai.mcp_bridge')
+
+    pai_mcp_bridge = importlib.import_module("codomyrmex.agents.pai.mcp_bridge")
     create_codomyrmex_mcp_server = pai_mcp_bridge.create_codomyrmex_mcp_server
 
     server = create_codomyrmex_mcp_server(
