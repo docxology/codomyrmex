@@ -275,9 +275,8 @@ def run_interactive_shell() -> bool:
         return False
 
     try:
-        from codomyrmex.terminal_interface.interactive_shell import InteractiveShell
-
         from codomyrmex.demos.terminal import run_terminal_demo
+        from codomyrmex.terminal_interface.interactive_shell import InteractiveShell
 
         shell = InteractiveShell(demo_runner=run_terminal_demo)
         shell.run()
