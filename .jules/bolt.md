@@ -8,6 +8,7 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+
 ## 2024-05-18 - Optimized InMemoryCache LRU Eviction to O(1)
 **Learning:** The Python dictionary-based cache eviction in InMemoryCache (`min(self._cache.keys(), key=lambda k: self._cache[k][1])`) resulted in O(N) performance for cache insertions at maximum capacity, which degrades quickly under high load.
 **Action:** Used `collections.OrderedDict` with `.move_to_end(key)` and `.popitem(last=False)` instead of standard dictionaries with `del` and re-insertion, to maintain correct LRU semantics in O(1) time while preventing thread-safety issues and race conditions.
