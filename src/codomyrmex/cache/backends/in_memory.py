@@ -3,6 +3,7 @@ In-memory cache backend.
 """
 
 import time
+from collections import OrderedDict
 from typing import Any
 
 from codomyrmex.cache.cache import Cache
@@ -22,7 +23,7 @@ class InMemoryCache(Cache):
             max_size: Maximum number of items
             default_ttl: Default time-to-live in seconds
         """
-        self._cache: dict[str, tuple[Any, float, int | None]] = {}
+        self._cache: dict[str, tuple[Any, float, int | None]] = OrderedDict()  # type: ignore
         self.max_size = max_size
         self.default_ttl = default_ttl
         self._stats = CacheStats(max_size=max_size)
@@ -50,13 +51,13 @@ class InMemoryCache(Cache):
         """set a value in the cache."""
         # Evict if at max size
         if len(self._cache) >= self.max_size and key not in self._cache:
-            # Remove oldest entry
-            oldest_key = min(self._cache.keys(), key=lambda k: self._cache[k][1])
-            del self._cache[oldest_key]
+            # O(1) pop instead of O(n) search to optimize performance
+            self._cache.popitem(last=False)  # type: ignore
             self._stats.size -= 1
 
         ttl = ttl or self.default_ttl
         self._cache[key] = (value, time.time(), ttl)
+        self._cache.move_to_end(key)  # type: ignore
         self._stats.size = len(self._cache)
         return True
 
