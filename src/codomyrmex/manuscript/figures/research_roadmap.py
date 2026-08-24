@@ -16,9 +16,10 @@ from codomyrmex.manuscript.figures._common import (
 
 _STATUS_COLORS = {
     "implemented": _OI["green"],
-    "next": _OI["blue"],
+    "adapter_ready": _OI["blue"],
+    "harness_ready": _OI["blue"],
     "planned": _OI["orange"],
-    "research": _OI["pink"],
+    "prototype_ready": _OI["pink"],
 }
 
 

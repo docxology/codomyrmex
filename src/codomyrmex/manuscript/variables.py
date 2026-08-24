@@ -650,13 +650,21 @@ _ROADMAP_FIELDS = (
     "id",
     "name",
     "status",
+    "implementation_status",
+    "evidence_status",
     "hypothesis",
     "artifact",
     "metric",
     "falsifier",
     "exit_criteria",
 )
-_ROADMAP_STATUSES = {"implemented", "next", "planned", "research"}
+_ROADMAP_STATUSES = {
+    "adapter_ready",
+    "harness_ready",
+    "implemented",
+    "planned",
+    "prototype_ready",
+}
 
 
 def _research_roadmap_entries(
@@ -685,7 +693,13 @@ def _research_roadmap_entries(
             field: str(raw_entry[field]).strip() for field in _ROADMAP_FIELDS
         }
         artifact_paths = raw_entry.get("artifact_paths", [])
-        if entry["status"] == "implemented":
+        dependencies = raw_entry.get("dependencies")
+        if not isinstance(dependencies, list):
+            raise RuntimeError(
+                f"Research milestone {entry['id']!r} dependencies must be a list"
+            )
+        entry["dependencies"] = [str(value).strip() for value in dependencies]
+        if entry["implementation_status"] in {"implemented", "prototype"}:
             if not isinstance(artifact_paths, list) or not artifact_paths:
                 raise RuntimeError(
                     f"Implemented research milestone {entry['id']!r} must list "
@@ -721,6 +735,18 @@ def _research_roadmap_entries(
         raise RuntimeError(
             "Research roadmap must identify at least one implemented milestone"
         )
+    identifiers = {entry["id"] for entry in entries}
+    for entry in entries:
+        unknown = set(entry["dependencies"]) - identifiers
+        if unknown:
+            raise RuntimeError(
+                f"Research milestone {entry['id']!r} has unknown dependencies: "
+                f"{', '.join(sorted(unknown))}"
+            )
+        if entry["id"] in entry["dependencies"]:
+            raise RuntimeError(
+                f"Research milestone {entry['id']!r} cannot depend on itself"
+            )
     return entries
 
 

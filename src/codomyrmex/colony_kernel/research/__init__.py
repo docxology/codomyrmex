@@ -50,6 +50,13 @@ from .metrics import (
     reliability_bins,
     selective_risk,
 )
+from .orchestration import (
+    ResearchProgramOrchestrator,
+    ResearchProgramReport,
+    ResearchTrack,
+    TrackResult,
+    TrackStatus,
+)
 from .persistent_store import PersistentPheromoneStore
 from .probabilistic import (
     GenerativeModelSpec,
@@ -86,9 +93,14 @@ __all__ = [
     "PersistentPheromoneStore",
     "PolicyTrace",
     "ResearchManifest",
+    "ResearchProgramOrchestrator",
+    "ResearchProgramReport",
+    "ResearchTrack",
     "TaskCase",
     "ThreatStratifiedResult",
     "ToolEmuAdapter",
+    "TrackResult",
+    "TrackStatus",
     "TrustCalibrationReport",
     "TrustCalibrationStudy",
     "brier_score",

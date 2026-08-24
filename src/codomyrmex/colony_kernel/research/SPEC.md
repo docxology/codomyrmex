@@ -1,6 +1,6 @@
 # Colony Kernel research specification
 
-The research package has four boundaries:
+The research package has five boundaries:
 
 1. `schemas.py` defines versioned cases, policy traces, manifests, hashes, and
    conservative train/held-out leakage reports.
@@ -16,6 +16,10 @@ The research package has four boundaries:
 4. `probabilistic.py` declares priors, likelihoods, transitions, preferences,
    actions, horizon, and seed. Its output is an adapter observation, not a
    safety probability or a replacement for the deterministic gate.
+5. `orchestration.py` validates research-track dependencies, runs each ready
+   track once in deterministic topological order, and retains failures and
+   dependency blocks. Completion means only that the supplied runner returned;
+   empirical promotion remains governed by the roadmap evidence criteria.
 
 External datasets and services are caller-supplied and opt-in. No result may
 be described as calibrated, causal, optimal, safe, or biologically equivalent

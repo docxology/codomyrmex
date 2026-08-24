@@ -538,6 +538,9 @@ research_roadmap:
   - id: "R0"
     name: "Reproducible kernel contract"
     status: "implemented"
+    implementation_status: "implemented"
+    evidence_status: "local_complete"
+    dependencies: []
     artifact_paths:
       - "src/codomyrmex/colony_kernel/replay.py"
       - "tests/unit/colony_kernel/test_replay.py"
@@ -551,6 +554,9 @@ research_roadmap:
   - id: "R1"
     name: "Local authenticated lifecycle ledger"
     status: "implemented"
+    implementation_status: "implemented"
+    evidence_status: "local_complete"
+    dependencies: ["R0"]
     artifact_paths:
       - "src/codomyrmex/colony_kernel/attestation.py"
       - "tests/unit/colony_kernel/test_attestation.py"
@@ -562,7 +568,13 @@ research_roadmap:
     exit_criteria: "Lifecycle integration tests pass and the external-observation boundary remains explicit."
   - id: "R2"
     name: "End-to-end external actuation attestation"
-    status: "next"
+    status: "adapter_ready"
+    implementation_status: "implemented"
+    evidence_status: "external_not_run"
+    dependencies: ["R1"]
+    artifact_paths:
+      - "src/codomyrmex/colony_kernel/research/actuation_adapter.py"
+      - "tests/unit/colony_kernel/test_external_actuation.py"
     hypothesis: "Independently sourced execution evidence can distinguish actual external actuation from caller-reported lifecycle events."
     artifact: "Deployment-specific adapter that verifies execution identity, external receipt provenance, and outcome linkage."
     metric: "Forgery and replay rejection, observation completeness, adapter overhead, and independently replayed traces."
@@ -570,7 +582,13 @@ research_roadmap:
     exit_criteria: "A declared deployment adapter passes adversarial tests and an independent verifier reproduces its evidence chain."
   - id: "R3"
     name: "Adversarial tool-use benchmark"
-    status: "planned"
+    status: "harness_ready"
+    implementation_status: "implemented"
+    evidence_status: "external_not_run"
+    dependencies: ["R2"]
+    artifact_paths:
+      - "src/codomyrmex/colony_kernel/research/adversarial_workload.py"
+      - "tests/unit/colony_kernel/test_adversarial_workload.py"
     hypothesis: "Gate-mediated proposals will change unsafe-action and recovery outcomes under hostile tool inputs."
     artifact: "Seeded AgentDojo, InjecAgent, or ToolEmu adapter with paired baseline traces."
     metric: "Attack success, harmful-action rate, task utility, refusal cost, and complete trace retention."
@@ -578,7 +596,13 @@ research_roadmap:
     exit_criteria: "Independent rerun reproduces paired estimates and failure analyses."
   - id: "R4"
     name: "Calibration and utility"
-    status: "planned"
+    status: "harness_ready"
+    implementation_status: "implemented"
+    evidence_status: "held_out_data_absent"
+    dependencies: ["R2", "R3"]
+    artifact_paths:
+      - "src/codomyrmex/colony_kernel/research/calibration_study.py"
+      - "tests/unit/colony_kernel/test_calibration_study.py"
     hypothesis: "Gate scores can be calibrated against independently observed downstream consequences."
     artifact: "Held-out outcome dataset, baseline policies, calibration analysis, and preregistered configuration."
     metric: "Log loss, calibration error, selective risk, repair cost, utility, and confidence intervals."
@@ -586,7 +610,13 @@ research_roadmap:
     exit_criteria: "Held-out analysis and uncertainty intervals are released with raw traces."
   - id: "R5"
     name: "Persistence and concurrency"
-    status: "planned"
+    status: "harness_ready"
+    implementation_status: "implemented"
+    evidence_status: "deployment_profile_not_run"
+    dependencies: ["R2"]
+    artifact_paths:
+      - "src/codomyrmex/colony_kernel/research/concurrency_study.py"
+      - "tests/unit/colony_kernel/test_concurrency_study.py"
     hypothesis: "Explicit persistence and concurrent access can preserve locality without violating isolation or ordering."
     artifact: "Restart, crash-recovery, multi-worker, and load scenarios under a declared deployment profile."
     metric: "Durability, ordering, isolation, throughput, latency, and recovery completeness."
@@ -594,12 +624,30 @@ research_roadmap:
     exit_criteria: "Scenario matrix passes with retained logs, seeds, environment, and artifact hashes."
   - id: "R6"
     name: "Probabilistic and Active Inference extension"
-    status: "research"
+    status: "prototype_ready"
+    implementation_status: "prototype"
+    evidence_status: "held_out_comparison_not_run"
+    dependencies: ["R3", "R4"]
+    artifact_paths:
+      - "src/codomyrmex/colony_kernel/research/active_inference_adapter.py"
+      - "src/codomyrmex/colony_kernel/research/probabilistic.py"
+      - "tests/unit/colony_kernel/test_active_inference_adapter.py"
     hypothesis: "An explicit generative model can improve prediction or policy selection beyond the heuristic projection."
     artifact: "Declared likelihood, posterior implementation, simulation-based calibration, and paired baselines."
     metric: "Posterior predictive checks, held-out log loss, calibration, policy utility, and compute cost."
     falsifier: "The probabilistic model fails calibration or utility comparisons, or its assumptions are not identifiable."
     exit_criteria: "Model, assumptions, replay harness, and negative results are independently reproducible."
+  - id: "R7"
+    name: "Independent replication and promotion decision"
+    status: "planned"
+    implementation_status: "planned"
+    evidence_status: "blocked_by_dependencies"
+    dependencies: ["R3", "R4", "R5", "R6"]
+    hypothesis: "The retained evidence package can be reproduced in an independent environment without widening the registered claim boundary."
+    artifact: "Independent replay report, environment comparison, discrepancy ledger, and signed promotion decision."
+    metric: "Artifact agreement, discrepancy count and severity, rerun completeness, and claim-ledger consistency."
+    falsifier: "Independent replay cannot reconstruct the decisive results or reveals an unreported dependency or claim mismatch."
+    exit_criteria: "An independent verifier reproduces or explicitly rejects each promoted result and all discrepancies remain retained."
 
 # Formalism-to-code mappings are a second, evidence-oriented research contract. A
 # mapping is not accepted merely because names sound similar: it must identify the

@@ -7,27 +7,28 @@ This file tracks open research items, formal gaps, and architectural improvement
 
 ---
 
-## Major Items (Foundational Adapters & Workload Harnesses)
+## Evidence Program (Implemented Substrate, Open Studies)
 
 | ID | Title | Scope & Artifacts | Acceptance Criteria |
 |:---|:------|:------------------|:--------------------|
-| **R2** | **External-Actuation Observation Adapter** | `src/codomyrmex/colony_kernel/research/actuation_adapter.py`, `tests/unit/colony_kernel/test_external_actuation.py` | Independent runtime observation harness distinguishing external actuation from caller-reported lifecycle events, with tamper-proof receipt verification, replay rejection, and execution verification. |
-| **R3** | **Adversarial Workload Evaluation Adapter** | `src/codomyrmex/colony_kernel/research/adversarial_workload.py`, `tests/unit/colony_kernel/test_adversarial_workload.py` | Implementation of threat-stratified benchmark adapter (AgentDojo, InjecAgent, ToolEmu protocols) with paired assignments, attack success metrics, and safety-utility frontier analysis. |
-| **F5 / R6** | **Active Inference Research Adapter & Formal Bridge** | `src/codomyrmex/colony_kernel/research/active_inference_adapter.py`, `src/codomyrmex/colony_kernel/research/probabilistic.py`, `tests/unit/colony_kernel/test_active_inference_adapter.py` | End-to-end active inference decision loop bridging `cerebrum` and `colony_kernel`, evaluating expected free energy against deterministic gates under declared generative model assumptions. |
+| **R2** | **External actuation study** | Adapter and deterministic verification tests are implemented. | Run a declared deployment adapter against independently sourced execution evidence; retain replay, forgery, linkage, and overhead results. |
+| **R3** | **Adversarial workload study** | Synthetic evaluator and external benchmark protocols are implemented. | Execute preregistered external workloads with unique cases, paired assignments, complete traces, failure stratification, and independent rerun. |
+| **R4** | **Trust calibration study** | Calibration harness is implemented. | Acquire held-out independently observed outcomes; report missingness, Brier score, ECE, log loss, selective risk, utility, and uncertainty. |
+| **R5** | **Persistence and concurrency study** | SQLite WAL and crash/concurrency harnesses are implemented. | Run the declared multi-worker deployment matrix with restart, ordering, isolation, throughput, latency, and retained failure evidence. |
+| **F5 / R6** | **Probabilistic and Active Inference comparison** | Declared generative-model and decision-loop prototypes are implemented. | Complete held-out calibration and paired policy comparisons without relabeling deterministic scores as probabilities or expected free energy. |
+| **R7** | **Independent replication and promotion** | Dependency-aware orchestration is implemented; the independent study is not run. | Reproduce or reject each candidate result in a separate environment and issue a discrepancy ledger plus signed promotion decision. |
 
 ---
 
-## Medium Items (Empirical Studies & Formalism Crosswalk)
+## Engineering Follow-up
 
 | ID | Title | Scope & Artifacts | Acceptance Criteria |
 |:---|:------|:------------------|:--------------------|
-| **R4** | **Trust Calibration Study Harness** | `src/codomyrmex/colony_kernel/research/calibration_study.py`, `tests/unit/colony_kernel/test_calibration_study.py` | Multi-method calibration analysis (Brier score, ECE, Platt scaling, reliability diagrams) on synthetic and attested traces with formal missingness handling. |
-| **R5** | **Persistence and Concurrency Study Harness** | `src/codomyrmex/colony_kernel/research/concurrency_study.py`, `tests/unit/colony_kernel/test_concurrency_study.py` | Multi-worker concurrent load testing, crash injection across transaction boundaries, WAL persistence verification, and race condition auditing. |
 | **F3** | **Formalism-to-Code Runtime Invariant Crosswalk** | `src/codomyrmex/colony_kernel/invariants.py`, `tests/unit/colony_kernel/test_invariants.py` | Extended runtime invariant predicates validating budget monotonicity, gate decision space closure, consequence trust bounds, and cross-subsystem invariant suites. |
 
 ---
 
-## Minor Items (Typing, Documentation & Performance)
+## Maintenance
 
 | ID | Title | Scope & Artifacts | Acceptance Criteria |
 |:---|:------|:------------------|:--------------------|

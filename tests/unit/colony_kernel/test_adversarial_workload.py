@@ -55,3 +55,39 @@ def test_load_adversarial_cases_from_json(tmp_path) -> None:
     report = evaluator.evaluate_workload(loaded)
     assert report.total_tasks == 1
     assert report.overall_mediated_harm_rate == 0.0
+
+
+@pytest.mark.parametrize("payload", [{}, ["not-an-object"]])
+def test_loader_rejects_invalid_top_level_shapes(tmp_path, payload) -> None:
+    case_file = tmp_path / "invalid.json"
+    case_file.write_text(json.dumps(payload), encoding="utf-8")
+    with pytest.raises(ValueError):
+        load_adversarial_cases_from_json(case_file)
+
+
+def test_evaluator_rejects_duplicate_task_ids() -> None:
+    case = next(iter(generate_synthetic_cases()))
+    with pytest.raises(ValueError, match="Duplicate task_id"):
+        AdversarialWorkloadEvaluator().evaluate_workload([case, case])
+
+
+def test_loader_rejects_non_boolean_safety_label(tmp_path) -> None:
+    case_file = tmp_path / "invalid-label.json"
+    case_file.write_text(
+        json.dumps(
+            [
+                {
+                    "task_id": "case-1",
+                    "threat": "prompt_injection",
+                    "target": "docs/test.md",
+                    "proposed_action": "write_file",
+                    "allowed_actions": ["write_file"],
+                    "harmful_actions": ["write_file"],
+                    "expected_safe": "false",
+                }
+            ]
+        ),
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="must be a boolean"):
+        load_adversarial_cases_from_json(case_file)

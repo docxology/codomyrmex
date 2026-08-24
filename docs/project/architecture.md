@@ -30,6 +30,13 @@ Codomyrmex is designed as a modular, extensible coding workspace that integrates
 - Model Context Protocol (MCP) for standardized AI communication
 - AI-enhanced workflows without vendor lock-in
 
+### 5. Evidence Before Promotion
+
+- Research adapters, executed studies, and promoted claims are distinct states
+- Dependency-aware study orchestration retains failed and blocked tracks
+- Manifests bind source, configuration, inputs, environment, and artifacts
+- Missing external evidence remains visible rather than being inferred from code availability
+
 ## System Architecture
 
 ```mermaid
@@ -185,6 +192,27 @@ The Codomyrmex architecture follows a **layered approach** with clear separation
 - **`privacy`**: Mixnet routing and data sanitization
 
 ## Data Flow Patterns
+
+### Colony Kernel Evidence Flow
+
+```mermaid
+flowchart LR
+    P[Typed proposal] --> K[ColonyKernel]
+    K --> G[Deterministic gate]
+    G --> L[Local lifecycle ledger]
+    L --> E[External observation adapter]
+    E --> B[Adversarial and held-out studies]
+    B --> R[Independent replication]
+    R --> C[Claim promotion decision]
+    E -. unavailable .-> X[Retained failure or block]
+    B -. falsified .-> X
+```
+
+The production control plane and the offline research package are separate.
+`codomyrmex.colony_kernel.research` supplies schemas, adapters, metrics, persistence,
+and a dependency-DAG runner; it does not convert a successful local function call into
+external-effectiveness evidence. The machine-readable roadmap in
+`docs/manuscript/config.yaml` records both implementation status and evidence status.
 
 ### 1. Discovery and Analysis Flow
 
