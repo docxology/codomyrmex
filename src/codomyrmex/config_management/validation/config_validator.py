@@ -432,22 +432,22 @@ class ConfigValidator:
 
         return issues
 
+    _TYPE_MAP = {
+        "str": str,
+        "int": int,
+        "float": float,
+        "bool": bool,
+        "list": list,
+        "dict": dict,
+    }
+
     def _check_type(self, value: Any, expected_type: str) -> bool:
         """Check if value matches expected type."""
-        type_map = {
-            "str": str,
-            "int": int,
-            "float": float,
-            "bool": bool,
-            "list": list,
-            "dict": dict,
-        }
-
         # Handle "any" type - accept everything
         if expected_type == "any":
             return True
 
-        type_class = type_map.get(expected_type)
+        type_class = self._TYPE_MAP.get(expected_type)
         if type_class is not None:
             return isinstance(value, type_class)
 
