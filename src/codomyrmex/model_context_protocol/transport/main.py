@@ -10,6 +10,7 @@ NOT at module import time.
 """
 
 import asyncio
+import importlib
 import logging
 
 from codomyrmex.logging_monitoring import get_logger
@@ -27,9 +28,9 @@ async def run_server() -> None:
     # Configure logging for the MCP server specifically if needed
     logging.basicConfig(level=logging.INFO)
 
-    from codomyrmex.agents.pai.mcp_bridge import create_codomyrmex_mcp_server
+    bridge = importlib.import_module("codomyrmex.agents.pai.mcp_bridge")
 
-    server = create_codomyrmex_mcp_server(
+    server = bridge.create_codomyrmex_mcp_server(
         name="codomyrmex-mcp",
         transport="stdio",
     )

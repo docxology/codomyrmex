@@ -111,13 +111,17 @@ class ExternalActuationAdapter:
         Returns:
             ActuationObservationResult with cryptographic provenance.
         """
-        proposal_id = str(proposal_dict.get("proposal_id", uuid.uuid4().hex))
-        target = str(proposal_dict.get("target", "unknown"))
-        action = str(proposal_dict.get("action", "unknown"))
+        proposal_id = str(proposal_dict.get("proposal_id") or uuid.uuid4().hex)
+        normalized_proposal = dict(proposal_dict)
+        normalized_proposal["proposal_id"] = proposal_id
+        target = str(normalized_proposal.get("target", "unknown"))
+        action = str(normalized_proposal.get("action", "unknown"))
 
         # 1. Record proposal event
         try:
-            prop_event = self.ledger.record_proposal(run_id, actor_id, proposal_dict)
+            prop_event = self.ledger.record_proposal(
+                run_id, actor_id, normalized_proposal
+            )
         except LedgerError as err:
             return ActuationObservationResult(
                 run_id=run_id,

@@ -7,7 +7,6 @@ The upstream context_references module is imported from the same checkout as
 Tests cover:
 - parse_context_references(): token parsing
 - _strip_trailing_punctuation(): punctuation handling
-- _remove_reference_tokens(): token removal from message
 - _is_binary_file(): binary detection
 - preprocess_context_references_async(): end-to-end expansion
 """
@@ -179,45 +178,6 @@ class TestStripTrailingPunctuation:
 
 
 # ---------------------------------------------------------------------------
-# _remove_reference_tokens()
-# ---------------------------------------------------------------------------
-
-
-class TestRemoveReferenceTokens:
-    """Reference tokens removed cleanly from the parent message."""
-
-    def test_single_token_removed(self):
-        ctx = _import_ctx()
-        refs = ctx.parse_context_references("Show me @diff please")
-        result = ctx._remove_reference_tokens("Show me @diff please", refs)
-        assert "@diff" not in result
-        assert "Show me" in result
-        assert "please" in result
-
-    def test_multiple_tokens_removed(self):
-        ctx = _import_ctx()
-        msg = "Look at @file:a.py and @diff"
-        refs = ctx.parse_context_references(msg)
-        result = ctx._remove_reference_tokens(msg, refs)
-        assert "@file:" not in result
-        assert "@diff" not in result
-
-    def test_no_tokens_returns_unchanged(self):
-        ctx = _import_ctx()
-        msg = "Just a normal message."
-        refs = ctx.parse_context_references(msg)
-        result = ctx._remove_reference_tokens(msg, refs)
-        assert result.strip() == msg.strip()
-
-    def test_double_spaces_collapsed(self):
-        ctx = _import_ctx()
-        msg = "See @file:x.py for info"
-        refs = ctx.parse_context_references(msg)
-        result = ctx._remove_reference_tokens(msg, refs)
-        assert "  " not in result  # no double spaces
-
-
-# ---------------------------------------------------------------------------
 # _is_binary_file()
 # ---------------------------------------------------------------------------
 
@@ -287,6 +247,7 @@ class TestPreprocessContextReferencesAsync:
         )
         assert result.expanded is True
         assert result.blocked is False
+        assert f"@file:{f}" in result.message
         assert "greet" in result.message
         assert "Attached Context" in result.message
 

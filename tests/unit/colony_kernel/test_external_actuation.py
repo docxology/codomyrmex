@@ -105,3 +105,24 @@ def test_gate_refusal_prevents_actuation_execution(tmp_path) -> None:
     assert result.witness is None
     assert executed is False
     assert result.verified is True
+
+
+def test_missing_proposal_id_is_generated_and_attested(tmp_path) -> None:
+    ledger = AttestationLedger(
+        tmp_path / "attestation.db",
+        signer=HMACSigner(secret_key=b"test_secret_key_16bytes_min"),
+    )
+    adapter = ExternalActuationAdapter(ledger)
+
+    result = adapter.observe_and_record(
+        run_id="run-generated-id",
+        proposal_dict={"target": "src/example.py", "action": "inspect"},
+        gate_verdict="refuse",
+        gate_metadata={"score": 0.1},
+        executor_fn=lambda: (0, "", ""),
+    )
+
+    proposal_event = ledger.events("run-generated-id")[0]
+    assert result.proposal_id
+    assert proposal_event.payload["proposal_id"] == result.proposal_id
+    assert result.verified is True
