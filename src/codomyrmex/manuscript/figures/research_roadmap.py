@@ -120,7 +120,7 @@ def fig_research_roadmap() -> None:
             status.upper(),
             ha="left",
             va="center",
-            fontsize=8.2,
+            fontsize=7.2,
             color="white",
             fontweight="bold",
             bbox={
@@ -131,9 +131,9 @@ def fig_research_roadmap() -> None:
         )
         artifact = "Required evidence: " + stage["artifact"]
         ax.text(
-            0.30,
+            0.36,
             y - 0.08,
-            textwrap.fill(artifact, width=62),
+            textwrap.fill(artifact, width=56),
             ha="left",
             va="center",
             fontsize=7.5,
