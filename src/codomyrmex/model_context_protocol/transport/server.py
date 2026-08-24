@@ -18,6 +18,10 @@ from codomyrmex.model_context_protocol.schemas.mcp_schemas import (
     MCPToolRegistry,
 )
 
+# Optimization: Hoisted from tool decorator to avoid dictionary creation on every parameter inspection.
+# Impact: Marginally reduces latency during server tool initialization.
+_TYPE_MAP = {str: "string", int: "integer", float: "number", bool: "boolean"}
+
 
 @dataclass
 class MCPServerConfig:
@@ -168,7 +172,6 @@ class MCPServer:
 
             properties = {}
             required = []
-            type_map = {str: "string", int: "integer", float: "number", bool: "boolean"}
 
             for pname, param in sig.parameters.items():
                 if pname in ("self", "cls"):
@@ -176,7 +179,7 @@ class MCPServer:
 
                 ptype = hints.get(pname, str)
                 properties[pname] = {
-                    "type": type_map.get(ptype, "string"),
+                    "type": _TYPE_MAP.get(ptype, "string"),
                     "description": f"{pname} parameter",
                 }
                 if param.default == inspect.Parameter.empty:

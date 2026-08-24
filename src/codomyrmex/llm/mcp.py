@@ -17,6 +17,18 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 
+# Optimization: Hoisted from register_tool_from_function to prevent dictionary re-allocation.
+# Impact: Improves performance when registering multiple tools programmatically.
+_TYPE_MAP = {
+    str: "string",
+    int: "integer",
+    float: "number",
+    bool: "boolean",
+    list: "array",
+    dict: "object",
+}
+
+
 class MCPCapability(Enum):
     """MCP server capabilities."""
 
@@ -129,21 +141,12 @@ class MCPBridge:
         properties = {}
         required = []
 
-        type_map = {
-            str: "string",
-            int: "integer",
-            float: "number",
-            bool: "boolean",
-            list: "array",
-            dict: "object",
-        }
-
         for param_name, param in sig.parameters.items():
             if param_name in ("self", "cls"):
                 continue
 
             python_type = type_hints.get(param_name, str)
-            json_type = type_map.get(python_type, "string")
+            json_type = _TYPE_MAP.get(python_type, "string")
 
             properties[param_name] = {
                 "type": json_type,
