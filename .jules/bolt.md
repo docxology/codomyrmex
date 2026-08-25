@@ -9,6 +9,7 @@
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
 
+
 ## 2026-08-25 - Replace O(N) LRU cache with O(1) OrderedDict
 **Learning:** Implementing an LRU cache using a dictionary and a separate list for access order results in O(N) performance due to list removals.
 **Action:** Use `collections.OrderedDict` with `.move_to_end()` and `.popitem(last=False)` to implement LRU caches with O(1) operations.
