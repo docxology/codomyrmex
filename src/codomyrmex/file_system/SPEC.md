@@ -1,7 +1,7 @@
 # File System Module SPEC
 
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: May 2026
 
 ## Overview
 The `file_system` module provides a comprehensive, high-level interface for file and directory operations within the Codomyrmex ecosystem. It aims to simplify common FS tasks with a consistent API, prioritizing safety, efficiency, and clarity.

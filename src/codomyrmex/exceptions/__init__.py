@@ -102,6 +102,7 @@ from .orchestration import (
 
 # Specialized Domain Exceptions
 from .specialized import (
+    RequestedBackendUnavailable,
     ArtifactError,
     AuthenticationError,
     BulkheadFullError,
@@ -206,6 +207,7 @@ __all__ = [
     "PhysicalManagementError",
     "PlottingError",
     "PluginError",
+    "RequestedBackendUnavailable",
     "ProjectManagementError",
     "RepositoryError",
     "ResourceError",

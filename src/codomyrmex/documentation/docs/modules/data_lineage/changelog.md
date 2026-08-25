@@ -1,4 +1,4 @@
-# Changelog for [Module Name]
+# Changelog for Data Lineage
 
 All notable changes to this module will be documented in this file.
 

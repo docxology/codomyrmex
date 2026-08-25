@@ -1,7 +1,7 @@
 # Pi Coding Agent
 
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 **Module**: `codomyrmex.agents.pi` | **Category**: CLI-based | **Version**: v1.0.0 | **Last Updated**: March 2026
 

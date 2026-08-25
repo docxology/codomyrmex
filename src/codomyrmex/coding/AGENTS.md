@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/coding
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Code generation, review, debugging, refactoring, pattern matching, and sandbox execution. Static analysis integration and security scanning capabilities.

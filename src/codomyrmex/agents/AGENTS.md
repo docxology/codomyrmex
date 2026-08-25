@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/agents
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 LLM provider integrations and agent implementations for Claude, Codex, Gemini, OpenAI, and other AI providers. Handles API communication, tool orchestration, and provider-specific features.

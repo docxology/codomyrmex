@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/networking
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Network utilities, service discovery, and distributed communication protocols.

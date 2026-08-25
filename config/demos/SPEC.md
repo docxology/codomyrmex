@@ -1,7 +1,7 @@
 # SPEC — config/demos
 
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 YAML schema for demos module settings: logging, performance, and feature toggles. Authoritative field semantics live with `src/codomyrmex/demos/` loaders.
 

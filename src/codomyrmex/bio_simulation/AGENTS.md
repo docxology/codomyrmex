@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/bio_simulation
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Biological simulation with cellular automata, reactor modeling, and agent-based biological systems.

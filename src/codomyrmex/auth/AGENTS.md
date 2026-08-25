@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/auth
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Authentication and authorization with credential rotation, session management, and provider-specific auth flows.

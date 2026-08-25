@@ -1,7 +1,7 @@
 # free_apis
 
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: May 2026
 
 Structured index and HTTP client for the [public-apis](https://github.com/public-apis/public-apis) catalogue — ~1 400 free, publicly accessible APIs organised by category.
 

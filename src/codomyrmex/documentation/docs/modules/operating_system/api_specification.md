@@ -1,6 +1,6 @@
 # Operating System - API Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## 1. Overview
 The `operating_system` module provides cross-platform OS abstraction with auto-detection and platform-specific providers for macOS, Linux, and Windows. Zero external dependencies — uses `subprocess` and native OS commands.

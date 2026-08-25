@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/evolutionary_ai
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Evolutionary algorithms with genetic programming, fitness optimization, and population management.

@@ -1,6 +1,6 @@
 # Codomyrmex Agents — tests/unit/security/secrets_tests
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 ## Purpose
 Tests for `codomyrmex.security.secrets`. The folder is named **`secrets_tests`** (not `secrets`) so that when `tests/unit/security` appears on `sys.path`, `import secrets` still resolves to the **stdlib** module (NumPy and others require `secrets.randbits`).

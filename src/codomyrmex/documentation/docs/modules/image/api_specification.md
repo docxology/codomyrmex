@@ -1,6 +1,6 @@
 # Image - API Specification
 
-**Version**: v0.1.0 | **Status**: Reserved | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Reserved | **Last Updated**: March 2026
 
 ## 1. Overview
 The `image` module is a reserved namespace for image processing, analysis, and format operations. Image generation lives in `codomyrmex.multimodal`; this module focuses on metadata extraction and format information.

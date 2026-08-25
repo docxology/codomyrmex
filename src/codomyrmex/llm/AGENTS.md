@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/llm
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 LLM inference, chain orchestration, RAG pipelines, guardrails, and multi-provider abstraction layer. Supports Ollama, MLX, fabric, and custom model runners.

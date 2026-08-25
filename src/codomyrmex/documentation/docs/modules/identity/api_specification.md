@@ -1,4 +1,4 @@
-# [Module Name] - API Specification
+# Identity - API Specification
 
 ## Introduction
 

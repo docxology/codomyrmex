@@ -161,6 +161,22 @@ class AutonomousAgent:
                 raise RuntimeError("provider returned an empty response")
             self.send(reply)
 
+            # CHECKPOINT PRODUCER SITE:
+            # Uncomment the following to save a checkpoint after each response.
+            # See agents/transport/checkpoint.py for the full producer snippet.
+            #
+            # from codomyrmex.agents.transport.checkpoint import Checkpoint
+            # from codomyrmex.agents.transport.serializer import AgentSerializer
+            # serializer = AgentSerializer()
+            # snapshot = serializer.snapshot(
+            #     agent_id=self.identity,
+            #     agent_type="AutonomousAgent",
+            #     config={"persona": self.persona, "channel": self.channel},
+            #     memory={"last_reply": reply},
+            # )
+            # ckpt = Checkpoint(snapshot=snapshot)
+            # ckpt.save(f"/tmp/codomyrmex-{self.identity}-checkpoint.json")
+
             if self._scheduler is not None:
                 self._scheduler.record_success()
 

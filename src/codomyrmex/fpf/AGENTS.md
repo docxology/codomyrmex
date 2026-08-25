@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/fpf
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Free energy principle computations and active inference implementations.

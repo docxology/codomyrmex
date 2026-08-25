@@ -428,19 +428,38 @@ def run_shell_command(
     env: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     """
-    Execute a shell command safely.
+    Execute an arbitrary shell command with the caller's full environment.
+
+    WARNING: This tool runs ``shell=True`` with the full inherited environment,
+    no command allowlist/denylist, and only path-level cwd constraints.
+    It is gated at the TRUSTED security tier and should only be exposed to
+    verified callers.  Environment variables matching ``*_API_KEY``, ``*_TOKEN``,
+    ``*_SECRET*``, ``*_PASSWORD``, ``AWS_*``, ``AZURE_*``, ``GCP_*``,
+    ``OPENAI_*``, ``ANTHROPIC_*``, or ``COHERE_*`` are stripped unless
+    explicitly overridden via the ``env`` parameter.
 
     Args:
         command: Command to execute
         cwd: Working directory
         timeout: Timeout in seconds
-        env: Additional environment variables
+        env: Additional environment variables (sensitive defaults stripped)
 
     Returns:
         dict with stdout, stderr, and exit code
     """
     try:
         cmd_env = os.environ.copy()
+        # Strip sensitive environment variables unless explicitly overridden.
+        # This reduces the blast radius of a shell injection even at TRUSTED tier.
+        _STRIP_PATTERNS = (
+            "_API_KEY", "_TOKEN", "_SECRET", "_PASSWORD",
+            "AWS_", "AZURE_", "GCP_", "OPENAI_", "ANTHROPIC_", "COHERE_",
+        )
+        _overrides = set(env.keys()) if env else set()
+        for _key in list(cmd_env.keys()):
+            if any(p in _key.upper() for p in _STRIP_PATTERNS):
+                if _key not in _overrides:
+                    del cmd_env[_key]
         if env:
             cmd_env.update(env)
 

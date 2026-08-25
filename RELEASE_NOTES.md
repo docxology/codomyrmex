@@ -2,6 +2,9 @@
 
 **Current package version:** [pyproject.toml](pyproject.toml) (v1.3.0). For the full changelog see [CHANGELOG.md](CHANGELOG.md). The section below summarizes the historical **v1.2.3** “Coherence Release”.
 
+> **Current state (v1.3.0):** coverage `fail_under` gate raised to **60%** in pyproject.toml:401 and CI. The v1.2.3 gate described below was 40% and was superseded.
+
+
 ## Codomyrmex v1.2.3 — "Coherence Release"
 
 ### Overview

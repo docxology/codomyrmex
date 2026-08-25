@@ -1,6 +1,6 @@
 # Codex (OpenAI)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: June 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 **Module**: `codomyrmex.agents.codex` | **Category**: API-based
 

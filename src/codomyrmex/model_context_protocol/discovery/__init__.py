@@ -413,6 +413,7 @@ def mcp_tool(
     tags: list[str] | None = None,
     version: str = "1.0",
     requires: list[str] | None = None,
+    destructive: bool | None = None,
 ) -> Callable[..., Any]:
     """Decorator to mark a function as an MCP tool.
 
@@ -422,6 +423,8 @@ def mcp_tool(
         tags: list of tags for classification.
         version: Semantic version string.
         requires: list of importable package names required by this tool.
+        destructive: Whether the tool can produce side effects (write/execute).
+                      ``None`` = use default classification from trust_metadata.
                   If any are missing, the tool will be registered as unavailable.
     """
 
@@ -455,6 +458,7 @@ def mcp_tool(
             "parameters": params,
             "version": version,
             "requires": requires or [],
+            "destructive": destructive,
         }
         return func
 

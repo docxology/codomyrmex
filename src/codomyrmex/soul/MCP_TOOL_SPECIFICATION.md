@@ -1,6 +1,6 @@
 # soul — MCP Tool Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 This module exposes **5 MCP tools** via the `@mcp_tool` decorator, auto-discovered by the PAI MCP bridge.
 

@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/deployment
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Deployment automation with health checks, rollback management, and multi-environment support.

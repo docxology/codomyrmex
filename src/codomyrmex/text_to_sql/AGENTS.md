@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/text_to_sql
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Natural language to SQL query generation with schema awareness and validation.

@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/feature_flags
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Feature flag management with percentage rollouts and A/B testing support.

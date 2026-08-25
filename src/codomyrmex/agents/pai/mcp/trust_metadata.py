@@ -18,6 +18,24 @@ EXPLICIT_DESTRUCTIVE_TOOLS: frozenset[str] = frozenset(
     }
 )
 
+# Tools explicitly declared safe.  Because the default for dynamically
+# discovered tools is DESTRUCTIVE (fail-closed), any tool not in this list
+# or in EXPLICIT_DESTRUCTIVE_TOOLS is treated as destructive.
+EXPLICIT_SAFE_TOOLS: frozenset[str] = frozenset(
+    {
+        "codomyrmex.read_file",
+        "codomyrmex.list_directory",
+        "codomyrmex.search_codebase",
+        "codomyrmex.git_status",
+        "codomyrmex.git_diff",
+        "codomyrmex.json_query",
+        "codomyrmex.checksum_file",
+        "codomyrmex.get_package_version",
+        "codomyrmex.tool_list_modules",
+        "codomyrmex.tool_module_info",
+    }
+)
+
 DESTRUCTIVE_TOOL_NAME_PATTERNS: frozenset[str] = frozenset(
     {
         # VCS, deployment, and external-communication verbs are side effects
@@ -67,8 +85,16 @@ DESTRUCTIVE_TOOL_NAME_PATTERNS: frozenset[str] = frozenset(
 
 
 def is_destructive_tool(tool_name: str) -> bool:
-    """Return whether a canonical MCP tool name needs elevated trust."""
+    """Return whether a canonical MCP tool name needs elevated trust.
+
+    Default is ``True`` (destructive/fail-closed).  A tool is classified as
+    *safe* only when it appears in ``EXPLICIT_SAFE_TOOLS``.  The name-pattern
+    heuristic in ``DESTRUCTIVE_TOOL_NAME_PATTERNS`` is a *warning* fallback
+    only — it never downgrades a tool from destructive to safe.
+    """
     if not isinstance(tool_name, str):
+        return True  # fail-closed: unclassifiable → destructive
+    if tool_name in EXPLICIT_SAFE_TOOLS:
         return False
     if tool_name in EXPLICIT_DESTRUCTIVE_TOOLS:
         return True
@@ -76,11 +102,17 @@ def is_destructive_tool(tool_name: str) -> bool:
     # classification must not become fail-open merely because the name has no
     # module prefix.
     function_name = tool_name.rsplit(".", 1)[-1].lower()
-    return any(pattern in function_name for pattern in DESTRUCTIVE_TOOL_NAME_PATTERNS)
+    # Pattern match is advisory: if the name *does* match a destructive
+    # pattern, confirm it.  If it does NOT match, the safe-by-default
+    # behaviour is eliminated — we still return True (destructive).
+    if any(pattern in function_name for pattern in DESTRUCTIVE_TOOL_NAME_PATTERNS):
+        return True
+    return True  # default: destructive by default
 
 
 __all__ = [
     "DESTRUCTIVE_TOOL_NAME_PATTERNS",
     "EXPLICIT_DESTRUCTIVE_TOOLS",
+    "EXPLICIT_SAFE_TOOLS",
     "is_destructive_tool",
 ]

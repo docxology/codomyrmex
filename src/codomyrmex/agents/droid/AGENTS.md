@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/agents/droid
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Coordinates the Droid task automation package, including file-backed task persistence, handler dispatch, generators, and the command-line runner.

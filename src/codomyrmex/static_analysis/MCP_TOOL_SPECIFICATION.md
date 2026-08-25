@@ -1,6 +1,6 @@
 # Static Analysis Module — MCP Tool Specification
 
-**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: February 2026
+**Version**: v1.3.0 | **Status**: Stable | **Last Updated**: February 2026
 
 ## Overview
 

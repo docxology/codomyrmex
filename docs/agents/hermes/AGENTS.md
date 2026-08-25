@@ -1,7 +1,7 @@
 # Hermes Documentation — Agent Coordination
 
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 **Module**: `docs/agents/hermes/` | **Version**: v0.4.0 | **Last Updated**: March 2026 (73-commit update + v0.4.0)
 

@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/model_context_protocol
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 MCP server and client implementation for tool discovery, registration, and invocation. Enables standardized tool communication across agents.
