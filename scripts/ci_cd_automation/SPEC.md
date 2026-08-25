@@ -1,7 +1,7 @@
 # Ci Cd Automation Specification
 
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 ## 1. Functional Requirements
 The `ci_cd_automation` module must:

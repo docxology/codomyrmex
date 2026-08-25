@@ -4,8 +4,8 @@ This document serves as a template for defining tools within the `Market` module
 
 **Instructions for Use:**
 1.  Replace `Market` in the title above and throughout this document with the actual name of your module.
-2.  For each tool you define, copy the "Tool: `market_tool`" section.
-3.  Replace all bracketed placeholders (e.g., `market_tool`, `[Brief description...]`, `[ParameterName]`, `[DataType]`, etc.) with specific details for your tool.
+2.  For each tool you define, copy the "Tool: `market_create_auction`" section.
+3.  Replace all bracketed placeholders (e.g., `market_create_auction`, `[Brief description...]`, `[ParameterName]`, `[DataType]`, etc.) with specific details for your tool.
 4.  Provide concrete examples for Input/Output schemas and MCP usage.
 5.  If a section (like Idempotency or specific Security Considerations beyond general file path validation) is not applicable, clearly state "N/A" or provide a relevant explanation.
 6.  Refer to the `model_context_protocol` module's documentation for overarching MCP guidelines and schema definitions.
@@ -19,15 +19,15 @@ This document serves as a template for defining tools within the `Market` module
 
 ---
 
-## Tool: `market_tool`
+## Tool: `market_create_auction`
 
 ### 1. Tool Purpose and Description
 
-[Brief description of what the tool does, its primary function, and its intended use case within the MCP framework.]
+Reverse auction and demand aggregation via MCP tools
 
 ### 2. Invocation Name
 
-`[your_tool_invocation_name]`
+`market_create_auction`
 (This should be a unique, descriptive name, typically in snake_case, used to call the tool via MCP.)
 
 ### 3. Input Schema (Parameters)
@@ -80,7 +80,7 @@ Provide one or more examples of how this tool would be invoked within an MCP mes
 
 ```json
 {
-  "tool_name": "[your_tool_invocation_name]",
+  "tool_name": "market_create_auction",
   "arguments": {
     "[Parameter1Name]": "[ExampleValue1]",
     "[Parameter2Name]": "[ExampleValue2]"
@@ -98,4 +98,4 @@ Provide one or more examples of how this tool would be invoked within an MCP mes
 - **File Paths**: (If `output_path` or similar is used) "Ensure that any user-supplied file paths are rigorously validated and restricted to designated writable directories to prevent unauthorized file access, overwrites, or path traversal vulnerabilities. The application running the MCP tool server must operate with appropriate, least-privilege file system permissions."
 
 ---
-<!-- Add more tool specifications below by copying the "Tool: `market_tool`" section. --> 
+<!-- Add more tool specifications below by copying the "Tool: `market_create_auction`" section. --> 

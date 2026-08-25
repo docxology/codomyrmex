@@ -1,4 +1,4 @@
-# [Module Name] - Usage Examples
+# Market - Usage Examples
 
 ## Example 1: Basic Usage
 

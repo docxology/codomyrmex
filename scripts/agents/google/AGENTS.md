@@ -1,7 +1,7 @@
 # Codomyrmex Scripts Agents Google Coordination
 
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 **Parent**: [`scripts/agents/AGENTS.md`](../AGENTS.md)
 **Focus**: Google AI Integration Scripts

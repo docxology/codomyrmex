@@ -27,7 +27,7 @@ This document serves as a template for defining tools within the `Market` module
 
 ### 2. Invocation Name
 
-`[your_tool_invocation_name]`
+`market_create_auction`
 (This should be a unique, descriptive name, typically in snake_case, used to call the tool via MCP.)
 
 ### 3. Input Schema (Parameters)
@@ -80,7 +80,7 @@ Provide one or more examples of how this tool would be invoked within an MCP mes
 
 ```json
 {
-  "tool_name": "[your_tool_invocation_name]",
+  "tool_name": "market_create_auction",
   "arguments": {
     "[Parameter1Name]": "[ExampleValue1]",
     "[Parameter2Name]": "[ExampleValue2]"

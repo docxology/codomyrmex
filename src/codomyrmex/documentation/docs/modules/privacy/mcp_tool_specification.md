@@ -23,11 +23,11 @@ This document serves as a template for defining tools within the `Privacy` modul
 
 ### 1. Tool Purpose and Description
 
-[Brief description of what the tool does, its primary function, and its intended use case within the MCP framework.]
+Data sanitization, blacklist management, and noise generation via MCP
 
 ### 2. Invocation Name
 
-`[your_tool_invocation_name]`
+`privacy_scrub`
 (This should be a unique, descriptive name, typically in snake_case, used to call the tool via MCP.)
 
 ### 3. Input Schema (Parameters)
@@ -80,7 +80,7 @@ Provide one or more examples of how this tool would be invoked within an MCP mes
 
 ```json
 {
-  "tool_name": "[your_tool_invocation_name]",
+  "tool_name": "privacy_scrub",
   "arguments": {
     "[Parameter1Name]": "[ExampleValue1]",
     "[Parameter2Name]": "[ExampleValue2]"

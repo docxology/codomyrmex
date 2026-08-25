@@ -1,7 +1,7 @@
 # SPEC — scripts/calendar_integration
 
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 ## Purpose
 Signpost and optional automation for `calendar_integration`. Extend this file when public script CLIs or stable entry points are added.
