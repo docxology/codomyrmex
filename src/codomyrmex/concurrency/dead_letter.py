@@ -46,7 +46,7 @@ class DeadLetterQueue:
             >>> dlq = DeadLetterQueue("/tmp/my-dlq.jsonl")
         """
         self._path = Path(path)
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
         self._replay_lock = threading.Lock()
         self._active_replays: set[str] = set()
         self._path.parent.mkdir(parents=True, exist_ok=True)
@@ -129,6 +129,11 @@ class DeadLetterQueue:
         with self._lock:
             if not self._path.exists():
                 return entries
+
+            # Reconcile stale in-progress replays before building the list
+            if reconcile_stale:
+                self._reconcile_stale_replays()
+
             for line in self._path.read_text(encoding="utf-8").splitlines():
                 if not line.strip():
                     continue
@@ -136,7 +141,7 @@ class DeadLetterQueue:
                     entry = json.loads(line)
                 except json.JSONDecodeError:
                     continue
-                if not include_replayed and entry.get("replayed"):
+                if not include_replayed and (entry.get("replayed") or entry.get("replay_failed")):
                     continue
                 if operation and entry.get("operation") != operation:
                     continue
@@ -145,12 +150,6 @@ class DeadLetterQueue:
                     if ts < since.isoformat():
                         continue
                 entries.append(entry)
-
-        # Reconcile stale in-progress replays: entries marked replay_in_progress
-        # but not replayed, with no active replay session, are stale (crash
-        # between callback and _mark_replayed). Mark them as replay_failed.
-        if reconcile_stale:
-            self._reconcile_stale_replays()
 
         return entries
 

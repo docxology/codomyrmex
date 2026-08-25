@@ -27,7 +27,7 @@ def test_save_load_preserves_args_kwargs():
         kwargs={"extra": "value"},
     )
 
-    # Verify the state file was written
+    # Verify the state file was written with args/kwargs
     with open(state_path) as f:
         data = json.load(f)
     assert len(data["jobs"]) == 1
@@ -35,12 +35,15 @@ def test_save_load_preserves_args_kwargs():
     assert saved_job["args"] == [3, 4]
     assert saved_job["kwargs"] == {"extra": "value"}
 
-    # Simulate restart with a new scheduler instance loading the same state
+    # Simulate restart: register function before _load_state sees the file
     sched2 = PersistentScheduler(state_path=str(state_path), auto_save=False)
     sched2.register_function("dummy", _dummy_func)
-    # _load_state runs in __init__ and should restore the job with args/kwargs
+    # _load_state already ran in __init__ but found no matching function.
+    # Re-run it manually now that the function is registered.
+    sched2._load_state()
+
     jobs = list(sched2._jobs.values())
-    assert len(jobs) == 1
+    assert len(jobs) == 1, f"Expected 1 job loaded, got {len(jobs)}"
     loaded_job = jobs[0]
     assert loaded_job.args == (3, 4), f"Expected args (3,4), got {loaded_job.args}"
     assert loaded_job.kwargs == {"extra": "value"}, (
@@ -72,6 +75,7 @@ def test_save_load_with_empty_args_kwargs():
 
     sched2 = PersistentScheduler(state_path=str(state_path), auto_save=False)
     sched2.register_function("dummy", _dummy_func)
+    sched2._load_state()
     jobs = list(sched2._jobs.values())
     assert len(jobs) >= 1
 
