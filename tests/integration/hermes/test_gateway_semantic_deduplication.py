@@ -86,4 +86,4 @@ def test_execution_tool_integration(monkeypatch):
     stdout = res["stdout"]
 
     # First, compression takes it down drastically
-    # assert "... [Line repeated" in stdout
+    # pass # assert "... [Line repeated" in stdout
