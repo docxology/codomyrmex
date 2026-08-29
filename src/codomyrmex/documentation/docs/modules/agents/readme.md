@@ -27,7 +27,6 @@ Module implementation, resources, and local coordination for Agents.
 - `deepseek/` – Subdirectory
 - `droid/` – Subdirectory
 - `editing_loop.py` – File
-- `education.py` – File
 - `evaluation/` – Subdirectory
 - `every_code/` – Subdirectory
 - `gemini/` – Subdirectory
@@ -52,6 +51,7 @@ Module implementation, resources, and local coordination for Agents.
 - `orchestrator.py` – File
 - `pai/` – Subdirectory
 - `perplexity/` – Subdirectory
+- `paperclip/` – Subdirectory
 - `planner/` – Subdirectory
 - `pooling/` – Subdirectory
 - `py.typed` – File

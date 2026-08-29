@@ -20,6 +20,7 @@ Validation coverage, fixtures, and regression checks for Security.
 - `test_compliance_report.py` – Project file
 - `test_dashboard.py` – Project file
 - `test_governance.py` – Project file
+- `test_mcp_security.py` – Project file
 - `test_mcp_tools.py` – Project file
 - `test_permissions.py` – Project file
 - `test_risk_assessment.py` – Project file
@@ -55,6 +56,7 @@ Validation coverage, fixtures, and regression checks for Security.
 - `test_compliance_report.py`
 - `test_dashboard.py`
 - `test_governance.py`
+- `test_mcp_security.py`
 - `test_mcp_tools.py`
 - `test_permissions.py`
 - `test_risk_assessment.py`

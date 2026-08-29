@@ -1,26 +1,28 @@
 # security
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: August 2026
 
 ## Overview
 
 Validation coverage, fixtures, and regression checks for Security.
 
 ## Directory Contents
+- `AGENTS.md` – File
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
-- `audit/` – Subdirectory
-- `compliance/` – Subdirectory
-- `integration/` – Subdirectory
-- `scanning/` – Subdirectory
-- `secrets/` – Subdirectory
+- `audit` – Subdirectory
+- `compliance` – Subdirectory
+- `integration` – Subdirectory
+- `scanning` – Subdirectory
+- `secrets_tests` – Subdirectory
 - `test_architecture_patterns.py` – File
 - `test_audit_trail.py` – File
 - `test_best_practices.py` – File
 - `test_compliance_report.py` – File
 - `test_dashboard.py` – File
 - `test_governance.py` – File
+- `test_mcp_security.py` – File
 - `test_mcp_tools.py` – File
 - `test_permissions.py` – File
 - `test_risk_assessment.py` – File
@@ -36,8 +38,8 @@ Validation coverage, fixtures, and regression checks for Security.
 - `test_threat_modeling.py` – File
 - `test_vulnerability_scanner.py` – File
 - `test_vulnerability_scanner_impl.py` – File
-- `theory/` – Subdirectory
-- `unit/` – Subdirectory
+- `theory` – Subdirectory
+- `unit` – Subdirectory
 
 ## Navigation
 - **Parent Directory**: [unit](../README.md)

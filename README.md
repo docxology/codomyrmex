@@ -219,144 +219,144 @@ graph TB
 
 | Module | Py | Tests | Docs | Config | Scripts | Description |
 |:---|:---:|:---:|:---:|:---:|:---:|:---|
-| [`agents`](src/codomyrmex/agents/) | 168 | 83 | [📖](docs/modules/agents/) | [⚙️](config/agents/config.yaml) | [📜](scripts/agents/) | Multi-provider agent framework (Gemini, Claude, OpenAI, Jules) |
-| [`cerebrum`](src/codomyrmex/cerebrum/) | 32 | 13 | [📖](docs/modules/cerebrum/) | [⚙️](config/cerebrum/config.yaml) | [📜](scripts/cerebrum/) | Cognitive reasoning engine with chain-of-thought & decision trees |
-| [`llm`](src/codomyrmex/llm/) | 41 | 20 | [📖](docs/modules/llm/) | [⚙️](config/llm/config.yaml) | [📜](scripts/llm/) | LLM subsystem with OpenRouter, Gemini 2.5 Pro, streaming |
-| [`orchestrator`](src/codomyrmex/orchestrator/) | 46 | 20 | [📖](docs/modules/orchestrator/) | [⚙️](config/orchestrator/config.yaml) | [📜](scripts/orchestrator/) | Workflow engine, pipeline execution, parallel orchestration |
-| [`model_context_protocol`](src/codomyrmex/model_context_protocol/) | 27 | 9 | [📖](docs/modules/model_context_protocol/) | [⚙️](config/model_context_protocol/config.yaml) | [📜](scripts/model_context_protocol/) | MCP tool server, bridge, and protocol implementation |
-| [`prompt_engineering`](src/codomyrmex/prompt_engineering/) | 10 | 7 | [📖](docs/modules/prompt_engineering/) | [⚙️](config/prompt_engineering/config.yaml) | [📜](scripts/prompt_engineering/) | Template management, prompt optimization, few-shot patterns |
-| [`skills`](src/codomyrmex/skills/) | 22 | 11 | [📖](docs/modules/skills/) | [⚙️](config/skills/config.yaml) | [📜](scripts/skills/) | Extensible skill registry and execution engine |
-| [`colony_kernel`](src/codomyrmex/colony_kernel/) | 13 | 13 | [📖](docs/modules/colony_kernel/) | [⚙️](config/colony_kernel/) | — | Stigmergic colony control plane: pheromone field, actuation gate, consequence memory, role/trust adaptation |
+| [`agents`](src/codomyrmex/agents/) | 285 | 154 | [📖](docs/modules/agents/) | [⚙️](config/agents/config.yaml) | [📜](scripts/agents/) | Multi-provider agent framework (Gemini, Claude, OpenAI, Jules) |
+| [`cerebrum`](src/codomyrmex/cerebrum/) | 37 | 16 | [📖](docs/modules/cerebrum/) | [⚙️](config/cerebrum/config.yaml) | [📜](scripts/cerebrum/) | Cognitive reasoning engine with chain-of-thought & decision trees |
+| [`llm`](src/codomyrmex/llm/) | 65 | 38 | [📖](docs/modules/llm/) | [⚙️](config/llm/config.yaml) | [📜](scripts/llm/) | LLM subsystem with OpenRouter, Gemini 2.5 Pro, streaming |
+| [`orchestrator`](src/codomyrmex/orchestrator/) | 66 | 24 | [📖](docs/modules/orchestrator/) | [⚙️](config/orchestrator/config.yaml) | [📜](scripts/orchestrator/) | Workflow engine, pipeline execution, parallel orchestration |
+| [`model_context_protocol`](src/codomyrmex/model_context_protocol/) | 29 | 15 | [📖](docs/modules/model_context_protocol/) | [⚙️](config/model_context_protocol/config.yaml) | [📜](scripts/model_context_protocol/) | MCP tool server, bridge, and protocol implementation |
+| [`prompt_engineering`](src/codomyrmex/prompt_engineering/) | 10 | 12 | [📖](docs/modules/prompt_engineering/) | [⚙️](config/prompt_engineering/config.yaml) | [📜](scripts/prompt_engineering/) | Template management, prompt optimization, few-shot patterns |
+| [`skills`](src/codomyrmex/skills/) | 26 | 17 | [📖](docs/modules/skills/) | [⚙️](config/skills/config.yaml) | [📜](scripts/skills/) | Extensible skill registry and execution engine |
+| [`colony_kernel`](src/codomyrmex/colony_kernel/) | 43 | 26 | [📖](docs/modules/colony_kernel/) | [⚙️](config/colony_kernel/) | — | Stigmergic colony control plane: pheromone field, actuation gate, consequence memory, role/trust adaptation |
 
 ### 🤖 AI & Machine Learning Modules
 
 | Module | Py | Tests | Docs | Config | Scripts | Description |
 |:---|:---:|:---:|:---:|:---:|:---:|:---|
-| [`coding`](src/codomyrmex/coding/) | 71 | 18 | [📖](docs/modules/coding/) | [⚙️](config/coding/config.yaml) | [📜](scripts/coding/) | Code generation, refactoring, analysis, and review agents |
-| [`evolutionary_ai`](src/codomyrmex/evolutionary_ai/) | 11 | 6 | [📖](docs/modules/evolutionary_ai/) | [⚙️](config/evolutionary_ai/config.yaml) | [📜](scripts/evolutionary_ai/) | Genetic algorithms, fitness, selection, genome operators |
-| [`graph_rag`](src/codomyrmex/graph_rag/) | 5 | 3 | [📖](docs/modules/graph_rag/) | [⚙️](config/graph_rag/config.yaml) | [📜](scripts/graph_rag/) | Graph-based retrieval-augmented generation |
-| [`vector_store`](src/codomyrmex/vector_store/) | 5 | 4 | [📖](docs/modules/vector_store/) | [⚙️](config/vector_store/config.yaml) | [📜](scripts/vector_store/) | Embedding storage, similarity search, FAISS/ChromaDB |
-| [`bio_simulation`](src/codomyrmex/bio_simulation/) | 9 | 3 | [📖](docs/modules/bio_simulation/) | [⚙️](config/bio_simulation/config.yaml) | [📜](scripts/bio_simulation/) | Biological colony simulation and genomic population models |
-| [`simulation`](src/codomyrmex/simulation/) | 3 | 3 | [📖](docs/modules/simulation/) | [⚙️](config/simulation/config.yaml) | [📜](scripts/simulation/) | General-purpose simulation framework |
-| [`quantum`](src/codomyrmex/quantum/) | 6 | 1 | [📖](docs/modules/quantum/) | [⚙️](config/quantum/config.yaml) | [📜](scripts/quantum/) | Quantum computing abstractions and circuit simulation |
-| [`fpf`](src/codomyrmex/fpf/) | 26 | 11 | [📖](docs/modules/fpf/) | [⚙️](config/fpf/config.yaml) | [📜](scripts/fpf/) | Feed-Parse-Format pipeline (fetch, parse, section export) |
+| [`coding`](src/codomyrmex/coding/) | 70 | 31 | [📖](docs/modules/coding/) | [⚙️](config/coding/config.yaml) | [📜](scripts/coding/) | Code generation, refactoring, analysis, and review agents |
+| [`evolutionary_ai`](src/codomyrmex/evolutionary_ai/) | 14 | 8 | [📖](docs/modules/evolutionary_ai/) | [⚙️](config/evolutionary_ai/config.yaml) | [📜](scripts/evolutionary_ai/) | Genetic algorithms, fitness, selection, genome operators |
+| [`graph_rag`](src/codomyrmex/graph_rag/) | 6 | 7 | [📖](docs/modules/graph_rag/) | [⚙️](config/graph_rag/config.yaml) | [📜](scripts/graph_rag/) | Graph-based retrieval-augmented generation |
+| [`vector_store`](src/codomyrmex/vector_store/) | 7 | 8 | [📖](docs/modules/vector_store/) | [⚙️](config/vector_store/config.yaml) | [📜](scripts/vector_store/) | Embedding storage, similarity search, FAISS/ChromaDB |
+| [`bio_simulation`](src/codomyrmex/bio_simulation/) | 13 | 7 | [📖](docs/modules/bio_simulation/) | [⚙️](config/bio_simulation/config.yaml) | [📜](scripts/bio_simulation/) | Biological colony simulation and genomic population models |
+| [`simulation`](src/codomyrmex/simulation/) | 4 | 4 | [📖](docs/modules/simulation/) | [⚙️](config/simulation/config.yaml) | [📜](scripts/simulation/) | General-purpose simulation framework |
+| [`quantum`](src/codomyrmex/quantum/) | 7 | 5 | [📖](docs/modules/quantum/) | [⚙️](config/quantum/config.yaml) | [📜](scripts/quantum/) | Quantum computing abstractions and circuit simulation |
+| [`fpf`](src/codomyrmex/fpf/) | 27 | 14 | [📖](docs/modules/fpf/) | [⚙️](config/fpf/config.yaml) | [📜](scripts/fpf/) | Feed-Parse-Format pipeline (fetch, parse, section export) |
 
 ### ☁️ Infrastructure & DevOps Modules
 
 | Module | Py | Tests | Docs | Config | Scripts | Description |
 |:---|:---:|:---:|:---:|:---:|:---:|:---|
-| [`cloud`](src/codomyrmex/cloud/) | 52 | 22 | [📖](docs/modules/cloud/) | [⚙️](config/cloud/config.yaml) | [📜](scripts/cloud/) | Multi-cloud SDK (AWS, GCP, Azure, Infomaniak, Coda.io) |
-| [`containerization`](src/codomyrmex/containerization/) | 16 | 7 | [📖](docs/modules/containerization/) | [⚙️](config/containerization/config.yaml) | [📜](scripts/containerization/) | Docker/Podman management, image building, registry |
-| [`container_optimization`](src/codomyrmex/container_optimization/) | 3 | 2 | [📖](docs/modules/container_optimization/) | [⚙️](config/container_optimization/config.yaml) | [📜](scripts/container_optimization/) | Resource tuning and container performance optimization |
-| [`ci_cd_automation`](src/codomyrmex/ci_cd_automation/) | 22 | 12 | [📖](docs/modules/ci_cd_automation/) | [⚙️](config/ci_cd_automation/config.yaml) | [📜](scripts/ci_cd_automation/) | Pipeline building, artifact management, deployment orchestration |
-| [`deployment`](src/codomyrmex/deployment/) | 13 | 7 | [📖](docs/modules/deployment/) | [⚙️](config/deployment/config.yaml) | [📜](scripts/deployment/) | Deployment strategies (blue-green, canary, rolling) |
-| [`edge_computing`](src/codomyrmex/edge_computing/) | 14 | 2 | [📖](docs/modules/edge_computing/) | [⚙️](config/edge_computing/config.yaml) | [📜](scripts/edge_computing/) | Edge cluster management, scheduling, health monitoring |
-| [`networking`](src/codomyrmex/networking/) | 9 | 6 | [📖](docs/modules/networking/) | [⚙️](config/networking/config.yaml) | [📜](scripts/networking/) | HTTP clients, WebSocket, gRPC, service mesh |
-| [`networks`](src/codomyrmex/networks/) | 3 | 3 | [📖](docs/modules/networks/) | [⚙️](config/networks/config.yaml) | [📜](scripts/networks/) | Network topology and graph analysis |
-| [`cost_management`](src/codomyrmex/cost_management/) | 4 | 2 | [📖](docs/modules/cost_management/) | [⚙️](config/cost_management/config.yaml) | [📜](scripts/cost_management/) | Cloud cost tracking, budget alerts, optimization |
+| [`cloud`](src/codomyrmex/cloud/) | 83 | 28 | [📖](docs/modules/cloud/) | [⚙️](config/cloud/config.yaml) | [📜](scripts/cloud/) | Multi-cloud SDK (AWS, GCP, Azure, Infomaniak, Coda.io) |
+| [`containerization`](src/codomyrmex/containerization/) | 19 | 9 | [📖](docs/modules/containerization/) | [⚙️](config/containerization/config.yaml) | [📜](scripts/containerization/) | Docker/Podman management, image building, registry |
+| [`container_optimization`](src/codomyrmex/container_optimization/) | 4 | 3 | [📖](docs/modules/container_optimization/) | [⚙️](config/container_optimization/config.yaml) | [📜](scripts/container_optimization/) | Resource tuning and container performance optimization |
+| [`ci_cd_automation`](src/codomyrmex/ci_cd_automation/) | 24 | 12 | [📖](docs/modules/ci_cd_automation/) | [⚙️](config/ci_cd_automation/config.yaml) | [📜](scripts/ci_cd_automation/) | Pipeline building, artifact management, deployment orchestration |
+| [`deployment`](src/codomyrmex/deployment/) | 16 | 8 | [📖](docs/modules/deployment/) | [⚙️](config/deployment/config.yaml) | [📜](scripts/deployment/) | Deployment strategies (blue-green, canary, rolling) |
+| [`edge_computing`](src/codomyrmex/edge_computing/) | 17 | 6 | [📖](docs/modules/edge_computing/) | [⚙️](config/edge_computing/config.yaml) | [📜](scripts/edge_computing/) | Edge cluster management, scheduling, health monitoring |
+| [`networking`](src/codomyrmex/networking/) | 10 | 9 | [📖](docs/modules/networking/) | [⚙️](config/networking/config.yaml) | [📜](scripts/networking/) | HTTP clients, WebSocket, gRPC, service mesh |
+| [`networks`](src/codomyrmex/networks/) | 4 | 4 | [📖](docs/modules/networks/) | [⚙️](config/networks/config.yaml) | [📜](scripts/networks/) | Network topology and graph analysis |
+| [`cost_management`](src/codomyrmex/cost_management/) | 6 | 3 | [📖](docs/modules/cost_management/) | [⚙️](config/cost_management/config.yaml) | [📜](scripts/cost_management/) | Cloud cost tracking, budget alerts, optimization |
 
 ### 💾 Data & Storage Modules
 
 | Module | Py | Tests | Docs | Config | Scripts | Description |
 |:---|:---:|:---:|:---:|:---:|:---:|:---|
-| [`database_management`](src/codomyrmex/database_management/) | 17 | 12 | [📖](docs/modules/database_management/) | [⚙️](config/database_management/config.yaml) | [📜](scripts/database_management/) | Multi-DB engine (SQLite, PostgreSQL), migrations, ORM |
-| [`cache`](src/codomyrmex/cache/) | 19 | 11 | [📖](docs/modules/cache/) | [⚙️](config/cache/config.yaml) | [📜](scripts/cache/) | Multi-backend caching (Redis, memory, disk), TTL, LRU |
-| [`data_lineage`](src/codomyrmex/data_lineage/) | 5 | 2 | [📖](docs/modules/data_lineage/) | [⚙️](config/data_lineage/config.yaml) | [📜](scripts/data_lineage/) | Data flow tracking, lineage graphs, provenance |
-| [`serialization`](src/codomyrmex/serialization/) | 7 | 6 | [📖](docs/modules/serialization/) | [⚙️](config/serialization/config.yaml) | [📜](scripts/serialization/) | JSON, YAML, MessagePack, Protobuf serialization |
-| [`documents`](src/codomyrmex/documents/) | 38 | 16 | [📖](docs/modules/documents/) | [⚙️](config/documents/config.yaml) | [📜](scripts/documents/) | Document processing (PDF, HTML, CSV, XML, Markdown) |
-| [`feature_store`](src/codomyrmex/feature_store/) | 5 | 2 | [📖](docs/modules/feature_store/) | [⚙️](config/feature_store/config.yaml) | [📜](scripts/feature_store/) | ML feature registry, versioning, and serving |
-| [`agentic_memory`](src/codomyrmex/agentic_memory/) | 35 | 30 | [📖](docs/modules/agentic_memory/) | [⚙️](config/agentic_memory/config.yaml) | [📜](scripts/agentic_memory/) | Long-term agent memory, retrieval, and knowledge graphs |
-| [`model_ops`](src/codomyrmex/model_ops/) | 22 | 10 | [📖](docs/modules/model_ops/) | [⚙️](config/model_ops/config.yaml) | [📜](scripts/model_ops/) | ML model lifecycle, registry, versioning |
+| [`database_management`](src/codomyrmex/database_management/) | 22 | 16 | [📖](docs/modules/database_management/) | [⚙️](config/database_management/config.yaml) | [📜](scripts/database_management/) | Multi-DB engine (SQLite, PostgreSQL), migrations, ORM |
+| [`cache`](src/codomyrmex/cache/) | 24 | 15 | [📖](docs/modules/cache/) | [⚙️](config/cache/config.yaml) | [📜](scripts/cache/) | Multi-backend caching (Redis, memory, disk), TTL, LRU |
+| [`data_lineage`](src/codomyrmex/data_lineage/) | 6 | 3 | [📖](docs/modules/data_lineage/) | [⚙️](config/data_lineage/config.yaml) | [📜](scripts/data_lineage/) | Data flow tracking, lineage graphs, provenance |
+| [`serialization`](src/codomyrmex/serialization/) | 7 | 10 | [📖](docs/modules/serialization/) | [⚙️](config/serialization/config.yaml) | [📜](scripts/serialization/) | JSON, YAML, MessagePack, Protobuf serialization |
+| [`documents`](src/codomyrmex/documents/) | 39 | 16 | [📖](docs/modules/documents/) | [⚙️](config/documents/config.yaml) | [📜](scripts/documents/) | Document processing (PDF, HTML, CSV, XML, Markdown) |
+| [`feature_store`](src/codomyrmex/feature_store/) | 6 | 5 | [📖](docs/modules/feature_store/) | [⚙️](config/feature_store/config.yaml) | [📜](scripts/feature_store/) | ML feature registry, versioning, and serving |
+| [`agentic_memory`](src/codomyrmex/agentic_memory/) | 53 | 47 | [📖](docs/modules/agentic_memory/) | [⚙️](config/agentic_memory/config.yaml) | [📜](scripts/agentic_memory/) | Long-term agent memory, retrieval, and knowledge graphs |
+| [`model_ops`](src/codomyrmex/model_ops/) | 22 | 13 | [📖](docs/modules/model_ops/) | [⚙️](config/model_ops/config.yaml) | [📜](scripts/model_ops/) | ML model lifecycle, registry, versioning |
 
 ### 🔒 Security & Identity Modules
 
 | Module | Py | Tests | Docs | Config | Scripts | Description |
 |:---|:---:|:---:|:---:|:---:|:---:|:---|
-| [`security`](src/codomyrmex/security/) | 47 | 16 | [📖](docs/modules/security/) | [⚙️](config/security/config.yaml) | [📜](scripts/security/) | Threat detection, vulnerability scanning, audit trails |
-| [`auth`](src/codomyrmex/auth/) | 13 | 4 | [📖](docs/modules/auth/) | [⚙️](config/auth/config.yaml) | [📜](scripts/auth/) | OAuth, API key, JWT, RBAC authentication |
-| [`crypto`](src/codomyrmex/crypto/) | 37 | 26 | [📖](docs/modules/crypto/) | [⚙️](config/crypto/config.yaml) | [📜](scripts/crypto/) | Cryptographic primitives, hashing, key management |
-| [`encryption`](src/codomyrmex/encryption/) | 12 | 3 | [📖](docs/modules/encryption/) | [⚙️](config/encryption/config.yaml) | [📜](scripts/encryption/) | AES-GCM, signing, KDF, HMAC, key rotation |
-| [`privacy`](src/codomyrmex/privacy/) | 4 | 2 | [📖](docs/modules/privacy/) | [⚙️](config/privacy/config.yaml) | [📜](scripts/privacy/) | PII detection, data anonymization, compliance |
-| [`identity`](src/codomyrmex/identity/) | 5 | 4 | [📖](docs/modules/identity/) | [⚙️](config/identity/config.yaml) | [📜](scripts/identity/) | Digital identity, persona management, biocognitive auth |
-| [`wallet`](src/codomyrmex/wallet/) | 16 | 3 | [📖](docs/modules/wallet/) | [⚙️](config/wallet/config.yaml) | [📜](scripts/wallet/) | Cryptocurrency wallet, key storage, transaction signing |
+| [`security`](src/codomyrmex/security/) | 51 | 33 | [📖](docs/modules/security/) | [⚙️](config/security/config.yaml) | [📜](scripts/security/) | Threat detection, vulnerability scanning, audit trails |
+| [`auth`](src/codomyrmex/auth/) | 14 | 7 | [📖](docs/modules/auth/) | [⚙️](config/auth/config.yaml) | [📜](scripts/auth/) | OAuth, API key, JWT, RBAC authentication |
+| [`crypto`](src/codomyrmex/crypto/) | 37 | 27 | [📖](docs/modules/crypto/) | [⚙️](config/crypto/config.yaml) | [📜](scripts/crypto/) | Cryptographic primitives, hashing, key management |
+| [`encryption`](src/codomyrmex/encryption/) | 13 | 4 | [📖](docs/modules/encryption/) | [⚙️](config/encryption/config.yaml) | [📜](scripts/encryption/) | AES-GCM, signing, KDF, HMAC, key rotation |
+| [`privacy`](src/codomyrmex/privacy/) | 5 | 5 | [📖](docs/modules/privacy/) | [⚙️](config/privacy/config.yaml) | [📜](scripts/privacy/) | PII detection, data anonymization, compliance |
+| [`identity`](src/codomyrmex/identity/) | 6 | 6 | [📖](docs/modules/identity/) | [⚙️](config/identity/config.yaml) | [📜](scripts/identity/) | Digital identity, persona management, biocognitive auth |
+| [`wallet`](src/codomyrmex/wallet/) | 18 | 7 | [📖](docs/modules/wallet/) | [⚙️](config/wallet/config.yaml) | [📜](scripts/wallet/) | Cryptocurrency wallet, key storage, transaction signing |
 
 ### 🎨 Multimedia & Visualization Modules
 
 | Module | Py | Tests | Docs | Config | Scripts | Description |
 |:---|:---:|:---:|:---:|:---:|:---:|:---|
-| [`audio`](src/codomyrmex/audio/) | 15 | 5 | [📖](docs/modules/audio/) | [⚙️](config/audio/config.yaml) | [📜](scripts/audio/) | TTS (edge-tts, pyttsx3), audio processing, transcription |
-| [`video`](src/codomyrmex/video/) | 12 | 4 | [📖](docs/modules/video/) | [⚙️](config/video/config.yaml) | [📜](scripts/video/) | Video processing, frame extraction, Veo 2.0 generation |
-| [`multimodal`](src/codomyrmex/multimodal/) | 2 | 3 | [📖](docs/modules/multimodal/) | [⚙️](config/multimodal/config.yaml) | [📜](scripts/multimodal/) | Imagen 3 image generation, multi-modal AI pipelines |
-| [`data_visualization`](src/codomyrmex/data_visualization/) | 68 | 20 | [📖](docs/modules/data_visualization/) | [⚙️](config/data_visualization/config.yaml) | [📜](scripts/data_visualization/) | Matplotlib, Plotly, chart generation, dashboards |
-| [`meme`](src/codomyrmex/meme/) | 57 | 6 | [📖](docs/modules/meme/) | [⚙️](config/meme/config.yaml) | [📜](scripts/meme/) | Meme generation, template engine, social media formatting |
-| [`spatial`](src/codomyrmex/spatial/) | 12 | 3 | [📖](docs/modules/spatial/) | [⚙️](config/spatial/config.yaml) | [📜](scripts/spatial/) | Geospatial data, coordinate systems, mapping |
+| [`audio`](src/codomyrmex/audio/) | 22 | 13 | [📖](docs/modules/audio/) | [⚙️](config/audio/config.yaml) | [📜](scripts/audio/) | TTS (edge-tts, pyttsx3), audio processing, transcription |
+| [`video`](src/codomyrmex/video/) | 15 | 8 | [📖](docs/modules/video/) | [⚙️](config/video/config.yaml) | [📜](scripts/video/) | Video processing, frame extraction, Veo 2.0 generation |
+| [`multimodal`](src/codomyrmex/multimodal/) | 3 | 4 | [📖](docs/modules/multimodal/) | [⚙️](config/multimodal/config.yaml) | [📜](scripts/multimodal/) | Imagen 3 image generation, multi-modal AI pipelines |
+| [`data_visualization`](src/codomyrmex/data_visualization/) | 79 | 28 | [📖](docs/modules/data_visualization/) | [⚙️](config/data_visualization/config.yaml) | [📜](scripts/data_visualization/) | Matplotlib, Plotly, chart generation, dashboards |
+| [`meme`](src/codomyrmex/meme/) | 58 | 19 | [📖](docs/modules/meme/) | [⚙️](config/meme/config.yaml) | [📜](scripts/meme/) | Meme generation, template engine, social media formatting |
+| [`spatial`](src/codomyrmex/spatial/) | 18 | 8 | [📖](docs/modules/spatial/) | [⚙️](config/spatial/config.yaml) | [📜](scripts/spatial/) | Geospatial data, coordinate systems, mapping |
 
 ### 🏠 Personal AI (PAI) Modules
 
 | Module | Py | Tests | Docs | Config | Scripts | Description |
 |:---|:---:|:---:|:---:|:---:|:---:|:---|
-| [`email`](src/codomyrmex/email/) | 14 | 4 | [📖](docs/modules/email/) | [⚙️](config/email/config.yaml) | [📜](scripts/email/) | Gmail, AgentMail providers, SMTP, IMAP |
-| [`calendar_integration`](src/codomyrmex/calendar_integration/) | 6 | 2 | [📖](docs/modules/calendar_integration/) | [⚙️](config/calendar_integration/config.yaml) | [📜](scripts/calendar_integration/) | Google Calendar CRUD, event management, scheduling |
-| [`finance`](src/codomyrmex/finance/) | 10 | 2 | [📖](docs/modules/finance/) | [⚙️](config/finance/config.yaml) | [📜](scripts/finance/) | Ledger, payroll, forecasting, tax calculation |
-| [`website`](src/codomyrmex/website/) | 15 | 19 | [📖](docs/modules/website/) | [⚙️](config/website/config.yaml) | [📜](scripts/website/) | PAI dashboard server, health monitoring, proxying |
-| [`market`](src/codomyrmex/market/) | 4 | 3 | [📖](docs/modules/market/) | [⚙️](config/market/config.yaml) | [📜](scripts/market/) | Market data, trading signals, portfolio analysis |
-| [`logistics`](src/codomyrmex/logistics/) | 27 | 9 | [📖](docs/modules/logistics/) | [⚙️](config/logistics/config.yaml) | [📜](scripts/logistics/) | Task routing, supply chain, resource allocation |
-| [`relations`](src/codomyrmex/relations/) | 15 | 4 | [📖](docs/modules/relations/) | [⚙️](config/relations/config.yaml) | [📜](scripts/relations/) | Contact management, relationship mapping, CRM |
-| [`physical_management`](src/codomyrmex/physical_management/) | 8 | 4 | [📖](docs/modules/physical_management/) | [⚙️](config/physical_management/config.yaml) | [📜](scripts/physical_management/) | IoT device tracking, physical asset management |
+| [`email`](src/codomyrmex/email/) | 14 | 8 | [📖](docs/modules/email/) | [⚙️](config/email/config.yaml) | [📜](scripts/email/) | Gmail, AgentMail providers, SMTP, IMAP |
+| [`calendar_integration`](src/codomyrmex/calendar_integration/) | 6 | 3 | [📖](docs/modules/calendar_integration/) | [⚙️](config/calendar_integration/config.yaml) | [📜](scripts/calendar_integration/) | Google Calendar CRUD, event management, scheduling |
+| [`finance`](src/codomyrmex/finance/) | 13 | 5 | [📖](docs/modules/finance/) | [⚙️](config/finance/config.yaml) | [📜](scripts/finance/) | Ledger, payroll, forecasting, tax calculation |
+| [`website`](src/codomyrmex/website/) | 18 | 23 | [📖](docs/modules/website/) | [⚙️](config/website/config.yaml) | [📜](scripts/website/) | PAI dashboard server, health monitoring, proxying |
+| [`market`](src/codomyrmex/market/) | 5 | 4 | [📖](docs/modules/market/) | [⚙️](config/market/config.yaml) | [📜](scripts/market/) | Market data, trading signals, portfolio analysis |
+| [`logistics`](src/codomyrmex/logistics/) | 31 | 10 | [📖](docs/modules/logistics/) | [⚙️](config/logistics/config.yaml) | [📜](scripts/logistics/) | Task routing, supply chain, resource allocation |
+| [`relations`](src/codomyrmex/relations/) | 19 | 7 | [📖](docs/modules/relations/) | [⚙️](config/relations/config.yaml) | [📜](scripts/relations/) | Contact management, relationship mapping, CRM |
+| [`physical_management`](src/codomyrmex/physical_management/) | 10 | 7 | [📖](docs/modules/physical_management/) | [⚙️](config/physical_management/config.yaml) | [📜](scripts/physical_management/) | IoT device tracking, physical asset management |
 
 ### 🛠️ Developer Tooling Modules
 
 | Module | Py | Tests | Docs | Config | Scripts | Description |
 |:---|:---:|:---:|:---:|:---:|:---:|:---|
-| [`cli`](src/codomyrmex/cli/) | 21 | 6 | [📖](docs/modules/cli/) | [⚙️](config/cli/config.yaml) | [📜](scripts/cli/) | Rich CLI with subcommands for all modules |
-| [`ide`](src/codomyrmex/ide/) | 16 | 9 | [📖](docs/modules/ide/) | [⚙️](config/ide/config.yaml) | [📜](scripts/ide/) | VS Code, Cursor, Antigravity IDE integrations |
-| [`git_operations`](src/codomyrmex/git_operations/) | 34 | 20 | [📖](docs/modules/git_operations/) | [⚙️](config/git_operations/config.yaml) | [📜](scripts/git_operations/) | Full Git CLI wrapper (branch, merge, stash, submodules) |
-| [`git_analysis`](src/codomyrmex/git_analysis/) | 16 | 4 | [📖](docs/modules/git_analysis/) | [⚙️](config/git_analysis/config.yaml) | [📜](scripts/git_analysis/) | Commit analysis, contributor stats, code churn |
-| [`tree_sitter`](src/codomyrmex/tree_sitter/) | 7 | 2 | [📖](docs/modules/tree_sitter/) | [⚙️](config/tree_sitter/config.yaml) | [📜](scripts/tree_sitter/) | AST parsing, code navigation, structural queries |
+| [`cli`](src/codomyrmex/cli/) | 26 | 7 | [📖](docs/modules/cli/) | [⚙️](config/cli/config.yaml) | [📜](scripts/cli/) | Rich CLI with subcommands for all modules |
+| [`ide`](src/codomyrmex/ide/) | 20 | 12 | [📖](docs/modules/ide/) | [⚙️](config/ide/config.yaml) | [📜](scripts/ide/) | VS Code, Cursor, Antigravity IDE integrations |
+| [`git_operations`](src/codomyrmex/git_operations/) | 34 | 22 | [📖](docs/modules/git_operations/) | [⚙️](config/git_operations/config.yaml) | [📜](scripts/git_operations/) | Full Git CLI wrapper (branch, merge, stash, submodules) |
+| [`git_analysis`](src/codomyrmex/git_analysis/) | 5 | 5 | [📖](docs/modules/git_analysis/) | [⚙️](config/git_analysis/config.yaml) | [📜](scripts/git_analysis/) | Commit analysis, contributor stats, code churn |
+| [`tree_sitter`](src/codomyrmex/tree_sitter/) | 12 | 2 | [📖](docs/modules/tree_sitter/) | [⚙️](config/tree_sitter/config.yaml) | [📜](scripts/tree_sitter/) | AST parsing, code navigation, structural queries |
 | [`static_analysis`](src/codomyrmex/static_analysis/) | 4 | 9 | [📖](docs/modules/static_analysis/) | [⚙️](config/static_analysis/config.yaml) | [📜](scripts/static_analysis/) | Linting, complexity metrics, dead code detection |
-| [`terminal_interface`](src/codomyrmex/terminal_interface/) | 8 | 4 | [📖](docs/modules/terminal_interface/) | [⚙️](config/terminal_interface/config.yaml) | [📜](scripts/terminal_interface/) | Rich terminal UI, ANSI rendering, interactive prompts |
-| [`scrape`](src/codomyrmex/scrape/) | 12 | 9 | [📖](docs/modules/scrape/) | [⚙️](config/scrape/config.yaml) | [📜](scripts/scrape/) | Web scraping, HTML parsing, sitemap crawling |
-| [`search`](src/codomyrmex/search/) | 6 | 3 | [📖](docs/modules/search/) | [⚙️](config/search/config.yaml) | [📜](scripts/search/) | Full-text search, fuzzy matching, regex search |
+| [`terminal_interface`](src/codomyrmex/terminal_interface/) | 18 | 6 | [📖](docs/modules/terminal_interface/) | [⚙️](config/terminal_interface/config.yaml) | [📜](scripts/terminal_interface/) | Rich terminal UI, ANSI rendering, interactive prompts |
+| [`scrape`](src/codomyrmex/scrape/) | 12 | 12 | [📖](docs/modules/scrape/) | [⚙️](config/scrape/config.yaml) | [📜](scripts/scrape/) | Web scraping, HTML parsing, sitemap crawling |
+| [`search`](src/codomyrmex/search/) | 6 | 4 | [📖](docs/modules/search/) | [⚙️](config/search/config.yaml) | [📜](scripts/search/) | Full-text search, fuzzy matching, regex search |
 
 ### ⚙️ Configuration & Operations Modules
 
 | Module | Py | Tests | Docs | Config | Scripts | Description |
 |:---|:---:|:---:|:---:|:---:|:---:|:---|
-| [`config_management`](src/codomyrmex/config_management/) | 13 | 7 | [📖](docs/modules/config_management/) | [⚙️](config/config_management/config.yaml) | [📜](scripts/config_management/) | Hierarchical config loading, validation, hot-reload |
-| [`config_monitoring`](src/codomyrmex/config_monitoring/) | 3 | 1 | [📖](docs/modules/config_monitoring/) | [⚙️](config/config_monitoring/config.yaml) | [📜](scripts/config_monitoring/) | Configuration drift detection and alerting |
-| [`config_audits`](src/codomyrmex/config_audits/) | 4 | 1 | [📖](docs/modules/config_audits/) | [⚙️](config/config_audits/config.yaml) | [📜](scripts/config_audits/) | Configuration compliance auditing and rule engine |
-| [`environment_setup`](src/codomyrmex/environment_setup/) | 4 | 4 | [📖](docs/modules/environment_setup/) | [⚙️](config/environment_setup/config.yaml) | [📜](scripts/environment_setup/) | Dependency resolution, environment validation |
-| [`logging_monitoring`](src/codomyrmex/logging_monitoring/) | 16 | 4 | [📖](docs/modules/logging_monitoring/) | [⚙️](config/logging_monitoring/config.yaml) | [📜](scripts/logging_monitoring/) | Structured logging, metrics collection, alerting |
-| [`telemetry`](src/codomyrmex/telemetry/) | 25 | 13 | [📖](docs/modules/telemetry/) | [⚙️](config/telemetry/config.yaml) | [📜](scripts/telemetry/) | OpenTelemetry traces, spans, exporters |
-| [`performance`](src/codomyrmex/performance/) | 19 | 4 | [📖](docs/modules/performance/) | [⚙️](config/performance/config.yaml) | [📜](scripts/performance/) | Benchmarking, profiling, performance visualization |
-| [`maintenance`](src/codomyrmex/maintenance/) | 12 | 3 | [📖](docs/modules/maintenance/) | [⚙️](config/maintenance/config.yaml) | [📜](scripts/maintenance/) | Health checks, cleanup, system diagnostics |
-| [`release`](src/codomyrmex/release/) | 4 | 2 | [📖](docs/modules/release/) | [⚙️](config/release/config.yaml) | [📜](scripts/release/) | Release management, changelog generation, versioning |
+| [`config_management`](src/codomyrmex/config_management/) | 17 | 16 | [📖](docs/modules/config_management/) | [⚙️](config/config_management/config.yaml) | [📜](scripts/config_management/) | Hierarchical config loading, validation, hot-reload |
+| [`config_monitoring`](src/codomyrmex/config_monitoring/) | 4 | 3 | [📖](docs/modules/config_monitoring/) | [⚙️](config/config_monitoring/config.yaml) | [📜](scripts/config_monitoring/) | Configuration drift detection and alerting |
+| [`config_audits`](src/codomyrmex/config_audits/) | 5 | 4 | [📖](docs/modules/config_audits/) | [⚙️](config/config_audits/config.yaml) | [📜](scripts/config_audits/) | Configuration compliance auditing and rule engine |
+| [`environment_setup`](src/codomyrmex/environment_setup/) | 5 | 5 | [📖](docs/modules/environment_setup/) | [⚙️](config/environment_setup/config.yaml) | [📜](scripts/environment_setup/) | Dependency resolution, environment validation |
+| [`logging_monitoring`](src/codomyrmex/logging_monitoring/) | 17 | 6 | [📖](docs/modules/logging_monitoring/) | [⚙️](config/logging_monitoring/config.yaml) | [📜](scripts/logging_monitoring/) | Structured logging, metrics collection, alerting |
+| [`telemetry`](src/codomyrmex/telemetry/) | 32 | 20 | [📖](docs/modules/telemetry/) | [⚙️](config/telemetry/config.yaml) | [📜](scripts/telemetry/) | OpenTelemetry traces, spans, exporters |
+| [`performance`](src/codomyrmex/performance/) | 20 | 5 | [📖](docs/modules/performance/) | [⚙️](config/performance/config.yaml) | [📜](scripts/performance/) | Benchmarking, profiling, performance visualization |
+| [`maintenance`](src/codomyrmex/maintenance/) | 12 | 4 | [📖](docs/modules/maintenance/) | [⚙️](config/maintenance/config.yaml) | [📜](scripts/maintenance/) | Health checks, cleanup, system diagnostics |
+| [`release`](src/codomyrmex/release/) | 8 | 5 | [📖](docs/modules/release/) | [⚙️](config/release/config.yaml) | [📜](scripts/release/) | Release management, changelog generation, versioning |
 
 ### 🧩 Framework & Utility Modules
 
 | Module | Py | Tests | Docs | Config | Scripts | Description |
 |:---|:---:|:---:|:---:|:---:|:---:|:---|
-| [`utils`](src/codomyrmex/utils/) | 17 | 15 | [📖](docs/modules/utils/) | [⚙️](config/utils/config.yaml) | [📜](scripts/utils/) | CLI helpers, string ops, file utils, decorators |
-| [`validation`](src/codomyrmex/validation/) | 16 | 7 | [📖](docs/modules/validation/) | [⚙️](config/validation/config.yaml) | [📜](scripts/validation/) | Schema validation, data contracts, type checking |
-| [`exceptions`](src/codomyrmex/exceptions/) | 13 | 2 | [📖](docs/modules/exceptions/) | [⚙️](config/exceptions/config.yaml) | [📜](scripts/exceptions/) | Comprehensive exception hierarchy (AI, IO, Git, Config) |
-| [`events`](src/codomyrmex/events/) | 29 | 7 | [📖](docs/modules/events/) | [⚙️](config/events/config.yaml) | [📜](scripts/events/) | Event bus, pub/sub, event store, logging listeners |
-| [`plugin_system`](src/codomyrmex/plugin_system/) | 12 | 7 | [📖](docs/modules/plugin_system/) | [⚙️](config/plugin_system/config.yaml) | [📜](scripts/plugin_system/) | Plugin discovery, lifecycle, dependency injection |
-| [`dependency_injection`](src/codomyrmex/dependency_injection/) | 4 | 2 | [📖](docs/modules/dependency_injection/) | [⚙️](config/dependency_injection/config.yaml) | [📜](scripts/dependency_injection/) | IoC container, service locator, scoped lifetimes |
-| [`concurrency`](src/codomyrmex/concurrency/) | 17 | 5 | [📖](docs/modules/concurrency/) | [⚙️](config/concurrency/config.yaml) | [📜](scripts/concurrency/) | Distributed locks, semaphores, Redis locking |
-| [`compression`](src/codomyrmex/compression/) | 8 | 1 | [📖](docs/modules/compression/) | [⚙️](config/compression/config.yaml) | [📜](scripts/compression/) | gzip, zstd, brotli compression algorithms |
-| [`templating`](src/codomyrmex/templating/) | 8 | 4 | [📖](docs/modules/templating/) | [⚙️](config/templating/config.yaml) | [📜](scripts/templating/) | Jinja2 templating, code generation templates |
+| [`utils`](src/codomyrmex/utils/) | 20 | 17 | [📖](docs/modules/utils/) | [⚙️](config/utils/config.yaml) | [📜](scripts/utils/) | CLI helpers, string ops, file utils, decorators |
+| [`validation`](src/codomyrmex/validation/) | 19 | 12 | [📖](docs/modules/validation/) | [⚙️](config/validation/config.yaml) | [📜](scripts/validation/) | Schema validation, data contracts, type checking |
+| [`exceptions`](src/codomyrmex/exceptions/) | 13 | 7 | [📖](docs/modules/exceptions/) | [⚙️](config/exceptions/config.yaml) | [📜](scripts/exceptions/) | Comprehensive exception hierarchy (AI, IO, Git, Config) |
+| [`events`](src/codomyrmex/events/) | 30 | 17 | [📖](docs/modules/events/) | [⚙️](config/events/config.yaml) | [📜](scripts/events/) | Event bus, pub/sub, event store, logging listeners |
+| [`plugin_system`](src/codomyrmex/plugin_system/) | 14 | 10 | [📖](docs/modules/plugin_system/) | [⚙️](config/plugin_system/config.yaml) | [📜](scripts/plugin_system/) | Plugin discovery, lifecycle, dependency injection |
+| [`dependency_injection`](src/codomyrmex/dependency_injection/) | 5 | 4 | [📖](docs/modules/dependency_injection/) | [⚙️](config/dependency_injection/config.yaml) | [📜](scripts/dependency_injection/) | IoC container, service locator, scoped lifetimes |
+| [`concurrency`](src/codomyrmex/concurrency/) | 18 | 10 | [📖](docs/modules/concurrency/) | [⚙️](config/concurrency/config.yaml) | [📜](scripts/concurrency/) | Distributed locks, semaphores, Redis locking |
+| [`compression`](src/codomyrmex/compression/) | 9 | 4 | [📖](docs/modules/compression/) | [⚙️](config/compression/config.yaml) | [📜](scripts/compression/) | gzip, zstd, brotli compression algorithms |
+| [`templating`](src/codomyrmex/templating/) | 14 | 4 | [📖](docs/modules/templating/) | [⚙️](config/templating/config.yaml) | [📜](scripts/templating/) | Jinja2 templating, code generation templates |
 | [`feature_flags`](src/codomyrmex/feature_flags/) | 9 | 6 | [📖](docs/modules/feature_flags/) | [⚙️](config/feature_flags/config.yaml) | [📜](scripts/feature_flags/) | Feature flag management, rollout strategies |
 | [`tool_use`](src/codomyrmex/tool_use/) | 5 | 4 | [📖](docs/modules/tool_use/) | [⚙️](config/tool_use/config.yaml) | [📜](scripts/tool_use/) | Tool registration, execution, and discovery |
-| [`testing`](src/codomyrmex/testing/) | 15 | 7 | [📖](docs/modules/testing/) | [⚙️](config/testing/config.yaml) | [📜](scripts/testing/) | Test fixtures, runners, coverage utilities |
-| [`documentation`](src/codomyrmex/documentation/) | 45 | 10 | [📖](docs/modules/documentation/) | [⚙️](config/documentation/config.yaml) | [📜](scripts/documentation/) | Docusaurus site, docs generation, quality checks |
-| [`docs_gen`](src/codomyrmex/docs_gen/) | 4 | 2 | [📖](docs/modules/docs_gen/) | [⚙️](config/docs_gen/config.yaml) | [📜](scripts/docs_gen/) | Automated documentation generation from source |
-| [`module_template`](src/codomyrmex/module_template/) | 2 | 5 | [📖](docs/modules/module_template/) | [⚙️](config/module_template/config.yaml) | [📜](scripts/module_template/) | Canonical template for new module creation |
+| [`testing`](src/codomyrmex/testing/) | 15 | 8 | [📖](docs/modules/testing/) | [⚙️](config/testing/config.yaml) | [📜](scripts/testing/) | Test fixtures, runners, coverage utilities |
+| [`documentation`](src/codomyrmex/documentation/) | 56 | 27 | [📖](docs/modules/documentation/) | [⚙️](config/documentation/config.yaml) | [📜](scripts/documentation/) | Docusaurus site, docs generation, quality checks |
+| [`docs_gen`](src/codomyrmex/docs_gen/) | 5 | 4 | [📖](docs/modules/docs_gen/) | [⚙️](config/docs_gen/config.yaml) | [📜](scripts/docs_gen/) | Automated documentation generation from source |
+| [`module_template`](src/codomyrmex/module_template/) | 2 | 6 | [📖](docs/modules/module_template/) | [⚙️](config/module_template/config.yaml) | [📜](scripts/module_template/) | Canonical template for new module creation |
 | [`operating_system`](src/codomyrmex/operating_system/) | 10 | 1 | [📖](docs/modules/operating_system/) | [⚙️](config/operating_system/config.yaml) | [📜](scripts/operating_system/) | OS interaction (macOS/Linux/Windows), filesystem |
-| [`file_system`](src/codomyrmex/file_system/) | 2 | 2 | [📖](docs/modules/file_system/) | [⚙️](config/file_system/config.yaml) | [📜](scripts/file_system/) | File operations, directory walker, permissions |
-| [`dark`](src/codomyrmex/dark/) | 4 | 2 | [📖](docs/modules/dark/) | [⚙️](config/dark/config.yaml) | [📜](scripts/dark/) | Dark PDF extraction and processing |
-| [`demos`](src/codomyrmex/demos/) | 2 | 1 | [📖](docs/modules/demos/) | [⚙️](config/demos/config.yaml) | [📜](scripts/demos/) | Demo registry and showcase runner |
-| [`formal_verification`](src/codomyrmex/formal_verification/) | 8 | 2 | [📖](docs/modules/formal_verification/) | [⚙️](config/formal_verification/config.yaml) | [📜](scripts/formal_verification/) | Z3 backend, SMT solver, invariant checking |
-| [`system_discovery`](src/codomyrmex/system_discovery/) | 14 | 4 | [📖](docs/modules/system_discovery/) | [⚙️](config/system_discovery/config.yaml) | [📜](scripts/system_discovery/) | System introspection, capability detection |
+| [`file_system`](src/codomyrmex/file_system/) | 3 | 3 | [📖](docs/modules/file_system/) | [⚙️](config/file_system/config.yaml) | [📜](scripts/file_system/) | File operations, directory walker, permissions |
+| [`dark`](src/codomyrmex/dark/) | 5 | 4 | [📖](docs/modules/dark/) | [⚙️](config/dark/config.yaml) | [📜](scripts/dark/) | Dark PDF extraction and processing |
+| [`demos`](src/codomyrmex/demos/) | 3 | 1 | [📖](docs/modules/demos/) | [⚙️](config/demos/config.yaml) | [📜](scripts/demos/) | Demo registry and showcase runner |
+| [`formal_verification`](src/codomyrmex/formal_verification/) | 13 | 4 | [📖](docs/modules/formal_verification/) | [⚙️](config/formal_verification/config.yaml) | [📜](scripts/formal_verification/) | Z3 backend, SMT solver, invariant checking |
+| [`system_discovery`](src/codomyrmex/system_discovery/) | 19 | 10 | [📖](docs/modules/system_discovery/) | [⚙️](config/system_discovery/config.yaml) | [📜](scripts/system_discovery/) | System introspection, capability detection |
 
 ### 🧬 ML Training & Optimization Modules
 
@@ -367,7 +367,7 @@ graph TB
 | [`rlhf`](src/codomyrmex/rlhf/) | 3 | [📖](docs/modules/rlhf/) | Reinforcement learning from human feedback |
 | [`dpo`](src/codomyrmex/dpo/) | 3 | [📖](docs/modules/dpo/) | Direct preference optimization |
 | [`distillation`](src/codomyrmex/distillation/) | 3 | [📖](docs/modules/distillation/) | Model distillation and compression |
-| [`quantization`](src/codomyrmex/quantization/) | 5 | [📖](docs/modules/quantization/) | Model quantization (INT8, FP16) |
+| [`quantization`](src/codomyrmex/quantization/) | 6 | [📖](docs/modules/quantization/) | Model quantization (INT8, FP16) |
 | [`distributed_training`](src/codomyrmex/distributed_training/) | 3 | [📖](docs/modules/distributed_training/) | Multi-GPU and distributed training |
 | [`autograd`](src/codomyrmex/autograd/) | 4 | [📖](docs/modules/autograd/) | Automatic differentiation engine |
 | [`matmul_kernel`](src/codomyrmex/matmul_kernel/) | 3 | [📖](docs/modules/matmul_kernel/) | Custom matrix multiplication kernels |
@@ -384,8 +384,8 @@ graph TB
 
 | Module | Py | Docs | Description |
 |:---|:---:|:---:|:---|
-| [`api`](src/codomyrmex/api/) | 31 | [📖](docs/modules/api/) | REST/GraphQL API framework |
-| [`collaboration`](src/codomyrmex/collaboration/) | 30 | [📖](docs/modules/collaboration/) | Multi-agent collaboration protocols |
+| [`api`](src/codomyrmex/api/) | 47 | [📖](docs/modules/api/) | REST/GraphQL API framework |
+| [`collaboration`](src/codomyrmex/collaboration/) | 32 | [📖](docs/modules/collaboration/) | Multi-agent collaboration protocols |
 | [`ml_pipeline`](src/codomyrmex/ml_pipeline/) | 2 | [📖](docs/modules/ml_pipeline/) | ML pipeline orchestration |
 | [`data_curation`](src/codomyrmex/data_curation/) | 3 | [📖](docs/modules/data_curation/) | Dataset curation and cleaning |
 | [`synthetic_data`](src/codomyrmex/synthetic_data/) | 3 | [📖](docs/modules/synthetic_data/) | Synthetic data generation |
@@ -401,13 +401,13 @@ graph TB
 | [`neural`](src/codomyrmex/neural/) | 7 | [📖](docs/modules/neural/) | Neural network primitives |
 | [`interpretability`](src/codomyrmex/interpretability/) | 3 | [📖](docs/modules/interpretability/) | Model interpretability and explainability |
 | [`image`](src/codomyrmex/image/) | 2 | [📖](docs/modules/image/) | Image processing utilities |
-| [`examples`](src/codomyrmex/examples/) | 9 | [📖](docs/modules/examples/) | Reference implementation examples |
-| [`pai_pm`](src/codomyrmex/pai_pm/) | 6 | [📖](docs/modules/pai_pm/) | PAI Project Manager server (Bun/TypeScript) |
+| [`examples`](src/codomyrmex/examples/) | 13 | [📖](docs/modules/examples/) | Reference implementation examples |
+| [`pai_pm`](src/codomyrmex/pai_pm/) | 7 | [📖](docs/modules/pai_pm/) | PAI Project Manager server (Bun/TypeScript) |
 | [`soul`](src/codomyrmex/soul/) | 4 | [📖](docs/modules/soul/) | Biocognitive identity and persona engine |
-| [`defense`](src/codomyrmex/defense/) | 5 | [📖](docs/modules/defense/) | Local active-defense: prompt-exploit detection, honeytokens, rate limiting |
-| [`embodiment`](src/codomyrmex/embodiment/) | 3 | [📖](docs/modules/embodiment/) | Simulated sensors/actuators, WebSocket bridging, ROS-style pub/sub, 3D transforms |
-| [`languages`](src/codomyrmex/languages/) | 3 | [📖](docs/modules/languages/) | Language runtime adapters (Python, JS/TS, Go, Java, Rust, Ruby, Swift, R, PHP, Elixir, C++, C#) |
-| [`manuscript`](src/codomyrmex/manuscript/) | 2 | [📖](docs/modules/manuscript/) | Manuscript token computation and publication figure generation |
+| [`defense`](src/codomyrmex/defense/) | 4 | [📖](docs/modules/defense/) | Local active-defense: prompt-exploit detection, honeytokens, rate limiting |
+| [`embodiment`](src/codomyrmex/embodiment/) | 11 | [📖](docs/modules/embodiment/) | Simulated sensors/actuators, WebSocket bridging, ROS-style pub/sub, 3D transforms |
+| [`languages`](src/codomyrmex/languages/) | 31 | [📖](docs/modules/languages/) | Language runtime adapters (Python, JS/TS, Go, Java, Rust, Ruby, Swift, R, PHP, Elixir, C++, C#) |
+| [`manuscript`](src/codomyrmex/manuscript/) | 24 | [📖](docs/modules/manuscript/) | Manuscript token computation and publication figure generation |
 | [`vision`](src/codomyrmex/vision/) | 5 | [📖](docs/modules/vision/) | Visual document processing: annotation extraction, PDF extraction, VLM client |
 
 ---
@@ -511,8 +511,8 @@ sequenceDiagram
 ```text
 codomyrmex/
 ├── .github/                  # 37 GitHub Actions workflows, templates, docs
-├── config/                   # 102 top-level config dirs, 96 config.yaml files
-├── docs/                     # 1,204 Markdown files (see inventory); 18+ top-level sections
+├── config/                   # 100 top-level config dirs, 94 config.yaml files
+├── docs/                     # 1,204 Markdown files (see inventory); 21 top-level sections
 │   ├── ARCHITECTURE.md       # System architecture
 │   ├── AGENTS.md             # Agent coordination
 │   ├── SPEC.md               # Technical specification
@@ -524,18 +524,17 @@ codomyrmex/
 │   ├── modules/              # Per-module doc directories (see inventory for counts)
 │   ├── security/             # 11 security guides
 │   ├── agi/                  # 14 AGI theory docs
-│   └── ... (18 directories)
+│   └── ... (16 directories)
 ├── scripts/                  # 445+ orchestrator scripts
 │   ├── agents/               # Jules batch dispatch, harvester
 │   ├── maintenance/          # Config generation, health checks
 │   └── ... (90+ module scripts)
-├── projects/                 # Project workspaces and adapter integrations (daf-consulting v0.4.1, hermes-paperclip-adapter)
+├── projects/                 # Project workspaces (test_project/, a nested Git worktree)
 ├── src/codomyrmex/           # Main source (130 modules)
-│   ├── agents/               # 168 files
-│   ├── llm/                  # 41 files
-│   ├── security/             # 47 files
-│   ├── tests/                # 1,023+ test files (zero-mock)
-│   └── ... (122 more modules)
+│   ├── agents/               # 285 files
+│   ├── llm/                  # 65 files
+│   ├── security/             # 51 files
+│   └── ... (127 more modules)
 ├── CHANGELOG.md              # Release history
 ├── CITATION.cff              # Citation metadata
 └── pyproject.toml            # uv-managed project config (uv_build backend)
@@ -664,7 +663,7 @@ uv run ty check --output-format concise src/ scripts/ tests/  # type check
 
 ## 🗺️ Configuration Architecture
 
-> See [config/](config/) for 102 top-level configuration directories and 96 live `config.yaml` files.
+> See [config/](config/) for 100 top-level configuration directories and 94 live `config.yaml` files.
 
 ```mermaid
 graph TB
@@ -672,7 +671,7 @@ graph TB
         C1["agents/config.yaml"]
         C2["llm/config.yaml"]
         C3["security/config.yaml"]
-        Cdots["... 96 config.yaml files"]
+        Cdots["... 94 config.yaml files"]
     end
 
     subgraph Scripts["scripts/"]

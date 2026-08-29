@@ -7,6 +7,7 @@
 Module implementation, resources, and local coordination for Coding.
 
 ## Directory Contents
+- `AGENTS.md` – File
 - `API_SPECIFICATION.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
 - `MIGRATION_COMPLETE.md` – File

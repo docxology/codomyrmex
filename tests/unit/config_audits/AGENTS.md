@@ -1,4 +1,4 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/config_audits
+# Codomyrmex Agents — tests/unit/config_audits
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
 

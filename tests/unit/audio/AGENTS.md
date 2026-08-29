@@ -1,25 +1,29 @@
 # Codomyrmex Agents — tests/unit/audio
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: August 2026
 
 ## Purpose
 Validation coverage, fixtures, and regression checks for Audio.
 
 ## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `py.typed` – Project file
-- `speech_to_text/` – Directory containing speech_to_text components
-- `test_audio.py` – Project file
-- `test_audio_exceptions.py` – Project file
-- `test_codec.py` – Project file
-- `test_mcp_tools.py` – Project file
-- `test_streaming.py` – Project file
-- `test_stt_models.py` – Project file
-- `test_transcription.py` – Project file
-- `test_tts_models.py` – Project file
+- `AGENTS.md` – Agent coordination and navigation
+- `README.md` – Directory overview
+- `SPEC.md` – Specification
+- `PAI.md` – PAI notes
+- `__init__.py` – Package marker
+- `py.typed` – PEP 561 marker
+- `speech_to_text/` – Speech-to-text test components
+- `test_audio_exceptions.py` – Audio exception hierarchy tests
+- `test_audio_streaming.py` – Audio streaming pipeline tests
+- `test_codec.py` – Codec negotiation tests
+- `test_edge_tts_lifecycle.py` – Edge-TTS lifecycle tests
+- `test_mcp_audio.py` – MCP audio tool tests
+- `test_mcp_tools.py` – MCP tool handler tests
+- `test_stt_models.py` – STT data model tests
+- `test_synthesizer.py` – Synthesizer tests
+- `test_transcriber.py` – Transcriber tests
+- `test_tts_models.py` – TTS data model tests
+- `test_vad.py` – Voice activity detection tests
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -29,19 +33,17 @@ Validation coverage, fixtures, and regression checks for Audio.
 ## Key Files
 - `AGENTS.md` - Agent coordination and navigation
 - `README.md` - Directory overview
-- `PAI.md`
-- `README.md`
-- `SPEC.md`
-- `__init__.py`
-- `py.typed`
-- `test_audio.py`
 - `test_audio_exceptions.py`
+- `test_audio_streaming.py`
 - `test_codec.py`
+- `test_edge_tts_lifecycle.py`
+- `test_mcp_audio.py`
 - `test_mcp_tools.py`
-- `test_streaming.py`
 - `test_stt_models.py`
-- `test_transcription.py`
+- `test_synthesizer.py`
+- `test_transcriber.py`
 - `test_tts_models.py`
+- `test_vad.py`
 
 ## Dependencies
 - Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.

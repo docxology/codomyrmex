@@ -120,17 +120,16 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 **Foundation Layer**:
 
 - `logging_monitoring/` - Centralized logging system
-  - Key Classes: `Logger`, `LogAggregator`, `StructuredLogger`
-  - Key Functions: `get_logger(name: str) -> Logger`, `setup_logging(config: dict) -> None`
+  - Key Components: `LogAggregator`, `StructuredFormatter`
+  - Key Functions: `get_logger(name: str) -> logging.Logger`, `setup_logging(force: bool = True) -> None`
 - `environment_setup/` - Environment validation and setup
-  - Key Classes: `EnvironmentValidator`, `DependencyChecker`, `ConfigLoader`
-  - Key Functions: `validate_environment() -> bool`, `check_dependencies(requirements: list) -> dict`
+  - Key Components: `DependencyResolver`, `ValidationReport`
+  - Key Functions: `check_dependencies(dependencies: list[str]) -> list[DependencyStatus]`, `validate_environment(min_python: str = "3.10") -> ValidationReport`, `generate_environment_report() -> str`, `check_and_setup_env_vars()`
 - `model_context_protocol/` - AI communication standards
-  - Key Classes: `MCPClient`, `ToolSpecification`, `ModelInterface`
-  - Key Functions: `register_tool(name: str, spec: dict) -> bool`, `call_tool(name: str, params: dict) -> Any`
+  - Key Components: `MCPServer`, `MCPClient`, `MCPDiscovery`, `CircuitBreaker`
+  - Key Functions: `MCPServer.register_tool(name: str, schema: dict, handler: Callable) -> None`, `async MCPClient.call_tool(name: str, arguments: dict | None = None) -> dict`
 - `terminal_interface/` - Rich terminal interactions
-  - Key Classes: `TerminalUI`, `ProgressBar`, `InteractivePrompt`
-  - Key Functions: `display_table(data: list, headers: list) -> None`, `confirm_action(message: str) -> bool`
+  - Key Components: `InteractiveShell`, `CommandRunner`, `TerminalFormatter` (capability-detected), `cli_commands()` entry point
 
 **Core Layer**:
 

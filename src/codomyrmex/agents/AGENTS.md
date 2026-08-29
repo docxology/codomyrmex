@@ -26,7 +26,6 @@ LLM provider integrations and agent implementations for Claude, Codex, Gemini, O
 - `deepseek/` – deepseek module implementation
 - `droid/` – droid module implementation
 - `editing_loop.py` – Internal implementation module
-- `education.py` – Education implementation
 - `evaluation/` – evaluation module implementation
 - `every_code/` – every code module implementation
 - `gemini/` – gemini module implementation
@@ -54,6 +53,7 @@ LLM provider integrations and agent implementations for Claude, Codex, Gemini, O
 - `orchestrator.py` – Orchestrator implementation
 - `pai/` – pai module implementation
 - `perplexity/` – perplexity module implementation
+- `paperclip/` – paperclip module implementation (Paperclip orchestration CLI and API clients)
 - `planner/` – planner module implementation
 - `pooling/` – pooling module implementation
 - `py.typed` – PEP 561 marker for typed package
@@ -67,7 +67,7 @@ LLM provider integrations and agent implementations for Claude, Codex, Gemini, O
 
 - `hermes/client_pkg/ — Hermes agent client for codomyrmex integration`
 - `mcp_tools.py — MCP tool definitions for agent operations`
-- `session.py — Agent session management and state persistence`
+- Session management is provided by the `hermes` module (`session.py`)
 - `hermes/provider_router_pkg/ — Dynamic provider selection and routing`
 
 ## Operating Contracts
@@ -88,7 +88,6 @@ LLM provider integrations and agent implementations for Claude, Codex, Gemini, O
 - `autonomous.py`
 - `benchmarks.py`
 - `editing_loop.py`
-- `education.py`
 - `llm_client.py`
 - `mcp_tools.py`
 - `orchestrator.py`

@@ -10,7 +10,7 @@ Adversarial plan review for the colony kernel gate.
 | --- | --- |
 | `models.py` | `AttackVector`, `FalsificationReport`, severity rank helpers |
 | `import_graph.py` | AST import-graph walk for circular dependency detection |
-| `checks/` | One module per attack vector (`check_no_rollback`, …) |
+| `checks/` | One module per attack vector (`no_rollback`, …) |
 | `worker.py` | `FalsificationWorker` orchestrator + pheromone deposits |
 
 ## Dependencies

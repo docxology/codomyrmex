@@ -38,7 +38,7 @@ This document tells AI agents what they need to know to operate safely within th
 | `commands/` | Gemini AI command `.toml` configs for PR review and triage |
 | `CODEOWNERS` | Code ownership mapping (`@docxology`) |
 | `dependabot.yml` | Automated dependency update configuration (3 ecosystems) |
-| `PULL_REQUEST_TEMPLATE.md` | Concise agent-friendly PR template (28 lines) |
+| `PULL_REQUEST_TEMPLATE.md` | Concise agent-friendly PR template (27 lines) |
 
 ## Agent-Specific Infrastructure
 

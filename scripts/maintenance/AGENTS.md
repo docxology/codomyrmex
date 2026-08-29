@@ -1,6 +1,6 @@
 # Codomyrmex Agents — scripts/maintenance
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: August 2026
 
 ## Purpose
 Automation and utility scripts.
@@ -11,9 +11,11 @@ Automation and utility scripts.
 - `SPEC.md` – Project file
 - `audit_stubs.py` – Project file
 - `check_dependencies.py` – Project file
-- `fix_docstrings_v2.py` – Project file
+- `enrich_boilerplate_docs.py` – Project file
 - `fix_llm_rasp.py` – Project file
 - `fix_nested_rasp.py` – Project file
+- `rectify_folder_docs.py` – Project file
+- `release_audit.py` – Project file
 - `generate_config_docs.py` – Project file
 - `generate_configs.py` – Project file
 - `list_all_models.py` – Project file
@@ -35,11 +37,14 @@ Automation and utility scripts.
 - `PAI.md`
 - `README.md`
 - `SPEC.md`
+- `_config_module_meta.py`
 - `audit_stubs.py`
 - `check_dependencies.py`
-- `fix_docstrings_v2.py`
+- `enrich_boilerplate_docs.py`
 - `fix_llm_rasp.py`
 - `fix_nested_rasp.py`
+- `rectify_folder_docs.py`
+- `release_audit.py`
 - `generate_config_docs.py`
 - `generate_configs.py`
 - `list_all_models.py`

@@ -9,9 +9,9 @@
 
 Agent coordination document for the Hermes documentation subfolder. Guides AI agents navigating Hermes-related documentation and scripts.
 
-## Documentation files (29)
+## Documentation files (30)
 
-Twenty-eight topical Markdown files in this folder plus **`assets/README.md`** (optional diagram exports; primary diagrams are Mermaid in the guides below). Hermes doc suite version **v0.4.0** applies to this folder; Copilot ACP is documented under `copilot_acp.md` at that same suite revision unless upstream release notes say otherwise.
+Twenty-six topical Markdown files in this folder plus **`assets/README.md`** and **`assets/AGENTS.md`** (optional diagram exports; primary diagrams are Mermaid in the guides below), together with the hub `README.md` and this `AGENTS.md`. Hermes doc suite version **v0.4.0** applies to this folder; Copilot ACP is documented under `copilot_acp.md` at that same suite revision unless upstream release notes say otherwise.
 
 ### Index
 
@@ -86,6 +86,7 @@ Twenty-eight topical Markdown files in this folder plus **`assets/README.md`** (
 | File | Description |
 | :--- | :--- |
 | `assets/README.md` | Optional static diagram exports |
+| `assets/AGENTS.md` | Agent coordination for assets |
 
 ## Scripts (`scripts/agents/hermes/`)
 

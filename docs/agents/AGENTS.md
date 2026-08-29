@@ -36,7 +36,7 @@ Agent coordination document for the `docs/agents/` directory. This directory con
 | Qwen | [qwen/](qwen/) | `src/codomyrmex/agents/qwen/` |
 | Perplexity | [perplexity/](perplexity/) | `src/codomyrmex/agents/perplexity/` |
 
-### Core Infrastructure (8)
+### Core Infrastructure (9)
 
 | Module | Documentation | Source Module |
 |:---|:---|:---|

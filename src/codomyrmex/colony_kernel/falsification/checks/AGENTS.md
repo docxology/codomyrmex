@@ -6,7 +6,7 @@ Per-vector check modules for `FalsificationWorker`. See parent [../AGENTS.md](..
 
 ## Key Files
 
-- One module per `AttackVector` member (e.g. `check_no_rollback.py`).
+- One module per `AttackVector` member (e.g. `no_rollback.py`).
 
 ## Dependencies
 

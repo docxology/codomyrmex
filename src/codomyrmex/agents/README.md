@@ -27,7 +27,6 @@ Module implementation, resources, and local coordination for Agents.
 - `deepseek/` – Subdirectory
 - `droid/` – Subdirectory
 - `editing_loop.py` – File
-- `education.py` – File
 - `evaluation/` – Subdirectory
 - `every_code/` – Subdirectory
 - `gemini/` – Subdirectory
@@ -43,15 +42,19 @@ Module implementation, resources, and local coordination for Agents.
 - `mcp_tools.py` – File
 - `memory/` – Subdirectory
 - `meta/` – Subdirectory
+- `mission_control/` – Subdirectory
 - `navigation/` – Read-only capability catalog and MCP navigation
 - `mistral_vibe/` – Subdirectory
 - `o1/` – Subdirectory
 - `openclaw/` – Subdirectory
 - `opencode/` – Subdirectory
 - `openfang/` – Subdirectory
+- `open_gauss/` – Subdirectory
 - `orchestrator.py` – File
 - `pai/` – Subdirectory
+- `paperclip/` – Subdirectory
 - `perplexity/` – Subdirectory
+- `pi/` – Subdirectory
 - `planner/` – Subdirectory
 - `pooling/` – Subdirectory
 - `py.typed` – File

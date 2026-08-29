@@ -1,30 +1,33 @@
 # agentic_memory
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.4.0 | **Status**: Active | **Last Updated**: August 2026
 
 ## Overview
 
-Module implementation, resources, and local coordination for Agentic Memory.
+Agent memory systems with SQLite persistence, Obsidian integration, and memory consolidation.
 
 ## Directory Contents
+- `AGENTS.md` – File
 - `API_SPECIFICATION.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
 - `__init__.py` – File
+- `bridges` – Subdirectory
 - `cognilayer_bridge.py` – File
 - `consolidation.py` – File
+- `core` – Subdirectory
+- `ki_index.py` – File
 - `mcp_tools.py` – File
-- `memory.py` – File
-- `models.py` – File
-- `obsidian/` – Subdirectory
+- `obsidian` – Subdirectory
 - `obsidian_bridge.py` – File
 - `py.typed` – File
-- `rules/` – Subdirectory
+- `rules` – Subdirectory
 - `sqlite_store.py` – File
+- `stigmergy` – Subdirectory
 - `stores.py` – File
-- `tests/` – Subdirectory
+- `tests` – Subdirectory
 - `user_profile.py` – File
 
 ## Navigation

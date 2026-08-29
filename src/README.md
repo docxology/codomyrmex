@@ -17,7 +17,7 @@ Current volatile counts are documented in [../docs/reference/inventory.md](../do
 - `codomyrmex/model_context_protocol/` owns MCP decorators, schemas, transport, discovery, and tool registration.
 - `codomyrmex/agents/`, `codomyrmex/skills/`, and `codomyrmex/tool_use/` provide agent, skill, and tool registries that expose capabilities to higher-level orchestration.
 - `codomyrmex/logging_monitoring/`, `codomyrmex/config_management/`, `codomyrmex/validation/`, and `codomyrmex/exceptions/` are foundation modules used across the tree.
-- `codomyrmex/tests/` contains source-level unit, integration, and performance tests; package builds exclude tests per `pyproject.toml`.
+- The repository-level `tests/` tree contains unit, integration, and performance tests; package builds exclude tests per `pyproject.toml`.
 
 ## Directory Contents
 
@@ -28,6 +28,7 @@ Current volatile counts are documented in [../docs/reference/inventory.md](../do
 - `SPEC.md` – Source-surface specification
 - `__init__.py` – Source-root marker
 - `codomyrmex/` – Installable package root
+- `pytest_pymupdf.py` – Early optional PyMuPDF loader for the pytest harness
 
 ## Development Expectations
 

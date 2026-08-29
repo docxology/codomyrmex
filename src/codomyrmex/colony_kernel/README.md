@@ -228,7 +228,7 @@ Key test modules:
 
 - `test_models.py` — data contract validation for all dataclasses and enums
 - `test_kernel.py` — full propose/record/tick round-trips
-- `test_gate.py` — gate score calculations and threshold routing
+- `test_actuation_gate.py` — gate score calculations and threshold routing
 - `test_consequence_memory.py` — SQLite persistence and trust delta computation
 - `test_falsification_worker.py` — each attack vector in isolation
 - `test_pruning_daemon.py` — staleness detection via pheromone field state

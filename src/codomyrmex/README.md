@@ -1,6 +1,6 @@
 # codomyrmex
 
-**Version**: v1.3.0 | **Status**: Active | **Last Updated**: July 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 ## Overview
 
@@ -28,6 +28,7 @@ Installable package root for Codomyrmex. This directory contains the public pack
 - `cli/` – Subdirectory
 - `cloud/` – Subdirectory
 - `coding/` – Subdirectory
+- `colony_kernel/` – Subdirectory
 - `collaboration/` – Subdirectory
 - `compression/` – Subdirectory
 - `concurrency/` – Subdirectory
@@ -84,6 +85,7 @@ Installable package root for Codomyrmex. This directory contains the public pack
 - `logit_processor/` – Subdirectory
 - `lora/` – Subdirectory
 - `maintenance/` – Subdirectory
+- `manuscript/` – Subdirectory
 - `market/` – Subdirectory
 - `matmul_kernel/` – Subdirectory
 - `meme/` – Subdirectory
@@ -131,7 +133,6 @@ Installable package root for Codomyrmex. This directory contains the public pack
 - `templating/` – Subdirectory
 - `terminal_interface/` – Subdirectory
 - `testing/` – Subdirectory
-- `tests/` – Subdirectory
 - `text_to_sql/` – Subdirectory
 - `tokenizer/` – Subdirectory
 - `tool_use/` – Subdirectory

@@ -34,7 +34,7 @@ Agent coordination document for the `docs/` directory. Guides AI agents navigati
 
 ## Documentation Architecture
 
-The `docs/` directory is organized into **19 thematic sections** containing **1,204 Markdown files** ([reference/inventory.md](reference/inventory.md)):
+The `docs/` directory is organized into **21 thematic sections** containing **1,204 Markdown files** ([reference/inventory.md](reference/inventory.md)):
 
 ### Core references (top level)
 
@@ -53,7 +53,7 @@ Volatile counts (modules, MCP tools, tests) live in [reference/inventory.md](ref
 
 | Section | Focus | Key Content |
 |:---|:---|:---|
-| `agents/` | AI agent integrations | 39 packages mirror `src/codomyrmex/agents/` (+ [`agents/rules/`](agents/rules/) docs-only); Hermes: [agents/hermes/AGENTS.md](agents/hermes/AGENTS.md), [skills.md](agents/hermes/skills.md) |
+| `agents/` | AI agent integrations | 41 packages mirror `src/codomyrmex/agents/` (+ [`agents/rules/`](agents/rules/) docs-only); Hermes: [agents/hermes/AGENTS.md](agents/hermes/AGENTS.md), [skills.md](agents/hermes/skills.md) |
 | `agi/` | AGI theory | Essays on emergence, category theory, agency |
 | `bio/` | Biological simulation | BioSimulator, genetic algorithms |
 | `cognitive/` | Cognitive systems | Cerebrum, Bayesian networks, active inference |
@@ -63,6 +63,7 @@ Volatile counts (modules, MCP tools, tests) live in [reference/inventory.md](ref
 | `examples/` | Tutorials | Executable demos and integration examples |
 | `getting-started/` | Onboarding | Quickstart, installation, learning path |
 | `integration/` | Cross-module | Integration patterns, MCP bridges |
+| `manuscript/` | Manuscript | Colony Kernel paper source, tokens, and rendering pipeline |
 | `modules/` | Module docs | **130** top-level packages; ownership hub [modules/AGENTS.md](modules/AGENTS.md) (see [reference/inventory.md](reference/inventory.md)) |
 | `pai/` | PAI system | Dashboard, skills, memory, dispatch |
 | `plans/` | Roadmap | Release plans, version targets |
@@ -71,6 +72,7 @@ Volatile counts (modules, MCP tools, tests) live in [reference/inventory.md](ref
 | `reference/` | API docs | CLI tools, configuration reference |
 | `security/` | Security | Threat models, audit, secret management |
 | `skills/` | Agent skills | Skill creation, registry, testing |
+| `todo/` | Backlog | Per-module scope documents ([todo/README.md](todo/README.md)) |
 
 ## Operating Contracts
 

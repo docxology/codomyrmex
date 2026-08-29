@@ -160,7 +160,7 @@ Eight MCP tools expose the colony kernel to AI agents via Model Context Protocol
 | `colony_pruning_report` | List stale or broken module locations identified by the pruning daemon |
 | `colony_tick` | Advance the colony one time-step and evaporate pheromone traces |
 
-See [`MCP_TOOL_SPECIFICATION.md`](MCP_TOOL_SPECIFICATION.md) for full JSON schemas and examples.
+See [`MCP_TOOL_SPECIFICATION.md`](mcp_tool_specification.md) for full JSON schemas and examples.
 
 ## Health Check
 
@@ -228,7 +228,7 @@ Key test modules:
 
 - `test_models.py` — data contract validation for all dataclasses and enums
 - `test_kernel.py` — full propose/record/tick round-trips
-- `test_gate.py` — gate score calculations and threshold routing
+- `test_actuation_gate.py` — gate score calculations and threshold routing
 - `test_consequence_memory.py` — SQLite persistence and trust delta computation
 - `test_falsification_worker.py` — each attack vector in isolation
 - `test_pruning_daemon.py` — staleness detection via pheromone field state
@@ -240,5 +240,5 @@ Key test modules:
 - **Project Root**: [../../../README.md](../../../README.md)
 - **Agents Reference**: [AGENTS.md](AGENTS.md)
 - **Formal Specification**: [SPEC.md](SPEC.md)
-- **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)
+- **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](mcp_tool_specification.md)
 - **Stigmergy Integration**: [agentic_memory/stigmergy](../agentic_memory/)
