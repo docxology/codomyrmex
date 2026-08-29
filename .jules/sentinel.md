@@ -11,3 +11,8 @@ Duplicate definitions across modules (e.g., repeating the `SecretType` definitio
 
 **Prevention:**
 Use descriptive suffixes or alternatives (e.g., changing `"password"` to `"password_type"`) for model or type definitions. Implement robust CI checks to enforce single-source-of-truth patterns rather than duplicating classes.
+
+## 2026-03-01 - Fix Command Injection in SystemOpsMixin
+**Vulnerability:** The `SystemOpsMixin.run_command` method executed arbitrary commands using `subprocess.run` with `shell=True`. This allowed command injection if user-provided input was passed directly into the `command` parameter.
+**Learning:** Passing untrusted input to `shell=True` executes it through the shell, interpreting metacharacters like `;` and `|` as new commands.
+**Prevention:** Avoid `shell=True`. Use `shlex.split()` to parse a command string into a list of arguments, and execute the list directly to ensure it is treated as a single command with arguments, safely escaping any metacharacters.
