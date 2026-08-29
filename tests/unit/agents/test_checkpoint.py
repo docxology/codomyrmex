@@ -31,7 +31,7 @@ def test_checkpoint_save_load_verify():
     assert ckpt.checkpoint_id.startswith("ckpt-test-agent-1")
 
     # Save to a temp file
-    path = Path(tempfile.mktemp(suffix=".json"))
+    path = Path(tempfile.NamedTemporaryFile(suffix=".json", delete=False).name)
     ckpt.save(path)
 
     # Verify file exists and is valid JSON
