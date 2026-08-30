@@ -1,6 +1,7 @@
 """SystemOpsMixin functionality."""
 
 import os
+import shlex
 import subprocess
 import time
 from typing import Any
@@ -159,9 +160,9 @@ class SystemOpsMixin:
         start_time = time.time()
 
         try:
+            parsed_command = shlex.split(command)
             result = subprocess.run(
-                command,
-                shell=True,  # nosec B602
+                parsed_command,
                 cwd=cwd,
                 capture_output=capture_output,
                 text=True,

@@ -102,7 +102,6 @@ from .orchestration import (
 
 # Specialized Domain Exceptions
 from .specialized import (
-    RequestedBackendUnavailable,
     ArtifactError,
     AuthenticationError,
     BulkheadFullError,
@@ -125,6 +124,7 @@ from .specialized import (
     PerformanceError,
     PhysicalManagementError,
     PluginError,
+    RequestedBackendUnavailable,
     ResourceError,
     SerializationError,
     SessionError,
@@ -145,7 +145,6 @@ from .viz import (
 )
 
 __all__ = [
-    # AI
     "AIProviderError",
     "APIDocumentationError",
     "APIError",
@@ -160,18 +159,14 @@ __all__ = [
     "CapabilityScanError",
     "CaseError",
     "CaseNotFoundError",
-    # CEREBRUM
     "CerebrumError",
     "CircuitOpenError",
     "CodeEditingError",
-    # Execution
     "CodeExecutionError",
     "CodeGenerationError",
-    # Base
     "CodomyrmexError",
     "CommandExecutionError",
     "CompressionError",
-    # Configuration
     "ConfigurationError",
     "ContainerError",
     "DatabaseError",
@@ -182,9 +177,7 @@ __all__ = [
     "EncryptionError",
     "EnvironmentError",
     "EventError",
-    # I/O
     "FileOperationError",
-    # Git
     "GitOperationError",
     "IDEConnectionError",
     "IDEError",
@@ -196,20 +189,17 @@ __all__ = [
     "ModelContextError",
     "ModelError",
     "Modeling3DError",
-    # Network/API/Validation
     "NetworkError",
     "NetworkStructureError",
-    # Orchestration
     "OrchestrationError",
     "PatternMatchingError",
-    # Specialized
     "PerformanceError",
     "PhysicalManagementError",
     "PlottingError",
     "PluginError",
-    "RequestedBackendUnavailable",
     "ProjectManagementError",
     "RepositoryError",
+    "RequestedBackendUnavailable",
     "ResourceError",
     "SandboxError",
     "SchemaError",
@@ -219,7 +209,6 @@ __all__ = [
     "SimulationError",
     "SkillError",
     "SpatialError",
-    # Analysis
     "StaticAnalysisError",
     "SynthesisError",
     "SystemDiscoveryError",
@@ -229,7 +218,6 @@ __all__ = [
     "TimeoutError",
     "TransformationError",
     "ValidationError",
-    # Visualization/Docs
     "VisualizationError",
     "WorkflowError",
     "create_error_context",
