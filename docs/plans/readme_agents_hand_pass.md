@@ -1,7 +1,26 @@
 # README / AGENTS hand-pass tracker
 
 **Status:** Active freeze; package-wide integrity audited, bounded hub review in
-progress. **Last measured:** July 29, 2026.
+progress. **Last measured:** August 30, 2026.
+
+## 2026-08-30 fleet-pass stub resolution
+
+The 2026-08-30 fleet pass left 198 placeholder stubs
+(`SKELETON (auto-generated 2026-08-30)`). All 198 have been replaced with
+content derived from on-disk reality:
+
+- 130 module `README.md` files under
+  `src/codomyrmex/documentation/docs/modules/<module>/` — generated from each
+  module's `__init__.py` docstring, `__all__` exports, and submodule inventory;
+  SPEC links omitted where no `SPEC.md` exists in the bundle. Marked
+  `<!-- readme: generated -->`.
+- 68 hand-verified docs across `.agent/`, `.agents/`, `.cursor/skills/`,
+  runtime-config dirs, `.devcontainer/`, `.jules/`,
+  `.pipelines/`, `data/sair/`, `docs/assets/demo_stills/`, `evaluations/`,
+  `tests/` subdirs, and 3 module `AGENTS.md` files (config_audits,
+  config_monitoring, manuscript).
+- Post-pass strict audit: 1,557 directories / 3,114 files, **0 errors,
+  0 warnings** (receipt: `output/readme_agents_audit.json`, 2026-08-30).
 
 ## Current receipt
 
