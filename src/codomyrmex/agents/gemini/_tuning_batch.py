@@ -2,7 +2,10 @@
 
 from typing import Any
 
-from google.genai import types
+try:
+    from google.genai import types
+except ImportError:  # optional dependency not installed
+    types = None  # type: ignore[assignment]
 
 from codomyrmex.agents.core.exceptions import GeminiError
 from codomyrmex.logging_monitoring import get_logger
@@ -31,6 +34,8 @@ class GeminiTuningBatchMixin:
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
+            if types is None:
+                raise GeminiError("google-genai SDK is not installed")
             job = self.client.tunings.tune(
                 base_model=source_model,
                 training_data=training_data,

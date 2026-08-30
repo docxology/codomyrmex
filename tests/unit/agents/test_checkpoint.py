@@ -1,6 +1,7 @@
 """Test Checkpoint save+load+verify cycle."""
 
 import json
+import os
 import tempfile
 from pathlib import Path
 
@@ -31,7 +32,9 @@ def test_checkpoint_save_load_verify():
     assert ckpt.checkpoint_id.startswith("ckpt-test-agent-1")
 
     # Save to a temp file
-    path = Path(tempfile.mktemp(suffix=".json"))
+    fd, _name = tempfile.mkstemp(suffix=".json")
+    os.close(fd)
+    path = Path(_name)
     ckpt.save(path)
 
     # Verify file exists and is valid JSON

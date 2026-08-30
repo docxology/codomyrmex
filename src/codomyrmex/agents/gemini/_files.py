@@ -2,7 +2,10 @@
 
 from typing import Any
 
-from google.genai import types
+try:
+    from google.genai import types
+except ImportError:  # optional dependency not installed
+    types = None  # type: ignore[assignment]
 
 from codomyrmex.agents.core.exceptions import GeminiError
 from codomyrmex.logging_monitoring import get_logger
@@ -23,6 +26,8 @@ class GeminiFilesMixin:
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
+            if types is None:
+                raise GeminiError("google-genai SDK is not installed")
             config = types.UploadFileConfig(mime_type=mime_type) if mime_type else None
             file_ref = self.client.files.upload(file=file_path, config=config)
             return file_ref.model_dump()

@@ -2,7 +2,10 @@
 
 from typing import Any
 
-from google.genai import types
+try:
+    from google.genai import types
+except ImportError:  # optional dependency not installed
+    types = None  # type: ignore[assignment]
 
 from codomyrmex.agents.core.exceptions import GeminiError
 from codomyrmex.logging_monitoring import get_logger
@@ -27,6 +30,8 @@ class GeminiCacheMixin:
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
+            if types is None:
+                raise GeminiError("google-genai SDK is not installed")
             config = types.CreateCachedContentConfig(
                 contents=contents, ttl=ttl, display_name=display_name
             )
@@ -73,6 +78,8 @@ class GeminiCacheMixin:
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         try:
+            if types is None:
+                raise GeminiError("google-genai SDK is not installed")
             return self.client.caches.update(
                 name=name, config=types.UpdateCachedContentConfig(ttl=ttl)
             ).model_dump()

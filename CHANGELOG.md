@@ -8,6 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Optional-dependency import guards (collection errors)**: `agents.gemini`
+  mixins (`_cache`, `_files`, `_tuning_batch`) and `agents.claude`
+  (`mixins/execution`) no longer crash at import time when `google-genai` /
+  `anthropic` are absent; SDK use now raises `GeminiError`/`ClaudeError` with a
+  clear message instead of `ModuleNotFoundError` during test collection.
+  Fixes 12 of the 16 collection errors in the 2026-08-30 strict sweep.
+- **Zero-mock test hygiene**: replaced insecure `tempfile.mktemp` with
+  `tempfile.mkstemp` in `tests/unit/{agents,concurrency,orchestrator}` (S306).
+- **Lint pass**: sorted `__all__` in `exceptions/__init__.py` (RUF022), sorted
+  import blocks in `cli/handlers/system.py` and `exceptions/__init__.py` (I001),
+  removed placeholder f-strings in `logistics/task/queue.py` (F541).
+
 ### Added
 
 - **PAI v3/v4 skill directory coexistence**: `_modules.py` now discovers PAI

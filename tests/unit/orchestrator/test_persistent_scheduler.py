@@ -1,6 +1,7 @@
 """Test PersistentScheduler args/kwargs persistence across simulated restart."""
 
 import json
+import os
 import tempfile
 from pathlib import Path
 
@@ -14,7 +15,9 @@ def _dummy_func(a=1, b=2):
 
 def test_save_load_preserves_args_kwargs():
     """Test that _save_state persists args/kwargs and _load_state restores them."""
-    state_path = Path(tempfile.mktemp(suffix=".json"))
+    fd, _name = tempfile.mkstemp(suffix=".json")
+    os.close(fd)
+    state_path = Path(_name)
 
     # First scheduler instance: register, schedule, let it save
     sched1 = PersistentScheduler(state_path=str(state_path), auto_save=True)
@@ -56,7 +59,9 @@ def test_save_load_preserves_args_kwargs():
 
 def test_save_load_with_empty_args_kwargs():
     """Test that jobs with no explicit args/kwargs survive restart."""
-    state_path = Path(tempfile.mktemp(suffix=".json"))
+    fd, _name = tempfile.mkstemp(suffix=".json")
+    os.close(fd)
+    state_path = Path(_name)
 
     sched1 = PersistentScheduler(state_path=str(state_path), auto_save=True)
     sched1.register_function("dummy", _dummy_func)

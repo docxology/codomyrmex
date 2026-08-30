@@ -1,6 +1,7 @@
 """Test dead letter queue replay in-progress marker."""
 
 import json
+import os
 import tempfile
 from pathlib import Path
 
@@ -16,7 +17,9 @@ def _dummy_callback(operation: str, args: dict) -> str:
 
 def test_replay_in_progress_marker():
     """Verify that replay writes in-progress marker before callback."""
-    dlq = DeadLetterQueue(path=tempfile.mktemp(suffix=".jsonl"))
+    fd, _name = tempfile.mkstemp(suffix=".jsonl")
+    os.close(fd)
+    dlq = DeadLetterQueue(path=_name)
 
     entry_id = dlq.add(operation="test_op", args={"key": "val"}, error="boom")
     result = dlq.replay(entry_id, _dummy_callback)
@@ -34,7 +37,9 @@ def test_replay_in_progress_marker():
 def test_replay_crash_leaves_in_progress():
     """Simulate a crash between callback and _mark_replayed by
     calling _mark_replaying manually and never calling _mark_replayed."""
-    dlq = DeadLetterQueue(path=tempfile.mktemp(suffix=".jsonl"))
+    fd, _name = tempfile.mkstemp(suffix=".jsonl")
+    os.close(fd)
+    dlq = DeadLetterQueue(path=_name)
 
     entry_id = dlq.add(operation="crash_op", args={"x": 1}, error="timeout")
 
@@ -63,7 +68,9 @@ def test_replay_crash_leaves_in_progress():
 
 def test_replay_checks_in_progress():
     """Verify that a replay cannot restart while one is in progress."""
-    dlq = DeadLetterQueue(path=tempfile.mktemp(suffix=".jsonl"))
+    fd, _name = tempfile.mkstemp(suffix=".jsonl")
+    os.close(fd)
+    dlq = DeadLetterQueue(path=_name)
     entry_id = dlq.add(operation="slow_op", args={}, error="oom")
 
     # Manually set up in-progress state in the active_replays set

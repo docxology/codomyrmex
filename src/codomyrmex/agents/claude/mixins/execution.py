@@ -4,7 +4,10 @@ import time
 from collections.abc import Iterator
 from typing import Any, Protocol
 
-import anthropic
+try:
+    import anthropic
+except ImportError:  # optional dependency not installed
+    anthropic = None  # type: ignore[assignment]
 
 from codomyrmex.agents.core import (
     AgentRequest,
@@ -13,6 +16,10 @@ from codomyrmex.agents.core import (
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
+
+API_ERRORS: tuple[type[Exception], ...] = (
+    (anthropic.APIError,) if anthropic is not None else ()
+)
 
 CLAUDE_PRICING = {
     "claude-3-opus-20240229": {"input": 15.00, "output": 75.00},
@@ -158,7 +165,7 @@ class ExecutionMixin:
                 execution_time=execution_time,
             )
 
-        except anthropic.APIError as e:
+        except API_ERRORS as e:
             execution_time = time.time() - start_time
             self._handle_api_error(e, execution_time, anthropic.APIError)
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
@@ -246,7 +253,7 @@ class ExecutionMixin:
                 },
             )
 
-        except anthropic.APIError as e:
+        except API_ERRORS as e:
             self.logger.error(
                 "Claude API streaming error",
                 exc_info=True,
