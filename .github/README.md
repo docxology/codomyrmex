@@ -292,7 +292,7 @@ graph TB
 | [`multimodal`](../src/codomyrmex/multimodal/) | 3 | 4 | [📖](../docs/modules/multimodal/) | [⚙️](../config/multimodal/config.yaml) | [📜](../scripts/multimodal/) | Imagen 3 image generation, multi-modal AI pipelines |
 | [`data_visualization`](../src/codomyrmex/data_visualization/) | 79 | 28 | [📖](../docs/modules/data_visualization/) | [⚙️](../config/data_visualization/config.yaml) | [📜](../scripts/data_visualization/) | Matplotlib, Plotly, chart generation, dashboards |
 | [`meme`](../src/codomyrmex/meme/) | 58 | 19 | [📖](../docs/modules/meme/) | [⚙️](../config/meme/config.yaml) | [📜](../scripts/meme/) | Meme generation, template engine, social media formatting |
-| [`spatial`](../src/codomyrmex/spatial/) | 18 | 8 | [📖](../docs/modules/spatial/) | [⚙️](../config/spatial/config.yaml) | [📜](../scripts/spatial/) | Geospatial data, coordinate systems, mapping |
+| [`spatial`](../src/codomyrmex/spatial/) | 18 | 8 | [📖](../docs/modules/spatial/) | [⚙️](../config/spatial/config.yaml) | [📜](../scripts/spatial/) | 3D/4D geometry, coordinate transforms, physics and rendering |
 
 ### 🏠 Personal AI (PAI) Modules
 
