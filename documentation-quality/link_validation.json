@@ -5439,6 +5439,13 @@
     "message": "External link (not validated)"
   },
   {
+    "file": ".codex/README.md",
+    "link": "../README.md",
+    "line": 8,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
     "file": "examples/README.md",
     "link": "AGENTS.md",
     "line": 19,
@@ -51695,6 +51702,69 @@
     "message": "File exists"
   },
   {
+    "file": "data/README.md",
+    "link": "sair/README.md",
+    "line": 6,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "data/README.md",
+    "link": "../README.md",
+    "line": 8,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "data/sair/README.md",
+    "link": "runs/README.md",
+    "line": 6,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "data/sair/README.md",
+    "link": "results/README.md",
+    "line": 7,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "data/sair/README.md",
+    "link": "../README.md",
+    "line": 9,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "data/sair/README.md",
+    "link": "../../scripts/sair/",
+    "line": 9,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "data/sair/results/README.md",
+    "link": "../README.md",
+    "line": 3,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "data/sair/results/README.md",
+    "link": "../README.md",
+    "line": 7,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "data/sair/runs/README.md",
+    "link": "../README.md",
+    "line": 7,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
     "file": "tests/SPEC.md",
     "link": "README.md",
     "line": 151,
@@ -56850,6 +56920,202 @@
     "file": "projects/test_project/config/README.md",
     "link": "AGENTS.md",
     "line": 23,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/README.md",
+    "link": "skills/agent-interop/SKILL.md",
+    "line": 6,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/README.md",
+    "link": "skills/first-principles/SKILL.md",
+    "line": 7,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/README.md",
+    "link": "skills/mcp-tool-use/SKILL.md",
+    "line": 8,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/README.md",
+    "link": "skills/red-team/SKILL.md",
+    "line": 9,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/README.md",
+    "link": "skills/systems-thinking/SKILL.md",
+    "line": 10,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/README.md",
+    "link": "../README.md",
+    "line": 12,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/README.md",
+    "link": "agent-interop/SKILL.md",
+    "line": 6,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/README.md",
+    "link": "first-principles/SKILL.md",
+    "line": 7,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/README.md",
+    "link": "mcp-tool-use/SKILL.md",
+    "line": 8,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/README.md",
+    "link": "red-team/SKILL.md",
+    "line": 9,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/README.md",
+    "link": "systems-thinking/SKILL.md",
+    "line": 10,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/README.md",
+    "link": "../README.md",
+    "line": 12,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/README.md",
+    "link": "../AGENTS.md",
+    "line": 12,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/red-team/AGENTS.md",
+    "link": "SKILL.md",
+    "line": 4,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/red-team/README.md",
+    "link": "SKILL.md",
+    "line": 5,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/red-team/README.md",
+    "link": "../README.md",
+    "line": 7,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/first-principles/AGENTS.md",
+    "link": "SKILL.md",
+    "line": 4,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/first-principles/README.md",
+    "link": "SKILL.md",
+    "line": 5,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/first-principles/README.md",
+    "link": "../README.md",
+    "line": 7,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/agent-interop/AGENTS.md",
+    "link": "SKILL.md",
+    "line": 4,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/agent-interop/README.md",
+    "link": "SKILL.md",
+    "line": 5,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/agent-interop/README.md",
+    "link": "../README.md",
+    "line": 7,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/systems-thinking/AGENTS.md",
+    "link": "SKILL.md",
+    "line": 4,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/systems-thinking/README.md",
+    "link": "SKILL.md",
+    "line": 5,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/systems-thinking/README.md",
+    "link": "../README.md",
+    "line": 7,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/mcp-tool-use/AGENTS.md",
+    "link": "SKILL.md",
+    "line": 4,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/mcp-tool-use/README.md",
+    "link": "SKILL.md",
+    "line": 5,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".agents/skills/mcp-tool-use/README.md",
+    "link": "../README.md",
+    "line": 7,
     "status": "ok",
     "message": "File exists"
   },
@@ -88587,21 +88853,21 @@
   {
     "file": "docs/plans/readme_agents_hand_pass.md",
     "link": "../development/documentation.md",
-    "line": 116,
+    "line": 135,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/plans/readme_agents_hand_pass.md",
     "link": "agents-readme-gap-report.md",
-    "line": 117,
+    "line": 136,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/plans/readme_agents_hand_pass.md",
     "link": "../../AGENTS.md",
-    "line": 118,
+    "line": 137,
     "status": "ok",
     "message": "File exists"
   },
@@ -91640,6 +91906,13 @@
     "file": "docs/assets/README.md",
     "link": "AGENTS.md",
     "line": 21,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/assets/demo_stills/README.md",
+    "link": "../../README.md",
+    "line": 6,
     "status": "ok",
     "message": "File exists"
   },
@@ -112651,6 +112924,62 @@
     "message": "File exists"
   },
   {
+    "file": ".devcontainer/README.md",
+    "link": "../README.md",
+    "line": 8,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".jules/README.md",
+    "link": "bolt.md",
+    "line": 6,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".jules/README.md",
+    "link": "sentinel.md",
+    "line": 7,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".jules/README.md",
+    "link": "../README.md",
+    "line": 9,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".cursor/skills/README.md",
+    "link": "codomyrmex/SKILL.md",
+    "line": 6,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".cursor/skills/README.md",
+    "link": "desloppify/SKILL.md",
+    "line": 7,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".cursor/skills/README.md",
+    "link": "fractals/SKILL.md",
+    "line": 8,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".cursor/skills/README.md",
+    "link": "../README.md",
+    "line": 10,
+    "status": "broken",
+    "message": "Target not found: ../README.md"
+  },
+  {
     "file": ".cursor/skills/codomyrmex/SKILL.md",
     "link": "../../../SKILL.md",
     "line": 13,
@@ -112665,9 +112994,51 @@
     "message": "File exists"
   },
   {
+    "file": ".cursor/skills/codomyrmex/AGENTS.md",
+    "link": "SKILL.md",
+    "line": 4,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".cursor/skills/codomyrmex/README.md",
+    "link": "SKILL.md",
+    "line": 5,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".cursor/skills/codomyrmex/README.md",
+    "link": "../README.md",
+    "line": 7,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
     "file": ".cursor/skills/desloppify/SKILL.md",
     "link": "../../../.agent/skills/desloppify/SKILL.md",
     "line": 13,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".cursor/skills/desloppify/AGENTS.md",
+    "link": "SKILL.md",
+    "line": 4,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".cursor/skills/desloppify/README.md",
+    "link": "SKILL.md",
+    "line": 5,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".cursor/skills/desloppify/README.md",
+    "link": "../README.md",
+    "line": 7,
     "status": "ok",
     "message": "File exists"
   },
@@ -112682,6 +113053,104 @@
     "file": ".cursor/skills/fractals/SKILL.md",
     "link": "../../../src/codomyrmex/orchestrator/fractals/MCP_TOOL_SPECIFICATION.md",
     "line": 17,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".cursor/skills/fractals/AGENTS.md",
+    "link": "SKILL.md",
+    "line": 4,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".cursor/skills/fractals/README.md",
+    "link": "SKILL.md",
+    "line": 5,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": ".cursor/skills/fractals/README.md",
+    "link": "../README.md",
+    "line": 7,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "evaluations/README.md",
+    "link": "api/README.md",
+    "line": 6,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "evaluations/README.md",
+    "link": "cli/README.md",
+    "line": 7,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "evaluations/README.md",
+    "link": "gemini/README.md",
+    "line": 8,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "evaluations/README.md",
+    "link": "overall_evaluation_report.md",
+    "line": 10,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "evaluations/README.md",
+    "link": "../README.md",
+    "line": 12,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "evaluations/gemini/README.md",
+    "link": "overall_evaluation_report.md",
+    "line": 7,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "evaluations/gemini/README.md",
+    "link": "../README.md",
+    "line": 9,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "evaluations/api/README.md",
+    "link": "overall_evaluation_report.md",
+    "line": 6,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "evaluations/api/README.md",
+    "link": "../README.md",
+    "line": 8,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "evaluations/cli/README.md",
+    "link": "overall_evaluation_report.md",
+    "line": 3,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "evaluations/cli/README.md",
+    "link": "../README.md",
+    "line": 5,
     "status": "ok",
     "message": "File exists"
   },

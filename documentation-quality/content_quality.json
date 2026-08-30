@@ -228,6 +228,32 @@
     }
   },
   {
+    "file": ".codex/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 60,
+      "link_count": 0
+    }
+  },
+  {
+    "file": ".codex/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 2,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 22,
+      "link_count": 1
+    }
+  },
+  {
     "file": "examples/AGENTS.md",
     "score": 100,
     "issues": [],
@@ -34340,6 +34366,112 @@
     }
   },
   {
+    "file": "data/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 69,
+      "link_count": 0
+    }
+  },
+  {
+    "file": "data/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 2,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 18,
+      "link_count": 2
+    }
+  },
+  {
+    "file": "data/sair/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 78,
+      "link_count": 0
+    }
+  },
+  {
+    "file": "data/sair/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 2,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 32,
+      "link_count": 4
+    }
+  },
+  {
+    "file": "data/sair/results/AGENTS.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 3,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 25,
+      "link_count": 0
+    }
+  },
+  {
+    "file": "data/sair/results/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 1,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 16,
+      "link_count": 2
+    }
+  },
+  {
+    "file": "data/sair/runs/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 3,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 53,
+      "link_count": 0
+    }
+  },
+  {
+    "file": "data/sair/runs/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 1,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 17,
+      "link_count": 1
+    }
+  },
+  {
     "file": ".github/SPEC.md",
     "score": 100,
     "issues": [],
@@ -35176,6 +35308,54 @@
     }
   },
   {
+    "file": ".agents/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 74,
+      "link_count": 0
+    }
+  },
+  {
+    "file": ".agents/README.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 2,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 92,
+      "link_count": 6
+    }
+  },
+  {
+    "file": ".agents/skills/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 63,
+      "link_count": 0
+    }
+  },
+  {
+    "file": ".agents/skills/README.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 2,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 80,
+      "link_count": 7
+    }
+  },
+  {
     "file": ".agents/skills/red-team/SKILL.md",
     "score": 100,
     "issues": [],
@@ -35185,6 +35365,32 @@
       "code_block_count": 0,
       "word_count": 156,
       "link_count": 0
+    }
+  },
+  {
+    "file": ".agents/skills/red-team/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 69,
+      "link_count": 1
+    }
+  },
+  {
+    "file": ".agents/skills/red-team/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 1,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 25,
+      "link_count": 2
     }
   },
   {
@@ -35200,6 +35406,32 @@
     }
   },
   {
+    "file": ".agents/skills/first-principles/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 71,
+      "link_count": 1
+    }
+  },
+  {
+    "file": ".agents/skills/first-principles/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 1,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 22,
+      "link_count": 2
+    }
+  },
+  {
     "file": ".agents/skills/agent-interop/SKILL.md",
     "score": 100,
     "issues": [],
@@ -35209,6 +35441,32 @@
       "code_block_count": 0,
       "word_count": 165,
       "link_count": 0
+    }
+  },
+  {
+    "file": ".agents/skills/agent-interop/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 76,
+      "link_count": 1
+    }
+  },
+  {
+    "file": ".agents/skills/agent-interop/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 1,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 24,
+      "link_count": 2
     }
   },
   {
@@ -35224,6 +35482,32 @@
     }
   },
   {
+    "file": ".agents/skills/systems-thinking/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 71,
+      "link_count": 1
+    }
+  },
+  {
+    "file": ".agents/skills/systems-thinking/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 1,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 23,
+      "link_count": 2
+    }
+  },
+  {
     "file": ".agents/skills/mcp-tool-use/SKILL.md",
     "score": 100,
     "issues": [],
@@ -35233,6 +35517,32 @@
       "code_block_count": 0,
       "word_count": 205,
       "link_count": 0
+    }
+  },
+  {
+    "file": ".agents/skills/mcp-tool-use/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 68,
+      "link_count": 1
+    }
+  },
+  {
+    "file": ".agents/skills/mcp-tool-use/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 1,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 22,
+      "link_count": 2
     }
   },
   {
@@ -47880,10 +48190,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 8,
+      "heading_count": 9,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 661,
+      "word_count": 764,
       "link_count": 3
     }
   },
@@ -48607,6 +48917,34 @@
       "code_block_count": 0,
       "word_count": 68,
       "link_count": 2
+    }
+  },
+  {
+    "file": "docs/assets/demo_stills/AGENTS.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 3,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 42,
+      "link_count": 0
+    }
+  },
+  {
+    "file": "docs/assets/demo_stills/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 1,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 22,
+      "link_count": 1
     }
   },
   {
@@ -65294,6 +65632,18 @@
     }
   },
   {
+    "file": ".pipelines/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 57,
+      "link_count": 0
+    }
+  },
+  {
     "file": ".pipelines/README.md",
     "score": 100,
     "issues": [],
@@ -65303,6 +65653,44 @@
       "code_block_count": 0,
       "word_count": 86,
       "link_count": 3
+    }
+  },
+  {
+    "file": ".devcontainer/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 55,
+      "link_count": 0
+    }
+  },
+  {
+    "file": ".devcontainer/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 2,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 23,
+      "link_count": 1
+    }
+  },
+  {
+    "file": ".jules/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 58,
+      "link_count": 0
     }
   },
   {
@@ -65318,6 +65706,20 @@
     }
   },
   {
+    "file": ".jules/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 2,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 22,
+      "link_count": 3
+    }
+  },
+  {
     "file": ".jules/sentinel.md",
     "score": 100,
     "issues": [],
@@ -65330,6 +65732,30 @@
     }
   },
   {
+    "file": ".cursor/skills/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 79,
+      "link_count": 0
+    }
+  },
+  {
+    "file": ".cursor/skills/README.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 2,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 64,
+      "link_count": 4
+    }
+  },
+  {
     "file": ".cursor/skills/codomyrmex/SKILL.md",
     "score": 100,
     "issues": [],
@@ -65338,6 +65764,34 @@
       "placeholder_count": 0,
       "code_block_count": 0,
       "word_count": 74,
+      "link_count": 2
+    }
+  },
+  {
+    "file": ".cursor/skills/codomyrmex/AGENTS.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 3,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 38,
+      "link_count": 1
+    }
+  },
+  {
+    "file": ".cursor/skills/codomyrmex/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 1,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 20,
       "link_count": 2
     }
   },
@@ -65354,6 +65808,34 @@
     }
   },
   {
+    "file": ".cursor/skills/desloppify/AGENTS.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 3,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 49,
+      "link_count": 1
+    }
+  },
+  {
+    "file": ".cursor/skills/desloppify/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 1,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 28,
+      "link_count": 2
+    }
+  },
+  {
     "file": ".cursor/skills/fractals/SKILL.md",
     "score": 100,
     "issues": [],
@@ -65363,6 +65845,46 @@
       "code_block_count": 0,
       "word_count": 62,
       "link_count": 2
+    }
+  },
+  {
+    "file": ".cursor/skills/fractals/AGENTS.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 3,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 37,
+      "link_count": 1
+    }
+  },
+  {
+    "file": ".cursor/skills/fractals/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 1,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 17,
+      "link_count": 2
+    }
+  },
+  {
+    "file": "evaluations/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 137,
+      "link_count": 0
     }
   },
   {
@@ -65378,6 +65900,32 @@
     }
   },
   {
+    "file": "evaluations/README.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 2,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 55,
+      "link_count": 5
+    }
+  },
+  {
+    "file": "evaluations/gemini/AGENTS.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 3,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 30,
+      "link_count": 0
+    }
+  },
+  {
     "file": "evaluations/gemini/overall_evaluation_report.md",
     "score": 100,
     "issues": [],
@@ -65386,6 +65934,34 @@
       "placeholder_count": 0,
       "code_block_count": 0,
       "word_count": 393,
+      "link_count": 0
+    }
+  },
+  {
+    "file": "evaluations/gemini/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 1,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 17,
+      "link_count": 2
+    }
+  },
+  {
+    "file": "evaluations/api/AGENTS.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 3,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 43,
       "link_count": 0
     }
   },
@@ -65404,6 +65980,34 @@
     }
   },
   {
+    "file": "evaluations/api/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 2,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 29,
+      "link_count": 2
+    }
+  },
+  {
+    "file": "evaluations/cli/AGENTS.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 3,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 29,
+      "link_count": 0
+    }
+  },
+  {
     "file": "evaluations/cli/overall_evaluation_report.md",
     "score": 100,
     "issues": [],
@@ -65413,6 +66017,20 @@
       "code_block_count": 0,
       "word_count": 378,
       "link_count": 0
+    }
+  },
+  {
+    "file": "evaluations/cli/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 1,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 14,
+      "link_count": 2
     }
   },
   {
