@@ -8,3 +8,6 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+## 2026-08-30 - O(1) Eviction in InMemoryCache
+**Learning:** Dictionary eviction based on timestamp search `min(keys, key=lambda k: map[k][1])` degrades to O(N), severely impacting performance during cache fill.
+**Action:** Use `collections.OrderedDict` with `popitem(last=False)` and `move_to_end(key)` to maintain correct FIFO semantics while ensuring O(1) performance.

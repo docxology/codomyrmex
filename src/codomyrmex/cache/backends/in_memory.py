@@ -2,6 +2,7 @@
 In-memory cache backend.
 """
 
+import collections
 import time
 from typing import Any
 
@@ -22,7 +23,9 @@ class InMemoryCache(Cache):
             max_size: Maximum number of items
             default_ttl: Default time-to-live in seconds
         """
-        self._cache: dict[str, tuple[Any, float, int | None]] = {}
+        self._cache: collections.OrderedDict[str, tuple[Any, float, int | None]] = (
+            collections.OrderedDict()
+        )
         self.max_size = max_size
         self.default_ttl = default_ttl
         self._stats = CacheStats(max_size=max_size)
@@ -48,15 +51,14 @@ class InMemoryCache(Cache):
 
     def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
         """set a value in the cache."""
-        # Evict if at max size
+        # ⚡ Bolt: Use OrderedDict to make eviction O(1) instead of O(N)
         if len(self._cache) >= self.max_size and key not in self._cache:
-            # Remove oldest entry
-            oldest_key = min(self._cache.keys(), key=lambda k: self._cache[k][1])
-            del self._cache[oldest_key]
+            self._cache.popitem(last=False)
             self._stats.size -= 1
 
         ttl = ttl or self.default_ttl
         self._cache[key] = (value, time.time(), ttl)
+        self._cache.move_to_end(key)
         self._stats.size = len(self._cache)
         return True
 
