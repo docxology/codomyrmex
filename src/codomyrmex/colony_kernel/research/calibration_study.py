@@ -62,7 +62,7 @@ class TrustCalibrationStudy:
         metadata: dict[str, Any] | None = None,
     ) -> None:
         """Add a score-outcome pair."""
-        if not (0.0 <= predicted_score <= 1.0):
+        if not math.isfinite(predicted_score) or not (0.0 <= predicted_score <= 1.0):
             raise ValueError(
                 f"predicted_score must be in [0.0, 1.0], got {predicted_score}"
             )

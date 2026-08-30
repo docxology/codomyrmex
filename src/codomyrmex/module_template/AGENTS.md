@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/module_template
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Template scaffolding for creating new Codomyrmex modules with standard structure.

@@ -1,7 +1,7 @@
 # SPEC.md — Audio Generation Scripts
 
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 ## Scope
 Thin orchestrator scripts delegating TTS synthesis to `codomyrmex.audio.text_to_speech.Synthesizer`.

@@ -757,7 +757,9 @@ class TestMCPDiscoveryEngine:
         )
         engine.register_tool(tool)
         assert engine.tool_count == 1
-        assert engine.get_tool("test_tool") is tool
+        registered = engine.get_tool("test_tool")
+        assert registered == tool
+        assert registered is not tool
         assert engine.get_tool("nonexistent") is None
 
     def test_record_cache_hit(self):

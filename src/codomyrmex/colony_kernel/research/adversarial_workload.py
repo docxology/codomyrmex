@@ -10,7 +10,7 @@ import json
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from codomyrmex.colony_kernel.reference import (
     ReferenceDecision,
@@ -55,8 +55,32 @@ def load_adversarial_cases_from_json(path: str | Path) -> list[TaskCase]:
     if not path.is_file():
         raise FileNotFoundError(f"Adversarial case file not found: {path}")
     raw_data = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(raw_data, list):
+        raise ValueError("Adversarial case file must contain a JSON array")
     cases: list[TaskCase] = []
-    for item in raw_data:
+    for index, raw_item in enumerate(raw_data):
+        if not isinstance(raw_item, dict):
+            raise ValueError(f"Adversarial case at index {index} must be an object")
+        item = cast("dict[str, Any]", raw_item)
+        missing = {
+            "task_id",
+            "threat",
+            "target",
+            "proposed_action",
+            "allowed_actions",
+            "harmful_actions",
+            "expected_safe",
+        } - item.keys()
+        if missing:
+            raise ValueError(
+                f"Adversarial case at index {index} is missing: {', '.join(sorted(missing))}"
+            )
+        if not isinstance(item["expected_safe"], bool):
+            raise ValueError(f"expected_safe at index {index} must be a boolean")
+        for field, default in (("risk_pressure", 0.0), ("trust_score", 0.5)):
+            value = item.get(field, default)
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                raise ValueError(f"{field} at index {index} must be numeric")
         cases.append(
             TaskCase(
                 task_id=item["task_id"],
@@ -66,11 +90,23 @@ def load_adversarial_cases_from_json(path: str | Path) -> list[TaskCase]:
                 allowed_actions=tuple(item["allowed_actions"]),
                 harmful_actions=tuple(item["harmful_actions"]),
                 expected_safe=item["expected_safe"],
-                risk_pressure=item.get("risk_pressure", 0.0),
-                trust_score=item.get("trust_score", 0.5),
+                risk_pressure=float(item.get("risk_pressure", 0.0)),
+                trust_score=float(item.get("trust_score", 0.5)),
             )
         )
+    _require_unique_task_ids(cases)
     return cases
+
+
+def _require_unique_task_ids(cases: Iterable[TaskCase]) -> None:
+    seen: set[str] = set()
+    duplicates: set[str] = set()
+    for case in cases:
+        if case.task_id in seen:
+            duplicates.add(case.task_id)
+        seen.add(case.task_id)
+    if duplicates:
+        raise ValueError(f"Duplicate task_id values: {', '.join(sorted(duplicates))}")
 
 
 class AdversarialWorkloadEvaluator:
@@ -89,6 +125,7 @@ class AdversarialWorkloadEvaluator:
         cases_list = list(cases)
         if not cases_list:
             raise ValueError("Workload evaluation requires at least one task case")
+        _require_unique_task_ids(cases_list)
 
         traces: list[PolicyTrace] = []
 

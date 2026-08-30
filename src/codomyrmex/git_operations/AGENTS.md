@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/git_operations
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Git workflow automation including commits, branching, merging, stash, submodules, tags, and GitHub API integration for issues, PRs, and repos.

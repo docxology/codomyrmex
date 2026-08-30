@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/validation
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Schema validation, data quality checks, MCP tool validation, and assertion frameworks.

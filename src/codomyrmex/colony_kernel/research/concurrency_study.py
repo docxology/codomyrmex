@@ -64,16 +64,27 @@ class PersistenceConcurrencyStudy:
         operations_per_worker: int = 25,
     ) -> ConcurrencyAuditReport:
         """Run concurrent multi-threaded writes against PersistentPheromoneStore."""
+        if num_workers < 1:
+            raise ValueError("num_workers must be at least 1")
+        if operations_per_worker < 1:
+            raise ValueError("operations_per_worker must be at least 1")
+
         errors: dict[str, int] = {}
         successes = 0
         failures = 0
         lock = threading.Lock()
 
+        # Establish the schema before workers race to open independent connections.
+        initial_store = PersistentPheromoneStore(self.db_path)
+        initial_store.close()
+
         def worker_task(worker_id: int) -> None:
             nonlocal successes, failures
-            # Each worker uses its own connection/store instance against the same file
-            store = PersistentPheromoneStore(self.db_path)
+            store: PersistentPheromoneStore | None = None
+            completed = 0
             try:
+                # Each worker uses its own connection against the same file.
+                store = PersistentPheromoneStore(self.db_path)
                 for i in range(operations_per_worker):
                     sig = ColonySignal(
                         signal_type=SignalType.NEED,
@@ -86,20 +97,24 @@ class PersistenceConcurrencyStudy:
                     store.deposit_signal(sig)
                     with lock:
                         successes += 1
+                    completed += 1
             except Exception as exc:
                 err_name = type(exc).__name__
                 with lock:
-                    failures += 1
-                    errors[err_name] = errors.get(err_name, 0) + 1
+                    abandoned = operations_per_worker - completed
+                    failures += abandoned
+                    errors[err_name] = errors.get(err_name, 0) + abandoned
             finally:
-                store.close()
+                if store is not None:
+                    store.close()
 
         start_time = time.perf_counter()
         with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
             futures = [
                 executor.submit(worker_task, w_id) for w_id in range(num_workers)
             ]
-            concurrent.futures.wait(futures)
+            for future in concurrent.futures.as_completed(futures):
+                future.result()
 
         elapsed = time.perf_counter() - start_time
         total_ops = num_workers * operations_per_worker

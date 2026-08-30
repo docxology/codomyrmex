@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/tool_use
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Tool use framework for structured function calling and tool orchestration.

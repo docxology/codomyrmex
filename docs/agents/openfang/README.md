@@ -1,7 +1,7 @@
 # OpenFang — Agent Operating System
 
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 **Module**: `codomyrmex.agents.openfang` | **Category**: CLI-based | **Last Updated**: March 2026
 

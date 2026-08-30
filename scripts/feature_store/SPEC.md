@@ -1,7 +1,7 @@
 # Feature Store Orchestrator Specification
 
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 ## Purpose
 This specification defines the behavior of the `feature_store_demo.py` orchestrator script, which serves as both a demonstration and a functional test for the `codomyrmex.feature_store` module.

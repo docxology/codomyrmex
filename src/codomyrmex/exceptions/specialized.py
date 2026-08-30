@@ -636,6 +636,26 @@ class ArtifactError(IDEError):
             self.context["artifact_id"] = artifact_id
 
 
+# Requested Backend
+class RequestedBackendUnavailable(CodomyrmexError):
+    """Raised when a requested backend is not available.
+
+    Attributes:
+        message (str): The error message.
+        backend (str): The name of the requested backend.
+    """
+
+    def __init__(
+        self,
+        message: str,
+        backend: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        if backend:
+            self.context["backend"] = backend
+
+
 # Cache
 class CacheError(CodomyrmexError):
     """Raised when cache operations fail.

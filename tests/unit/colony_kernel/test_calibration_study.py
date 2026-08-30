@@ -48,3 +48,7 @@ def test_trust_calibration_validation_and_errors() -> None:
 
     with pytest.raises(ValueError, match="predicted_score"):
         study.add_record("bad", 1.5, True)
+
+    for non_finite in (float("nan"), float("inf"), float("-inf")):
+        with pytest.raises(ValueError, match="predicted_score"):
+            study.add_record("non-finite", non_finite, True)

@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/languages
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Multi-language runtime management for Python, Rust, JavaScript, Go, Java, and more.

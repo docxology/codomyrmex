@@ -1,7 +1,7 @@
 # SPEC.md — PAI PM Module Specification
 
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: May 2026
 
 **Module**: `src/codomyrmex/agents/pai/pm/`
 **Version**: 2.2.0 (github.ts arg-fix + Bike Ride LLM refinements)

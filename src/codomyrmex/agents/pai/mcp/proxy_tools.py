@@ -131,7 +131,22 @@ _ALLOWED_MODULE_PREFIXES: frozenset[str] = frozenset(
         "codomyrmex.soul.",
         "codomyrmex.text_to_sql.",
         "codomyrmex.logging_monitoring.",
-        "codomyrmex.model_context_protocol.",
+        # Only reviewed sub-modules, never the broad top-level prefix.
+        "codomyrmex.model_context_protocol.quality.",
+        "codomyrmex.model_context_protocol.decorators.",
+        "codomyrmex.model_context_protocol.errors.",
+    }
+)
+
+# Functions reachable through _ALLOWED_MODULE_PREFIXES that are nevertheless
+# destructive.  A resolved callable whose __qualname__ or __name__ appears in
+# this set is refused regardless of how its module was reached.
+_DENIED_FUNCTIONS: frozenset[str] = frozenset(
+    {
+        # model_context_protocol.tools — excluded by prefix narrowing above,
+        # listed here as defence-in-depth.
+        "run_shell_command",
+        "run_command",
     }
 )
 
@@ -183,7 +198,22 @@ def tool_call_module_function(
     except ImportError as e:
         return {"error": f"Module {module_path} not found: {e}"}
 
-    func = getattr(mod, func_name, None)
+    # Defence-in-depth: refuse known destructive callables even if
+    # their module passed the prefix check.
+    resolved_name = getattr(mod, func_name, None)
+    if resolved_name is not None and (
+        getattr(resolved_name, "__qualname__", None) in _DENIED_FUNCTIONS
+        or getattr(resolved_name, "__name__", None) in _DENIED_FUNCTIONS
+    ):
+        return {
+            "error": (
+                f"Function {func_name!r} is denied for security reasons "
+                f"regardless of its module path."
+            ),
+            "available": [],
+        }
+    func = resolved_name
+
     if func is None or not callable(func):
         available = [
             n

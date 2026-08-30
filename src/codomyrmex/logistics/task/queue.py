@@ -35,8 +35,13 @@ class Queue:
 
                 self._queue = RedisQueue()
             except ImportError:
-                logger.warning("Redis not available, falling back to in-memory queue")
-                self._queue = InMemoryQueue()
+                from codomyrmex.exceptions import RequestedBackendUnavailable
+
+                raise RequestedBackendUnavailable(
+                    f"Redis backend requested but redis_queue module not available: "
+                    f"install redis or add backends/redis_queue.py",
+                    backend="redis",
+                ) from None
         else:
             logger.warning("Unknown backend %s, using in-memory queue", backend)
             self._queue = InMemoryQueue()

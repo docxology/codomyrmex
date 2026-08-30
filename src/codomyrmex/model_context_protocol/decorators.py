@@ -25,6 +25,7 @@ def mcp_tool(
     tags: list[str] | None = None,
     version: str | None = None,
     deprecated_in: str | None = None,
+    destructive: bool | None = None,
 ) -> Callable[..., Any]:
     """
     Decorator to mark a function as an MCP tool.
@@ -38,6 +39,8 @@ def mcp_tool(
         version: Tool version string (e.g., "1.0", "2.0"). Defaults to "1.0".
         deprecated_in: Version in which this tool was deprecated (e.g., "1.5").
                        If set, calling the tool emits a DeprecationWarning.
+        destructive: Whether the tool can produce side effects (write/execute).
+                     ``None`` = use default classification from trust_metadata.
 
     Usage:
         @mcp_tool(category="math", version="2.0")
@@ -70,6 +73,7 @@ def mcp_tool(
             "module": func.__module__,
             "version": version or "1.0",
             "deprecated_in": deprecated_in,
+            "destructive": destructive,
         }
         func._mcp_tool_meta = tool_meta
         func._mcp_tool = tool_meta

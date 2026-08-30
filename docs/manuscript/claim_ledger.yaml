@@ -144,6 +144,7 @@ claims:
       - "peng2011reproducible"
       - "raji2020accountability"
       - "seto1998simplex"
+      - "w3c2013provo"
 
   - id: "C9"
     class: "implementation_contract"
@@ -247,4 +248,17 @@ claims:
       - "tests/unit/colony_kernel/test_manuscript_consistency.py"
       - "scripts/validate_manuscript_integrity.py"
     boundary: "A notation contract prevents symbol drift; it does not prove that the translated formalism is a whole-program proof or an empirical result."
+    citations: []
+
+  - id: "C16"
+    class: "implementation_contract"
+    status: "supported"
+    statement: "The research package can validate a dependency DAG, execute ready tracks deterministically, and retain failed and dependency-blocked outcomes."
+    source:
+      - "docs/manuscript/09_research_roadmap.md"
+      - "docs/manuscript/11_supplemental_notation.md"
+    evidence:
+      - "src/codomyrmex/colony_kernel/research/orchestration.py"
+      - "tests/unit/colony_kernel/test_research_orchestration.py"
+    boundary: "A completed runner call establishes orchestration behavior only; it is not empirical acceptance, external replication, or authorization to promote a scientific claim."
     citations: []

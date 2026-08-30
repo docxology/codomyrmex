@@ -669,12 +669,12 @@ class SQLiteSessionStore:
 
 
 class SessionRaceGuard:
-    """Thread-safe session access guard for preventing duplicate prompt ingestion.
+    """In-process thread-safe session access guard.
 
-    When multiple Codomyrmex swarm modules invoke actions against the identical
-    Hermes session ID at the same microsecond, the Sentinel Guard prevents
-    duplicate prompt ingestion. This ensures parallel fan-out swarms remain
-    idempotent and safe when crossing the gateway boundaries simultaneously.
+    Uses a ``threading.Lock`` per session ID to prevent duplicate prompt
+    ingestion within a single process.  Does NOT guard against concurrent
+    access from separate processes — for cross-process idempotency the
+    ledger-based attestation layer (colony_kernel/attestation.py) is needed.
 
     Attributes:
         store: The session store to guard.

@@ -2,7 +2,7 @@
 
 Single source of truth for counts used in documentation and marketing copy. **Refresh** after large changes to modules, tools, documentation, or tests. Values below are a measured snapshot, not a timeless project invariant.
 
-**Last updated:** 2026-08-15
+**Last updated:** 2026-08-24
 
 ## Definitions
 
@@ -26,7 +26,7 @@ Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/a
 | `mcp_tools.py` files (non-test) | 151 |
 | Runtime MCP tools | 612 (PAI merged manifest in the complete locked dependency profile; other launcher profiles are enumerated at startup) |
 | Production `@mcp_tool` decorators | 627 |
-| Pytest tests collected | 36,028 (`uv run --locked --all-groups --all-extras python scripts/doc_inventory.py --pytest` in the complete locked dependency profile) |
+| Pytest tests collected | 36,049 (`uv run python scripts/doc_inventory.py --pytest`; collection completed in the current project environment) |
 | GitHub Actions workflow files (`.github/workflows/*.yml`) | 37 |
 | Markdown files under `docs/` | 1,204 (`find docs -name '*.md' -type f \| wc -l`) |
 

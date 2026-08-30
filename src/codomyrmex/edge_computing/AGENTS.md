@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/edge_computing
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Edge deployment with node management, mesh orchestration, and distributed task execution.

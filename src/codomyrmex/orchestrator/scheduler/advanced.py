@@ -159,6 +159,8 @@ class PersistentScheduler(Scheduler):
                         "id": job_id,
                         "name": job.name,
                         "function": func_name,
+                        "args": list(job.args),
+                        "kwargs": dict(job.kwargs),
                         "status": job.status.value,
                     }
                 )

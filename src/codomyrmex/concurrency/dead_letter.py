@@ -46,7 +46,7 @@ class DeadLetterQueue:
             >>> dlq = DeadLetterQueue("/tmp/my-dlq.jsonl")
         """
         self._path = Path(path)
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
         self._replay_lock = threading.Lock()
         self._active_replays: set[str] = set()
         self._path.parent.mkdir(parents=True, exist_ok=True)
@@ -109,6 +109,7 @@ class DeadLetterQueue:
         operation: str | None = None,
         since: datetime | None = None,
         include_replayed: bool = False,
+        reconcile_stale: bool = True,
     ) -> list[dict[str, Any]]:
         """list dead-letter entries with optional filtering.
 
@@ -128,6 +129,11 @@ class DeadLetterQueue:
         with self._lock:
             if not self._path.exists():
                 return entries
+
+            # Reconcile stale in-progress replays before building the list
+            if reconcile_stale:
+                self._reconcile_stale_replays()
+
             for line in self._path.read_text(encoding="utf-8").splitlines():
                 if not line.strip():
                     continue
@@ -135,7 +141,7 @@ class DeadLetterQueue:
                     entry = json.loads(line)
                 except json.JSONDecodeError:
                     continue
-                if not include_replayed and entry.get("replayed"):
+                if not include_replayed and (entry.get("replayed") or entry.get("replay_failed")):
                     continue
                 if operation and entry.get("operation") != operation:
                     continue
@@ -144,6 +150,7 @@ class DeadLetterQueue:
                     if ts < since.isoformat():
                         continue
                 entries.append(entry)
+
         return entries
 
     def replay(
@@ -193,6 +200,9 @@ class DeadLetterQueue:
             self._active_replays.add(entry_id)
 
         try:
+            # Write in-progress marker BEFORE the callback so a crash
+            # between callback and _mark_replayed leaves a traceable record.
+            self._mark_replaying(entry_id)
             result = callback(target["operation"], target.get("args", {}))
             self._mark_replayed(entry_id)
             return {"success": True, "result": result}
@@ -201,6 +211,32 @@ class DeadLetterQueue:
         finally:
             with self._replay_lock:
                 self._active_replays.discard(entry_id)
+
+    def _mark_replaying(self, entry_id: str) -> None:
+        """Mark an entry as replay-in-progress before the callback runs.
+
+        If the process crashes between this call and _mark_replayed,
+        the stale in-progress marker is reconciled on the next load.
+
+        Args:
+            entry_id: ID of the entry to mark.
+        """
+        with self._lock:
+            if not self._path.exists():
+                return
+            lines = self._path.read_text(encoding="utf-8").splitlines()
+            new_lines: list[str] = []
+            for line in lines:
+                if not line.strip():
+                    continue
+                try:
+                    entry = json.loads(line)
+                    if entry.get("id") == entry_id:
+                        entry["replay_in_progress"] = True
+                    new_lines.append(json.dumps(entry))
+                except json.JSONDecodeError:
+                    new_lines.append(line)
+            self._atomic_write("\n".join(new_lines) + "\n" if new_lines else "")
 
     def _mark_replayed(self, entry_id: str) -> None:
         """Mark an entry as replayed by rewriting the file.
@@ -221,10 +257,46 @@ class DeadLetterQueue:
                     if entry.get("id") == entry_id:
                         entry["replayed"] = True
                         entry["replayed_at"] = datetime.now(UTC).isoformat() + "Z"
+                        entry.pop("replay_in_progress", None)
                     new_lines.append(json.dumps(entry))
                 except json.JSONDecodeError:
                     new_lines.append(line)
-            self._atomic_write("\n".join(new_lines) + "\n")
+            self._atomic_write("\n".join(new_lines) + "\n" if new_lines else "")
+
+    def _reconcile_stale_replays(self) -> None:
+        """Mark stale in-progress replay entries as failed.
+
+        An entry with replay_in_progress=True that is not actively
+        being replayed (no entry in _active_replays) and does not
+        have replayed=True is a leftover from a crash between
+        _mark_replaying and _mark_replayed.
+        """
+        with self._lock:
+            if not self._path.exists():
+                return
+            lines = self._path.read_text(encoding="utf-8").splitlines()
+            changed = False
+            new_lines: list[str] = []
+            for line in lines:
+                if not line.strip():
+                    continue
+                try:
+                    entry = json.loads(line)
+                    if (
+                        entry.get("replay_in_progress")
+                        and not entry.get("replayed")
+                        and entry.get("id") not in self._active_replays
+                    ):
+                        entry["replay_in_progress"] = False
+                        entry["replay_failed"] = True
+                        changed = True
+                    new_lines.append(json.dumps(entry))
+                except json.JSONDecodeError:
+                    new_lines.append(line)
+            if changed:
+                self._atomic_write(
+                    "\n".join(new_lines) + "\n" if new_lines else ""
+                )
 
     def purge(self, *, before: datetime | None = None) -> int:
         """Remove entries from the queue.

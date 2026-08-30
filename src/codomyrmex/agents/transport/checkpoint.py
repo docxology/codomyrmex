@@ -2,6 +2,24 @@
 
 Saves and loads agent snapshots to/from disk as JSON files
 with metadata for diff-based state comparison.
+
+Producer (where to call save/load):
+    The canonical agent loop is ``AutonomousAgent._handle_message``
+    in ``agents/autonomous.py``.  After a successful message response
+    (line ~162, after ``self.send(reply)``), call::
+
+        from codomyrmex.agents.transport.checkpoint import Checkpoint
+        from codomyrmex.agents.transport.serializer import AgentSerializer
+
+        serializer = AgentSerializer()
+        snapshot = serializer.snapshot(
+            agent_id=self.identity,
+            agent_type="AutonomousAgent",
+            config={"persona": self.persona, "channel": self.channel},
+            memory={"last_reply": reply},
+        )
+        ckpt = Checkpoint(snapshot=snapshot)
+        ckpt.save(f"/tmp/codomyrmex-{self.identity}-checkpoint.json")
 """
 
 from __future__ import annotations

@@ -1,7 +1,7 @@
 # Perplexity AI
 
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 **Module**: `codomyrmex.agents.perplexity` | **Category**: API-based | **Last Updated**: March 2026
 

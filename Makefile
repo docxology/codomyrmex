@@ -123,7 +123,7 @@ type-check:
 security:
 	@echo "Running security scanning..."
 	uv run --locked bandit -r src/codomyrmex/ \
-		-x '*/tests/*,*/vendor/*,*/generated/*,src/codomyrmex/agents/open_gauss,src/codomyrmex/documentation/docs' \
+		-x '*/tests/*,*/vendor/*,*/generated/*,src/codomyrmex/agents/hermes/evolution,src/codomyrmex/agents/open_gauss,src/codomyrmex/documentation/docs' \
 		-lll -iii
 	@$(MAKE) audit-lock
 

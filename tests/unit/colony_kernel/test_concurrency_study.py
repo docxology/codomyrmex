@@ -21,6 +21,10 @@ def test_concurrent_load_test(tmp_path) -> None:
     assert report.total_operations == 45
     assert report.successful_operations == 45
     assert report.failed_operations == 0
+    assert (
+        report.successful_operations + report.failed_operations
+        == report.total_operations
+    )
     assert report.data_consistent is True
     assert report.final_marker_count > 0
 
@@ -35,3 +39,19 @@ def test_crash_injection_and_recovery(tmp_path) -> None:
     assert report.crash_induced is True
     assert report.recovered_cleanly is True
     assert report.integrity_check_passed is True
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "message"),
+    [
+        ({"num_workers": 0}, "num_workers"),
+        ({"operations_per_worker": 0}, "operations_per_worker"),
+    ],
+)
+def test_concurrent_load_rejects_non_positive_dimensions(
+    tmp_path, kwargs: dict[str, int], message: str
+) -> None:
+    study = PersistenceConcurrencyStudy(tmp_path / "concurrent.db")
+
+    with pytest.raises(ValueError, match=message):
+        study.run_concurrent_load_test(**kwargs)

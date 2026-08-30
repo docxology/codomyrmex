@@ -1,16 +1,16 @@
-# [Module Name] - MCP Tool Specification Template
+# Privacy - MCP Tool Specification Template
 
-This document serves as a template for defining tools within the `[Module Name]` module that are intended to be integrated with the Model Context Protocol (MCP).
+This document serves as a template for defining tools within the `Privacy` module that are intended to be integrated with the Model Context Protocol (MCP).
 
 **Instructions for Use:**
-1.  Replace `[Module Name]` in the title above and throughout this document with the actual name of your module.
-2.  For each tool you define, copy the "Tool: `[YourToolName]`" section.
-3.  Replace all bracketed placeholders (e.g., `[YourToolName]`, `[Brief description...]`, `[ParameterName]`, `[DataType]`, etc.) with specific details for your tool.
+1.  Replace `Privacy` in the title above and throughout this document with the actual name of your module.
+2.  For each tool you define, copy the "Tool: `privacy_scrub`" section.
+3.  Replace all bracketed placeholders (e.g., `privacy_scrub`, `[Brief description...]`, `[ParameterName]`, `[DataType]`, etc.) with specific details for your tool.
 4.  Provide concrete examples for Input/Output schemas and MCP usage.
 5.  If a section (like Idempotency or specific Security Considerations beyond general file path validation) is not applicable, clearly state "N/A" or provide a relevant explanation.
 6.  Refer to the `model_context_protocol` module's documentation for overarching MCP guidelines and schema definitions.
 
-## General Considerations for [Module Name] Tools
+## General Considerations for Privacy Tools
 
 - **Dependencies**: Clearly list any other Codomyrmex modules or significant external libraries required by the tools in this module. (e.g., "All tools require the `logging_monitoring` module. Ensure `setup_logging()` is called.")
 - **Initialization**: Specify any module-level initialization required before tools can be invoked.
@@ -19,15 +19,15 @@ This document serves as a template for defining tools within the `[Module Name]`
 
 ---
 
-## Tool: `[YourToolName]`
+## Tool: `privacy_scrub`
 
 ### 1. Tool Purpose and Description
 
-[Brief description of what the tool does, its primary function, and its intended use case within the MCP framework.]
+Data sanitization, blacklist management, and noise generation via MCP
 
 ### 2. Invocation Name
 
-`[your_tool_invocation_name]`
+`privacy_scrub`
 (This should be a unique, descriptive name, typically in snake_case, used to call the tool via MCP.)
 
 ### 3. Input Schema (Parameters)
@@ -65,7 +65,7 @@ Describe the structure of the data returned by the tool upon successful executio
 - **Specific Errors**: Detail any specific error conditions or codes the tool might return, beyond general module errors.
     - `[ErrorCode1]`: `[Description of error and when it occurs]`
     - `[ErrorCode2]`: `[Description of error and when it occurs]`
-- **Return Format on Error**: Reiterate or specify the error object format (e.g., `{"error": "Specific error message related to [YourToolName]", "details": {...}}`).
+- **Return Format on Error**: Reiterate or specify the error object format (e.g., `{"error": "Specific error message related to privacy_tool", "details": {...}}`).
 
 ### 6. Idempotency
 
@@ -80,7 +80,7 @@ Provide one or more examples of how this tool would be invoked within an MCP mes
 
 ```json
 {
-  "tool_name": "[your_tool_invocation_name]",
+  "tool_name": "privacy_scrub",
   "arguments": {
     "[Parameter1Name]": "[ExampleValue1]",
     "[Parameter2Name]": "[ExampleValue2]"
@@ -98,4 +98,4 @@ Provide one or more examples of how this tool would be invoked within an MCP mes
 - **File Paths**: (If `output_path` or similar is used) "Ensure that any user-supplied file paths are rigorously validated and restricted to designated writable directories to prevent unauthorized file access, overwrites, or path traversal vulnerabilities. The application running the MCP tool server must operate with appropriate, least-privilege file system permissions."
 
 ---
-<!-- Add more tool specifications below by copying the "Tool: `[YourToolName]`" section. --> 
+<!-- Add more tool specifications below by copying the "Tool: `privacy_scrub`" section. --> 

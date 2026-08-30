@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/serialization
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Multi-format serialization supporting JSON, YAML, MessagePack, protobuf, and binary formats with validation.

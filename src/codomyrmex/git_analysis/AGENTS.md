@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/git_analysis
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Repository analysis with GitNexus integration, code metrics, and contributor insights.

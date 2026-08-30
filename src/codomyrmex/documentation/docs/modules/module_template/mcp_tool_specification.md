@@ -23,11 +23,11 @@ This document serves as a template for defining tools within the `[Module Name]`
 
 ### 1. Tool Purpose and Description
 
-[Brief description of what the tool does, its primary function, and its intended use case within the MCP framework.]
+Example tool description — replace with actual tool purpose
 
 ### 2. Invocation Name
 
-`[your_tool_invocation_name]`
+`template_tool`
 (This should be a unique, descriptive name, typically in snake_case, used to call the tool via MCP.)
 
 ### 3. Input Schema (Parameters)
@@ -80,7 +80,7 @@ Provide one or more examples of how this tool would be invoked within an MCP mes
 
 ```json
 {
-  "tool_name": "[your_tool_invocation_name]",
+  "tool_name": "template_tool",
   "arguments": {
     "[Parameter1Name]": "[ExampleValue1]",
     "[Parameter2Name]": "[ExampleValue2]"

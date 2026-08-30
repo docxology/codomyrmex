@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/documentation/docs/modules/calendar_integration
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Documentation tooling, generated references, and publishing assets for Calendar Integration.

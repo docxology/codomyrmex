@@ -132,6 +132,21 @@ population confidence intervals, p-values, or evidence of external effectiveness
 
 ## Cross-reference rule
 
+## Research-program dependency notation
+
+Let $\mathcal R=(V,E)$ denote the configured directed acyclic graph of research
+tracks. An edge $(R_a,R_b)\in E$ means that admissible completion evidence for
+$R_a$ is required before runner $R_b$ may execute. For each track $R_j$, $I_j$
+denotes implementation status and $E_j$ denotes empirical evidence status; these
+are separate categorical variables, so $I_j=\mathrm{implemented}$ does not imply
+$E_j=\mathrm{complete}$. The execution result
+$Z_j\in\{\mathrm{completed},\mathrm{failed},\mathrm{blocked}\}$ records only the
+local orchestration attempt. Scientific promotion additionally requires the
+configured metric, falsifier, exit criterion, provenance, and independent replay.
+
+This distinction prevents a completed Python call from being substituted for a
+completed empirical milestone and makes unavailable prerequisites explicit.
+
 Formal sections should cite this glossary when introducing a symbol, and captions
 should name a quantity in words when a reader could confuse it with a probability,
 posterior, or population estimate. The formalism inventory in

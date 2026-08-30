@@ -1,4 +1,4 @@
-# [Module Name] - API Specification
+# Privacy - API Specification
 
 ## Introduction
 

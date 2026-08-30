@@ -17,6 +17,11 @@ environment, falsifier, and uncertainty analysis. A deterministic gate score is
 not a probability, and the probabilistic adapter does not retroactively change
 the deterministic gate's semantics.
 
+`ResearchProgramOrchestrator` executes a validated dependency DAG and retains
+failed tracks and blocked dependants as explicit results. It does not infer that
+an available adapter supplies empirical evidence: roadmap entries separately
+record implementation and evidence status.
+
 ## Local checks
 
 ```bash

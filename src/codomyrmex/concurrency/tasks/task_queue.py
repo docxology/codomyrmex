@@ -1,7 +1,7 @@
-"""Distributed task queue with priority and deduplication.
+"""In-process task queue with priority and deduplication.
 
 Priority queue supporting task deduplication, deadline-based
-ordering, dead-letter handling, and at-least-once delivery.
+ordering, dead-letter handling, and in-process best-effort delivery (no persistence across restarts).
 """
 
 from __future__ import annotations

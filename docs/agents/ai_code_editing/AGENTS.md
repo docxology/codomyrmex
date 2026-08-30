@@ -2,7 +2,7 @@
 
 # Codomyrmex Agents — docs/agents/ai_code_editing
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: April 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 ## Signposting
 

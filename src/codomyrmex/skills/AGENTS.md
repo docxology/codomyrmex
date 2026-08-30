@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/skills
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Skill discovery, loading, health monitoring, and lifecycle management. Enables modular capability extension through pluggable skill packages with MCP tool integration.

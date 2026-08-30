@@ -1,7 +1,7 @@
 # AGENTS.md — free_apis
 
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: May 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: May 2026
 
 AI agent guidance for the `codomyrmex.api.free_apis` submodule.
 

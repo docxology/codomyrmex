@@ -76,6 +76,13 @@ The complete configured program contains {{CONFIG_RESEARCH_ROADMAP_STAGE_COUNT}}
 milestones. Each row states what would be built, measured, falsified, and accepted;
 empty claims are not allowed to advance by narrative momentum.
 
+Each configured row has two orthogonal state fields. `implementation_status` records
+whether executable substrate exists; `evidence_status` records whether the decisive
+study has produced admissible evidence. Thus an adapter can be implemented while its
+external study remains `external_not_run`, and a prototype can exist while its held-out
+comparison remains unperformed. The compact Status column below is only a display
+label; the two machine-readable fields govern audit and promotion.
+
 | ID | Milestone | Status | Hypothesis | Required artifact |
 |:---|:---|:---|:---|:---|
 {{RESULT_RESEARCH_ROADMAP_EVIDENCE_ROWS}}
@@ -94,11 +101,20 @@ planning visual and its hash. R0 additionally retains the replay's semantic and 
 digests shown in [@tbl:reproducibility_identity]. The implemented R0 row is accepted
 only when its configured `artifact_paths` resolve to checked-in source or evidence
 surfaces. R1 is governed by the same artifact-path requirement for the implemented local
-ledger. R2 is deliberately separate and remains open until a deployment-specific
-external-observation adapter and independent verification evidence exist; later rows
-remain hypotheses until they acquire equivalent retained paths.
+ledger. R2-R5 now have local adapters or harnesses, and R6 has a research prototype,
+but those implementation artifacts do not satisfy their empirical exit criteria. R2
+remains evidence-open until its adapter is exercised against deployment-specific,
+independently sourced observations; R3-R6 remain evidence-open until their declared
+external or held-out comparisons are retained. R7 is blocked until those dependencies
+can be independently replayed.
 
 ## Execution protocol
+
+`ResearchProgramOrchestrator` supplies the local dependency-control mechanism. It
+validates a directed acyclic graph, executes ready tracks in deterministic topological
+order, records exceptions as failures, and marks dependent tracks blocked. It does not
+retry, hide, or promote a failed study, and a returned runner output is not itself a
+scientific acceptance decision.
 
 Every future study should retain the following minimum evidence bundle:
 
@@ -112,6 +128,12 @@ Every future study should retain the following minimum evidence bundle:
   diagnostics, and failure stratifications; and
 - generated tables, figures, captions, and a machine-readable manifest linking each
   claim to its source artifact.
+
+This entity--activity--agent separation is compatible with the W3C PROV data model,
+which is used here as a provenance vocabulary rather than as evidence that a result is
+correct [@w3c2013provo]. In particular, recording who or what generated an artifact and
+which activity used it supports auditability; scientific acceptance still depends on
+the milestone's independent observations, falsifier, and replay.
 
 This bundle turns a research result into a replay target. It does not require a claim to
 be positive: a well-specified null result or failed falsification attempt is publishable
@@ -156,8 +178,9 @@ evidence for the Colony Kernel until the experiment is actually run
 ## Scope of this release
 
 The current release documents and validates R0's local contract, fixed-input replay, and
-reproducibility route plus R1's authenticated local lifecycle ledger. It does not claim
-that R2's end-to-end external-actuation attestation or any later milestone is complete,
+reproducibility route plus R1's authenticated local lifecycle ledger. It also provides
+implementation substrate for R2-R6 and dependency-aware execution bookkeeping. It does
+not claim that R2's external study or any later milestone's empirical evidence is complete,
 that the provisional settings are calibrated, or that the control plane is a security
 boundary. The appropriate scholarly contribution at this stage is a composable,
 inspectable research substrate with explicit failure conditions and a machine-readable

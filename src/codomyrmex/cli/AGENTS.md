@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/cli
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 Command-line interface for Codomyrmex with status reporting, agent management, memory operations, and orchestration controls.

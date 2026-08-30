@@ -441,7 +441,7 @@ REQUIRED_CLAIMS = {
         "612 runtime MCP tools",
         "627 decorators",
         "1,204",
-        "36,028",
+        "36,049",
     ],
 }
 
@@ -653,6 +653,19 @@ def test_implemented_roadmap_milestones_have_resolvable_artifacts() -> None:
         assert isinstance(paths, list) and paths, entry["id"]
         for relative_path in paths:
             assert (REPO_ROOT / relative_path).is_file(), relative_path
+
+
+def test_research_roadmap_separates_implementation_from_evidence() -> None:
+    entries = yaml.safe_load(_read("docs/manuscript/config.yaml"))["research_roadmap"]
+    identifiers = {entry["id"] for entry in entries}
+    for entry in entries:
+        assert entry["implementation_status"]
+        assert entry["evidence_status"]
+        assert set(entry["dependencies"]) <= identifiers
+        assert entry["id"] not in entry["dependencies"]
+        if entry["implementation_status"] in {"implemented", "prototype"}:
+            for relative_path in entry["artifact_paths"]:
+                assert (REPO_ROOT / relative_path).is_file(), relative_path
 
 
 def test_manuscript_generator_uses_branch_coverage_contract() -> None:
