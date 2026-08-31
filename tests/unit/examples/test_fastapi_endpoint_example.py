@@ -1,4 +1,6 @@
 import pytest
+
+pytest.importorskip("fastapi", reason="fastapi is an opt-in extra: uv sync --extra api")
 from fastapi.testclient import TestClient
 
 import codomyrmex.examples.fastapi_endpoint_example as example_module

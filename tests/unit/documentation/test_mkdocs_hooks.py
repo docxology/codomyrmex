@@ -6,6 +6,10 @@ import importlib.util
 from pathlib import Path
 
 import pytest
+
+pytest.importorskip(
+    "mkdocs", reason="mkdocs is an opt-in extra: uv sync --extra physical_management"
+)
 from mkdocs.exceptions import BuildError
 
 REPO_ROOT = Path(__file__).resolve().parents[3]

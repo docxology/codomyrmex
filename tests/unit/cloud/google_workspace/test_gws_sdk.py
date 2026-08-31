@@ -12,10 +12,23 @@ import sys
 
 import pytest
 
-_SDK_INSTALLED = importlib.util.find_spec("googleapiclient") is not None
-_GOOGLE_AUTH_INSTALLED = (
-    importlib.util.find_spec("google.oauth2.service_account") is not None
-)
+
+def _find_spec_safe(name: str) -> bool:
+    """Return True only when the module is genuinely importable.
+
+    ``find_spec`` raises ModuleNotFoundError when a parent package exists
+    but the dotted child is absent (e.g. the ``google`` namespace is
+    present while ``google.oauth2`` is not installed); treat that as
+    "not found".
+    """
+    try:
+        return importlib.util.find_spec(name) is not None
+    except ModuleNotFoundError:
+        return False
+
+
+_SDK_INSTALLED = _find_spec_safe("googleapiclient")
+_GOOGLE_AUTH_INSTALLED = _find_spec_safe("google.oauth2.service_account")
 _GWS_CREDS_SET = bool(
     os.getenv("GWS_SERVICE_ACCOUNT_FILE") or os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 )

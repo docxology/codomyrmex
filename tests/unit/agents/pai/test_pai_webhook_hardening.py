@@ -12,6 +12,8 @@ import hmac
 import json
 
 import pytest
+
+pytest.importorskip("fastapi", reason="fastapi is an opt-in extra: uv sync --extra api")
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 

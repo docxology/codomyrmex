@@ -10,6 +10,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **`agents` package lazy loading (TODO M3)**: `src/codomyrmex/agents/__init__.py`
+  converted to PEP 562 `__getattr__` lazy imports — importing `codomyrmex.agents`
+  no longer loads any framework subpackage. Cold import of
+  `from codomyrmex.agents import BaseAgent`: ~44 s eager → ~0.2-0.3 s lazy
+  (2 orders of magnitude). Two previously dead `__all__` entries
+  (`AgentEvaluator`, `ConversationHistory`) now map to their real
+  implementations. New test `tests/unit/agents/test_agents_lazy_all.py` asserts
+  every `__all__` name resolves plus lazy semantics.
+- **Opt-in dependency collection skips**: `tests/unit/cloud/google_workspace/test_gws_sdk.py`
+  now uses a `find_spec`-safe SDK probe (namespace-package safe);
+  `tests/unit/examples/test_fastapi_endpoint_example.py`,
+  `tests/unit/agents/pai/test_pai_webhook_hardening.py`, and
+  `tests/unit/documentation/test_mkdocs_hooks.py` use `pytest.importorskip`
+  for their opt-in extras (`api`, `physical_management`). Collection is now
+  error-free without the extras installed.
+
 - **Optional-dependency import guards (collection errors)**: `agents.gemini`
   mixins (`_cache`, `_files`, `_tuning_batch`) and `agents.claude`
   (`mixins/execution`) no longer crash at import time when `google-genai` /

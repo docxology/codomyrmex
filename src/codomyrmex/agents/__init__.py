@@ -27,172 +27,114 @@ Available submodules:
 - pooling: Multi-agent load balancing and failover
 - evaluation: Agent benchmarking and quality metrics
 - history: Conversation and context persistence
+
+Public names are loaded lazily (PEP 562): importing this package does not
+import any agent framework subpackage; each name in ``__all__`` is imported
+on first attribute access via the module-level ``__getattr__``.
 """
 
-# Shared schemas for cross-module interop
-import contextlib
+from __future__ import annotations
 
-with contextlib.suppress(ImportError):
-    from codomyrmex.validation.schemas import Result, ResultStatus
+import importlib
+from types import MappingProxyType
+from typing import Any
 
-with contextlib.suppress(ImportError):
-    from codomyrmex.agents.ai_code_editing.code_editor import CodeEditor
+__version__ = "1.1.0"
 
-with contextlib.suppress(ImportError):
-    from codomyrmex.agents.claude import ClaudeClient
-
-with contextlib.suppress(ImportError):
-    from codomyrmex.agents.codex import CodexClient
-
-with contextlib.suppress(ImportError):
-    from codomyrmex.agents.droid import DroidController
-
-with contextlib.suppress(ImportError):
-    from codomyrmex.agents.every_code import EveryCodeClient
-
-with contextlib.suppress(ImportError):
-    from codomyrmex.agents.gemini import GeminiClient
-
-with contextlib.suppress(ImportError):
-    from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
-
-with contextlib.suppress(ImportError):
-    from codomyrmex.agents.jules import JulesClient
-
-with contextlib.suppress(ImportError):
-    from codomyrmex.agents.mistral_vibe import MistralVibeClient
-
-with contextlib.suppress(ImportError):
-    from codomyrmex.agents.openclaw import OpenClawClient
-
-with contextlib.suppress(ImportError):
-    from codomyrmex.agents.openfang import OpenFangRunner
-
-with contextlib.suppress(ImportError):
-    from codomyrmex.agents.opencode import OpenCodeClient
-
-with contextlib.suppress(ImportError):
-    from codomyrmex.agents.theory.agent_architectures import (
-        DeliberativeArchitecture,
-        HybridArchitecture,
-        KnowledgeBase,
-        ReactiveArchitecture,
-    )
-
-import contextlib
-
-from .core import (
-    AgentCapabilities,
-    AgentConfig,
-    AgentIntegrationAdapter,
-    AgentInterface,
-    AgentRequest,
-    AgentResponse,
-    AgentSession,
-    BaseAgent,
-    CodeBlock,
-    Message,
-    ParseResult,
-    SessionManager,
-    clean_response,
-    get_config,
-    parse_code_blocks,
-    parse_first_code_block,
-    parse_json_response,
-    parse_structured_output,
-    reset_config,
-    set_config,
+# name -> (module, attribute). Module strings are relative to this package
+# unless they are absolute (``codomyrmex.validation.schemas``).
+_EXPORTS: MappingProxyType[str, tuple[str, str]] = MappingProxyType(
+    {
+        # Shared schemas for cross-module interop
+        "Result": ("codomyrmex.validation.schemas", "Result"),
+        "ResultStatus": ("codomyrmex.validation.schemas", "ResultStatus"),
+        # Agent clients (API-based)
+        "ClaudeClient": ("codomyrmex.agents.claude", "ClaudeClient"),
+        "CodexClient": ("codomyrmex.agents.codex", "CodexClient"),
+        "GeminiClient": ("codomyrmex.agents.gemini", "GeminiClient"),
+        "O1Client": ("codomyrmex.agents.o1", "O1Client"),
+        "DeepSeekClient": ("codomyrmex.agents.deepseek", "DeepSeekClient"),
+        "QwenClient": ("codomyrmex.agents.qwen", "QwenClient"),
+        "MistralVibeClient": ("codomyrmex.agents.mistral_vibe", "MistralVibeClient"),
+        "EveryCodeClient": ("codomyrmex.agents.every_code", "EveryCodeClient"),
+        # Agent clients (CLI-based)
+        "JulesClient": ("codomyrmex.agents.jules", "JulesClient"),
+        "OpenClawClient": ("codomyrmex.agents.openclaw", "OpenClawClient"),
+        "OpenCodeClient": ("codomyrmex.agents.opencode", "OpenCodeClient"),
+        "OpenFangRunner": ("codomyrmex.agents.openfang", "OpenFangRunner"),
+        "AgenticSeekClient": ("codomyrmex.agents.agentic_seek", "AgenticSeekClient"),
+        "MissionControlClient": ("codomyrmex.agents.mission_control", "MissionControlClient"),
+        "PiClient": ("codomyrmex.agents.pi", "PiClient"),
+        "DroidController": ("codomyrmex.agents.droid", "DroidController"),
+        "GitAgent": ("codomyrmex.agents.git_agent", "GitAgent"),
+        # Editing / orchestration / theory
+        "CodeEditor": ("codomyrmex.agents.ai_code_editing.code_editor", "CodeEditor"),
+        "AgentOrchestrator": ("codomyrmex.agents.generic.agent_orchestrator", "AgentOrchestrator"),
+        "APIAgentBase": ("codomyrmex.agents.generic", "APIAgentBase"),
+        "CLIAgentBase": ("codomyrmex.agents.generic", "CLIAgentBase"),
+        "DeliberativeArchitecture": ("codomyrmex.agents.theory.agent_architectures", "DeliberativeArchitecture"),
+        "HybridArchitecture": ("codomyrmex.agents.theory.agent_architectures", "HybridArchitecture"),
+        "KnowledgeBase": ("codomyrmex.agents.theory.agent_architectures", "KnowledgeBase"),
+        "ReactiveArchitecture": ("codomyrmex.agents.theory.agent_architectures", "ReactiveArchitecture"),
+        # Core
+        "AgentCapabilities": ("codomyrmex.agents.core", "AgentCapabilities"),
+        "AgentConfig": ("codomyrmex.agents.core", "AgentConfig"),
+        "AgentIntegrationAdapter": ("codomyrmex.agents.core", "AgentIntegrationAdapter"),
+        "AgentInterface": ("codomyrmex.agents.core", "AgentInterface"),
+        "AgentRequest": ("codomyrmex.agents.core", "AgentRequest"),
+        "AgentResponse": ("codomyrmex.agents.core", "AgentResponse"),
+        "AgentSession": ("codomyrmex.agents.core", "AgentSession"),
+        "BaseAgent": ("codomyrmex.agents.core", "BaseAgent"),
+        "CodeBlock": ("codomyrmex.agents.core", "CodeBlock"),
+        "Message": ("codomyrmex.agents.core", "Message"),
+        "ParseResult": ("codomyrmex.agents.core", "ParseResult"),
+        "SessionManager": ("codomyrmex.agents.core", "SessionManager"),
+        "clean_response": ("codomyrmex.agents.core", "clean_response"),
+        "get_config": ("codomyrmex.agents.core", "get_config"),
+        "parse_code_blocks": ("codomyrmex.agents.core", "parse_code_blocks"),
+        "parse_first_code_block": ("codomyrmex.agents.core", "parse_first_code_block"),
+        "parse_json_response": ("codomyrmex.agents.core", "parse_json_response"),
+        "parse_structured_output": ("codomyrmex.agents.core", "parse_structured_output"),
+        "reset_config": ("codomyrmex.agents.core", "reset_config"),
+        "set_config": ("codomyrmex.agents.core", "set_config"),
+        # Core exceptions
+        "AgentConfigurationError": ("codomyrmex.agents.core.exceptions", "AgentConfigurationError"),
+        "AgentError": ("codomyrmex.agents.core.exceptions", "AgentError"),
+        "AgentTimeoutError": ("codomyrmex.agents.core.exceptions", "AgentTimeoutError"),
+        "ContextError": ("codomyrmex.agents.core.exceptions", "ContextError"),
+        "ExecutionError": ("codomyrmex.agents.core.exceptions", "ExecutionError"),
+        "SessionError": ("codomyrmex.agents.core.exceptions", "SessionError"),
+        "ToolError": ("codomyrmex.agents.core.exceptions", "ToolError"),
+        # Submodules / registries
+        "AgentPool": ("codomyrmex.agents.pooling", "AgentPool"),
+        "AgentEvaluator": ("codomyrmex.agents.evaluation.benchmark", "AgentBenchmark"),
+        "ConversationHistory": ("codomyrmex.agents.memory.conversation", "ConversationHistory"),
+        "InfrastructureAgent": ("codomyrmex.agents.infrastructure", "InfrastructureAgent"),
+        "AgentRegistry": ("codomyrmex.agents.agent_setup", "AgentRegistry"),
+    }
 )
 
-# Lazy imports for submodules that may not be installed yet
-with contextlib.suppress(ImportError):
-    from .o1 import O1Client
 
-with contextlib.suppress(ImportError):
-    from .deepseek import DeepSeekClient
-
-with contextlib.suppress(ImportError):
-    from .qwen import QwenClient
-
-with contextlib.suppress(ImportError):
-    from .pooling import AgentPool
-
-with contextlib.suppress(ImportError):
-    from .evaluation import AgentEvaluator
-
-with contextlib.suppress(ImportError):
-    from .history import ConversationHistory
-
-with contextlib.suppress(ImportError):
-    from .infrastructure import InfrastructureAgent
-
-with contextlib.suppress(ImportError):
-    from .agent_setup import AgentRegistry
-
-with contextlib.suppress(ImportError):
-    from .core.exceptions import (
-        AgentConfigurationError,
-        AgentError,
-        AgentTimeoutError,
-        ContextError,
-        ExecutionError,
-        SessionError,
-        ToolError,
-    )
-
-with contextlib.suppress(ImportError):
-    from .generic import APIAgentBase, CLIAgentBase
-
-with contextlib.suppress(ImportError):
-    from .git_agent import GitAgent
-
-with contextlib.suppress(ImportError):
-    from .agentic_seek import AgenticSeekClient
-
-with contextlib.suppress(ImportError):
-    from .mission_control import MissionControlClient
-
-with contextlib.suppress(ImportError):
-    from .pi import PiClient
+def _resolve(name: str) -> Any:
+    module_name, attr = _EXPORTS[name]
+    module = importlib.import_module(module_name)
+    try:
+        return getattr(module, attr)
+    except AttributeError as exc:  # pragma: no cover - defensive
+        raise ImportError(f"cannot import name {attr!r} from {module_name!r}") from exc
 
 
-def cli_commands():
-    """Return CLI commands for the agents module."""
+def __getattr__(name: str) -> Any:
+    """PEP 562 lazy loading: import public names on first access."""
+    if name in _EXPORTS:
+        value = _resolve(name)
+        globals()[name] = value  # cache so future lookups skip __getattr__
+        return value
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
-    def _list_agents():
-        providers = []
-        provider_map = {
-            "claude": ClaudeClient,
-            "codex": CodexClient,
-            "gemini": GeminiClient,
-            "jules": JulesClient,
-            "mistral_vibe": MistralVibeClient,
-            "openclaw": OpenClawClient,
-            "opencode": OpenCodeClient,
-            "every_code": EveryCodeClient,
-            "o1": O1Client,
-            "deepseek": DeepSeekClient,
-            "qwen": QwenClient,
-            "agentic_seek": AgenticSeekClient,
-            "mission_control": MissionControlClient,
-            "pi": PiClient,
-        }
-        for name, client in provider_map.items():
-            status = "available" if client is not None else "not installed"
-            providers.append(f"  {name}: {status}")
-        print("Registered agent providers:")
-        print("\n".join(providers))
 
-    def _show_config():
-        config = get_config()
-        print("Agent configuration:")
-        for key, value in vars(config).items():
-            print(f"  {key}: {value}")
-
-    return {
-        "list": _list_agents,
-        "config": _show_config,
-    }
+def __dir__() -> list[str]:
+    return sorted(set(globals()) | set(_EXPORTS))
 
 
 __all__ = [
@@ -264,4 +206,44 @@ __all__ = [
     "set_config",
 ]
 
-__version__ = "1.1.0"
+
+def cli_commands() -> dict[str, Any]:
+    """Return CLI commands for the agents module (lazy import of clients)."""
+    return _cli_commands_impl()
+
+
+def _cli_commands_impl() -> dict[str, Any]:
+    def _list_agents() -> None:
+        providers = []
+        provider_map = {
+            "claude": _resolve("ClaudeClient"),
+            "codex": _resolve("CodexClient"),
+            "gemini": _resolve("GeminiClient"),
+            "jules": _resolve("JulesClient"),
+            "mistral_vibe": _resolve("MistralVibeClient"),
+            "openclaw": _resolve("OpenClawClient"),
+            "opencode": _resolve("OpenCodeClient"),
+            "every_code": _resolve("EveryCodeClient"),
+            "o1": _resolve("O1Client"),
+            "deepseek": _resolve("DeepSeekClient"),
+            "qwen": _resolve("QwenClient"),
+            "agentic_seek": _resolve("AgenticSeekClient"),
+            "mission_control": _resolve("MissionControlClient"),
+            "pi": _resolve("PiClient"),
+        }
+        for name, client in provider_map.items():
+            status = "available" if client is not None else "not installed"
+            providers.append(f"  {name}: {status}")
+        print("Registered agent providers:")
+        print("\n".join(providers))
+
+    def _show_config() -> None:
+        config = get_config()
+        print("Agent configuration:")
+        for key, value in vars(config).items():
+            print(f"  {key}: {value}")
+
+    return {
+        "list": _list_agents,
+        "config": _show_config,
+    }
