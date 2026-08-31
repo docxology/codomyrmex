@@ -38,8 +38,8 @@ class Queue:
                 from codomyrmex.exceptions import RequestedBackendUnavailable
 
                 raise RequestedBackendUnavailable(
-                    f"Redis backend requested but redis_queue module not available: "
-                    f"install redis or add backends/redis_queue.py",
+                    "Redis backend requested but redis_queue module not available: "
+                    "install redis or add backends/redis_queue.py",
                     backend="redis",
                 ) from None
         else:

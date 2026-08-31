@@ -475,6 +475,8 @@ filterwarnings = [
     "ignore:Please install grpcio-status.*:ImportWarning",
     # google-genai 1.68 uses typing._UnionGenericAlias which Python 3.14 marks as deprecated.
     "ignore:'_UnionGenericAlias' is deprecated:DeprecationWarning",
+    # google-genai 1.68 with pydantic >= 2.12: model_validator mode='after' classmethod deprecation at import.
+    "ignore:Using `@model_validator` with mode='after' on a classmethod is deprecated.*:",
 ]
 
 
