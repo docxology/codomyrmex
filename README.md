@@ -93,6 +93,7 @@ uv run codomyrmex doctor --all
 | [**docs/PAI.md**](docs/PAI.md) | Personal AI Infrastructure integration reference |
 | [**docs/PAI_DASHBOARD.md**](docs/PAI_DASHBOARD.md) | PAI dashboard GUI reference and tab guide |
 | [**docs/index.md**](docs/index.md) | MkDocs site index and navigation entry point |
+| [**TODO.md**](TODO.md) | Authoritative backlog — what to do next (single source of truth for open work) |
 
 ### Documentation Directories
 

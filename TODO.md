@@ -44,3 +44,14 @@ This file tracks open research items, formal gaps, and architectural improvement
 - Preserve the dirty `src/codomyrmex/agents/open_gauss` submodule as a separate ownership boundary; no cleanup or edits are authorized.
 - Preserve failed gates, negative controls, `not_estimated` calibration status, and conditional or `not_run` claims.
 - Zero-Mock Policy: All test suites must exercise authentic functional implementations.
+
+## Agent Ergonomics (2026-08-31 pass)
+
+| ID | Severity | Title | Files |
+|:---|:---------|:------|:------|
+| **M-ERG-1** | Minor | Test-count snapshot conflict resolved this pass (36,028 -> 36,049 with supersede note); keep INDEX.md numbers linked to inventory.md | `INDEX.md`, `docs/reference/inventory.md` |
+| **M-ERG-2** | Medium | Backlog reachability fixed this pass (TODO.md now linked from README.md and AGENTS.md); keep one-hop reachability when entry docs change | `README.md`, `AGENTS.md`, `TODO.md` |
+| **M-ERG-3** | Medium | Root security audit was a dated 2026-07-31 point-in-time report with superseded counts; archived to docs/compliance/ this pass | `docs/compliance/SECURITY_AUDIT_REPORT_2026-07-31.md` |
+| **M-ERG-4** | Minor | Dated review log convention created (`REVIEW_LOG_2026-08-31.md`); append future deep-pass logs rather than starting new formats | `REVIEW_LOG_2026-08-31.md` |
+
+M-ERG-1 through M-ERG-4 were completed in the 2026-08-31 pass (see REVIEW_LOG_2026-08-31.md); retained as record.
