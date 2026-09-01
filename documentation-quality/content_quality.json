@@ -204,18 +204,6 @@
     }
   },
   {
-    "file": "REVIEW_LOG_2026-08-31.md",
-    "score": 100,
-    "issues": [],
-    "metrics": {
-      "heading_count": 7,
-      "placeholder_count": 0,
-      "code_block_count": 0,
-      "word_count": 489,
-      "link_count": 0
-    }
-  },
-  {
     "file": "CHANGELOG.md",
     "score": 100,
     "issues": [],

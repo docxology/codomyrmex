@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-01T04:07:15.860856",
+  "generated": "2026-09-01T21:10:06.042134",
   "links": {
     "total": 16167,
     "broken": 1,
@@ -7,8 +7,8 @@
     "external": 425
   },
   "quality": {
-    "files": 5442,
-    "avg_score": 99.16207276736493,
+    "files": 5441,
+    "avg_score": 99.16191876493292,
     "min_score": 75,
     "max_score": 100,
     "placeholder_total": 0
