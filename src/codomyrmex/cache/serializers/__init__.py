@@ -5,7 +5,10 @@ Provides serializers for cache values.
 """
 
 import base64
+import hashlib
+import hmac
 import json
+import os
 import pickle
 import zlib
 from abc import ABC, abstractmethod
@@ -15,6 +18,8 @@ from typing import Any, Optional
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
+
+_PICKLE_SECRET_KEY = os.urandom(32)
 
 
 class CacheSerializer(ABC):
@@ -53,16 +58,37 @@ class PickleSerializer(CacheSerializer):
         for untrusted or network-sourced cache entries.
     """
 
-    def __init__(self, protocol: int = pickle.HIGHEST_PROTOCOL):
+    def __init__(
+        self,
+        protocol: int = pickle.HIGHEST_PROTOCOL,
+        secret_key: bytes | str | None = None,
+    ):
         self.protocol = protocol
+        if secret_key:
+            self.secret_key = (
+                secret_key.encode("utf-8")
+                if isinstance(secret_key, str)
+                else secret_key
+            )
+        else:
+            self.secret_key = _PICKLE_SECRET_KEY
 
     def serialize(self, value: Any) -> bytes:
         """Serialize this object to a portable format."""
-        return pickle.dumps(value, protocol=self.protocol)
+        payload = pickle.dumps(value, protocol=self.protocol)
+        mac = hmac.new(self.secret_key, payload, hashlib.sha256).digest()
+        return mac + payload
 
     def deserialize(self, data: bytes) -> Any:
         """Deserialize from a portable format and return an instance."""
-        return pickle.loads(data)
+        if len(data) < 32:
+            raise ValueError("Invalid payload: too short")
+        mac = data[:32]
+        payload = data[32:]
+        expected_mac = hmac.new(self.secret_key, payload, hashlib.sha256).digest()
+        if not hmac.compare_digest(mac, expected_mac):
+            raise ValueError("Invalid payload: signature mismatch")
+        return pickle.loads(payload)
 
 
 class CompressedSerializer(CacheSerializer):

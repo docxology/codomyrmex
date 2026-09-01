@@ -77,6 +77,30 @@ class TestPickleSerializer:
         s = PickleSerializer(protocol=2)
         assert s.protocol == 2
 
+    def test_deserialize_invalid_payload_too_short(self):
+        s = PickleSerializer()
+        with pytest.raises(ValueError, match="Invalid payload: too short"):
+            s.deserialize(b"short")
+
+    def test_deserialize_invalid_payload_signature_mismatch(self):
+        s1 = PickleSerializer(secret_key="key1")
+        s2 = PickleSerializer(secret_key="key2")
+        data = s1.serialize({"key": "val"})
+        with pytest.raises(ValueError, match="Invalid payload: signature mismatch"):
+            s2.deserialize(data)
+
+    def test_custom_secret_key(self):
+        s1 = PickleSerializer(secret_key="my-secret-key")
+        s2 = PickleSerializer(secret_key="my-secret-key")
+        data = s1.serialize({"key": "val"})
+        assert s2.deserialize(data) == {"key": "val"}
+
+    def test_custom_secret_key_bytes(self):
+        s1 = PickleSerializer(secret_key=b"my-secret-key")
+        s2 = PickleSerializer(secret_key=b"my-secret-key")
+        data = s1.serialize({"key": "val"})
+        assert s2.deserialize(data) == {"key": "val"}
+
 
 # ── CompressedSerializer ──────────────────────────────────────────────
 
