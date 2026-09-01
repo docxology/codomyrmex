@@ -6,6 +6,7 @@ from ``pyproject.toml`` and optional ``uv.lock`` data.
 
 from __future__ import annotations
 
+import functools
 import json
 import re
 import uuid
@@ -194,9 +195,15 @@ class SBOMGenerator:
         )
 
     @staticmethod
+    @functools.lru_cache(maxsize=128)
+    def _get_field_pattern(field_name: str) -> re.Pattern:
+        """Get a cached compiled regex for field extraction."""
+        return re.compile(rf'^{field_name}\s*=\s*"([^"]*)"', re.MULTILINE)
+
+    @staticmethod
     def _extract_field(content: str, field_name: str) -> str:
         """Extract a field value from TOML content."""
-        pattern = re.compile(rf'^{field_name}\s*=\s*"([^"]*)"', re.MULTILINE)
+        pattern = SBOMGenerator._get_field_pattern(field_name)
         match = pattern.search(content)
         return match.group(1) if match else ""
 
