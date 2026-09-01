@@ -8,3 +8,6 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+## 2026-08-16 - O(1) Eviction in InMemoryCache
+**Learning:** Python 3.7+ dictionaries maintain insertion order. Using `min()` over cache keys to find the oldest entry based on timestamp creates an O(N) bottleneck on every insert when the cache is full.
+**Action:** Exploit dictionary insertion order by re-inserting updated keys (to move them to the end) and evicting using `next(iter(dict))` for O(1) performance.
