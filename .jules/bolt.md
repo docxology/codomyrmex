@@ -8,3 +8,7 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+
+## 2025-07-26 - Avoid compiling regular expressions inside frequently called functions
+**Learning:** Compiling regular expressions using `re.compile()` inside methods that are called recursively or inside loops (like template rendering) adds significant overhead and impacts performance.
+**Action:** Move static `re.compile()` calls to class-level or module-level constants to compile them once and eliminate per-call overhead.

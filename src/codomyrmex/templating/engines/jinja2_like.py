@@ -11,6 +11,15 @@ from .base import TemplateEngine
 
 logger = get_logger(__name__)
 
+_VAR_PATTERN = re.compile(r"\{\{\s*(.+?)\s*\}\}")
+_FOR_PATTERN = re.compile(
+    r"\{%\s*for\s+(\w+)\s+in\s+(.+?)\s*%\}(.+?)\{%\s*endfor\s*%\}", re.DOTALL
+)
+_IF_PATTERN = re.compile(
+    r"\{%\s*if\s+(.+?)\s*%\}(.+?)(?:\{%\s*else\s*%\}(.+?))?\{%\s*endif\s*%\}",
+    re.DOTALL,
+)
+
 
 class Jinja2LikeEngine(TemplateEngine):
     """Enhanced template engine with control structures."""
@@ -123,8 +132,6 @@ class Jinja2LikeEngine(TemplateEngine):
 
     def _process_variables(self, template: str, context: dict[str, Any]) -> str:
         """Process {{ variable }} expressions."""
-        pattern = re.compile(r"\{\{\s*(.+?)\s*\}\}")
-
         def replace(match):
             value = self._parse_expression(match.group(1), context)
             if value is None:
@@ -134,14 +141,10 @@ class Jinja2LikeEngine(TemplateEngine):
                 result = html.escape(result)
             return result
 
-        return pattern.sub(replace, template)
+        return _VAR_PATTERN.sub(replace, template)
 
     def _process_for_loops(self, template: str, context: dict[str, Any]) -> str:
         """Process {% for item in items %} blocks."""
-        pattern = re.compile(
-            r"\{%\s*for\s+(\w+)\s+in\s+(.+?)\s*%\}(.+?)\{%\s*endfor\s*%\}", re.DOTALL
-        )
-
         def replace(match):
             var_name = match.group(1)
             iterable = self._parse_expression(match.group(2), context)
@@ -165,8 +168,8 @@ class Jinja2LikeEngine(TemplateEngine):
 
             return "".join(result)
 
-        while pattern.search(template):
-            template = pattern.sub(replace, template)
+        while _FOR_PATTERN.search(template):
+            template = _FOR_PATTERN.sub(replace, template)
 
         return template
 
@@ -207,11 +210,6 @@ class Jinja2LikeEngine(TemplateEngine):
 
     def _process_if_blocks(self, template: str, context: dict[str, Any]) -> str:
         """Process {% if condition %} / {% else %} / {% endif %} blocks."""
-        pattern = re.compile(
-            r"\{%\s*if\s+(.+?)\s*%\}(.+?)(?:\{%\s*else\s*%\}(.+?))?\{%\s*endif\s*%\}",
-            re.DOTALL,
-        )
-
         def replace(match):
             condition = match.group(1)
             true_block = match.group(2)
@@ -221,8 +219,8 @@ class Jinja2LikeEngine(TemplateEngine):
                 return self.render(true_block, context)
             return self.render(false_block, context)
 
-        while pattern.search(template):
-            template = pattern.sub(replace, template)
+        while _IF_PATTERN.search(template):
+            template = _IF_PATTERN.sub(replace, template)
 
         return template
 
