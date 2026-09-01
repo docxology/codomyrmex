@@ -5,6 +5,7 @@ LRU cache for inference results.
 """
 
 import threading
+from collections import OrderedDict
 from typing import Any
 
 
@@ -21,8 +22,9 @@ class InferenceCache:
 
     def __init__(self, max_size: int = 1000):
         self.max_size = max_size
-        self._cache: dict[str, Any] = {}
-        self._access_order: list[str] = []
+        # ⚡ Bolt: Optimized LRU cache using OrderedDict for O(1) get/put operations.
+        # Previously used a list for access order which caused O(N) removals.
+        self._cache: OrderedDict[str, Any] = OrderedDict()
         self._lock = threading.Lock()
 
     def get(self, key: str) -> Any | None:
@@ -30,8 +32,7 @@ class InferenceCache:
         with self._lock:
             if key in self._cache:
                 # Move to end (most recently used)
-                self._access_order.remove(key)
-                self._access_order.append(key)
+                self._cache.move_to_end(key)
                 return self._cache[key]
         return None
 
@@ -39,14 +40,12 @@ class InferenceCache:
         """Cache a result."""
         with self._lock:
             if key in self._cache:
-                self._access_order.remove(key)
+                self._cache.move_to_end(key)
             elif len(self._cache) >= self.max_size:
                 # Evict LRU
-                lru_key = self._access_order.pop(0)
-                del self._cache[lru_key]
+                self._cache.popitem(last=False)
 
             self._cache[key] = value
-            self._access_order.append(key)
 
     def contains(self, key: str) -> bool:
         """Check if key is cached."""
@@ -56,7 +55,6 @@ class InferenceCache:
         """Clear the cache."""
         with self._lock:
             self._cache.clear()
-            self._access_order.clear()
 
     @property
     def size(self) -> int:
