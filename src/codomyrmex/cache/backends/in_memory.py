@@ -3,6 +3,7 @@ In-memory cache backend.
 """
 
 import time
+from collections import OrderedDict
 from typing import Any
 
 from codomyrmex.cache.cache import Cache
@@ -22,7 +23,8 @@ class InMemoryCache(Cache):
             max_size: Maximum number of items
             default_ttl: Default time-to-live in seconds
         """
-        self._cache: dict[str, tuple[Any, float, int | None]] = {}
+        # Optimize: Use OrderedDict for O(1) LRU cache eviction
+        self._cache: OrderedDict[str, tuple[Any, float, int | None]] = OrderedDict()
         self.max_size = max_size
         self.default_ttl = default_ttl
         self._stats = CacheStats(max_size=max_size)
@@ -43,6 +45,8 @@ class InMemoryCache(Cache):
             self._stats.misses += 1
             return None
 
+        # Optimize: Move accessed key to end to maintain LRU order in O(1)
+        self._cache.move_to_end(key)
         self._stats.hits += 1
         return value
 
@@ -50,13 +54,14 @@ class InMemoryCache(Cache):
         """set a value in the cache."""
         # Evict if at max size
         if len(self._cache) >= self.max_size and key not in self._cache:
-            # Remove oldest entry
-            oldest_key = min(self._cache.keys(), key=lambda k: self._cache[k][1])
-            del self._cache[oldest_key]
+            # Optimize: O(1) eviction of oldest item using popitem(last=False)
+            self._cache.popitem(last=False)
             self._stats.size -= 1
 
         ttl = ttl or self.default_ttl
         self._cache[key] = (value, time.time(), ttl)
+        # Optimize: Move accessed key to end to maintain LRU order in O(1)
+        self._cache.move_to_end(key)
         self._stats.size = len(self._cache)
         return True
 
