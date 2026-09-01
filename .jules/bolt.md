@@ -8,3 +8,7 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+
+## 2026-07-31 - Fast-path check before expensive regex
+**Learning:** Regex searches like `re.compile(r'#\s*(TODO|FIXME|...)\').finditer(line)` inside a tight loop over every line in a file can be surprisingly slow, especially in static analysis rules. Using a simple substring check like `if '#' not in line: continue` as a fast-path filter significantly reduces processing time for lines that obviously can't match.
+**Action:** For string processing loops applying complex regex patterns, always look for simple string operations (like `in`, `.startswith`) to quickly skip irrelevant data.
