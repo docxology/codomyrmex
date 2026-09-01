@@ -8,3 +8,7 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+
+## 2026-07-25 - Pre-compile Regexes Outside Recursive Functions
+**Learning:** Compiling a regular expression (using `re.compile`) inside a recursive function like `resolve_env_vars` causes the regex to be recompiled unnecessarily for every node in a data structure (e.g., every string in a large config file). Moving the regex compilation to the module level avoids this repeated overhead, leading to measurable performance gains.
+**Action:** Always extract `re.compile` calls from frequently executed or recursive functions and store them as module-level or class-level constants.
