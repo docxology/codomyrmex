@@ -72,11 +72,19 @@ class SecretsDetector:
     # Entropy threshold (Shannon entropy)
     ENTROPY_THRESHOLD = 4.5
 
+    COMPILED_PATTERNS = {
+        name: re.compile(pattern) for name, pattern in PATTERNS.items()
+    }
+
     def __init__(self, patterns: dict[str, str] | None = None):
         """Initialize detector."""
-        self.patterns = patterns or self.PATTERNS.copy()
-        self.compiled_patterns: dict[str, Pattern] = {}
-        self._compile_patterns()
+        if patterns is None:
+            self.patterns = self.PATTERNS.copy()
+            self.compiled_patterns = self.COMPILED_PATTERNS
+        else:
+            self.patterns = patterns
+            self.compiled_patterns: dict[str, Pattern] = {}
+            self._compile_patterns()
 
     def _compile_patterns(self):
         """Compile regex patterns."""
