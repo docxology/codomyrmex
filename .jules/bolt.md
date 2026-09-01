@@ -8,3 +8,7 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+
+## 2026-08-19 - O(1) Cache Eviction Optimization
+**Learning:** Python dictionary-based cache eviction utilizing O(N) operations like `min()` over keys can cause severe bottlenecks. Replacing it with `collections.OrderedDict` maintains insertion/timestamp order natively.
+**Action:** When implementing LRU/FIFO caches, use `collections.OrderedDict` with `.move_to_end(key)` on updates and `.popitem(last=False)` for O(1) eviction to maintain correct semantics and prevent thread-safety issues/race conditions.

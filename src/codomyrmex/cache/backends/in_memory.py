@@ -3,6 +3,7 @@ In-memory cache backend.
 """
 
 import time
+from collections import OrderedDict
 from typing import Any
 
 from codomyrmex.cache.cache import Cache
@@ -22,7 +23,10 @@ class InMemoryCache(Cache):
             max_size: Maximum number of items
             default_ttl: Default time-to-live in seconds
         """
-        self._cache: dict[str, tuple[Any, float, int | None]] = {}
+        # ⚡ Bolt Optimization: Use OrderedDict for O(1) eviction performance
+        # Expected Impact: Reduces eviction time from O(N) to O(1), preventing
+        # CPU spikes and blocking when the cache is full and under heavy load.
+        self._cache: OrderedDict[str, tuple[Any, float, int | None]] = OrderedDict()
         self.max_size = max_size
         self.default_ttl = default_ttl
         self._stats = CacheStats(max_size=max_size)
@@ -50,12 +54,19 @@ class InMemoryCache(Cache):
         """set a value in the cache."""
         # Evict if at max size
         if len(self._cache) >= self.max_size and key not in self._cache:
-            # Remove oldest entry
-            oldest_key = min(self._cache.keys(), key=lambda k: self._cache[k][1])
-            del self._cache[oldest_key]
+            # ⚡ Bolt Optimization: Remove oldest entry in O(1) time
+            # Expected Impact: Eliminates the O(N) min() scan over all keys, significantly
+            # improving throughput for large caches during eviction.
+            self._cache.popitem(last=False)
             self._stats.size -= 1
 
         ttl = ttl or self.default_ttl
+
+        # ⚡ Bolt Optimization: Move updated keys to the end to maintain timestamp order.
+        # Expected Impact: Preserves O(1) eviction semantics safely instead of using del/re-insert.
+        if key in self._cache:
+            self._cache.move_to_end(key)
+
         self._cache[key] = (value, time.time(), ttl)
         self._stats.size = len(self._cache)
         return True
