@@ -26,8 +26,8 @@
                 style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); flex: 1;">
                 <strong>Architect</strong><br>
                 <div style="margin-top: 0.5rem;">
-                    <label style="font-size: 0.85em; color: var(--text-secondary);">Provider:</label>
-                    <select class="agent-provider"
+                    <label for="architect-provider" style="font-size: 0.85em; color: var(--text-secondary);">Provider:</label>
+                    <select id="architect-provider" class="agent-provider"
                         style="width: 100%; padding: 0.3rem; margin-bottom: 0.5rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px;">
                         <option value="ollama" selected>Ollama</option>
                         <option value="claude_code">Claude</option>
@@ -35,8 +35,8 @@
                     </select>
                 </div>
                 <div>
-                    <label style="font-size: 0.85em; color: var(--text-secondary);">Persona:</label>
-                    <input type="text" class="agent-persona" value="System Planner"
+                    <label for="architect-persona" style="font-size: 0.85em; color: var(--text-secondary);">Persona:</label>
+                    <input id="architect-persona" type="text" class="agent-persona" value="System Planner"
                         style="width: 100%; padding: 0.3rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px;">
                 </div>
             </div>
@@ -44,8 +44,8 @@
                 style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); flex: 1;">
                 <strong>Developer</strong><br>
                 <div style="margin-top: 0.5rem;">
-                    <label style="font-size: 0.85em; color: var(--text-secondary);">Provider:</label>
-                    <select class="agent-provider"
+                    <label for="developer-provider" style="font-size: 0.85em; color: var(--text-secondary);">Provider:</label>
+                    <select id="developer-provider" class="agent-provider"
                         style="width: 100%; padding: 0.3rem; margin-bottom: 0.5rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px;">
                         <option value="ollama" selected>Ollama</option>
                         <option value="claude_code">Claude</option>
@@ -53,8 +53,8 @@
                     </select>
                 </div>
                 <div>
-                    <label style="font-size: 0.85em; color: var(--text-secondary);">Persona:</label>
-                    <input type="text" class="agent-persona" value="Code Writer"
+                    <label for="developer-persona" style="font-size: 0.85em; color: var(--text-secondary);">Persona:</label>
+                    <input id="developer-persona" type="text" class="agent-persona" value="Code Writer"
                         style="width: 100%; padding: 0.3rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px;">
                 </div>
             </div>
@@ -62,8 +62,8 @@
                 style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); flex: 1;">
                 <strong>Reviewer</strong><br>
                 <div style="margin-top: 0.5rem;">
-                    <label style="font-size: 0.85em; color: var(--text-secondary);">Provider:</label>
-                    <select class="agent-provider"
+                    <label for="reviewer-provider" style="font-size: 0.85em; color: var(--text-secondary);">Provider:</label>
+                    <select id="reviewer-provider" class="agent-provider"
                         style="width: 100%; padding: 0.3rem; margin-bottom: 0.5rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px;">
                         <option value="ollama">Ollama</option>
                         <option value="claude_code">Claude</option>
@@ -71,8 +71,8 @@
                     </select>
                 </div>
                 <div>
-                    <label style="font-size: 0.85em; color: var(--text-secondary);">Persona:</label>
-                    <input type="text" class="agent-persona" value="Code Executor"
+                    <label for="reviewer-persona" style="font-size: 0.85em; color: var(--text-secondary);">Persona:</label>
+                    <input id="reviewer-persona" type="text" class="agent-persona" value="Code Executor"
                         style="width: 100%; padding: 0.3rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px;">
                 </div>
             </div>
