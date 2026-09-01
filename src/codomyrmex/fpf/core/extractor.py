@@ -21,13 +21,14 @@ from .models import (
 class FPFExtractor:
     """Extractor for FPF patterns, concepts, and relationships."""
 
+    _U_TYPE_PATTERN = re.compile(r"`?U\.(\w+)`?")
+    _CONCEPT_PATTERN = re.compile(r"`?([A-Z][a-zA-Z0-9]*(?:\.[A-Z][a-zA-Z0-9]*)*)`?")
+
     def __init__(self):
         """Initialize the extractor."""
         # Patterns for extracting U.Types and concepts
-        self.u_type_pattern = re.compile(r"`?U\.(\w+)`?")
-        self.concept_pattern = re.compile(
-            r"`?([A-Z][a-zA-Z0-9]*(?:\.[A-Z][a-zA-Z0-9]*)*)`?"
-        )
+        self.u_type_pattern = self._U_TYPE_PATTERN
+        self.concept_pattern = self._CONCEPT_PATTERN
 
     def extract_patterns(self, spec: FPFSpec) -> list[Pattern]:
         """Extract all patterns from the specification.
