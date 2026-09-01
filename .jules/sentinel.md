@@ -1,3 +1,5 @@
+# Sentinel Journal
+
 ## 2026-03-01 - Fix Hardcoded Secret Vulnerability in Models
 
 **Vulnerability:**
@@ -11,3 +13,9 @@ Duplicate definitions across modules (e.g., repeating the `SecretType` definitio
 
 **Prevention:**
 Use descriptive suffixes or alternatives (e.g., changing `"password"` to `"password_type"`) for model or type definitions. Implement robust CI checks to enforce single-source-of-truth patterns rather than duplicating classes.
+
+## 2026-08-17 - Refactor subprocess to avoid shell=True
+
+**Vulnerability:** Use of shell=True in subprocess.run for local STT commands allows potential command injection.
+**Learning:** Even when inputs are shlex.quoted, shell=True invokes a shell process that parses the entire command string, making it harder to reason about edge cases or shell features being abused, especially with user-defined command templates.
+**Prevention:** Always use shell=False and pass arguments as a list. For templates, use shlex.split() to safely parse the formatted string into a command list before execution.
