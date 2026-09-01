@@ -26,7 +26,7 @@
 
 > **A comprehensive, modular, agentic Python ecosystem for software engineering, personal AI infrastructure, and multi-agent orchestration.**
 
-Codomyrmex is a modular library of **130 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more. The count is honest (every directory has an `__init__.py`) — roughly **25 modules are substantial production surfaces** (agents, llm, cloud, security, coding, documentation, orchestrator, etc.), **~75 are legitimate but narrower utilities**, and **~30 are teaching/exploratory modules** (dpo, nas, ssm, softmax_opt, etc.) that demonstrate techniques rather than ship production workflows. A documented **Zero-Mock** policy governs the active test suites, while the measured quality gates and inventory describe what was actually checked in a given run; they do not imply that every method is complete or production-safe. In the current project environment, the ecosystem exposes **612** runtime MCP tools in the generated manifest and **627** production `@mcp_tool` decorator lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **36,049** collected tests (`uv run python scripts/doc_inventory.py --pytest`), **1,204** Markdown files under `docs/`, and **37** GitHub Actions workflows (`.github/workflows/*.yml`). These are measured snapshot values for that dependency profile; refresh the linked inventory before treating them as current.
+Codomyrmex is a modular library of **130 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more. The count is honest (every directory has an `__init__.py`) — roughly **25 modules are substantial production surfaces** (agents, llm, cloud, security, coding, documentation, orchestrator, etc.), **~75 are legitimate but narrower utilities**, and **~30 are teaching/exploratory modules** (dpo, nas, ssm, softmax_opt, etc.) that demonstrate techniques rather than ship production workflows. A documented **Zero-Mock** policy governs the active test suites, while the measured quality gates and inventory describe what was actually checked in a given run; they do not imply that every method is complete or production-safe. In the current project environment, the ecosystem exposes **612** runtime MCP tools in the generated manifest and **627** production `@mcp_tool` decorator lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **36,049** collected tests (`uv run python scripts/doc_inventory.py --pytest`), **1,208** Markdown files under `docs/`, and **37** GitHub Actions workflows (`.github/workflows/*.yml`). These are measured snapshot values for that dependency profile; refresh the linked inventory before treating them as current.
 
 ## Technical report
 
@@ -514,7 +514,7 @@ sequenceDiagram
 codomyrmex/
 ├── .github/                  # 37 GitHub Actions workflows, templates, docs
 ├── config/                   # 100 top-level config dirs, 94 config.yaml files
-├── docs/                     # 1,204 Markdown files (see inventory); 21 top-level sections
+├── docs/                     # 1,208 Markdown files (see inventory); 21 top-level sections
 │   ├── ARCHITECTURE.md       # System architecture
 │   ├── AGENTS.md             # Agent coordination
 │   ├── SPEC.md               # Technical specification
@@ -551,7 +551,7 @@ codomyrmex/
 | **Total Modules** | 130 (top-level under `src/codomyrmex/`) |
 | **Total Python Files** | 3,000+ |
 | **Collected tests** | 36,049 in the current project environment (`uv run python scripts/doc_inventory.py --pytest`) |
-| **Documentation Files** | 1,204 Markdown under `docs/` (`find docs -name '*.md'`) |
+| **Documentation Files** | 1,208 Markdown under `docs/` (`find docs -name '*.md'`) |
 | **GitHub Workflows** | 37 (`.github/workflows/*.yml`) |
 | **MCP Runtime Tools** | 612 (generated runtime manifest in the complete locked dependency profile) |
 | **MCP Tool Decorators** | 627 (`@mcp_tool` lines, production tree) |
@@ -840,7 +840,7 @@ Copyright © 2025–2026 The Codomyrmex Contributors ([@docxology](https://githu
 
 <p align="center">
   <b>Built with 🐜 Codomyrmex — A Modular Software Colony</b><br>
-  <sub>130 modules · 612 runtime MCP tools · 627 decorators · 36,049 tests · 1,204 docs · 37 workflows · Zero-Mock policy · Evidence-scoped</sub>
+  <sub>130 modules · 612 runtime MCP tools · 627 decorators · 36,049 tests · 1,208 docs · 37 workflows · Zero-Mock policy · Evidence-scoped</sub>
 </p>
 
 <!-- Keywords for discoverability: AI agent framework, MCP tools, Model Context Protocol, autonomous software engineering, multi-agent orchestration, LLM tooling, Python AI library, agentic coding, Claude tools, Gemini tools, GPT tools, vector store, graph RAG, code analysis, static analysis, security scanning, personal AI infrastructure, PAI -->

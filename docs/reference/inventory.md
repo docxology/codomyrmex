@@ -9,7 +9,7 @@ Single source of truth for counts used in documentation and marketing copy. **Re
 | Term | Meaning |
 | --- | --- |
 | **Top-level modules** | Directories under `src/codomyrmex/` that contain `__init__.py`, excluding `tests/`. Each is one Codomyrmex package surface. |
-| **Agent packages** | Direct child directories of `src/codomyrmex/agents/` with `__init__.py` (excluding `__pycache__`). Documented under `docs/agents/`; **`docs/agents/rules/`** is docs-only. **39** packages. |
+| **Agent packages** | Direct child directories of `src/codomyrmex/agents/` with `__init__.py` (excluding `__pycache__`). Documented under `docs/agents/`; **`docs/agents/rules/`** is docs-only. **40** packages (41 child directories including the `open_gauss` submodule, which intentionally has no `__init__.py`). |
 | **`@mcp_tool` count** | Physical lines starting with `@mcp_tool` in `.py` files under `src/codomyrmex/`, excluding paths containing `tests/`. Matches `uv run python scripts/doc_inventory.py`. |
 | **`mcp_tools.py` files** | Files named `mcp_tools.py` under `src/codomyrmex/`, excluding `*/tests/*`. |
 | **Runtime MCP tools** | Tool entries in the generated PAI runtime manifest. This can differ from the raw decorator-line count or standalone launcher profile when decorators share wrappers, aliases, built-in registrations, or optional dependencies. |
@@ -28,7 +28,7 @@ Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/a
 | Production `@mcp_tool` decorators | 627 |
 | Pytest tests collected | 36,049 (`uv run python scripts/doc_inventory.py --pytest`; collection completed in the current project environment) |
 | GitHub Actions workflow files (`.github/workflows/*.yml`) | 37 |
-| Markdown files under `docs/` | 1,204 (`find docs -name '*.md' -type f \| wc -l`) |
+| Markdown files under `docs/` | 1,208 (`find docs -name '*.md' -type f \| wc -l`) |
 
 ## Reproduce
 

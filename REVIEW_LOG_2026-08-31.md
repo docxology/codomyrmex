@@ -35,3 +35,10 @@ Agent: codomyrmex lane of the agent-ergonomics fleet. Pre-existing dirty files a
 - Link checker re-run on touched docs: 0 broken.
 - Path-scoped adds only; `git status --porcelain -- <paths>` checked pre-commit; no pre-existing dirty file swept in.
 - Fast gate: not run (doc-only changes; declared docs gates unverified for runtime on this drive - disclosed, not invented).
+
+## Addendum — inventory re-verification (2026-08-31, evening lane)
+
+- Executable truth via `scripts/doc_inventory.py`: top-level 130, mcp_tools.py 151, @mcp_tool 627, workflows 37 — all match docs.
+- Drift found: inventory said **39** agent packages; live count is **40** (41 child dirs incl. dirty `open_gauss` submodule, no `__init__.py`). Fixed in `docs/reference/inventory.md` (definition row + value row, with clarifying note).
+- Drift found: docs markdown count 1,204 documented vs 1,208 live (docs/security lane additions). Fixed in `docs/reference/inventory.md`, README.md (4 occurrences), and INDEX.md if present. `Last updated` bumped to 2026-08-31.
+- `docs/agents/AGENTS.md` "41 top-level agent packages" left as-is — it mirrors the tree (41 child dirs), not the `__init__.py` count; both figures now traceable.
