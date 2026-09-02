@@ -8,3 +8,6 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+## 2026-09-02 - Optimize Cache Timestamping with time.monotonic()
+**Learning:** Using `datetime.now()` for simple cache eviction timestamps is unnecessarily expensive. Replacing it with `time.monotonic()` improves cache operations speed (e.g. puts and gets are ~18-20% faster) and avoids system clock rollback issues.
+**Action:** Use `time.monotonic()` instead of `datetime.now()` for cache eviction logic, timestamps, or simple duration tracking.
