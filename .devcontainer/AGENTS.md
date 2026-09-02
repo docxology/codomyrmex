@@ -10,3 +10,12 @@ Dev Container definition for reproducible codespace environments.
 - Keep the container feature set in sync with `Dockerfile` and `pyproject.toml`
   extras; drift here produces environments where the test suite fails for
   dependency reasons rather than code reasons.
+
+## Key Files
+- `README.md`: Readme file
+
+## Dependencies
+- None
+
+## Development Guidelines
+- Follow standard practices

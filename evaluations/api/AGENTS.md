@@ -7,3 +7,12 @@ demo) plus a roll-up report.
 
 ## Gotchas
 - Generated artifacts: regenerate via the evaluation harness instead of editing.
+
+## Key Files
+- `README.md`: Readme file
+
+## Dependencies
+- None
+
+## Development Guidelines
+- Follow standard practices

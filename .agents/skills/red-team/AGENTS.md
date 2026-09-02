@@ -9,3 +9,12 @@ Portable repository-scoped skill: Adversarially test a design, implementation, a
 ## Gotchas
 - Use for security, reliability, permission, and prompt-injection review.
 - Runtime adapters (`.cursor/skills/`, `.agent/skills/`) may mirror this skill; edit the canonical copy here first.
+
+## Key Files
+- `README.md`: Readme file
+
+## Dependencies
+- None
+
+## Development Guidelines
+- Follow standard practices

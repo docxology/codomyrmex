@@ -26,3 +26,12 @@ Workflow definitions consumed by Claude Code / Antigravity runtimes from the `.a
 - Workflows reference skills by name; keep names aligned with `../SKILL_INDEX.md`.
 - Workflows encode codomyrmex trust/verify patterns (codomyrmexTrust, codomyrmexVerify) —
   do not weaken their verification steps when editing.
+
+## Key Files
+- `README.md`: Readme file
+
+## Dependencies
+- None
+
+## Development Guidelines
+- Follow standard practices

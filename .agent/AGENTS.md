@@ -12,3 +12,12 @@ a skill index, runtime-scoped skills, and workflow definitions.
 ## Gotchas
 - Runtime-scoped skills here are adapters; the portable repository-scoped set
   lives in `.agents/skills/`. Keep `SKILL_INDEX.md` in sync when either set changes.
+
+## Key Files
+- `README.md`: Readme file
+
+## Dependencies
+- None
+
+## Development Guidelines
+- Follow standard practices

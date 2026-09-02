@@ -10,3 +10,12 @@ Configuration for the Jules agent runtime: persona/instruction files consumed by
 ## Gotchas
 - These files are instructions for an external agent runtime; treat edits as
   behavior changes and review them like code.
+
+## Key Files
+- `README.md`: Readme file
+
+## Dependencies
+- None
+
+## Development Guidelines
+- Follow standard practices

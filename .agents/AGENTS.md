@@ -12,3 +12,12 @@ skill library shared by Codex, Claude Code, Hermes, and other runtimes.
   `.cursor/skills/` hold runtime adapters. Edit here first, then mirror.
 - Skills are referenced by name from `.agent/SKILL_INDEX.md` and
   `.cursor/skill_manifest.json`-style manifests — keep names stable.
+
+## Key Files
+- `README.md`: Readme file
+
+## Dependencies
+- None
+
+## Development Guidelines
+- Follow standard practices

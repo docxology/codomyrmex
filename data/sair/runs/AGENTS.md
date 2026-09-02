@@ -8,3 +8,12 @@ per-item results.
 ## Gotchas
 - Append-only evidence: never modify or rename existing run files.
 - Correlation IDs tie runs to logs/telemetry — preserve them when archiving.
+
+## Key Files
+- `README.md`: Readme file
+
+## Dependencies
+- None
+
+## Development Guidelines
+- Follow standard practices

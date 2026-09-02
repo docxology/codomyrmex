@@ -7,4 +7,4 @@ Cursor-invocable skills for the codomyrmex workspace.
 - [`desloppify`](desloppify/SKILL.md) — raise codebase strict score via the desloppify CLI scan → next → resolve loop.
 - [`fractals`](fractals/SKILL.md) — recursive task decomposition with git worktrees per leaf; `orchestrate_fractal_task` MCP tool.
 
-Parent: [../README.md](../README.md)
+Parent: [../../README.md](../../README.md)
