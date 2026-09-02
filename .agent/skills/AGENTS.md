@@ -9,3 +9,12 @@ Runtime-scoped skills for the `.agent` surface. Each child folder carries one `S
 ## Gotchas
 - Prefer editing the `.agents/skills/` canonical copy when a skill exists there too;
   this tree is a runtime adapter, not the source of truth.
+
+## Key Files
+- `README.md`: Readme file
+
+## Dependencies
+- None
+
+## Development Guidelines
+- Follow standard practices

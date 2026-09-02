@@ -17,3 +17,12 @@ Gemini dispatch demo). Each subfolder holds per-script JSON eval records plus an
 - These are generated evaluation artifacts with a point-in-time verdict —
   re-run the evaluator rather than editing scores; keep the generated date in mind when citing compliance.
 - The 2026-03-12 report marks several scripts NON-COMPLIANT (legacy `Optional[...]` typing); check git history before treating any verdict as current.
+
+## Key Files
+- `README.md`: Readme file
+
+## Dependencies
+- None
+
+## Development Guidelines
+- Follow standard practices
