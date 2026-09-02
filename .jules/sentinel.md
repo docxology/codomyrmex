@@ -11,3 +11,7 @@ Duplicate definitions across modules (e.g., repeating the `SecretType` definitio
 
 **Prevention:**
 Use descriptive suffixes or alternatives (e.g., changing `"password"` to `"password_type"`) for model or type definitions. Implement robust CI checks to enforce single-source-of-truth patterns rather than duplicating classes.
+## 2024-09-02 - Command Injection in STT tool
+**Vulnerability:** subprocess.run was used with shell=True for a string command template containing user input.
+**Learning:** Always use shell=False and pass a list of arguments to prevent command injection.
+**Prevention:** Ensure all subprocess.run calls use shell=False.
