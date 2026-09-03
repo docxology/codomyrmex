@@ -1,3 +1,5 @@
+# Bolt Journal
+
 ## 2026-03-10 - Refactored Synchronous API Wrappers for asyncio Completeness
 
 **Vulnerability/Performance Issue:** Synchronous blocking `time.sleep` calls were present in retry loops during API interaction logic. When the framework executes in an event loop environment, these synchronous blocking calls could stall the event loop. Furthermore, maintaining split implementation blocks (sync vs async) introduced duplication and bugs.
@@ -8,3 +10,8 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+
+## 2026-09-03 - O(1) Cache Eviction using OrderedDict
+
+**Learning:** The default dictionary eviction strategy removing the item with the minimum timestamp requires an O(n) scan over all keys. For large max_size caches, this introduces a significant performance bottleneck during insertion.
+**Action:** Replaced standard `dict` with `collections.OrderedDict` combined with `.popitem(last=False)` and `.move_to_end(key)` to achieve O(1) eviction and maintain LRU semantics efficiently. Also replaced time.time() with time.monotonic() for faster time checks.
