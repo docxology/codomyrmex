@@ -22,7 +22,9 @@ class InMemoryCache(Cache):
             max_size: Maximum number of items
             default_ttl: Default time-to-live in seconds
         """
-        self._cache: dict[str, tuple[Any, float, int | None]] = {}
+        from collections import OrderedDict
+
+        self._cache: OrderedDict[str, tuple[Any, float, int | None]] = OrderedDict()
         self.max_size = max_size
         self.default_ttl = default_ttl
         self._stats = CacheStats(max_size=max_size)
@@ -38,11 +40,13 @@ class InMemoryCache(Cache):
         value, timestamp, ttl = self._cache[key]
 
         # Check expiration
-        if ttl is not None and time.time() - timestamp > ttl:
+        if ttl is not None and time.monotonic() - timestamp > ttl:
             del self._cache[key]
             self._stats.misses += 1
             return None
 
+        # Update LRU semantics for O(1) eviction
+        self._cache.move_to_end(key)
         self._stats.hits += 1
         return value
 
@@ -50,13 +54,13 @@ class InMemoryCache(Cache):
         """set a value in the cache."""
         # Evict if at max size
         if len(self._cache) >= self.max_size and key not in self._cache:
-            # Remove oldest entry
-            oldest_key = min(self._cache.keys(), key=lambda k: self._cache[k][1])
-            del self._cache[oldest_key]
+            # O(1) eviction of the oldest entry (LRU) replacing O(N) scan
+            self._cache.popitem(last=False)
             self._stats.size -= 1
 
         ttl = ttl or self.default_ttl
-        self._cache[key] = (value, time.time(), ttl)
+        self._cache[key] = (value, time.monotonic(), ttl)
+        self._cache.move_to_end(key)
         self._stats.size = len(self._cache)
         return True
 
@@ -81,7 +85,7 @@ class InMemoryCache(Cache):
 
         # Check expiration
         _, timestamp, ttl = self._cache[key]
-        if ttl is not None and time.time() - timestamp > ttl:
+        if ttl is not None and time.monotonic() - timestamp > ttl:
             del self._cache[key]
             return False
 
