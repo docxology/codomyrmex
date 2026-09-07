@@ -191,7 +191,9 @@ class TextToSQLEngine:
             if eq_match:
                 col, val = eq_match.group(1), eq_match.group(2)
                 if col in self.schema.tables.get(table, []):
-                    sql += f" WHERE {col} = '{val}'"
+                    # Sanitize val to prevent SQL injection
+                    safe_val = val.replace("'", "''")
+                    sql += f" WHERE {col} = '{safe_val}'"
 
         # Add ORDER BY
         if re.search(r"\border by\b|\bsort by\b", question_lower):

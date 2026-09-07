@@ -11,3 +11,8 @@ Duplicate definitions across modules (e.g., repeating the `SecretType` definitio
 
 **Prevention:**
 Use descriptive suffixes or alternatives (e.g., changing `"password"` to `"password_type"`) for model or type definitions. Implement robust CI checks to enforce single-source-of-truth patterns rather than duplicating classes.
+
+## 2023-11-20 - Fix SQL Injection Vulnerability in Text-to-SQL Engine
+**Vulnerability:** The Text-to-SQL engine concatenated user input directly into the `WHERE` clause without sanitization, leading to a SQL injection vulnerability.
+**Learning:** Even internal query generators that do not directly execute SQL must ensure string values are sanitized, otherwise the generated strings could break downstream systems or allow an attacker to bypass intended logic.
+**Prevention:** Always escape single quotes in SQL string literals when parameterized queries cannot be used.
