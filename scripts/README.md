@@ -22,6 +22,7 @@ submodule exclusions, and tests first.
 | `audits/` | Source, export, RASP, and policy audits |
 | `review/` | Diff review and SARIF utilities |
 | `agents/` | Agent-specific launch and maintenance commands |
+| `run_all_scripts.py` | Orchestrator CLI over `scripts/` via `codomyrmex.orchestrator.core`; missing-mode invocation defaults to `--dry-run` |
 | `sair/` | Separate SAIR submodule worktree |
 
 ## Common validation

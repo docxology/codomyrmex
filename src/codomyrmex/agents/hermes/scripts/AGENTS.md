@@ -16,7 +16,6 @@ Automation and utility scripts.
 - `run_status.py` – Project file
 - `run_stream.py` – Project file
 - `run_template.py` – Project file
-- `test_hermes_scripts.py` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -36,7 +35,6 @@ Automation and utility scripts.
 - `run_status.py`
 - `run_stream.py`
 - `run_template.py`
-- `test_hermes_scripts.py`
 
 ## Dependencies
 - Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.

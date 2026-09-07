@@ -6,46 +6,47 @@
 # dev-dependencies = []
 # ///
 """
-Master Script Orchestrator
+Master Script Orchestrator (thin wrapper).
 
-Run and log all scripts in the scripts directory with comprehensive reporting.
-Discovers Python scripts in subdirectories, executes them, and generates
-execution reports with logs.
-
-This script is now a thin wrapper around the `codomyrmex.orchestrator` module.
+Delegates to ``codomyrmex.orchestrator.core.main``. A missing-mode invocation
+(no ``--dry-run``, ``--subdirs``, or ``--filter``) defaults to ``--dry-run`` so
+the script never runs the whole ``scripts/`` tree implicitly; see the
+mutation-boundary rules in ``scripts/README.md``.
 
 Usage:
-    python run_all_scripts.py [--dry-run] [--timeout SECONDS] [--filter PATTERN]
-    python run_all_scripts.py --subdirs documentation testing
-    python run_all_scripts.py --verbose --output-dir /path/to/logs
+    uv run --locked python scripts/run_all_scripts.py --dry-run
+    uv run --locked python scripts/run_all_scripts.py --subdirs documentation
+    uv run --locked python scripts/run_all_scripts.py --filter audit --timeout 60
 """
 
 import sys
 from pathlib import Path
 
-# Add project src to sys.path to ensure we can import codomyrmex
-project_root = Path(__file__).parent.parent
-src_path = project_root / "src"
-if src_path.exists():
-    sys.path.insert(0, str(src_path))
-
 try:
     from codomyrmex.orchestrator.core import main
 except ImportError as e:
     print(
-        "Error: Could not import codomyrmex.orchestrator. Ensure 'src' is in PYTHONPATH.",
+        "Error: Could not import codomyrmex.orchestrator. "
+        "Run with 'uv run --locked python scripts/run_all_scripts.py' so the "
+        "project package is importable.",
         file=sys.stderr,
     )
     print(f"Traceback: {e}", file=sys.stderr)
     sys.exit(1)
 
 if __name__ == "__main__":
-    # Construct arguments for the orchestrator
-    argv = sys.argv[1:]  # Start with existing args
+    argv = sys.argv[1:]
 
-    # We pass the directory of this script so the orchestrator knows where to start searching
+    # Missing-mode invocations stay read-only: no explicit scope means dry-run.
+    if not any(
+        arg == "--dry-run" or arg.startswith(("--subdirs", "--filter"))
+        for arg in argv
+    ):
+        argv.append("--dry-run")
+
+    # Pass the directory of this script so the orchestrator knows where to search.
     if "--scripts-dir" not in argv:
-        argv.append(f"--scripts-dir={Path(__file__).parent}")
+        argv.append(f"--scripts-dir={Path(__file__).resolve().parent}")
 
     if "--timeout" not in argv:
         argv.extend(["--timeout", "120"])

@@ -33,10 +33,6 @@ try:
 except ImportError:
     YAML_AVAILABLE = False
 
-# Add src to path if needed
-project_root = Path(__file__).parent.parent.parent.parent.parent
-sys.path.insert(0, str(project_root / "src"))
-
 try:
     from codomyrmex.logging_monitoring import get_logger
 

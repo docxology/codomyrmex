@@ -62,11 +62,6 @@ class SmartTemplateEngine:
     def __init__(self, repo_root: Path):
         """Initialize template engine."""
         self.repo_root = repo_root.resolve()
-        self.src_path = repo_root / "src"
-
-        # Add src to Python path
-        if str(self.src_path) not in sys.path:
-            sys.path.insert(0, str(self.src_path))
 
     def analyze_module(self, module_path: Path) -> ModuleAnalysis:
         """Analyze a Python module."""

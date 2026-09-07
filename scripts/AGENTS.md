@@ -29,6 +29,7 @@ Define execution and maintenance safety for repository automation.
 - `doc_inventory.py` — authoritative volatile metrics
 - `src_structure_audit.py` — source/documentation parity
 - `rasp_gap_report.py` — README/AGENTS pair audit
+- `run_all_scripts.py` — orchestrator CLI wrapper; missing-mode invocation defaults to `--dry-run`
 - `documentation/` — canonical documentation tooling
 
 ## High-risk categories

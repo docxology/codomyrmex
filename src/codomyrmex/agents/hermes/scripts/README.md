@@ -17,7 +17,6 @@ Automation and utility scripts.
 - `run_status.py` – File
 - `run_stream.py` – File
 - `run_template.py` – File
-- `test_hermes_scripts.py` – File
 
 ## Navigation
 - **Parent Directory**: [hermes](../README.md)

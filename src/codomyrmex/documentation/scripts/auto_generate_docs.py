@@ -12,8 +12,6 @@ try:
 except Exception as _exc:
     logger = logging.getLogger(__name__)
 
-# Import smart template engine
-# sys.path.insert(0, str(Path(__file__).parent)) # Removed sys.path hack
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 

@@ -13,9 +13,10 @@ import sys
 from pathlib import Path
 
 import pytest
+from tests.support.repo_paths import REPO_ROOT
 
 # Ensure the evolution submodule is importable
-_evo_path = Path(__file__).resolve().parent.parent / "evolution"
+_evo_path = REPO_ROOT / "src" / "codomyrmex" / "agents" / "hermes" / "evolution"
 if _evo_path.exists() and str(_evo_path) not in sys.path:
     sys.path.insert(0, str(_evo_path))
 
@@ -668,6 +669,6 @@ class TestNewMCPTools:
     def test_session_store_exported_from_package(self) -> None:
         """SessionStore protocol is importable from the hermes package."""
         from codomyrmex.agents.hermes import SessionStore, SQLiteSessionStore
-
         store = SQLiteSessionStore(":memory:")
         assert isinstance(store, SessionStore)
+        store.close()
