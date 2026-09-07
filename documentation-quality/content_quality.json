@@ -759,14 +759,29 @@
     }
   },
   {
+    "file": ".jules/palette.md",
+    "score": 75,
+    "issues": [
+      "No headings found",
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 0,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 0,
+      "link_count": 0
+    }
+  },
+  {
     "file": ".jules/sentinel.md",
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 1,
+      "heading_count": 2,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 156,
+      "word_count": 208,
       "link_count": 0
     }
   },
@@ -5994,7 +6009,7 @@
       "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 357,
+      "word_count": 372,
       "link_count": 4
     }
   },
@@ -6006,7 +6021,7 @@
       "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 269,
+      "word_count": 280,
       "link_count": 6
     }
   },
@@ -43302,7 +43317,7 @@
       "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 84,
+      "word_count": 80,
       "link_count": 3
     }
   },
@@ -43314,7 +43329,7 @@
       "heading_count": 9,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 233,
+      "word_count": 226,
       "link_count": 2
     }
   },

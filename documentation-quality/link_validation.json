@@ -12231,28 +12231,28 @@
   {
     "file": "scripts/README.md",
     "link": "AGENTS.md",
-    "line": 62,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "scripts/README.md",
-    "link": "documentation/README.md",
     "line": 63,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/README.md",
-    "link": "../docs/development/documentation.md",
+    "link": "documentation/README.md",
     "line": 64,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/README.md",
-    "link": "../README.md",
+    "link": "../docs/development/documentation.md",
     "line": 65,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "scripts/README.md",
+    "link": "../README.md",
+    "line": 66,
     "status": "ok",
     "message": "File exists"
   },
@@ -12273,28 +12273,28 @@
   {
     "file": "scripts/AGENTS.md",
     "link": "README.md",
-    "line": 55,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "scripts/AGENTS.md",
-    "link": "documentation/AGENTS.md",
     "line": 56,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/AGENTS.md",
-    "link": "../AGENTS.md",
+    "link": "documentation/AGENTS.md",
     "line": 57,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/AGENTS.md",
-    "link": "../README.md",
+    "link": "../AGENTS.md",
     "line": 58,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "scripts/AGENTS.md",
+    "link": "../README.md",
+    "line": 59,
     "status": "ok",
     "message": "File exists"
   },
@@ -79648,35 +79648,35 @@
   {
     "file": "src/codomyrmex/agents/hermes/scripts/README.md",
     "link": "../README.md",
-    "line": 23,
+    "line": 22,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/agents/hermes/scripts/README.md",
     "link": "AGENTS.md",
-    "line": 28,
+    "line": 27,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/agents/hermes/scripts/README.md",
     "link": "SPEC.md",
-    "line": 29,
+    "line": 28,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/agents/hermes/scripts/AGENTS.md",
     "link": "../README.md",
-    "line": 50,
+    "line": 48,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/agents/hermes/scripts/AGENTS.md",
     "link": "SPEC.md",
-    "line": 55,
+    "line": 53,
     "status": "ok",
     "message": "File exists"
   },
