@@ -230,7 +230,11 @@ class TTLPolicy(EvictionPolicy[K, V]):
     def __init__(self, max_size: int, default_ttl: float | timedelta = 3600.0):
         super().__init__(max_size)
         self._cache: dict[K, CacheEntry[V]] = {}
-        self._default_ttl = default_ttl.total_seconds() if isinstance(default_ttl, timedelta) else default_ttl
+        self._default_ttl = (
+            default_ttl.total_seconds()
+            if isinstance(default_ttl, timedelta)
+            else default_ttl
+        )
         self._expiry_heap: list[tuple[float, K]] = []
 
     def _cleanup_expired(self) -> None:
