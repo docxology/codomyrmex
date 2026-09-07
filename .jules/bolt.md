@@ -8,3 +8,7 @@
 
 **Learning:** Recreating static dictionaries on every function call (e.g. `type_map = {"int": int, ...}` inside `deserialize`) adds significant overhead in frequently called code paths.
 **Action:** Move static mapping dictionaries to class-level or module-level constants (e.g. `_TYPE_MAP`) to initialize them once and eliminate per-call allocation overhead.
+
+## 2026-03-01 - Monotonic Clock Optimization
+**Learning:** In the cache modules (`codomyrmex.cache.policies` and `codomyrmex.cache.invalidation`), the use of `datetime.now()` for TTL and LRU expiration tracking is a measurable bottleneck. `time.monotonic()` is significantly faster (~5-6x faster than `datetime.now()` and safe against system clock rollbacks).
+**Action:** Replace `datetime.now()` with `time.monotonic()` and `timedelta` with floats for duration tracking where appropriate, especially in core cache structures. Ensure backward compatibility by normalizing `timedelta` to floats inside `put` and `set` methods instead of changing API contracts abruptly.
