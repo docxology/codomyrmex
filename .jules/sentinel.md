@@ -15,3 +15,8 @@ Use descriptive suffixes or alternatives (e.g., changing `"password"` to `"passw
 **Vulnerability:** Command Injection risk from using shell=True in subprocess.run for transcription_tools.py.
 **Learning:** Even when interpolating quoted strings, shell=True exposes the system to injection if templates are misconfigured or arguments leak.
 **Prevention:** Use shell=False combined with shlex.split() to safely tokenize commands while maintaining argument grouping.
+
+## 2026-09-08 - SQL Injection via Regex Capture
+**Vulnerability:** The `TextToSQLEngine` text-to-SQL logic built WHERE clauses using unescaped regex captures (e.g., `WHERE col = 'val'`). If the query included quotes, they could bypass string boundaries.
+**Learning:** When generating code (like SQL from NLP), user input interpolated without proper escaping creates injection vectors even inside seemingly isolated modules.
+**Prevention:** Use proper database query parameters when possible, or at least rigorously escape quotes (`val.replace("'", "''")`) and ensure matches are tightly bound.

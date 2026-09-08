@@ -186,11 +186,18 @@ class TextToSQLEngine:
 
         # Add WHERE if mentioned
         if re.search(r"\bwhere\b.*=", question_lower):
-            # Try to extract condition
-            eq_match = re.search(r"(\w+)\s*=\s*['\"]?(\w+)['\"]?", question)
+            # Try to extract condition, avoiding SQL injection by escaping quotes
+            # and only matching up to SQL keywords, semicolons, or comments.
+            eq_match = re.search(
+                r"(\w+)\s*=\s*['\"]?(.*?)['\"]?(?:\s+(?:and|or|order|limit|;)|--|$)",
+                question,
+                re.IGNORECASE,
+            )
             if eq_match:
-                col, val = eq_match.group(1), eq_match.group(2)
+                col, val = eq_match.group(1), eq_match.group(2).strip()
                 if col in self.schema.tables.get(table, []):
+                    # Escape single quotes for SQL
+                    val = val.replace("'", "''")
                     sql += f" WHERE {col} = '{val}'"
 
         # Add ORDER BY
