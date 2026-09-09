@@ -3,6 +3,7 @@ In-memory cache backend.
 """
 
 import time
+from collections import OrderedDict
 from typing import Any
 
 from codomyrmex.cache.cache import Cache
@@ -22,7 +23,9 @@ class InMemoryCache(Cache):
             max_size: Maximum number of items
             default_ttl: Default time-to-live in seconds
         """
-        self._cache: dict[str, tuple[Any, float, int | None]] = {}
+        # ⚡ Bolt: Using OrderedDict for O(1) eviction instead of O(N) dict search.
+        # This prevents performance degradation when the cache is full and evicting.
+        self._cache: OrderedDict[str, tuple[Any, float, int | None]] = OrderedDict()
         self.max_size = max_size
         self.default_ttl = default_ttl
         self._stats = CacheStats(max_size=max_size)
@@ -38,7 +41,9 @@ class InMemoryCache(Cache):
         value, timestamp, ttl = self._cache[key]
 
         # Check expiration
-        if ttl is not None and time.time() - timestamp > ttl:
+        # ⚡ Bolt: Using time.monotonic() over time.time() for faster execution
+        # and immunity to system clock changes.
+        if ttl is not None and time.monotonic() - timestamp > ttl:
             del self._cache[key]
             self._stats.misses += 1
             return None
@@ -51,12 +56,16 @@ class InMemoryCache(Cache):
         # Evict if at max size
         if len(self._cache) >= self.max_size and key not in self._cache:
             # Remove oldest entry
-            oldest_key = min(self._cache.keys(), key=lambda k: self._cache[k][1])
-            del self._cache[oldest_key]
+            # ⚡ Bolt: O(1) removal from OrderedDict instead of O(N) min() scan over keys.
+            self._cache.popitem(last=False)
             self._stats.size -= 1
 
+        if key in self._cache:
+            # ⚡ Bolt: move updated key to end so its new timestamp correctly orders it as newest
+            self._cache.move_to_end(key)
+
         ttl = ttl or self.default_ttl
-        self._cache[key] = (value, time.time(), ttl)
+        self._cache[key] = (value, time.monotonic(), ttl)
         self._stats.size = len(self._cache)
         return True
 
@@ -81,7 +90,7 @@ class InMemoryCache(Cache):
 
         # Check expiration
         _, timestamp, ttl = self._cache[key]
-        if ttl is not None and time.time() - timestamp > ttl:
+        if ttl is not None and time.monotonic() - timestamp > ttl:
             del self._cache[key]
             return False
 
