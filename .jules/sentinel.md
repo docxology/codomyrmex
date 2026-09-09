@@ -15,3 +15,8 @@ Use descriptive suffixes or alternatives (e.g., changing `"password"` to `"passw
 **Vulnerability:** Command Injection risk from using shell=True in subprocess.run for transcription_tools.py.
 **Learning:** Even when interpolating quoted strings, shell=True exposes the system to injection if templates are misconfigured or arguments leak.
 **Prevention:** Use shell=False combined with shlex.split() to safely tokenize commands while maintaining argument grouping.
+
+## 2024-05-24 - Command Injection in Local STT Execution
+**Vulnerability:** The `transcription_tools.py` module executes a local STT command template using `subprocess.run(..., shell=True)`. While the format parameters are quoted via `shlex.quote`, the command template itself can be provided via the `LOCAL_STT_COMMAND_ENV` environment variable, allowing a malicious actor with environment access to execute arbitrary shell commands.
+**Learning:** Using `shell=True` is always dangerous if any part of the command string (even the template structure) is user-controllable. `shlex.quote` only protects against argument injection, not template manipulation.
+**Prevention:** Always use a list format for `subprocess.run` (with `shell=False`, the default) and parse formatted string templates using `shlex.split(command)` prior to execution to safely separate arguments and prevent shell interpretation.
