@@ -228,12 +228,13 @@ class ReportGenerator:
 | Pattern | Count |
 | :--- | ---: |
 """
+            pattern_rows = []
             for pattern, count in sorted(
                 patterns.items(), key=lambda x: x[1], reverse=True
             ):
                 display_name = pattern.replace("_", " ").title()
-                content += f"| {display_name} | {count} |\n"
-            content += "\n"
+                pattern_rows.append(f"| {display_name} | {count} |\n")
+            content += "".join(pattern_rows) + "\n"
 
         # Files section
         if config.include_file_details:
@@ -294,7 +295,7 @@ class ReportGenerator:
         target = results.get("target", "Unknown")
 
         # Build file rows
-        file_rows = ""
+        file_rows_list = []
         files = results.get("files", [])
         for f in files[: config.max_files]:
             metrics = f.get("metrics", {})
@@ -312,7 +313,7 @@ class ReportGenerator:
 
             issue_class = "warning" if issues else "success"
 
-            file_rows += f"""
+            file_rows_list.append(f"""
                 <tr>
                     <td class="file-cell" title="{file_path}">{file_name}</td>
                     <td class="num">{metrics.get("lines_of_code", 0):,}</td>
@@ -321,11 +322,13 @@ class ReportGenerator:
                     <td>{pattern_badges or "-"}</td>
                     <td class="num {issue_class}">{len(issues)}</td>
                 </tr>
-            """
+            """)
+
+        file_rows = "".join(file_rows_list)
 
         # Build pattern chart
         patterns = summary.get("patterns_found", {})
-        pattern_bars = ""
+        pattern_bars_list = []
         if patterns:
             max_count = max(patterns.values())
             for pattern, count in sorted(
@@ -333,13 +336,15 @@ class ReportGenerator:
             )[:10]:
                 width = (count / max_count) * 100
                 display_name = pattern.replace("_", " ").title()
-                pattern_bars += f"""
+                pattern_bars_list.append(f"""
                     <div class="bar-row">
                         <span class="label">{display_name}</span>
                         <div class="bar-bg"><div class="bar" style="width: {width}%"></div></div>
                         <span class="value">{count}</span>
                     </div>
-                """
+                """)
+
+        pattern_bars = "".join(pattern_bars_list)
 
         html = f"""<!DOCTYPE html>
 <html lang="en">
