@@ -20,6 +20,29 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+_SENSITIVE_PATTERNS = [
+    (
+        re.compile(r'password\s*[:=]\s*["\'][^"\']+["\']', re.IGNORECASE),
+        "Plaintext password pattern found",
+    ),
+    (
+        re.compile(r'api_key\s*[:=]\s*["\'][^"\']+["\']', re.IGNORECASE),
+        "Plaintext API key pattern found",
+    ),
+    (
+        re.compile(r'secret\s*[:=]\s*["\'][^"\']+["\']', re.IGNORECASE),
+        "Plaintext secret pattern found",
+    ),
+    (
+        re.compile(r'token\s*[:=]\s*["\'][^"\']+["\']', re.IGNORECASE),
+        "Plaintext token pattern found",
+    ),
+    (
+        re.compile(r"-----BEGIN (?:RSA |EC )?PRIVATE KEY-----"),
+        "Unencrypted private key found",
+    ),
+]
+
 
 @dataclass
 class ConfigChange:
@@ -419,29 +442,6 @@ class ConfigurationMonitor:
         recommendations = []
         files_audited = 0
 
-        sensitive_patterns = [
-            (
-                re.compile(r'password\s*[:=]\s*["\'][^"\']+["\']', re.IGNORECASE),
-                "Plaintext password pattern found",
-            ),
-            (
-                re.compile(r'api_key\s*[:=]\s*["\'][^"\']+["\']', re.IGNORECASE),
-                "Plaintext API key pattern found",
-            ),
-            (
-                re.compile(r'secret\s*[:=]\s*["\'][^"\']+["\']', re.IGNORECASE),
-                "Plaintext secret pattern found",
-            ),
-            (
-                re.compile(r'token\s*[:=]\s*["\'][^"\']+["\']', re.IGNORECASE),
-                "Plaintext token pattern found",
-            ),
-            (
-                re.compile(r"-----BEGIN (?:RSA |EC )?PRIVATE KEY-----"),
-                "Unencrypted private key found",
-            ),
-        ]
-
         for f in path.rglob("*"):
             if not f.is_file():
                 continue
@@ -461,7 +461,7 @@ class ConfigurationMonitor:
 
             try:
                 content = f.read_text(errors="ignore")
-                for pattern, msg in sensitive_patterns:
+                for pattern, msg in _SENSITIVE_PATTERNS:
                     if pattern.search(content):
                         issues.append(f"{msg} in {f.name}")
                         recommendations.append(
