@@ -30,7 +30,6 @@ from codomyrmex.colony_kernel.models import (
     ActionProposal,
     AgentTrustProfile,
     FalsificationFinding,
-    FalsificationSeverity,
     GateResult,
     PruningCandidate,
     ResourceCost,
