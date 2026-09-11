@@ -64,6 +64,7 @@ class PlainFormatter(OutputFormatter):
     """Plain text formatter."""
 
     def format_data(self, data: Any) -> str:
+        """Format generic data representation."""
         if isinstance(data, (dict, list)):
             return json.dumps(data, indent=2)
         return str(data)
@@ -71,6 +72,7 @@ class PlainFormatter(OutputFormatter):
     def format_table(
         self, data: list[dict], columns: list[Column] | None = None
     ) -> str:
+        """Format a list of dicts as a basic text table."""
         if not data:
             return "No data"
 
@@ -101,9 +103,11 @@ class PlainFormatter(OutputFormatter):
         return "\n".join(lines)
 
     def format_list(self, items: list[Any]) -> str:
+        """Format a list of items into text."""
         return "\n".join(f"  - {item}" for item in items)
 
     def format_key_value(self, data: dict[str, Any]) -> str:
+        """Format a dictionary into text key-value pairs."""
         max_key_len = max(len(k) for k in data) if data else 0
         lines = []
         for key, value in data.items():
@@ -117,20 +121,25 @@ class JSONFormatter(OutputFormatter):
     """JSON formatter for machine-readable output."""
 
     def __init__(self, indent: int = 2, compact: bool = False):
+        """Initialize the JSON formatter."""
         self.indent = None if compact else indent
 
     def format_data(self, data: Any) -> str:
+        """Format generic data to JSON."""
         return json.dumps(data, indent=self.indent, default=str)
 
     def format_table(
         self, data: list[dict], columns: list[Column] | None = None
     ) -> str:
+        """Format table data to JSON."""
         return self.format_data(data)
 
     def format_list(self, items: list[Any]) -> str:
+        """Format list to JSON."""
         return self.format_data(items)
 
     def format_key_value(self, data: dict[str, Any]) -> str:
+        """Format key-value dictionary to JSON."""
         return self.format_data(data)
 
 
@@ -143,6 +152,7 @@ class TableFormatter(OutputFormatter):
         show_header: bool = True,
         row_separator: bool = False,
     ):
+        """Initialize the table formatter."""
         self.border_style = border_style
         self.show_header = show_header
         self.row_separator = row_separator
@@ -207,6 +217,7 @@ class TableFormatter(OutputFormatter):
         return styles.get(self.border_style, styles["single"])
 
     def format_data(self, data: Any) -> str:
+        """Format generic data representation."""
         if isinstance(data, list) and all(isinstance(d, dict) for d in data):
             return self.format_table(data)
         if isinstance(data, dict):
@@ -216,6 +227,7 @@ class TableFormatter(OutputFormatter):
     def format_table(
         self, data: list[dict], columns: list[Column] | None = None
     ) -> str:
+        """Format a list of dicts as a formatted table."""
         if not data:
             return "No data"
 
@@ -287,10 +299,12 @@ class TableFormatter(OutputFormatter):
         return "\n".join(lines)
 
     def format_list(self, items: list[Any]) -> str:
+        """Format a list of items into a text table."""
         data = [{"item": item} for item in items]
         return self.format_table(data, [Column(name="Item", key="item")])
 
     def format_key_value(self, data: dict[str, Any]) -> str:
+        """Format a dictionary as key-value pairs in a text table."""
         table_data = [{"key": k, "value": v} for k, v in data.items()]
         return self.format_table(
             table_data,
@@ -302,6 +316,7 @@ class YAMLFormatter(OutputFormatter):
     """YAML-like formatter for readable output."""
 
     def __init__(self, indent: int = 2):
+        """Initialize the text formatter."""
         self.indent = indent
 
     def _format_value(self, value: Any, level: int = 0) -> str:
@@ -343,17 +358,21 @@ class YAMLFormatter(OutputFormatter):
         return str(value)
 
     def format_data(self, data: Any) -> str:
+        """Format generic data into formatted text."""
         return self._format_value(data)
 
     def format_table(
         self, data: list[dict], columns: list[Column] | None = None
     ) -> str:
+        """Format table data into formatted text."""
         return self.format_data(data)
 
     def format_list(self, items: list[Any]) -> str:
+        """Format list items into formatted text."""
         return self.format_data(items)
 
     def format_key_value(self, data: dict[str, Any]) -> str:
+        """Format dictionary items into formatted text."""
         return self.format_data(data)
 
 

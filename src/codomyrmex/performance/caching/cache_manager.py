@@ -1,3 +1,9 @@
+"""Caching utilities for Codomyrmex modules.
+
+This module provides caching capabilities to improve performance
+by storing expensive computation results and avoiding redundant work.
+"""
+
 import functools
 import hashlib
 import json
@@ -10,18 +16,11 @@ from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
-"""Caching utilities for Codomyrmex modules.
-
-This module provides caching capabilities to improve performance
-by storing expensive computation results and avoiding redundant work.
-"""
-
 logger = get_logger(__name__)
 
 
 class CacheManager:
-    """
-    A cache manager that provides persistent caching for expensive operations.
+    """A cache manager that provides persistent caching for expensive operations.
 
     This class supports both in-memory and disk-based caching with
     configurable expiration times and cache size limits.
@@ -33,13 +32,13 @@ class CacheManager:
         max_memory_items: int = 1000,
         default_ttl: int = 3600,
     ):  # 1 hour default TTL
-        """
-        Initialize the cache manager.
+        """Initialize the cache manager.
 
         Args:
             cache_dir: Directory for persistent cache files. If None, uses temp directory.
             max_memory_items: Maximum number of items to keep in memory cache.
             default_ttl: Default time-to-live for cache entries in seconds.
+
         """
         self.cache_dir = (
             Path(cache_dir)
@@ -182,8 +181,7 @@ def cached_function(
     cache_key_prefix: str | None = None,
     cache_manager: CacheManager | None = None,
 ) -> Callable:
-    """
-    Decorator for caching function results.
+    """Cache function results to avoid redundant computations.
 
     Args:
         ttl: Time-to-live for cache entries in seconds. If None, uses default.
@@ -198,21 +196,26 @@ def cached_function(
         ... def expensive_computation(data):
         ...     # Some expensive operation
         ...     return result
+
     """
 
     def decorator(func: Callable) -> Callable:
-        """Decorator.
+        """Decorate the function for caching.
 
-        Args:        func: Parameter for the operation.
+        Args:
+            func: Parameter for the operation.
 
-        Returns:        The result of the operation.
+        Returns:
+            The wrapped function with caching capability.
+
         """
-
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            """Wrapper.
+            """Execute the function, utilizing the cache to store or retrieve results.
 
-            Returns:        The result of the operation.
+            Returns:
+                The result of the operation.
+
             """
             mgr = cache_manager or _cache_manager
             # Generate cache key
