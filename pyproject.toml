@@ -221,7 +221,7 @@ audio = [
 ]
 
 video = [
-    "opencv-python>=4.8.0",   # Frame extraction, analysis
+    "opencv-python>=4.13.0.92",  # Frame extraction, analysis
     "pillow>=12.3.0",         # Image processing (security-patched baseline)
 ]
 
