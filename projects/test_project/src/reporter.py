@@ -228,12 +228,13 @@ class ReportGenerator:
 | Pattern | Count |
 | :--- | ---: |
 """
+            pattern_rows = []
             for pattern, count in sorted(
                 patterns.items(), key=lambda x: x[1], reverse=True
             ):
                 display_name = pattern.replace("_", " ").title()
-                content += f"| {display_name} | {count} |\n"
-            content += "\n"
+                pattern_rows.append(f"| {display_name} | {count} |\n")
+            content += "".join(pattern_rows) + "\n"
 
         # Files section
         if config.include_file_details:
