@@ -8,6 +8,26 @@ from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 
 
+# Hoisted static mapping to prevent per-call allocation overhead
+_FORMAT_MAPPING = {
+    "md": "markdown",
+    "markdown": "markdown",
+    "json": "json",
+    "yaml": "yaml",
+    "yml": "yaml",
+    "pdf": "pdf",
+    "txt": "text",
+    "text": "text",
+    "html": "html",
+    "htm": "html",
+    "xml": "xml",
+    "csv": "csv",
+    "rtf": "rtf",
+    "docx": "docx",
+    "xlsx": "xlsx",
+}
+
+
 def detect_format_from_path(file_path: Path) -> str:
     """
     Detect document format from file extension.
@@ -20,25 +40,7 @@ def detect_format_from_path(file_path: Path) -> str:
     """
     suffix = file_path.suffix.lower().lstrip(".")
 
-    format_mapping = {
-        "md": "markdown",
-        "markdown": "markdown",
-        "json": "json",
-        "yaml": "yaml",
-        "yml": "yaml",
-        "pdf": "pdf",
-        "txt": "text",
-        "text": "text",
-        "html": "html",
-        "htm": "html",
-        "xml": "xml",
-        "csv": "csv",
-        "rtf": "rtf",
-        "docx": "docx",
-        "xlsx": "xlsx",
-    }
-
-    return format_mapping.get(suffix, "text")
+    return _FORMAT_MAPPING.get(suffix, "text")
 
 
 def detect_mime_type(file_path: Path) -> str | None:

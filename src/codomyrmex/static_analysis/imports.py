@@ -138,6 +138,11 @@ UPWARD_INTERFACE_CONTRACTS: Mapping[InterfaceContractKey, str] = MappingProxyTyp
             "logging_monitoring/handlers/event_bridge.py",
         ): "Optional logging-to-event-bus bridge isolated in a handler adapter.",
         (
+            "model_context_protocol",
+            "agents",
+            "model_context_protocol/transport/main.py",
+        ): "MCP server delegates to PAI bridge for production tool registration.",
+        (
             "orchestrator",
             "agents",
             "orchestrator/fractals/executor.py",

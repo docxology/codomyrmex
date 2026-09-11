@@ -24,6 +24,14 @@ from .base import (
 # ── Detection ───────────────────────────────────────────────────────
 
 
+# Hoisted static mapping to prevent per-call allocation overhead
+_PLATFORM_MAPPING = {
+    "darwin": OSPlatform.MACOS,
+    "linux": OSPlatform.LINUX,
+    "windows": OSPlatform.WINDOWS,
+}
+
+
 def detect_platform() -> OSPlatform:
     """Detect the current operating system platform.
 
@@ -32,12 +40,7 @@ def detect_platform() -> OSPlatform:
         or ``UNKNOWN``).
     """
     system = _platform.system().lower()
-    mapping = {
-        "darwin": OSPlatform.MACOS,
-        "linux": OSPlatform.LINUX,
-        "windows": OSPlatform.WINDOWS,
-    }
-    return mapping.get(system, OSPlatform.UNKNOWN)
+    return _PLATFORM_MAPPING.get(system, OSPlatform.UNKNOWN)
 
 
 @lru_cache(maxsize=1)
