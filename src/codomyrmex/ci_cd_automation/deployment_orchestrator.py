@@ -8,6 +8,7 @@ and release coordination capabilities.
 import importlib
 import json
 import os
+import shlex
 import shutil
 import socket
 import subprocess
@@ -569,15 +570,35 @@ class DeploymentOrchestrator:
                 env.update(deployment.environment.variables)
                 env["DEPLOYMENT_VERSION"] = deployment.version
 
-                result = subprocess.run(
-                    hook,
-                    shell=True,  # nosec B602
-                    capture_output=True,
-                    text=True,
-                    cwd=os.getcwd(),
-                    env=env,
-                    timeout=300,
-                )
+                # SECURITY: run simple hooks without a shell to prevent command
+                # injection. Compound shell syntax (pipes, &&, redirection,
+                # globbing) cannot be expressed as an argv, so fall back to
+                # shell=True explicitly for those hooks only.
+                _SHELL_METACHARS = set("|&;<>()$`\\\"'*?[]{}#~")
+                try:
+                    hook_argv = shlex.split(hook)
+                except ValueError:
+                    hook_argv = None
+                if hook_argv and not (_SHELL_METACHARS & set(hook)):
+                    result = subprocess.run(
+                        hook_argv,
+                        shell=False,
+                        capture_output=True,
+                        text=True,
+                        cwd=os.getcwd(),
+                        env=env,
+                        timeout=300,
+                    )
+                else:
+                    result = subprocess.run(
+                        hook,
+                        shell=True,  # nosec B602: compound shell hook fallback
+                        capture_output=True,
+                        text=True,
+                        cwd=os.getcwd(),
+                        env=env,
+                        timeout=300,
+                    )
 
                 if result.returncode != 0:
                     logger.warning("Hook failed: %s - %s", hook, result.stderr)

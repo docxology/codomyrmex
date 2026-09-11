@@ -4,6 +4,9 @@ MCP callers may select only the small, explicitly registered set of pure
 callables below.  Import paths are deliberately not treated as capabilities.
 """
 
+import ast
+import operator
+
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
@@ -166,7 +169,10 @@ def orchestrator_run_dag(
                         "Double underscores are not allowed in fn_expr for security reasons."
                     )
 
-                safe_locals = {
+                # SECURITY: AST-whitelisted evaluation of agent-supplied
+                # expressions. eval() is forbidden here even with empty
+                # __builtins__, since reflection/attribute tricks enable RCE.
+                safe_funcs = {
                     "len": len,
                     "sum": sum,
                     "min": min,
@@ -174,9 +180,104 @@ def orchestrator_run_dag(
                     "abs": abs,
                     "round": round,
                 }
-                return lambda *_a, **_kw: eval(  # nosec B307
-                    expr, {"__builtins__": {}}, safe_locals
-                )
+
+                _BIN_OPS = {
+                    ast.Add: operator.add,
+                    ast.Sub: operator.sub,
+                    ast.Mult: operator.mul,
+                    ast.Div: operator.truediv,
+                    ast.FloorDiv: operator.floordiv,
+                    ast.Mod: operator.mod,
+                    ast.Pow: operator.pow,
+                    ast.USub: operator.neg,
+                    ast.UAdd: operator.pos,
+                }
+                _CMP_OPS = {
+                    ast.Eq: operator.eq,
+                    ast.NotEq: operator.ne,
+                    ast.Lt: operator.lt,
+                    ast.LtE: operator.le,
+                    ast.Gt: operator.gt,
+                    ast.GtE: operator.ge,
+                }
+
+                def _safe_eval(node: ast.AST):
+                    """Recursively evaluate only whitelisted AST nodes."""
+                    if isinstance(node, ast.Expression):
+                        return _safe_eval(node.body)
+                    if isinstance(node, ast.Constant):
+                        return node.value
+                    if isinstance(node, ast.Name):
+                        if node.id in safe_funcs:
+                            return safe_funcs[node.id]
+                        raise ValueError(f"Unknown variable or function: {node.id}")
+                    if isinstance(node, ast.Call):
+                        if (
+                            isinstance(node.func, ast.Name)
+                            and node.func.id in safe_funcs
+                        ):
+                            args = [_safe_eval(arg) for arg in node.args]
+                            return safe_funcs[node.func.id](*args)
+                        raise ValueError(f"Unsupported function call: {ast.dump(node)}")
+                    if isinstance(node, ast.List):
+                        return [_safe_eval(elt) for elt in node.elts]
+                    if isinstance(node, ast.Tuple):
+                        return tuple(_safe_eval(elt) for elt in node.elts)
+                    if isinstance(node, ast.Dict):
+                        return {
+                            _safe_eval(k): _safe_eval(v)
+                            for k, v in zip(node.keys, node.values, strict=False)
+                            if k is not None
+                        }
+                    if isinstance(node, ast.Subscript):
+                        obj = _safe_eval(node.value)
+                        key = _safe_eval(node.slice)
+                        return obj[key]
+                    if isinstance(node, ast.Compare):
+                        left = _safe_eval(node.left)
+                        for op, cmp_node in zip(
+                            node.ops, node.comparators, strict=False
+                        ):
+                            if type(op) not in _CMP_OPS:
+                                raise ValueError(
+                                    f"Unsupported comparison operator: {type(op).__name__}"
+                                )
+                            right = _safe_eval(cmp_node)
+                            if not _CMP_OPS[type(op)](left, right):
+                                return False
+                            left = right
+                        return True
+                    if isinstance(node, ast.BoolOp):
+                        values = (_safe_eval(v) for v in node.values)
+                        if isinstance(node.op, ast.And):
+                            result = True
+                            for value in values:
+                                result = value
+                                if not value:
+                                    break
+                            return result
+                        result = False
+                        for value in values:
+                            result = value
+                            if value:
+                                break
+                        return result
+                    if isinstance(node, ast.BinOp) and type(node.op) in _BIN_OPS:
+                        return _BIN_OPS[type(node.op)](
+                            _safe_eval(node.left), _safe_eval(node.right)
+                        )
+                    if isinstance(node, ast.UnaryOp) and type(node.op) in _BIN_OPS:
+                        return _BIN_OPS[type(node.op)](_safe_eval(node.operand))
+                    raise ValueError(
+                        f"Unsupported expression component: {type(node).__name__}"
+                    )
+
+                try:
+                    tree = ast.parse(expr, mode="eval")
+                except SyntaxError as e:
+                    raise ValueError(f"Invalid expression syntax: {e}") from e
+
+                return lambda *_a, **_kw: _safe_eval(tree)
             # Default: identity (return args as-is)
             return lambda *a, **kw: {"args": a, "kwargs": kw}
 

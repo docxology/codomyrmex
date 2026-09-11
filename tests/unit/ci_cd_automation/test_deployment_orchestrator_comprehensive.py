@@ -66,7 +66,22 @@ class TestDeploymentOrchestrator:
         # But wait, in our implementation if hooks fail, we log warning and continue.
         # Let's see how it behaves.
         orchestrator.deploy("fail-hook")
-        assert any("Hook failed" in log for log in deployment.logs)
+        # A simple hook ("exit 1") runs without a shell and fails because no
+        # `exit` binary exists; a compound hook falls back to shell=True.
+        assert any(
+            "Hook failed" in log or "Hook execution failed" in log
+            for log in deployment.logs
+        )
+
+    def test_deploy_compound_hook(self, config_file, tmp_path):
+        """Compound shell hooks (pipes) must still run via the shell fallback."""
+        orchestrator = DeploymentOrchestrator(config_file)
+        env = orchestrator.environments["staging"]
+        env.pre_deploy_hooks = ["echo deploying | tr a-z A-Z"]
+
+        deployment = orchestrator.create_deployment("compound-hook", "1.0", "staging", [])
+        orchestrator.deploy("compound-hook")
+        assert any("Hook executed" in log for log in deployment.logs)
 
     def test_health_check_fail(self, config_file):
         """Test that a failing health check marks deployment as failed/rolled back."""
