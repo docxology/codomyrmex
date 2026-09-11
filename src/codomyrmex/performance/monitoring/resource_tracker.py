@@ -1,3 +1,9 @@
+"""Resource Tracker for Codomyrmex Performance Monitoring.
+
+This module provides detailed resource tracking capabilities for monitoring
+memory usage, CPU consumption, and other system resources during operations.
+"""
+
 import logging
 import threading
 import time
@@ -9,13 +15,6 @@ from typing import Any
 import psutil
 
 from codomyrmex.logging_monitoring import get_logger
-
-"""
-# Resource Tracker for Codomyrmex Performance Monitoring
-
-This module provides detailed resource tracking capabilities for monitoring
-memory usage, CPU consumption, and other system resources during operations.
-"""
 
 # Import logging
 try:
@@ -93,20 +92,19 @@ class ResourceTrackingResult:
 
 
 class ResourceTracker:
-    """
-    Advanced resource tracker for monitoring system resource usage.
+    """Advanced resource tracker for monitoring system resource usage.
 
     Provides detailed tracking of memory, CPU, threads, and other system
     resources during operation execution with configurable sampling rates.
     """
 
     def __init__(self, sample_interval: float = 0.1, max_snapshots: int = 1000):
-        """
-        Initialize the resource tracker.
+        """Initialize the resource tracker.
 
         Args:
             sample_interval: Time between resource samples in seconds
             max_snapshots: Maximum number of snapshots to keep
+
         """
         self.sample_interval = sample_interval
         self.max_snapshots = max_snapshots
@@ -126,6 +124,7 @@ class ResourceTracker:
         Args:
             operation: Name of the operation being tracked
             context: Additional context information
+
         """
         if self._tracking:
             logger.warning("Resource tracking already in progress")
@@ -143,14 +142,14 @@ class ResourceTracker:
         self._take_snapshot("start")
 
     def stop_tracking(self, operation: str) -> ResourceTrackingResult:
-        """
-        Stop tracking and return results.
+        """Stop tracking and return results.
 
         Args:
             operation: Name of the operation (for validation)
 
         Returns:
             ResourceTrackingResult with complete tracking data
+
         """
         if not self._tracking:
             logger.warning("Resource tracking not in progress")
@@ -316,19 +315,19 @@ class ResourceTracker:
 
 @contextmanager
 def track_memory_usage(func: Callable):
-    """
-    Context manager decorator to track memory usage of a function.
+    """Context manager decorator to track memory usage of a function.
 
     Args:
         func: Function to track
 
     Yields:
         Function result
+
     """
     tracker = ResourceTracker()
 
     def wrapper(*args, **kwargs):
-        """Wrapper."""
+        """Execute the function and track its resource usage."""
         tracker.start_tracking(
             func.__name__, {"args_count": len(args), "kwargs_count": len(kwargs)}
         )
@@ -392,7 +391,6 @@ def _report_top_consumers(results: list[ResourceTrackingResult]) -> dict[str, An
         ],
     }
 
-
 def create_resource_report(results: list[ResourceTrackingResult]) -> dict[str, Any]:
     """Create a comprehensive resource usage report from multiple tracking results."""
     if not results:
@@ -432,7 +430,18 @@ def _benchmark_metrics(
 def benchmark_resource_usage(
     func: Callable, iterations: int = 10, *args, **kwargs
 ) -> dict[str, Any]:
-    """Benchmark resource usage of a function over multiple iterations."""
+    """Benchmark resource usage of a function over multiple iterations.
+
+    Args:
+        func: Function to benchmark
+        iterations: Number of iterations to run
+        *args: Variable length argument list to pass to the function
+        **kwargs: Arbitrary keyword arguments to pass to the function
+
+    Returns:
+        Benchmark results dictionary
+
+    """
     tracker = ResourceTracker(sample_interval=0.05)
     results = []
     for i in range(iterations):

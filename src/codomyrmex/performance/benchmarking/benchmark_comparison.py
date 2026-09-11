@@ -29,6 +29,7 @@ class BenchmarkDelta:
         absolute_delta: after - before.
         relative_delta: Percentage change.
         improved: Whether the change is an improvement.
+
     """
 
     name: str
@@ -55,6 +56,7 @@ def compute_delta(
 
     Returns:
         BenchmarkDelta with computed fields.
+
     """
     absolute = after - before
     relative = (absolute / before * 100) if before != 0 else 0.0

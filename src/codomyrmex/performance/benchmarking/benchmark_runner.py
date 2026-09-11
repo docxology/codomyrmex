@@ -28,6 +28,7 @@ class BenchmarkResult:
         ops_per_sec: Operations per second.
         passed: Whether it met the threshold.
         threshold_ms: Maximum allowed mean time.
+
     """
 
     name: str
@@ -50,6 +51,7 @@ class BenchmarkSuite:
         results: Individual benchmark results.
         total_ms: Total suite time.
         all_passed: Whether all benchmarks passed.
+
     """
 
     name: str = "Performance Suite"
@@ -70,11 +72,13 @@ class BenchmarkRunner:
     """
 
     def __init__(self, suite_name: str = "Performance Suite") -> None:
+        """Initialize the benchmark runner."""
         self._suite_name = suite_name
         self._benchmarks: list[dict[str, Any]] = []
 
     @property
     def benchmark_count(self) -> int:
+        """Get the number of benchmarks registered."""
         return len(self._benchmarks)
 
     def add(
@@ -109,6 +113,7 @@ class BenchmarkRunner:
 
         Returns:
             BenchmarkSuite with results.
+
         """
         suite_start = time.monotonic()
         results: list[BenchmarkResult] = []

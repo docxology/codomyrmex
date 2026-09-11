@@ -1,5 +1,4 @@
-"""
-Profiling subpackage for Codomyrmex performance module.
+"""Profiling subpackage for Codomyrmex performance module.
 
 Provides benchmarking utilities and asynchronous function profiling
 for measuring execution time, memory usage, and identifying bottlenecks.

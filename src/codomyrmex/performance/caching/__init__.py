@@ -1,5 +1,4 @@
-"""
-Caching subpackage for Codomyrmex performance module.
+"""Caching subpackage for Codomyrmex performance module.
 
 Provides caching capabilities to improve performance by storing expensive
 computation results and avoiding redundant work. Supports both in-memory

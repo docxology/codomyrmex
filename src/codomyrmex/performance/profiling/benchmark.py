@@ -40,18 +40,22 @@ class BenchmarkResult:
 
     @property
     def average_time(self) -> float:
+        """Get the average execution time."""
         return sum(self.times) / max(len(self.times), 1)
 
     @property
     def min_time(self) -> float:
+        """Get the minimum execution time."""
         return min(self.times) if self.times else 0.0
 
     @property
     def max_time(self) -> float:
+        """Get the maximum execution time."""
         return max(self.times) if self.times else 0.0
 
     @property
     def total_time(self) -> float:
+        """Get the total execution time."""
         return sum(self.times)
 
     @property
@@ -106,6 +110,7 @@ def run_benchmark(
 
     Returns:
         Dictionary containing benchmark statistics.
+
     """
     for _ in range(warmup):
         try:
@@ -199,6 +204,7 @@ class BenchmarkSuite:
     """
 
     def __init__(self) -> None:
+        """Initialize the benchmark suite."""
         self._benchmarks: dict[str, Callable[[], Any]] = {}
         self._results: dict[str, dict[str, Any]] = {}
 
@@ -234,6 +240,7 @@ class BenchmarkSuite:
 
     @property
     def benchmark_count(self) -> int:
+        """Get the number of registered benchmarks."""
         return len(self._benchmarks)
 
 
