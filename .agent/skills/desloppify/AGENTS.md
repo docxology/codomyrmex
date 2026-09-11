@@ -10,3 +10,12 @@ then the next/resolve loop.
 
 ## Gotchas
 - Adapter copy; edit the canonical definition (`.agents/skills/` or `.cursor/skills/desloppify/`) first and mirror here.
+
+## Key Files
+- None
+
+## Dependencies
+- None
+
+## Development Guidelines
+None

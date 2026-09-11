@@ -7,3 +7,12 @@ demo) plus a roll-up report.
 
 ## Gotchas
 - Generated artifacts: regenerate via the evaluation harness instead of editing.
+
+## Key Files
+- None
+
+## Dependencies
+- None
+
+## Development Guidelines
+None

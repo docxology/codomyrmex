@@ -11,3 +11,12 @@ One folder per skill, each with a single `SKILL.md`:
 ## Gotchas
 - Keep skill frontmatter (`name`, `description`) stable — runtimes index by it.
 - New skills must be added to the crossover index (`.agent/SKILL_INDEX.md`).
+
+## Key Files
+- None
+
+## Dependencies
+- None
+
+## Development Guidelines
+None

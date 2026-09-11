@@ -5,3 +5,12 @@ Evaluation records for the Gemini dispatch demo (`demo_gemini_dispatch_eval.json
 
 ## Gotchas
 - Generated artifacts — regenerate via the evaluation harness.
+
+## Key Files
+- None
+
+## Dependencies
+- None
+
+## Development Guidelines
+None

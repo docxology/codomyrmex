@@ -11,3 +11,12 @@ Repository-level data area. Currently hosts the SAIR distillation outputs only.
   pipeline (`scripts/sair/`).
 - Large/bulk data belongs in `data/` only when referenced by deterministic code;
   transient artifacts belong in `output/`.
+
+## Key Files
+- None
+
+## Dependencies
+- None
+
+## Development Guidelines
+None

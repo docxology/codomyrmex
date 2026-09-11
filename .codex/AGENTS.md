@@ -11,3 +11,12 @@ documentation pair.
 - Do not commit secrets or credentials into `config.toml`; keep secrets in the
   runtime's own credential store.
 - Treat edits as behavior changes for any Codex-driven agent sessions.
+
+## Key Files
+- None
+
+## Dependencies
+- None
+
+## Development Guidelines
+None

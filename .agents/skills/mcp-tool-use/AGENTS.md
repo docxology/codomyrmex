@@ -9,3 +9,12 @@ Portable repository-scoped skill: Use Model Context Protocol tools safely: schem
 ## Gotchas
 - Use whenever an MCP server or external tool is involved.
 - Runtime adapters (`.cursor/skills/`, `.agent/skills/`) may mirror this skill; edit the canonical copy here first.
+
+## Key Files
+- None
+
+## Dependencies
+- None
+
+## Development Guidelines
+None
