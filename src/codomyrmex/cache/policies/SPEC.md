@@ -39,7 +39,7 @@ Abstract `EvictionPolicy[K, V]` base class with four concrete implementations. E
 
 - Storage: `dict[K, CacheEntry[V]]` + `heapq` expiry heap
 - `_cleanup_expired()` runs on every `get()` and `put()` call
-- Default TTL: 1 hour (`timedelta(hours=1)`)
+- Default TTL: 1 hour (`3600.0`)
 
 ### `FIFOPolicy`
 
@@ -62,7 +62,7 @@ Accepted names: `"lru"`, `"lfu"`, `"ttl"`, `"fifo"`. Raises `ValueError` for unk
 ## Constraints
 
 - Thread-safe via `RLock` (reentrant); safe for same-thread recursive access.
-- `CacheEntry.is_expired()` uses `datetime.now()` comparison; not monotonic-clock based.
+- `CacheEntry.is_expired()` uses `time.monotonic()` comparison.
 - `LFUPolicy` frequency starts at 0; first `touch()` moves to 1.
 - Zero-mock: real cache operations only, `NotImplementedError` for unimplemented paths.
 
