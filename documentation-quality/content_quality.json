@@ -790,10 +790,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 2,
+      "heading_count": 4,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 200,
+      "word_count": 276,
       "link_count": 0
     }
   },
