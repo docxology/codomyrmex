@@ -1016,7 +1016,7 @@ requires-dist = [
     { name = "defusedxml", specifier = ">=0.7.1" },
     { name = "diff-match-patch", specifier = ">=20230430.0" },
     { name = "docker", marker = "extra == 'containerization'", specifier = ">=6.0.0" },
-    { name = "dynaconf", marker = "extra == 'physical-management'", specifier = ">=3.1.0" },
+    { name = "dynaconf", marker = "extra == 'physical-management'", specifier = ">=3.2.13" },
     { name = "edge-tts", marker = "extra == 'audio'", specifier = ">=6.1.0" },
     { name = "email-validator", specifier = ">=2.3.0" },
     { name = "fastapi", marker = "extra == 'api'", specifier = ">=0.100.0" },
