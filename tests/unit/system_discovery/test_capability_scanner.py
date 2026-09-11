@@ -145,3 +145,99 @@ CONSTANT = 42
         modules = scanner.scan_all_modules()
         assert isinstance(modules, dict)
         assert len(modules) > 0
+
+    def test_analyze_capability_relationships(self):
+        scanner = CapabilityScanner()
+
+        # Create a mock capability structure
+        func1 = FunctionCapability(
+            name="shared_func",
+            signature="shared_func()",
+            docstring="",
+            parameters=[],
+            return_annotation="None",
+            file_path="mod1.py",
+            line_number=1,
+            is_async=False,
+            is_generator=False,
+            decorators=[],
+            complexity_score=5,
+        )
+        func2 = FunctionCapability(
+            name="shared_func",
+            signature="shared_func()",
+            docstring="",
+            parameters=[],
+            return_annotation="None",
+            file_path="mod2.py",
+            line_number=1,
+            is_async=False,
+            is_generator=False,
+            decorators=[],
+            complexity_score=15, # High complexity
+        )
+        func3 = FunctionCapability(
+            name="unique_func",
+            signature="unique_func()",
+            docstring="",
+            parameters=[],
+            return_annotation="None",
+            file_path="mod2.py",
+            line_number=10,
+            is_async=False,
+            is_generator=False,
+            decorators=[],
+            complexity_score=2,
+        )
+
+        mod1 = ModuleCapability(
+            name="mod1",
+            path="/src/mod1.py",
+            docstring="",
+            functions=[func1],
+            classes=[],
+            constants={},
+            imports=[],
+            exports=[],
+            file_count=1,
+            line_count=10,
+            last_modified="unknown"
+        )
+        mod2 = ModuleCapability(
+            name="mod2",
+            path="/src/mod2.py",
+            docstring="",
+            functions=[func2, func3],
+            classes=[],
+            constants={},
+            imports=[],
+            exports=[],
+            file_count=1,
+            line_count=20,
+            last_modified="unknown"
+        )
+
+        capabilities = {"mod1": mod1, "mod2": mod2}
+
+        relationships = scanner.analyze_capability_relationships(capabilities)
+
+        # Check shared functions
+        assert "shared_functions" in relationships
+        shared = relationships["shared_functions"]
+        assert len(shared) == 1
+        assert shared[0]["name"] == "shared_func"
+        assert set(shared[0]["modules"]) == {"mod1", "mod2"}
+
+        # Check complexity analysis
+        assert "complexity_analysis" in relationships
+        comp_analysis = relationships["complexity_analysis"]
+        assert comp_analysis["average"] == (5 + 15 + 2) / 3
+        assert comp_analysis["max"] == 15
+        assert comp_analysis["min"] == 2
+
+        # Check high complexity functions
+        high_comp = comp_analysis["high_complexity_functions"]
+        assert len(high_comp) == 1
+        assert high_comp[0]["module"] == "mod2"
+        assert high_comp[0]["function"] == "shared_func"
+        assert high_comp[0]["complexity"] == 15
