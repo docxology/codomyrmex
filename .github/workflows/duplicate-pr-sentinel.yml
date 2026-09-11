@@ -1,0 +1,36 @@
+name: Duplicate PR Sentinel
+
+on:
+  schedule:
+    - cron: '30 */6 * * *' # Every 6 hours, offset from pr-conflict-check
+  workflow_dispatch:
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  close-duplicates:
+    name: Close duplicate-family PRs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run duplicate-PR sentinel
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # --older-than 7 protects fresh PRs from an overeager sweep; the
+        # representative (member with the most substantive file changes)
+        # of every duplicate family always stays open.
+        run: |
+          python3 scripts/maintenance/close_duplicate_prs.py --older-than 7 --apply
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "# 🔁 Duplicate PR Sentinel" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Swept at $(date -u). See job log for closed PR numbers." >> $GITHUB_STEP_SUMMARY
