@@ -30,7 +30,6 @@ from codomyrmex.colony_kernel.models import (
     ActionProposal,
     AgentTrustProfile,
     GateResult,
-    PruningCandidate,
     ResourceCost,
     SignalType,
 )
