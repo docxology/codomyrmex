@@ -224,7 +224,7 @@ class TTLPolicy(EvictionPolicy[K, V]):
 
     def __init__(self, max_size: int, default_ttl: timedelta = timedelta(hours=1)):
         super().__init__(max_size)
-        self._cache: dict[K, CacheEntry[V]] = {}
+        self._cache: OrderedDict[K, CacheEntry[V]] = OrderedDict()
         self._default_ttl = default_ttl
         self._expiry_heap: list[tuple[datetime, K]] = []
 
@@ -261,12 +261,12 @@ class TTLPolicy(EvictionPolicy[K, V]):
             entry = CacheEntry(value=value, ttl=actual_ttl)
 
             if len(self._cache) >= self.max_size and key not in self._cache:
-                # Evict oldest entry
+                # Evict oldest entry in O(1)
                 if self._cache:
-                    oldest_key = min(
-                        self._cache.keys(), key=lambda k: self._cache[k].created_at
-                    )
-                    del self._cache[oldest_key]
+                    self._cache.popitem(last=False)
+
+            if key in self._cache:
+                self._cache.move_to_end(key)
 
             self._cache[key] = entry
             expiry_time = entry.created_at + actual_ttl
