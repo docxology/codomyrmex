@@ -937,6 +937,28 @@ class TestEventLoggerExtended:
 
         assert len(recent) <= 5
 
+    def test_get_event_stats_returns_singleton_stats(self):
+        """get_event_stats() correctly returns statistics from the singleton EventLogger."""
+        from codomyrmex.events.handlers.event_logger import (
+            get_event_logger,
+            get_event_stats,
+            log_event_to_monitoring,
+        )
+
+        logger = get_event_logger()
+        logger.clear()
+
+        try:
+            event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
+            log_event_to_monitoring(event)
+
+            stats = get_event_stats()
+
+            assert stats["total_events"] == 1
+            assert stats["event_counts"][EventType.SYSTEM_STARTUP.value] == 1
+        finally:
+            logger.clear()
+
 
 # ===========================================================================
 # AsyncStream (async_stream.py)
@@ -1149,3 +1171,41 @@ class TestDeadLetterDataclass:
         assert restored.payload == original.payload
         assert restored.error == original.error
         assert restored.error_type == original.error_type
+
+
+@pytest.mark.unit
+class TestEventLoggerModuleFunctions:
+    """Tests for module-level functions in event_logger.py."""
+
+    def test_get_recent_events_module_function(self):
+        """Test the get_recent_events module-level function."""
+        from codomyrmex.events.handlers.event_logger import (
+            get_event_logger,
+            get_recent_events,
+        )
+
+        # Clear the singleton to ensure a clean state
+        logger = get_event_logger()
+        logger.clear()
+
+        # Add some events
+        e1 = Event(
+            event_type=EventType.CUSTOM,
+            data={"type": "test_module_1", "data": 1},
+            source="test",
+        )
+        e2 = Event(
+            event_type=EventType.CUSTOM,
+            data={"type": "test_module_2", "data": 2},
+            source="test",
+        )
+        logger.log_event(e1)
+        logger.log_event(e2)
+
+        # Retrieve recent events via module function
+        events = get_recent_events(limit=2)
+
+        # Verify the events were retrieved correctly
+        assert len(events) == 2
+        assert events[0].event.data["type"] == "test_module_1"
+        assert events[1].event.data["type"] == "test_module_2"

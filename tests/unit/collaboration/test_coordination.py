@@ -142,12 +142,21 @@ class TestDependencyGraph:
 
         task1 = Task(name="Task 1", id="t1")
         task2 = Task(name="Task 2", id="t2", dependencies=["t1"])
+        task3 = Task(name="Task 3", id="t3", dependencies=["t1", "t2"])
 
         graph.add_task(task1)
         graph.add_task(task2)
+        graph.add_task(task3)
 
-        deps = graph.get_dependencies("t2")
-        assert "t1" in deps
+        # Check dependencies
+        assert graph.get_dependencies("t1") == set()
+        assert graph.get_dependencies("t2") == {"t1"}
+        assert graph.get_dependencies("t3") == {"t1", "t2"}
+
+        # Check dependents
+        assert graph.get_dependents("t1") == {"t2", "t3"}
+        assert graph.get_dependents("t2") == {"t3"}
+        assert graph.get_dependents("t3") == set()
 
     def test_graph_get_ready_tasks(self):
         """Test getting ready tasks."""
@@ -281,6 +290,55 @@ class TestTaskManager:
 
         assert manager.get_completed_count() == 1
         assert manager.get_task_status(assigned.id) == TaskStatus.COMPLETED
+
+    def test_manager_get_task_status(self):
+        """Test getting task status."""
+        manager = TaskManager()
+        agent = CollaborativeAgent(name="Worker")
+
+        # Unknown task
+        assert manager.get_task_status("unknown") is None
+
+        # Queued task
+        task1 = Task(name="Task 1")
+        t1_id = manager.submit(task1)
+        assert manager.get_task_status(t1_id) == TaskStatus.QUEUED
+
+        # Running task
+        task2 = Task(name="Task 2")
+        t2_id = manager.submit(task2)
+        assigned = manager.get_next_task(agent)
+        # Because we submitted task1 first, get_next_task might return task1 depending on priority.
+        # So we should check the status of whatever task was assigned.
+        assert manager.get_task_status(assigned.id) == TaskStatus.RUNNING
+
+        # Let's cancel task1 to clear it out for the next tests
+        manager.cancel(t1_id)
+
+        t2_id = assigned.id
+
+        # Completed task
+        result_success = TaskResult(
+            task_id=t2_id,
+            success=True,
+            output="Done",
+            agent_id=agent.agent_id,
+        )
+        manager.complete_task(result_success)
+        assert manager.get_task_status(t2_id) == TaskStatus.COMPLETED
+
+        # Failed task
+        task3 = Task(name="Task 3")
+        t3_id = manager.submit(task3)
+        assigned3 = manager.get_next_task(agent)
+        result_failed = TaskResult(
+            task_id=assigned3.id,
+            success=False,
+            error="Error",
+            agent_id=agent.agent_id,
+        )
+        manager.complete_task(result_failed)
+        assert manager.get_task_status(assigned3.id) == TaskStatus.FAILED
 
 
 class TestVotingMechanism:
@@ -507,6 +565,27 @@ class TestRotatingLeadership:
 
         assert rotation.get_current_leader() is agent
 
+    def test_rotating_add_agent_non_empty(self):
+        """Test adding agent to non-empty rotation."""
+        agent1 = CollaborativeAgent(name="Agent 1")
+        rotation = RotatingLeadership([agent1])
+        agent2 = CollaborativeAgent(name="Agent 2")
+
+        rotation.add_agent(agent2)
+
+        assert rotation._agents == [agent1, agent2]
+        assert rotation.get_current_leader() is agent1
+
+    def test_rotating_add_duplicate_agent(self):
+        """Test adding a duplicate agent to rotation."""
+        agent1 = CollaborativeAgent(name="Agent 1")
+        rotation = RotatingLeadership([agent1])
+
+        rotation.add_agent(agent1)
+
+        assert len(rotation._agents) == 1
+        assert rotation._agents == [agent1]
+
     def test_rotating_rotate(self):
         """Test rotating leadership."""
         agent1 = CollaborativeAgent(name="Agent 1")
@@ -531,6 +610,68 @@ class TestRotatingLeadership:
 
         assert result is True
         assert rotation.get_current_leader() is agent2
+
+    def test_rotating_remove_unknown_agent(self):
+        """Test removing an agent not in rotation."""
+        agent1 = CollaborativeAgent(name="Agent 1")
+        rotation = RotatingLeadership([agent1])
+        result = rotation.remove_agent("unknown-id")
+        assert result is False
+        assert rotation.get_current_leader() is agent1
+
+    def test_rotating_remove_agent_before_current(self):
+        """Test removing an agent before the current index."""
+        agent1 = CollaborativeAgent(name="Agent 1")
+        agent2 = CollaborativeAgent(name="Agent 2")
+        agent3 = CollaborativeAgent(name="Agent 3")
+        rotation = RotatingLeadership([agent1, agent2, agent3])
+        # Rotate so current_leader is agent2 (index 1)
+        rotation.rotate()
+        assert rotation._current_index == 1
+
+        # Remove agent1 (index 0)
+        result = rotation.remove_agent(agent1.agent_id)
+        assert result is True
+        # Index should be decremented to 0 to keep pointing to agent2
+        assert rotation._current_index == 0
+        assert rotation.get_current_leader() is agent2
+
+    def test_rotating_remove_agent_after_current(self):
+        """Test removing an agent after the current index."""
+        agent1 = CollaborativeAgent(name="Agent 1")
+        agent2 = CollaborativeAgent(name="Agent 2")
+        agent3 = CollaborativeAgent(name="Agent 3")
+        rotation = RotatingLeadership([agent1, agent2, agent3])
+        # Rotate so current_leader is agent2 (index 1)
+        rotation.rotate()
+        assert rotation._current_index == 1
+
+        # Remove agent3 (index 2)
+        result = rotation.remove_agent(agent3.agent_id)
+        assert result is True
+        # Index should remain 1
+        assert rotation._current_index == 1
+        assert rotation.get_current_leader() is agent2
+
+    def test_rotating_remove_current_leader(self):
+        """Test removing the current leader."""
+        agent1 = CollaborativeAgent(name="Agent 1")
+        agent2 = CollaborativeAgent(name="Agent 2")
+        agent3 = CollaborativeAgent(name="Agent 3")
+        rotation = RotatingLeadership([agent1, agent2, agent3])
+        # Rotate so current_leader is agent2 (index 1)
+        rotation.rotate()
+        assert rotation._current_index == 1
+
+        # Remove agent2 (index 1)
+        result = rotation.remove_agent(agent2.agent_id)
+        assert result is True
+        # Index should decrement to 0, which points to agent1 (the agent before the removed one),
+        # but technically the agent at the removed index is now agent3
+        # In current implementation it decrements to 0, so next leader is agent1.
+        # This matches `i <= self._current_index` and `self._current_index > 0` decrement logic
+        assert rotation._current_index == 0
+        assert rotation.get_current_leader() is agent1
 
     def test_rotating_get_current_leader(self):
         """Test getting current leader."""
