@@ -6,6 +6,7 @@ Routes events between modules with topic-based subscriptions.
 from __future__ import annotations
 
 import fnmatch
+import re
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -77,6 +78,7 @@ class IntegrationBus:
         self._mailboxes: dict[str, list[dict[str, Any]]] = defaultdict(list)
         # Optional append-only EventStore for durable P2P records
         self._event_store = event_store
+        self._compiled_patterns: dict[str, re.Pattern] = {}
 
     def subscribe(
         self,
@@ -94,6 +96,9 @@ class IntegrationBus:
         self._handlers[topic].append((handler, priority))
         # Keep handlers sorted by priority
         self._handlers[topic].sort(key=lambda x: x[1], reverse=True)
+        # Pre-compile the regex pattern if it has wildcards
+        if topic not in self._compiled_patterns and any(c in topic for c in "*?[]"):
+            self._compiled_patterns[topic] = re.compile(fnmatch.translate(topic))
 
     def unsubscribe(
         self, topic: str, handler: Callable[[IntegrationEvent], None]
@@ -121,7 +126,12 @@ class IntegrationBus:
         matching_handlers: list[tuple[Callable[[IntegrationEvent], None], int]] = []
 
         for pattern, handlers in self._handlers.items():
-            if pattern == topic or fnmatch.fnmatch(topic, pattern):
+            if pattern == topic:
+                matching_handlers.extend(handlers)
+            elif pattern in self._compiled_patterns:
+                if self._compiled_patterns[pattern].match(topic):
+                    matching_handlers.extend(handlers)
+            elif fnmatch.fnmatch(topic, pattern):
                 matching_handlers.extend(handlers)
 
         # Sort all matching handlers by priority
