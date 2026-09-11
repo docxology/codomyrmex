@@ -1062,3 +1062,55 @@ class TestCacheInvalidationManager:
         mgr.get("a")
         s = mgr.stats()
         assert isinstance(s, dict)
+
+
+@pytest.mark.unit
+class TestCacheCLICommands:
+    """Tests for cache CLI commands."""
+
+    def test_cli_commands_structure(self):
+        """Test the structure of the returned CLI commands dictionary."""
+        from codomyrmex.cache import cli_commands
+
+        commands = cli_commands()
+
+        assert "backends" in commands
+        assert "stats" in commands
+
+        assert "help" in commands["backends"]
+        assert "handler" in commands["backends"]
+        assert callable(commands["backends"]["handler"])
+
+        assert "help" in commands["stats"]
+        assert "handler" in commands["stats"]
+        assert callable(commands["stats"]["handler"])
+
+    def test_cli_commands_backends_handler(self, capsys):
+        """Test the backends command handler output."""
+        from codomyrmex.cache import cli_commands
+
+        commands = cli_commands()
+        handler = commands["backends"]["handler"]
+
+        handler()
+        captured = capsys.readouterr()
+
+        assert "Cache Backends:" in captured.out
+        assert "in_memory" in captured.out
+        assert "file_based" in captured.out
+        assert "redis" in captured.out
+
+    def test_cli_commands_stats_handler(self, capsys):
+        """Test the stats command handler output."""
+        from codomyrmex.cache import cli_commands
+
+        commands = cli_commands()
+        handler = commands["stats"]["handler"]
+
+        handler()
+        captured = capsys.readouterr()
+
+        assert "Cache Statistics:" in captured.out
+        assert "Active caches :" in captured.out
+        assert "Total hits    :" in captured.out
+        assert "Total misses  :" in captured.out
