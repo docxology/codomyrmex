@@ -769,6 +769,7 @@ dependencies = [
     { name = "email-validator" },
     { name = "gitpython" },
     { name = "jsonschema" },
+    { name = "langdetect" },
     { name = "lizard" },
     { name = "loguru" },
     { name = "mako" },
@@ -1037,6 +1038,7 @@ requires-dist = [
     { name = "google-genai", marker = "extra == 'llm-providers'", specifier = ">=1.0.0" },
     { name = "jinja2", marker = "extra == 'security-audit'", specifier = ">=3.1.0" },
     { name = "jsonschema", specifier = ">=4.23.0" },
+    { name = "langdetect", specifier = ">=1.0.9" },
     { name = "lizard", specifier = ">=1.17.0" },
     { name = "loguru", specifier = ">=0.7.0" },
     { name = "mako", specifier = ">=1.2.0" },
@@ -3101,6 +3103,15 @@ sdist = { url = "https://files.pythonhosted.org/packages/40/71/d89bb0e71b1415453
 wheels = [
     { url = "https://files.pythonhosted.org/packages/af/40/791891d4c0c4dab4c5e187c17261cedc26285fd41541577f900470a45a4d/license_expression-30.4.4-py3-none-any.whl", hash = "sha256:421788fdcadb41f049d2dc934ce666626265aeccefddd25e162a26f23bcbf8a4", size = 120615, upload-time = "2025-07-22T11:13:31.217Z" },
 ]
+
+[[package]]
+name = "langdetect"
+version = "1.0.9"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "six" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/0e/72/a3add0e4eec4eb9e2569554f7c70f4a3c27712f40e3284d483e88094cc0e/langdetect-1.0.9.tar.gz", hash = "sha256:cbc1fef89f8d062739774bd51eda3da3274006b3661d199c2655f6b3f6d605a0", size = 981474, upload-time = "2021-05-07T07:54:13.562Z" }
 
 [[package]]
 name = "linkify-it-py"
