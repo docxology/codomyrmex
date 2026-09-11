@@ -1,9 +1,11 @@
 # AGENTS.md — `codomyrmex/.agent/workflows`
 
 ## Purpose
+
 Workflow definitions consumed by Claude Code / Antigravity runtimes from the `.agent` surface.
 
 ## Layout
+
 - `codomyrmexAnalyze.md`
 - `codomyrmexDocs.md`
 - `codomyrmexMemory.md`
@@ -23,15 +25,19 @@ Workflow definitions consumed by Claude Code / Antigravity runtimes from the `.a
 - `tdd.md`
 
 ## Gotchas
+
 - Workflows reference skills by name; keep names aligned with `../SKILL_INDEX.md`.
 - Workflows encode codomyrmex trust/verify patterns (codomyrmexTrust, codomyrmexVerify) —
   do not weaken their verification steps when editing.
 
 ## Key Files
+
 - None
 
 ## Dependencies
+
 - None
 
 ## Development Guidelines
+
 None
