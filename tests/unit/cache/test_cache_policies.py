@@ -33,11 +33,11 @@ class TestCacheEntry:
         assert e.is_expired() is False
 
     def test_not_expired_within_ttl(self):
-        e = CacheEntry(value="v", ttl=timedelta(hours=1))
+        e = CacheEntry(value="v", ttl=3600.0)
         assert e.is_expired() is False
 
     def test_expired_with_past_ttl(self):
-        e = CacheEntry(value="v", ttl=timedelta(seconds=-1))
+        e = CacheEntry(value="v", ttl=-1.0)
         assert e.is_expired() is True
 
     def test_touch_increments_access_count(self):
@@ -125,12 +125,12 @@ class TestLRUPolicy:
 
     def test_get_expired_entry_returns_none(self):
         lru = LRUPolicy(max_size=5)
-        lru.put("k", "v", ttl=timedelta(seconds=-1))
+        lru.put("k", "v", ttl=-1.0)
         assert lru.get("k") is None
 
     def test_get_expired_removes_entry(self):
         lru = LRUPolicy(max_size=5)
-        lru.put("k", "v", ttl=timedelta(seconds=-1))
+        lru.put("k", "v", ttl=-1.0)
         lru.get("k")  # triggers removal
         assert lru.size() == 0
 
@@ -210,7 +210,7 @@ class TestLFUPolicy:
 
     def test_get_expired_entry_returns_none(self):
         lfu = LFUPolicy(max_size=5)
-        lfu.put("k", "v", ttl=timedelta(seconds=-1))
+        lfu.put("k", "v", ttl=-1.0)
         assert lfu.get("k") is None
 
     def test_frequency_increases_on_access(self):
@@ -233,35 +233,35 @@ class TestTTLPolicy:
         assert ttl_pol.get("missing") is None
 
     def test_put_and_get(self):
-        ttl_pol = TTLPolicy(max_size=5, default_ttl=timedelta(hours=1))
+        ttl_pol = TTLPolicy(max_size=5, default_ttl=3600.0)
         ttl_pol.put("k", "v")
         assert ttl_pol.get("k") == "v"
 
     def test_size_after_put(self):
-        ttl_pol = TTLPolicy(max_size=5, default_ttl=timedelta(hours=1))
+        ttl_pol = TTLPolicy(max_size=5, default_ttl=3600.0)
         ttl_pol.put("a", 1)
         ttl_pol.put("b", 2)
         assert ttl_pol.size() == 2
 
     def test_custom_ttl_used(self):
-        ttl_pol = TTLPolicy(max_size=5, default_ttl=timedelta(hours=1))
-        ttl_pol.put("k", "v", ttl=timedelta(seconds=-1))
+        ttl_pol = TTLPolicy(max_size=5, default_ttl=3600.0)
+        ttl_pol.put("k", "v", ttl=-1.0)
         assert ttl_pol.get("k") is None
 
     def test_default_ttl_applied_when_no_ttl(self):
-        ttl_pol = TTLPolicy(max_size=5, default_ttl=timedelta(hours=1))
+        ttl_pol = TTLPolicy(max_size=5, default_ttl=3600.0)
         ttl_pol.put("k", "v")
         assert ttl_pol.get("k") == "v"
 
     def test_eviction_when_capacity_reached(self):
-        ttl_pol = TTLPolicy(max_size=2, default_ttl=timedelta(hours=1))
+        ttl_pol = TTLPolicy(max_size=2, default_ttl=3600.0)
         ttl_pol.put("a", 1)
         ttl_pol.put("b", 2)
         ttl_pol.put("c", 3)  # should evict oldest
         assert ttl_pol.size() == 2
 
     def test_remove_existing_returns_value(self):
-        ttl_pol = TTLPolicy(max_size=5, default_ttl=timedelta(hours=1))
+        ttl_pol = TTLPolicy(max_size=5, default_ttl=3600.0)
         ttl_pol.put("k", "v")
         result = ttl_pol.remove("k")
         assert result == "v"
@@ -271,25 +271,25 @@ class TestTTLPolicy:
         assert ttl_pol.remove("nonexistent") is None
 
     def test_clear(self):
-        ttl_pol = TTLPolicy(max_size=5, default_ttl=timedelta(hours=1))
+        ttl_pol = TTLPolicy(max_size=5, default_ttl=3600.0)
         ttl_pol.put("a", 1)
         ttl_pol.put("b", 2)
         ttl_pol.clear()
         assert ttl_pol.size() == 0
 
     def test_cleanup_expired_entries_on_get(self):
-        ttl_pol = TTLPolicy(max_size=10, default_ttl=timedelta(hours=1))
+        ttl_pol = TTLPolicy(max_size=10, default_ttl=3600.0)
         # Put entry with past expiry
-        ttl_pol.put("expire_me", "v", ttl=timedelta(seconds=-1))
-        ttl_pol.put("keep_me", "v2", ttl=timedelta(hours=1))
+        ttl_pol.put("expire_me", "v", ttl=-1.0)
+        ttl_pol.put("keep_me", "v2", ttl=3600.0)
         # Get triggers cleanup
         assert ttl_pol.get("expire_me") is None
         assert ttl_pol.get("keep_me") == "v2"
 
     def test_size_excludes_expired(self):
-        ttl_pol = TTLPolicy(max_size=10, default_ttl=timedelta(hours=1))
-        ttl_pol.put("expired", "v", ttl=timedelta(seconds=-1))
-        ttl_pol.put("live", "v2", ttl=timedelta(hours=1))
+        ttl_pol = TTLPolicy(max_size=10, default_ttl=3600.0)
+        ttl_pol.put("expired", "v", ttl=-1.0)
+        ttl_pol.put("live", "v2", ttl=3600.0)
         # size() calls _cleanup_expired first
         assert ttl_pol.size() == 1
 
@@ -333,12 +333,12 @@ class TestFIFOPolicy:
 
     def test_get_expired_entry_returns_none(self):
         fifo = FIFOPolicy(max_size=5)
-        fifo.put("k", "v", ttl=timedelta(seconds=-1))
+        fifo.put("k", "v", ttl=-1.0)
         assert fifo.get("k") is None
 
     def test_get_expired_removes_entry(self):
         fifo = FIFOPolicy(max_size=5)
-        fifo.put("k", "v", ttl=timedelta(seconds=-1))
+        fifo.put("k", "v", ttl=-1.0)
         fifo.get("k")
         assert fifo.size() == 0
 
@@ -399,5 +399,5 @@ class TestCreatePolicy:
         assert isinstance(p, LRUPolicy)
 
     def test_kwargs_passed_to_ttl(self):
-        p = create_policy("ttl", max_size=5, default_ttl=timedelta(minutes=30))
+        p = create_policy("ttl", max_size=5, default_ttl=1800.0)
         assert isinstance(p, TTLPolicy)
