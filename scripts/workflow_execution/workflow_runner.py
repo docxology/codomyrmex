@@ -30,7 +30,7 @@ def load_workflow(path: Path) -> dict:
     if path.suffix == ".json":
         with open(path) as f:
             return json.load(f)
-    elif path.suffix in [".yaml", ".yml"]:
+    elif path.suffix in {".yaml", ".yml"}:
         try:
             import yaml
 

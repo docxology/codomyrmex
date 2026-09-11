@@ -22,9 +22,6 @@ from codomyrmex.logging_monitoring import get_logger
 if TYPE_CHECKING:
     from codomyrmex.coding.debugging.patch_generator import Patch
 
-# In a real scenario, this would import the Execution module
-# from codomyrmex.coding.execution import execute_code
-
 logger = get_logger(__name__)
 
 
@@ -100,8 +97,6 @@ class FixVerifier:
         self._apply_patch(original_source, patch)
 
         # 2. Execute patched code
-        # result = execute_code("python", patched_source, stdin=test_input)
-
         # Verification requires active code execution module — returns unverified result
         return VerificationResult(
             success=False,
