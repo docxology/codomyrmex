@@ -75,10 +75,10 @@ class KnowledgeGraph:
         """Get neighboring entities."""
         neighbor_ids: set[str] = set()
 
-        if direction in ["out", "both"]:
+        if direction in {"out", "both"}:
             neighbor_ids.update(self._adjacency.get(entity_id, []))
 
-        if direction in ["in", "both"]:
+        if direction in {"in", "both"}:
             neighbor_ids.update(self._reverse_adjacency.get(entity_id, []))
 
         return [self._entities[nid] for nid in neighbor_ids if nid in self._entities]
@@ -91,9 +91,9 @@ class KnowledgeGraph:
         """Get relationships involving an entity."""
         results = []
         for r in self._relationships:
-            if direction in ["out", "both"] and r.source_id == entity_id:
+            if direction in {"out", "both"} and r.source_id == entity_id:
                 results.append(r)
-            if direction in ["in", "both"] and r.target_id == entity_id:
+            if direction in {"in", "both"} and r.target_id == entity_id:
                 results.append(r)
         return results
 
