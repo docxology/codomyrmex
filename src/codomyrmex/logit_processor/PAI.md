@@ -22,32 +22,34 @@ token = sample_token(logits, temperature=0.7, top_k=50, top_p=0.9)
 
 ## MCP Tools (Auto-discovered)
 
-| Tool            | Description                                                    |
-|-----------------|----------------------------------------------------------------|
-| process_logits  | Sample a token from logits with temperature, top-k, top-p, repetition penalty. Returns sampled_token, greedy_token, top5_tokens, entropy. |
+ | Tool | Description |
+ | ----------------- | ---------------------------------------------------------------- |
+ | process_logits | Sample a token from logits with temperature, top-k, top-p, repetition penalty. Returns sampled_token, greedy_token, top5_tokens, entropy. |
 
 ### process_logits Parameters
 
-| Parameter         | Type        | Description                          |
-|-------------------|-------------|--------------------------------------|
-| logits            | list[float] | Raw logit scores from model          |
-| temperature       | float       | Sampling temperature                 |
-| top_k             | int         | Top-k filtering cutoff               |
-| top_p             | float       | Nucleus sampling threshold           |
-| repetition_penalty| float       | Penalty for repeated tokens          |
-| previous_tokens   | list[int]   | Token history for repetition penalty |
-| seed              | int         | Random seed for reproducibility      |
+ | Parameter | Type | Description |
+ | ------------------- | ------------- | -------------------------------------- |
+ | logits | list[float] | Raw logit scores from model |
+ | temperature | float | Sampling temperature |
+ | top_k | int | Top-k filtering cutoff |
+ | top_p | float | Nucleus sampling threshold |
+ | repetition_penalty | float | Penalty for repeated tokens |
+ | previous_tokens | list[int] | Token history for repetition penalty |
+ | seed | int | Random seed for reproducibility |
 
 ## PAI Phase Mapping
 
-| Phase   | Tool/Function    | Usage                                    |
-|---------|------------------|------------------------------------------|
-| EXECUTE | process_logits   | Sample tokens during LLM inference       |
-| EXECUTE | greedy_decode    | Deterministic token selection             |
-| EXECUTE | sample_token     | Stochastic token sampling with controls  |
+ | Phase | Tool/Function | Usage |
+ | --------- | ------------------ | ------------------------------------------ |
+ | EXECUTE | process_logits | Sample tokens during LLM inference |
+ | EXECUTE | greedy_decode | Deterministic token selection |
+ | EXECUTE | sample_token | Stochastic token sampling with controls |
 
 ## Integration Notes
 
 - Has `mcp_tools.py` -- auto-discovered via MCP bridge (1 tool).
+
 - Pairs with `llm` module for end-to-end inference pipelines.
+
 - No trust elevation required -- read-only logit processing.

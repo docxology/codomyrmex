@@ -15,9 +15,13 @@ Instead, please email [YOUR_MODULE_SECURITY_CONTACT_EMAIL_OR_DEFAULT_PROJECT_EMA
 Please include the following information in your report:
 
 - A description of the vulnerability and its potential impact.
+
 - Steps to reproduce the vulnerability, including any specific configurations or conditions required.
+
 - Any proof-of-concept code or examples.
+
 - The version(s) of the module affected.
+
 - Your name and contact information (optional).
 
 We aim to acknowledge receipt of your vulnerability report within [Specify Expected Response Time, e.g., 2-3 business days] and will work with you to understand and remediate the issue. We may request additional information if needed.
@@ -35,7 +39,9 @@ This security policy applies only to the `[Module Name]` module within the Codom
 ## Best Practices for Using This Module
 
 - Always use the latest stable version of the module.
+
 - Follow the principle of least privilege when configuring access or permissions related to this module.
+
 - Regularly review configurations and logs for suspicious activity.
 
-Thank you for helping keep Codomyrmex and the [Module Name] module secure. 
+Thank you for helping keep Codomyrmex and the [Module Name] module secure.

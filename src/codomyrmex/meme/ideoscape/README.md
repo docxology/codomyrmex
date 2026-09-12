@@ -7,17 +7,27 @@
 Module implementation, resources, and local coordination for Ideoscape..
 
 ## Directory Contents
+
 - `PAI.md` – File
+
 - `README.md` – File
+
 - `SPEC.md` – File
+
 - `__init__.py` – File
+
 - `cartography.py` – File
+
 - `engine.py` – File
+
 - `models.py` – File
+
 - `py.typed` – File
 
 ## Navigation
+
 - **Parent Directory**: [meme](../README.md)
+
 - **Project Root**: ../../../../README.md
 
 ## Related Documents

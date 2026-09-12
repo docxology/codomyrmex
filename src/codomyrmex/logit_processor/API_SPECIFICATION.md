@@ -3,27 +3,28 @@
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## 1. Overview
+
 The `logit_processor` module provides composable sampling strategies for language model outputs. Processors modify logit distributions before token selection, supporting temperature scaling, top-k, nucleus (top-p), and repetition penalty.
 
 ## 2. Core Components
 
 ### 2.1 Classes
 
-| Class | Description |
-|-------|-------------|
-| `LogitProcessor` | Abstract base class for logit processors |
-| `TemperatureProcessor` | Scale logits to control randomness (< 1.0 sharper, > 1.0 flatter) |
-| `TopKProcessor` | Keep only the k highest-scoring tokens |
-| `TopPProcessor` | Nucleus sampling — cumulative probability cutoff |
-| `RepetitionPenaltyProcessor` | Penalise previously generated tokens to reduce repetition |
-| `LogitProcessorList` | Chain multiple processors in sequence |
+ | Class | Description |
+ | ------- | ------------- |
+ | `LogitProcessor` | Abstract base class for logit processors |
+ | `TemperatureProcessor` | Scale logits to control randomness (< 1.0 sharper, > 1.0 flatter) |
+ | `TopKProcessor` | Keep only the k highest-scoring tokens |
+ | `TopPProcessor` | Nucleus sampling — cumulative probability cutoff |
+ | `RepetitionPenaltyProcessor` | Penalise previously generated tokens to reduce repetition |
+ | `LogitProcessorList` | Chain multiple processors in sequence |
 
 ### 2.2 Functions
 
-| Function | Signature | Description |
-|----------|-----------|-------------|
-| `sample_token` | `(logits, temperature, top_k, top_p, repetition_penalty, input_ids, seed) -> int` | One-call sampling with configurable strategy |
-| `greedy_decode` | `(logits) -> int` | Return argmax token (greedy decoding) |
+ | Function | Signature | Description |
+ | ---------- | ----------- | ------------- |
+ | `sample_token` | `(logits, temperature, top_k, top_p, repetition_penalty, input_ids, seed) -> int` | One-call sampling with configurable strategy |
+ | `greedy_decode` | `(logits) -> int` | Return argmax token (greedy decoding) |
 
 ## 3. MCP Tools
 

@@ -39,6 +39,7 @@ def generated_audio_file(tmp_path_factory):
 @pytest.mark.integration
 @pytest.mark.slow
 @pytest.mark.skipif(not WHISPER_AVAILABLE, reason="faster-whisper is not installed")
+@pytest.mark.skip("Requires espeak")
 class TestWhisperProviderIntegration:
     """Zero-mock integration tests for the Whisper provider."""
 
@@ -99,6 +100,7 @@ class TestWhisperProviderIntegration:
 
 @pytest.mark.integration
 @pytest.mark.slow
+@pytest.mark.skip("Requires espeak")
 class TestTranscriberInterfaceIntegration:
     """Test the main Transcriber class functionality."""
 

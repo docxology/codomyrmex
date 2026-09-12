@@ -7,17 +7,27 @@
 Module implementation, resources, and local coordination for Logit Processor..
 
 ## Directory Contents
+
 - `MCP_TOOL_SPECIFICATION.md` – File
+
 - `PAI.md` – File
+
 - `README.md` – File
+
 - `SPEC.md` – File
+
 - `__init__.py` – File
+
 - `mcp_tools.py` – File
+
 - `processor.py` – File
+
 - `py.typed` – File
 
 ## Navigation
+
 - **Parent Directory**: [codomyrmex](../README.md)
+
 - **Project Root**: ../../../README.md
 
 ## Related Documents

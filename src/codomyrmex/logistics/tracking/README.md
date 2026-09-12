@@ -7,14 +7,21 @@
 Module implementation, resources, and local coordination for Tracking..
 
 ## Directory Contents
+
 - `PAI.md` – File
+
 - `README.md` – File
+
 - `SPEC.md` – File
+
 - `__init__.py` – File
+
 - `py.typed` – File
 
 ## Navigation
+
 - **Parent Directory**: [logistics](../README.md)
+
 - **Project Root**: ../../../../README.md
 
 ## Related Documents

@@ -10,12 +10,12 @@ in `mcp_tools.py` and surfaced as part of the ~303 dynamic tools available to Cl
 
 ## Auto-Discovery
 
-| Property | Value |
-|----------|-------|
-| Discovery method | `@mcp_tool` decorator scan |
-| Namespace | `logit_processor` |
-| Trust default | Safe |
-| PAI bridge | `src/codomyrmex/agents/pai/mcp/` |
+ | Property | Value |
+ | ---------- | ------- |
+ | Discovery method | `@mcp_tool` decorator scan |
+ | Namespace | `logit_processor` |
+ | Trust default | Safe |
+ | PAI bridge | `src/codomyrmex/agents/pai/mcp/` |
 
 ## Tool Reference
 
@@ -27,15 +27,15 @@ in `mcp_tools.py` and surfaced as part of the ~303 dynamic tools available to Cl
 
 **Parameters**:
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `logits` | `list[float]` | Yes | -- | Raw logit values from language model |
-| `temperature` | `float` | No | `1.0` | Scaling factor (>1=diverse, <1=focused, 1=unchanged) |
-| `top_k` | `int` | No | `0` | Keep only top-k tokens (0=disabled) |
-| `top_p` | `float` | No | `1.0` | Nucleus sampling threshold (1.0=disabled) |
-| `repetition_penalty` | `float` | No | `1.0` | Penalize repeated tokens (1.0=disabled, >1.0=penalize) |
-| `previous_tokens` | `list[int] \ | None` | No | `None` Previously generated token IDs for repetition penalty |
-| `seed` | `int \ | None` | No | `None` Random seed for reproducibility |
+ | Parameter | Type | Required | Default | Description |
+ | ----------- | ------ | ---------- | --------- | ------------- |
+ | `logits` | `list[float]` | Yes | -- | Raw logit values from language model |
+ | `temperature` | `float` | No | `1.0` | Scaling factor (>1=diverse, <1=focused, 1=unchanged) |
+ | `top_k` | `int` | No | `0` | Keep only top-k tokens (0=disabled) |
+ | `top_p` | `float` | No | `1.0` | Nucleus sampling threshold (1.0=disabled) |
+ | `repetition_penalty` | `float` | No | `1.0` | Penalize repeated tokens (1.0=disabled, >1.0=penalize) |
+ | `previous_tokens` | `list[int] \ | None` | No | `None` Previously generated token IDs for repetition penalty |
+ | `seed` | `int \ | None` | No | `None` Random seed for reproducibility |
 
 **Returns**: `dict` -- Dictionary with sampled_token, greedy_token, top5_tokens (list of {id, prob}), and entropy.
 
@@ -54,8 +54,11 @@ result = process_logits(
 ## Integration Notes
 
 - **Auto-discovered**: Yes (via `@mcp_tool` in `mcp_tools.py`)
+
 - **Trust Gateway**: All tools are safe -- no destructive operations
+
 - **PAI Phases**: BUILD (token sampling), VERIFY (sampling distribution analysis)
+
 - **Dependencies**: Requires `numpy` and internal `processor` module
 
 ## Navigation

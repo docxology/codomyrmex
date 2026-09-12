@@ -32,7 +32,7 @@ steps = [
 # Create workflow
 success = wf_manager.create_workflow("code_analysis_workflow", steps)
 print(f"Workflow created: {success}")
-```
+```text
 
 ### Executing a Workflow
 
@@ -40,7 +40,7 @@ print(f"Workflow created: {success}")
 # Execute workflow
 result = wf_manager.execute_workflow("code_analysis_workflow")
 print(f"Workflow status: {result.status}")
-```
+```text
 
 ## 🏗️ Project Lifecycle Management
 
@@ -61,7 +61,7 @@ project = project_manager.create_project(
 
 print(f"Created project: {project.name}")
 print(f"Project type: {project.type.value}")
-```
+```text
 
 ## ⚙️ Task Orchestration
 
@@ -94,7 +94,7 @@ analysis_task = Task(
 task_orchestrator.add_task(setup_task)
 task_orchestrator.add_task(analysis_task)
 task_orchestrator.start_execution()
-```
+```text
 
 ## 🤖 AI Integration with MCP Tools
 
@@ -113,7 +113,7 @@ result = tools.execute_tool("execute_workflow", {
 })
 
 print(f"Workflow execution result: {result.success}")
-```
+```text
 
 ### Creating Projects via AI
 
@@ -127,7 +127,7 @@ result = tools.execute_tool("create_project", {
 
 if result.success:
     print(f"Project created: {result.data['project_name']}")
-```
+```text
 
 ## 📊 Performance Monitoring
 
@@ -145,7 +145,7 @@ result = wf_manager.execute_workflow("code_analysis_workflow")
 # Get performance summary
 perf_summary = wf_manager.get_performance_summary()
 print(f"Performance summary: {perf_summary}")
-```
+```text
 
 ## 🚨 Error Handling and Recovery
 
@@ -175,7 +175,7 @@ wf_manager.create_workflow("error_test_workflow", error_steps)
 result = wf_manager.execute_workflow("error_test_workflow")
 print(f"Workflow status: {result.status}")
 print(f"Errors: {result.errors}")
-```
+```text
 
 ## 🚀 Advanced Scenarios
 
@@ -204,7 +204,7 @@ for project_name in projects:
         path=f"./projects/{project_name}"
     )
     print(f"Project {project_name} workflow: {result['success']}")
-```
+```text
 
 ### Event-Driven Orchestration
 
@@ -219,7 +219,7 @@ engine.register_event_handler('workflow_completed', on_workflow_completed)
 # Create session and execute workflow
 session_id = engine.create_session(user_id="event_user")
 result = engine.execute_workflow("code_analysis_workflow", session_id)
-```
+```text
 
 ## 🔍 Debugging and Troubleshooting
 
@@ -235,7 +235,7 @@ logger.setLevel(logging.DEBUG)
 
 # Execute workflow with debug info
 result = wf_manager.execute_workflow("code_analysis_workflow")
-```
+```text
 
 ### Health Monitoring
 
@@ -250,9 +250,13 @@ for component, status in health['components'].items():
 ```
 
 This guide covers the main usage patterns for the Codomyrmex Project Orchestration module. For more details, see the API documentation and integration tests.
+
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)
+
 - **Module Index**: [All Agents](../../AGENTS.md)
+
 - **Documentation**: [Reference Guides](../../../../../docs/README.md)
+
 - **Home**: [Root README](../../../README.md)
