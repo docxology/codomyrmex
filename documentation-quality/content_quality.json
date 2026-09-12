@@ -4,10 +4,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 6,
+      "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 625,
+      "word_count": 788,
       "link_count": 1
     }
   },
@@ -64,10 +64,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 148,
+      "heading_count": 149,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 9341,
+      "word_count": 9877,
       "link_count": 2
     }
   },
@@ -199,7 +199,7 @@
       "heading_count": 39,
       "placeholder_count": 0,
       "code_block_count": 11,
-      "word_count": 5412,
+      "word_count": 5409,
       "link_count": 555
     }
   },
@@ -760,16 +760,13 @@
   },
   {
     "file": ".jules/palette.md",
-    "score": 75,
-    "issues": [
-      "No headings found",
-      "Document appears too short"
-    ],
+    "score": 100,
+    "issues": [],
     "metrics": {
-      "heading_count": 0,
+      "heading_count": 4,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 0,
+      "word_count": 340,
       "link_count": 0
     }
   },
@@ -778,10 +775,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 2,
+      "heading_count": 3,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 208,
+      "word_count": 448,
       "link_count": 0
     }
   },
@@ -790,10 +787,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 4,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 276,
+      "word_count": 491,
       "link_count": 0
     }
   },
@@ -807,8 +804,8 @@
       "heading_count": 2,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 22,
-      "link_count": 3
+      "word_count": 30,
+      "link_count": 4
     }
   },
   {
@@ -819,7 +816,7 @@
       "heading_count": 4,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 58,
+      "word_count": 66,
       "link_count": 0
     }
   },
@@ -21314,6 +21311,54 @@
     }
   },
   {
+    "file": "docs/modules/preprocessing/SPEC.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 8,
+      "placeholder_count": 0,
+      "code_block_count": 1,
+      "word_count": 70,
+      "link_count": 0
+    }
+  },
+  {
+    "file": "docs/modules/preprocessing/PAI.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 77,
+      "link_count": 3
+    }
+  },
+  {
+    "file": "docs/modules/preprocessing/README.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 5,
+      "placeholder_count": 0,
+      "code_block_count": 1,
+      "word_count": 69,
+      "link_count": 2
+    }
+  },
+  {
+    "file": "docs/modules/preprocessing/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 5,
+      "placeholder_count": 0,
+      "code_block_count": 1,
+      "word_count": 52,
+      "link_count": 3
+    }
+  },
+  {
     "file": "docs/modules/image/SPEC.md",
     "score": 100,
     "issues": [],
@@ -23465,6 +23510,54 @@
       "code_block_count": 0,
       "word_count": 197,
       "link_count": 1
+    }
+  },
+  {
+    "file": "docs/modules/language_detection/SPEC.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 8,
+      "placeholder_count": 0,
+      "code_block_count": 2,
+      "word_count": 105,
+      "link_count": 0
+    }
+  },
+  {
+    "file": "docs/modules/language_detection/PAI.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 82,
+      "link_count": 3
+    }
+  },
+  {
+    "file": "docs/modules/language_detection/README.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 6,
+      "placeholder_count": 0,
+      "code_block_count": 1,
+      "word_count": 100,
+      "link_count": 2
+    }
+  },
+  {
+    "file": "docs/modules/language_detection/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 5,
+      "placeholder_count": 0,
+      "code_block_count": 1,
+      "word_count": 73,
+      "link_count": 3
     }
   },
   {
@@ -32444,6 +32537,84 @@
     }
   },
   {
+    "file": "src/codomyrmex/preprocessing/MCP_TOOL_SPECIFICATION.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 5,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 110,
+      "link_count": 4
+    }
+  },
+  {
+    "file": "src/codomyrmex/preprocessing/SPEC.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 2,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 10,
+      "link_count": 0
+    }
+  },
+  {
+    "file": "src/codomyrmex/preprocessing/PAI.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 86,
+      "link_count": 4
+    }
+  },
+  {
+    "file": "src/codomyrmex/preprocessing/API_SPECIFICATION.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 6,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 126,
+      "link_count": 3
+    }
+  },
+  {
+    "file": "src/codomyrmex/preprocessing/README.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 1,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 15,
+      "link_count": 0
+    }
+  },
+  {
+    "file": "src/codomyrmex/preprocessing/AGENTS.md",
+    "score": 90,
+    "issues": [
+      "Document appears too short"
+    ],
+    "metrics": {
+      "heading_count": 1,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 10,
+      "link_count": 0
+    }
+  },
+  {
     "file": "src/codomyrmex/image/MCP_TOOL_SPECIFICATION.md",
     "score": 100,
     "issues": [],
@@ -39189,7 +39360,7 @@
       "heading_count": 14,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 386,
+      "word_count": 383,
       "link_count": 4
     }
   },
@@ -39473,6 +39644,78 @@
       "code_block_count": 0,
       "word_count": 190,
       "link_count": 1
+    }
+  },
+  {
+    "file": "src/codomyrmex/language_detection/MCP_TOOL_SPECIFICATION.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 5,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 128,
+      "link_count": 4
+    }
+  },
+  {
+    "file": "src/codomyrmex/language_detection/SPEC.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 5,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 93,
+      "link_count": 0
+    }
+  },
+  {
+    "file": "src/codomyrmex/language_detection/PAI.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 97,
+      "link_count": 3
+    }
+  },
+  {
+    "file": "src/codomyrmex/language_detection/API_SPECIFICATION.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 8,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 161,
+      "link_count": 3
+    }
+  },
+  {
+    "file": "src/codomyrmex/language_detection/README.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 4,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 76,
+      "link_count": 0
+    }
+  },
+  {
+    "file": "src/codomyrmex/language_detection/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 3,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 95,
+      "link_count": 0
     }
   },
   {

@@ -5694,6 +5694,19 @@
     "score": 100
   },
   {
+    "file": "docs/modules/preprocessing/AGENTS.md",
+    "valid": false,
+    "missing_sections": [
+      "Development Guidelines"
+    ],
+    "warnings": [
+      "Consider adding 'Code Style' section",
+      "Consider adding 'Testing' section",
+      "Consider adding 'Common Tasks' section"
+    ],
+    "score": 80
+  },
+  {
     "file": "docs/modules/image/AGENTS.md",
     "valid": true,
     "missing_sections": [],
@@ -6136,6 +6149,19 @@
       "Consider adding 'Common Tasks' section"
     ],
     "score": 100
+  },
+  {
+    "file": "docs/modules/language_detection/AGENTS.md",
+    "valid": false,
+    "missing_sections": [
+      "Development Guidelines"
+    ],
+    "warnings": [
+      "Consider adding 'Code Style' section",
+      "Consider adding 'Testing' section",
+      "Consider adding 'Common Tasks' section"
+    ],
+    "score": 80
   },
   {
     "file": "docs/modules/exceptions/AGENTS.md",
@@ -7679,6 +7705,26 @@
     "score": 100
   },
   {
+    "file": "src/codomyrmex/preprocessing/AGENTS.md",
+    "valid": false,
+    "missing_sections": [
+      "Purpose",
+      "Key Files",
+      "Dependencies",
+      "Development Guidelines"
+    ],
+    "warnings": [
+      "Consider adding 'Code Style' section",
+      "Consider adding 'Testing' section",
+      "Consider adding 'Integration Points' section",
+      "Consider adding 'Common Tasks' section",
+      "File appears too short",
+      "File has very few sections",
+      "No code blocks or file references found"
+    ],
+    "score": 0
+  },
+  {
     "file": "src/codomyrmex/image/AGENTS.md",
     "valid": true,
     "missing_sections": [],
@@ -9117,6 +9163,22 @@
       "Consider adding 'Common Tasks' section"
     ],
     "score": 100
+  },
+  {
+    "file": "src/codomyrmex/language_detection/AGENTS.md",
+    "valid": false,
+    "missing_sections": [
+      "Purpose",
+      "Key Files",
+      "Dependencies"
+    ],
+    "warnings": [
+      "Consider adding 'Code Style' section",
+      "Consider adding 'Testing' section",
+      "Consider adding 'Integration Points' section",
+      "Consider adding 'Common Tasks' section"
+    ],
+    "score": 40
   },
   {
     "file": "src/codomyrmex/exceptions/AGENTS.md",
