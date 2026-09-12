@@ -45,3 +45,8 @@ Example implementations and demonstration scripts for Codomyrmex features.
 ## Navigation Links
 - **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../README.md - Main project documentation
+
+## CLI and AI Integration
+
+- Demos are runnable via the `codomyrmex` CLI; `mcp_tools.py` exposes
+  `demos_list_demos` and `demos_run_demo` via `@mcp_tool` for agents.

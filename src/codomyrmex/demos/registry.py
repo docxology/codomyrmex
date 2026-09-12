@@ -42,6 +42,7 @@ class DemoRegistry:
     """Registry for managing and running demonstrations."""
 
     def __init__(self) -> None:
+        """Initialize a new DemoRegistry."""
         self._demos: dict[str, DemoInfo] = {}
 
     def register(
@@ -191,6 +192,7 @@ def demo(
     """Decorator to register a function as a demo."""
 
     def decorator(func: Callable) -> Callable:
+        """Process the decorated demo function."""
         demo_name = name or func.__name__
         demo_desc = description or (func.__doc__ or "").split("\n")[0]
 
@@ -212,6 +214,7 @@ def demo(
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
+            """Execute the registered demo."""
             return func(*args, **kwargs)
 
         return wrapper
