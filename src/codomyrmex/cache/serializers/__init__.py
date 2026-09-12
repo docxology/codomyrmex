@@ -175,7 +175,6 @@ _SERIALIZERS = {
     "typed": TypedSerializer,
 }
 
-
 def create_serializer(
     serializer_type: str = "json", compress: bool = False, **kwargs
 ) -> CacheSerializer:
