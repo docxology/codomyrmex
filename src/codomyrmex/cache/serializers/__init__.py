@@ -166,18 +166,20 @@ class TypedSerializer(CacheSerializer):
             return False
 
 
+# ⚡ Bolt: Moved serializers dictionary to a module-level constant to initialize
+# once and eliminate per-call allocation overhead during factory function calls.
+_SERIALIZERS = {
+    "json": JSONSerializer,
+    "pickle": PickleSerializer,
+    "string": StringSerializer,
+    "typed": TypedSerializer,
+}
+
 def create_serializer(
     serializer_type: str = "json", compress: bool = False, **kwargs
 ) -> CacheSerializer:
     """Factory function to create serializers."""
-    serializers = {
-        "json": JSONSerializer,
-        "pickle": PickleSerializer,
-        "string": StringSerializer,
-        "typed": TypedSerializer,
-    }
-
-    serializer_class = serializers.get(serializer_type)
+    serializer_class = _SERIALIZERS.get(serializer_type)
     if not serializer_class:
         raise ValueError(f"Unknown serializer: {serializer_type}")
 
