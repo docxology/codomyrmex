@@ -9,12 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
-### 2026-09-11 open-PR triage (300 → 39 open)
+### 2026-09-11 open-PR triage (352 open → 0)
 
-The 300 open PRs (agent-generated Palette/Bolt/Sentinel families plus test,
-perf, security, and feature proposals) were triaged in one pass: 99 were
-squash-merged or applied to `main` (14 via GitHub squash, 85 via re-based
-cherry-picks preserving substantive hunks only), 200 were closed as
+The 352 open PRs at triage start (300 newest + 52 oldest; agent-generated Palette/Bolt/Sentinel families plus test,
+perf, security, and feature proposals) were triaged in one pass: 101 were
+squash-merged or applied to `main` (14 via GitHub squash, 87 via re-based
+cherry-picks/cumulative patches preserving substantive hunks only), 251 were closed as
 duplicates/superseded/broken with per-PR rationale, and stale-path test
 content was relocated to the `tests/` layout. Notable merged content:
 

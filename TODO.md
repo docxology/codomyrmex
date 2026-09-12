@@ -60,7 +60,7 @@ M-ERG-1 through M-ERG-4 were completed in the 2026-08-31 pass (see REVIEW_LOG_20
 
 | ID | Severity | Title | Files |
 |:---|:---------|:------|:------|
-| **M-ERG-5** | High | 300 open PRs triaged in one pass: 98 merged/applied (14 GitHub squash + 84 re-based cherry-picks), 202 closed with rationale (duplicate/superseded/broken); see CHANGELOG 2026-09-11 entry for the merged set | `CHANGELOG.md` |
+| **M-ERG-5** | High | All 352 open PRs triaged in one pass: 101 merged/applied (14 GitHub squash + 87 re-based applications), 251 closed with rationale (duplicate/superseded/broken); zero open PRs remain; see CHANGELOG 2026-09-11 entry | `CHANGELOG.md` |
 | **M-ERG-5** | Medium | Duplicate-PR sentinel added (`scripts/maintenance/close_duplicate_prs.py` + 6-hourly workflow) to auto-close stale duplicate families with a 7-day freshness guard | `scripts/maintenance/close_duplicate_prs.py`, `.github/workflows/duplicate-pr-sentinel.yml` |
 | **M-ERG-6** | Medium | `.jules/palette.md` authored (was 0 bytes) with dedupe-before-proposing rules; `.jules/bolt.md`/`.jules/sentinel.md` gained session-hygiene sections and retired-topic lists so agent floods cannot re-propose merged work | `.jules/` |
 | **M-ERG-7** | Minor | New modules `preprocessing` and `language_detection` reached full structure-audit parity (docs/modules counterparts, py.typed, PAI/API/MCP specs); module snapshots updated 130 → 132 | `docs/modules/`, `INDEX.md`, `AGENTS.md`, `README.md`, `docs/reference/inventory.md` |
