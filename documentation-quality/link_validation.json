@@ -64848,6 +64848,48 @@
     "message": "Target not found: ../../docs/modules/preprocessing/README.md"
   },
   {
+    "file": "src/codomyrmex/preprocessing/SPEC.md",
+    "link": "MCP_TOOL_SPECIFICATION.md",
+    "line": 26,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/preprocessing/SPEC.md",
+    "link": "../../../tests/unit/preprocessing/test_mcp_tools.py",
+    "line": 31,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/preprocessing/SPEC.md",
+    "link": "AGENTS.md",
+    "line": 41,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/preprocessing/SPEC.md",
+    "link": "API_SPECIFICATION.md",
+    "line": 42,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/preprocessing/SPEC.md",
+    "link": "MCP_TOOL_SPECIFICATION.md",
+    "line": 43,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/preprocessing/SPEC.md",
+    "link": "PAI.md",
+    "line": 44,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
     "file": "src/codomyrmex/preprocessing/PAI.md",
     "link": "MCP_TOOL_SPECIFICATION.md",
     "line": 16,
@@ -64893,6 +64935,41 @@
     "file": "src/codomyrmex/preprocessing/API_SPECIFICATION.md",
     "link": "MCP_TOOL_SPECIFICATION.md",
     "line": 35,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/preprocessing/AGENTS.md",
+    "link": "MCP_TOOL_SPECIFICATION.md",
+    "line": 25,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/preprocessing/AGENTS.md",
+    "link": "API_SPECIFICATION.md",
+    "line": 26,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/preprocessing/AGENTS.md",
+    "link": "../../../tests/unit/preprocessing/test_mcp_tools.py",
+    "line": 28,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/preprocessing/AGENTS.md",
+    "link": "../README.md",
+    "line": 32,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/preprocessing/AGENTS.md",
+    "link": "../../../docs/modules/preprocessing/README.md",
+    "line": 34,
     "status": "ok",
     "message": "File exists"
   },

@@ -32550,16 +32550,14 @@
   },
   {
     "file": "src/codomyrmex/preprocessing/SPEC.md",
-    "score": 90,
-    "issues": [
-      "Document appears too short"
-    ],
+    "score": 100,
+    "issues": [],
     "metrics": {
-      "heading_count": 2,
+      "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 10,
-      "link_count": 0
+      "word_count": 181,
+      "link_count": 6
     }
   },
   {
@@ -32602,16 +32600,14 @@
   },
   {
     "file": "src/codomyrmex/preprocessing/AGENTS.md",
-    "score": 90,
-    "issues": [
-      "Document appears too short"
-    ],
+    "score": 100,
+    "issues": [],
     "metrics": {
-      "heading_count": 1,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 10,
-      "link_count": 0
+      "word_count": 150,
+      "link_count": 5
     }
   },
   {
