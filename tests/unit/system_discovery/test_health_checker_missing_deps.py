@@ -6,34 +6,31 @@ import pytest
 from codomyrmex.system_discovery.core.health_checker import SystemHealthChecker
 
 
-def test_check_core_dependencies_all_pass(capsys: pytest.CaptureFixture[str]) -> None:
-    """Test check_core_dependencies when all core dependencies import successfully."""
-    # We create a SystemHealthChecker instance
+def test_check_core_dependencies_all_pass(
+    capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """All mapped dependencies report OK when every import succeeds."""
+    import types
+
     checker = SystemHealthChecker(
         project_root=Path("/fake/root"),
         src_path=Path("/fake/root/src"),
         testing_path=Path("/fake/root/tests"),
     )
 
-    # In our testing environment, all core dependencies are installed,
-    # so they should all pass. We call the method and capture stdout.
+    from codomyrmex.system_discovery.core.health_checker import _DEP_MAPPING
+
+    # Force every mapped dependency to import successfully so the test is
+    # independent of which optional extras the local environment installs.
+    stub = types.ModuleType("stub")
+    monkeypatch.setattr(importlib, "import_module", lambda name, package=None: stub)
+
     checker.check_core_dependencies()
     captured = capsys.readouterr()
 
     assert "Core Dependencies:" in captured.out
 
-    expected_deps = [
-        "python-dotenv",
-        "cased-kit",
-        "openai",
-        "anthropic",
-        "matplotlib",
-        "numpy",
-        "pytest",
-        "fastapi",
-    ]
-
-    for dep in expected_deps:
+    for dep in _DEP_MAPPING:
         assert f"   OK {dep}" in captured.out
         assert f"   MISSING {dep}" not in captured.out
 
@@ -48,13 +45,16 @@ def test_check_core_dependencies_some_missing(
         testing_path=Path("/fake/root/tests"),
     )
 
-    original_import_module = importlib.import_module
+    import types
 
-    # Mock importlib.import_module to simulate Missing deps
+    # Mock importlib.import_module: openai/matplotlib fail; everything else
+    # succeeds deterministically regardless of local extras.
+    stub = types.ModuleType("stub")
+
     def mock_import_module(name, package=None):
         if name in ("openai", "matplotlib"):
             raise ImportError(f"No module named '{name}'")
-        return original_import_module(name, package)
+        return stub
 
     monkeypatch.setattr(importlib, "import_module", mock_import_module)
 
@@ -63,13 +63,10 @@ def test_check_core_dependencies_some_missing(
 
     assert "Core Dependencies:" in captured.out
 
+    from codomyrmex.system_discovery.core.health_checker import _DEP_MAPPING
+
     expected_deps_ok = [
-        "python-dotenv",
-        "cased-kit",
-        "anthropic",
-        "numpy",
-        "pytest",
-        "fastapi",
+        dep for dep in _DEP_MAPPING if dep not in ("openai", "matplotlib")
     ]
     expected_deps_missing = ["openai", "matplotlib"]
 
