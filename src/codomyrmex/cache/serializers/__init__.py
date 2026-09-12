@@ -19,7 +19,33 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
-_PICKLE_SECRET_KEY = os.urandom(32)
+
+def _get_pickle_secret_key() -> bytes:
+    """Get the pickle secret key from environment or generate a persistent one."""
+    key = os.environ.get("PICKLE_SECRET_KEY")
+    if key:
+        return key.encode("utf-8")
+
+    key_file = os.environ.get(
+        "PICKLE_SECRET_FILE", "/tmp/.codomyrmex_pickle_secret_key"
+    )
+    try:
+        if os.path.exists(key_file):
+            with open(key_file, "rb") as f:
+                return f.read()
+
+        new_key = os.urandom(32)
+        os.makedirs(os.path.dirname(key_file), exist_ok=True)
+        with open(key_file, "wb") as f:
+            f.write(new_key)
+        os.chmod(key_file, 0o600)
+        return new_key
+    except Exception:
+        # Fallback to ephemeral if filesystem access fails
+        return os.urandom(32)
+
+
+_PICKLE_SECRET_KEY = _get_pickle_secret_key()
 
 
 class CacheSerializer(ABC):
