@@ -6,7 +6,6 @@ Provides different strategies for cache eviction when capacity is reached.
 
 import heapq
 import threading
-import time
 from abc import ABC, abstractmethod
 from collections import OrderedDict
 from dataclasses import dataclass, field
@@ -21,11 +20,9 @@ V = TypeVar("V")
 class CacheEntry(Generic[V]):
     """A single cache entry with metadata."""
 
-    # Optimization: Using time.monotonic() instead of datetime.now() for ~20% faster cache operations
-
     value: V
-    created_at: float = field(default_factory=time.monotonic)
-    accessed_at: float = field(default_factory=time.monotonic)
+    created_at: datetime = field(default_factory=datetime.now)
+    accessed_at: datetime = field(default_factory=datetime.now)
     access_count: int = 0
     ttl: timedelta | None = None
     size: int = 1
@@ -34,11 +31,11 @@ class CacheEntry(Generic[V]):
         """Check if the entry has expired."""
         if self.ttl is None:
             return False
-        return time.monotonic() > self.created_at + self.ttl.total_seconds()
+        return datetime.now() > self.created_at + self.ttl
 
     def touch(self) -> None:
         """Update access metadata."""
-        self.accessed_at = time.monotonic()
+        self.accessed_at = datetime.now()
         self.access_count += 1
 
 
@@ -229,11 +226,11 @@ class TTLPolicy(EvictionPolicy[K, V]):
         super().__init__(max_size)
         self._cache: dict[K, CacheEntry[V]] = {}
         self._default_ttl = default_ttl
-        self._expiry_heap: list[tuple[float, K]] = []
+        self._expiry_heap: list[tuple[datetime, K]] = []
 
     def _cleanup_expired(self) -> None:
         """Remove expired entries."""
-        now = time.monotonic()
+        now = datetime.now()
         while self._expiry_heap and self._expiry_heap[0][0] <= now:
             _, key = heapq.heappop(self._expiry_heap)
             if key in self._cache and self._cache[key].is_expired():
@@ -272,7 +269,7 @@ class TTLPolicy(EvictionPolicy[K, V]):
                     del self._cache[oldest_key]
 
             self._cache[key] = entry
-            expiry_time = entry.created_at + actual_ttl.total_seconds()
+            expiry_time = entry.created_at + actual_ttl
             heapq.heappush(self._expiry_heap, (expiry_time, key))
 
     def remove(self, key: K) -> V | None:
