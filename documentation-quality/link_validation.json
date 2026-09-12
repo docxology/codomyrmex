@@ -92738,28 +92738,28 @@
   {
     "file": "src/codomyrmex/demos/SPEC.md",
     "link": "../README.md",
-    "line": 46,
+    "line": 49,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/demos/SPEC.md",
     "link": "README.md",
-    "line": 47,
+    "line": 50,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/demos/SPEC.md",
     "link": "AGENTS.md",
-    "line": 48,
+    "line": 51,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/demos/SPEC.md",
     "link": "../../../README.md",
-    "line": 49,
+    "line": 52,
     "status": "ok",
     "message": "File exists"
   },
@@ -92794,14 +92794,14 @@
   {
     "file": "src/codomyrmex/demos/README.md",
     "link": "../README.md",
-    "line": 21,
+    "line": 29,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/demos/README.md",
     "link": "AGENTS.md",
-    "line": 26,
+    "line": 34,
     "status": "ok",
     "message": "File exists"
   },
