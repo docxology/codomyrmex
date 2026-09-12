@@ -28,6 +28,8 @@ _DOCKER_SETUP_ERROR_MARKERS = (
     "github.com/docker/cli",
     "github.com/docker/docker",
     "github.com/moby/moby/client",
+    "failed to mount",
+    "error response from daemon",
 )
 _DOCKER_COMPATIBILITY_SHIM_MARKERS = ("emulate docker cli using podman",)
 
