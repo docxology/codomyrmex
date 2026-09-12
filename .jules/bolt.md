@@ -42,3 +42,6 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+## 2024-09-12 - Eliminate per-call allocation overhead in factory functions
+**Learning:** Dynamically creating mapping dictionaries inside frequently called factory functions like `create_serializer` adds measurable overhead due to repeated memory allocation on every call.
+**Action:** Always extract static mapping dictionaries (like registry maps) to module-level or class-level constants to initialize them exactly once.
