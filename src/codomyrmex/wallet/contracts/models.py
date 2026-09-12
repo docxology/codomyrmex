@@ -25,13 +25,15 @@ class TransactionStatus(Enum):
     FAILED = "failed"
 
 
-_EVM_NETWORKS = frozenset({
-    Network.ETHEREUM,
-    Network.POLYGON,
-    Network.ARBITRUM,
-    Network.OPTIMISM,
-    Network.BASE,
-})
+_EVM_NETWORKS = frozenset(
+    {
+        Network.ETHEREUM,
+        Network.POLYGON,
+        Network.ARBITRUM,
+        Network.OPTIMISM,
+        Network.BASE,
+    }
+)
 
 
 @dataclass

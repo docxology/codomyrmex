@@ -89,6 +89,7 @@ class AsyncProfiler:
 
     def profile(self, func: Callable) -> Callable:
         """Decorator to profile an async function."""
+
         @functools.wraps(func)
         async def wrapper(*args: Any, **kwargs: Any) -> Any:
             start = time.perf_counter()
@@ -123,6 +124,7 @@ class AsyncProfiler:
 
     def profile_sync(self, func: Callable) -> Callable:
         """Decorator to profile a synchronous function."""
+
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             """Execute the wrapped function and record its duration."""

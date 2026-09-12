@@ -331,8 +331,9 @@ class TestTemplateManager:
         template = Template(jinja_template, "jinja2")
         manager.add_template("value_template", template)
         retrieved = manager.get_template("value_template")
-        # TemplateManager's add_template extracts string rep of Template instead of storing the object directly.
-        assert str(template) in retrieved
+        # add_template preserves object identity for Template instances
+        # (converting to a string would lose the render contract).
+        assert retrieved is template
 
     def test_remove_template(self, manager):
         """Test removing a template."""

@@ -21,7 +21,7 @@ Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/a
 
 | Metric | Value (as of last update) |
 | --- | --- |
-| Top-level modules | 130 |
+| Top-level modules | 132 |
 | Agent packages (`src/codomyrmex/agents/`) | 39 |
 | `mcp_tools.py` files (non-test) | 151 |
 | Runtime MCP tools | 612 (PAI merged manifest in the complete locked dependency profile; other launcher profiles are enumerated at startup) |

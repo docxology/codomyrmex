@@ -193,6 +193,8 @@ def test_is_virtual_env_false(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(sys, "prefix", "/usr")
     monkeypatch.delenv("VIRTUAL_ENV", raising=False)
     assert EnvironmentProfiler.is_virtual_env() is False
+
+
 @pytest.mark.parametrize(
     "env_vars, path_exists_return, release_return, expected_type",
     [

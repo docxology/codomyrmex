@@ -63,7 +63,9 @@ class PythonParser(Parser):
             )
         return functions
 
-    _CLASS_PATTERN = re.compile(r"^(\s*)class\s+(\w+)\s*(?:\((.*?)\))?\s*:", re.MULTILINE)
+    _CLASS_PATTERN = re.compile(
+        r"^(\s*)class\s+(\w+)\s*(?:\((.*?)\))?\s*:", re.MULTILINE
+    )
 
     def _parse_classes(self, source: str, lines: list[str]) -> list[ASTNode]:
         classes = []

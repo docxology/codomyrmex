@@ -170,17 +170,15 @@ def test_get_system_status_dict(health_checker: SystemHealthChecker) -> None:
     assert "venv_exists" in status["project"]
     assert status["project"]["venv_exists"] is True
 
-    # Check dependencies dictionary structure
-    expected_deps = [
-        "python-dotenv",
-        "cased-kit",
-        "openai",
-        "anthropic",
-        "matplotlib",
-        "numpy",
-        "pytest",
-    ]
-    for dep in expected_deps:
+    # Check dependencies dictionary structure against the source of truth.
+    # get_system_status_dict deliberately skips fastapi (optional extra),
+    # so only the remaining mapped dependencies must appear as booleans.
+    from codomyrmex.system_discovery.core.health_checker import _DEP_MAPPING
+
+    assert "fastapi" not in status["dependencies"]
+    for dep in _DEP_MAPPING:
+        if dep == "fastapi":
+            continue
         assert dep in status["dependencies"]
         assert isinstance(status["dependencies"][dep], bool)
 

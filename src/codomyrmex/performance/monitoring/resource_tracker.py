@@ -391,6 +391,7 @@ def _report_top_consumers(results: list[ResourceTrackingResult]) -> dict[str, An
         ],
     }
 
+
 def create_resource_report(results: list[ResourceTrackingResult]) -> dict[str, Any]:
     """Create a comprehensive resource usage report from multiple tracking results."""
     if not results:

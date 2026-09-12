@@ -132,6 +132,7 @@ class Jinja2LikeEngine(TemplateEngine):
 
     def _process_variables(self, template: str, context: dict[str, Any]) -> str:
         """Process {{ variable }} expressions."""
+
         def replace(match):
             value = self._parse_expression(match.group(1), context)
             if value is None:
@@ -145,6 +146,7 @@ class Jinja2LikeEngine(TemplateEngine):
 
     def _process_for_loops(self, template: str, context: dict[str, Any]) -> str:
         """Process {% for item in items %} blocks."""
+
         def replace(match):
             var_name = match.group(1)
             iterable = self._parse_expression(match.group(2), context)
@@ -210,6 +212,7 @@ class Jinja2LikeEngine(TemplateEngine):
 
     def _process_if_blocks(self, template: str, context: dict[str, Any]) -> str:
         """Process {% if condition %} / {% else %} / {% endif %} blocks."""
+
         def replace(match):
             condition = match.group(1)
             true_block = match.group(2)

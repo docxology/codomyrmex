@@ -18,7 +18,7 @@ def test_current_repo_structure_audit_passes() -> None:
     audit = audit_module_structure(_repo_root())
     assert audit.passed
     assert audit.errors == ()
-    assert audit.catalog.runtime_module_count == 130
+    assert audit.catalog.runtime_module_count == 132
     assert audit.to_dict()["orphaned_docs_module_count"] == 0
 
 

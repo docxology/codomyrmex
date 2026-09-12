@@ -11,7 +11,7 @@
 | :------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Run the CLI                      | `codomyrmex --help` → [cli/](src/codomyrmex/cli/)                                                                                                                          |
 | Understand PAI integration       | [PAI.md](PAI.md) — algorithm phase ↔ module mapping                                                                                                                        |
-| Browse all 130 top-level modules | [src/codomyrmex/INDEX.md](src/codomyrmex/INDEX.md) — full module catalog by layer                                                                                          |
+| Browse all 132 top-level modules | [src/codomyrmex/INDEX.md](src/codomyrmex/INDEX.md) — full module catalog by layer                                                                                          |
 | MCP tool reference               | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) — **627** production `@mcp_tool` lines; **612** merged runtime tools ([inventory](docs/reference/inventory.md)) |
 | Check system health              | `codomyrmex status` or `codomyrmex check`                                                                                                                                  |
 | Run tests                        | `uv run pytest`                                                                                                                                                            |
@@ -22,7 +22,7 @@
 
 | Metric                              | Value                                      | Source                                                                                                                                                              |
 | :---------------------------------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Top-level packages                  | 130                                        | [docs/reference/inventory.md](docs/reference/inventory.md)                                                                                                          |
+| Top-level packages                  | 132                                        | [docs/reference/inventory.md](docs/reference/inventory.md)                                                                                                          |
 | `@mcp_tool` decorators (production) | 627                                        | `uv run python scripts/doc_inventory.py`                                                                                                                            |
 | `mcp_tools.py` files (non-test)     | 151                                        | [docs/reference/inventory.md](docs/reference/inventory.md)                                                                                                          |
 | MCP resources                       | 3                                          | [docs/pai/tools-reference.md](docs/pai/tools-reference.md)                                                                                                          |
@@ -65,7 +65,7 @@ Full module catalog with layer assignments: [src/codomyrmex/INDEX.md](src/codomy
 | Directory                                  | Description                                              |
 | :----------------------------------------- | :------------------------------------------------------- |
 | [src/](src/INDEX.md)                       | Source root — namespace package                          |
-| [src/codomyrmex/](src/codomyrmex/INDEX.md) | Main package — **130 top-level modules** across 4 layers |
+| [src/codomyrmex/](src/codomyrmex/INDEX.md) | Main package — **132 top-level modules** across 4 layers |
 
 ### Infrastructure
 
@@ -99,7 +99,7 @@ Full module catalog with layer assignments: [src/codomyrmex/INDEX.md](src/codomy
 ```text
 INDEX.md                           ← You are here
 ├── src/INDEX.md                   ← Source directory index
-│   └── src/codomyrmex/INDEX.md    ← 130-module catalog by layer
+│   └── src/codomyrmex/INDEX.md    ← 132-module catalog by layer
 └── docs/                          ← Documentation site
 ```
 

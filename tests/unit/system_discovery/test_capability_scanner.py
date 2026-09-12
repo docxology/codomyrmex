@@ -174,7 +174,7 @@ CONSTANT = 42
             is_async=False,
             is_generator=False,
             decorators=[],
-            complexity_score=15, # High complexity
+            complexity_score=15,  # High complexity
         )
         func3 = FunctionCapability(
             name="unique_func",
@@ -201,7 +201,7 @@ CONSTANT = 42
             exports=[],
             file_count=1,
             line_count=10,
-            last_modified="unknown"
+            last_modified="unknown",
         )
         mod2 = ModuleCapability(
             name="mod2",
@@ -214,7 +214,7 @@ CONSTANT = 42
             exports=[],
             file_count=1,
             line_count=20,
-            last_modified="unknown"
+            last_modified="unknown",
         )
 
         capabilities = {"mod1": mod1, "mod2": mod2}
@@ -251,15 +251,31 @@ CONSTANT = 42
                 docstring="A test module.",
                 functions=[
                     FunctionCapability(
-                        name="f", signature="f()", docstring="doc", parameters=[], return_annotation="None",
-                        file_path="f.py", line_number=1, is_async=False, is_generator=False, decorators=[],
-                        complexity_score=1
+                        name="f",
+                        signature="f()",
+                        docstring="doc",
+                        parameters=[],
+                        return_annotation="None",
+                        file_path="f.py",
+                        line_number=1,
+                        is_async=False,
+                        is_generator=False,
+                        decorators=[],
+                        complexity_score=1,
                     )
                 ],
                 classes=[
                     ClassCapability(
-                        name="C", docstring="doc", properties=[], class_variables=[], inheritance=[],
-                        file_path="c.py", line_number=1, is_abstract=False, decorators=[], methods=[]
+                        name="C",
+                        docstring="doc",
+                        properties=[],
+                        class_variables=[],
+                        inheritance=[],
+                        file_path="c.py",
+                        line_number=1,
+                        is_abstract=False,
+                        decorators=[],
+                        methods=[],
                     )
                 ],
                 constants={},
@@ -267,7 +283,7 @@ CONSTANT = 42
                 exports=[],
                 file_count=5,
                 line_count=200,
-                last_modified="2026-01-01"
+                last_modified="2026-01-01",
             )
         }
         output = scanner.export_capabilities_report(caps, filename="test.json")

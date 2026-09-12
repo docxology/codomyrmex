@@ -209,6 +209,7 @@ def cached_function(
             The wrapped function with caching capability.
 
         """
+
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             """Execute the function, utilizing the cache to store or retrieve results.

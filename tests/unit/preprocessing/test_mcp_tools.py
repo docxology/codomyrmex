@@ -8,6 +8,7 @@ def test_preprocess_data():
     result = preprocess_data("  Hello World  ")
     assert result == {"status": "success", "preprocessed": "hello world"}
 
+
 def test_preprocess_data_empty():
     """Test preprocess_data tool with empty string."""
     result = preprocess_data("")

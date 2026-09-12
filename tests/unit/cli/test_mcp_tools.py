@@ -88,7 +88,9 @@ def test_cli_run_command_invalid_json_args():
 
     assert isinstance(result, dict)
     assert result["status"] == "error"
-    assert "args must be a JSON object" in result.get("message", "") or "Expecting value" in result.get("message", "")
+    assert "args must be a JSON object" in result.get(
+        "message", ""
+    ) or "Expecting value" in result.get("message", "")
 
 
 @pytest.mark.unit

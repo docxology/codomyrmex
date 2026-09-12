@@ -26,6 +26,7 @@ class _PlainTerminalFormatter:
     def color(self, msg: str, _color: str) -> str:
         return msg
 
+
 try:
     from codomyrmex.terminal_interface.terminal_utils import TerminalFormatter
 

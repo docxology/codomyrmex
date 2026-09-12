@@ -79,7 +79,9 @@ class TestDeploymentOrchestrator:
         env = orchestrator.environments["staging"]
         env.pre_deploy_hooks = ["echo deploying | tr a-z A-Z"]
 
-        deployment = orchestrator.create_deployment("compound-hook", "1.0", "staging", [])
+        deployment = orchestrator.create_deployment(
+            "compound-hook", "1.0", "staging", []
+        )
         orchestrator.deploy("compound-hook")
         assert any("Hook executed" in log for log in deployment.logs)
 
