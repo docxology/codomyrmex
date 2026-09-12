@@ -196,13 +196,12 @@ class ProviderRouter:
             ``is_fallback``, ``error``.
 
         """
-        resolved_provider = provider or self.resolve_provider()
-        resolved_model = model or self.model
-
         import time
 
-        # Check if we should rotate
-        if resolved_provider == "openrouter" and not model:
+        # Check if we should rotate without forcing provider resolution right away
+        # This allows fallback tests to work without actually needing hermes setup credentials
+        _check_provider = provider or getattr(self, "primary_provider", "openrouter")
+        if _check_provider == "openrouter" and not model:
             rotation_models = self.get_rotation_models()
             for r_model in rotation_models:
                 m_id = r_model["model"]
@@ -227,6 +226,8 @@ class ProviderRouter:
                     continue
 
         try:
+            resolved_provider = provider or self.resolve_provider()
+            resolved_model = model or self.model
             return self._dispatch(prompt, resolved_provider, resolved_model, timeout)
         except Exception as primary_exc:
             if self.fallback_provider and resolved_provider != self.fallback_provider:

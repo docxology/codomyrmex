@@ -91,6 +91,9 @@ def test_rotation_all_fail(
 ) -> None:
     """Verify that if all models fail, we return a failure."""
 
+    # Provide a mock for resolve_provider to avoid credential check failures
+    monkeypatch.setattr(rotation_router, "resolve_provider", lambda: "openrouter")
+
     def always_fail(prompt: str, provider: str, model: str, timeout: int) -> None:
         raise RuntimeError("Generic Error")
 
