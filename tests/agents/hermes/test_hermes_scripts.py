@@ -669,6 +669,7 @@ class TestNewMCPTools:
     def test_session_store_exported_from_package(self) -> None:
         """SessionStore protocol is importable from the hermes package."""
         from codomyrmex.agents.hermes import SessionStore, SQLiteSessionStore
+
         store = SQLiteSessionStore(":memory:")
         assert isinstance(store, SessionStore)
         store.close()

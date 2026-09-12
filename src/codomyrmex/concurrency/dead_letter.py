@@ -141,7 +141,9 @@ class DeadLetterQueue:
                     entry = json.loads(line)
                 except json.JSONDecodeError:
                     continue
-                if not include_replayed and (entry.get("replayed") or entry.get("replay_failed")):
+                if not include_replayed and (
+                    entry.get("replayed") or entry.get("replay_failed")
+                ):
                     continue
                 if operation and entry.get("operation") != operation:
                     continue
@@ -294,9 +296,7 @@ class DeadLetterQueue:
                 except json.JSONDecodeError:
                     new_lines.append(line)
             if changed:
-                self._atomic_write(
-                    "\n".join(new_lines) + "\n" if new_lines else ""
-                )
+                self._atomic_write("\n".join(new_lines) + "\n" if new_lines else "")
 
     def purge(self, *, before: datetime | None = None) -> int:
         """Remove entries from the queue.
