@@ -9,7 +9,9 @@ from codomyrmex.colony_kernel.falsification.models import AttackVector
 from codomyrmex.colony_kernel.models import FalsificationFinding, FalsificationSeverity
 
 
-def check_over_broad_module(plan: dict[str, Any]) -> FalsificationFinding | None:
+def check_over_broad_module(
+    plan: dict[str, Any]
+) -> FalsificationFinding | None:
     """Attack: plan proposes a module that tries to do too many things."""
     rationale = str(plan.get("rationale", "")).strip()
     scope_str = str(plan.get("scope", "")).strip()
@@ -28,7 +30,9 @@ def check_over_broad_module(plan: dict[str, Any]) -> FalsificationFinding | None
             severity=FalsificationSeverity.MEDIUM,
             evidence={
                 "responsibility_verb_count": len(responsibility_indicators),
-                "verbs_found": list({v.lower() for v in responsibility_indicators[:8]}),
+                "verbs_found": list(
+                    {v.lower() for v in responsibility_indicators[:8]}
+                ),
             },
             remediation=(
                 f"The rationale uses {len(responsibility_indicators)} responsibility verbs, "

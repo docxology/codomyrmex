@@ -223,9 +223,7 @@ flask==2.2.0
         )
 
         with (
-            perf_logger.time_operation("development_workflow")
-            if perf_logger
-            else contextlib.nullcontext()  # type: ignore
+            perf_logger.time_operation("development_workflow") if perf_logger else contextlib.nullcontext()  # type: ignore
         ):
             # Step 1: Generate code using AI
             generated_code = r'''
@@ -288,11 +286,7 @@ for email in emails:
             else None
         )
 
-        with (
-            perf_logger.time_operation("cicd_workflow")
-            if perf_logger
-            else contextlib.nullcontext()
-        ):  # type: ignore
+        with perf_logger.time_operation("cicd_workflow") if perf_logger else contextlib.nullcontext():  # type: ignore
             test_files = self._create_test_project()
 
             # Step 1: Static analysis
@@ -395,9 +389,7 @@ for email in emails:
         )
 
         with (
-            perf_logger.time_operation("performance_workflow")
-            if perf_logger
-            else contextlib.nullcontext()  # type: ignore
+            perf_logger.time_operation("performance_workflow") if perf_logger else contextlib.nullcontext()  # type: ignore
         ):
             # Step 1: Define functions to test
             def algorithm_a(n):

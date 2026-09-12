@@ -1,5 +1,4 @@
 """Hermes MCP tools — tasks category."""
-
 from __future__ import annotations
 
 from typing import Any
@@ -74,7 +73,6 @@ def hermes_parse_canvas(vault_path: str, canvas_name: str) -> dict[str, Any]:
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
-
 @mcp_tool(
     category="hermes",
     description=(
@@ -122,7 +120,6 @@ def hermes_search_vault(
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
-
 
 @mcp_tool(
     category="hermes",
@@ -187,7 +184,6 @@ def hermes_create_task(
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
-
 @mcp_tool(
     category="hermes",
     description=(
@@ -245,7 +241,6 @@ def hermes_update_task_status(
             return {"status": "success", "task": task}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
-
 
 @mcp_tool(
     category="hermes",
@@ -330,7 +325,6 @@ def hermes_delegate_task(
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc), "sub_agent_response": ""}
-
 
 @mcp_tool(
     category="hermes",

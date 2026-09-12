@@ -57,7 +57,6 @@ class HermesSessionOpsMixin:
         except Exception as e:
             self.logger.warning("Worktree creation error: %s", e)
             return None
-
     def cleanup_worktree(self, session_id: str) -> bool:
         """Remove an isolated git worktree after session completes.
 
@@ -89,7 +88,6 @@ class HermesSessionOpsMixin:
         except Exception as e:
             self.logger.warning("Worktree cleanup failed: %s", e)
             return False
-
     def get_session_stats(self) -> dict[str, Any]:
         """Return summary statistics for the session database.
 
@@ -100,7 +98,6 @@ class HermesSessionOpsMixin:
         """
         with SQLiteSessionStore(self._session_db_path) as store:
             return store.get_stats()
-
     def fork_session(
         self, session_id: str, new_name: str | None = None
     ) -> HermesSession | None:
@@ -129,7 +126,6 @@ class HermesSessionOpsMixin:
                 child.name,
             )
             return child
-
     def export_session_markdown(self, session_id: str) -> str | None:
         """Export a session as formatted Markdown.
 
@@ -142,7 +138,6 @@ class HermesSessionOpsMixin:
         """
         with SQLiteSessionStore(self._session_db_path) as store:
             return store.export_markdown(session_id)
-
     def batch_execute(
         self,
         prompts: list[str],
@@ -214,7 +209,6 @@ class HermesSessionOpsMixin:
                 self.timeout = orig_timeout
 
         return results
-
     def set_system_prompt(self, session_id: str, prompt: str) -> bool:
         """Prepend (or replace) a persistent system message in a session.
 
@@ -232,7 +226,6 @@ class HermesSessionOpsMixin:
             if not store.load(session_id):
                 store.save(HermesSession(session_id=session_id))
             return store.update_system_prompt(session_id, prompt)
-
     def get_session_detail(self, session_id: str) -> dict[str, Any] | None:
         """Return a rich detail dictionary for a session.
 
@@ -246,7 +239,6 @@ class HermesSessionOpsMixin:
         """
         with SQLiteSessionStore(self._session_db_path) as store:
             return store.get_detail(session_id)
-
     def session_merge(
         self, target_id: str, source_ids: list[str], deduplicate: bool = True
     ) -> bool:

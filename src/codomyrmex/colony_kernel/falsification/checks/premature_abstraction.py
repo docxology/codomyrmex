@@ -9,7 +9,9 @@ from codomyrmex.colony_kernel.falsification.models import AttackVector
 from codomyrmex.colony_kernel.models import FalsificationFinding, FalsificationSeverity
 
 
-def check_premature_abstraction(plan: dict[str, Any]) -> FalsificationFinding | None:
+def check_premature_abstraction(
+    plan: dict[str, Any]
+) -> FalsificationFinding | None:
     """Attack: plan introduces a generic abstraction without demonstrated need."""
     rationale = str(plan.get("rationale", "")).strip()
     scope_str = str(plan.get("scope", "")).strip()
@@ -38,7 +40,9 @@ def check_premature_abstraction(plan: dict[str, Any]) -> FalsificationFinding | 
         r"\bproven\b",
         r"\bdemonstrated\b",
     ]
-    has_evidence = any(re.search(p, combined, re.IGNORECASE) for p in evidence_patterns)
+    has_evidence = any(
+        re.search(p, combined, re.IGNORECASE) for p in evidence_patterns
+    )
 
     if not has_evidence and len(hits) >= 2:
         return FalsificationFinding(

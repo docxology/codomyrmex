@@ -71,7 +71,6 @@ HEADING_PATTERN = re.compile(
     r"^(?P<level>#{1,3})\s+(?P<title>.+?)(?:\s+\{(?P<attrs>[^}]*)\})?\s*$"
 )
 
-
 def _find_project_root() -> Path:
     """Walk up from this script's location to the project root (contains pyproject.toml)."""
     here = Path(__file__).resolve().parent

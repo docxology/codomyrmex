@@ -17,7 +17,6 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-
 class ModelContextRegistry:
     """Dynamic context window resolution for OpenRouter models.
 

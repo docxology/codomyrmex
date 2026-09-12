@@ -1,5 +1,4 @@
 """Hermes MCP tools — memory category."""
-
 from __future__ import annotations
 
 from typing import Any
@@ -42,7 +41,6 @@ def hermes_recall_memory(query: str, limit: int = 10) -> dict[str, Any]:
     except Exception as exc:
         return {"status": "error", "message": str(exc), "results": []}
 
-
 @mcp_tool(
     category="hermes",
     description="Search Hermes sessions by name substring.",
@@ -66,7 +64,6 @@ def hermes_session_search(query: str) -> dict[str, Any]:
             return {"status": "success", "sessions": results, "count": len(results)}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
-
 
 @mcp_tool(
     category="hermes",
@@ -145,7 +142,6 @@ def hermes_build_memory_graph(
     except Exception as exc:
         return {"status": "error", "message": str(exc), "nodes": [], "edges": []}
 
-
 @mcp_tool(
     category="hermes",
     description=(
@@ -213,7 +209,6 @@ def hermes_extract_ki(
     except Exception as exc:
         return {"status": "error", "message": str(exc)}
 
-
 @mcp_tool(
     category="hermes",
     description=(
@@ -266,7 +261,6 @@ def hermes_search_knowledge_items(
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc), "results": []}
-
 
 @mcp_tool(
     category="hermes",

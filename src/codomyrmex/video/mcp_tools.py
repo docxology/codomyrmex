@@ -447,7 +447,9 @@ def video_extract_frames(
             "status": "success",
             "frame_count": len(saved),
             "output_paths": [str(p) for p in saved],
-            "timestamps": [round(start + i * interval, 2) for i in range(len(saved))],
+            "timestamps": [
+                round(start + i * interval, 2) for i in range(len(saved))
+            ],
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc)}

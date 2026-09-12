@@ -21,7 +21,6 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-
 class ContextCompressor:
     """Auto-compress conversation context when it exceeds token limits.
 

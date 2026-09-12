@@ -106,7 +106,6 @@ class HermesContextMixin:
         self._export_to_obsidian(
             session_id=session.session_id, name=session.name, content=summary
         )
-
     def _export_to_obsidian(
         self, session_id: str, name: str | None, content: str
     ) -> None:

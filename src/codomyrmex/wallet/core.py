@@ -250,7 +250,5 @@ class WalletManager:
             return False
         self._wallets[user_id] = wallet_address
         self._created_at[user_id] = datetime.now(UTC).isoformat()
-        logger.info(
-            "Registered existing wallet %s for user %s", wallet_address, user_id
-        )
+        logger.info("Registered existing wallet %s for user %s", wallet_address, user_id)
         return True

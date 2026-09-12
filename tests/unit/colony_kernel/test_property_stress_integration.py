@@ -92,9 +92,7 @@ def _good_proposal(
     )
 
 
-def _gate_with_no_pressure(
-    trust_score: float,
-) -> tuple[ActuationGate, AgentTrustProfile]:
+def _gate_with_no_pressure(trust_score: float) -> tuple[ActuationGate, AgentTrustProfile]:
     """Return a fresh gate + profile with the given trust score."""
     field = TraceField(StigmergyConfig())
     gate = ActuationGate(pheromone_store=field, resource_ledger=_UnlimitedLedger())
@@ -108,9 +106,7 @@ def _gate_with_no_pressure(
     return gate, profile
 
 
-def _gate_with_risk(
-    pressure: float, target: str = "codomyrmex.some.module"
-) -> ActuationGate:
+def _gate_with_risk(pressure: float, target: str = "codomyrmex.some.module") -> ActuationGate:
     """Return a gate with a RISK signal pre-loaded at *target* with *pressure*."""
     field = TraceField(StigmergyConfig(max_strength=200.0))
     key = f"{target}:{SignalType.RISK.value}"
@@ -277,12 +273,9 @@ class TestPropertyResourceCostArithmetic:
     @settings(max_examples=80, deadline=1000)
     def test_resource_cost_add_commutativity(
         self,
-        a_llm: int,
-        b_llm: int,
-        a_runtime: float,
-        b_runtime: float,
-        a_risk: float,
-        b_risk: float,
+        a_llm: int, b_llm: int,
+        a_runtime: float, b_runtime: float,
+        a_risk: float, b_risk: float,
     ) -> None:
         """a + b == b + a for llm_calls and runtime_seconds (risk saturates at 1.0)."""
         a = ResourceCost(llm_calls=a_llm, runtime_seconds=a_runtime, risk_level=a_risk)
@@ -314,9 +307,7 @@ class TestPropertyResourceCostArithmetic:
         abc_right = a + (b + c)
 
         assert abc_left.llm_calls == abc_right.llm_calls
-        assert abc_left.runtime_seconds == pytest.approx(
-            abc_right.runtime_seconds, abs=1e-9
-        )
+        assert abc_left.runtime_seconds == pytest.approx(abc_right.runtime_seconds, abs=1e-9)
 
     @given(llm=st.integers(min_value=0, max_value=100))
     @settings(max_examples=40, deadline=1000)
@@ -397,9 +388,7 @@ class TestGateExtremeRiskPressure:
             total_proposals=20,
             accepted_proposals=18,
         )
-        result = gate.evaluate(
-            _good_proposal(agent_id="risk-sweep-agent", target=self._TARGET), profile
-        )
+        result = gate.evaluate(_good_proposal(agent_id="risk-sweep-agent", target=self._TARGET), profile)
         return result.decision
 
     def test_zero_risk_pressure_executes(self) -> None:
@@ -424,8 +413,7 @@ class TestGateExtremeRiskPressure:
             accepted_proposals=3,
         )
         result = gate.evaluate(
-            _good_proposal(agent_id="med-risk-medium-trust", target=self._TARGET),
-            profile,
+            _good_proposal(agent_id="med-risk-medium-trust", target=self._TARGET), profile
         )
         # score = 0.30 + 0.5*0.30 + 0.5*0.25 + 0.15 = 0.30+0.15+0.125+0.15 = 0.725 < 0.75
         assert result.decision in {GateDecision.HOLD, GateDecision.EXECUTE}
@@ -606,9 +594,7 @@ class TestKernelThousandProposals:
                 target=f"codomyrmex.stress.module_{i % 10}",
                 rationale=f"Stress test proposal #{i} with full rationale text.",
                 expected_outcome=f"All tests pass after stress patch #{i}.",
-                budget_estimate=ResourceCost(
-                    llm_calls=1, runtime_seconds=1.0, risk_level=0.05
-                ),
+                budget_estimate=ResourceCost(llm_calls=1, runtime_seconds=1.0, risk_level=0.05),
                 rollback_plan="git revert HEAD",
                 evidence={"stress_run": i},
             )
@@ -660,9 +646,7 @@ class TestActuationGateExtremeFindings:
         gate, profile = self._gate_and_profile()
         proposal = _good_proposal(agent_id="findings-agent")
         findings = [self._finding(FalsificationSeverity.LOW) for _ in range(50)]
-        result = gate.evaluate(
-            proposal, profile, findings=findings, budget_approved=True
-        )
+        result = gate.evaluate(proposal, profile, findings=findings, budget_approved=True)
         assert isinstance(result.decision, GateDecision)
         assert 0.0 <= result.gate_score <= 1.0
 
@@ -675,9 +659,7 @@ class TestActuationGateExtremeFindings:
             self._finding(FalsificationSeverity.HIGH),
             self._finding(FalsificationSeverity.CRITICAL),
         ]
-        result = gate.evaluate(
-            proposal, profile, findings=findings, budget_approved=True
-        )
+        result = gate.evaluate(proposal, profile, findings=findings, budget_approved=True)
         assert isinstance(result.decision, GateDecision)
         assert 0.0 <= result.gate_score <= 1.0
 
@@ -685,9 +667,7 @@ class TestActuationGateExtremeFindings:
         """A CRITICAL finding contributes weight 1.0 and must reduce gate_score vs clean."""
         gate_clean, profile = self._gate_and_profile()
         proposal = _good_proposal(agent_id="findings-agent")
-        clean_result = gate_clean.evaluate(
-            proposal, profile, findings=[], budget_approved=True
-        )
+        clean_result = gate_clean.evaluate(proposal, profile, findings=[], budget_approved=True)
 
         gate_critical, profile2 = self._gate_and_profile()
         proposal2 = _good_proposal(agent_id="findings-agent")
@@ -1049,9 +1029,7 @@ class TestAllSignalTypesCanBeSensed:
         )
         store.deposit_signal(sig)
         sensed = store.sense(location, sig_type)
-        assert sensed > 0.0, (
-            f"Expected positive sense for {sig_type.value}; got {sensed}"
-        )
+        assert sensed > 0.0, f"Expected positive sense for {sig_type.value}; got {sensed}"
 
     @pytest.mark.parametrize("sig_type", list(SignalType))
     def test_sense_absent_signal_returns_zero(self, sig_type: SignalType) -> None:
@@ -1218,9 +1196,7 @@ class TestRoleAdapterThreeProposalsAllFailed:
 
         profile = AgentTrustProfile(agent_id="fail-trust-agent", trust_score=0.1)
         for _ in range(3):
-            delta = (
-                _TRUST_DELTA_FAIL + _TRUST_DELTA_REPAIR
-            )  # tests_passed=False, repair_needed=True
+            delta = _TRUST_DELTA_FAIL + _TRUST_DELTA_REPAIR  # tests_passed=False, repair_needed=True
             profile.apply_delta(delta)
         # Trust can only go down from failures
         assert profile.trust_score <= 0.1
@@ -1237,9 +1213,7 @@ class TestMakeTraceKeyAllSignalTypes:
     def test_all_signal_type_keys_distinct_at_same_location(self) -> None:
         location = "codomyrmex.key.integration"
         keys = [make_trace_key(location, st) for st in SignalType]
-        assert len(keys) == len(set(keys)), (
-            "Some SignalType keys collided at the same location"
-        )
+        assert len(keys) == len(set(keys)), "Some SignalType keys collided at the same location"
 
     def test_same_signal_type_different_locations_distinct(self) -> None:
         locations = [f"codomyrmex.module_{i}" for i in range(10)]

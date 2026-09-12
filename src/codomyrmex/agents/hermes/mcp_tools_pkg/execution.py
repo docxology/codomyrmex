@@ -1,5 +1,4 @@
 """Hermes MCP tools — execution category."""
-
 from __future__ import annotations
 
 from typing import Any
@@ -55,7 +54,6 @@ def hermes_execute(
     except Exception as exc:
         return {"status": "error", "content": "", "error": str(exc), "metadata": {}}
 
-
 @mcp_tool(
     category="hermes",
     tags=["hermes", "skills", "cli_preload", "interop"],
@@ -108,7 +106,6 @@ def hermes_stream(
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc), "lines": [], "line_count": 0}
-
 
 @mcp_tool(
     category="hermes",
@@ -166,7 +163,6 @@ def hermes_chat_session(
             "metadata": {},
         }
 
-
 @mcp_tool(
     category="hermes",
     tags=["hermes", "skills", "cli_preload", "interop"],
@@ -214,7 +210,6 @@ def hermes_batch_execute(
         }
     except Exception as exc:
         return {"status": "error", "message": str(exc), "results": [], "count": 0}
-
 
 @mcp_tool(
     category="hermes",
@@ -284,7 +279,6 @@ def hermes_sampling(
         return {"status": "error", "content": "", "error": response.error}
     except Exception as exc:
         return {"status": "error", "content": "", "error": str(exc)}
-
 
 @mcp_tool(
     category="hermes",
@@ -356,7 +350,6 @@ def hermes_spawn_agent(
         )
     except Exception as exc:
         return {"status": "error", "role": role, "message": str(exc)}
-
 
 @mcp_tool(
     category="hermes",

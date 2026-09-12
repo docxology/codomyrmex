@@ -17,7 +17,6 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-
 class ProviderRouter:
     """Provider-agnostic LLM routing abstraction.
 

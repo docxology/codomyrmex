@@ -34,7 +34,9 @@ def check_false_metric(plan: dict[str, Any]) -> FalsificationFinding | None:
         r"\bseamlessly\b",
         r"\bstable\b",
     ]
-    hits = [p for p in unfalsifiable_patterns if re.search(p, outcome, re.IGNORECASE)]
+    hits = [
+        p for p in unfalsifiable_patterns if re.search(p, outcome, re.IGNORECASE)
+    ]
     if len(hits) >= 2:
         return FalsificationFinding(
             claim="The expected outcome is concrete and falsifiable.",

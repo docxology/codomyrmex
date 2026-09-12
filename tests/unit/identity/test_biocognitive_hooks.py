@@ -32,29 +32,21 @@ except ImportError:
 # ── Helpers ────────────────────────────────────────────────────────────
 
 
-def _sine_wave(
-    freq: float, duration_s: float = 1.0, rate: float = 256.0
-) -> list[float]:
+def _sine_wave(freq: float, duration_s: float = 1.0, rate: float = 256.0) -> list[float]:
     """Generate a pure sine wave at *freq* Hz."""
     n = int(duration_s * rate)
     return [math.sin(2 * math.pi * freq * t / rate) for t in range(n)]
 
 
-def _composite_eeg(
-    freqs: list[float], duration_s: float = 2.0, rate: float = 256.0
-) -> list[float]:
+def _composite_eeg(freqs: list[float], duration_s: float = 2.0, rate: float = 256.0) -> list[float]:
     """Generate a sum of sine waves at the given frequencies."""
     n = int(duration_s * rate)
     return [sum(math.sin(2 * math.pi * f * t / rate) for f in freqs) for t in range(n)]
 
 
-def _normal_heartbeat(
-    mean_ms: float = 800.0, count: int = 30, jitter: float = 20.0
-) -> list[float]:
+def _normal_heartbeat(mean_ms: float = 800.0, count: int = 30, jitter: float = 20.0) -> list[float]:
     """Generate realistic RR intervals with small variation."""
-    return [
-        float(mean_ms + ((i * 37) % 100 - 50) * (jitter / 50)) for i in range(count)
-    ]
+    return [float(mean_ms + ((i * 37) % 100 - 50) * (jitter / 50)) for i in range(count)]
 
 
 # ── EEG band definitions ───────────────────────────────────────────────
@@ -70,7 +62,7 @@ class TestEEGBands:
     def test_band_ranges_are_contiguous(self):
         bands = list(EEG_BANDS.values())
         for i in range(len(bands) - 1):
-            assert bands[i][1] == bands[i + 1][0], f"Gap between band {i} and {i + 1}"
+            assert bands[i][1] == bands[i + 1][0], f"Gap between band {i} and {i+1}"
 
     def test_delta_is_lowest(self):
         assert EEG_BANDS["delta"][0] == 0.5
@@ -259,7 +251,9 @@ class TestVerifyHeartbeatIntervals:
         assert result["verified"] is False
 
     def test_enroll_too_few_returns_error(self):
-        result = verify_heartbeat_intervals([800, 810], baseline_intervals=[800, 810])
+        result = verify_heartbeat_intervals(
+            [800, 810], baseline_intervals=[800, 810]
+        )
         assert result["status"] == "error"
 
 
