@@ -55,3 +55,16 @@ This file tracks open research items, formal gaps, and architectural improvement
 | **M-ERG-4** | Minor | Dated review log convention created (`REVIEW_LOG_2026-08-31.md`); append future deep-pass logs rather than starting new formats | `REVIEW_LOG_2026-08-31.md` |
 
 M-ERG-1 through M-ERG-4 were completed in the 2026-08-31 pass (see REVIEW_LOG_2026-08-31.md); retained as record.
+
+## Agent Ergonomics (2026-09-11 pass)
+
+| ID | Severity | Title | Files |
+|:---|:---------|:------|:------|
+| **M-ERG-5** | High | 300 open PRs triaged in one pass: 98 merged/applied (14 GitHub squash + 84 re-based cherry-picks), 202 closed with rationale (duplicate/superseded/broken); see CHANGELOG 2026-09-11 entry for the merged set | `CHANGELOG.md` |
+| **M-ERG-5** | Medium | Duplicate-PR sentinel added (`scripts/maintenance/close_duplicate_prs.py` + 6-hourly workflow) to auto-close stale duplicate families with a 7-day freshness guard | `scripts/maintenance/close_duplicate_prs.py`, `.github/workflows/duplicate-pr-sentinel.yml` |
+| **M-ERG-6** | Medium | `.jules/palette.md` authored (was 0 bytes) with dedupe-before-proposing rules; `.jules/bolt.md`/`.jules/sentinel.md` gained session-hygiene sections and retired-topic lists so agent floods cannot re-propose merged work | `.jules/` |
+| **M-ERG-7** | Minor | New modules `preprocessing` and `language_detection` reached full structure-audit parity (docs/modules counterparts, py.typed, PAI/API/MCP specs); module snapshots updated 130 → 132 | `docs/modules/`, `INDEX.md`, `AGENTS.md`, `README.md`, `docs/reference/inventory.md` |
+
+M-ERG-5 through M-ERG-7 plus the triage receipt (M-ERG-4 numbering continues
+from the 2026-08-31 pass) were completed in the 2026-09-11 pass; retained as
+record.

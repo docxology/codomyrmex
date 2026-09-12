@@ -8,8 +8,102 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
 
+### 2026-09-11 open-PR triage (300 → 38 open)
+
+The 300 open PRs (agent-generated Palette/Bolt/Sentinel families plus test,
+perf, security, and feature proposals) were triaged in one pass: 98 were
+squash-merged or applied to `main` (14 via GitHub squash, 84 via re-based
+cherry-picks preserving substantive hunks only), 202 were closed as
+duplicates/superseded/broken with per-PR rationale, and stale-path test
+content was relocated to the `tests/` layout. Notable merged content:
+
+**Security**
+
+- `orchestrator/mcp_tools.py`: eval of agent-supplied `fn_expr` replaced with
+  an AST-whitelisted evaluator (no attribute/getattr access, whitelisted
+  funcs/binops/comparisons) — #221 (absorbing narrower #214/#261).
+- `formal_verification/backends/z3_backend.py`: bare `exec()` replaced by an
+  AST-walking `_safe_exec` with a regression test — #307.
+- `testing/workflow/executors.py`: AST pre-validation blocking dunder
+  attribute access and `eval`/`exec` calls before the restricted eval — #326.
+- `database_management/backup/backup_manager.py`: mysqldump password moved
+  from `-p<password>` argv to the `MYSQL_PWD` environment variable — #150.
+- `ci_cd_automation/deployment_orchestrator.py`: simple deployment hooks run
+  via `shlex.split` + `shell=False`; compound hooks keep an explicit nosec
+  shell fallback — #382.
+- `database_management` `db_manager`: PRAGMA introspection parameterized
+  (`pragma_table_info(?)`) — #247.
+- `agents/pai/pm/routes/dispatch.ts`: js-yaml v4 `safeLoad` with explicit
+  JSON schema — #323.
+
+**Performance**
+
+- Cache: `InMemoryCache` O(1) OrderedDict eviction with monotonic clocks
+  (#488, #470, #483, #449), `InferenceCache` LRU (#485),
+  `model_context_protocol/quality/validation.py` `_TYPE_MAP` hoist (#410),
+  and the `InMemoryBackend` stats wiring fix — `record_write`/
+  `record_delete` were never called (#283).
+- Regex precompilation: templating engines (#397, #402), `config_loader`
+  (#401, #381), improvement pipeline (#366), dependency scan (#241), SBOM
+  (#237), tree-sitter parsers (#386), config monitor (#391), tool runners
+  (#325), REST API router (#156).
+- Dict/list hoists and set conversions: openapi/metrics (#425), health
+  checker (#435), metric evaluator (#441), audio/mime/OS maps (#444),
+  events/orchestration priority maps (#405, #432), TodoCommentRule fast path
+  (#413), Hermes session migration batching (#370), workflow runner (#230),
+  documentation readme list (#358), wallet display (#338), capability
+  scanner (#359), graph direction checks (#351), multimodal extensions
+  (#356), report string building (#250, #229), hermes migration batching
+  (#370).
+- Algorithms: MinHash integer extraction (#219), ConsistentHash O(N)
+  `remove_node` (#146), EventBus pre-compiled patterns (#151), O(1)
+  preferential-attachment graph growth (#160), spatial-hash flocking (#165).
+
+**Modules and tests**
+
+- New `preprocessing` module (MCP tool + zero-mock tests) — #105.
+- New `language_detection` module (langdetect-backed, MCP tools + tests) —
+  #103.
+- Test coverage applied for templating/template-manager, module catalog,
+  cache CLI + stats bug (#283), scrape MCP surface, src package init,
+  profilers/environment/GPU-parsing helpers, health checker git status,
+  dependency analyzer, events module functions, conftest pytest_configure,
+  task-manager status/dependencies, RotatingLeadership add/remove edges,
+  wallet transaction gas + builders, CLI MCP tools (#107), performance
+  module (#126) — 30+ test PRs.
+- Accessibility: PAI PM SPA icon-button labels (#217), `role="alert"` Ollama
+  warning banners (#149).
+
+**Guardrails against the flood (new)**
+
+- `scripts/maintenance/close_duplicate_prs.py`: groups open PRs into
+  duplicate families (title signature + file overlap), keeps the member with
+  the most substantive file changes, closes stale members with rationale;
+  dry-run default, `--older-than` scoping.
+- `.github/workflows/duplicate-pr-sentinel.yml`: scheduled sweep every 6
+  hours with a 7-day freshness guard.
+- `.jules/palette.md`: real Palette operating spec (was empty) with
+  dedupe-before-proposing rules; `.jules/bolt.md` and `.jules/sentinel.md`
+  gained mandatory session-hygiene sections and retired-topic lists.
+
+**Dependency floors (lockstep-regenerated)**
+
+`numpy>=2.4.4`, `opencv-python>=4.13.0.92`, `bandit>=1.9.4`,
+`dynaconf>=3.2.13`, `vulture>=2.16` (#168–#172), docusaurus `^3.10.1`
+(#173), react/react-dom `^19.2.5` (#174) with `uv.lock`,
+`documentation/package-lock.json`, `documentation/yarn.lock`, and a new
+`documentation/bun.lock`.
+
+**Docs parity**
+
+- `preprocessing` and `language_detection`: `docs/modules/<name>/`
+  counterparts, `py.typed`, PAI/API/MCP-tool specs; module-count snapshots
+  130 → 132 (INDEX/AGENTS/README/inventory/structure-audit test); inventory
+  metrics refreshed (153 `mcp_tools.py`, 630 `@mcp_tool`, 38 workflows,
+  1,216 docs).
+
+### Fixed
 - **`agents` package lazy loading (TODO M3)**: `src/codomyrmex/agents/__init__.py`
   converted to PEP 562 `__getattr__` lazy imports — importing `codomyrmex.agents`
   no longer loads any framework subpackage. Cold import of

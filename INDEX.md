@@ -12,7 +12,7 @@
 | Run the CLI                      | `codomyrmex --help` → [cli/](src/codomyrmex/cli/)                                                                                                                          |
 | Understand PAI integration       | [PAI.md](PAI.md) — algorithm phase ↔ module mapping                                                                                                                        |
 | Browse all 132 top-level modules | [src/codomyrmex/INDEX.md](src/codomyrmex/INDEX.md) — full module catalog by layer                                                                                          |
-| MCP tool reference               | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) — **627** production `@mcp_tool` lines; **612** merged runtime tools ([inventory](docs/reference/inventory.md)) |
+| MCP tool reference               | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) — **630** production `@mcp_tool` lines; **612** merged runtime tools ([inventory](docs/reference/inventory.md)) |
 | Check system health              | `codomyrmex status` or `codomyrmex check`                                                                                                                                  |
 | Run tests                        | `uv run pytest`                                                                                                                                                            |
 | Install dependencies             | `uv sync`                                                                                                                                                                  |
