@@ -258,7 +258,7 @@ for email in emails:
 
                 # Validate workflow results
                 assert execution_result["status"] in ["success", "execution_error"]
-                # pass # assert "invalid-email: False" in execution_result["stdout"]
+                # assert "invalid-email: False" in execution_result["stdout"]
 
                 # Store results for cross-workflow validation
                 self.workflow_results["development"] = {
