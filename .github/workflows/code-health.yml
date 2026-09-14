@@ -26,12 +26,12 @@ jobs:
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v7
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -87,7 +87,7 @@ jobs:
           fi
 
       - name: Download previous health snapshot
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         continue-on-error: true
         with:
           name: health-snapshot
@@ -159,7 +159,7 @@ jobs:
           echo "_This dashboard runs weekly (Sundays) and on every push to main._" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload health results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: health-snapshot
