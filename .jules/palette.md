@@ -43,4 +43,8 @@ families (see `CHANGELOG.md` Unreleased). Palette must not re-propose:
 icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
-proposed attribute on `main`.
+proposed attribute on `main`
+
+## 2024-05-24 - Missing ARIA Labels on Modal Close Buttons
+**Learning:** Icon-only close buttons in modals frequently lack accessible names in this app's components, hindering screen reader users.
+**Action:** Ensure all icon-only buttons receive a descriptive `aria-label` (e.g., `aria-label="Close"`) when introduced or modified.
