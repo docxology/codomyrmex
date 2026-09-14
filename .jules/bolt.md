@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2025-05-18 - Fast Cache Eviction and Timing
+**Learning:** Python dictionary sorting by value (`sorted(dict.items(), key=lambda x: x[1])`) is O(N log N). For hot-path cache evictions, replacing a dictionary with `collections.OrderedDict` provides O(1) LRU eviction via `.move_to_end(key)` and `.popitem(last=False)`. Furthermore, replacing `time.time()` with `time.monotonic()` yields significant speed improvements for hot cache paths when tracking simple durations or relative timestamps.
+**Action:** Default to `collections.OrderedDict` instead of `dict` + timestamp sorting when managing size-capped sets ordered by recency. Always use `time.monotonic()` instead of `time.time()` for cache TTLs, hit rate windows, or eviction tracking to ensure clock-drift resilience and better performance.
