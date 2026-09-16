@@ -44,6 +44,3 @@ icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
-## 2024-03-20 - Add ARIA labels and attributes to buttons
-**Learning:** Found several buttons in Mission Control (such as 'Detach session', 'Remove widget', 'Close project manager') and toggle widgets that lack ARIA labels and states, making them less accessible for screen reader users.
-**Action:** Always verify icon-only buttons have an `aria-label` attribute and collapsible/toggle elements use `aria-expanded` attributes.
