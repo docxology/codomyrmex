@@ -61,7 +61,7 @@ class CacheManager:
         if cache_key not in self._caches:
             self._caches[cache_key] = self._create_backend(backend)
             self._backends[cache_key] = backend
-            self._created_at[cache_key] = time.time()
+            self._created_at[cache_key] = time.monotonic()
             logger.info("Created cache '%s' with backend '%s'", name, backend)
 
         return self._caches[cache_key]
