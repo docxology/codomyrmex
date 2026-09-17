@@ -28,6 +28,7 @@ _DOCKER_SETUP_ERROR_MARKERS = (
     "github.com/docker/cli",
     "github.com/docker/docker",
     "github.com/moby/moby/client",
+    "failed to mount",
 )
 _DOCKER_COMPATIBILITY_SHIM_MARKERS = ("emulate docker cli using podman",)
 
@@ -104,7 +105,7 @@ def run_code_in_docker(
     Returns:
         Dictionary with execution results
     """
-    start_time = time.time()
+    start_time = time.monotonic()
     language_config = SUPPORTED_LANGUAGES[language]
 
     # Prepare Docker command
@@ -149,7 +150,7 @@ def run_code_in_docker(
             "stdout": "",
             "stderr": "Docker is not available",
             "exit_code": -1,
-            "execution_time": round(time.time() - start_time, 3),
+            "execution_time": round(time.monotonic() - start_time, 3),
             "status": "setup_error",
             "error_message": "Docker is required but not available or not running",
         }
@@ -248,7 +249,7 @@ def run_code_in_docker(
         status = "setup_error"
         error_message = f"Container setup failed: {e!s}"
 
-    execution_time = time.time() - start_time
+    execution_time = time.monotonic() - start_time
 
     # Cap very long output to prevent memory issues
     MAX_OUTPUT_CHARS = 100000  # 100KB

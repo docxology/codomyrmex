@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2026-09-17 - Use time.monotonic() for cache durations
+**Learning:** Python's time.time() and datetime.now() are subject to system clock changes, making them unsafe and slower for duration tracking and cache TTLs. Using time.monotonic() is much faster and ensures cache logic isn't broken by NTP rollbacks.
+**Action:** Always prefer time.monotonic() when measuring duration, tracking age, or executing cache evictions across the codebase.

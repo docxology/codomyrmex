@@ -29,7 +29,7 @@ class AccessTracker(Generic[K]):
         """Record an access to a key."""
         with self._lock:
             self._access_counts[key] = self._access_counts.get(key, 0) + 1
-            self._last_access[key] = time.time()
+            self._last_access[key] = time.monotonic()
             if len(self._access_counts) > self.max_keys:
                 self._trim()
 
@@ -52,7 +52,7 @@ class AccessTracker(Generic[K]):
 
     def get_recent_keys(self, seconds: float = 300.0, limit: int = 100) -> list[K]:
         """Return most-recently-accessed keys within the time window."""
-        cutoff = time.time() - seconds
+        cutoff = time.monotonic() - seconds
         with self._lock:
             recent = [(k, t) for k, t in self._last_access.items() if t >= cutoff]
             recent.sort(key=lambda x: x[1], reverse=True)

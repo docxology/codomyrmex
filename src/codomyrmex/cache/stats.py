@@ -77,7 +77,7 @@ class CacheStats:
         """Record a cache hit."""
         self.hits += 1
         self.total_requests += 1
-        self._timestamps.append((time.time(), True))
+        self._timestamps.append((time.monotonic(), True))
         if key:
             self._key_hits[key] += 1
 
@@ -85,7 +85,7 @@ class CacheStats:
         """Record a cache miss."""
         self.misses += 1
         self.total_requests += 1
-        self._timestamps.append((time.time(), False))
+        self._timestamps.append((time.monotonic(), False))
 
     def record_write(self) -> None:
         self.writes += 1
@@ -100,7 +100,7 @@ class CacheStats:
 
     def hit_rate_window(self, seconds: float = 60.0) -> float:
         """Hit rate within the last N seconds."""
-        cutoff = time.time() - seconds
+        cutoff = time.monotonic() - seconds
         recent = [(ts, hit) for ts, hit in self._timestamps if ts >= cutoff]
         if not recent:
             return 0.0
