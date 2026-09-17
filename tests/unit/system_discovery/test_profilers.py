@@ -196,7 +196,7 @@ def test_is_virtual_env_false(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 @pytest.mark.parametrize(
-    "env_vars, path_exists_return, release_return, expected_type",
+    ("env_vars", "path_exists_return", "release_return", "expected_type"),
     [
         ({"GITHUB_ACTIONS": "true"}, False, "generic", "ci_github"),
         ({"TRAVIS": "true"}, False, "generic", "ci_travis"),

@@ -277,13 +277,13 @@ def broken_function(
         """Test that the workflow can be monitored for performance."""
         import time
 
-        start_time = time.time()
+        start_time = time.monotonic()
 
         # Simple code execution
         simple_code = 'print("Performance test")'
         result = execute_code("python", simple_code, timeout=5)
 
-        end_time = time.time()
+        end_time = time.monotonic()
         total_time = end_time - start_time
 
         # Should complete quickly
