@@ -42,7 +42,3 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
-
-## 2026-10-06 - O(log N) Lookup for Time-Windowed Cache Stats using Bisect
-**Learning:** The `CacheStats.hit_rate_window` method was iterating over a continuously growing list of ALL timestamps to filter out old ones, causing an O(N) performance bottleneck. Attempting to fix this by destructively popping from a deque broke the method because the `seconds` parameter can vary (destructively removing data for a short window breaks a subsequent call for a longer window).
-**Action:** Used `bisect.bisect_left` for fast O(log N) lookup without destructive mutation. This eliminates the O(N) list comprehension overhead while keeping historical data safe for varying window queries.

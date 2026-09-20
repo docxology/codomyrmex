@@ -100,21 +100,12 @@ class CacheStats:
 
     def hit_rate_window(self, seconds: float = 60.0) -> float:
         """Hit rate within the last N seconds."""
-        import bisect
-
         cutoff = time.time() - seconds
-
-        # ⚡ Bolt: Fast O(log N) lookup using bisect instead of O(N) list comprehension.
-        # We do not destructively mutate self._timestamps because `seconds` can vary.
-        # bisecting a list of tuples compares element by element, so (cutoff, False) works.
-        idx = bisect.bisect_left(self._timestamps, (cutoff, False))
-
-        recent_count = len(self._timestamps) - idx
-        if recent_count == 0:
+        recent = [(ts, hit) for ts, hit in self._timestamps if ts >= cutoff]
+        if not recent:
             return 0.0
-
-        hits = sum(1 for i in range(idx, len(self._timestamps)) if self._timestamps[i][1])
-        return hits / recent_count
+        hits = sum(1 for _, hit in recent if hit)
+        return hits / len(recent)
 
     # ── Key frequency ───────────────────────────────────────────────
 
