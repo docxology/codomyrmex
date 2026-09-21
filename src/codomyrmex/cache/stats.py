@@ -9,6 +9,7 @@ Provides:
 
 from __future__ import annotations
 
+import bisect
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -101,11 +102,18 @@ class CacheStats:
     def hit_rate_window(self, seconds: float = 60.0) -> float:
         """Hit rate within the last N seconds."""
         cutoff = time.time() - seconds
-        recent = [(ts, hit) for ts, hit in self._timestamps if ts >= cutoff]
-        if not recent:
+
+        # Take a local snapshot of the length to prevent race conditions during calculation
+        # Use a dummy boolean False for fast C-optimized tuple comparison in bisect
+        current_len = len(self._timestamps)
+        idx = bisect.bisect_left(self._timestamps, (cutoff, False), hi=current_len)
+
+        recent_count = current_len - idx
+        if recent_count <= 0:
             return 0.0
-        hits = sum(1 for _, hit in recent if hit)
-        return hits / len(recent)
+
+        hits = sum(1 for i in range(idx, current_len) if self._timestamps[i][1])
+        return hits / recent_count
 
     # ── Key frequency ───────────────────────────────────────────────
 
