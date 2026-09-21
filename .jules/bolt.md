@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2026-09-21 - Optimize time-windowed hit rate calculation
+**Learning:** When calculating metrics over time windows on append-only chronological lists (like cache hit events), using list comprehensions requires an O(N) scan. This causes performance to degrade linearly as the list grows indefinitely in long-running applications.
+**Action:** Always use `bisect.bisect_left` for O(log N) lookups of the cutoff timestamp without mutating the underlying data to maintain high performance regardless of history size.
