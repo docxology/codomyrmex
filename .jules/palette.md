@@ -44,9 +44,3 @@ icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
-
-## 2024-05-24 - Accessibility improvements for inline UI close buttons
-
-**Learning:** Relying on plain text characters like 'x' for close buttons inside dense panels (like memory browser) makes them unapproachable for screen readers and hard to hit with pointers. Consistent SVG icons with explicit `aria-label` improve both a11y and visual polish.
-
-**Action:** When adding modal or panel dismiss buttons, avoid plain 'x' text strings. Use standard SVG icons paired with `aria-label` and hover state styles.
