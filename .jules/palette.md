@@ -44,3 +44,6 @@ icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
+## 2026-09-22 - Accessibility of Icon-Only Utility Buttons
+**Learning:** Icon-only utility buttons or buttons using abbreviations (like 'RW' / 'RO') are easily missed by screen readers if they lack explicit `aria-label` properties, causing poor accessibility.
+**Action:** Always ensure that any button without explicit descriptive text content includes an `aria-label` property.
