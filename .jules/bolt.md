@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2024-05-15 - Fast system summary by avoiding full metadata extraction
+**Learning:** Counting items by invoking functions that build rich metadata (like `get_modules()`) creates huge overhead (parsing markdown, analyzing modules) just to get the list length.
+**Action:** When only counts are needed for high-level summaries, iterate directly over the directory structure instead of reusing expensive data hydration methods.

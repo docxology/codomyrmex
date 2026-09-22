@@ -52,8 +52,8 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
             "status": "Operational",
             "version": "0.1.0",
             "environment": os.getenv("CODOMYRMEX_ENV", "Development"),
-            "module_count": len(self.get_modules()),
-            "agent_count": len(self.get_actual_agents()),
+            "module_count": self._get_module_count(),
+            "agent_count": self._get_agent_count(),
             "last_build": self._get_last_build_time(),
         }
 
@@ -77,6 +77,30 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
             return "SyntaxError"
         except Exception as _exc:
             return "Unknown"
+
+    def _get_module_count(self) -> int:
+        """Returns count of active modules."""
+        src_path = self.root_dir / "src/codomyrmex"
+        if not src_path.exists():
+            return 0
+        return sum(
+            1
+            for item in src_path.iterdir()
+            if item.is_dir() and (item / "__init__.py").exists()
+        )
+
+    def _get_agent_count(self) -> int:
+        """Returns count of actual agents."""
+        agents_path = self.root_dir / "src/codomyrmex/agents"
+        if not agents_path.exists():
+            return 0
+        return sum(
+            1
+            for item in agents_path.iterdir()
+            if item.is_dir()
+            and item.name not in ["tests", "__pycache__"]
+            and (item / "__init__.py").exists()
+        )
 
     def get_modules(self) -> list[dict[str, Any]]:
         """
