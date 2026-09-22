@@ -1,6 +1,7 @@
 import os
-import pytest
 from pathlib import Path
+
+import pytest
 
 from codomyrmex.system_discovery.core.dependency_analyzer import DependencyAnalyzer
 
