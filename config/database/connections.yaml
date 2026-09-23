@@ -105,8 +105,8 @@ environments:
 # Connection Health Checks
 health_checks:
   enabled: true
-  interval: 60 # seconds
-  timeout: 5 # seconds
+  interval: 60  # seconds
+  timeout: 5  # seconds
   retries: 3
 
   checks:

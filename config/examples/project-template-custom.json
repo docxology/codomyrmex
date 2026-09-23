@@ -3,11 +3,24 @@
   "type": "custom",
   "description": "Custom project template for {{project_name}}",
   "version": "1.0",
-  "directory_structure": ["src/", "tests/", "docs/", "config/", ".codomyrmex/"],
+  "directory_structure": [
+    "src/",
+    "tests/",
+    "docs/",
+    "config/",
+    ".codomyrmex/"
+  ],
   "template_files": {},
-  "workflows": ["custom-workflow"],
-  "required_modules": ["static_analysis"],
-  "optional_modules": ["data_visualization", "documentation"],
+  "workflows": [
+    "custom-workflow"
+  ],
+  "required_modules": [
+    "static_analysis"
+  ],
+  "optional_modules": [
+    "data_visualization",
+    "documentation"
+  ],
   "default_config": {
     "project": {
       "name": "{{project_name}}",
@@ -21,7 +34,12 @@
     }
   },
   "documentation_config": {
-    "nested_docs": ["src/", "tests/", "docs/", "config/"],
+    "nested_docs": [
+      "src/",
+      "tests/",
+      "docs/",
+      "config/"
+    ],
     "doc_links": {
       "enabled": true,
       "parent_link": true,

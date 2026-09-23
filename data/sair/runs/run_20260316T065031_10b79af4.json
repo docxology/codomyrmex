@@ -23,7 +23,9 @@
     "unknown_verdicts": 0,
     "avg_latency_sec": 117.96,
     "total_tokens": 56098,
-    "missed_problems": ["hard_0001"]
+    "missed_problems": [
+      "hard_0001"
+    ]
   },
   "results": [
     {

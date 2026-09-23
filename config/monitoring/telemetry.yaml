@@ -15,7 +15,7 @@ telemetry:
 # Distributed Tracing
 tracing:
   enabled: false
-  provider: "opentelemetry" # opentelemetry, jaeger, zipkin
+  provider: "opentelemetry"  # opentelemetry, jaeger, zipkin
 
   # OpenTelemetry configuration
   opentelemetry:
@@ -25,8 +25,8 @@ tracing:
 
   # Sampling
   sampling:
-    type: "probabilistic" # always, never, probabilistic
-    rate: 0.1 # 10% of traces
+    type: "probabilistic"  # always, never, probabilistic
+    rate: 0.1  # 10% of traces
 
   # Trace context propagation
   propagation:
@@ -49,8 +49,8 @@ performance:
 
   # Performance thresholds
   thresholds:
-    slow_request: 1.0 # seconds
-    slow_query: 0.5 # seconds
+    slow_request: 1.0  # seconds
+    slow_query: 0.5  # seconds
 
 # Observability
 observability:
@@ -65,7 +65,7 @@ observability:
   # Service discovery
   service_discovery:
     enabled: false
-    provider: "consul" # consul, etcd, kubernetes
+    provider: "consul"  # consul, etcd, kubernetes
 
 # Export Configuration
 export:

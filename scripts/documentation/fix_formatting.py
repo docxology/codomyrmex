@@ -6,7 +6,6 @@
 3. Fill empty sections with placeholder content
 4. Add Installation sections to 3 remaining READMEs
 """
-
 import ast
 import os
 import re
@@ -49,8 +48,9 @@ def fix_duplicate_sections(filepath):
                 # Skip this duplicate section until next heading
                 skip_until_next_heading = True
                 continue
-            seen_headings.add(heading)
-            skip_until_next_heading = False
+            else:
+                seen_headings.add(heading)
+                skip_until_next_heading = False
 
         if skip_until_next_heading:
             # Check if this line starts a new heading (not duplicate)
@@ -131,14 +131,7 @@ def add_installation(mod_name):
     )
 
     # Insert before Key Exports, Quick Start, Testing, or Navigation
-    for anchor in [
-        "## Key Export",
-        "## Quick Start",
-        "## Feature",
-        "## Testing",
-        "## Documentation",
-        "## Navigation",
-    ]:
+    for anchor in ["## Key Export", "## Quick Start", "## Feature", "## Testing", "## Documentation", "## Navigation"]:
         if anchor in content:
             content = content.replace(anchor, install + "\n" + anchor)
             break
@@ -152,21 +145,14 @@ def add_installation(mod_name):
 
 def main():
     # Auto-injected: Load configuration
-    from pathlib import Path
-
     import yaml
-
-    config_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "config"
-        / "documentation"
-        / "config.yaml"
-    )
+    from pathlib import Path
+    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "documentation" / "config.yaml"
     config_data = {}
     if config_path.exists():
-        with open(config_path) as f:
+        with open(config_path, "r") as f:
             config_data = yaml.safe_load(f) or {}
-            print("Loaded config from config/documentation/config.yaml")
+            print(f"Loaded config from config/documentation/config.yaml")
 
     fixes = {"unclosed": 0, "duplicate": 0, "empty": 0, "install": 0}
 
@@ -208,8 +194,7 @@ def main():
 
     # Add missing Installation sections
     modules = sorted(
-        d
-        for d in os.listdir(SRC)
+        d for d in os.listdir(SRC)
         if os.path.isdir(os.path.join(SRC, d)) and d != "__pycache__"
     )
     for mod in modules:

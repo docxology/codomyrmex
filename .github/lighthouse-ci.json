@@ -43,7 +43,8 @@
     "collect": {
       "settings": {
         "chromeFlags": "--no-sandbox --headless"
-      }
+      },
+      "staticDistDir": "site"
     }
   }
 }

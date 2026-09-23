@@ -11,13 +11,13 @@ backups:
   timestamp_format: "%Y%m%d_%H%M%S"
 
   # Backup format
-  format: "sql" # sql, dump, custom
+  format: "sql"  # sql, dump, custom
 
   # Compression
   compression:
     enabled: true
-    algorithm: "gzip" # gzip, bzip2, xz
-    level: 6 # 1-9 for gzip
+    algorithm: "gzip"  # gzip, bzip2, xz
+    level: 6  # 1-9 for gzip
 
   # Encryption
   encryption:
@@ -135,7 +135,7 @@ monitoring:
     channels:
       - email
       - slack
-    threshold: 1 # Alert after 1 failure
+    threshold: 1  # Alert after 1 failure
 
 # Backup Recovery
 recovery:

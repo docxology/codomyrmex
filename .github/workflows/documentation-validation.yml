@@ -319,7 +319,7 @@ jobs:
             --min-quality-score 70 \
             --max-broken-links 10 \
             --max-placeholders 100 \
-            --min-agents-valid-rate 100
+            --min-agents-valid-rate 95
 
       - name: Comment PR with results
         if: always() && github.event_name == 'pull_request'

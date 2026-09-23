@@ -12,12 +12,12 @@ roles:
         - "workflows"
         - "code_analysis"
         - "documentation"
-        - "api_keys" # Own keys only
+        - "api_keys"  # Own keys only
       write:
-        - "projects" # Own projects only
-        - "workflows" # Own workflows only
+        - "projects"  # Own projects only
+        - "workflows"  # Own workflows only
       execute:
-        - "workflows" # Own workflows only
+        - "workflows"  # Own workflows only
     restrictions:
       - "Cannot access production resources"
       - "Cannot modify system configuration"
@@ -27,13 +27,13 @@ roles:
     description: "Administrator with full system access"
     permissions:
       read:
-        - "*" # All resources
+        - "*"  # All resources
       write:
-        - "*" # All resources
+        - "*"  # All resources
       execute:
-        - "*" # All operations
+        - "*"  # All operations
       delete:
-        - "*" # All resources
+        - "*"  # All resources
     restrictions: []
 
   # Service role
@@ -45,9 +45,9 @@ roles:
         - "projects"
         - "system_status"
       write:
-        - "workflows" # Limited to service workflows
+        - "workflows"  # Limited to service workflows
       execute:
-        - "workflows" # Service workflows only
+        - "workflows"  # Service workflows only
     restrictions:
       - "Cannot access user data"
       - "Cannot modify user permissions"
@@ -79,9 +79,9 @@ permissions:
         - "delete"
         - "list"
       scopes:
-        - "own" # Own projects only
-        - "team" # Team projects
-        - "all" # All projects
+        - "own"  # Own projects only
+        - "team"  # Team projects
+        - "all"  # All projects
 
     workflows:
       actions:
@@ -104,8 +104,8 @@ permissions:
         - "delete"
         - "list"
       scopes:
-        - "own" # Only own keys
-        - "all" # All keys (admin only)
+        - "own"  # Only own keys
+        - "all"  # All keys (admin only)
 
     system:
       actions:
@@ -113,7 +113,7 @@ permissions:
         - "update"
         - "configure"
       scopes:
-        - "all" # Admin only
+        - "all"  # Admin only
 
 # Access Control Policies
 policies:
@@ -162,7 +162,7 @@ policies:
           max_workflows: 50
           max_api_keys: 5
         admin:
-          max_projects: -1 # Unlimited
+          max_projects: -1  # Unlimited
           max_workflows: -1
           max_api_keys: -1
 

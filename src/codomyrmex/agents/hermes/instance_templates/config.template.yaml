@@ -1,6 +1,6 @@
 model: nvidia/nemotron-3-nano-30b-a3b:free
 toolsets:
-  - all
+- all
 agent:
   max_turns: 300
   verbose: false
@@ -46,44 +46,44 @@ smart_model_routing:
 auxiliary:
   vision:
     provider: auto
-    model: ""
-    base_url: ""
-    api_key: ""
+    model: ''
+    base_url: ''
+    api_key: ''
   web_extract:
     provider: auto
-    model: ""
-    base_url: ""
-    api_key: ""
+    model: ''
+    base_url: ''
+    api_key: ''
   compression:
     provider: auto
-    model: ""
-    base_url: ""
-    api_key: ""
+    model: ''
+    base_url: ''
+    api_key: ''
   session_search:
     provider: auto
-    model: ""
-    base_url: ""
-    api_key: ""
+    model: ''
+    base_url: ''
+    api_key: ''
   skills_hub:
     provider: auto
-    model: ""
-    base_url: ""
-    api_key: ""
+    model: ''
+    base_url: ''
+    api_key: ''
   approval:
     provider: auto
-    model: ""
-    base_url: ""
-    api_key: ""
+    model: ''
+    base_url: ''
+    api_key: ''
   mcp:
     provider: auto
-    model: ""
-    base_url: ""
-    api_key: ""
+    model: ''
+    base_url: ''
+    api_key: ''
   flush_memories:
     provider: auto
-    model: ""
-    base_url: ""
-    api_key: ""
+    model: ''
+    base_url: ''
+    api_key: ''
 display:
   compact: false
   personality: technical
@@ -108,8 +108,8 @@ tts:
     model: gpt-4o-mini-tts
     voice: alloy
   neutts:
-    ref_audio: ""
-    ref_text: ""
+    ref_audio: ''
+    ref_text: ''
     model: neuphonic/neutts-air-q4-gguf
     device: cpu
 stt:
@@ -126,7 +126,7 @@ voice:
   silence_threshold: 200
   silence_duration: 3.0
 human_delay:
-  mode: "off"
+  mode: 'off'
   min_ms: 800
   max_ms: 2500
 memory:
@@ -137,16 +137,16 @@ memory:
   nudge_interval: 5
   flush_min_turns: 6
 delegation:
-  model: ""
-  provider: ""
-  base_url: ""
-  api_key: ""
-prefill_messages_file: ""
+  model: ''
+  provider: ''
+  base_url: ''
+  api_key: ''
+prefill_messages_file: ''
 honcho: {}
 timezone: America/Los_Angeles
 discord:
   require_mention: true
-  free_response_channels: ""
+  free_response_channels: ''
   auto_thread: true
 whatsapp: {}
 approvals:
@@ -167,12 +167,12 @@ security:
 _config_version: 10
 provider: openrouter
 fallback_models:
-  - google/gemini-2.0-flash-exp:free
-  - nvidia/nemotron-3-super-120b-a12b:free
-  - microsoft/phi-4-reasoning:free
+- google/gemini-2.0-flash-exp:free
+- nvidia/nemotron-3-super-120b-a12b:free
+- microsoft/phi-4-reasoning:free
 telegram:
   require_mention: true
-  free_response_channels: ""
+  free_response_channels: ''
 session_reset:
   mode: both
   idle_minutes: 1440

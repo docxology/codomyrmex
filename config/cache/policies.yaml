@@ -15,5 +15,5 @@ policies:
     max_size: 10000
 
 eviction:
-  strategy: "lru" # lru, lfu, fifo
+  strategy: "lru"  # lru, lfu, fifo
   max_memory: "512MB"

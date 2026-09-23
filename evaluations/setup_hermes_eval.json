@@ -1,14 +1,14 @@
 {
-  "adherence_assessment": {
-    "adheres": true,
-    "reasoning": "The script adheres to the Thin Orchestrator pattern by accepting configuration via get_config() and repo-relative paths, delegating core operations to helper functions and HermesClient methods, using cli_helpers for all status output, and exiting with explicit sys.exit codes. The main function acts as a clean orchestration loop. It also follows Python 3.11+ coding standards: uses modern type hint syntax (e.g., X | None, dict[str, int]), avoids bare except (uses except Exception as e), avoids wildcard imports and builtin shadowing, uses f-strings for formatting, and has no unused imports."
-  },
-  "underlying_improvements": [
-    "Consider making the session db path accessible via a public method or property in HermesClient to avoid accessing protected members.",
-    "Consider extracting validation checks into a separate module to further reduce orchestrator complexity."
-  ],
-  "technical_debt": [
-    "Sloppy Code: Ignored return value of _check_config function.",
-    "Sloppy Code: Access to protected member _session_db_path of HermesClient."
-  ]
+    "adherence_assessment": {
+        "adheres": true,
+        "reasoning": "The script adheres to the Thin Orchestrator pattern by accepting configuration via get_config() and repo-relative paths, delegating core operations to helper functions and HermesClient methods, using cli_helpers for all status output, and exiting with explicit sys.exit codes. The main function acts as a clean orchestration loop. It also follows Python 3.11+ coding standards: uses modern type hint syntax (e.g., X | None, dict[str, int]), avoids bare except (uses except Exception as e), avoids wildcard imports and builtin shadowing, uses f-strings for formatting, and has no unused imports."
+    },
+    "underlying_improvements": [
+        "Consider making the session db path accessible via a public method or property in HermesClient to avoid accessing protected members.",
+        "Consider extracting validation checks into a separate module to further reduce orchestrator complexity."
+    ],
+    "technical_debt": [
+        "Sloppy Code: Ignored return value of _check_config function.",
+        "Sloppy Code: Access to protected member _session_db_path of HermesClient."
+    ]
 }

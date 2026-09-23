@@ -1,14 +1,14 @@
 {
-  "adherence_assessment": {
-    "adheres": false,
-    "reasoning": "The script violates the coding standard by using legacy typing annotations (Optional[str] and Optional[object]) instead of Python 3.11+ union types (str | None and object | None). While the script generally follows the thin orchestrator pattern by delegating core actions to HermesClient or shell scripting, it contains significant helper functions for prompt building, response extraction, and code modernization that could be considered business logic. However, given the exemplary scripts in the project also contain similar helpers, the primary and clear violation is the legacy typing usage."
-  },
-  "technical_debt": [
-    "Legacy typing: Use of Optional[str] in _validate_args return type",
-    "Legacy typing: Use of Optional[object] in _boot_hermes_client return type"
-  ],
-  "underlying_improvements": [
-    "Replace legacy typing imports and annotations with Python 3.11+ union types (str | None, object | None) throughout the script",
-    "Consider extracting prompt construction and response processing logic to a dedicated library module to achieve a thinner orchestrator"
-  ]
+    "adherence_assessment": {
+        "adheres": false,
+        "reasoning": "The script violates the coding standard by using legacy typing annotations (Optional[str] and Optional[object]) instead of Python 3.11+ union types (str | None and object | None). While the script generally follows the thin orchestrator pattern by delegating core actions to HermesClient or shell scripting, it contains significant helper functions for prompt building, response extraction, and code modernization that could be considered business logic. However, given the exemplary scripts in the project also contain similar helpers, the primary and clear violation is the legacy typing usage."
+    },
+    "technical_debt": [
+        "Legacy typing: Use of Optional[str] in _validate_args return type",
+        "Legacy typing: Use of Optional[object] in _boot_hermes_client return type"
+    ],
+    "underlying_improvements": [
+        "Replace legacy typing imports and annotations with Python 3.11+ union types (str | None, object | None) throughout the script",
+        "Consider extracting prompt construction and response processing logic to a dedicated library module to achieve a thinner orchestrator"
+    ]
 }

@@ -14,13 +14,30 @@
     ".codomyrmex/"
   ],
   "template_files": {},
-  "workflows": ["data-processing", "visualization"],
-  "required_modules": ["data_visualization", "code"],
-  "optional_modules": ["ai_code_editing", "pattern_matching", "performance"],
+  "workflows": [
+    "data-processing",
+    "visualization"
+  ],
+  "required_modules": [
+    "data_visualization",
+    "code"
+  ],
+  "optional_modules": [
+    "ai_code_editing",
+    "pattern_matching",
+    "performance"
+  ],
   "default_config": {
     "data": {
-      "input_formats": ["csv", "json", "parquet"],
-      "output_formats": ["csv", "json"],
+      "input_formats": [
+        "csv",
+        "json",
+        "parquet"
+      ],
+      "output_formats": [
+        "csv",
+        "json"
+      ],
       "validation": true
     },
     "processing": {
@@ -29,8 +46,17 @@
       "memory_limit": "8GB"
     },
     "visualization": {
-      "charts": ["line", "bar", "scatter", "heatmap"],
-      "export_formats": ["png", "svg", "html"]
+      "charts": [
+        "line",
+        "bar",
+        "scatter",
+        "heatmap"
+      ],
+      "export_formats": [
+        "png",
+        "svg",
+        "html"
+      ]
     }
   },
   "documentation_config": {
