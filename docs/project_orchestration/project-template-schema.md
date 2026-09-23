@@ -457,4 +457,3 @@ Templates are validated when loaded:
 - [Project Lifecycle Guide](./project-lifecycle-guide.md)
 - [Config-Driven Operations](./config-driven-operations.md)
 - [API Specification](../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md)
-

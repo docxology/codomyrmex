@@ -40,7 +40,7 @@ This security policy applies only to the `website` module within the Codomyrmex 
 - Keep script execution constrained to the project `scripts/` directory; path containment is enforced with resolved paths, not string-prefix checks.
 - Treat `/api/config` writes as privileged local-development operations and avoid exposing them on untrusted networks.
 
-Thank you for helping keep Codomyrmex and the Website module secure. 
+Thank you for helping keep Codomyrmex and the Website module secure.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

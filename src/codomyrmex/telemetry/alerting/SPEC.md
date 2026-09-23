@@ -2,7 +2,7 @@
 
 **Version**: v1.0.0 | **Status**: Planned | **Last Updated**: February 2026
 
-**Module**: `codomyrmex.telemetry.alerting`  
+**Module**: `codomyrmex.telemetry.alerting`
 **Last Updated**: 2026-01-29
 
 ## 1. Purpose

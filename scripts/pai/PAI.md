@@ -1,6 +1,6 @@
 # PAI — Personal AI Infrastructure Scripts
 
-**Status**: Active  
+**Status**: Active
 **Last Updated**: March 2026
 
 ## AI Capabilities

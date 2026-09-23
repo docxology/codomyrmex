@@ -38,5 +38,3 @@ backups:
     keep_daily: 30
     keep_weekly: 12
     keep_monthly: 24
-
-

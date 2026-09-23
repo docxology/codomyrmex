@@ -31,4 +31,3 @@ Count to 5 slowly.
 ## Response
 
 One... two... three... four... five.
-

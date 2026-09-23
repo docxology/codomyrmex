@@ -2,7 +2,7 @@
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-**Module**: `codomyrmex.llm.prompts`  
+**Module**: `codomyrmex.llm.prompts`
 **Last Updated**: 2026-01-29
 
 ## 1. Purpose

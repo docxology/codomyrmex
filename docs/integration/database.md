@@ -276,4 +276,3 @@ async def ai_enhancement_with_history(code: str, user_id: str,
 
     return result
 ```
-

@@ -45,4 +45,3 @@ Provides integration with Fabric AI framework for pattern-based AI workflows. It
 ### Technical Implementation
 
 The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
-

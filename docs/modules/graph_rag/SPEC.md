@@ -2,7 +2,7 @@
 
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
-**Module**: `codomyrmex.graph_rag`  
+**Module**: `codomyrmex.graph_rag`
 **Last Updated**: 2026-01-29
 
 ## 1. Purpose

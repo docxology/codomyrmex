@@ -53,7 +53,7 @@ graph TD
     OAuthAuth[OAuth Auth]
     TokenManager[Token Manager]
     PermissionManager[Permission Manager]
-    
+
     AuthInterface --> APIKeyAuth
     AuthInterface --> OAuthAuth
     TokenManager --> AuthInterface

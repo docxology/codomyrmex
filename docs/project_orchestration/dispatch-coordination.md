@@ -28,7 +28,7 @@ class TaskQueue:
         # Priority queue uses negative priority for max-heap behavior
         priority_value = -task.priority.value
         self.queue.put((priority_value, task.created_at.timestamp(), task.id))
-    
+
     def get_next_ready_task(self, completed_tasks: set[str]) -> Optional[Task]:
         # Returns the highest priority task whose dependencies are satisfied
         ...
@@ -122,16 +122,16 @@ def _execution_loop(self):
     while not self.shutdown_requested:
         # Get next ready task
         task = self.task_queue.get_next_ready_task(self.completed_tasks)
-        
+
         if task is None:
             time.sleep(0.1)  # No ready tasks, wait
             continue
-        
+
         # Try to acquire resources
         if not self.resource_manager.acquire_resources(task):
             time.sleep(0.1)  # Resources not available, retry
             continue
-        
+
         # Execute task asynchronously
         self._execute_task_async(task)
 ```
@@ -147,14 +147,14 @@ async def execute_workflow(self, name: str, ...):
     steps = self.workflows[name]
     completed_steps = set()
     remaining_steps = list(steps)
-    
+
     while remaining_steps:
         # Find steps that can be executed (dependencies satisfied)
         ready_steps = [
             step for step in remaining_steps
             if all(dep in completed_steps for dep in step.dependencies)
         ]
-        
+
         # Execute ready steps
         for step in ready_steps:
             result = await self._execute_step(step, parameters, execution)
@@ -202,7 +202,7 @@ Workflow steps support retry logic:
 @dataclass
 class WorkflowStep:
     max_retries: int = 3  # Maximum retry attempts
-    
+
     # Retry happens automatically during execution
     # Current retry_count is tracked internally
 ```
@@ -318,7 +318,7 @@ OrchestrationEngine
              ├─> 4. ResourceManager.allocate_resources()
              ├─> 5. Execute step (module.action)
              └─> 6. ResourceManager.deallocate_resources()
-   
+
 7. OrchestrationEngine.emit_event('workflow_completed')
 ```
 

@@ -94,13 +94,13 @@ The `refactor_code_snippet` tool used the LLM to understand your refactoring ins
 
 - **Error: `LLM API request failed.` / `"status": "error"` with an API error message**
   - **Cause**: Similar to `generate_code_snippet` - API key issues, network problems, provider outages, or problematic input code/instructions.
-  - **Solution**: 
+  - **Solution**:
     1. Verify your LLM API key and its status.
     2. Check internet connectivity and LLM provider status.
     3. Ensure the `code_snippet` is valid for the specified `language`.
 - **Refactored code is incorrect, doesn't work, or introduces bugs**:
   - **Cause**: The `refactoring_instruction` might be ambiguous. The LLM might misunderstand complex code or the desired transformation. Refactoring can be harder than generation for LLMs.
-  - **Solution**: 
+  - **Solution**:
     1. **Clarify Instruction**: Make the `refactoring_instruction` highly specific. Mention exact patterns to use or avoid. For example, instead of "improve this code," say "convert the for-loop to a list comprehension."
     2. **Simplify Input**: If refactoring a large or complex piece of code, try with a smaller, isolated part first.
     3. **Break Down Task**: For very complex refactoring, consider multiple `refactor_code_snippet` calls with sequential instructions.
@@ -118,7 +118,7 @@ Now you can try:
 - Refactoring your own Python code or code in other supported languages.
 - Providing more complex `refactoring_instruction` like "add error handling for X condition" or "optimize this function for readability."
 - Using `refactor_code_snippet` to translate code from one style to another (e.g., functional to object-oriented, though this is a very advanced use case).
-- Reviewing the `agents/MCP_TOOL_SPECIFICATION.md` for all parameters of `refactor_code_snippet`. 
+- Reviewing the `agents/MCP_TOOL_SPECIFICATION.md` for all parameters of `refactor_code_snippet`.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

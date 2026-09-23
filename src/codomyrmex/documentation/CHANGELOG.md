@@ -34,10 +34,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added comprehensive usage examples for documentation website management and automation.
 
 ### Deprecated
-- 
+-
 
 ### Removed
-- 
+-
 
 ### Fixed
 - Rejected traversal-shaped documentation MCP module names.
@@ -45,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `audit_rasp()` exit-code contract.
 
 ### Security
-- 
+-
 
 ## [Version X.Y.Z] - YYYY-MM-DD
 
@@ -56,7 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhancement B.
 
 ### Fixed
-- Bug C. 
+- Bug C.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

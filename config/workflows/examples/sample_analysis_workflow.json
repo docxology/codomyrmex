@@ -26,9 +26,7 @@
         "source_path": ".",
         "output_path": "./output"
       },
-      "dependencies": [
-        "data_analysis"
-      ],
+      "dependencies": ["data_analysis"],
       "timeout": null,
       "retry_count": 0,
       "max_retries": 3
@@ -53,15 +51,10 @@
         "source_path": "./output",
         "output_path": "./final"
       },
-      "dependencies": [
-        "report_generation",
-        "security_scan"
-      ],
+      "dependencies": ["report_generation", "security_scan"],
       "timeout": null,
       "retry_count": 0,
       "max_retries": 3
     }
   ]
 }
-
-

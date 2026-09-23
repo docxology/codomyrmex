@@ -20,36 +20,36 @@ graph TB
         FPF_ANALYZER[FPFAnalyzer<br/>Importance, Centrality]
         TERM_ANALYZER[TermAnalyzer<br/>Co-occurrence]
     end
-    
+
     subgraph sg_fdbfc45999 [CEREBRUM Module]
         CEREBRUM_ENGINE[CerebrumEngine<br/>Orchestration]
         CASE_BASE[CaseBase<br/>Pattern Cases]
         BAYESIAN_NET[BayesianNetwork<br/>Pattern Relationships]
         ACTIVE_AGENT[ActiveInferenceAgent<br/>Exploration]
     end
-    
+
     subgraph sg_e70d8eb905 [Analysis]
         ORCHESTRATOR[FPFOrchestrator<br/>Main Analysis]
         COMBINATORICS[FPFCombinatoricsAnalyzer<br/>Combinatorics]
     end
-    
+
     subgraph sg_b2439bcb8d [Output]
         VISUALIZATIONS[Visualizations<br/>Networks, Heatmaps]
         REPORTS[Reports<br/>JSON, Markdown]
     end
-    
+
     FPF_SPEC --> ORCHESTRATOR
     FPF_SPEC --> COMBINATORICS
     FPF_ANALYZER --> ORCHESTRATOR
     TERM_ANALYZER --> COMBINATORICS
-    
+
     ORCHESTRATOR --> CEREBRUM_ENGINE
     ORCHESTRATOR --> CASE_BASE
     ORCHESTRATOR --> BAYESIAN_NET
     ORCHESTRATOR --> ACTIVE_AGENT
-    
+
     COMBINATORICS --> CASE_BASE
-    
+
     ORCHESTRATOR --> VISUALIZATIONS
     COMBINATORICS --> VISUALIZATIONS
     ORCHESTRATOR --> REPORTS
@@ -183,4 +183,3 @@ The integration demonstrates how CEREBRUM can be applied to structured knowledge
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../README.md)
 - **Home**: [Root README](../../README.md)
-

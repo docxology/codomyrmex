@@ -64,4 +64,3 @@ def main():
     app = core.Application()
     app.run()
 ```
-

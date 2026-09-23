@@ -2,7 +2,7 @@
  * Any CSS placed here will be applied to the site, allowing customization beyond the default Docusaurus styles.
  */
 
-/* You can override Docusaurus variables here. 
+/* You can override Docusaurus variables here.
    See: https://docusaurus.io/docs/styling-layout#styling-your-site-with-css */
 :root {
   --ifm-color-primary: #25c2a0;
@@ -23,4 +23,4 @@
   --ifm-color-primary-light: #29d5b0;
   --ifm-color-primary-lighter: #32d8b4;
   --ifm-color-primary-lightest: #4fddbf;
-} 
+}

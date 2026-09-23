@@ -226,7 +226,7 @@ Manages workflow definitions and execution.
 - **Example**:
   ```python
   from codomyrmex.logistics.orchestration.project import WorkflowManager, WorkflowStep
-  
+
   manager = WorkflowManager()
   steps = [
       WorkflowStep(
@@ -260,21 +260,21 @@ Manages workflow definitions and execution.
   ```python
   import asyncio
   from codomyrmex.logistics.orchestration.project import get_workflow_manager
-  
+
   async def main():
       manager = get_workflow_manager()
       execution = await manager.execute_workflow(
           "ai-analysis",
           parameters={"project_path": "/path/to/project", "output_format": "json"}
       )
-      
+
       if execution.status == WorkflowStatus.COMPLETED:
           print("Workflow completed successfully")
           for step_name, result in execution.results.items():
               print(f"Step {step_name}: {result}")
       else:
           print(f"Workflow failed: {execution.errors}")
-  
+
   asyncio.run(main())
   ```
 
@@ -656,17 +656,17 @@ class Task:
     module: str = ""  # Codomyrmex module name
     action: str = ""  # Module action/function name
     parameters: Dict[str, Any] = field(default_factory=dict)  # Action parameters
-    
+
     # Dependencies and scheduling
     dependencies: List[str] = field(default_factory=list)  # Task IDs this depends on
     priority: TaskPriority = TaskPriority.NORMAL
     resources: List[TaskResource] = field(default_factory=list)  # Required resources
-    
+
     # Execution control
     timeout: Optional[int] = None  # Timeout in seconds
     max_retries: int = 3  # Maximum retry attempts
     retry_delay: float = 1.0  # Seconds between retries
-    
+
     # Status tracking
     status: TaskStatus = TaskStatus.PENDING
     retry_count: int = 0
@@ -674,7 +674,7 @@ class Task:
     started_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
     result: Optional[TaskResult] = None
-    
+
     # Metadata
     tags: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -851,7 +851,7 @@ Raised when project operations fail.
 {
   "max_workers": 4,
   "workflows_dir": "./workflows",
-  "projects_dir": "./projects", 
+  "projects_dir": "./projects",
   "templates_dir": "./templates",
   "resource_config": "./resources.json",
   "performance_monitoring": true,
@@ -930,7 +930,7 @@ analysis_task = orchestrator.create_task(
 )
 
 visualization_task = orchestrator.create_task(
-    "create_chart", 
+    "create_chart",
     "data_visualization",
     "create_bar_chart",
     parameters={
@@ -949,7 +949,7 @@ if completed:
     analysis_result = orchestrator.get_task_result(analysis_task.id)
     if analysis_result and analysis_result.success:
         print(f"Analysis completed: {analysis_result.data}")
-    
+
     stats = orchestrator.get_execution_stats()
     print(f"Completed {stats['completed']} tasks")
 else:

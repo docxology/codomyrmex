@@ -257,7 +257,10 @@ for email in emails:
                 execution_result = execute_code("python", generated_code, timeout=10)
 
                 # Validate workflow results
-                if execution_result["status"] == "setup_error" and "docker" in execution_result.get("error_message", "").lower():
+                if (
+                    execution_result["status"] == "setup_error"
+                    and "docker" in execution_result.get("error_message", "").lower()
+                ):
                     pytest.skip("Docker not available")
                 assert execution_result["status"] == "success"
                 assert "invalid-email: False" in execution_result["stdout"]
@@ -461,8 +464,13 @@ print("Result:", algorithm_b({10000}))
             )
 
             # Validate workflow results
-            if (result_a["status"] == "setup_error" and "docker" in result_a.get("error_message", "").lower()) or \
-               (result_b["status"] == "setup_error" and "docker" in result_b.get("error_message", "").lower()):
+            if (
+                result_a["status"] == "setup_error"
+                and "docker" in result_a.get("error_message", "").lower()
+            ) or (
+                result_b["status"] == "setup_error"
+                and "docker" in result_b.get("error_message", "").lower()
+            ):
                 pytest.skip("Docker not available")
             assert result_a["status"] == "success"
             assert result_b["status"] == "success"
@@ -618,7 +626,10 @@ eval(input("Enter code: "))  # Code injection
             from codomyrmex.coding import execute_code
 
             result = execute_code("python", "print('Hello Workflow')", timeout=5)
-            if result["status"] == "setup_error" and "docker" in result.get("error_message", "").lower():
+            if (
+                result["status"] == "setup_error"
+                and "docker" in result.get("error_message", "").lower()
+            ):
                 pytest.skip("Docker not available")
             assert result["status"] == "success"
             steps_completed += 1
@@ -669,7 +680,10 @@ eval(input("Enter code: "))  # Code injection
             from codomyrmex.coding import execute_code
 
             exec_result = execute_code("python", test_data["code"], timeout=5)
-            if exec_result["status"] == "setup_error" and "docker" in exec_result.get("error_message", "").lower():
+            if (
+                exec_result["status"] == "setup_error"
+                and "docker" in exec_result.get("error_message", "").lower()
+            ):
                 results["execution"] = True
             else:
                 results["execution"] = exec_result["status"] == "success"
@@ -749,7 +763,10 @@ print(f"Fibonacci(10) = {result}")
                 from codomyrmex.coding import execute_code
 
                 exec_result = execute_code("python", test_code, timeout=10)
-                if exec_result["status"] == "setup_error" and "docker" in exec_result.get("error_message", "").lower():
+                if (
+                    exec_result["status"] == "setup_error"
+                    and "docker" in exec_result.get("error_message", "").lower()
+                ):
                     results["execution"] = True
                 else:
                     results["execution"] = exec_result["status"] == "success"

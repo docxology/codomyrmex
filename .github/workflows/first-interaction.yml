@@ -18,19 +18,19 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           issue-message: |
-            👋 Welcome and thank you for opening your first issue in Codomyrmex! 
-            
+            👋 Welcome and thank you for opening your first issue in Codomyrmex!
+
             A maintainer or AI triage agent will review this shortly. In the meantime, please ensure you've:
             - Checked for existing issues
             - Provided a clear reproduction or use case
             - Read our [Contributing Guidelines](https://github.com/docxology/codomyrmex/blob/main/CONTRIBUTING.md)
           pr-message: |
-            🎉 Welcome and thank you for making your first contribution to Codomyrmex! 
-            
+            🎉 Welcome and thank you for making your first contribution to Codomyrmex!
+
             We are thrilled to have you here. Before we merge your changes, please make sure:
             - You have followed our [Contributing Guidelines](https://github.com/docxology/codomyrmex/blob/main/CONTRIBUTING.md)
             - CI tests are passing (`uv run pytest`)
             - Linting is passing (`uv run ruff check .`)
             - You've followed Conventional Commits for your PR title (`type(scope): description`)
-            
+
             A maintainer or automated agent will review your PR soon.

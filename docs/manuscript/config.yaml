@@ -823,9 +823,9 @@ experiment:
   #   NORMAL: 1.0  — standard/default coordination signals (e.g. NEED)
   #   SLOW:   0.2  — persistent memory signals (e.g. SUCCESS, HUMAN_PRIORITY)
   decay_rates:
-    - FAST    # 3.0
-    - NORMAL  # 1.0
-    - SLOW    # 0.2
+    - FAST # 3.0
+    - NORMAL # 1.0
+    - SLOW # 0.2
 
   # Agent role taxonomy in the Codomyrmex colony:
   #   SANDBOX:      untrusted new agents; all proposals hard-refused by the gate
@@ -866,8 +866,8 @@ experiment:
   # Sourced from models.py constants (_TRUST_DELTA_PASS / _TRUST_DELTA_FAIL).
   # Changing these values propagates automatically to manuscript Tables 2 and 3
   # via CONFIG_TRUST_DELTA_PASS / CONFIG_TRUST_DELTA_FAIL tokens.
-  trust_delta_pass: 0.04     # +0.04 per successful outcome (no repair)
-  trust_delta_fail: -0.08    # -0.08 per failed outcome
+  trust_delta_pass: 0.04 # +0.04 per successful outcome (no repair)
+  trust_delta_fail: -0.08 # -0.08 per failed outcome
 
   # Falsification attack vectors applied per actuation proposal.
   # The FalsificationWorker used by both propose_action and colony_falsify_plan

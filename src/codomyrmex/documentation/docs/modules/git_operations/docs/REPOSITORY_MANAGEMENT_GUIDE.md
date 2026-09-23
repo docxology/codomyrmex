@@ -307,14 +307,14 @@ manager = RepositoryManager()
 repo_name = "docxology/docxology"
 if manager.clone_repository(repo_name):
     repo_path = str(manager.get_local_path(manager.get_repository(repo_name)))
-    
+
     # Create feature branch
     create_branch("feature/new-feature", repo_path)
-    
+
     # Make changes and commit
     add_files(["new_feature.py"], repo_path)
     commit_changes("Add new feature", repo_path)
-    
+
     # Push changes
     push_changes("origin", "feature/new-feature", repo_path)
 ```
@@ -325,15 +325,15 @@ if manager.clone_repository(repo_name):
 def maintain_repositories():
     """Automated repository maintenance."""
     manager = RepositoryManager()
-    
+
     # Update all external libraries
     print("Updating external libraries...")
     results = manager.bulk_update(RepositoryType.USE)
-    
+
     # Check status of development repositories
     print("Checking development repositories...")
     dev_repos = manager.list_repositories(RepositoryType.OWN)
-    
+
     for repo in dev_repos:
         status = manager.get_repository_status(repo.full_name)
         if status and not status['status']['clean']:
@@ -541,26 +541,26 @@ from codomyrmex.git_operations.repository_manager import RepositoryManager
 def setup_dev_environment():
     """Set up complete development environment."""
     manager = RepositoryManager()
-    
+
     print("Setting up development environment...")
-    
+
     # Clone all development repositories
     dev_results = manager.bulk_clone(RepositoryType.OWN)
     print(f"Development repos: {sum(dev_results.values())}/{len(dev_results)} cloned")
-    
+
     # Clone essential external tools
     essential_tools = [
         "fastapi/fastapi",
-        "openai/openai-python", 
+        "openai/openai-python",
         "pytest-dev/pytest"
     ]
-    
+
     for tool in essential_tools:
         if manager.clone_repository(tool):
             print(f"✅ Cloned {tool}")
         else:
             print(f"❌ Failed to clone {tool}")
-    
+
     print("Development environment setup complete!")
 
 if __name__ == "__main__":

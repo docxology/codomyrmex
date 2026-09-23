@@ -11,7 +11,7 @@ project:
 logging:
   level: INFO
   format: json
-  output: both  # console and file
+  output: both # console and file
   file_path: logs/test_project.log
   include_timestamps: true
   include_caller: true

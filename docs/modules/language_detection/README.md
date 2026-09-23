@@ -33,4 +33,3 @@ print(language_detection.__all__)  # Authoritative public exports
 
 - **Source**: [src/codomyrmex/language_detection/](../../../src/codomyrmex/language_detection/)
 - **Parent**: [Modules](../README.md)
-

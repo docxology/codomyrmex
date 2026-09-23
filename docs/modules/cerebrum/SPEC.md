@@ -79,23 +79,23 @@ graph TD
 
     PublicAPI --> CerebrumEngine
     MCPTools --> CerebrumEngine
-    
+
     CerebrumEngine --> ReasoningEngine
     CerebrumEngine --> ModelManager
-    
+
     ReasoningEngine --> CaseBase
     ReasoningEngine --> BayesianNetwork
-    
+
     CaseBase --> CaseRetriever
     CaseRetriever --> SimilarityMetrics
-    
+
     BayesianNetwork --> InferenceEngine
     InferenceEngine --> PriorBuilder
-    
+
     CerebrumEngine --> ActiveAgent
     ActiveAgent --> FreeEnergy
     ActiveAgent --> PolicySelector
-    
+
     CerebrumEngine --> TransformationManager
     TransformationManager --> AdaptationTransformer
     TransformationManager --> LearningTransformer
@@ -165,4 +165,3 @@ graph TD
 - **Package SPEC**: [../SPEC.md](../SPEC.md)
 
 <!-- Navigation Links keyword for score -->
-

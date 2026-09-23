@@ -2,7 +2,7 @@
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-**Module**: `codomyrmex.vector_store`  
+**Module**: `codomyrmex.vector_store`
 **Last Updated**: February 2026
 
 ## 1. Purpose

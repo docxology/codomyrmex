@@ -59,7 +59,7 @@ from codomyrmex.networking import SSHClient
 with SSHClient(hostname="remote.host", username="admin") as ssh:
     # Execute commands
     exit_code, stdout, stderr = ssh.execute_command("ls -la /var/log")
-    
+
     # SFTP operations
     sftp = ssh.get_sftp()
     sftp.put("local_file.txt", "remote_file.txt")

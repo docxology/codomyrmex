@@ -23,6 +23,6 @@ jobs:
             echo "Skipping assignment for bot: $PR_AUTHOR"
             exit 0
           fi
-          
+
           gh pr edit "$PR_URL" --add-assignee "$PR_AUTHOR" 2>/dev/null || true
           echo "✅ Assigned PR to creator: $PR_AUTHOR"

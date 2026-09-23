@@ -86,7 +86,7 @@ from codomyrmex.project_orchestration import get_workflow_manager
 
 async def main():
     manager = get_workflow_manager()
-    
+
     # Execute workflow from configuration
     execution = await manager.execute_workflow(
         "my_custom_workflow",
@@ -94,7 +94,7 @@ async def main():
             "custom_param": "value"
         }
     )
-    
+
     if execution.status == WorkflowStatus.COMPLETED:
         print("Workflow completed")
         for step_name, result in execution.results.items():
@@ -436,7 +436,7 @@ async def main():
         name="analysis_project",
         template_name="data_project"
     )
-    
+
     # Execute workflow (automatically loaded from config)
     engine = get_orchestration_engine()
     result = engine.execute_workflow(
@@ -444,7 +444,7 @@ async def main():
         input_file="./data/input.csv",
         output_path="./output/result.png"
     )
-    
+
     if result['success']:
         print("Analysis completed")
 

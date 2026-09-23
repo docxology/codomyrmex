@@ -91,7 +91,7 @@ rotation:
   enabled: true
   default_schedule: "90_days"
   advance_notice_days: 7
-  
+
   schedules:
     api_keys: "90_days"
     service_tokens: "60_days"
@@ -109,7 +109,7 @@ storage:
   primary:
     type: "environment"
     description: "Environment variables (most secure for containers)"
-  
+
   backup:
     - type: "aws_secrets_manager"
       region: "${AWS_REGION}"
@@ -120,5 +120,3 @@ storage:
     - type: "gcp_secret_manager"
       project_id: "${GCP_PROJECT_ID}"
       enabled: "${USE_GCP_SECRETS:false}"
-
-

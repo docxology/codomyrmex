@@ -88,8 +88,8 @@ database_specific:
 # Pool Monitoring
 monitoring:
   enabled: true
-  interval: 60  # seconds
-  
+  interval: 60 # seconds
+
   metrics:
     - "active_connections"
     - "idle_connections"
@@ -99,9 +99,9 @@ monitoring:
     - "pool_utilization"
 
   thresholds:
-    max_utilization: 0.8  # Alert if pool > 80% utilized
-    min_available: 2  # Alert if fewer than 2 connections available
-    max_wait_time: 5  # Alert if wait time > 5 seconds
+    max_utilization: 0.8 # Alert if pool > 80% utilized
+    min_available: 2 # Alert if fewer than 2 connections available
+    max_wait_time: 5 # Alert if wait time > 5 seconds
 
 # Pool Retry Policies
 retry_policies:
@@ -120,8 +120,6 @@ retry_policies:
 # Connection Pool Cleanup
 cleanup:
   enabled: true
-  interval: 300  # seconds
-  idle_timeout: 600  # seconds
-  max_lifetime: 7200  # seconds
-
-
+  interval: 300 # seconds
+  idle_timeout: 600 # seconds
+  max_lifetime: 7200 # seconds

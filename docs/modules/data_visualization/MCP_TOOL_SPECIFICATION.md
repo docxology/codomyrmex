@@ -394,7 +394,7 @@ Generates a pie chart to show proportions of different categories.
 - Ensure `labels` and other string inputs are handled safely if they come from untrusted sources, though typical plotting libraries are robust against injection via labels.
 
 ---
-<!-- End of tool specifications for Data Visualization --> 
+<!-- End of tool specifications for Data Visualization -->
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

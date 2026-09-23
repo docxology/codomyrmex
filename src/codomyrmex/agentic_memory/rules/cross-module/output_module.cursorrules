@@ -40,4 +40,3 @@ These rules are specific to the `output` directory/module and supplement `genera
 -   When generating output, ensure it's placed in a unique and descriptive path.
 -   When consuming output, ensure you understand its source and format.
 -   Confirm that `.gitignore` rules are appropriate for the files being generated or interacted with.
-

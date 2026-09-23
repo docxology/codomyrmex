@@ -2,7 +2,7 @@ module: physical_management
 enabled: true
 logging:
   level: INFO
-  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
   file: logs/physical_management.log
 performance:
   max_workers: 4

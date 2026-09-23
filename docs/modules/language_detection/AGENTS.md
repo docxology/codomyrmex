@@ -24,4 +24,3 @@ print(language_detection.__all__)  # Inspect supported public exports
 - **Source**: [src/codomyrmex/language_detection/](../../../src/codomyrmex/language_detection/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
-

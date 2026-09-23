@@ -258,20 +258,20 @@ try:
         version="1.0.0",
         formats=['json', 'html']
     )
-    
+
     # Validate OpenAPI spec
     spec = docs.to_dict()
     is_valid, errors = validate_openapi_spec(spec, strict=True)
-    
+
     if not is_valid:
         print("❌ Documentation validation failed:")
         for error in errors:
             print(f"  {error}")
         sys.exit(1)
-    
+
     print(f"✅ Generated documentation for {len(docs.endpoints)} endpoints")
     sys.exit(0)
-    
+
 except Exception as e:
     print(f"❌ Documentation generation failed: {e}")
     sys.exit(1)
@@ -383,17 +383,17 @@ Ensure your API code has detailed docstrings:
 def get_user(user_id: int) -> dict:
     """
     Retrieve user information by ID.
-    
+
     Args:
         user_id: Unique user identifier
-        
+
     Returns:
         User information dictionary with id, name, email
-        
+
     Raises:
         ValueError: If user_id is invalid
         NotFoundError: If user not found
-        
+
     Example:
         >>> user = get_user(123)
         >>> print(user['name'])

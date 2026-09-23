@@ -28,10 +28,10 @@ The `git_operations` module provides a programmatic Python interface for Git int
 graph TD
     CLI[Repo CLI] --> GitMgr[Git Manager]
     GitHubCLI[Metadata CLI] --> GitHubAPI[GitHub API]
-    
+
     GitMgr -->|Subprocess| GitBinary[Git Binary]
     GitHubAPI -->|HTTP| GitHubWeb[GitHub.com]
-    
+
     GitMgr --> Perf[Performance Monitor]
     GitMgr --> Logger[Logger]
 ```

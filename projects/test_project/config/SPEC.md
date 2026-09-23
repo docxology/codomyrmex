@@ -33,7 +33,7 @@ graph LR
     Settings[settings.yaml] --> ConfigMgr[config_management]
     Modules[modules.yaml] --> ConfigMgr
     Workflows[workflows.yaml] --> Orchestrator[orchestrator]
-    
+
     ConfigMgr --> App[Application]
     Orchestrator --> Pipeline[Pipeline]
 ```

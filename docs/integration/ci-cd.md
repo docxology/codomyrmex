@@ -309,4 +309,3 @@ jobs:
           --min-quality-score 80
 """
 ```
-

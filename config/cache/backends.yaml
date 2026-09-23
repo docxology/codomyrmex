@@ -5,7 +5,7 @@ backends:
     type: "memory"
     max_size: 1000
     default_ttl: 3600
-  
+
   redis:
     type: "redis"
     host: "${REDIS_HOST:localhost}"
@@ -13,12 +13,10 @@ backends:
     db: "${REDIS_DB:0}"
     password: "${REDIS_PASSWORD:}"
     default_ttl: 3600
-  
+
   file:
     type: "file"
     directory: "${CACHE_DIR:cache}"
     default_ttl: 86400
 
 default_backend: "memory"
-
-

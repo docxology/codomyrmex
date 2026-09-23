@@ -31,4 +31,3 @@ The capital of France is Paris.
 ## Model
 
 llama3.1:latest
-

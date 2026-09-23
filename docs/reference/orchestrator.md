@@ -33,7 +33,7 @@ InteractiveShell().run()
 - **Capability analysis** - Deep inspection of functions, methods, and classes
 - **Import status** - Identifies which modules are working vs. need attention
 
-### **📊 Status Reporting** 
+### **📊 Status Reporting**
 - **Health dashboard** - Comprehensive system status overview
 - **Environment checks** - Python, virtual environment, git repository status
 - **Dependency validation** - Checks for all required and optional packages
@@ -75,7 +75,7 @@ InteractiveShell().run()
 - `dive <module>` - Detailed capability inspection
 
 ### **Foraging Commands** 🔍
-- `forage` - Random discovery of interesting capabilities  
+- `forage` - Random discovery of interesting capabilities
 - `forage <search>` - Search for capabilities by name or description
 - `demo` - Run live demonstrations
 - `demo <module>` - Demo specific module
@@ -144,7 +144,7 @@ InteractiveShell().run()
 ### **System Inventory** (`codomyrmex_inventory.json`)
 Complete JSON report including:
 - All discovered modules with full metadata
-- Function signatures and complexity analysis  
+- Function signatures and complexity analysis
 - Class hierarchies and method details
 - Dependency relationships
 - System status and health metrics
@@ -203,7 +203,7 @@ start_here.sh (Main Orchestrator)
 
 1. **Start broad** - Use `explore` without arguments to get the big picture
 2. **Follow your nose** - Use `forage` to discover interesting capabilities randomly
-3. **Go deep** - Use `dive <module>` when you find something interesting  
+3. **Go deep** - Use `dive <module>` when you find something interesting
 4. **Try things** - Use `demo` to see modules in action
 5. **Track your journey** - Use `session` to see what you've discovered
 6. **Export your findings** - Use `export` to save discoveries for later

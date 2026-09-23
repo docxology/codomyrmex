@@ -1,6 +1,6 @@
 # Ml Pipeline — Functional Specification
 
-**Module**: `codomyrmex.ml_pipeline`  
+**Module**: `codomyrmex.ml_pipeline`
 **Version**: v1.3.0
 **Status**: Experimental
 

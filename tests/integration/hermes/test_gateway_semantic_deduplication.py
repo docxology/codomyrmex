@@ -82,7 +82,11 @@ def test_execution_tool_integration(monkeypatch):
     # Needs a real execution run
     res = execute_code(language="bash", code=script, timeout=10)
 
-    if res["exit_code"] != 0 and res["status"] == "setup_error" and "docker" in res.get("error_message", "").lower():
+    if (
+        res["exit_code"] != 0
+        and res["status"] == "setup_error"
+        and "docker" in res.get("error_message", "").lower()
+    ):
         pytest.skip("Docker not available")
     assert res["exit_code"] == 0
     stdout = res["stdout"]

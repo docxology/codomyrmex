@@ -47,4 +47,4 @@ coverage/
 
 # Backup files
 *.backup.*
-repository_metadata.json.backup.*/ 
+repository_metadata.json.backup.*/
