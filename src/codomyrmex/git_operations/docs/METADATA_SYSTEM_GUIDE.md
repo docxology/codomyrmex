@@ -369,23 +369,23 @@ for repo_name in repos_to_clone:
 ```python
 def monitor_repository_health(manager):
     """Monitor repository health and generate alerts."""
-    
+
     # Check for repositories with uncommitted changes
     all_repos = list(manager.metadata.values())
     uncommitted = [r for r in all_repos if r.local_info.uncommitted_changes]
-    
+
     if uncommitted:
         print("⚠️ Repositories with uncommitted changes:")
         for repo in uncommitted:
             print(f"   {repo.full_name}: {len(repo.local_info.modified_files)} modified files")
-    
+
     # Check for outdated repositories
     outdated = manager.get_outdated_repositories(7)  # 7 days
     if outdated:
         print("📅 Repositories not synced in 7 days:")
         for repo in outdated:
             print(f"   {repo.full_name}: {repo.last_sync_date or 'Never'}")
-    
+
     # Check for repositories with issues
     issues = [r for r in all_repos if r.stats.issues > 0]
     if issues:
@@ -402,22 +402,22 @@ monitor_repository_health(manager)
 ```python
 def development_workflow_status(manager):
     """Check development workflow status."""
-    
+
     # Get development repositories
     dev_repos = [r for r in manager.metadata.values() if r.repo_type == "OWN"]
-    
+
     print(f"📊 Development Repository Status ({len(dev_repos)} repos)")
     print("-" * 50)
-    
+
     for repo in dev_repos:
         status_icon = "✅" if repo.clone_status.value == "cloned" else "❌"
         changes_icon = "📝" if repo.local_info.uncommitted_changes else "🔒"
-        
+
         print(f"{status_icon} {changes_icon} {repo.full_name}")
         print(f"   Branch: {repo.local_info.current_branch}")
         print(f"   Last Commit: {repo.local_info.last_commit_date}")
         print(f"   Stars: {repo.stats.stars}, Forks: {repo.stats.forks}")
-        
+
         if repo.local_info.uncommitted_changes:
             print(f"   ⚠️ {len(repo.local_info.modified_files)} modified, "
                   f"{len(repo.local_info.untracked_files)} untracked files")
@@ -432,12 +432,12 @@ development_workflow_status(manager)
 ```python
 def generate_weekly_report(manager):
     """Generate weekly repository activity report."""
-    
+
     from datetime import datetime, timedelta
-    
+
     # Get repositories active in the last week
     week_ago = datetime.now() - timedelta(days=7)
-    
+
     active_repos = []
     for repo in manager.metadata.values():
         if repo.stats.last_activity:
@@ -449,16 +449,16 @@ def generate_weekly_report(manager):
                     active_repos.append((repo, last_activity))
             except ValueError:
                 continue
-    
+
     # Sort by activity
     active_repos.sort(key=lambda x: x[1], reverse=True)
-    
+
     print("📊 WEEKLY REPOSITORY ACTIVITY REPORT")
     print("=" * 50)
     print(f"Report Period: {week_ago.strftime('%Y-%m-%d')} to {datetime.now().strftime('%Y-%m-%d')}")
     print(f"Active Repositories: {len(active_repos)}")
     print()
-    
+
     for repo, activity_date in active_repos[:10]:  # Top 10
         print(f"🔥 {repo.full_name}")
         print(f"   Last Activity: {activity_date.strftime('%Y-%m-%d %H:%M')}")
@@ -505,11 +505,11 @@ metadata.notes = "Primary development repository with CI/CD"
 # Set up monitoring for important repositories
 def check_critical_repos(manager):
     critical_repos = [r for r in manager.metadata.values() if r.priority >= 1]
-    
+
     for repo in critical_repos:
         if repo.local_info.uncommitted_changes:
             print(f"🚨 CRITICAL: {repo.full_name} has uncommitted changes")
-        
+
         if not repo.last_sync_date:
             print(f"⚠️ WARNING: {repo.full_name} never synced")
 ```
@@ -609,13 +609,13 @@ from codomyrmex.git_operations.repository_metadata import RepositoryMetadataMana
 
 def main():
     manager = RepositoryMetadataManager()
-    
+
     # Check development environment status
     dev_repos = [r for r in manager.metadata.values() if r.repo_type == "OWN"]
-    
+
     print("🔧 Development Environment Status")
     print("=" * 40)
-    
+
     for repo in dev_repos:
         if repo.clone_status.value == "cloned":
             if repo.local_info.uncommitted_changes:

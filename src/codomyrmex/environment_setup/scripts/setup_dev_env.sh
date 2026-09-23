@@ -149,4 +149,4 @@ if [ -n "$VIRTUAL_ENV" ]; then
     echo_info "Virtual environment is active and ready to use!"
 else
     echo_info "Note: Virtual environment may need manual activation in new shell sessions."
-fi 
+fi

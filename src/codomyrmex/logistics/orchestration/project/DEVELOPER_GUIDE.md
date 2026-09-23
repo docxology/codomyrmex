@@ -229,12 +229,12 @@ def process_tasks(
     """Process a list of tasks with optional timeout and metadata."""
     if metadata is None:
         metadata = {}
-    
+
     results = {}
     for task in tasks:
         result = self._execute_task(task, timeout)
         results[task.id] = result
-    
+
     return results
 ```
 
@@ -246,23 +246,23 @@ Use Google-style docstrings:
 def create_workflow(self, name: str, steps: List[WorkflowStep], save: bool = True) -> bool:
     """
     Create a new workflow with the specified steps.
-    
+
     This method creates a new workflow definition and optionally persists it to disk.
     The workflow can then be executed using the execute_workflow method.
-    
+
     Args:
         name: Unique name for the workflow. Must be a valid identifier.
         steps: List of workflow steps to execute in order.
             Dependencies between steps are resolved automatically.
         save: Whether to persist the workflow to disk. Defaults to True.
-            
+
     Returns:
         True if workflow was created successfully, False otherwise.
-        
+
     Raises:
         ValueError: If workflow name is empty or invalid.
         OSError: If workflow cannot be saved to disk (when save=True).
-        
+
     Example:
         steps = [
             WorkflowStep(
@@ -278,13 +278,13 @@ def create_workflow(self, name: str, steps: List[WorkflowStep], save: bool = Tru
                 dependencies=["setup"]
             )
         ]
-        
+
         success = manager.create_workflow("code_analysis", steps)
         if success:
             print("Workflow created successfully")
         else:
             print("Failed to create workflow")
-            
+
     Note:
         - Workflow names must be unique within the manager instance
         - Steps are validated for proper dependency chains
@@ -325,11 +325,11 @@ def execute_workflow(self, name: str) -> WorkflowExecution:
     try:
         if name not in self.workflows:
             raise WorkflowError(f"Workflow '{name}' not found")
-        
+
         execution = WorkflowExecution(workflow_name=name)
         execution.start_time = datetime.now()
         execution.status = WorkflowStatus.RUNNING
-        
+
         # Execute workflow steps
         for step in self.workflows[name]:
             try:
@@ -338,12 +338,12 @@ def execute_workflow(self, name: str) -> WorkflowExecution:
             except TaskError as e:
                 execution.errors.append(f"Step {step.name} failed: {e}")
                 self.logger.error(f"Step {step.name} execution failed: {e}")
-        
+
         execution.end_time = datetime.now()
         execution.status = WorkflowStatus.COMPLETED if not execution.errors else WorkflowStatus.FAILED
-        
+
         return execution
-        
+
     except Exception as e:
         self.logger.error(f"Workflow execution failed: {e}")
         raise WorkflowError(f"Failed to execute workflow '{name}': {e}")
@@ -360,26 +360,26 @@ from codomyrmex.logging_monitoring import get_logger
 class WorkflowManager:
     def __init__(self):
         self.logger = get_logger(__name__)
-    
+
     def create_workflow(self, name: str, steps: List[WorkflowStep]) -> bool:
         """Create a workflow with proper logging."""
         self.logger.info(f"Creating workflow: {name} with {len(steps)} steps")
-        
+
         try:
             # Validation
             if not name or not name.strip():
                 self.logger.error("Workflow name cannot be empty")
                 return False
-            
+
             if not steps:
                 self.logger.error("Workflow must have at least one step")
                 return False
-            
+
             # Create workflow
             self.workflows[name] = steps
             self.logger.info(f"Successfully created workflow: {name}")
             return True
-            
+
         except Exception as e:
             self.logger.error(f"Failed to create workflow {name}: {e}")
             return False
@@ -427,15 +427,15 @@ tests/
 ```python
 class TestWorkflowManager:
     """Test cases for WorkflowManager class."""
-    
+
     def test_create_workflow_success(self):
         """Test successful workflow creation."""
         pass
-    
+
     def test_create_workflow_empty_name(self):
         """Test workflow creation with empty name."""
         pass
-    
+
     def test_create_workflow_invalid_dependencies(self):
         """Test workflow creation with invalid dependencies."""
         pass
@@ -473,7 +473,7 @@ def sample_steps():
 def test_workflow_creation(workflow_manager, sample_steps):
     """Test workflow creation with valid steps."""
     result = workflow_manager.create_workflow("test_workflow", sample_steps)
-    
+
     assert result is True
     assert "test_workflow" in workflow_manager.workflows
     assert workflow_manager.workflows["test_workflow"] == sample_steps
@@ -484,27 +484,27 @@ def test_workflow_creation(workflow_manager, sample_steps):
 ```python
 class TestWorkflowTaskIntegration:
     """Integration tests between WorkflowManager and TaskOrchestrator."""
-    
+
     def test_workflow_creates_tasks(self):
         """Test that workflow execution creates and manages tasks."""
         workflow_manager = get_workflow_manager()
         task_orchestrator = get_task_orchestrator()
-        
+
         # Create workflow
         steps = [
             WorkflowStep(name="setup", module="environment_setup", action="check_environment"),
             WorkflowStep(name="analyze", module="static_analysis", action="analyze_code", dependencies=["setup"])
         ]
-        
+
         workflow_manager.create_workflow("integration_test", steps)
-        
+
         # Execute workflow
         async def run_workflow():
             execution = await workflow_manager.execute_workflow("integration_test")
             return execution
-        
+
         execution = asyncio.run(run_workflow())
-        
+
         # Verify execution
         assert execution.status.value in ["completed", "failed"]
         assert len(execution.results) == 2
@@ -517,20 +517,20 @@ class TestWorkflowTaskIntegration:
 def test_workflow_performance():
     """Test workflow execution performance."""
     workflow_manager = get_workflow_manager()
-    
+
     # Create large workflow
     steps = [
         WorkflowStep(name=f"step_{i}", module="module", action="action")
         for i in range(100)
     ]
-    
+
     workflow_manager.create_workflow("performance_test", steps)
-    
+
     # Measure execution time
     start_time = time.time()
     execution = asyncio.run(workflow_manager.execute_workflow("performance_test"))
     execution_time = time.time() - start_time
-    
+
     # Assert performance requirements
     assert execution_time < 10.0  # Should complete within 10 seconds
     assert execution.status == WorkflowStatus.COMPLETED
@@ -566,17 +566,17 @@ class WorkflowManager:
     def __init__(self):
         # Use weak references for large objects
         self._workflow_cache = weakref.WeakValueDictionary()
-        
+
     def _cleanup_old_executions(self):
         """Clean up old execution records to prevent memory leaks."""
         current_time = datetime.now()
         cutoff_time = current_time - timedelta(hours=24)
-        
+
         executions_to_remove = [
             exec_id for exec_id, execution in self.executions.items()
             if execution.start_time and execution.start_time < cutoff_time
         ]
-        
+
         for exec_id in executions_to_remove:
             del self.executions[exec_id]
 ```
@@ -589,29 +589,29 @@ async def execute_workflow(self, name: str) -> WorkflowExecution:
     execution = WorkflowExecution(workflow_name=name)
     execution.start_time = datetime.now()
     execution.status = WorkflowStatus.RUNNING
-    
+
     try:
         steps = self.workflows[name]
-        
+
         # Execute steps concurrently where possible
         tasks = []
         for step in steps:
             if not step.dependencies:
                 task = asyncio.create_task(self._execute_step(step))
                 tasks.append((step, task))
-        
+
         # Wait for independent steps to complete
         for step, task in tasks:
             result = await task
             execution.results[step.name] = result
-        
+
         execution.end_time = datetime.now()
         execution.status = WorkflowStatus.COMPLETED
-        
+
     except Exception as e:
         execution.status = WorkflowStatus.FAILED
         execution.errors.append(str(e))
-    
+
     return execution
 ```
 
@@ -623,7 +623,7 @@ class ResourceManager:
         # Use efficient data structures
         self._resource_locks = {}
         self._allocation_cache = {}
-        
+
     def _optimize_allocations(self):
         """Optimize resource allocations for better performance."""
         # Implement allocation optimization logic
@@ -691,7 +691,7 @@ def create_workflow(self, name: str, steps: List[WorkflowStep]) -> bool:
         step_count=len(steps),
         step_names=[step.name for step in steps]
     )
-    
+
     try:
         # Implementation
         logger.info("Workflow created successfully", workflow_name=name)
@@ -717,7 +717,7 @@ class WorkflowManager:
         """Create workflow with performance monitoring."""
         # Implementation
         pass
-    
+
     @monitor_performance("workflow_execute")
     async def execute_workflow(self, name: str) -> WorkflowExecution:
         """Execute workflow with performance monitoring."""
@@ -849,12 +849,12 @@ def profile_workflow_execution():
     """Profile workflow execution performance."""
     profiler = cProfile.Profile()
     profiler.enable()
-    
+
     # Execute workflow
     execution = asyncio.run(workflow_manager.execute_workflow("test"))
-    
+
     profiler.disable()
-    
+
     # Print profiling results
     stats = pstats.Stats(profiler)
     stats.sort_stats('cumulative')

@@ -31,4 +31,3 @@ Tell me about artificial intelligence.
 ## Response Preview
 
 Artificial intelligence (AI) is a field of computer science that focuses on creating intelligent machines that can perform tasks that typically require human intelligence, such as learning, problem-so...
-

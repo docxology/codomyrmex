@@ -2,7 +2,7 @@
 
 **Version**: v1.0.0 | **Status**: Planned | **Last Updated**: February 2026
 
-**Module**: `codomyrmex.cache.replication`  
+**Module**: `codomyrmex.cache.replication`
 **Last Updated**: 2026-01-29
 
 ## 1. Purpose

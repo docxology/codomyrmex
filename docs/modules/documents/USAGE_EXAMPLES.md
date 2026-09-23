@@ -332,14 +332,14 @@ for md_file in input_dir.glob("*.md"):
     try:
         # Read markdown
         doc = read_document(md_file)
-        
+
         # Convert to JSON
         json_doc = convert_document(doc, DocumentFormat.JSON)
-        
+
         # Write JSON
         output_file = output_dir / f"{md_file.stem}.json"
         write_document(json_doc, output_file)
-        
+
         print(f"Converted {md_file.name} to {output_file.name}")
     except Exception as e:
         print(f"Error processing {md_file.name}: {e}")
@@ -354,4 +354,3 @@ for md_file in input_dir.glob("*.md"):
 
 
 <!-- Navigation Links keyword for score -->
-

@@ -1,8 +1,8 @@
 # Codomyrmex Security Audit & Threat Model
 
-**Reviewers**: critical_review.code_security_review + critical_review.threat_model_review  
+**Reviewers**: critical_review.code_security_review + critical_review.threat_model_review
 | **Date**: 2026-07-31 (findings updated 2026-07-31 — F1, F2, F4, F11, F12 resolved)
-**Scope**: PAI bridge trust gateway, Docker sandbox, MCP tool surface (655 tools), identity/wallet crypto, dependency supply chain, command injection, CI/CD  
+**Scope**: PAI bridge trust gateway, Docker sandbox, MCP tool surface (655 tools), identity/wallet crypto, dependency supply chain, command injection, CI/CD
 **Confidence**: High — every finding is pinned to file:line evidence and corroborated by manual tracing.
 
 ---
@@ -99,7 +99,7 @@ The `create_codomyrmex_mcp_server()` function (`mcp/server.py:109-211`) creates 
 
 **Trust boundary**: Any MCP client (PAI agent, Claude, Gemini, external tool) connecting via stdio or HTTP can invoke any of the 655 registered tools — including `codomyrmex.write_file`, `codomyrmex.run_command`, `codomyrmex.run_tests`, `codomyrmex.call_module_function` — without trust verification.
 
-**Attack path**: 
+**Attack path**:
 1. Attacker-controlled or compromised MCP client connects to Codomyrmex MCP server
 2. Sends `tools/call` with `name: "codomyrmex.run_command"` and arbitrary `arguments`
 3. Server validates schema, checks rate limit, executes directly — no trust check
@@ -180,7 +180,7 @@ all_passed = all(
 
 A check with `conclusion: None` (pending/incomplete) is treated as passed.
 
-**Remediation**: 
+**Remediation**:
 1. Require explicit `auto-merge` label only — remove branch-name heuristics
 2. Treat `conclusion: None` as NOT passed
 3. Require review approval before auto-merge
@@ -268,12 +268,12 @@ DEFAULT_DOCKER_ARGS = [
 ]
 ```
 
-Good: `--network=none`, `--cap-drop=ALL`, `--security-opt=no-new-privileges`, `--read-only`, resource limits.  
+Good: `--network=none`, `--cap-drop=ALL`, `--security-opt=no-new-privileges`, `--read-only`, resource limits.
 Missing: No `--security-opt=seccomp=<profile>` — relies solely on `--cap-drop=ALL` for syscall filtering. Docker's default seccomp profile is applied, but a custom restrictive profile would be more robust.
 
-**Podman shim detection**: `container.py:32-44` correctly detects `"emulate docker cli using podman"` in stderr/stdout and refuses to proceed. ✅  
-**Path traversal prevention**: `container.py:121-124` validates `temp_dir` is within system temp. ✅  
-**stdin file validation**: `container.py:142-145` validates `stdin_file` is inside `temp_dir`. ✅  
+**Podman shim detection**: `container.py:32-44` correctly detects `"emulate docker cli using podman"` in stderr/stdout and refuses to proceed. ✅
+**Path traversal prevention**: `container.py:121-124` validates `temp_dir` is within system temp. ✅
+**stdin file validation**: `container.py:142-145` validates `stdin_file` is inside `temp_dir`. ✅
 **Temp file creation**: `security.py:28` uses `tempfile.mkdtemp(prefix="codomyrmex_sandbox_")`. ✅
 
 ---

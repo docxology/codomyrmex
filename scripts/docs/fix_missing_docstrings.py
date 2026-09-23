@@ -58,7 +58,7 @@ def fix_docstring(rel_path: str, src_dir: Path):
         return
 
     docstring = DOCSTRINGS.get(rel_path, f'"""Module for {Path(rel_path).name}."""\n')
-    
+
     print(f"Fixing {rel_path}")
     try:
         content = path.read_text()
@@ -81,12 +81,12 @@ def main():
     parser.add_argument("--root", type=Path, default=Path(__file__).parent.parent, help="Project root directory")
     parser.add_argument("--target", action="append", help="Specific target module (relative to src/codomyrmex). Can be used multiple times.")
     parser.add_argument("--all", action="store_true", help="Run on all default targets")
-    
+
     args = parser.parse_args()
-    
+
     root_dir = args.root
     src_dir = root_dir / "src" / "codomyrmex"
-    
+
     if not src_dir.exists():
         print(f"Error: Source directory {src_dir} does not exist.")
         return
@@ -98,7 +98,7 @@ def main():
          # Current script runs defaults immediately. Let's keep that behavior but allow overriding.
          if not targets:
              targets = DEFAULT_TARGETS
-    
+
     print(f"Fixing {len(targets)} modules...")
     for target in targets:
         fix_docstring(target, src_dir)

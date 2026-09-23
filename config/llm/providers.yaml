@@ -92,7 +92,7 @@ default_provider: "ollama"
 provider_selection:
   # Automatic provider selection based on model
   auto_select: true
-  
+
   # Provider priority (in order)
   priority:
     - "ollama"
@@ -105,12 +105,12 @@ health_checks:
   enabled: true
   interval: 60  # seconds
   timeout: 10  # seconds
-  
+
   checks:
     - name: "provider_availability"
       type: "ping"
       endpoint: "/health"
-    
+
     - name: "model_availability"
       type: "model_list"
       timeout: 30
@@ -118,17 +118,15 @@ health_checks:
 # Provider Monitoring
 monitoring:
   enabled: true
-  
+
   metrics:
     - "request_count"
     - "response_time"
     - "error_rate"
     - "token_usage"
     - "cost"
-  
+
   thresholds:
     max_error_rate: 0.05  # 5%
     max_response_time: 30  # seconds
     max_cost_per_hour: 100  # dollars
-
-

@@ -452,8 +452,16 @@ def run_shell_command(
         # Strip sensitive environment variables unless explicitly overridden.
         # This reduces the blast radius of a shell injection even at TRUSTED tier.
         _STRIP_PATTERNS = (
-            "_API_KEY", "_TOKEN", "_SECRET", "_PASSWORD",
-            "AWS_", "AZURE_", "GCP_", "OPENAI_", "ANTHROPIC_", "COHERE_",
+            "_API_KEY",
+            "_TOKEN",
+            "_SECRET",
+            "_PASSWORD",
+            "AWS_",
+            "AZURE_",
+            "GCP_",
+            "OPENAI_",
+            "ANTHROPIC_",
+            "COHERE_",
         )
         _overrides = set(env.keys()) if env else set()
         for _key in list(cmd_env.keys()):

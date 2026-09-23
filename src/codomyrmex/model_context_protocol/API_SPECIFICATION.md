@@ -128,7 +128,7 @@ Not applicable to these Pydantic models.
 ## Versioning
 
 -   The Pydantic models in `model_context_protocol.mcp_schemas` will be versioned according to the overall version of the `model_context_protocol` module (see `CHANGELOG.md`).
--   Changes to these models (e.g., adding required fields, removing fields, changing types in a non-backward-compatible way) would constitute a breaking change and necessitate a major version increment for the `model_context_protocol` module. 
+-   Changes to these models (e.g., adding required fields, removing fields, changing types in a non-backward-compatible way) would constitute a breaking change and necessitate a major version increment for the `model_context_protocol` module.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

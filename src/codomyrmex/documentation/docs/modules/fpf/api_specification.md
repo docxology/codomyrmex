@@ -33,7 +33,7 @@ class FPFClient:
 
 **`fetch_and_load(repo: str, branch: str) -> FPFSpec`**
 - Fetch latest FPF specification from GitHub and load it
-- **Parameters**: 
+- **Parameters**:
   - `repo` - GitHub repository (default: "ailev/FPF")
   - `branch` - Branch name (default: "main")
 - **Returns**: Parsed FPFSpec object

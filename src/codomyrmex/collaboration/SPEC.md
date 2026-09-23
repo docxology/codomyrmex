@@ -22,10 +22,10 @@ graph TD
     SM --> Bus[MessageBus]
     SM --> Decomp[TaskDecomposer]
     SM --> Cons[ConsensusEngine]
-    
+
     Pool --> A1[Agent 1]
     Pool --> A2[Agent 2]
-    
+
     A1 <--> Bus
     A2 <--> Bus
 ```

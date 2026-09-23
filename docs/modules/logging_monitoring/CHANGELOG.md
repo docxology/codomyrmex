@@ -15,19 +15,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `PerformanceLogger` class - specialized logger for performance metrics and operation timing with timer functionality
 
 ### Changed
-- 
+-
 
 ### Deprecated
-- 
+-
 
 ### Removed
-- 
+-
 
 ### Fixed
-- 
+-
 
 ### Security
-- 
+-
 
 ## [Version X.Y.Z] - YYYY-MM-DD
 
@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhancement B.
 
 ### Fixed
-- Bug C. 
+- Bug C.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

@@ -140,4 +140,3 @@ mcp_bridge:
       command: "uv"
       args: ["run", "python", "-m", "codomyrmex.model_context_protocol.server"]
       description: "Codomyrmex MCP tool server (474 tools)"
-

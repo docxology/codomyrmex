@@ -207,7 +207,7 @@ project = pm.get_project("my_ai_project")
 if project:
     project.status = ProjectStatus.COMPLETED
     project.save()
-    
+
     # Add final milestone
     pm.add_project_milestone(
         "my_ai_project",
@@ -337,7 +337,7 @@ if result['success']:
             "insights_generated": 45
         }
     )
-    
+
     # 5. Update metrics
     pm.update_project_metrics(
         "codebase_analysis",
@@ -347,11 +347,11 @@ if result['success']:
             "last_execution": datetime.now(timezone.utc).isoformat()
         }
     )
-    
+
     # 6. Get status
     status = pm.get_project_status("codebase_analysis")
     print(f"Project status: {status}")
-    
+
     # 7. Complete project
     project = pm.get_project("codebase_analysis")
     if project:

@@ -253,7 +253,7 @@ graph TD
 
   # Test generated code before applying
   result = execute_code(language="python", code="print('test')")
-  
+
   # Code review integration
   from codomyrmex.coding.review import CodeReviewer, analyze_file
   reviewer = CodeReviewer()

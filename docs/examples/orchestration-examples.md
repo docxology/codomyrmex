@@ -185,7 +185,7 @@ import asyncio
 async def complete_orchestration_example():
     # 1. Create workflow
     wf_manager = get_workflow_manager()
-    
+
     steps = [
         WorkflowStep(
             name="setup",
@@ -207,13 +207,13 @@ async def complete_orchestration_example():
             dependencies=["analyze"]
         )
     ]
-    
+
     wf_manager.create_workflow("complete_workflow", steps)
-    
+
     # 2. Execute workflow
     engine = get_orchestration_engine()
     result = engine.execute_workflow("complete_workflow")
-    
+
     # 3. Review results
     if result['success']:
         print(f"Workflow completed: {result['steps_executed']} steps")

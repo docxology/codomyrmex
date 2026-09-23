@@ -118,7 +118,7 @@ Refer to `data_visualization/API_SPECIFICATION.md` for a full list of parameters
 ## 5. Troubleshooting
 
 - **`ModuleNotFoundError`**: Ensure `matplotlib`, `seaborn`, `numpy` are installed in your active Python environment.
-- **`FileNotFoundError` or `PermissionError` when saving**: 
+- **`FileNotFoundError` or `PermissionError` when saving**:
     - Check that the directory specified in `output_path` (e.g., `./my_plots/`) exists and is writable.
     - Ensure the filename in `output_path` is valid.
 - **Data Mismatch Errors** (e.g., `ValueError: x and y must be the same size`):
@@ -129,7 +129,7 @@ Refer to `data_visualization/API_SPECIFICATION.md` for a full list of parameters
 
 - Experiment with other parameters of `create_line_plot` (see `API_SPECIFICATION.md`).
 - Try other plotting functions from the `data_visualization` module like `create_scatter_plot` or `create_bar_chart`.
-- Integrate these plotting functions into your own data analysis scripts within the Codomyrmex project. 
+- Integrate these plotting functions into your own data analysis scripts within the Codomyrmex project.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

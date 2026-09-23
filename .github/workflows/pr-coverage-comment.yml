@@ -22,21 +22,21 @@ jobs:
           name: test-results-ubuntu-latest-3.11
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ github.event.workflow_run.id }}
-          
+
       - name: Install Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          
+
       - name: Install pycobertura
         run: pip install pycobertura
-        
+
       - name: Post coverage report to PR
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
-            
+
             // Find PR number from workflow run
             const pulls = await github.rest.pulls.list({
               owner: context.repo.owner,
@@ -44,13 +44,13 @@ jobs:
               head: `${context.repo.owner}:${context.payload.workflow_run.head_branch}`,
               state: 'open'
             });
-            
+
             if (pulls.data.length === 0) {
               console.log('No open PR found for this branch');
               return;
             }
             const prNumber = pulls.data[0].number;
-            
+
             // Just notify that coverage was collected
             let body = '## 🧪 Test Coverage Results\n\n';
             if (fs.existsSync('coverage.xml')) {
@@ -59,7 +59,7 @@ jobs:
             } else {
                body += '⚠️ Coverage artifact could not be found.';
             }
-            
+
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,

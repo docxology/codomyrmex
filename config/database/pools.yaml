@@ -89,7 +89,7 @@ database_specific:
 monitoring:
   enabled: true
   interval: 60  # seconds
-  
+
   metrics:
     - "active_connections"
     - "idle_connections"
@@ -123,5 +123,3 @@ cleanup:
   interval: 300  # seconds
   idle_timeout: 600  # seconds
   max_lifetime: 7200  # seconds
-
-

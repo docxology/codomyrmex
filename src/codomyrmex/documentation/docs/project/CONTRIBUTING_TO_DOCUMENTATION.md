@@ -221,7 +221,7 @@ This is a danger warning. Indicates critical information or actions that could h
 -   [ ] If adding new files, have you updated `sidebars.js` if necessary to include them in navigation?
 -   [ ] Have you followed the project's general contribution workflow (Git, PRs)?
 
-Thank you for helping to improve the Codomyrmex documentation! 
+Thank you for helping to improve the Codomyrmex documentation!
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

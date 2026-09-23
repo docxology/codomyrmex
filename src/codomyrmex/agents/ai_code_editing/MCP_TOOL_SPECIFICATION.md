@@ -133,7 +133,7 @@ Takes an existing code snippet and a refactoring instruction (e.g., improve effi
 - **Output Review**: Refactored code must be reviewed as it can introduce errors or vulnerabilities, just like newly generated code.
 - **Data Privacy**: The `code_snippet` and `refactoring_instruction` are sent to an external LLM provider. Consider data privacy implications.
 
---- 
+---
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

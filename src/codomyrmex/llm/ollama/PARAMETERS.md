@@ -11,7 +11,7 @@ The `ExecutionOptions` dataclass provides modular control over model execution p
 - **Range**: 0.0 - 2.0
 - **Default**: 0.7
 - **Description**: Controls the randomness of the model's output. Lower values produce more deterministic, focused responses. Higher values produce more creative, varied responses.
-- **Usage**: 
+- **Usage**:
   ```python
   options = ExecutionOptions(temperature=0.1)  # More deterministic
   options = ExecutionOptions(temperature=0.9)   # More creative
@@ -292,4 +292,3 @@ Validation occurs in `ConfigManager.validate_config()`.
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
-

@@ -14,7 +14,7 @@ This documentation site provides comprehensive information about the Codomyrmex 
 
 The Codomyrmex project aims to unify various coding-related functions into a cohesive package, leveraging proven GitHub-backed projects to enable extensibility, maintainability, and support for polyglot development workflows.
 
-Use the sidebar to navigate through the different sections of the documentation. 
+Use the sidebar to navigate through the different sections of the documentation.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

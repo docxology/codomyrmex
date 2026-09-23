@@ -67,7 +67,7 @@ Use your Codomyrmex MCP client to send the request. The exact command will depen
 **Using a hypothetical MCP client command:**
 ```bash
 # Ensure ./mcp_plots directory exists and is writable by the server
-# mkdir -p ./mcp_plots 
+# mkdir -p ./mcp_plots
 
 codomyrmex_mcp_client send_request --file heatmap_request.json
 ```
@@ -118,7 +118,7 @@ For a complete list of parameters and details for the `create_heatmap` MCP tool 
 
 - Experiment with different colormaps (`cmap` parameter).
 - Try generating heatmaps with larger or different datasets.
-- Explore other MCP plotting tools provided by the `data_visualization` module, such as `create_line_plot` or `create_bar_chart`, by consulting the `MCP_TOOL_SPECIFICATION.md`. 
+- Explore other MCP plotting tools provided by the `data_visualization` module, such as `create_line_plot` or `create_bar_chart`, by consulting the `MCP_TOOL_SPECIFICATION.md`.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

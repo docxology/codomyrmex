@@ -98,4 +98,4 @@ Provide one or more examples of how this tool would be invoked within an MCP mes
 - **File Paths**: (If `output_path` or similar is used) "Ensure that any user-supplied file paths are rigorously validated and restricted to designated writable directories to prevent unauthorized file access, overwrites, or path traversal vulnerabilities. The application running the MCP tool server must operate with appropriate, least-privilege file system permissions."
 
 ---
-<!-- Add more tool specifications below by copying the "Tool: `privacy_tool`" section. --> 
+<!-- Add more tool specifications below by copying the "Tool: `privacy_tool`" section. -->

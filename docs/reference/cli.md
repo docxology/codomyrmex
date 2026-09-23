@@ -15,7 +15,7 @@ codomyrmex --version
 # Get basic help
 codomyrmex --help
 ```
- 
+
 
 ## 🔧 Global Options
 
@@ -140,8 +140,8 @@ budget is needed (values above 900 seconds are capped).
 
 ---
 
-**Version**: 0.1.0  
-**Last Updated**: Aligned with current CLI implementation  
+**Version**: 0.1.0
+**Last Updated**: Aligned with current CLI implementation
 **Support**: See [Troubleshooting Guide](troubleshooting.md) or [GitHub Issues](https://github.com/docxology/codomyrmex/issues)
 
 ## Navigation Links

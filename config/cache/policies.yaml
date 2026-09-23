@@ -5,11 +5,11 @@ policies:
     ttl: 3600
     max_size: 1000
     eviction: "lru"
-  
+
   short_term:
     ttl: 300
     max_size: 500
-  
+
   long_term:
     ttl: 86400
     max_size: 10000
@@ -17,5 +17,3 @@ policies:
 eviction:
   strategy: "lru"  # lru, lfu, fifo
   max_memory: "512MB"
-
-

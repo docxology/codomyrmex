@@ -111,7 +111,7 @@ body:
       placeholder: |
         # Example API usage
         from codomyrmex.your_module import new_feature
-        
+
         result = new_feature.do_something(param="value")
 
   - type: textarea
@@ -200,4 +200,3 @@ body:
         - label: I can help with testing
         - label: I can help with documentation
         - label: I can provide feedback during development
-

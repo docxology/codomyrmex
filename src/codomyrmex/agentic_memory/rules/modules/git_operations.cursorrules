@@ -46,11 +46,11 @@ When working within this module, pay close attention to:
 -   Clearly document security implications and prerequisites (like Git authentication setup) for using the API.
 
 ## 4. Testing
--   **Unit Tests (`tests/unit/`)**: 
+-   **Unit Tests (`tests/unit/`)**:
     -   Focus on the logic within wrapper functions (argument parsing, subprocess calls, output parsing).
     -   Use real Git repositories in temp directories for testing various responses (Zero-Mock policy).
     -   Test error handling and return value types.
--   **Integration Tests (`tests/integration/`)**: 
+-   **Integration Tests (`tests/integration/`)**:
     -   These tests should interact with actual (temporary, locally created) Git repositories.
     -   Create a temporary directory, initialize a Git repo (`git init`).
     -   Perform sequences of API calls (e.g., `create_branch`, `commit_changes`, `get_status`) and then assert the state of the local Git repository.

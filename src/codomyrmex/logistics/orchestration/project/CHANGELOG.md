@@ -33,7 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Build and Test Workflow: Comprehensive build and testing pipeline
 - Data Pipeline Workflow: Data processing and visualization
 
-### Project Templates  
+### Project Templates
 - AI Analysis Project: Structure for AI-powered analysis projects
 - Web Application Project: Full-stack web application template
 - Data Pipeline Project: Data processing pipeline template

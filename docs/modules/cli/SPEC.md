@@ -38,7 +38,7 @@ graph TD
     Handlers --> Environment[environment.py]
     Handlers --> FPF[fpf.py]
     Handlers --> Skills[skills.py]
-    
+
     AI --> agents[agents module]
     Analysis --> static_analysis[static_analysis module]
     Build --> deployment[deployment module]

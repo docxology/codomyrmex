@@ -45,8 +45,6 @@ jobs:
           configPath: .github/lighthouse-ci.json
           uploadArtifacts: true
           temporaryPublicStorage: true
-          urls: |
-            file://${{ github.workspace }}/site/index.html
 
       - name: Comment results on PR
         if: github.event_name == 'pull_request'

@@ -27,7 +27,7 @@ providers:
           - "openid"
           - "email"
           - "profile"
-      
+
       github:
         enabled: false
         client_id: "${GITHUB_CLIENT_ID}"
@@ -62,7 +62,7 @@ providers:
 methods:
   # Primary authentication method
   primary: "api_key"
-  
+
   # Fallback methods (in order)
   fallback:
     - "token"
@@ -137,5 +137,3 @@ integrations:
     idp_metadata_url: "${SAML_IDP_METADATA_URL}"
     entity_id: "${SAML_ENTITY_ID}"
     certificate: "${SAML_CERTIFICATE}"
-
-

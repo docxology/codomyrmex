@@ -170,7 +170,7 @@ policies:
 role_assignment:
   # Default role for new users
   default_role: "developer"
-  
+
   # Role assignment rules
   assignment_rules:
     - condition: "user.email ends with '@admin.example.com'"
@@ -196,5 +196,3 @@ events:
     - "unauthorized_access_attempt"
     - "privilege_escalation_attempt"
     - "suspicious_permission_change"
-
-

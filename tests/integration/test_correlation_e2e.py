@@ -80,6 +80,9 @@ def test_call_tool_correlation(clean_event_bus, _trust_safe_tools):
     bus, events = clean_event_bus
 
     # Invoke a real, always-available tool through the full call_tool path.
+    from codomyrmex.agents.pai import trust_tool
+
+    trust_tool("codomyrmex.list_modules")
     result = call_tool("codomyrmex.list_modules")
 
     # The tool should succeed and return module data.

@@ -5,7 +5,7 @@ logging:
   level: "DEBUG"
   format: "TEXT"
   text_format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-  
+
   outputs:
     - type: "console"
       enabled: true
@@ -25,5 +25,3 @@ modules:
     level: "INFO"
   codomyrmex.llm:
     level: "DEBUG"
-
-

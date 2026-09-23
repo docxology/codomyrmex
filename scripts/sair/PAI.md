@@ -1,7 +1,7 @@
 # SAIR PAI Bridge
 
-**Module**: scripts/sair  
-**Status**: 🟢 Active (v0.1.0)  
+**Module**: scripts/sair
+**Status**: 🟢 Active (v0.1.0)
 **Last Review**: March 2026
 
 ## Core Objectives

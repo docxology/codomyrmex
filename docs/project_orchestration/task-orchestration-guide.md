@@ -194,10 +194,10 @@ import time
 while True:
     stats = orchestrator.get_execution_stats()
     print(f"Pending: {stats['pending']}, Running: {stats['running']}, Completed: {stats['completed']}")
-    
+
     if stats['pending'] == 0 and stats['running'] == 0:
         break
-    
+
     time.sleep(1)
 ```
 
@@ -241,7 +241,7 @@ for task in failed_tasks:
     result = orchestrator.get_task_result(task.id)
     if result:
         print(f"Task {task.name} failed: {result.error_message}")
-        
+
         # Check if task can be retried
         if task.can_retry():
             # Reset task and retry
@@ -369,11 +369,11 @@ if completed:
     # Get results
     analysis_result = orchestrator.get_task_result(analysis_task.id)
     visualization_result = orchestrator.get_task_result(visualization_task.id)
-    
+
     # Print statistics
     stats = orchestrator.get_execution_stats()
     print(f"Completed {stats['completed']} tasks in {stats['total_execution_time']:.2f}s")
-    
+
     # Stop execution
     orchestrator.stop_execution()
 else:

@@ -5,7 +5,9 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
 @mcp_tool(category="demos")
-def demos_list_demos(module: str | None = None, category: str | None = None) -> list[dict]:
+def demos_list_demos(
+    module: str | None = None, category: str | None = None
+) -> list[dict]:
     """
     List all registered demonstrations.
 

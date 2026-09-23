@@ -2,8 +2,8 @@
 
 # Preprocessing — Functional Specification
 
-**Module**: `codomyrmex.preprocessing`  
-**Version**: v1.3.0  
+**Module**: `codomyrmex.preprocessing`
+**Version**: v1.3.0
 **Status**: Active
 
 ## 1. Overview
@@ -34,4 +34,3 @@ See source module for available exports.
 ```bash
 uv run python -m pytest tests/ -k preprocessing -v
 ```
-

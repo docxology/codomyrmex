@@ -25,16 +25,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `API_SPECIFICATION.md` from template to specific functions.
 
 ### Deprecated
-- 
+-
 
 ### Removed
-- 
+-
 
 ### Fixed
-- 
+-
 
 ### Security
-- 
+-
 
 ## [Version X.Y.Z] - YYYY-MM-DD
 
@@ -45,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhancement B.
 
 ### Fixed
-- Bug C. 
+- Bug C.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

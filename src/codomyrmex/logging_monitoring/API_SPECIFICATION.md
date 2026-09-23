@@ -96,7 +96,7 @@ This document specifies the Application Programming Interface (API) for the Logg
 
 ## Versioning
 
-(This module follows the general versioning strategy of the Codomyrmex project. API stability is aimed for, with changes documented in the CHANGELOG.md.) 
+(This module follows the general versioning strategy of the Codomyrmex project. API stability is aimed for, with changes documented in the CHANGELOG.md.)
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

@@ -5,23 +5,23 @@
 migrations:
   # Migration directory
   directory: "${MIGRATIONS_DIR:migrations}"
-  
+
   # Migration file naming pattern
   naming_pattern: "{timestamp}_{name}.sql"
   timestamp_format: "%Y%m%d_%H%M%S"
-  
+
   # Auto-generate rollback migrations
   auto_rollback: true
-  
+
   # Migration timeout (seconds)
   timeout: 300
-  
+
   # Dry run mode (validate without executing)
   dry_run: false
-  
+
   # Transaction mode
   use_transactions: true
-  
+
   # Migration validation
   validation:
     enabled: true
@@ -33,25 +33,25 @@ migrations:
 policies:
   # Allow destructive operations
   allow_destructive: false
-  
+
   # Require backup before migration
   require_backup: true
-  
+
   # Migration approval
   require_approval: false
-  
+
   # Environment restrictions
   environments:
     development:
       allow_destructive: true
       require_backup: false
       require_approval: false
-    
+
     staging:
       allow_destructive: false
       require_backup: true
       require_approval: false
-    
+
     production:
       allow_destructive: false
       require_backup: true
@@ -61,12 +61,12 @@ policies:
 execution:
   # Execution order
   order: "sequential"  # sequential or parallel
-  
+
   # Parallel execution settings
   parallel:
     enabled: false
     max_workers: 4
-  
+
   # Error handling
   error_handling:
     stop_on_error: true
@@ -77,13 +77,13 @@ execution:
 tracking:
   # Track migration history
   enabled: true
-  
+
   # Migration history table
   history_table: "migration_history"
-  
+
   # Track execution time
   track_execution_time: true
-  
+
   # Track migration dependencies
   track_dependencies: true
 
@@ -91,10 +91,10 @@ tracking:
 rollback:
   # Enable rollback
   enabled: true
-  
+
   # Rollback timeout
   timeout: 300
-  
+
   # Rollback validation
   validation:
     enabled: true
@@ -104,11 +104,9 @@ rollback:
 testing:
   # Test migrations before applying
   enabled: true
-  
+
   # Test database
   test_database: "${TEST_DATABASE_URL}"
-  
+
   # Test timeout
   timeout: 300
-
-

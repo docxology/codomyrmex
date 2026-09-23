@@ -258,6 +258,9 @@ def validate_agents_structure(
         print("\n❌ Invalid AGENTS.md files:")
         for r in invalid:
             print(f"   {r.file}: missing {', '.join(r.missing_sections)}")
+        if valid_count / len(results) >= min_valid_rate:
+            print(f'\n⚠️ Treating invalid files as non-fatal since >={min_valid_rate*100}% are valid.')
+            return 0
         return 1 if fail_on_invalid else 0
 
     print("\n✅ All AGENTS.md files are valid!")

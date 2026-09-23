@@ -53,7 +53,7 @@ graph TD
     FileCache[File-Based Cache]
     RedisCache[Redis Cache]
     CacheManager[Cache Manager]
-    
+
     CacheInterface --> InMemoryCache
     CacheInterface --> FileCache
     CacheInterface --> RedisCache

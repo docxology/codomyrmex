@@ -5,7 +5,7 @@ This document outlines the Model Context Protocol (MCP) tools provided by the Pr
 ## General Considerations
 
 - **Session Management**: Tools can operate within orchestration sessions for context preservation
-- **Resource Awareness**: All operations respect system resource limits and availability  
+- **Resource Awareness**: All operations respect system resource limits and availability
 - **Error Recovery**: Tools include automatic retry and error recovery mechanisms
 - **Performance Monitoring**: All tool executions are monitored for performance metrics
 - **Dependency Resolution**: Tools automatically handle inter-module dependencies
@@ -148,7 +148,7 @@ Creates a new project from a template with intelligent configuration and optiona
   "tool_name": "create_project",
   "arguments": {
     "project_name": "ecommerce-code-review",
-    "template_name": "ai_analysis", 
+    "template_name": "ai_analysis",
     "description": "AI-powered code review for e-commerce platform",
     "author": "Development Team",
     "tags": ["code-review", "ecommerce", "quality"],
@@ -232,7 +232,7 @@ Executes a single task with intelligent resource management and integration with
   "tool_name": "execute_task",
   "arguments": {
     "task_name": "generate_visualization",
-    "module": "data_visualization", 
+    "module": "data_visualization",
     "action": "create_bar_chart",
     "parameters": {
       "categories": ["Security", "Performance", "Maintainability"],
@@ -421,7 +421,7 @@ Manages project lifecycle operations including status updates, milestone trackin
     }
   },
   {
-    "tool_name": "execute_task", 
+    "tool_name": "execute_task",
     "arguments": {
       "task_name": "generate_chart",
       "module": "data_visualization",
@@ -437,7 +437,7 @@ Manages project lifecycle operations including status updates, milestone trackin
     "tool_name": "execute_task",
     "arguments": {
       "task_name": "ai_summary",
-      "module": "ai_code_editing", 
+      "module": "ai_code_editing",
       "action": "generate_code_snippet",
       "dependencies": ["static_analysis", "generate_chart"],
       "parameters": {

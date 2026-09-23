@@ -372,22 +372,22 @@ class ResourceType(Enum):
 class StorageClient(ABC):
     @abstractmethod
     def list_buckets(self) -> List[str]: ...
-    
+
     @abstractmethod
     def create_bucket(self, name: str) -> bool: ...
-    
+
     @abstractmethod
-    def upload_file(self, bucket: str, key: str, data: bytes, 
+    def upload_file(self, bucket: str, key: str, data: bytes,
                     content_type: Optional[str] = None) -> str: ...
-    
+
     @abstractmethod
     def download_file(self, bucket: str, key: str) -> bytes: ...
-    
+
     @abstractmethod
     def delete_object(self, bucket: str, key: str) -> bool: ...
-    
+
     @abstractmethod
-    def generate_presigned_url(self, bucket: str, key: str, 
+    def generate_presigned_url(self, bucket: str, key: str,
                                expires_in: int = 3600) -> str: ...
 ```
 
