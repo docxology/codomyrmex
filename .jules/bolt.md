@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2025-02-14 - Optimize `_python_type_to_param_type` with module-level dict
+**Learning:** Recreating static dictionaries on every function call (e.g., inside `_python_type_to_param_type` in `llm/tools/__init__.py`) adds significant allocation overhead on hot paths.
+**Action:** Move static mapping dictionaries to module-level constants (e.g. `_TYPE_MAPPING`) to eliminate per-call allocation overhead.

@@ -178,17 +178,23 @@ class ToolRegistry:
         return tool.execute(**kwargs)
 
 
+# PERFORMANCE OPTIMIZATION:
+# Hoisted the static type mapping dictionary to a module-level constant.
+# Recreating the dictionary on every function call adds significant allocation overhead
+# in the frequently called tool parameter processing path.
+_TYPE_MAPPING: dict[type[Any], ParameterType] = {
+    str: ParameterType.STRING,
+    int: ParameterType.INTEGER,
+    float: ParameterType.NUMBER,
+    bool: ParameterType.BOOLEAN,
+    list: ParameterType.ARRAY,
+    dict: ParameterType.OBJECT,
+}
+
+
 def _python_type_to_param_type(python_type: type[Any]) -> ParameterType:
     """Convert Python type to JSON Schema parameter type."""
-    type_mapping: dict[type[Any], ParameterType] = {
-        str: ParameterType.STRING,
-        int: ParameterType.INTEGER,
-        float: ParameterType.NUMBER,
-        bool: ParameterType.BOOLEAN,
-        list: ParameterType.ARRAY,
-        dict: ParameterType.OBJECT,
-    }
-    return type_mapping.get(python_type, ParameterType.STRING)
+    return _TYPE_MAPPING.get(python_type, ParameterType.STRING)
 
 
 def tool(
