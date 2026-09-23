@@ -201,6 +201,9 @@ def run_code_in_docker(
                     if error_detail
                     else "Docker setup error: container failed to start"
                 )
+            elif exit_code == 125 and "Error response from daemon" in stderr:
+                status = "setup_error"
+                error_message = f"Docker setup error: {stderr.strip()}"
             else:
                 status = "execution_error"
                 error_message = f"Execution error: process exited with code {exit_code}"

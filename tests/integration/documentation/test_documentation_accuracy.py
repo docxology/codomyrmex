@@ -127,7 +127,7 @@ class TestDocumentationAccuracy:
         assert "status" in result, (
             f"Expected 'status' in result, got keys: {result.keys()}"
         )
-        if result.get("status") == "setup_error":
+        if result.get("status") == "setup_error" and "docker" in result.get("error_message", "").lower():
             pytest.skip("Docker/sandbox not available for code execution test")
         assert result.get("status") == "success", (
             f"Expected status='success', got {result.get('status')}"
@@ -310,7 +310,7 @@ class TestDocumentationAccuracy:
                 language="python",
                 timeout=10,
             )
-            if execution_result.get("status") == "setup_error":
+            if execution_result.get("status") == "setup_error" and "docker" in execution_result.get("error_message", "").lower():
                 pytest.skip("Docker/sandbox not available for workflow test")
             assert execution_result.get("status") == "success"
             assert "Result: 4" in execution_result.get(
