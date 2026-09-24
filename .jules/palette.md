@@ -44,6 +44,8 @@ icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
+
 ## 2024-05-24 - Accessibility Labels for Close Buttons
+
 **Learning:** Found multiple instances of icon-only close buttons (using "x", "&times;", or SVG icons) lacking ARIA labels across modals and panels. This makes it impossible for screen reader users to understand the button's purpose when navigating the UI.
 **Action:** Consistently apply descriptive `aria-label` attributes to all icon-only or generic close buttons (e.g., `aria-label="Close setup modal"` or `aria-label="Remove allowed tool"`) to ensure the interactive elements are fully accessible.
