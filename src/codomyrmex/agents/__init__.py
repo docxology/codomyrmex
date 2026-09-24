@@ -63,23 +63,44 @@ _EXPORTS: MappingProxyType[str, tuple[str, str]] = MappingProxyType(
         "OpenCodeClient": ("codomyrmex.agents.opencode", "OpenCodeClient"),
         "OpenFangRunner": ("codomyrmex.agents.openfang", "OpenFangRunner"),
         "AgenticSeekClient": ("codomyrmex.agents.agentic_seek", "AgenticSeekClient"),
-        "MissionControlClient": ("codomyrmex.agents.mission_control", "MissionControlClient"),
+        "MissionControlClient": (
+            "codomyrmex.agents.mission_control",
+            "MissionControlClient",
+        ),
         "PiClient": ("codomyrmex.agents.pi", "PiClient"),
         "DroidController": ("codomyrmex.agents.droid", "DroidController"),
         "GitAgent": ("codomyrmex.agents.git_agent", "GitAgent"),
         # Editing / orchestration / theory
         "CodeEditor": ("codomyrmex.agents.ai_code_editing.code_editor", "CodeEditor"),
-        "AgentOrchestrator": ("codomyrmex.agents.generic.agent_orchestrator", "AgentOrchestrator"),
+        "AgentOrchestrator": (
+            "codomyrmex.agents.generic.agent_orchestrator",
+            "AgentOrchestrator",
+        ),
         "APIAgentBase": ("codomyrmex.agents.generic", "APIAgentBase"),
         "CLIAgentBase": ("codomyrmex.agents.generic", "CLIAgentBase"),
-        "DeliberativeArchitecture": ("codomyrmex.agents.theory.agent_architectures", "DeliberativeArchitecture"),
-        "HybridArchitecture": ("codomyrmex.agents.theory.agent_architectures", "HybridArchitecture"),
-        "KnowledgeBase": ("codomyrmex.agents.theory.agent_architectures", "KnowledgeBase"),
-        "ReactiveArchitecture": ("codomyrmex.agents.theory.agent_architectures", "ReactiveArchitecture"),
+        "DeliberativeArchitecture": (
+            "codomyrmex.agents.theory.agent_architectures",
+            "DeliberativeArchitecture",
+        ),
+        "HybridArchitecture": (
+            "codomyrmex.agents.theory.agent_architectures",
+            "HybridArchitecture",
+        ),
+        "KnowledgeBase": (
+            "codomyrmex.agents.theory.agent_architectures",
+            "KnowledgeBase",
+        ),
+        "ReactiveArchitecture": (
+            "codomyrmex.agents.theory.agent_architectures",
+            "ReactiveArchitecture",
+        ),
         # Core
         "AgentCapabilities": ("codomyrmex.agents.core", "AgentCapabilities"),
         "AgentConfig": ("codomyrmex.agents.core", "AgentConfig"),
-        "AgentIntegrationAdapter": ("codomyrmex.agents.core", "AgentIntegrationAdapter"),
+        "AgentIntegrationAdapter": (
+            "codomyrmex.agents.core",
+            "AgentIntegrationAdapter",
+        ),
         "AgentInterface": ("codomyrmex.agents.core", "AgentInterface"),
         "AgentRequest": ("codomyrmex.agents.core", "AgentRequest"),
         "AgentResponse": ("codomyrmex.agents.core", "AgentResponse"),
@@ -94,11 +115,17 @@ _EXPORTS: MappingProxyType[str, tuple[str, str]] = MappingProxyType(
         "parse_code_blocks": ("codomyrmex.agents.core", "parse_code_blocks"),
         "parse_first_code_block": ("codomyrmex.agents.core", "parse_first_code_block"),
         "parse_json_response": ("codomyrmex.agents.core", "parse_json_response"),
-        "parse_structured_output": ("codomyrmex.agents.core", "parse_structured_output"),
+        "parse_structured_output": (
+            "codomyrmex.agents.core",
+            "parse_structured_output",
+        ),
         "reset_config": ("codomyrmex.agents.core", "reset_config"),
         "set_config": ("codomyrmex.agents.core", "set_config"),
         # Core exceptions
-        "AgentConfigurationError": ("codomyrmex.agents.core.exceptions", "AgentConfigurationError"),
+        "AgentConfigurationError": (
+            "codomyrmex.agents.core.exceptions",
+            "AgentConfigurationError",
+        ),
         "AgentError": ("codomyrmex.agents.core.exceptions", "AgentError"),
         "AgentTimeoutError": ("codomyrmex.agents.core.exceptions", "AgentTimeoutError"),
         "ContextError": ("codomyrmex.agents.core.exceptions", "ContextError"),
@@ -108,8 +135,14 @@ _EXPORTS: MappingProxyType[str, tuple[str, str]] = MappingProxyType(
         # Submodules / registries
         "AgentPool": ("codomyrmex.agents.pooling", "AgentPool"),
         "AgentEvaluator": ("codomyrmex.agents.evaluation.benchmark", "AgentBenchmark"),
-        "ConversationHistory": ("codomyrmex.agents.memory.conversation", "ConversationHistory"),
-        "InfrastructureAgent": ("codomyrmex.agents.infrastructure", "InfrastructureAgent"),
+        "ConversationHistory": (
+            "codomyrmex.agents.memory.conversation",
+            "ConversationHistory",
+        ),
+        "InfrastructureAgent": (
+            "codomyrmex.agents.infrastructure",
+            "InfrastructureAgent",
+        ),
         "AgentRegistry": ("codomyrmex.agents.agent_setup", "AgentRegistry"),
     }
 )
