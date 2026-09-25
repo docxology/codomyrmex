@@ -31,12 +31,12 @@ executors.
 
 **Action (mandatory, in order):**
 
-   1. `gh pr list --state open --search "<callsite>"` and
+1. `gh pr list --state open --search "<callsite>"` and
    `git log --oneline -50 -- <target-file>`; read the callsite on `main`. If
    the injection is already fixed (list args, no shell, parameterized SQL,
    AST evaluation), the task is DONE. Do not open a PR.
-   2. Cite `file:line` on `main` proving the vulnerable pattern exists today.
-   3. One logical change = one PR. No CI/workflow edits, no formatter churn, no
+2. Cite `file:line` on `main` proving the vulnerable pattern exists today.
+3. One logical change = one PR. No CI/workflow edits, no formatter churn, no
    `.jules/` journal-only diffs, no test-suite deletions.
 
 **Dispositions (do not re-propose):**
