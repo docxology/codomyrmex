@@ -11,7 +11,9 @@ from __future__ import annotations
 
 import hashlib
 import math
-import random
+import secrets
+
+crypto_random = secrets.SystemRandom()
 import re
 from dataclasses import dataclass, field
 from typing import Any
@@ -132,7 +134,7 @@ def laplace_noise(epsilon: float, sensitivity: float = 1.0) -> float:
     if epsilon <= 0:
         raise ValueError("Epsilon must be positive")
     sensitivity / epsilon
-    return random.random() - 0.5  # Uniform approx; proper Laplace below
+    return crypto_random.random() - 0.5  # Uniform approx; proper Laplace below
     # Proper Laplace: sign * scale * ln(1 - uniform)
 
 
@@ -151,7 +153,7 @@ def add_laplace_noise(value: float, epsilon: float, sensitivity: float = 1.0) ->
         raise ValueError("Epsilon must be positive")
     scale = sensitivity / epsilon
     # Proper Laplace distribution sampling
-    u = random.random() - 0.5
+    u = crypto_random.random() - 0.5
     noise = -scale * math.copysign(1, u) * math.log(1 - 2 * abs(u))
     return value + noise
 
