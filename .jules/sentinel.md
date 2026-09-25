@@ -1,3 +1,5 @@
+# Sentinel Journal
+
 ## 2026-03-01 - Fix Hardcoded Secret Vulnerability in Models
 
 **Vulnerability:**
@@ -11,7 +13,9 @@ Duplicate definitions across modules (e.g., repeating the `SecretType` definitio
 
 **Prevention:**
 Use descriptive suffixes or alternatives (e.g., changing `"password"` to `"password_type"`) for model or type definitions. Implement robust CI checks to enforce single-source-of-truth patterns rather than duplicating classes.
+
 ## 2026-08-04 - Prevent Command Injection via shell=True
+
 **Vulnerability:** Command Injection risk from using shell=True in subprocess.run for transcription_tools.py.
 **Learning:** Even when interpolating quoted strings, shell=True exposes the system to injection if templates are misconfigured or arguments leak.
 **Prevention:** Use shell=False combined with shlex.split() to safely tokenize commands while maintaining argument grouping.
@@ -26,6 +30,7 @@ already list-args without a shell), and "fixing" intentionally shell-based
 executors.
 
 **Action (mandatory, in order):**
+
 1. `gh pr list --state open --search "<callsite>"` and
    `git log --oneline -50 -- <target-file>`; read the callsite on `main`. If
    the injection is already fixed (list args, no shell, parameterized SQL,
@@ -35,6 +40,7 @@ executors.
    `.jules/` journal-only diffs, no test-suite deletions.
 
 **Dispositions (do not re-propose):**
+
 - Interactive shell sessions and agent shell executors (`do_shell`,
   `_shell_session`, `SystemOpsMixin`, OS provider diagnostic commands marked
   `# nosec B602`) are intentional design. Converting them to
@@ -49,6 +55,7 @@ executors.
   call site; the `transcription_tools.py` file does not exist on `main`.
 
 ## 2026-09-25 - Secure Randomness for Privacy Noise
+
 **Vulnerability:** The `codomyrmex/privacy` module (specifically `privacy.py` and `mixnet.py`) used the standard `random` module for generating differential privacy noise and mixnet routing, which is pseudo-random and not cryptographically secure.
 **Learning:** Privacy-critical operations like differential privacy noise generation and mixnet routing require cryptographically secure randomness to prevent predictability and side-channel attacks.
 **Prevention:** Always use the `secrets` module (e.g., `secrets.SystemRandom()`) instead of the standard `random` module for generating noise and selecting paths in privacy mechanisms.
