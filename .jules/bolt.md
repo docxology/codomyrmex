@@ -42,3 +42,13 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2026-09-25 - Deque and bisect don't mix
+
+**Learning:** `bisect` works on `list` with $O(\log N)$ time, but applying it to `collections.deque` causes severe performance degradation. While operations at the ends of a `deque` are $O(1)$, random access (e.g. `reqs[mid]` during binary search) takes $O(N)$ time because it must traverse the linked list. Thus, `bisect` on a `deque` is $O(N \log N)$.
+**Action:** The simple `while reqs and reqs[0] < cutoff: reqs.popleft()` is strictly $O(K)$ where $K$ is the number of elements removed, as both `[0]` and `popleft` are $O(1)$. Do not attempt to optimize this with `bisect` unless the underlying structure is a plain list, which would then make `pop(0)` expensive. Stick to the `while` loop for deques.
+
+## 2026-09-25 - Avoid N+1 stat() calls in directory traversal
+
+**Learning:** Checking `path.is_file()` or similar properties individually on each child of a directory causes a new system `stat` call for each file. This introduces massive overhead on filesystems (e.g. $O(N)$ system calls for $N$ files).
+**Action:** When evaluating the presence of specific files in a known directory, use `child_names = {p.name for p in path.iterdir()}` once to create a set of names, then check for string presence in that set. This turns $O(N)$ system calls into $O(1)$ system call and $O(1)$ set lookups, significantly speeding up directory traversals.

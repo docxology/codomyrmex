@@ -95,6 +95,14 @@ class ModuleIntrospector:
     def __init__(self, src_root: Path | None = None) -> None:
         self._root = src_root or _SRC_ROOT
 
+    def _get_py_files(self, mod_dir: Path) -> list[Path]:
+        """Helper to efficiently get python files avoiding heavy metadata checks where possible."""
+        py_files = []
+        for path in mod_dir.rglob("*.py"):
+            if "__pycache__" not in str(path):
+                py_files.append(path)
+        return py_files
+
     def scan_module(self, mod_dir: Path) -> ModuleInfo:
         """Scan a single module directory.
 
@@ -106,8 +114,7 @@ class ModuleIntrospector:
         """
         info = ModuleInfo(name=mod_dir.name, path=str(mod_dir))
 
-        py_files = list(mod_dir.rglob("*.py"))
-        py_files = [f for f in py_files if "__pycache__" not in str(f)]
+        py_files = self._get_py_files(mod_dir)
         info.file_count = len(py_files)
 
         total_loc = 0
@@ -153,7 +160,7 @@ class ModuleIntrospector:
         info.has_spec = (mod_dir / "SPEC.md").exists()
 
         # Test detection
-        info.has_tests = bool(list(mod_dir.rglob("test_*.py")))
+        info.has_tests = any(f.is_file() for f in mod_dir.rglob("test_*.py"))
 
         # Submodule counting
         info.submodule_count = sum(
