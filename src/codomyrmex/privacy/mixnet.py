@@ -3,7 +3,9 @@
 Simulates anonymous routing via an overlay network (Melange Mixnet).
 """
 
-import random
+import secrets
+
+crypto_random = secrets.SystemRandom()
 import time
 import uuid
 from dataclasses import dataclass
@@ -31,7 +33,7 @@ class MixNode:
     def relay(self, packet: Packet) -> Packet | None:
         """Process and forward a packet."""
         # Simulate processing delay to thwart timing analysis
-        time.sleep(random.uniform(0.01, 0.05))
+        time.sleep(crypto_random.uniform(0.01, 0.05))
 
         if packet.hops_remaining <= 0:
             return packet
@@ -58,7 +60,7 @@ class MixnetProxy:
         packet = Packet(payload, route_id, hops)
 
         # Select random path
-        path = random.sample(self._nodes, k=min(hops, len(self._nodes)))
+        path = crypto_random.sample(self._nodes, k=min(hops, len(self._nodes)))
         logger.info("Routing packet %s via %s hops", route_id, len(path))
 
         current_packet = packet

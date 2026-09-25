@@ -47,3 +47,8 @@ executors.
   (proposals #482/#484 rejected).
 - Transcription/STT command injection was fixed by merged #423 at the live
   call site; the `transcription_tools.py` file does not exist on `main`.
+
+## 2026-09-25 - Secure Randomness for Privacy Noise
+**Vulnerability:** The `codomyrmex/privacy` module (specifically `privacy.py` and `mixnet.py`) used the standard `random` module for generating differential privacy noise and mixnet routing, which is pseudo-random and not cryptographically secure.
+**Learning:** Privacy-critical operations like differential privacy noise generation and mixnet routing require cryptographically secure randomness to prevent predictability and side-channel attacks.
+**Prevention:** Always use the `secrets` module (e.g., `secrets.SystemRandom()`) instead of the standard `random` module for generating noise and selecting paths in privacy mechanisms.
