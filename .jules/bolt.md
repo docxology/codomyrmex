@@ -15,6 +15,7 @@
 
 **Learning:** The `InMemoryCache` was implementing eviction by calling `min()` across all cache keys to find the oldest entry, causing $O(N)$ behavior on every cache insertion once it was full. This creates severe performance degradation for large caches.
 **Action:** Use `collections.OrderedDict` to maintain insertion order, enabling $O(1)$ eviction via `.popitem(last=False)`, and pair it with `.move_to_end(key)` for existing updates. Use `time.monotonic()` for robust timestamp tracking over `time.time()`.
+
 ## 2026-09-11 - Session hygiene: dedupe before optimizing
 
 **Failure mode:** The 2026-09 triage closed 200+ duplicate Bolt PRs. The
@@ -24,6 +25,7 @@ representative was merged, because sessions never checked open PRs or recent
 merge history.
 
 **Action (mandatory, in order):**
+
 1. `gh pr list --state open --search "<symbol or file>"` — an open PR on the
    same file/intent blocks a new PR.
 2. `git log --oneline -50 -- <target-file>` + read the file on `main` — if
@@ -44,5 +46,6 @@ templating regex precompile (#397/#402 family), `config_loader` env regex
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
 
 ## 2024-05-28 - O(1) Enum Value Lookups in SerializationManager
+
 **Learning:** Re-evaluating list comprehensions like `[f.value for f in Enum]` on every method call incurs high allocation overhead.
 **Action:** Use a pre-computed module-level set `_FORMAT_VALUES = {f.value for f in SerializationFormat}` combined with exception handling to replace O(N) linear scans and list creations with an O(1) check.
