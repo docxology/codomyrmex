@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2024-05-28 - O(1) Enum Value Lookups in SerializationManager
+**Learning:** Re-evaluating list comprehensions like `[f.value for f in Enum]` on every method call incurs high allocation overhead.
+**Action:** Use a pre-computed module-level set `_FORMAT_VALUES = {f.value for f in SerializationFormat}` combined with exception handling to replace O(N) linear scans and list creations with an O(1) check.
