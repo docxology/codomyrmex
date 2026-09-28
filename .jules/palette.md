@@ -44,6 +44,8 @@ icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
+
 ## 2024-05-18 - Missing ARIA Labels on Icon-only Buttons
+
 **Learning:** Found several icon-only buttons (like attachment removal and sidebar toggle) that were missing `aria-label` attributes. Without these, screen readers would simply read "button", leaving visually impaired users guessing the button's purpose.
 **Action:** Always add descriptive `aria-label` or `title` attributes to buttons containing only icons, such as toggle buttons in nav bars and contextual actions in lists.
