@@ -187,6 +187,7 @@ _TYPE_MAPPING: dict[type[Any], ParameterType] = {
     dict: ParameterType.OBJECT,
 }
 
+
 def _python_type_to_param_type(python_type: type[Any]) -> ParameterType:
     """Convert Python type to JSON Schema parameter type."""
     return _TYPE_MAPPING.get(python_type, ParameterType.STRING)
