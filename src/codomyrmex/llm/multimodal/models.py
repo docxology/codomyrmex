@@ -41,11 +41,6 @@ class AudioFormat(Enum):
     FLAC = "flac"
 
 
-_IMAGE_EXTS = frozenset({"png", "jpg", "jpeg", "gif", "webp"})
-_AUDIO_EXTS = frozenset({"wav", "mp3", "ogg", "flac"})
-_VIDEO_EXTS = frozenset({"mp4", "webm", "avi"})
-
-
 @dataclass
 class MediaContent:
     """Container for media content."""
@@ -89,11 +84,11 @@ class MediaContent:
         # Determine type from extension
         ext = path.suffix.lower().lstrip(".")
 
-        if ext in _IMAGE_EXTS:
+        if ext in ["png", "jpg", "jpeg", "gif", "webp"]:
             media_type = MediaType.IMAGE
-        elif ext in _AUDIO_EXTS:
+        elif ext in ["wav", "mp3", "ogg", "flac"]:
             media_type = MediaType.AUDIO
-        elif ext in _VIDEO_EXTS:
+        elif ext in ["mp4", "webm", "avi"]:
             media_type = MediaType.VIDEO
         else:
             media_type = MediaType.TEXT

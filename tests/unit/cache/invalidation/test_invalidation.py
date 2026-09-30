@@ -69,7 +69,7 @@ class TestLRUPolicy:
         policy = LRUPolicy()
 
         old = CacheEntry(key="old", value="1")
-        old.last_accessed = time.monotonic() - 3600.0
+        old.last_accessed = datetime.now() - timedelta(hours=1)
 
         new = CacheEntry(key="new", value="2")
 

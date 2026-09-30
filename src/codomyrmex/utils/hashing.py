@@ -62,9 +62,7 @@ class ConsistentHash:
 
     def _hash(self, key: str) -> int:
         """Return the hash value."""
-        return int.from_bytes(
-            hashlib.md5(key.encode(), usedforsecurity=False).digest(), "big"
-        )
+        return int(hashlib.md5(key.encode(), usedforsecurity=False).hexdigest(), 16)
 
     def add_node(self, node: str) -> None:
         """Add a node to the ring."""
@@ -76,16 +74,10 @@ class ConsistentHash:
 
     def remove_node(self, node: str) -> None:
         """Remove a node from the ring."""
-        # Optimization: Collect hashes and build a new list in O(N) time.
-        # Calling list.remove() inside the loop takes O(N^2) time overall.
-        hashes_to_remove = set()
         for i in range(self._replicas):
             h = self._hash(f"{node}:{i}")
-            hashes_to_remove.add(h)
-            if h in self._node_map:
-                del self._node_map[h]
-        # List comprehension preserves the sorted order of self._ring
-        self._ring = [h for h in self._ring if h not in hashes_to_remove]
+            self._ring.remove(h)
+            del self._node_map[h]
 
     def get_node(self, key: str) -> str:
         """Get the node responsible for a given key."""

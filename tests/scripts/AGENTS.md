@@ -14,7 +14,7 @@ Validation coverage, fixtures, and regression checks for Scripts.
 
 ## Active Components
 - Markdown `README.md`
-- Directory `sair/` — validation suite for `scripts/sair` (`test_sair_scripts.py`)
+- Directory `sair/` — subdirectory or package
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

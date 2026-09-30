@@ -6,11 +6,10 @@ Provides different strategies for cache eviction when capacity is reached.
 
 import heapq
 import threading
-import time
 from abc import ABC, abstractmethod
 from collections import OrderedDict
 from dataclasses import dataclass, field
-from datetime import timedelta
+from datetime import datetime, timedelta
 from typing import Any, Generic, Optional, TypeVar
 
 K = TypeVar("K")
@@ -22,21 +21,21 @@ class CacheEntry(Generic[V]):
     """A single cache entry with metadata."""
 
     value: V
-    created_at: float = field(default_factory=time.monotonic)
-    accessed_at: float = field(default_factory=time.monotonic)
+    created_at: datetime = field(default_factory=datetime.now)
+    accessed_at: datetime = field(default_factory=datetime.now)
     access_count: int = 0
-    ttl: float | None = None
+    ttl: timedelta | None = None
     size: int = 1
 
     def is_expired(self) -> bool:
         """Check if the entry has expired."""
         if self.ttl is None:
             return False
-        return time.monotonic() > self.created_at + self.ttl
+        return datetime.now() > self.created_at + self.ttl
 
     def touch(self) -> None:
         """Update access metadata."""
-        self.accessed_at = time.monotonic()
+        self.accessed_at = datetime.now()
         self.access_count += 1
 
 
@@ -52,7 +51,7 @@ class EvictionPolicy(ABC, Generic[K, V]):
         """Get a value from the cache."""
 
     @abstractmethod
-    def put(self, key: K, value: V, ttl: float | timedelta | None = None) -> None:
+    def put(self, key: K, value: V, ttl: timedelta | None = None) -> None:
         """Put a value in the cache."""
 
     @abstractmethod
@@ -95,10 +94,8 @@ class LRUPolicy(EvictionPolicy[K, V]):
             entry.touch()
             return entry.value
 
-    def put(self, key: K, value: V, ttl: float | timedelta | None = None) -> None:
+    def put(self, key: K, value: V, ttl: timedelta | None = None) -> None:
         """Put."""
-        if isinstance(ttl, timedelta):
-            ttl = ttl.total_seconds()
         with self._lock:
             if key in self._cache:
                 self._cache.move_to_end(key)
@@ -170,10 +167,8 @@ class LFUPolicy(EvictionPolicy[K, V]):
             self._update_frequency(key)
             return entry.value
 
-    def put(self, key: K, value: V, ttl: float | timedelta | None = None) -> None:
+    def put(self, key: K, value: V, ttl: timedelta | None = None) -> None:
         """Put."""
-        if isinstance(ttl, timedelta):
-            ttl = ttl.total_seconds()
         with self._lock:
             if self.max_size <= 0:
                 return
@@ -227,19 +222,15 @@ class LFUPolicy(EvictionPolicy[K, V]):
 class TTLPolicy(EvictionPolicy[K, V]):
     """TTL-based eviction policy with lazy expiration."""
 
-    def __init__(self, max_size: int, default_ttl: float | timedelta = 3600.0):
+    def __init__(self, max_size: int, default_ttl: timedelta = timedelta(hours=1)):
         super().__init__(max_size)
-        self._cache: OrderedDict[K, CacheEntry[V]] = OrderedDict()
-        self._default_ttl = (
-            default_ttl.total_seconds()
-            if isinstance(default_ttl, timedelta)
-            else default_ttl
-        )
-        self._expiry_heap: list[tuple[float, K]] = []
+        self._cache: dict[K, CacheEntry[V]] = {}
+        self._default_ttl = default_ttl
+        self._expiry_heap: list[tuple[datetime, K]] = []
 
     def _cleanup_expired(self) -> None:
         """Remove expired entries."""
-        now = time.monotonic()
+        now = datetime.now()
         while self._expiry_heap and self._expiry_heap[0][0] <= now:
             _, key = heapq.heappop(self._expiry_heap)
             if key in self._cache and self._cache[key].is_expired():
@@ -261,10 +252,8 @@ class TTLPolicy(EvictionPolicy[K, V]):
             entry.touch()
             return entry.value
 
-    def put(self, key: K, value: V, ttl: float | timedelta | None = None) -> None:
+    def put(self, key: K, value: V, ttl: timedelta | None = None) -> None:
         """Put."""
-        if isinstance(ttl, timedelta):
-            ttl = ttl.total_seconds()
         with self._lock:
             self._cleanup_expired()
 
@@ -272,12 +261,12 @@ class TTLPolicy(EvictionPolicy[K, V]):
             entry = CacheEntry(value=value, ttl=actual_ttl)
 
             if len(self._cache) >= self.max_size and key not in self._cache:
-                # Evict oldest entry in O(1)
+                # Evict oldest entry
                 if self._cache:
-                    self._cache.popitem(last=False)
-
-            if key in self._cache:
-                self._cache.move_to_end(key)
+                    oldest_key = min(
+                        self._cache.keys(), key=lambda k: self._cache[k].created_at
+                    )
+                    del self._cache[oldest_key]
 
             self._cache[key] = entry
             expiry_time = entry.created_at + actual_ttl
@@ -324,10 +313,8 @@ class FIFOPolicy(EvictionPolicy[K, V]):
             entry.touch()
             return entry.value
 
-    def put(self, key: K, value: V, ttl: float | timedelta | None = None) -> None:
+    def put(self, key: K, value: V, ttl: timedelta | None = None) -> None:
         """Put."""
-        if isinstance(ttl, timedelta):
-            ttl = ttl.total_seconds()
         with self._lock:
             if key in self._cache:
                 self._cache[key] = CacheEntry(value=value, ttl=ttl)
@@ -354,20 +341,16 @@ class FIFOPolicy(EvictionPolicy[K, V]):
         return len(self._cache)
 
 
-# PERFORMANCE OPTIMIZATION:
-# Hoisting the policy dictionary to module level avoids per-call allocation
-# overhead during cache policy instantiation.
-_POLICIES = {
-    "lru": LRUPolicy,
-    "lfu": LFUPolicy,
-    "ttl": TTLPolicy,
-    "fifo": FIFOPolicy,
-}
-
-
 def create_policy(policy_name: str, max_size: int, **kwargs) -> EvictionPolicy:
     """Factory function to create eviction policies."""
-    policy_class = _POLICIES.get(policy_name.lower())
+    policies = {
+        "lru": LRUPolicy,
+        "lfu": LFUPolicy,
+        "ttl": TTLPolicy,
+        "fifo": FIFOPolicy,
+    }
+
+    policy_class = policies.get(policy_name.lower())
     if not policy_class:
         raise ValueError(f"Unknown policy: {policy_name}")
 

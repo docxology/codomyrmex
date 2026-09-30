@@ -194,25 +194,22 @@ class SQLiteHistoryStore:
             )
 
             # Insert messages
-            if conversation.messages:
-                conn.executemany(
+            for msg in conversation.messages:
+                conn.execute(
                     """
                     INSERT INTO messages
                     (message_id, conversation_id, role, content, timestamp, tokens, metadata)
                     VALUES (?, ?, ?, ?, ?, ?, ?)
                 """,
-                    [
-                        (
-                            msg.message_id,
-                            conversation.conversation_id,
-                            msg.role.value,
-                            msg.content,
-                            msg.timestamp.isoformat(),
-                            msg.tokens,
-                            json.dumps(msg.metadata),
-                        )
-                        for msg in conversation.messages
-                    ],
+                    (
+                        msg.message_id,
+                        conversation.conversation_id,
+                        msg.role.value,
+                        msg.content,
+                        msg.timestamp.isoformat(),
+                        msg.tokens,
+                        json.dumps(msg.metadata),
+                    ),
                 )
 
             conn.commit()

@@ -609,9 +609,6 @@ from pathlib import Path
 import re
 
 
-_README_VARIANTS = frozenset({"readme.md", "Readme.md", "README.MD"})
-
-
 class DocumentationConsistencyChecker:
     """Checks documentation consistency across files."""
 
@@ -660,7 +657,7 @@ class DocumentationConsistencyChecker:
             filename = file_path.name
 
             # Check filename conventions
-            if filename in _README_VARIANTS:
+            if filename in ["readme.md", "Readme.md", "README.MD"]:
                 issues.append(f"❌ {file_path}: Use 'README.md' (not '{filename}')")
 
             # Check header formatting in file

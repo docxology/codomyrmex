@@ -54,13 +54,6 @@ from .task_orchestrator import (
 )
 from .workflow_manager import WorkflowStep, get_workflow_manager
 
-_PRIORITY_MAP = {
-    "low": TaskPriority.LOW,
-    "normal": TaskPriority.NORMAL,
-    "high": TaskPriority.HIGH,
-    "critical": TaskPriority.CRITICAL,
-}
-
 
 class OrchestrationMCPTools:
     """MCP tools for orchestration operations.
@@ -463,12 +456,19 @@ class OrchestrationMCPTools:
         dependencies = arguments.get("dependencies", [])
 
         # Convert priority string to enum
+        priority_map = {
+            "low": TaskPriority.LOW,
+            "normal": TaskPriority.NORMAL,
+            "high": TaskPriority.HIGH,
+            "critical": TaskPriority.CRITICAL,
+        }
+
         task = Task(
             name=name,
             module=module,
             action=action,
             parameters=parameters,
-            priority=_PRIORITY_MAP.get(priority, TaskPriority.NORMAL),
+            priority=priority_map.get(priority, TaskPriority.NORMAL),
             dependencies=dependencies,
         )
 

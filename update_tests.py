@@ -1,4 +1,10 @@
-import os
+import re
+
+with open("tests/unit/system_discovery/test_profilers.py") as f:
+    content = f.read()
+
+# I will just write a new test_profilers.py content.
+new_content = """import os
 import platform
 from pathlib import Path
 
@@ -7,34 +13,32 @@ import pytest
 from codomyrmex.system_discovery.reporting.profilers import HardwareProfiler
 
 
-def create_fake_executable(
-    base_path: Path, name: str, output: str = "", fail: bool = False
-) -> None:
-    """Create a cross-platform fake executable for testing."""
+def create_fake_executable(base_path: Path, name: str, output: str = "", fail: bool = False) -> None:
+    \"\"\"Create a cross-platform fake executable for testing.\"\"\"
     # Unix script
     sh_path = base_path / name
     if fail:
-        sh_path.write_text("#!/bin/sh\nexit 1\n")
+        sh_path.write_text("#!/bin/sh\\nexit 1\\n")
     else:
-        sh_path.write_text(f"#!/bin/sh\ncat << 'EOF'\n{output}\nEOF\n")
+        sh_path.write_text(f"#!/bin/sh\\ncat << 'EOF'\\n{output}\\nEOF\\n")
     sh_path.chmod(0o755)
 
     # Windows bat
     bat_path = base_path / f"{name}.bat"
     if fail:
-        bat_path.write_text("@echo off\nexit /b 1\n")
+        bat_path.write_text("@echo off\\nexit /b 1\\n")
     else:
-        lines = [f"echo {line}" for line in output.split("\n") if line]
-        bat_content = "@echo off\n" + "\n".join(lines) + "\n"
+        lines = [f"echo {line}" for line in output.split("\\n") if line]
+        bat_content = "@echo off\\n" + "\\n".join(lines) + "\\n"
         bat_path.write_text(bat_content)
 
 
 def test_gpu_info_nvidia_smi(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
-    """Test get_gpu_info when nvidia-smi is available in PATH."""
+    \"\"\"Test get_gpu_info when nvidia-smi is available in PATH.\"\"\"
     fake_bin = tmp_path / "bin"
     fake_bin.mkdir()
 
-    output = "GeForce RTX 3090, 24576, 510.39.01\nTesla T4, 15360, 510.39.01"
+    output = "GeForce RTX 3090, 24576, 510.39.01\\nTesla T4, 15360, 510.39.01"
     create_fake_executable(fake_bin, "nvidia-smi", output)
 
     old_path = os.environ.get("PATH", "")
@@ -62,7 +66,7 @@ def test_gpu_info_nvidia_smi(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) ->
 
 
 def test_gpu_info_rocm_smi(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
-    """Test get_gpu_info when rocm-smi is available in PATH."""
+    \"\"\"Test get_gpu_info when rocm-smi is available in PATH.\"\"\"
     fake_bin = tmp_path / "bin"
     fake_bin.mkdir()
 
@@ -82,10 +86,8 @@ def test_gpu_info_rocm_smi(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> N
     assert found_amd
 
 
-def test_gpu_info_nvidia_smi_failure(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
-    """Test get_gpu_info handles nvidia-smi execution failure gracefully."""
+def test_gpu_info_nvidia_smi_failure(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    \"\"\"Test get_gpu_info handles nvidia-smi execution failure gracefully.\"\"\"
     fake_bin = tmp_path / "bin"
     fake_bin.mkdir()
 
@@ -97,10 +99,8 @@ def test_gpu_info_nvidia_smi_failure(
     assert len(nvidia_details) == 0
 
 
-def test_gpu_info_nvidia_smi_malformed(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
-    """Test get_gpu_info handles malformed nvidia-smi output gracefully."""
+def test_gpu_info_nvidia_smi_malformed(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    \"\"\"Test get_gpu_info handles malformed nvidia-smi output gracefully.\"\"\"
     fake_bin = tmp_path / "bin"
     fake_bin.mkdir()
 
@@ -112,24 +112,21 @@ def test_gpu_info_nvidia_smi_malformed(
     assert len(nvidia_details) == 0
 
 
-def test_gpu_info_system_profiler(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
-    """Test get_gpu_info parses system_profiler output correctly on macOS."""
+def test_gpu_info_system_profiler(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    \"\"\"Test get_gpu_info parses system_profiler output correctly on macOS.\"\"\"
     monkeypatch.setattr(platform, "system", lambda: "Darwin")
 
     fake_bin = tmp_path / "bin"
     fake_bin.mkdir()
 
-    output = "Chipset Model: Apple M2 Max\nChipset Model: Apple M1"
+    output = "Chipset Model: Apple M2 Max\\nChipset Model: Apple M1"
     create_fake_executable(fake_bin, "system_profiler", output)
 
-    old_path = os.environ.get("PATH", "")
-    monkeypatch.setenv("PATH", f"{fake_bin}{os.pathsep}{old_path}")
+    monkeypatch.setenv("PATH", str(fake_bin))
 
     gpu_info = HardwareProfiler.get_gpu_info()
 
-    assert gpu_info["available"] is True, f"gpu_info is {gpu_info}"
+    assert gpu_info["available"] is True
 
     found_m2 = False
     found_m1 = False
@@ -145,7 +142,7 @@ def test_gpu_info_system_profiler(
 
 
 def test_gpu_info_no_gpu(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
-    """Test get_gpu_info when no GPU tools are available on non-Darwin systems."""
+    \"\"\"Test get_gpu_info when no GPU tools are available on non-Darwin systems.\"\"\"
     monkeypatch.setattr(platform, "system", lambda: "Linux")
     fake_bin = tmp_path / "bin"
     fake_bin.mkdir()
@@ -156,3 +153,6 @@ def test_gpu_info_no_gpu(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> Non
 
     assert gpu_info["available"] is False
     assert len(gpu_info["details"]) == 0
+"""
+with open("tests/unit/system_discovery/test_profilers.py", "w") as f:
+    f.write(new_content)

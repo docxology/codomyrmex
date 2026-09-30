@@ -25,17 +25,6 @@ class TransactionStatus(Enum):
     FAILED = "failed"
 
 
-_EVM_NETWORKS = frozenset(
-    {
-        Network.ETHEREUM,
-        Network.POLYGON,
-        Network.ARBITRUM,
-        Network.OPTIMISM,
-        Network.BASE,
-    }
-)
-
-
 @dataclass
 class Address:
     """Blockchain address."""
@@ -49,7 +38,13 @@ class Address:
 
     @property
     def is_valid(self) -> bool:
-        if self.network in _EVM_NETWORKS:
+        if self.network in [
+            Network.ETHEREUM,
+            Network.POLYGON,
+            Network.ARBITRUM,
+            Network.OPTIMISM,
+            Network.BASE,
+        ]:
             return len(self.value) == 42 and self.value.startswith("0x")
         return len(self.value) > 0
 

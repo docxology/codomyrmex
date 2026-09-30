@@ -48,25 +48,21 @@ def get_formatter() -> Any | None:
 
 
 def print_success(msg: str):
-    """Print a success message using the terminal formatter."""
     formatter = get_formatter()
     print(formatter.success(msg) if formatter else f"✅ {msg}")
 
 
 def print_error(msg: str):
-    """Print an error message using the terminal formatter."""
     formatter = get_formatter()
     print(formatter.error(msg) if formatter else f"❌ {msg}")
 
 
 def print_warning(msg: str):
-    """Print a warning message using the terminal formatter."""
     formatter = get_formatter()
     print(formatter.warning(msg) if formatter else f"⚠️  {msg}")
 
 
 def print_header(msg: str, char: str = "=", length: int = 60):
-    """Print a header message using the terminal formatter."""
     formatter = get_formatter()
     if formatter:
         print(formatter.header(msg, char, length))

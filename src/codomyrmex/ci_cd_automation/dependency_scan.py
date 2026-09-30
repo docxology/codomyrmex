@@ -16,9 +16,6 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
-# Simple regex for dependencies = ["pkg>=version", ...]
-_DEP_PATTERN = re.compile(r'"([a-zA-Z0-9_-]+)\s*([><=!~]*\s*[\d.]*[^"]*)"')
-
 
 @dataclass
 class Vulnerability:
@@ -224,7 +221,9 @@ class DependencyScanner:
     def _parse_dependencies(content: str) -> dict[str, str]:
         """Parse dependencies from pyproject.toml content."""
         deps: dict[str, str] = {}
-        for match in _DEP_PATTERN.finditer(content):
+        # Simple regex for dependencies = ["pkg>=version", ...]
+        dep_pattern = re.compile(r'"([a-zA-Z0-9_-]+)\s*([><=!~]*\s*[\d.]*[^"]*)"')
+        for match in dep_pattern.finditer(content):
             pkg = match.group(1)
             version = match.group(2).strip()
             deps[pkg] = version

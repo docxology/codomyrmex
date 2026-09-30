@@ -1,9 +1,3 @@
-"""Performance monitoring components.
-
-Includes decorators, context managers, and monitors for tracking CPU,
-memory, and execution time of functions.
-"""
-
 import functools
 import json
 import time
@@ -57,7 +51,6 @@ class SystemMonitor:
     """Background monitor that samples system metrics at a fixed polling interval via psutil."""
 
     def __init__(self, interval: float = 1.0):
-        """Initialize the SystemMonitor with a given polling interval."""
         self.interval = interval
         self._process = psutil.Process() if HAS_PSUTIL else None
         self._monitoring = False
@@ -87,7 +80,6 @@ class SystemMonitor:
             self._monitor_thread.join(timeout=2.0)
 
     def get_current_metrics(self) -> SystemMetrics:
-        """Get the current system metrics."""
         if not HAS_PSUTIL:
             return SystemMetrics(0, 0, 0, 0, 0, 0, 0, 0)
 
@@ -108,18 +100,19 @@ class SystemMonitor:
 
 
 class PerformanceMonitor:
-    """A performance monitor that tracks execution times and resource usage.
+    """
+    A performance monitor that tracks execution times and resource usage.
 
     This class provides methods to monitor function performance,
     track resource usage, and generate performance reports.
     """
 
     def __init__(self, log_file: str | Path | None = None):
-        """Initialize the performance monitor.
+        """
+        Initialize the performance monitor.
 
         Args:
             log_file: Optional file to log performance metrics to.
-
         """
         self.log_file = Path(log_file) if log_file else None
         self.metrics: list[PerformanceMetrics] = []
@@ -145,7 +138,8 @@ class PerformanceMonitor:
         cpu_percent: float | None = None,
         metadata: dict[str, Any] | None = None,
     ) -> None:
-        """Record performance metrics.
+        """
+        Record performance metrics.
 
         Args:
             function_name: Name of the function being monitored
@@ -153,7 +147,6 @@ class PerformanceMonitor:
             memory_usage_mb: Memory usage in MB (if None, gets current usage)
             cpu_percent: CPU usage percentage (if None, gets current usage)
             metadata: Additional metadata to store
-
         """
         if memory_usage_mb is None:
             memory_usage_mb = self._get_memory_usage()
@@ -196,14 +189,14 @@ class PerformanceMonitor:
             logger.debug("Failed to write performance log: %s", e)
 
     def get_stats(self, function_name: str | None = None) -> dict[str, Any]:
-        """Get performance statistics.
+        """
+        Get performance statistics.
 
         Args:
             function_name: If specified, only return stats for this function
 
         Returns:
             Dictionary containing performance statistics
-
         """
         if function_name:
             filtered_metrics = [
@@ -245,11 +238,11 @@ class PerformanceMonitor:
         self.metrics.clear()
 
     def export_metrics(self, file_path: str | Path) -> None:
-        """Export metrics to a JSON file.
+        """
+        Export metrics to a JSON file.
 
         Args:
             file_path: Path to export metrics to
-
         """
         export_data = []
         for metrics in self.metrics:
@@ -275,7 +268,8 @@ _performance_monitor = PerformanceMonitor()
 def monitor_performance(
     function_name: str | None = None, monitor: PerformanceMonitor | None = None
 ) -> Callable:
-    """Monitor function performance.
+    """
+    Decorator for monitoring function performance.
 
     Args:
         function_name: Name to use for monitoring (defaults to function name)
@@ -283,15 +277,14 @@ def monitor_performance(
 
     Returns:
         Decorated function with performance monitoring enabled
-
     """
 
     def decorator(func: Callable) -> Callable:
-        """Decorate the function to track performance."""
+        """Decorator."""
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            """Execute the function and track its execution time."""
+            """Wrapper."""
             current_monitor = monitor or _performance_monitor
             start_time = time.time()
             try:
@@ -310,19 +303,20 @@ def monitor_performance(
 
 
 def profile_memory_usage(func: Callable) -> Callable:
-    """Profile memory usage of a function.
+    """
+    Decorator to profile memory usage of a function.
 
     Args:
         func: Function to profile
 
     Returns:
         Decorated function that tracks memory usage
-
     """
 
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        """Execute the function and calculate memory deltas."""
+        """Wrapper."""
+
         if not HAS_PSUTIL:
             logger.warning("psutil not available, memory profiling disabled")
             return func(*args, **kwargs)
@@ -352,11 +346,11 @@ def profile_memory_usage(func: Callable) -> Callable:
 
 
 def get_system_metrics() -> dict[str, Any]:
-    """Get comprehensive system metrics.
+    """
+    Get comprehensive system metrics.
 
     Returns:
         Dictionary containing current system metrics
-
     """
     monitor = SystemMonitor()
     metrics = monitor.get_current_metrics()
@@ -376,11 +370,11 @@ def get_system_metrics() -> dict[str, Any]:
 
 @contextmanager
 def track_resource_usage(operation: str):
-    """Context manager to track resource usage for an operation.
+    """
+    Context manager to track resource usage for an operation.
 
     Args:
         operation: Name of the operation being tracked
-
     """
     if not HAS_PSUTIL:
         logger.warning("psutil not available, resource tracking disabled")
@@ -428,7 +422,6 @@ def get_performance_stats(function_name: str | None = None) -> dict[str, Any]:
 
     Returns:
         Dictionary containing performance statistics.
-
     """
     return _performance_monitor.get_stats(function_name)
 
@@ -439,7 +432,6 @@ def performance_context(operation: str):
 
     Args:
         operation: Name of the operation being tracked.
-
     """
     start_time = time.time()
     try:

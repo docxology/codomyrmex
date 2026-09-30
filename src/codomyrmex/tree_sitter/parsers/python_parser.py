@@ -28,14 +28,12 @@ class PythonParser(Parser):
         root.children.extend(self._parse_imports(source, lines))
         return root
 
-    # Bolt optimization: Hoisted regex compilation to class level to prevent recompiling on every parse call
-    _FUNC_PATTERN = re.compile(
-        r"^(\s*)def\s+(\w+)\s*\((.*?)\)\s*(?:->.*?)?:", re.MULTILINE
-    )
-
     def _parse_functions(self, source: str, lines: list[str]) -> list[ASTNode]:
         functions = []
-        for match in self._FUNC_PATTERN.finditer(source):
+        pattern = re.compile(
+            r"^(\s*)def\s+(\w+)\s*\((.*?)\)\s*(?:->.*?)?:", re.MULTILINE
+        )
+        for match in pattern.finditer(source):
             indent = len(match.group(1))
             name = match.group(2)
             params = match.group(3)
@@ -63,13 +61,10 @@ class PythonParser(Parser):
             )
         return functions
 
-    _CLASS_PATTERN = re.compile(
-        r"^(\s*)class\s+(\w+)\s*(?:\((.*?)\))?\s*:", re.MULTILINE
-    )
-
     def _parse_classes(self, source: str, lines: list[str]) -> list[ASTNode]:
         classes = []
-        for match in self._CLASS_PATTERN.finditer(source):
+        pattern = re.compile(r"^(\s*)class\s+(\w+)\s*(?:\((.*?)\))?\s*:", re.MULTILINE)
+        for match in pattern.finditer(source):
             indent = len(match.group(1))
             name = match.group(2)
             bases = match.group(3) or ""
@@ -95,12 +90,11 @@ class PythonParser(Parser):
             )
         return classes
 
-    _IMPORT_PATTERN1 = re.compile(r"^import\s+(.+)$", re.MULTILINE)
-    _IMPORT_PATTERN2 = re.compile(r"^from\s+(\S+)\s+import\s+(.+)$", re.MULTILINE)
-
     def _parse_imports(self, source: str, lines: list[str]) -> list[ASTNode]:
         imports = []
-        for match in self._IMPORT_PATTERN1.finditer(source):
+        pattern1 = re.compile(r"^import\s+(.+)$", re.MULTILINE)
+        pattern2 = re.compile(r"^from\s+(\S+)\s+import\s+(.+)$", re.MULTILINE)
+        for match in pattern1.finditer(source):
             line_num = source[: match.start()].count("\n")
             imports.append(
                 ASTNode(
@@ -114,7 +108,7 @@ class PythonParser(Parser):
                     },
                 )
             )
-        for match in self._IMPORT_PATTERN2.finditer(source):
+        for match in pattern2.finditer(source):
             line_num = source[: match.start()].count("\n")
             imports.append(
                 ASTNode(

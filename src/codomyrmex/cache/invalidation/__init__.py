@@ -12,7 +12,7 @@ import time
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import timedelta
+from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Optional
 
@@ -34,8 +34,8 @@ class CacheEntry:
 
     key: str
     value: Any
-    created_at: float = field(default_factory=time.monotonic)
-    last_accessed: float = field(default_factory=time.monotonic)
+    created_at: datetime = field(default_factory=datetime.now)
+    last_accessed: datetime = field(default_factory=datetime.now)
     access_count: int = 0
     ttl_seconds: float | None = None
     tags: set[str] = field(default_factory=set)
@@ -46,12 +46,12 @@ class CacheEntry:
         """Check if entry is expired."""
         if self.ttl_seconds is None:
             return False
-        age = time.monotonic() - self.created_at
+        age = (datetime.now() - self.created_at).total_seconds()
         return age > self.ttl_seconds
 
     def touch(self) -> None:
         """Update access time and count."""
-        self.last_accessed = time.monotonic()
+        self.last_accessed = datetime.now()
         self.access_count += 1
 
 
@@ -166,12 +166,10 @@ class InvalidationManager:
         self,
         key: str,
         value: Any,
-        ttl: float | timedelta | None = None,
+        ttl: float | None = None,
         tags: set[str] | None = None,
     ) -> None:
         """set a cache entry."""
-        if isinstance(ttl, timedelta):
-            ttl = ttl.total_seconds()
         with self._lock:
             # Evict if at capacity
             while len(self._entries) >= self.max_size:

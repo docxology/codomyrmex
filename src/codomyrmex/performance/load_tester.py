@@ -27,7 +27,6 @@ class LoadTestResult:
         p95_latency_ms: 95th percentile latency.
         throughput_per_sec: Requests per second.
         error_rate: Fraction of failed requests.
-
     """
 
     total_requests: int = 0
@@ -66,7 +65,6 @@ class LoadTester:
 
         Returns:
             LoadTestResult with stats.
-
         """
         latencies: list[float] = []
         successes = 0

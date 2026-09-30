@@ -5,7 +5,6 @@ Configuration for the Jules agent runtime: persona/instruction files consumed by
 
 ## Layout
 - `bolt.md` — fast-lane operating instructions for Jules.
-- `palette.md` — UI/UX and accessibility agent spec.
 - `sentinel.md` — guardrail/oversight instructions for Jules sessions.
 
 ## Gotchas

@@ -138,18 +138,13 @@ def handle_quick_pipe(commands: list[str], stop_on_error: bool = True) -> bool:
         """Run a single command."""
         import subprocess
 
-        loop = asyncio.get_running_loop()
-
-        def _run():
-            return subprocess.run(
-                cmd,
-                shell=True,  # nosec B602
-                capture_output=True,
-                text=True,
-                timeout=60,
-            )
-
-        result = await loop.run_in_executor(None, _run)
+        result = subprocess.run(
+            cmd,
+            shell=True,  # nosec B602
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
         return {
             "command": cmd,
             "returncode": result.returncode,
@@ -168,10 +163,7 @@ def handle_quick_pipe(commands: list[str], stop_on_error: bool = True) -> bool:
 
         # Create closure to capture cmd
         def make_action(command):
-            """Create an action callback for a command."""
-
             async def action(_task_results=None):
-                """Execute the command."""
                 return await run_command(command, _task_results)
 
             return action
