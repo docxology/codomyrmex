@@ -30,7 +30,6 @@ _CLASS_RE = re.compile(r"^class\s+", re.MULTILINE)
 _DEF_RE = re.compile(r"^def\s+", re.MULTILINE)
 
 
-
 @dataclass
 class ModuleInfo:
     """Structural profile of a single module.
@@ -135,7 +134,10 @@ class ModuleIntrospector:
                     for node in ast.walk(tree):
                         if isinstance(node, ast.Assign):
                             for target in node.targets:
-                                if isinstance(target, ast.Name) and target.id == "__all__":
+                                if (
+                                    isinstance(target, ast.Name)
+                                    and target.id == "__all__"
+                                ):
                                     if isinstance(node.value, ast.List):
                                         info.exports = [
                                             elt.value
