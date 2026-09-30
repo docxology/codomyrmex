@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2026-09-30 - Replace slow AST traversal with precompiled regex in loop
+**Learning:** `ModuleIntrospector` was parsing the AST for every Python file just to count top-level classes and functions, causing severe slowness (~22s vs ~0.7s) on large module counts. When finding structural stats (like lines of code, test file existence, or simple class/function counts) where exact static analysis isn't needed, prefer precompiled regex or lazy iterators (e.g. `next(rglob(...), None) is not None` instead of `list(rglob(...))`).
+**Action:** Replace `ast.walk` and `ast.parse` inside hot loops with precompiled `re.compile` patterns (using `re.MULTILINE`), and convert full evaluations like `bool(list(generator))` to `next(generator, None) is not None`.

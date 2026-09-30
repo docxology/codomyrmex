@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import ast
 import logging
+import re
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -24,6 +25,10 @@ from typing import Any
 logger = logging.getLogger(__name__)
 
 _SRC_ROOT = Path(__file__).resolve().parents[1]
+
+_CLASS_RE = re.compile(r"^class\s+", re.MULTILINE)
+_DEF_RE = re.compile(r"^def\s+", re.MULTILINE)
+
 
 
 @dataclass
@@ -121,24 +126,23 @@ class ModuleIntrospector:
                 total_loc += len(content.splitlines())
                 mcp_count += content.count("@mcp_tool")
 
-                tree = ast.parse(content, filename=str(f))
-                is_main_init = f == mod_dir / "__init__.py"
+                total_classes += len(_CLASS_RE.findall(content))
+                total_functions += len(_DEF_RE.findall(content))
 
-                for node in ast.walk(tree):
-                    if isinstance(node, ast.ClassDef):
-                        total_classes += 1
-                    elif isinstance(node, ast.FunctionDef) and node.col_offset == 0:
-                        total_functions += 1
-                    elif is_main_init and isinstance(node, ast.Assign):
-                        for target in node.targets:
-                            if isinstance(target, ast.Name) and target.id == "__all__":
-                                if isinstance(node.value, ast.List):
-                                    info.exports = [
-                                        elt.value
-                                        for elt in node.value.elts
-                                        if isinstance(elt, ast.Constant)
-                                        and isinstance(elt.value, str)
-                                    ]
+                is_main_init = f == mod_dir / "__init__.py"
+                if is_main_init:
+                    tree = ast.parse(content, filename=str(f))
+                    for node in ast.walk(tree):
+                        if isinstance(node, ast.Assign):
+                            for target in node.targets:
+                                if isinstance(target, ast.Name) and target.id == "__all__":
+                                    if isinstance(node.value, ast.List):
+                                        info.exports = [
+                                            elt.value
+                                            for elt in node.value.elts
+                                            if isinstance(elt, ast.Constant)
+                                            and isinstance(elt.value, str)
+                                        ]
             except Exception:
                 continue
 
@@ -153,7 +157,7 @@ class ModuleIntrospector:
         info.has_spec = (mod_dir / "SPEC.md").exists()
 
         # Test detection
-        info.has_tests = bool(list(mod_dir.rglob("test_*.py")))
+        info.has_tests = next(mod_dir.rglob("test_*.py"), None) is not None
 
         # Submodule counting
         info.submodule_count = sum(
