@@ -44,3 +44,6 @@ icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
+## 2024-09-30 - Terminal Toolbar Accessibility
+**Learning:** Terminal toolbars and split pane layout controls frequently use icon-only buttons or ambiguous text labels (like 'RW'/'RO') to save screen real estate. These are completely opaque to screen readers if they lack `aria-label` attributes.
+**Action:** When working on dense developer UI components like terminal toolbars or layout controls, actively inspect `<button>` elements for missing `aria-label` attributes, especially for icon-only buttons (like detach), layout grids, and abbreviated state toggles.
