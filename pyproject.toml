@@ -81,7 +81,7 @@ dependencies = [
     "psutil>=6.0.0",
     "email-validator>=2.3.0",
     "mlx-lm>=0.31.1",
-    "wasmtime>=42.0.0",
+    "wasmtime==42.0.0",
     "matplotlib>=3.10.8",
     # OpenGauss in-tree agent (CLI + ACP adapter tests import these)
     "prompt-toolkit>=3.0.0",
@@ -92,7 +92,6 @@ dependencies = [
     "httpcore2==2.12.0",
     "httpx2==2.12.0",
     "mkdocs-material==9.7.7",
-    "nltk==3.10.3",
     "oauthlib==4.0.0",
     "pyjwt==2.15.0",
     "pypdf==6.19.0",
