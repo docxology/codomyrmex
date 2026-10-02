@@ -47,3 +47,8 @@ executors.
   (proposals #482/#484 rejected).
 - Transcription/STT command injection was fixed by merged #423 at the live
   call site; the `transcription_tools.py` file does not exist on `main`.
+
+## 2025-02-25 - SQLValidator Keyword Bypass
+**Vulnerability:** The SQLValidator used `kw in sql_upper.split()` to check for dangerous keywords. This could be bypassed using punctuation or comments immediately adjacent to the keyword (e.g., `DROP;` or `DELETE(table)`).
+**Learning:** String splitting is an unreliable method for tokenizing SQL or detecting keywords because it ignores the syntactic structure of the language, particularly how punctuation forms token boundaries.
+**Prevention:** Always use regular expressions with explicit word boundaries (`\b`) when attempting to perform basic keyword filtering or blocklisting to ensure robust token matching against punctuation and whitespace tricks.
