@@ -16,9 +16,9 @@ from __future__ import annotations
 
 import ast
 import logging
+import re
 import time
 from dataclasses import dataclass, field
-import re
 from pathlib import Path
 from typing import Any
 
