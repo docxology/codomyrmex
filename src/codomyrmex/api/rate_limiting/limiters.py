@@ -361,6 +361,7 @@ _LIMITER_FACTORIES = {
     "token_bucket": TokenBucketLimiter,
 }
 
+
 def create_rate_limiter(strategy: str, **kwargs) -> RateLimiter:
     """Factory function to create a rate limiter by strategy name.
 
