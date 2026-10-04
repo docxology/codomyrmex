@@ -1,4 +1,3 @@
-
 """Regression test: no unfilled placeholders in module documentation.
 
 P2-4: Verifies that [Module Name] and [YourToolName] placeholders have been
@@ -33,7 +32,8 @@ def _find_files_with_placeholder(
 
     # Use -F (fixed string) so square brackets are not treated as regex
     cmd = [
-        "grep", "-Frl",
+        "grep",
+        "-Frl",
         placeholder,
         "--include=*.md",
         str(repo),
