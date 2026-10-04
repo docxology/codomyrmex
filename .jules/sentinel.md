@@ -47,3 +47,8 @@ executors.
   (proposals #482/#484 rejected).
 - Transcription/STT command injection was fixed by merged #423 at the live
   call site; the `transcription_tools.py` file does not exist on `main`.
+
+## 2024-10-04 - SQL Validation Evasion via Adjacent Punctuation
+**Vulnerability:** The SQL validation logic (`TextToSQLEngine.validate`) used `string.split()` to check for dangerous keywords (e.g., `DROP`, `DELETE`). This allowed attackers to bypass the check by appending punctuation (e.g., `;DROP TABLE`) without spaces, which wouldn't be matched by `.split()`.
+**Learning:** Simple string splitting is insufficient for keyword filtering because it fails to isolate words attached to punctuation, enabling evasion.
+**Prevention:** Strictly use regular expressions with word boundaries (`\b`) to robustly filter dangerous keywords, ensuring matches even when punctuation is adjacent.
