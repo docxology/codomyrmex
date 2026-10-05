@@ -11,6 +11,9 @@ from typing import TYPE_CHECKING
 from codomyrmex.agentic_memory.core.memory import KnowledgeMemory
 from codomyrmex.agentic_memory.stores import InMemoryStore
 from codomyrmex.agents.hermes.session import HermesSession, InMemorySessionStore
+import re
+
+_WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
 
 if TYPE_CHECKING:
     import pytest
@@ -34,7 +37,6 @@ def test_build_memory_graph_with_wiki_links(monkeypatch: pytest.MonkeyPatch) -> 
     s2.add_message("user", "How does [[BM25]] compare to [[TF-IDF]]?")
     store.save(s2)
 
-    WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
     concept_sessions: dict[str, set[str]] = defaultdict(set)
     edge_weights: Counter[tuple[str, str]] = Counter()
 
@@ -42,7 +44,7 @@ def test_build_memory_graph_with_wiki_links(monkeypatch: pytest.MonkeyPatch) -> 
         session = store.load(sid)
         assert session is not None
         full_text = " ".join(m.get("content", "") for m in session.messages)
-        concepts = set(WIKI_LINK_RE.findall(full_text))
+        concepts = set(_WIKI_LINK_RE.findall(full_text))
         for c in concepts:
             concept_sessions[c].add(sid)
         for c1 in concepts:
@@ -70,7 +72,6 @@ def test_build_memory_graph_no_links_returns_empty() -> None:
     s.add_message("user", "Hello world, no special links here.")
     store.save(s)
 
-    WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
     concept_sessions: dict[str, set[str]] = defaultdict(set)
     edge_weights: Counter[tuple[str, str]] = Counter()
 
@@ -78,7 +79,7 @@ def test_build_memory_graph_no_links_returns_empty() -> None:
         session = store.load(sid)
         assert session is not None
         full_text = " ".join(m.get("content", "") for m in session.messages)
-        for c in set(WIKI_LINK_RE.findall(full_text)):
+        for c in set(_WIKI_LINK_RE.findall(full_text)):
             concept_sessions[c].add(sid)
 
     assert len(concept_sessions) == 0

@@ -6,6 +6,9 @@ from typing import Any
 
 from codomyrmex.agents.hermes.mcp_tools_pkg._client import _get_client
 from codomyrmex.model_context_protocol.decorators import mcp_tool
+import re
+
+_WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
 
 
 @mcp_tool(
@@ -102,7 +105,6 @@ def hermes_build_memory_graph(
 
         db_path = resolve_hermes_session_db()
 
-        WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
 
         concept_sessions: dict[str, set[str]] = defaultdict(set)
         edge_weights: Counter[tuple[str, str]] = Counter()
@@ -114,7 +116,7 @@ def hermes_build_memory_graph(
                 if session is None:
                     continue
                 full_text = " ".join(m.get("content", "") for m in session.messages)
-                concepts_in_session = set(WIKI_LINK_RE.findall(full_text))
+                concepts_in_session = set(_WIKI_LINK_RE.findall(full_text))
                 for concept in concepts_in_session:
                     concept_sessions[concept].add(sid)
                 # Directed edges: concept → all other concepts in same session
