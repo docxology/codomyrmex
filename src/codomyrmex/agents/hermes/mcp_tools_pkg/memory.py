@@ -10,6 +10,8 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 _WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
 
+_WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
+
 
 @mcp_tool(
     category="hermes",
