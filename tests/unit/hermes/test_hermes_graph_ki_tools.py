@@ -6,12 +6,12 @@ No live LLM backend required.
 
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING
 
 from codomyrmex.agentic_memory.core.memory import KnowledgeMemory
 from codomyrmex.agentic_memory.stores import InMemoryStore
 from codomyrmex.agents.hermes.session import HermesSession, InMemorySessionStore
-import re
 
 _WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
 

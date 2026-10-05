@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from codomyrmex.agents.hermes.mcp_tools_pkg._client import _get_client
 from codomyrmex.model_context_protocol.decorators import mcp_tool
-import re
 
 _WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
 
