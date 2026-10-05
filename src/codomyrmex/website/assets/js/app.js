@@ -319,10 +319,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         docContentForBrowser.innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit;">${data.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>`;
                     }
                 } else {
-                    docContentForBrowser.innerHTML = `<p style="color: var(--error-color)">Error loading document: ${data.error}</p>`;
+                    docContentForBrowser.innerHTML = '';
+                    const errP = document.createElement('p');
+                    errP.style.color = 'var(--error-color)';
+                    errP.textContent = 'Error loading document: ' + data.error;
+                    docContentForBrowser.appendChild(errP);
                 }
             } catch (err) {
-                docContentForBrowser.innerHTML = `<p style="color: var(--error-color)">Network Error: ${err.message}</p>`;
+                docContentForBrowser.innerHTML = '';
+                const errP = document.createElement('p');
+                errP.style.color = 'var(--error-color)';
+                errP.textContent = 'Network Error: ' + err.message;
+                docContentForBrowser.appendChild(errP);
             }
         });
     });
