@@ -10,6 +10,8 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 _WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
 
+_WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
+
 
 @mcp_tool(
     category="hermes",
@@ -104,7 +106,6 @@ def hermes_build_memory_graph(
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
 
         db_path = resolve_hermes_session_db()
-
 
         concept_sessions: dict[str, set[str]] = defaultdict(set)
         edge_weights: Counter[tuple[str, str]] = Counter()

@@ -46,3 +46,7 @@ EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
 ## 2026-10-25 - Precompile regex at module level for MCP tools
 **Learning:** Instantiating `re.compile` inside function bodies like `hermes_build_memory_graph` causes redundant per-call compilation overhead, especially in MCP tools which may be called repeatedly during an agent session.
 **Action:** Always define precompiled regular expressions as module-level or class-level constants to initialize them once and eliminate per-call allocation overhead.
+
+## 2026-10-25 - Precompile regex at module level for MCP tools
+**Learning:** Instantiating `re.compile` inside function bodies like `hermes_build_memory_graph` causes redundant per-call compilation overhead, especially in MCP tools which may be called repeatedly during an agent session.
+**Action:** Always define precompiled regular expressions as module-level or class-level constants to initialize them once and eliminate per-call allocation overhead.

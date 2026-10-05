@@ -15,6 +15,8 @@ from codomyrmex.agents.hermes.session import HermesSession, InMemorySessionStore
 
 _WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
 
+_WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
+
 if TYPE_CHECKING:
     import pytest
 
