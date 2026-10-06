@@ -59,7 +59,7 @@ class CacheWarmer(Generic[K, V]):
                 return self._stats
             self._warming = True
 
-        start = time.time()
+        start = time.monotonic()
         stats = WarmingStats()
         try:
             target = keys if keys is not None else self.key_provider.get_keys()
@@ -68,7 +68,7 @@ class CacheWarmer(Generic[K, V]):
                 if isinstance(self.value_loader, BatchValueLoader)
                 else self._warm_parallel(target)
             )
-            stats.total_time_ms = (time.time() - start) * 1000
+            stats.total_time_ms = (time.monotonic() - start) * 1000
             stats.last_warming = datetime.now()
         finally:
             with self._lock:
