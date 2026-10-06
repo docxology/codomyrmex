@@ -27,8 +27,21 @@ def test_lazy_import_does_not_load_framework_subpackages() -> None:
 
 def test_unknown_attribute_raises_attribute_error() -> None:
     try:
-        agents_pkg.definitely_not_a_real_name  # type: ignore[attr-defined]  # noqa: B018
+        agents_pkg.definitely_not_a_real_name  # noqa: B018
     except AttributeError:
         pass
     else:
         raise AssertionError("expected AttributeError for unknown attribute")
+
+
+def test_cli_config_command_resolves_lazy_get_config(capsys) -> None:
+    """Regression: ``_show_config`` referenced an unbound global ``get_config``.
+
+    Lazy exports live behind module ``__getattr__``, which bare-name lookups
+    inside the module never consult, so the command raised ``NameError``.
+    """
+    commands = agents_pkg.cli_commands()
+    commands["config"]()
+    out = capsys.readouterr().out
+    assert out.startswith("Agent configuration:")
+    assert "default_timeout" in out
