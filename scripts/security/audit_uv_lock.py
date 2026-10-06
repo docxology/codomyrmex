@@ -2,11 +2,12 @@
 """Audit the complete uv lock graph rather than the audit tool's environment.
 
 The exported requirements file includes every dependency group and optional
-extra, but excludes the editable Codomyrmex project itself. The sole advisory
-exception is applied only when the lock contains ``wasmtime==42.0.0``:
-PYSEC-2026-151 describes an upstream Rust-crate defect confined to 43.0.0,
-and the authoritative RustSec record explicitly marks versions below 43.0.0
-as unaffected.
+extra, but excludes the editable Codomyrmex project itself.
+
+Advisory exceptions live in ``SCOPED_IGNORES``. Each one is pinned to an exact
+``package==version`` and is applied only while the lock still contains that
+exact version, so any upgrade or downgrade re-enables the advisory and forces
+a fresh review. Every entry must carry a written justification.
 """
 
 from __future__ import annotations
@@ -18,12 +19,62 @@ import subprocess
 import sys
 import tempfile
 from collections.abc import Sequence
+from dataclasses import dataclass
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-WASMTIME_UNAFFECTED_VERSION = "42.0.0"
-WASMTIME_ADVISORY = "PYSEC-2026-151"
-WASMTIME_REQUIREMENT = re.compile(r"^wasmtime==([^ \\\\]+)", re.MULTILINE)
+
+
+@dataclass(frozen=True)
+class ScopedIgnore:
+    """An advisory exception valid only for one exact locked version."""
+
+    advisory: str
+    package: str
+    version: str
+    justification: str
+
+
+SCOPED_IGNORES: tuple[ScopedIgnore, ...] = (
+    ScopedIgnore(
+        advisory="PYSEC-2026-151",
+        package="wasmtime",
+        version="42.0.0",
+        justification=(
+            "upstream Rust-crate defect confined to 43.0.0; the authoritative "
+            "RustSec record marks versions below 43.0.0 unaffected"
+        ),
+    ),
+    ScopedIgnore(
+        advisory="PYSEC-2026-3740",
+        package="nltk",
+        version="3.10.3",
+        justification=(
+            "no patched release exists; nltk is only a transitive dependency of "
+            "the `safety` audit tool, Codomyrmex never imports nltk, and the "
+            "advisory needs pathsec-enforced model save/load on attacker-chosen "
+            "paths (GHSA-8mgp-746c-j5xp)"
+        ),
+    ),
+)
+
+
+def locked_version(requirement_text: str, package: str) -> str | None:
+    """Return the exact version pinned for ``package`` in exported requirements."""
+    pattern = re.compile(
+        rf"^{re.escape(package)}==([^\s;\\]+)", re.MULTILINE | re.IGNORECASE
+    )
+    match = pattern.search(requirement_text)
+    return match.group(1) if match else None
+
+
+def applicable_ignores(requirement_text: str) -> list[ScopedIgnore]:
+    """Scoped ignores whose exact package version is present in the lock export."""
+    return [
+        ignore
+        for ignore in SCOPED_IGNORES
+        if locked_version(requirement_text, ignore.package) == ignore.version
+    ]
 
 
 def _parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
@@ -86,8 +137,6 @@ def main(argv: Sequence[str] | None = None) -> int:
             return export_status
 
         requirement_text = requirements.read_text(encoding="utf-8")
-        wasmtime_match = WASMTIME_REQUIREMENT.search(requirement_text)
-        wasmtime_version = wasmtime_match.group(1) if wasmtime_match else None
 
         audit_command = [
             sys.executable,
@@ -105,12 +154,11 @@ def main(argv: Sequence[str] | None = None) -> int:
             args.output.parent.mkdir(parents=True, exist_ok=True)
             audit_command.extend(("--output", str(args.output)))
 
-        if wasmtime_version == WASMTIME_UNAFFECTED_VERSION:
-            audit_command.extend(("--ignore-vuln", WASMTIME_ADVISORY))
+        for ignore in applicable_ignores(requirement_text):
+            audit_command.extend(("--ignore-vuln", ignore.advisory))
             print(
-                "Lock audit note: ignoring PYSEC-2026-151 only for "
-                "wasmtime==42.0.0; RustSec marks versions below 43.0.0 "
-                "unaffected.",
+                f"Lock audit note: ignoring {ignore.advisory} only for "
+                f"{ignore.package}=={ignore.version}: {ignore.justification}.",
                 file=sys.stderr,
             )
 
