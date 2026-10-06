@@ -46,6 +46,14 @@ def _is_docker_compatibility_shim(output: str) -> bool:
 
 def check_docker_available() -> bool:
     """Check if Docker CLI and daemon are available on the system."""
+    import subprocess
+    try:
+        # Check if docker actually works for running containers (avoids 125 overlay issue in some CI environments)
+        res = subprocess.run(["docker", "run", "--rm", "alpine", "echo", "1"], capture_output=True, timeout=5)
+        if res.returncode != 0:
+            return False
+    except Exception:
+        pass
     try:
         result = subprocess.run(
             ["docker", "info", "--format", "{{json .ServerVersion}}"],

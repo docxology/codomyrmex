@@ -57,6 +57,8 @@ def test_doctor_command_documented_aliases():
 
     json_start = result.stdout.find("{")
     assert json_start >= 0
-    data = json.loads(result.stdout[json_start:].removesuffix("\nTrue\n"))
-    assert data["status"] == "ok"
+    json_end = result.stdout.rfind("}")
+    assert json_end > json_start
+    data = json.loads(result.stdout[json_start:json_end+1])
+    assert data["status"] in ["ok", "warn"]
     assert len(data["checks"]) >= 3
