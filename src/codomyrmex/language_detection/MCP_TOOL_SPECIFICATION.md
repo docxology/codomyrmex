@@ -25,4 +25,4 @@ served through the shared MCP tool registry
 
 - **Source tools**: [mcp_tools.py](mcp_tools.py)
 - **Module SPEC**: [SPEC.md](SPEC.md)
-- **Docs overview**: [../../docs/modules/language_detection/README.md](../../docs/modules/language_detection/README.md)
+- **Docs overview**: [../../../docs/modules/language_detection/README.md](../../../docs/modules/language_detection/README.md)
