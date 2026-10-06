@@ -44,3 +44,6 @@ icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
+## 2026-10-06 - Accessible Navigation Controls
+**Learning:** Collapsible sidebar groups and deeply nested sidebar tree nodes in this app relied solely on chevron icons for state indicating without programmatic expansion states (`aria-expanded`) or text labels (`aria-label`).
+**Action:** Always ensure that icon-only toggle buttons in navigation rails explicitly declare their intended action context (e.g. Expand/Collapse `<Label>`) and current state to support screen readers, especially in complex layout sidebars.
