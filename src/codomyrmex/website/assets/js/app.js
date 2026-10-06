@@ -284,6 +284,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Show an error line in the doc pane as text, never parsed as HTML.
+    const showDocError = (container, message) => {
+        const errP = document.createElement('p');
+        errP.style.color = 'var(--error-color)';
+        errP.textContent = message;
+        container.textContent = '';
+        container.appendChild(errP);
+    };
+
     document.querySelectorAll('.doc-link').forEach(link => {
         link.addEventListener('click', async (e) => {
             e.preventDefault();
@@ -300,15 +309,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 try {
                     data = await response.json();
                 } catch (_e) {
-                    docContentForBrowser.innerHTML = `<p style="color: var(--error-color)">Server error: non-JSON response (HTTP ${response.status})</p>`;
+                    showDocError(docContentForBrowser, `Server error: non-JSON response (HTTP ${response.status})`);
                     return;
                 }
 
                 if (data.content !== undefined) {
                     if (typeof marked !== 'undefined' && typeof DOMPurify !== 'undefined') {
-                        const rawHtml = marked.parse(data.content);
-                        const cleanHtml = DOMPurify.sanitize(rawHtml);
-                        docContentForBrowser.innerHTML = cleanHtml;
+                        docContentForBrowser.innerHTML = DOMPurify.sanitize(marked.parse(data.content));
 
                         if (typeof hljs !== 'undefined') {
                             docContentForBrowser.querySelectorAll('pre code').forEach((block) => {
@@ -316,13 +323,19 @@ document.addEventListener('DOMContentLoaded', () => {
                             });
                         }
                     } else {
-                        docContentForBrowser.innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit;">${data.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>`;
+                        // Without the sanitizer, show the markdown source as plain text.
+                        const pre = document.createElement('pre');
+                        pre.style.whiteSpace = 'pre-wrap';
+                        pre.style.fontFamily = 'inherit';
+                        pre.textContent = data.content;
+                        docContentForBrowser.textContent = '';
+                        docContentForBrowser.appendChild(pre);
                     }
                 } else {
-                    docContentForBrowser.innerHTML = `<p style="color: var(--error-color)">Error loading document: ${data.error}</p>`;
+                    showDocError(docContentForBrowser, `Error loading document: ${data.error}`);
                 }
             } catch (err) {
-                docContentForBrowser.innerHTML = `<p style="color: var(--error-color)">Network Error: ${err.message}</p>`;
+                showDocError(docContentForBrowser, `Network Error: ${err.message}`);
             }
         });
     });

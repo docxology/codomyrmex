@@ -57,11 +57,16 @@
         marked.setOptions({ breaks: true, gfm: true });
     }
 
-    function renderMarkdown(raw) {
+    function renderMarkdown(container, raw) {
         if (typeof DOMPurify !== 'undefined' && typeof marked !== 'undefined') {
-            return DOMPurify.sanitize(marked.parse(raw));
+            container.innerHTML = DOMPurify.sanitize(marked.parse(raw));
+            return;
         }
-        return '<pre>' + raw.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
+        // Without the sanitizer, show the markdown source as plain text, never as HTML.
+        const pre = document.createElement('pre');
+        pre.textContent = raw;
+        container.textContent = '';
+        container.appendChild(pre);
     }
 
     function highlightCode(container) {
@@ -100,14 +105,14 @@
                 const resp = await fetch('/api/docs/' + path.split('/').map(encodeURIComponent).join('/'));
                 if (resp.ok) {
                     const data = await resp.json();
-                    content.innerHTML = renderMarkdown(data.content || '');
+                    renderMarkdown(content, data.content || '');
                     highlightCode(content);
                 } else {
                     const data = await resp.json();
-                    content.innerHTML = '<p style="color: var(--error-color);">Error: ' + (data.error || resp.status) + '</p>';
+                    content.innerHTML = '<p style="color: var(--error-color);">Error: ' + escapeHtml(data.error || resp.status) + '</p>';
                 }
             } catch (err) {
-                content.innerHTML = '<p style="color: var(--error-color);">Connection error: ' + err.message + '</p>';
+                content.innerHTML = '<p style="color: var(--error-color);">Connection error: ' + escapeHtml(err.message) + '</p>';
             }
         });
     });

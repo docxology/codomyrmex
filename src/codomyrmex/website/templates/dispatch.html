@@ -114,10 +114,10 @@
                 const color = turn.provider === 'antigravity' ? 'var(--accent-color)' : (turn.provider === 'claude_code' ? '#d97757' : '#3c82f6');
                 html += `<div style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
                     <div style="margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
-                        <strong style="color: ${color};"><span aria-hidden="true">■</span> ${turn.speaker}</strong>
-                        <small style="color: var(--text-secondary);">${turn.provider} | ${turn.elapsed_seconds}s | ~${turn.token_estimate} tokens</small>
+                        <strong style="color: ${escapeHtml(color)};"><span aria-hidden="true">■</span> ${escapeHtml(turn.speaker)}</strong>
+                        <small style="color: var(--text-secondary);">${escapeHtml(turn.provider)} | ${escapeHtml(turn.elapsed_seconds)}s | ~${escapeHtml(turn.token_estimate)} tokens</small>
                     </div>
-                    <div>${turn.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+                    <div>${escapeHtml(turn.content)}</div>
                 </div>`;
             });
             transcriptDiv.innerHTML = html;

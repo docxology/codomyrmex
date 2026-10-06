@@ -390,7 +390,7 @@
             const resp = await fetch('/api/security/posture');
             const data = await resp.json();
             if (data.status === 'error') {
-                container.innerHTML = `<p style="color: var(--text-secondary);">Security posture unavailable: ${data.error}</p>`;
+                container.innerHTML = `<p style="color: var(--text-secondary);">Security posture unavailable: ${escapeHtml(data.error)}</p>`;
                 return;
             }
             const risk = data.risk_score ?? 0;
@@ -400,28 +400,28 @@
             container.innerHTML = `
                 <div class="metric-grid">
                     <div class="metric">
-                        <span class="metric-value risk-badge ${riskClass}" title="Lower is better (0–100)">${risk.toFixed(0)}<span style="font-size: 0.9rem; font-weight: 400;">/100</span></span>
+                        <span class="metric-value risk-badge ${escapeHtml(riskClass)}" title="Lower is better (0–100)">${escapeHtml(risk.toFixed(0))}<span style="font-size: 0.9rem; font-weight: 400;">/100</span></span>
                         <span class="metric-label">Risk Score</span>
                     </div>
                     <div class="metric">
-                        <span class="metric-value ${compliance >= 80 ? 'status-ok' : compliance >= 50 ? 'status-warn' : 'status-err'}">${compliance}%</span>
+                        <span class="metric-value ${compliance >= 80 ? 'status-ok' : compliance >= 50 ? 'status-warn' : 'status-err'}">${escapeHtml(compliance)}%</span>
                         <span class="metric-label">Compliance</span>
                     </div>
                     <div class="metric">
-                        <span class="metric-value ${secrets === 0 ? 'status-ok' : 'status-err'}">${secrets}</span>
+                        <span class="metric-value ${secrets === 0 ? 'status-ok' : 'status-err'}">${escapeHtml(secrets)}</span>
                         <span class="metric-label">Secret Findings</span>
                     </div>
                     <div class="metric">
-                        <span class="metric-value">${data.total_checks ?? 0}</span>
+                        <span class="metric-value">${escapeHtml(data.total_checks ?? 0)}</span>
                         <span class="metric-label">Checks Run</span>
                     </div>
                 </div>
                 <details style="margin-top: 1rem;">
                     <summary style="cursor: pointer; font-size: 0.85rem; color: var(--text-secondary);">Raw markdown report</summary>
-                    <pre style="margin-top: 0.5rem; font-size: 0.8rem; white-space: pre-wrap; color: var(--text-secondary);">${data.markdown || ''}</pre>
+                    <pre style="margin-top: 0.5rem; font-size: 0.8rem; white-space: pre-wrap; color: var(--text-secondary);">${escapeHtml(data.markdown || '')}</pre>
                 </details>`;
         } catch (err) {
-            container.innerHTML = `<p style="color: var(--text-secondary);">Could not load security posture: ${err.message}</p>`;
+            container.innerHTML = `<p style="color: var(--text-secondary);">Could not load security posture: ${escapeHtml(err.message)}</p>`;
         }
     })();
 
@@ -447,7 +447,7 @@
             const startData = await startResp.json();
 
             if (startData.error) {
-                resultsDiv.innerHTML = `<p class="status-err">${startData.error}</p>`;
+                resultsDiv.innerHTML = `<p class="status-err">${escapeHtml(startData.error)}</p>`;
                 btn.disabled = false;
                 btn.textContent = 'Run Tests';
                 return;
@@ -463,33 +463,33 @@
                         clearInterval(pollInterval);
                         const data = pollData.results || {};
                         if (data.error) {
-                            resultsDiv.innerHTML = `<p class="status-err">${data.error}</p>`;
+                            resultsDiv.innerHTML = `<p class="status-err">${escapeHtml(data.error)}</p>`;
                         } else {
                             const statusClass = data.success ? 'status-ok' : 'status-err';
                             resultsDiv.innerHTML = `
                                 <div class="test-summary">
                                     <div class="test-stat">
-                                        <span class="test-stat-value status-ok">${data.passed}</span>
+                                        <span class="test-stat-value status-ok">${escapeHtml(data.passed)}</span>
                                         <span class="test-stat-label">Passed</span>
                                     </div>
                                     <div class="test-stat">
-                                        <span class="test-stat-value status-err">${data.failed}</span>
+                                        <span class="test-stat-value status-err">${escapeHtml(data.failed)}</span>
                                         <span class="test-stat-label">Failed</span>
                                     </div>
                                     <div class="test-stat">
-                                        <span class="test-stat-value ${data.errors > 0 ? 'status-err' : 'status-ok'}">${data.errors}</span>
+                                        <span class="test-stat-value ${data.errors > 0 ? 'status-err' : 'status-ok'}">${escapeHtml(data.errors)}</span>
                                         <span class="test-stat-label">Errors</span>
                                     </div>
                                     <div class="test-stat">
-                                        <span class="test-stat-value" style="color: var(--text-secondary);">${data.skipped}</span>
+                                        <span class="test-stat-value" style="color: var(--text-secondary);">${escapeHtml(data.skipped)}</span>
                                         <span class="test-stat-label">Skipped</span>
                                     </div>
                                     <div class="test-stat">
-                                        <span class="test-stat-value">${data.total}</span>
+                                        <span class="test-stat-value">${escapeHtml(data.total)}</span>
                                         <span class="test-stat-label">Total</span>
                                     </div>
                                     <div class="test-stat">
-                                        <span class="test-stat-value ${statusClass}">${data.success ? 'PASS' : 'FAIL'}</span>
+                                        <span class="test-stat-value ${escapeHtml(statusClass)}">${data.success ? 'PASS' : 'FAIL'}</span>
                                         <span class="test-stat-label">Result</span>
                                     </div>
                                 </div>`;
@@ -506,7 +506,7 @@
                 }
             }, 2000);
         } catch (err) {
-            resultsDiv.innerHTML = `<p class="status-err">Network error: ${err.message}</p>`;
+            resultsDiv.innerHTML = `<p class="status-err">Network error: ${escapeHtml(err.message)}</p>`;
             btn.disabled = false;
             btn.textContent = 'Run Tests';
         }

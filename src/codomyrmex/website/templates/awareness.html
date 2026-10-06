@@ -132,7 +132,7 @@
     <h2 class="card-title">Ecosystem Map</h2>
     {% if awareness.missions or awareness.projects %}
     <div class="mermaid">
-        {{ awareness.mermaid_graph | safe }}
+        {{ awareness.mermaid_graph }}
     </div>
     {% else %}
     <p style="color: var(--text-secondary);">No missions or projects to visualize.</p>
@@ -254,21 +254,21 @@
             let html = '';
 
             if (skills.length > 0) {
-                html += '<h3 style="margin-bottom: 0.5rem; font-size: 1rem;">Skills (' + skills.length + ')</h3>';
+                html += '<h3 style="margin-bottom: 0.5rem; font-size: 1rem;">Skills (' + escapeHtml(skills.length) + ')</h3>';
                 html += '<div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">';
                 skills.forEach(function (s) {
                     const name = typeof s === 'string' ? s : (s.name || s);
-                    html += '<span style="display: inline-block; padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.8rem; background: rgba(59,130,246,0.15); color: var(--accent-color); border: 1px solid rgba(59,130,246,0.3);">' + name + '</span>';
+                    html += '<span style="display: inline-block; padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.8rem; background: rgba(59,130,246,0.15); color: var(--accent-color); border: 1px solid rgba(59,130,246,0.3);">' + escapeHtml(name) + '</span>';
                 });
                 html += '</div>';
             }
 
             if (hooks.length > 0) {
-                html += '<h3 style="margin-bottom: 0.5rem; font-size: 1rem;">Hooks (' + hooks.length + ')</h3>';
+                html += '<h3 style="margin-bottom: 0.5rem; font-size: 1rem;">Hooks (' + escapeHtml(hooks.length) + ')</h3>';
                 html += '<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">';
                 hooks.forEach(function (h) {
                     const name = typeof h === 'string' ? h : (h.name || h);
-                    html += '<span style="display: inline-block; padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.8rem; background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3);">' + name + '</span>';
+                    html += '<span style="display: inline-block; padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.8rem; background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3);">' + escapeHtml(name) + '</span>';
                 });
                 html += '</div>';
             }
