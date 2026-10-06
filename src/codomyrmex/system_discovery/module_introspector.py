@@ -153,7 +153,7 @@ class ModuleIntrospector:
         info.has_spec = (mod_dir / "SPEC.md").exists()
 
         # Test detection
-        info.has_tests = bool(list(mod_dir.rglob("test_*.py")))
+        info.has_tests = next(mod_dir.rglob("test_*.py"), None) is not None
 
         # Submodule counting
         info.submodule_count = sum(
