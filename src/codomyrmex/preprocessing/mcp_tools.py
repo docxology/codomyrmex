@@ -11,6 +11,12 @@ def preprocess_data(data: str) -> dict:
         data: The input string data to preprocess.
 
     Returns:
-        A dictionary containing the preprocessed data.
+        ``{"status": "success", "preprocessed": <str>}``, or
+        ``{"status": "error", "message": <str>}`` when ``data`` is not a string.
     """
+    if not isinstance(data, str):
+        return {
+            "status": "error",
+            "message": f"data must be a string, got {type(data).__name__}",
+        }
     return {"status": "success", "preprocessed": data.strip().lower()}

@@ -2,6 +2,12 @@
 
 import langdetect
 
+__all__ = ["detect_language", "detect_languages_with_probabilities"]
+
+# langdetect samples n-grams randomly; without a fixed seed the same input can
+# yield different languages across runs. Seeding makes results reproducible.
+langdetect.DetectorFactory.seed = 0
+
 
 def detect_language(text: str) -> str:
     """Detect the language of the provided text.
