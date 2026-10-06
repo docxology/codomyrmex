@@ -24,4 +24,4 @@ through the shared MCP tool registry
 
 - **Source tools**: [mcp_tools.py](mcp_tools.py)
 - **Module SPEC**: [SPEC.md](SPEC.md)
-- **Docs overview**: [../../docs/modules/preprocessing/README.md](../../docs/modules/preprocessing/README.md)
+- **Docs overview**: [../../../docs/modules/preprocessing/README.md](../../../docs/modules/preprocessing/README.md)
