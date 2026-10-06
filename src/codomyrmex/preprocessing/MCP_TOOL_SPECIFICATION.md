@@ -5,7 +5,7 @@
 ## Current MCP Surface
 
 | Tool | Signature | Description |
-|:---|:---|:---|
+| :--- | :--- | :--- |
 | `preprocess_data` | `(data: str) -> dict` | Preprocess the given data string; returns a status dictionary with the processed payload. |
 
 ## Error Contract

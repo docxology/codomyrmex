@@ -1,10 +1,6 @@
 {
   "defaultAction": "SCMP_ACT_ERRNO",
-  "architectures": [
-    "SCMP_ARCH_X86_64",
-    "SCMP_ARCH_X86",
-    "SCMP_ARCH_AARCH64"
-  ],
+  "architectures": ["SCMP_ARCH_X86_64", "SCMP_ARCH_X86", "SCMP_ARCH_AARCH64"],
   "syscalls": [
     {
       "names": [
@@ -255,9 +251,7 @@
       "comment": "Essential syscalls for Python/code execution in sandbox"
     },
     {
-      "names": [
-        "personality"
-      ],
+      "names": ["personality"],
       "action": "SCMP_ACT_ALLOW",
       "args": [
         {
@@ -269,9 +263,7 @@
       "comment": "Allow only Linux-personality (no ASLR disable)"
     },
     {
-      "names": [
-        "clone3"
-      ],
+      "names": ["clone3"],
       "action": "SCMP_ACT_ERRNO",
       "errnoRet": 38
     }

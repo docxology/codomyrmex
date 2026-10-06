@@ -5,13 +5,13 @@
 ## Current MCP Surface
 
 | Tool | Signature | Description |
-|:---|:---|:---|
+| :--- | :--- | :--- |
 | `language_detection_detect` | `(text: str) -> dict[str, Any]` | Detect the primary language; returns `{"status": "success", "language": "<ISO 639-1 code>"}`. |
 | `language_detection_detect_probs` | `(text: str) -> dict[str, Any]` | Return per-language probabilities from `langdetect`; scores are heuristic, not calibrated. |
 
 ## Error Contract
 
-On failure the tools return `{"status": "error", "error": "<message>"}` rather
+On failure the tools return `{"status": "error", "message": "<message>"}` rather
 than raising. `langdetect` must be installed (`pyproject.toml` dependency);
 detection requires enough text to be reliable.
 
