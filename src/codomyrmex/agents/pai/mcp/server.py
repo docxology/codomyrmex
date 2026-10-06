@@ -147,7 +147,7 @@ def create_codomyrmex_mcp_server(
     )
 
     config = MCPServerConfig(name=name, transport=transport)
-    server = MCPServer(config=config)
+    server = MCPServer(config=config, call_tool_fn=call_tool)
 
     # ── Warm-up: eagerly populate discovery cache ─────────────────
     if config.warm_up:
