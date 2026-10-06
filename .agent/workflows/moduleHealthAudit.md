@@ -1,5 +1,5 @@
 ---
-description: Audit Codomyrmex module health: RASP compliance, MCP tool correctness, PAI.md accuracy, test coverage. Use at sprint boundaries or before a release.
+description: "Audit Codomyrmex module health: RASP compliance, MCP tool correctness, PAI.md accuracy, test coverage. Use at sprint boundaries or before a release."
 ---
 
 # Module Health Audit

@@ -1,15 +1,15 @@
 ---
-description: Push Codomyrmex test coverage toward the 40% target. Zero-mock policy applies.
+description: Push Codomyrmex test coverage above the 60% gate. Zero-mock policy applies.
 ---
 
 # Coverage Push Workflow
 
-Current gate: **40%** (`pyproject.toml`). Stretch target: 45%+. (Historical note: Sprint 22 baseline was ~32%.)
+Current gate: **60%** (`[tool.coverage.report] fail_under` in `pyproject.toml`, enforced by CI's coverage gate). (Historical note: Sprint 22 baseline was ~32%.)
 
 ## 1. Find High-ROI Targets
 
 ```bash
-uv run pytest --cov=src/codomyrmex --cov-fail-under=40 --cov-report=term-missing -q 2>&1 | grep " 0%" | head -30
+uv run pytest --cov=src/codomyrmex --cov-fail-under=60 --cov-report=term-missing -q 2>&1 | grep " 0%" | head -30
 ```
 Focus on 0%-covered files with the most statements.
 

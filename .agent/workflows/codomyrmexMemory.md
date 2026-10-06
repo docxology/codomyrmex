@@ -13,7 +13,7 @@ Persists information into the agent's long-term memory for future retrieval and 
 1. Save the memory:
 
 ```bash
-cd /Users/mini/Documents/GitHub/codomyrmex && uv run python -c "
+cd "$(git rev-parse --show-toplevel)" && uv run python -c "
 from codomyrmex.agentic_memory.mcp_tools import memory_put
 import sys
 content = sys.argv[1] if len(sys.argv) > 1 else ''

@@ -212,9 +212,6 @@ def check_rasp() -> list[CheckResult]:
     return results
 
 
-_WORKFLOW_DIR_DOC_FILES = frozenset({"AGENTS.md", "README.md", "SPEC.md", "PAI.md"})
-
-
 def check_workflows() -> list[CheckResult]:
     """Check workflow file validity."""
     results: list[CheckResult] = []
@@ -228,8 +225,10 @@ def check_workflows() -> list[CheckResult]:
     valid = 0
     invalid: list[str] = []
 
+    from codomyrmex.agents.pai.mcp.proxy_tools import WORKFLOW_DOC_FILES
+
     for wf in sorted(workflow_dir.glob("*.md")):
-        if wf.name in _WORKFLOW_DIR_DOC_FILES:
+        if wf.name in WORKFLOW_DOC_FILES:
             continue  # directory documentation, not a workflow definition
         content = wf.read_text(encoding="utf-8")
         if content.startswith("---"):
