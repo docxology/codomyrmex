@@ -37,7 +37,7 @@ Available Commands:
 
     Build Operations:
     codomyrmex build               Build project artifacts
-    codomyrmex test <module>       Run tests for a specific module
+    codomyrmex test \<module\>       Run tests for a specific module
 
     FPF (Functional Programming Format):
     codomyrmex fpf fetch           Fetch FPF data
