@@ -202,11 +202,25 @@ class TestLaplaceNoise:
         with pytest.raises(ValueError, match="Epsilon must be positive"):
             laplace_noise(-1.0)
 
-    def test_returns_value_in_range(self):
-        # Since implementation uses uniform approx: uniform(-0.5, 0.5)
-        for _ in range(20):
-            noise = laplace_noise(1.0)
-            assert -0.5 <= noise <= 0.5
+    def test_samples_follow_laplace_scale(self):
+        # Laplace(0, b): E[x] = 0 and E[|x|] = b. Regression: the function used
+        # to return uniform(-0.5, 0.5) noise regardless of epsilon/sensitivity.
+        n = 20_000
+        for epsilon, sensitivity in ((1.0, 1.0), (0.5, 2.0)):
+            scale = sensitivity / epsilon
+            samples = [laplace_noise(epsilon, sensitivity) for _ in range(n)]
+            mean = sum(samples) / n
+            mean_abs = sum(abs(x) for x in samples) / n
+            assert abs(mean) < 0.1 * scale
+            assert mean_abs == pytest.approx(scale, rel=0.05)
+            assert max(abs(x) for x in samples) > 0.5 * scale * 5
+
+    def test_uses_cryptographic_rng(self):
+        import secrets
+
+        from codomyrmex.privacy import privacy
+
+        assert isinstance(privacy._CSPRNG, secrets.SystemRandom)
 
 
 class TestAddLaplaceNoise:
