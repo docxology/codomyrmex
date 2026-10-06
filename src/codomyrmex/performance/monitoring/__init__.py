@@ -46,7 +46,7 @@ except ImportError:
 
         def __init__(self, *args, **kwargs):
             """Initialize the no-op context manager."""
-            return None  # No-op stub
+            return  # No-op stub
 
         def __enter__(self):
             """Enter the runtime context."""
@@ -54,7 +54,7 @@ except ImportError:
 
         def __exit__(self, *args):
             """Exit the runtime context."""
-            return None  # No-op stub
+            return  # No-op stub
 
     def get_system_metrics(*args, **kwargs):
         """Get system metrics (stub)."""

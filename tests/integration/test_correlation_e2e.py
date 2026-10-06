@@ -53,7 +53,7 @@ def _trust_safe_tools():
     _registry._load()
     snapshot = dict(_registry._levels)
 
-    _registry.verify_all_safe()
+    _registry.trust_all()
 
     yield
 
