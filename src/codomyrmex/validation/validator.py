@@ -310,3 +310,22 @@ class Validator:
         """Return the list of ValidationError objects from validating data."""
         result = self.validate(data, schema)
         return result.errors
+
+
+def validate(
+    data: Any, schema: Any, validator_type: str = "json_schema"
+) -> ValidationResult:
+    """Validate ``data`` against ``schema`` with a one-off :class:`Validator`."""
+    return Validator(validator_type).validate(data, schema)
+
+
+def is_valid(data: Any, schema: Any, validator_type: str = "json_schema") -> bool:
+    """Return True if ``data`` passes validation against ``schema``."""
+    return Validator(validator_type).is_valid(data, schema)
+
+
+def get_errors(
+    data: Any, schema: Any, validator_type: str = "json_schema"
+) -> list[ValidationError]:
+    """Return the validation errors for ``data`` against ``schema``."""
+    return Validator(validator_type).get_errors(data, schema)

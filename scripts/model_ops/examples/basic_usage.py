@@ -20,17 +20,7 @@ if TYPE_CHECKING:
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-# Direct import to avoid triggering full codomyrmex package init
-import importlib.util
-
-script_base_path = (
-    project_root / "src" / "codomyrmex" / "utils" / "process" / "script_base.py"
-)
-spec = importlib.util.spec_from_file_location("script_base", script_base_path)
-script_base = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(script_base)
-ScriptBase = script_base.ScriptBase
-ScriptConfig = script_base.ScriptConfig
+from codomyrmex.utils.process.script_base import ScriptBase, ScriptConfig
 
 
 class ModelOpsScript(ScriptBase):
