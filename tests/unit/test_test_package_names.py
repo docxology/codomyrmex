@@ -44,7 +44,10 @@ def _real_module_exists(name: str) -> bool:
     # from sys.path, which other tests may have extended: the repository root
     # (scripts and tools put it on sys.path), src/, and installed packages.
     search = [str(REPO_ROOT), str(REPO_ROOT / "src"), *site.getsitepackages()]
-    return PathFinder.find_spec(name, search) is not None
+    spec = PathFinder.find_spec(name, search)
+    # Plain directories (namespace packages) do not count: tests create output
+    # directories such as git_analysis/ in the working directory.
+    return spec is not None and spec.origin is not None
 
 
 @pytest.mark.unit
