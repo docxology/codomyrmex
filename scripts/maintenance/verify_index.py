@@ -1,6 +1,7 @@
 import re
+from pathlib import Path
 
-content = open("src/codomyrmex/INDEX.md").read()
+content = Path("src/codomyrmex/INDEX.md").read_text(encoding="utf-8")
 
 modules = set(re.findall(r"\[([a-z_]+)/\]\(\1/\)", content))
 print(f"Total entries in INDEX.md table: {len(modules)}")

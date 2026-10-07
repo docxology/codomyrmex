@@ -15,6 +15,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
+from tests.support.temp_files import temp_file_path
 
 from codomyrmex.serialization.streaming import (
     StreamBuffer,
@@ -27,9 +28,7 @@ from codomyrmex.serialization.streaming import (
 
 
 def _tmp_path(suffix: str = ".tmp") -> Path:
-    f = tempfile.NamedTemporaryFile(delete=False, suffix=suffix)
-    f.close()
-    return Path(f.name)
+    return temp_file_path(suffix)
 
 
 # ── stream_jsonl_write / read ─────────────────────────────────────────

@@ -181,8 +181,14 @@ class TestConnectivity:
 # ---------------------------------------------------------------------------
 
 
+@pytest.mark.performance
 class TestPerformance:
-    """Scale-free generation must be efficient."""
+    """Scale-free generation must be efficient.
+
+    Wall-clock budgets belong to the opt-in performance suite (CI runs
+    ``-m "not performance"``): on a shared macOS runner the 500-node case
+    took 1.5 s against its 1 s budget and failed an unrelated main build.
+    """
 
     def test_1000_nodes_under_5_seconds(self):
         """build_graph with 1000 SCALE_FREE nodes must finish in < 5 s."""

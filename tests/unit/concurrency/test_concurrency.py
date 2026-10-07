@@ -16,6 +16,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pytest
+from tests.support.temp_files import temp_file_path
 
 from codomyrmex.concurrency import (
     AsyncLocalSemaphore,
@@ -272,9 +273,18 @@ class TestLocalSemaphoreBasic:
         sem.release()
 
     def test_context_manager_timeout_raises(self):
-        sem = LocalSemaphore(value=0)
+        # The context manager used the fixed 10 s acquire() default, so this
+        # test always waited 10 s; acquire_timeout makes the wait explicit.
+        sem = LocalSemaphore(value=0, acquire_timeout=0.05)
         with pytest.raises(TimeoutError), sem:
             pass
+
+    def test_context_manager_default_timeout_is_ten_seconds(self):
+        assert LocalSemaphore().acquire_timeout == 10.0
+
+    def test_negative_acquire_timeout_rejected(self):
+        with pytest.raises(ValueError, match="acquire_timeout"):
+            LocalSemaphore(acquire_timeout=-1)
 
     def test_threaded_contention(self):
         sem = LocalSemaphore(value=2)
@@ -904,9 +914,7 @@ class TestAsyncSlidingWindowBasic:
 
 def _tmp_dlq():
     """Return (dlq, path) with an isolated temp JSONL file."""
-    f = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
-    f.close()
-    path = Path(f.name)
+    path = temp_file_path(".jsonl")
     return DeadLetterQueue(path=path), path
 
 
@@ -970,9 +978,7 @@ class TestDeadLetterQueueList:
             path.unlink(missing_ok=True)
 
     def test_nonexistent_file(self):
-        f = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
-        path = Path(f.name)
-        f.close()
+        path = temp_file_path(".jsonl")
         path.unlink()  # Remove to simulate nonexistent file
         dlq = DeadLetterQueue(path=path)
         assert dlq.list_entries() == []

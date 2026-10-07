@@ -7,6 +7,7 @@
 Validation coverage, fixtures, and regression checks for Security.
 
 ## Directory Contents
+
 - `AGENTS.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -22,7 +23,6 @@ Validation coverage, fixtures, and regression checks for Security.
 - `test_compliance_report.py` – File
 - `test_dashboard.py` – File
 - `test_governance.py` – File
-- `test_mcp_security.py` – File
 - `test_mcp_tools.py` – File
 - `test_permissions.py` – File
 - `test_risk_assessment.py` – File
@@ -42,6 +42,7 @@ Validation coverage, fixtures, and regression checks for Security.
 - `unit` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: ../../../../../README.md
 

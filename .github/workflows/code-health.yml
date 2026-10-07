@@ -47,7 +47,10 @@ jobs:
       - name: Collect test count
         id: test-count
         run: |
-          count=$(uv run pytest tests/unit/ --collect-only -q 2>/dev/null | grep "selected" | grep -oE "[0-9]+ selected" | head -1 | grep -oE "[0-9]+" || echo "N/A")
+          # "--collect-only -q" ends with "N tests collected"; the old pattern
+          # looked for "selected", which only appears when tests are deselected.
+          count=$(uv run pytest tests/unit/ --collect-only -q --no-cov 2>/dev/null | grep -oE "[0-9]+ tests? collected" | grep -oE "[0-9]+" | tail -1 || echo "N/A")
+          count=${count:-N/A}
           echo "count=${count}" >> $GITHUB_OUTPUT
           echo "Test count: ${count}"
 

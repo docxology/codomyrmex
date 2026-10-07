@@ -5,6 +5,8 @@ Zero-Mock: All tests use real implementations.
 
 from __future__ import annotations
 
+import pytest
+
 # ── Health Reporter ───────────────────────────────────────────────
 from codomyrmex.system_discovery.health_reporter import (
     HealthMetrics,
@@ -12,18 +14,22 @@ from codomyrmex.system_discovery.health_reporter import (
 )
 
 
+@pytest.fixture(scope="module")
+def health_report() -> dict:
+    """Scan the repository once; each scan takes ~7 s in CI."""
+    return HealthReporter().generate()
+
+
 class TestHealthReporter:
     """Verify codebase health reporting."""
 
-    def test_generate_report(self) -> None:
-        reporter = HealthReporter()
-        report = reporter.generate()
+    def test_generate_report(self, health_report: dict) -> None:
+        report = health_report
         assert report["health_score"] >= 0
         assert report["metrics"]["total_modules"] >= 100
 
-    def test_has_recommendations(self) -> None:
-        reporter = HealthReporter()
-        report = reporter.generate()
+    def test_has_recommendations(self, health_report: dict) -> None:
+        report = health_report
         assert isinstance(report["recommendations"], list)
 
     def test_health_score_range(self) -> None:
@@ -40,23 +46,22 @@ class TestHealthReporter:
         )
         assert metrics.health_score < 70  # Penalized
 
-    def test_write_markdown(self, tmp_path) -> None:
+    def test_write_markdown(self, tmp_path, health_report: dict) -> None:
         reporter = HealthReporter()
-        report = reporter.generate()
+        report = health_report
         out = reporter.write_markdown(report, str(tmp_path / "health.md"))
         assert out.exists()
         content = out.read_text()
         assert "Health Report" in content
 
-    def test_write_json(self, tmp_path) -> None:
+    def test_write_json(self, tmp_path, health_report: dict) -> None:
         reporter = HealthReporter()
-        report = reporter.generate()
+        report = health_report
         out = reporter.write_json(report, str(tmp_path / "health.json"))
         assert out.exists()
 
-    def test_largest_modules(self) -> None:
-        reporter = HealthReporter()
-        report = reporter.generate()
+    def test_largest_modules(self, health_report: dict) -> None:
+        report = health_report
         assert len(report["largest_modules"]) == 10
 
 
