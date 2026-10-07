@@ -4,7 +4,10 @@ SBOM (Software Bill of Materials) Generation
 Generate and manage SBOMs for supply chain security.
 """
 
+import base64
+import binascii
 import hashlib
+import hmac
 import json
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -242,21 +245,77 @@ class SupplyChainVerifier:
         """Verify component checksum."""
         return component.checksum == expected
 
-    def verify_signature(self, path: str, signature_path: str) -> bool:
-        """Verify file signature using simple hash comparison for now."""
+    def verify_digest(
+        self, path: str, digest_path: str, algorithm: str = "sha256"
+    ) -> bool:
+        """Check a file against a published hex digest (e.g. a ``.sha256`` file).
+
+        This proves integrity against the published digest only, not who
+        published it; use :meth:`verify_signature` for authenticity. The digest
+        file may be in ``sha256sum`` format (``<hex>  <filename>``).
+        """
         try:
-            with open(signature_path) as f:
-                expected = f.read().strip()
-
-            actual = self.compute_file_hash(path)
-            # A true signature verification would use public keys, but as a Zero-Mock implementation
-            # we do a secure hash comparison fallback.
-            import hmac
-
-            return hmac.compare_digest(actual, expected)
-        except Exception as e:
-            logger.warning("Signature verification failed: %s", e)
+            with open(digest_path) as f:
+                expected = f.read().split()[0].strip().lower()
+            actual = self.compute_file_hash(path, algorithm)
+        except (OSError, IndexError, ValueError) as e:
+            logger.warning("Digest verification failed for %s: %s", path, e)
             return False
+        return hmac.compare_digest(actual, expected)
+
+    def verify_signature(
+        self, path: str, signature_path: str, public_key_path: str
+    ) -> bool:
+        """Verify a detached signature over a file with a PEM public key.
+
+        Supports Ed25519 and Ed448 keys, RSA (PKCS#1 v1.5 with SHA-256, as
+        produced by ``openssl dgst -sha256 -sign``) and ECDSA with SHA-256.
+        The signature file holds the raw signature bytes or their base64
+        encoding.
+
+        Returns:
+            True only if the signature is valid for the file and key. Unreadable
+            files and invalid signatures return False (and are logged).
+
+        Raises:
+            ValueError: If the public key type is not supported.
+        """
+        from cryptography.exceptions import InvalidSignature
+        from cryptography.hazmat.primitives import hashes, serialization
+        from cryptography.hazmat.primitives.asymmetric import (
+            ec,
+            ed448,
+            ed25519,
+            padding,
+            rsa,
+        )
+
+        try:
+            with open(path, "rb") as f:
+                data = f.read()
+            with open(signature_path, "rb") as f:
+                signature = _decode_signature(f.read())
+            with open(public_key_path, "rb") as f:
+                public_key = serialization.load_pem_public_key(f.read())
+        except (OSError, ValueError) as e:
+            logger.warning("Signature verification failed for %s: %s", path, e)
+            return False
+
+        try:
+            if isinstance(public_key, (ed25519.Ed25519PublicKey, ed448.Ed448PublicKey)):
+                public_key.verify(signature, data)
+            elif isinstance(public_key, rsa.RSAPublicKey):
+                public_key.verify(signature, data, padding.PKCS1v15(), hashes.SHA256())
+            elif isinstance(public_key, ec.EllipticCurvePublicKey):
+                public_key.verify(signature, data, ec.ECDSA(hashes.SHA256()))
+            else:
+                raise ValueError(
+                    f"Unsupported public key type: {type(public_key).__name__}"
+                )
+        except InvalidSignature:
+            logger.warning("Invalid signature for %s", path)
+            return False
+        return True
 
     def compute_file_hash(self, path: str, algorithm: str = "sha256") -> str:
         """Compute file hash."""
@@ -265,6 +324,18 @@ class SupplyChainVerifier:
             for chunk in iter(lambda: f.read(8192), b""):
                 h.update(chunk)
         return h.hexdigest()
+
+
+def _decode_signature(raw: bytes) -> bytes:
+    """Return signature bytes from a raw or base64-encoded signature file."""
+    text = raw.strip()
+    try:
+        decoded = base64.b64decode(text, validate=True)
+    except (binascii.Error, ValueError):
+        return raw
+    # Raw binary signatures are almost never valid base64; treat a clean decode
+    # of printable input as the base64 form.
+    return decoded if text.isascii() and text else raw
 
 
 __all__ = [

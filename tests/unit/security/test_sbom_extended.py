@@ -3,6 +3,8 @@
 import hashlib
 import json
 
+import pytest
+
 from codomyrmex.security.sbom import (
     SBOM,
     Component,
@@ -372,28 +374,122 @@ class TestSupplyChainVerifier:
         verifier = SupplyChainVerifier()
         assert verifier.verify_checksum(comp, "wrong") is False
 
-    def test_verify_signature_match(self, tmp_path):
-        """verify_signature() returns True when file hash matches signature."""
+    def test_verify_digest_match(self, tmp_path):
+        """verify_digest() accepts a matching hex digest (sha256sum format too)."""
+        content = b"package content"
+        f = tmp_path / "package.whl"
+        f.write_bytes(content)
+        digest = tmp_path / "package.whl.sha256"
+        digest.write_text(f"{hashlib.sha256(content).hexdigest()}  package.whl\n")
+        verifier = SupplyChainVerifier()
+        assert verifier.verify_digest(str(f), str(digest)) is True
+
+    def test_verify_digest_mismatch(self, tmp_path):
+        """verify_digest() returns False when the digest differs."""
+        f = tmp_path / "package.whl"
+        f.write_bytes(b"real content")
+        digest = tmp_path / "package.whl.sha256"
+        digest.write_text("0" * 64)
+        verifier = SupplyChainVerifier()
+        assert verifier.verify_digest(str(f), str(digest)) is False
+
+    def test_verify_digest_missing_file(self, tmp_path):
+        """verify_digest() returns False when the digest file is missing."""
+        f = tmp_path / "package.whl"
+        f.write_bytes(b"content")
+        verifier = SupplyChainVerifier()
+        assert verifier.verify_digest(str(f), "/nonexistent/sha256") is False
+
+    @pytest.mark.parametrize("key_type", ["ed25519", "rsa", "ec"])
+    def test_verify_signature_real_keys(self, tmp_path, key_type):
+        """verify_signature() checks a detached signature with the public key."""
+        from cryptography.hazmat.primitives import hashes, serialization
+        from cryptography.hazmat.primitives.asymmetric import ec, ed25519, padding, rsa
+
+        content = b"package content"
+        f = tmp_path / "package.whl"
+        f.write_bytes(content)
+        if key_type == "ed25519":
+            key = ed25519.Ed25519PrivateKey.generate()
+            signature = key.sign(content)
+        elif key_type == "rsa":
+            key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+            signature = key.sign(content, padding.PKCS1v15(), hashes.SHA256())
+        else:
+            key = ec.generate_private_key(ec.SECP256R1())
+            signature = key.sign(content, ec.ECDSA(hashes.SHA256()))
+        pub = tmp_path / "key.pub"
+        pub.write_bytes(
+            key.public_key().public_bytes(
+                serialization.Encoding.PEM,
+                serialization.PublicFormat.SubjectPublicKeyInfo,
+            )
+        )
+        sig = tmp_path / "package.whl.sig"
+        sig.write_bytes(signature)
+        verifier = SupplyChainVerifier()
+        assert verifier.verify_signature(str(f), str(sig), str(pub)) is True
+
+        # Tampered content fails.
+        f.write_bytes(b"tampered content")
+        assert verifier.verify_signature(str(f), str(sig), str(pub)) is False
+
+    def test_verify_signature_base64_and_wrong_key(self, tmp_path):
+        """Base64 signature files work; another key's signature does not."""
+        import base64
+
+        from cryptography.hazmat.primitives import serialization
+        from cryptography.hazmat.primitives.asymmetric import ed25519
+
+        content = b"release.tar.gz bytes"
+        f = tmp_path / "release.tar.gz"
+        f.write_bytes(content)
+        signer = ed25519.Ed25519PrivateKey.generate()
+        other = ed25519.Ed25519PrivateKey.generate()
+        sig = tmp_path / "release.sig"
+        sig.write_text(base64.b64encode(signer.sign(content)).decode() + "\n")
+
+        def write_pub(key, name):
+            path = tmp_path / name
+            path.write_bytes(
+                key.public_key().public_bytes(
+                    serialization.Encoding.PEM,
+                    serialization.PublicFormat.SubjectPublicKeyInfo,
+                )
+            )
+            return str(path)
+
+        verifier = SupplyChainVerifier()
+        assert verifier.verify_signature(str(f), str(sig), write_pub(signer, "a.pub"))
+        assert not verifier.verify_signature(
+            str(f), str(sig), write_pub(other, "b.pub")
+        )
+
+    def test_verify_signature_rejects_a_bare_hash(self, tmp_path):
+        """A hex digest in the .sig file is not a signature."""
+        from cryptography.hazmat.primitives import serialization
+        from cryptography.hazmat.primitives.asymmetric import ed25519
+
         content = b"package content"
         f = tmp_path / "package.whl"
         f.write_bytes(content)
         sig = tmp_path / "package.whl.sig"
         sig.write_text(hashlib.sha256(content).hexdigest())
+        pub = tmp_path / "key.pub"
+        pub.write_bytes(
+            ed25519.Ed25519PrivateKey.generate()
+            .public_key()
+            .public_bytes(
+                serialization.Encoding.PEM,
+                serialization.PublicFormat.SubjectPublicKeyInfo,
+            )
+        )
         verifier = SupplyChainVerifier()
-        assert verifier.verify_signature(str(f), str(sig)) is True
+        assert verifier.verify_signature(str(f), str(sig), str(pub)) is False
 
-    def test_verify_signature_mismatch(self, tmp_path):
-        """verify_signature() returns False when hash doesn't match sig."""
-        f = tmp_path / "package.whl"
-        f.write_bytes(b"real content")
-        sig = tmp_path / "package.whl.sig"
-        sig.write_text("wronghash" * 7)  # Not a valid hash
-        verifier = SupplyChainVerifier()
-        assert verifier.verify_signature(str(f), str(sig)) is False
-
-    def test_verify_signature_missing_sig_file(self, tmp_path):
-        """verify_signature() returns False when signature file is missing."""
+    def test_verify_signature_missing_files(self, tmp_path):
+        """Missing signature or key files return False."""
         f = tmp_path / "package.whl"
         f.write_bytes(b"content")
         verifier = SupplyChainVerifier()
-        assert verifier.verify_signature(str(f), "/nonexistent/sig") is False
+        assert verifier.verify_signature(str(f), "/nonexistent/sig", "/no/key") is False
