@@ -297,24 +297,25 @@ def _hash_file(path: Path, algorithm: str = "sha256") -> str:
 def _write_json_atomically(path: Path, payload: dict[str, object]) -> None:
     """Write a JSON receipt through a same-directory temporary file."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = tempfile.NamedTemporaryFile(
-        mode="w",
-        encoding="utf-8",
-        dir=path.parent,
-        prefix=f".{path.name}.",
-        suffix=".tmp",
-        delete=False,
-    )
-    temporary_path = Path(temporary.name)
+    temporary_path: Path | None = None
     try:
-        with temporary:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=path.parent,
+            prefix=f".{path.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as temporary:
+            temporary_path = Path(temporary.name)
             json.dump(payload, temporary, indent=2, sort_keys=True)
             temporary.write("\n")
             temporary.flush()
             os.fsync(temporary.fileno())
         temporary_path.replace(path)
     finally:
-        temporary_path.unlink(missing_ok=True)
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
 
 
 def _composition_group(paths: list[Path], project_root: Path) -> dict[str, object]:
@@ -1040,12 +1041,10 @@ def _run_pandoc_pdf(
     if preamble and preamble.exists():
         latex_src = _extract_latex_from_preamble(preamble)
         if latex_src:
-            tmp = tempfile.NamedTemporaryFile(
+            with tempfile.NamedTemporaryFile(
                 mode="w", suffix=".tex", delete=False, encoding="utf-8"
-            )
-            tmp.write(latex_src)
-            tmp.flush()
-            tmp.close()
+            ) as tmp:
+                tmp.write(latex_src)
             temp_header = Path(tmp.name)
             cmd += ["-H", tmp.name]
         else:

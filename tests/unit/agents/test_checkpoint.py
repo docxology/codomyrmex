@@ -5,6 +5,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
+from tests.support.temp_files import temp_file_path
 
 from codomyrmex.agents.transport.checkpoint import Checkpoint, StateDelta
 from codomyrmex.agents.transport.serializer import AgentSerializer, AgentSnapshot
@@ -31,7 +32,7 @@ def test_checkpoint_save_load_verify():
     assert ckpt.checkpoint_id.startswith("ckpt-test-agent-1")
 
     # Save to a temp file
-    path = Path(tempfile.NamedTemporaryFile(suffix=".json", delete=False).name)
+    path = temp_file_path(".json")
     ckpt.save(path)
 
     # Verify file exists and is valid JSON

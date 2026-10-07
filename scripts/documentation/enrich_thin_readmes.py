@@ -4,6 +4,7 @@
 import ast
 import logging
 import os
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -72,7 +73,11 @@ def get_submodules(mod):
         ):
             sub_doc = ""
             try:
-                tree = ast.parse(open(os.path.join(child_path, "__init__.py")).read())
+                tree = ast.parse(
+                    Path(os.path.join(child_path, "__init__.py")).read_text(
+                        encoding="utf-8"
+                    )
+                )
                 if (
                     tree.body
                     and isinstance(tree.body[0], ast.Expr)
@@ -96,7 +101,7 @@ def get_classes_from_files(mod):
         if not f.endswith(".py") or f == "__init__.py":
             continue
         try:
-            tree = ast.parse(open(os.path.join(mod_dir, f)).read())
+            tree = ast.parse(Path(os.path.join(mod_dir, f)).read_text(encoding="utf-8"))
             for node in tree.body:
                 if isinstance(node, ast.ClassDef) and node.name not in seen:
                     doc = ast.get_docstring(node) or ""
@@ -116,7 +121,7 @@ def get_functions_from_files(mod):
         if not f.endswith(".py") or f == "__init__.py":
             continue
         try:
-            tree = ast.parse(open(os.path.join(mod_dir, f)).read())
+            tree = ast.parse(Path(os.path.join(mod_dir, f)).read_text(encoding="utf-8"))
             for node in tree.body:
                 if (
                     isinstance(node, ast.FunctionDef)
@@ -136,7 +141,7 @@ def get_version(mod):
     if not os.path.exists(init):
         return "0.1.0"
     try:
-        tree = ast.parse(open(init).read())
+        tree = ast.parse(Path(init).read_text(encoding="utf-8"))
         for node in ast.walk(tree):
             if isinstance(node, ast.Assign):
                 for target in node.targets:

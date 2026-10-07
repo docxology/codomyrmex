@@ -17,6 +17,7 @@ import time
 from pathlib import Path
 
 import pytest
+from tests.support.temp_files import temp_file_path
 
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "src"))
@@ -294,17 +295,16 @@ class TestPerformanceMonitor:
         if not PERFORMANCE_MONITOR_AVAILABLE:
             pytest.skip("PerformanceMonitor not available (psutil not installed)")
 
-        self.temp_file = tempfile.NamedTemporaryFile(delete=False)
-        self.temp_file.close()
-        self.monitor = PerformanceMonitor(log_file=self.temp_file.name)
+        self.temp_path = temp_file_path()
+        self.monitor = PerformanceMonitor(log_file=str(self.temp_path))
 
     def teardown_method(self):
         """Clean up test fixtures."""
-        os.unlink(self.temp_file.name)
+        self.temp_path.unlink(missing_ok=True)
 
     def test_performance_monitor_initialization(self):
         """Test PerformanceMonitor initialization."""
-        assert self.monitor.log_file == Path(self.temp_file.name)
+        assert self.monitor.log_file == self.temp_path
         assert isinstance(self.monitor.metrics, list)
         assert hasattr(self.monitor, "_process")
 
@@ -367,14 +367,13 @@ class TestPerformanceMonitor:
         """Test exporting metrics to file."""
         self.monitor.record_metrics("test_func", 1.0, 10.0, 20.0)
 
-        export_file = tempfile.NamedTemporaryFile(delete=False)
-        export_file.close()
+        export_file = temp_file_path()
 
         try:
-            self.monitor.export_metrics(export_file.name)
+            self.monitor.export_metrics(str(export_file))
 
             # Check that file was created and contains data
-            with open(export_file.name) as f:
+            with open(export_file) as f:
                 data = json.load(f)
 
             assert isinstance(data, list)
@@ -382,7 +381,7 @@ class TestPerformanceMonitor:
             assert data[0]["function_name"] == "test_func"
 
         finally:
-            os.unlink(export_file.name)
+            export_file.unlink(missing_ok=True)
 
     def test_monitor_performance_decorator(self):
         """Test monitor_performance decorator."""

@@ -11,6 +11,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
+from tests.support.temp_files import temp_file_path
 
 from codomyrmex.encryption.signing import (
     SignatureAlgorithm,
@@ -205,10 +206,9 @@ class TestSignAndVerifyFile:
     _KEY = "file-signing-key"
 
     def _write_tmp(self, content: bytes) -> Path:
-        f = tempfile.NamedTemporaryFile(delete=False, suffix=".bin")
-        f.write(content)
-        f.close()
-        return Path(f.name)
+        path = temp_file_path(".bin")
+        path.write_bytes(content)
+        return path
 
     def test_sign_file_returns_hex(self):
         path = self._write_tmp(b"file content")

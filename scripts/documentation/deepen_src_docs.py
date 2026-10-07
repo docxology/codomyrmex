@@ -16,6 +16,7 @@ import ast
 import logging
 import os
 import sys
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +32,7 @@ def get_module_exports(mod_path):
     if not os.path.exists(init):
         return classes, functions
     try:
-        tree = ast.parse(open(init).read())
+        tree = ast.parse(Path(init).read_text(encoding="utf-8"))
         for node in tree.body:
             if isinstance(node, ast.ClassDef):
                 doc = ast.get_docstring(node) or ""
@@ -49,7 +50,9 @@ def get_module_exports(mod_path):
             if not f.endswith(".py") or f == "__init__.py":
                 continue
             try:
-                sub = ast.parse(open(os.path.join(mod_path, f)).read())
+                sub = ast.parse(
+                    Path(os.path.join(mod_path, f)).read_text(encoding="utf-8")
+                )
                 for node in sub.body:
                     if isinstance(node, ast.ClassDef) and node.name not in seen_c:
                         doc = ast.get_docstring(node) or ""
@@ -255,7 +258,7 @@ def create_submodule_spec(parent, sub):
     init = os.path.join(SRC, parent, sub, "__init__.py")
     desc = f"{display} submodule."
     try:
-        tree = ast.parse(open(init).read())
+        tree = ast.parse(Path(init).read_text(encoding="utf-8"))
         if (
             tree.body
             and isinstance(tree.body[0], ast.Expr)
