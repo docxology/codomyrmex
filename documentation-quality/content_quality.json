@@ -28,11 +28,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 149,
+      "heading_count": 159,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 9886,
-      "link_count": 2
+      "word_count": 10286,
+      "link_count": 3
     }
   },
   {
@@ -211,7 +211,7 @@
       "heading_count": 34,
       "placeholder_count": 0,
       "code_block_count": 3,
-      "word_count": 2434,
+      "word_count": 2460,
       "link_count": 7
     }
   },
@@ -16419,8 +16419,8 @@
     "metrics": {
       "heading_count": 5,
       "placeholder_count": 0,
-      "code_block_count": 2,
-      "word_count": 183,
+      "code_block_count": 3,
+      "word_count": 189,
       "link_count": 0
     }
   },
@@ -17420,7 +17420,7 @@
       "heading_count": 22,
       "placeholder_count": 0,
       "code_block_count": 6,
-      "word_count": 1021,
+      "word_count": 1052,
       "link_count": 34
     }
   },
@@ -18028,7 +18028,7 @@
       "heading_count": 15,
       "placeholder_count": 0,
       "code_block_count": 3,
-      "word_count": 837,
+      "word_count": 861,
       "link_count": 7
     }
   },
@@ -18858,7 +18858,7 @@
       "heading_count": 57,
       "placeholder_count": 0,
       "code_block_count": 32,
-      "word_count": 1689,
+      "word_count": 1695,
       "link_count": 4
     }
   },
@@ -20662,7 +20662,7 @@
       "heading_count": 12,
       "placeholder_count": 0,
       "code_block_count": 4,
-      "word_count": 479,
+      "word_count": 492,
       "link_count": 6
     }
   },
@@ -20674,7 +20674,7 @@
       "heading_count": 31,
       "placeholder_count": 0,
       "code_block_count": 19,
-      "word_count": 577,
+      "word_count": 609,
       "link_count": 7
     }
   },
@@ -21168,8 +21168,8 @@
       "heading_count": 36,
       "placeholder_count": 0,
       "code_block_count": 19,
-      "word_count": 1693,
-      "link_count": 0
+      "word_count": 1717,
+      "link_count": 1
     }
   },
   {
@@ -22858,7 +22858,7 @@
       "heading_count": 10,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 277,
+      "word_count": 301,
       "link_count": 7
     }
   },
@@ -24316,7 +24316,7 @@
       "heading_count": 10,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 398,
+      "word_count": 429,
       "link_count": 7
     }
   },
@@ -25066,7 +25066,7 @@
       "heading_count": 10,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 379,
+      "word_count": 398,
       "link_count": 7
     }
   },
@@ -27548,7 +27548,7 @@
       "heading_count": 26,
       "placeholder_count": 0,
       "code_block_count": 15,
-      "word_count": 962,
+      "word_count": 955,
       "link_count": 4
     }
   },
@@ -27644,7 +27644,7 @@
       "heading_count": 24,
       "placeholder_count": 0,
       "code_block_count": 3,
-      "word_count": 870,
+      "word_count": 869,
       "link_count": 8
     }
   },
@@ -27908,7 +27908,7 @@
       "heading_count": 22,
       "placeholder_count": 0,
       "code_block_count": 6,
-      "word_count": 524,
+      "word_count": 592,
       "link_count": 7
     }
   },
@@ -28842,7 +28842,7 @@
       "heading_count": 24,
       "placeholder_count": 0,
       "code_block_count": 13,
-      "word_count": 924,
+      "word_count": 952,
       "link_count": 4
     }
   },
@@ -29758,7 +29758,7 @@
       "heading_count": 14,
       "placeholder_count": 0,
       "code_block_count": 3,
-      "word_count": 290,
+      "word_count": 385,
       "link_count": 4
     }
   },
@@ -30046,7 +30046,7 @@
       "heading_count": 9,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 191,
+      "word_count": 211,
       "link_count": 0
     }
   },
@@ -31528,7 +31528,7 @@
       "heading_count": 27,
       "placeholder_count": 0,
       "code_block_count": 10,
-      "word_count": 1489,
+      "word_count": 1558,
       "link_count": 11
     }
   },
@@ -36073,8 +36073,8 @@
     "metrics": {
       "heading_count": 20,
       "placeholder_count": 0,
-      "code_block_count": 10,
-      "word_count": 1525,
+      "code_block_count": 9,
+      "word_count": 1572,
       "link_count": 6
     }
   },
@@ -36586,7 +36586,7 @@
       "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 180,
+      "word_count": 203,
       "link_count": 0
     }
   },
@@ -37076,7 +37076,7 @@
       "heading_count": 15,
       "placeholder_count": 0,
       "code_block_count": 9,
-      "word_count": 835,
+      "word_count": 878,
       "link_count": 8
     }
   },
@@ -37268,7 +37268,7 @@
       "heading_count": 42,
       "placeholder_count": 0,
       "code_block_count": 5,
-      "word_count": 2327,
+      "word_count": 2341,
       "link_count": 4
     }
   },
@@ -37714,7 +37714,7 @@
       "heading_count": 3,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 26,
+      "word_count": 35,
       "link_count": 0
     }
   },
@@ -38322,7 +38322,7 @@
       "heading_count": 23,
       "placeholder_count": 0,
       "code_block_count": 10,
-      "word_count": 972,
+      "word_count": 988,
       "link_count": 4
     }
   },
@@ -39014,7 +39014,7 @@
       "heading_count": 22,
       "placeholder_count": 0,
       "code_block_count": 6,
-      "word_count": 561,
+      "word_count": 629,
       "link_count": 7
     }
   },
@@ -39083,10 +39083,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 23,
+      "heading_count": 16,
       "placeholder_count": 0,
-      "code_block_count": 4,
-      "word_count": 782,
+      "code_block_count": 3,
+      "word_count": 722,
       "link_count": 7
     }
   },
@@ -39372,8 +39372,8 @@
       "heading_count": 12,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 695,
-      "link_count": 0
+      "word_count": 715,
+      "link_count": 1
     }
   },
   {
@@ -39552,7 +39552,7 @@
       "heading_count": 24,
       "placeholder_count": 0,
       "code_block_count": 17,
-      "word_count": 942,
+      "word_count": 938,
       "link_count": 4
     }
   },
@@ -41466,7 +41466,7 @@
       "heading_count": 11,
       "placeholder_count": 0,
       "code_block_count": 3,
-      "word_count": 365,
+      "word_count": 383,
       "link_count": 7
     }
   },
@@ -42818,7 +42818,7 @@
       "heading_count": 14,
       "placeholder_count": 0,
       "code_block_count": 4,
-      "word_count": 709,
+      "word_count": 742,
       "link_count": 9
     }
   },
@@ -43566,7 +43566,7 @@
       "heading_count": 15,
       "placeholder_count": 0,
       "code_block_count": 7,
-      "word_count": 688,
+      "word_count": 756,
       "link_count": 8
     }
   },
@@ -44469,10 +44469,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 29,
+      "heading_count": 22,
       "placeholder_count": 0,
-      "code_block_count": 6,
-      "word_count": 705,
+      "code_block_count": 5,
+      "word_count": 647,
       "link_count": 7
     }
   },
@@ -44828,7 +44828,7 @@
       "heading_count": 23,
       "placeholder_count": 0,
       "code_block_count": 12,
-      "word_count": 1066,
+      "word_count": 1064,
       "link_count": 4
     }
   },
@@ -44928,7 +44928,7 @@
       "heading_count": 3,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 26,
+      "word_count": 31,
       "link_count": 0
     }
   },
@@ -45594,7 +45594,7 @@
       "heading_count": 11,
       "placeholder_count": 0,
       "code_block_count": 4,
-      "word_count": 588,
+      "word_count": 619,
       "link_count": 7
     }
   },
@@ -45666,7 +45666,7 @@
       "heading_count": 10,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 314,
+      "word_count": 377,
       "link_count": 7
     }
   },
@@ -49672,7 +49672,7 @@
       "heading_count": 11,
       "placeholder_count": 0,
       "code_block_count": 3,
-      "word_count": 335,
+      "word_count": 364,
       "link_count": 7
     }
   },
@@ -51646,7 +51646,7 @@
       "heading_count": 24,
       "placeholder_count": 0,
       "code_block_count": 13,
-      "word_count": 922,
+      "word_count": 932,
       "link_count": 8
     }
   },
@@ -51670,8 +51670,8 @@
       "heading_count": 30,
       "placeholder_count": 0,
       "code_block_count": 11,
-      "word_count": 975,
-      "link_count": 8
+      "word_count": 1016,
+      "link_count": 9
     }
   },
   {
@@ -52128,7 +52128,7 @@
       "heading_count": 55,
       "placeholder_count": 0,
       "code_block_count": 38,
-      "word_count": 3699,
+      "word_count": 3889,
       "link_count": 10
     }
   },
@@ -52152,7 +52152,7 @@
       "heading_count": 26,
       "placeholder_count": 0,
       "code_block_count": 7,
-      "word_count": 2166,
+      "word_count": 2220,
       "link_count": 6
     }
   },
@@ -52934,7 +52934,7 @@
       "heading_count": 12,
       "placeholder_count": 0,
       "code_block_count": 6,
-      "word_count": 336,
+      "word_count": 424,
       "link_count": 5
     }
   },
@@ -53296,7 +53296,7 @@
       "heading_count": 11,
       "placeholder_count": 0,
       "code_block_count": 4,
-      "word_count": 428,
+      "word_count": 441,
       "link_count": 6
     }
   },
@@ -53308,7 +53308,7 @@
       "heading_count": 31,
       "placeholder_count": 0,
       "code_block_count": 19,
-      "word_count": 577,
+      "word_count": 609,
       "link_count": 7
     }
   },
@@ -53514,8 +53514,8 @@
       "heading_count": 36,
       "placeholder_count": 0,
       "code_block_count": 19,
-      "word_count": 1693,
-      "link_count": 0
+      "word_count": 1717,
+      "link_count": 1
     }
   },
   {
@@ -54042,7 +54042,7 @@
       "heading_count": 9,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 249,
+      "word_count": 273,
       "link_count": 7
     }
   },
@@ -54656,7 +54656,7 @@
       "heading_count": 9,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 370,
+      "word_count": 401,
       "link_count": 7
     }
   },
@@ -54860,7 +54860,7 @@
       "heading_count": 9,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 334,
+      "word_count": 345,
       "link_count": 7
     }
   },
@@ -55484,7 +55484,7 @@
       "heading_count": 26,
       "placeholder_count": 0,
       "code_block_count": 15,
-      "word_count": 962,
+      "word_count": 955,
       "link_count": 4
     }
   },
@@ -55532,7 +55532,7 @@
       "heading_count": 21,
       "placeholder_count": 0,
       "code_block_count": 4,
-      "word_count": 563,
+      "word_count": 567,
       "link_count": 7
     }
   },
@@ -55666,7 +55666,7 @@
       "heading_count": 22,
       "placeholder_count": 0,
       "code_block_count": 6,
-      "word_count": 524,
+      "word_count": 592,
       "link_count": 7
     }
   },
@@ -56014,7 +56014,7 @@
       "heading_count": 24,
       "placeholder_count": 0,
       "code_block_count": 13,
-      "word_count": 924,
+      "word_count": 952,
       "link_count": 4
     }
   },
@@ -56134,7 +56134,7 @@
       "heading_count": 14,
       "placeholder_count": 0,
       "code_block_count": 4,
-      "word_count": 578,
+      "word_count": 670,
       "link_count": 8
     }
   },
@@ -56182,7 +56182,7 @@
       "heading_count": 6,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 475,
+      "word_count": 509,
       "link_count": 5
     }
   },
@@ -56554,7 +56554,7 @@
       "heading_count": 9,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 191,
+      "word_count": 211,
       "link_count": 0
     }
   },
@@ -57514,7 +57514,7 @@
       "heading_count": 26,
       "placeholder_count": 0,
       "code_block_count": 10,
-      "word_count": 1305,
+      "word_count": 1365,
       "link_count": 11
     }
   },
@@ -58298,7 +58298,7 @@
       "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 158,
+      "word_count": 226,
       "link_count": 3
     }
   },
@@ -58334,7 +58334,7 @@
       "heading_count": 6,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 149,
+      "word_count": 159,
       "link_count": 4
     }
   },
@@ -58406,7 +58406,7 @@
       "heading_count": 3,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 180,
+      "word_count": 222,
       "link_count": 0
     }
   },
@@ -58936,7 +58936,7 @@
       "heading_count": 42,
       "placeholder_count": 0,
       "code_block_count": 5,
-      "word_count": 2350,
+      "word_count": 2364,
       "link_count": 4
     }
   },
@@ -59396,7 +59396,7 @@
       "heading_count": 23,
       "placeholder_count": 0,
       "code_block_count": 10,
-      "word_count": 972,
+      "word_count": 988,
       "link_count": 4
     }
   },
@@ -59516,7 +59516,7 @@
       "heading_count": 22,
       "placeholder_count": 0,
       "code_block_count": 6,
-      "word_count": 561,
+      "word_count": 629,
       "link_count": 7
     }
   },
@@ -59585,10 +59585,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 23,
+      "heading_count": 16,
       "placeholder_count": 0,
-      "code_block_count": 4,
-      "word_count": 782,
+      "code_block_count": 3,
+      "word_count": 722,
       "link_count": 7
     }
   },
@@ -59624,8 +59624,8 @@
       "heading_count": 12,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 695,
-      "link_count": 0
+      "word_count": 715,
+      "link_count": 1
     }
   },
   {
@@ -60092,7 +60092,7 @@
       "heading_count": 10,
       "placeholder_count": 0,
       "code_block_count": 3,
-      "word_count": 337,
+      "word_count": 355,
       "link_count": 7
     }
   },
@@ -60502,7 +60502,7 @@
       "heading_count": 10,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 314,
+      "word_count": 329,
       "link_count": 7
     }
   },
@@ -60957,10 +60957,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 29,
+      "heading_count": 22,
       "placeholder_count": 0,
-      "code_block_count": 6,
-      "word_count": 695,
+      "code_block_count": 5,
+      "word_count": 637,
       "link_count": 7
     }
   },
@@ -61044,7 +61044,7 @@
       "heading_count": 23,
       "placeholder_count": 0,
       "code_block_count": 12,
-      "word_count": 1066,
+      "word_count": 1064,
       "link_count": 4
     }
   },
@@ -61116,7 +61116,7 @@
       "heading_count": 32,
       "placeholder_count": 0,
       "code_block_count": 15,
-      "word_count": 2488,
+      "word_count": 2494,
       "link_count": 10
     }
   },
@@ -61382,7 +61382,7 @@
       "heading_count": 9,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 286,
+      "word_count": 349,
       "link_count": 7
     }
   },
@@ -62236,7 +62236,7 @@
       "heading_count": 18,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 274,
+      "word_count": 277,
       "link_count": 3
     }
   },
@@ -62272,7 +62272,7 @@
       "heading_count": 10,
       "placeholder_count": 0,
       "code_block_count": 3,
-      "word_count": 307,
+      "word_count": 336,
       "link_count": 7
     }
   },
@@ -62680,7 +62680,7 @@
       "heading_count": 51,
       "placeholder_count": 0,
       "code_block_count": 15,
-      "word_count": 1996,
+      "word_count": 2069,
       "link_count": 48
     }
   },
@@ -62728,7 +62728,7 @@
       "heading_count": 9,
       "placeholder_count": 0,
       "code_block_count": 5,
-      "word_count": 1546,
+      "word_count": 1544,
       "link_count": 4
     }
   },
@@ -62739,9 +62739,9 @@
     "metrics": {
       "heading_count": 38,
       "placeholder_count": 0,
-      "code_block_count": 15,
-      "word_count": 2166,
-      "link_count": 11
+      "code_block_count": 14,
+      "word_count": 2223,
+      "link_count": 12
     }
   },
   {
@@ -62752,7 +62752,7 @@
       "heading_count": 10,
       "placeholder_count": 0,
       "code_block_count": 4,
-      "word_count": 1287,
+      "word_count": 1309,
       "link_count": 6
     }
   },
@@ -62823,8 +62823,8 @@
     "metrics": {
       "heading_count": 42,
       "placeholder_count": 0,
-      "code_block_count": 35,
-      "word_count": 1842,
+      "code_block_count": 33,
+      "word_count": 1992,
       "link_count": 8
     }
   },
@@ -62848,7 +62848,7 @@
       "heading_count": 6,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 129,
+      "word_count": 162,
       "link_count": 4
     }
   },
@@ -62970,7 +62970,7 @@
       "heading_count": 3,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 863,
+      "word_count": 873,
       "link_count": 0
     }
   },
@@ -62982,7 +62982,7 @@
       "heading_count": 2,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 814,
+      "word_count": 851,
       "link_count": 0
     }
   },
@@ -63006,7 +63006,7 @@
       "heading_count": 2,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 538,
+      "word_count": 548,
       "link_count": 0
     }
   },
@@ -63018,7 +63018,7 @@
       "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 842,
+      "word_count": 847,
       "link_count": 13
     }
   },
@@ -63570,7 +63570,7 @@
       "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 124,
+      "word_count": 194,
       "link_count": 5
     }
   },
@@ -63618,7 +63618,7 @@
       "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 114,
+      "word_count": 161,
       "link_count": 5
     }
   },
@@ -64182,7 +64182,7 @@
       "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 108,
+      "word_count": 173,
       "link_count": 5
     }
   },
@@ -64206,7 +64206,7 @@
       "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 112,
+      "word_count": 171,
       "link_count": 5
     }
   },
@@ -64302,7 +64302,7 @@
       "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 112,
+      "word_count": 147,
       "link_count": 5
     }
   },
@@ -64506,7 +64506,7 @@
       "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 116,
+      "word_count": 182,
       "link_count": 5
     }
   },
@@ -64578,7 +64578,7 @@
       "heading_count": 8,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 116,
+      "word_count": 188,
       "link_count": 5
     }
   },
@@ -64602,7 +64602,7 @@
       "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 116,
+      "word_count": 182,
       "link_count": 5
     }
   },
@@ -64782,7 +64782,7 @@
       "heading_count": 24,
       "placeholder_count": 0,
       "code_block_count": 15,
-      "word_count": 1287,
+      "word_count": 1295,
       "link_count": 16
     }
   },
@@ -64794,7 +64794,7 @@
       "heading_count": 40,
       "placeholder_count": 0,
       "code_block_count": 33,
-      "word_count": 1884,
+      "word_count": 1911,
       "link_count": 13
     }
   },
@@ -64830,7 +64830,7 @@
       "heading_count": 46,
       "placeholder_count": 0,
       "code_block_count": 32,
-      "word_count": 1856,
+      "word_count": 1883,
       "link_count": 17
     }
   },
@@ -64866,7 +64866,7 @@
       "heading_count": 37,
       "placeholder_count": 0,
       "code_block_count": 25,
-      "word_count": 2383,
+      "word_count": 2492,
       "link_count": 11
     }
   },
@@ -64902,7 +64902,7 @@
       "heading_count": 26,
       "placeholder_count": 0,
       "code_block_count": 13,
-      "word_count": 1063,
+      "word_count": 1075,
       "link_count": 4
     }
   },
@@ -64926,7 +64926,7 @@
       "heading_count": 6,
       "placeholder_count": 0,
       "code_block_count": 5,
-      "word_count": 1058,
+      "word_count": 1062,
       "link_count": 0
     }
   },
@@ -64950,7 +64950,7 @@
       "heading_count": 8,
       "placeholder_count": 0,
       "code_block_count": 5,
-      "word_count": 312,
+      "word_count": 373,
       "link_count": 4
     }
   },
@@ -65105,10 +65105,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 28,
+      "heading_count": 29,
       "placeholder_count": 0,
-      "code_block_count": 14,
-      "word_count": 1896,
+      "code_block_count": 15,
+      "word_count": 2091,
       "link_count": 10
     }
   },
@@ -65120,7 +65120,7 @@
       "heading_count": 40,
       "placeholder_count": 0,
       "code_block_count": 16,
-      "word_count": 1436,
+      "word_count": 1454,
       "link_count": 7
     }
   },
@@ -65155,8 +65155,8 @@
     "metrics": {
       "heading_count": 11,
       "placeholder_count": 0,
-      "code_block_count": 12,
-      "word_count": 1233,
+      "code_block_count": 13,
+      "word_count": 1347,
       "link_count": 6
     }
   },
@@ -65189,11 +65189,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 34,
+      "heading_count": 14,
       "placeholder_count": 0,
-      "code_block_count": 17,
-      "word_count": 1311,
-      "link_count": 7
+      "code_block_count": 5,
+      "word_count": 626,
+      "link_count": 8
     }
   },
   {
@@ -65204,8 +65204,8 @@
       "heading_count": 37,
       "placeholder_count": 0,
       "code_block_count": 17,
-      "word_count": 1282,
-      "link_count": 3
+      "word_count": 1356,
+      "link_count": 4
     }
   },
   {
@@ -65213,11 +65213,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 31,
+      "heading_count": 15,
       "placeholder_count": 0,
-      "code_block_count": 19,
-      "word_count": 904,
-      "link_count": 7
+      "code_block_count": 9,
+      "word_count": 574,
+      "link_count": 10
     }
   },
   {
@@ -65240,7 +65240,7 @@
       "heading_count": 32,
       "placeholder_count": 0,
       "code_block_count": 18,
-      "word_count": 982,
+      "word_count": 1137,
       "link_count": 7
     }
   },
@@ -65263,9 +65263,9 @@
     "metrics": {
       "heading_count": 34,
       "placeholder_count": 0,
-      "code_block_count": 17,
-      "word_count": 1046,
-      "link_count": 8
+      "code_block_count": 15,
+      "word_count": 1166,
+      "link_count": 13
     }
   },
   {
@@ -65276,7 +65276,7 @@
       "heading_count": 6,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 126,
+      "word_count": 174,
       "link_count": 4
     }
   },
@@ -65285,10 +65285,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 29,
+      "heading_count": 28,
       "placeholder_count": 0,
-      "code_block_count": 8,
-      "word_count": 1234,
+      "code_block_count": 7,
+      "word_count": 1292,
       "link_count": 8
     }
   },
@@ -65480,7 +65480,7 @@
       "heading_count": 31,
       "placeholder_count": 0,
       "code_block_count": 15,
-      "word_count": 1900,
+      "word_count": 1915,
       "link_count": 14
     }
   },
@@ -66134,7 +66134,7 @@
       "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 131,
+      "word_count": 138,
       "link_count": 2
     }
   },
@@ -66418,7 +66418,7 @@
       "heading_count": 11,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 313,
+      "word_count": 312,
       "link_count": 7
     }
   },
