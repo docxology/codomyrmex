@@ -509,7 +509,7 @@ Unified OAuth2 env var pattern across all Google integrations. PAI can now send 
 ### Added
 
 - **email/gmail**: `GmailProvider.from_env()` — OAuth2 env var constructor (`GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` + `GOOGLE_REFRESH_TOKEN`) with ADC fallback
-- **email/mcp_tools**: 4 Gmail MCP tools — `gmail_send_message`, `gmail_list_messages`, `gmail_get_message`, `gmail_create_draft`; PAI can now send Gmail directly via <FristonBlanket@gmail.com>
+- **email/mcp_tools**: 4 Gmail MCP tools — `gmail_send_message`, `gmail_list_messages`, `gmail_get_message`, `gmail_create_draft`; PAI can now send Gmail directly via [FristonBlanket@gmail.com](mailto:FristonBlanket@gmail.com)
 - **calendar_integration/gcal**: `GoogleCalendar.from_env()` — same unified OAuth2 env var pattern as `GmailProvider`
 - **tests/integration/email**: 11-test integration suite (9 skip without live creds); covers send/list/get/retrieve and MCP tool layer end-to-end
 
