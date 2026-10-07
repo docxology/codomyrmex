@@ -81,28 +81,23 @@ class ComplianceChecker:
         target_config: dict[str, Any],
         standards: list[ComplianceStandard] | None = None,
     ) -> list[ComplianceResult]:
-        """Check compliance against standards."""
-        results = []
-        # Mock compliance check logic
-        # In a real implementation, this would check configurations against controls
+        """Check compliance against standards.
 
-        # Determine standards to check
-        target_standards = standards or list(ComplianceStandard)
-
-        for control_id, control in self.controls.items():
-            if control.standard in target_standards:
-                # Mock result -> assumed compliant for demo unless specified
-                results.append(
-                    ComplianceResult(
-                        control_id=control_id,
-                        status="compliant",
-                        evidence="Mock evidence: configuration parameter X set to Y",
-                        timestamp=datetime.now(),
-                        details={"checked_config": "config1"},
-                    )
-                )
-
-        return results
+        Raises:
+            NotImplementedError: no automated control checks exist here. This
+                method used to report every control as "compliant" with
+                placeholder evidence, which is worse than no answer for a
+                security audit. Use
+                :class:`codomyrmex.security.compliance.ComplianceChecker`,
+                which evaluates registered controls with real checker
+                callables.
+        """
+        raise NotImplementedError(
+            "Automated compliance checks are not implemented in "
+            "codomyrmex.security.digital; use "
+            "codomyrmex.security.compliance.ComplianceChecker with ControlChecker "
+            "implementations instead."
+        )
 
     def get_compliance_score(self, results: list[ComplianceResult]) -> float:
         """Calculate compliance score."""
@@ -117,7 +112,7 @@ class ComplianceChecker:
 def check_compliance_standards(
     config: dict[str, Any], standards: list[str] | None = None
 ) -> list[dict[str, Any]]:
-    """Convenience function to check complianc standards."""
+    """Check standards with :class:`ComplianceChecker` (see its NotImplementedError)."""
     checker = ComplianceChecker()
     enum_standards = []
     if standards:
