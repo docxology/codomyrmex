@@ -14,15 +14,29 @@ def test_all_names_resolve() -> None:
 
 
 def test_lazy_import_does_not_load_framework_subpackages() -> None:
+    """Importing the package must not import framework subpackages.
+
+    Checked in a fresh interpreter: deleting ``codomyrmex.agents.*`` from this
+    process's ``sys.modules`` (as this test used to) leaves later tests holding
+    two copies of modules such as ``agents.core.config`` and the trust gateway,
+    which broke singletons and isinstance checks depending on xdist ordering.
+    """
+    import subprocess
     import sys
 
-    for mod in list(sys.modules):
-        if mod.startswith("codomyrmex.agents."):
-            del sys.modules[mod]
-    import codomyrmex.agents  # fresh module attributes
-
-    assert "codomyrmex.agents.core" not in sys.modules
-    assert "codomyrmex.agents.claude" not in sys.modules
+    probe = (
+        "import sys, codomyrmex.agents; "
+        "print(int('codomyrmex.agents.core' in sys.modules), "
+        "int('codomyrmex.agents.claude' in sys.modules))"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", probe],
+        capture_output=True,
+        text=True,
+        timeout=120,
+        check=True,
+    )
+    assert result.stdout.split()[-2:] == ["0", "0"], result.stdout + result.stderr
 
 
 def test_unknown_attribute_raises_attribute_error() -> None:
