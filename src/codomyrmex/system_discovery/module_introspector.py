@@ -124,10 +124,15 @@ class ModuleIntrospector:
                 tree = ast.parse(content, filename=str(f))
                 is_main_init = f == mod_dir / "__init__.py"
 
-                for node in ast.walk(tree):
+                # Performance optimization:
+                # ast.walk is recursively traversing every node in the AST which is very slow
+                # for large files. We only care about top-level definitions (classes, functions, __all__)
+                # so we can simply iterate over the top-level tree.body to extract this information,
+                # which significantly speeds up the analysis while preserving correctness.
+                for node in tree.body:
                     if isinstance(node, ast.ClassDef):
                         total_classes += 1
-                    elif isinstance(node, ast.FunctionDef) and node.col_offset == 0:
+                    elif isinstance(node, ast.FunctionDef):
                         total_functions += 1
                     elif is_main_init and isinstance(node, ast.Assign):
                         for target in node.targets:

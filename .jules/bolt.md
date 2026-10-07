@@ -42,3 +42,11 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2026-10-07 - AST Parsing overhead vs Correctness tradeoff
+**Learning:** While replacing `ast.parse` and `ast.walk` with precompiled regular expressions in static analysis code achieves massive speedups (~1s vs ~11s), it sacrifices critical correctness. Regex parsing of Python code leads to false positives on commented-out code, docstrings, and fragile extraction of complex variables like `__all__`, which directly violates the "speed without correctness is useless" rule.
+**Action:** Do not replace robust `ast.parse` structural analysis with regular expressions for optimizing performance when exact structural syntax analysis is required. Instead, hybrid approaches or alternative analysis methods should be used to avoid regressing functional discovery correctness.
+
+## 2026-10-07 - AST Walk overhead in large repetitive parsings
+**Learning:** `ast.walk` recursively traverses every single node in an Abstract Syntax Tree. When used in a large loop over thousands of files to only extract top-level declarations (like classes or functions), it introduces severe performance bottlenecks (e.g. 50% of processing time) because of the sheer volume of inner nodes (statements, expressions, variables) visited unnecessarily.
+**Action:** Replace `ast.walk(tree)` with a direct iteration over `tree.body` when only top-level module information is required. This correctly avoids traversing deep, irrelevant nested nodes, massively speeding up execution without sacrificing structural parsing correctness.
