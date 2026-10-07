@@ -5,11 +5,13 @@ This document outlines Codomyrmex's comprehensive testing approach, ensuring hig
 ## 🎯 Testing Philosophy
 
 ### **Test-Driven Development (TDD)**
+
 - **Write tests first**, then implement functionality
 - **No mock methods** - always test with real implementations
 - **Iterative approach** - rerun tests until all pass
 
 ### **Testing Pyramid**
+
 ```mermaid
 graph TB
     subgraph sg_a0657c7da2 [Testing Pyramid]
@@ -31,6 +33,7 @@ graph TB
 ## 🧪 Testing Levels
 
 ### **1. Unit Tests**
+
 **Purpose**: Test individual functions and classes in isolation
 
 ```python
@@ -65,12 +68,14 @@ def test_create_line_plot_basic():
 ```
 
 **Coverage Requirements**:
+
 - ✅ All public functions tested
 - ✅ Edge cases and error conditions
 - ✅ Input validation scenarios
 - ✅ Real data, no mocks
 
 ### **2. Integration Tests**
+
 **Purpose**: Test module interactions and data flow
 
 ```python
@@ -108,6 +113,7 @@ def calculate_total(items):
 ```
 
 ### **3. End-to-End Tests**
+
 **Purpose**: Test complete workflows from user perspective
 
 ```python
@@ -169,7 +175,8 @@ if __name__ == "__main__":
 ## 🏗️ Test Organization
 
 ### **Directory Structure**
-```
+
+```text
 tests/
 ├── unit/                    # Unit tests for each module
 │   ├── test_ai_code_editing.py
@@ -195,6 +202,7 @@ tests/
 ```
 
 ### **Naming Conventions**
+
 - **Files**: `test_<module_name>.py`
 - **Classes**: `Test<FeatureName>`
 - **Functions**: `test_<specific_behavior>`
@@ -203,6 +211,7 @@ tests/
 ## 🎨 Test Quality Standards
 
 ### **Test Characteristics**
+
 ```python
 def test_data_visualization_line_plot():
     """
@@ -237,6 +246,7 @@ def test_data_visualization_line_plot():
 ```
 
 ### **Anti-Patterns to Avoid**
+
 ```python
 # ❌ BAD: Vague test name
 def test_plotting():
@@ -284,6 +294,7 @@ The Zero-Mock Policy distinguishes **two kinds of test interventions**. The haza
 ## ⚡ Running Tests
 
 ### **Local Development**
+
 ```bash
 # Run all tests (prefer uv; default addopts omit --cov for speed)
 uv run pytest
@@ -304,6 +315,7 @@ uv run pytest -v --tb=short
 ```
 
 ### **CI/CD Integration**
+
 ```yaml
 # .github/workflows/tests.yml
 name: Comprehensive Testing
@@ -340,6 +352,7 @@ jobs:
 ## 🔍 Testing Each Module Type
 
 ### **Foundation Modules**
+
 ```python
 # Example: environment_setup testing (ACTUAL IMPLEMENTATION)
 def test_environment_validation():
@@ -370,6 +383,7 @@ def test_environment_validation():
 ```
 
 ### **AI-Enhanced Modules**
+
 ```python
 # Example: Code execution testing (ACTUAL IMPLEMENTATION - AI not yet implemented)
 def test_code_execution_real():
@@ -399,6 +413,7 @@ print(add(2, 3))",
 ```
 
 ### **Integration Modules**
+
 ```python
 # Example: Testing deployment (ACTUAL IMPLEMENTATION)
 def test_deployment_integration():
@@ -449,6 +464,7 @@ if __name__ == "__main__":
 ## 📊 Performance Testing
 
 ### **Benchmarking Critical Paths**
+
 ```python
 import time
 import pytest
@@ -474,6 +490,7 @@ def test_large_dataset_visualization_performance():
 ## 🚨 Error Handling & Edge Cases
 
 ### **Comprehensive Error Testing**
+
 ```python
 def test_error_handling_comprehensive():
     """Test all error scenarios for robust error handling."""
