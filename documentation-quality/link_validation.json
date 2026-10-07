@@ -109930,70 +109930,70 @@
   {
     "file": "docs/development/testing-strategy.md",
     "link": "https://github.com/docxology/codomyrmex/issues/175",
-    "line": 282,
+    "line": 292,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "docs/development/testing-strategy.md",
     "link": "../project/contributing.md",
-    "line": 503,
+    "line": 520,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/testing-strategy.md",
     "link": "../getting-started/tutorials/creating-a-module.md",
-    "line": 504,
+    "line": 521,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/testing-strategy.md",
     "link": "../reference/performance.md",
-    "line": 505,
+    "line": 522,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/testing-strategy.md",
     "link": "environment-setup.md",
-    "line": 506,
+    "line": 523,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/testing-strategy.md",
     "link": "../examples/README.md",
-    "line": 507,
+    "line": 524,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/testing-strategy.md",
     "link": "../README.md",
-    "line": 515,
+    "line": 532,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/testing-strategy.md",
     "link": "../../AGENTS.md",
-    "line": 516,
+    "line": 533,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/testing-strategy.md",
     "link": "../../docs/README.md",
-    "line": 517,
+    "line": 534,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/testing-strategy.md",
     "link": "../../README.md",
-    "line": 518,
+    "line": 535,
     "status": "ok",
     "message": "File exists"
   },
