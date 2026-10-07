@@ -597,7 +597,9 @@ class TestAsyncErrorHandling:
         bus = EventBus(enable_async=False)
 
         async def very_slow_handler(event):
-            await asyncio.sleep(10)  # Very slow
+            # Far slower than the 0.1 s check below; shutdown() waits for it,
+            # so 10 s here cost 10 s per run without testing anything more.
+            await asyncio.sleep(1)
 
         bus.subscribe([EventType.SYSTEM_STARTUP], very_slow_handler, "slow")
 
