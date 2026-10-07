@@ -52,7 +52,7 @@ jobs:
       docs-changed: ${{ steps.changes.outputs.docs }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -71,7 +71,7 @@ jobs:
           fi
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v7
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -139,10 +139,10 @@ jobs:
     if: needs.validate-documentation.outputs.docs-changed == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v7
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -223,7 +223,7 @@ jobs:
           fi
 
       - name: Upload aggregated documentation
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: aggregated-docs
           path: src/codomyrmex/documentation/docs/
@@ -235,16 +235,16 @@ jobs:
     if: needs.validate-documentation.outputs.docs-changed == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Download aggregated documentation
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: aggregated-docs
           path: src/codomyrmex/documentation/docs/
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -278,7 +278,7 @@ jobs:
           fi
 
       - name: Upload documentation build
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: documentation-build
           path: src/codomyrmex/documentation/build/
@@ -301,22 +301,22 @@ jobs:
 
     steps:
       - name: Download documentation build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: documentation-build
           path: ./build
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v6
 
       - name: Upload to GitHub Pages
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./build
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
   link-checker:
     name: Check Documentation Links
@@ -325,7 +325,7 @@ jobs:
     if: needs.validate-documentation.outputs.docs-changed == 'true'
     steps:
       - name: Download documentation build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: documentation-build
           path: ./build
@@ -360,7 +360,7 @@ jobs:
           echo '```' >> link-report.md
 
       - name: Upload link check report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: link-check-report
           path: |
@@ -378,7 +378,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Download documentation build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: documentation-build
           path: ./build
@@ -391,7 +391,7 @@ jobs:
           destination_dir: pr-preview/pr-${{ github.event.number }}
 
       - name: Comment PR
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const prNumber = context.payload.pull_request.number;

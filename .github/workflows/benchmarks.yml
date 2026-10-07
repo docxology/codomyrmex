@@ -40,7 +40,7 @@ jobs:
       benchmark-enabled: ${{ steps.check-benchmarks.outputs.enabled }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Check if benchmarks exist
         id: check-benchmarks
@@ -62,10 +62,10 @@ jobs:
     if: needs.benchmark-setup.outputs.benchmark-enabled == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v7
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -109,7 +109,7 @@ jobs:
           fi
 
       - name: Upload unit benchmark results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: unit-benchmark-results
           path: benchmarks/results/
@@ -121,10 +121,10 @@ jobs:
     if: needs.benchmark-setup.outputs.benchmark-enabled == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v7
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -163,7 +163,7 @@ jobs:
           fi
 
       - name: Upload integration benchmark results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: integration-benchmark-results
           path: benchmarks/results/
@@ -175,10 +175,10 @@ jobs:
     if: needs.benchmark-setup.outputs.benchmark-enabled == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v7
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -257,7 +257,7 @@ jobs:
           echo '```' >> benchmarks/results/memory-report.md
 
       - name: Upload memory benchmark results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: memory-benchmark-results
           path: benchmarks/results/
@@ -269,7 +269,7 @@ jobs:
     if: always()
     steps:
       - name: Download all benchmark results
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: ./benchmark-artifacts
 
@@ -306,7 +306,7 @@ jobs:
           echo "3. Consider optimization for functions showing high resource usage" >> comprehensive-benchmark-report.md
 
       - name: Upload comprehensive benchmark report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: comprehensive-benchmark-report
           path: comprehensive-benchmark-report.md
