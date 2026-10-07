@@ -108,6 +108,13 @@ class ResourceTuner:
 
         try:
             container = self.client.containers.get(container_id)
+            if container.status != "running":
+                # The daemon answers stats for a stopped container with an
+                # empty body, which surfaced as an opaque JSONDecodeError.
+                raise ValueError(
+                    f"Container '{container_id}' is not running "
+                    f"(status: {container.status})"
+                )
             stats = container.stats(stream=False)
 
             # CPU calculation

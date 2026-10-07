@@ -137,6 +137,18 @@ class TestResourceTuner:
         assert usage.container_id == running_container.id
         assert usage.memory_usage_bytes > 0
 
+    def test_analyze_usage_rejects_container_that_is_not_running(
+        self, docker_client, running_container
+    ):
+        created = docker_client.containers.create(
+            running_container.image.id, command=["sleep", "100"], entrypoint=""
+        )
+        try:
+            with pytest.raises(ValueError, match="is not running"):
+                ResourceTuner().analyze_usage(created.id)
+        finally:
+            created.remove(force=True)
+
     def test_suggest_limits_basic(self):
         tuner = ResourceTuner()
         usage = ResourceUsage(
