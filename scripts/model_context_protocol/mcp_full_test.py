@@ -189,7 +189,9 @@ def run_tool_tests(runner: TestRunner):
     runner.run_test(
         "tools",
         "list_directory - with pattern",
-        lambda: len(list_directory(".", pattern="*.py")["items"]) > 0,
+        lambda: (
+            len(list_directory(str(Path(__file__).parent), pattern="*.py")["items"]) > 0
+        ),
     )
 
     # analyze_python_file tests
@@ -257,9 +259,8 @@ def run_tool_tests(runner: TestRunner):
 
 def run_server_tests(runner: TestRunner):
     """Test MCP server implementation."""
-    from codomyrmex.model_context_protocol.testing import MockMCPClient
-
     from codomyrmex.model_context_protocol import MCPServer
+    from codomyrmex.model_context_protocol.quality.testing import TestMCPClient
 
     print("\n🖥️  Testing MCP Server...")
 
@@ -283,7 +284,7 @@ def run_server_tests(runner: TestRunner):
 
     # Async tests using run_until_complete
     async def test_initialize():
-        client = MockMCPClient(server)
+        client = TestMCPClient(server)
         response = await client.initialize()
         return "result" in response and "protocolVersion" in response["result"]
 
@@ -294,7 +295,7 @@ def run_server_tests(runner: TestRunner):
     )
 
     async def test_list_tools():
-        client = MockMCPClient(server)
+        client = TestMCPClient(server)
         await client.initialize()
         response = await client.list_tools()
         return "result" in response and "tools" in response["result"]
@@ -306,7 +307,7 @@ def run_server_tests(runner: TestRunner):
     )
 
     async def test_tool_call():
-        client = MockMCPClient(server)
+        client = TestMCPClient(server)
         await client.initialize()
         response = await client.call_tool("test_echo", {"message": "hello"})
         return "result" in response
@@ -463,14 +464,13 @@ def run_discovery_tests(runner: TestRunner):
     """Test MCP discovery."""
     from codomyrmex.model_context_protocol.discovery import (
         DiscoveredTool,
-        SpecificationScanner,
-        ToolCatalog,
+        MCPDiscovery,
     )
 
     print("\n🔍 Testing Discovery...")
 
-    # ToolCatalog tests
-    catalog = ToolCatalog()
+    # Registry tests
+    discovery = MCPDiscovery()
 
     tool = DiscoveredTool(
         name="test_tool",
@@ -481,45 +481,36 @@ def run_discovery_tests(runner: TestRunner):
         tags=["test", "example"],
     )
 
-    catalog.add(tool)
+    discovery.register_tool(tool)
 
     runner.run_test(
-        "discovery", "catalog - add tool", lambda: catalog.get("test_tool") is not None
+        "discovery",
+        "registry - register tool",
+        lambda: discovery.get_tool("test_tool") is not None,
     )
 
     runner.run_test(
-        "discovery", "catalog - list all", lambda: len(catalog.list_all()) == 1
+        "discovery", "registry - list all", lambda: len(discovery.list_tools()) == 1
     )
 
     runner.run_test(
         "discovery",
-        "catalog - search by name",
-        lambda: len(catalog.search(query="test")) == 1,
+        "registry - filter by tag",
+        lambda: len(discovery.list_tools(tag="test")) == 1,
     )
 
     runner.run_test(
         "discovery",
-        "catalog - search by tag",
-        lambda: len(catalog.search(tags=["test"])) == 1,
+        "tool - to mcp schema json",
+        lambda: "test_tool" in json.dumps(tool.to_mcp_schema()),
     )
 
-    runner.run_test(
-        "discovery", "catalog - to json", lambda: "test_tool" in catalog.to_json()
-    )
+    # Module scan test (real @mcp_tool definitions)
+    def scan_llm_tools() -> bool:
+        report = discovery.scan_module("codomyrmex.llm.mcp_tools")
+        return not report.failed_modules and len(report.tools) > 0
 
-    # SpecificationScanner tests
-    spec_scanner = SpecificationScanner()
-    project_root = Path(__file__).parent.parent.parent
-    spec_path = (
-        project_root / "src" / "codomyrmex" / "llm" / "MCP_TOOL_SPECIFICATION.md"
-    )
-
-    if spec_path.exists():
-        runner.run_test(
-            "discovery",
-            "spec scanner - parse file",
-            lambda: isinstance(spec_scanner.scan_spec_file(spec_path), list),
-        )
+    runner.run_test("discovery", "scan module - llm mcp_tools", scan_llm_tools)
 
 
 # ============================================================================
@@ -529,9 +520,8 @@ def run_discovery_tests(runner: TestRunner):
 
 def run_integration_tests(runner: TestRunner):
     """Test end-to-end MCP workflows."""
-    from codomyrmex.model_context_protocol.testing import MockMCPClient
-
     from codomyrmex.model_context_protocol import MCPServer
+    from codomyrmex.model_context_protocol.quality.testing import TestMCPClient
     from codomyrmex.model_context_protocol.tools import checksum_file, read_file
 
     print("\n🔗 Testing Integration...")
@@ -555,7 +545,7 @@ def run_integration_tests(runner: TestRunner):
 
     # Test real file operations through MCP
     async def test_read_integration():
-        client = MockMCPClient(server)
+        client = TestMCPClient(server)
         await client.initialize()
         response = await client.call_tool("read_file", {"path": __file__})
         return "result" in response
@@ -567,7 +557,7 @@ def run_integration_tests(runner: TestRunner):
     )
 
     async def test_checksum_integration():
-        client = MockMCPClient(server)
+        client = TestMCPClient(server)
         await client.initialize()
         response = await client.call_tool("checksum", {"path": __file__})
         return "result" in response
@@ -582,7 +572,7 @@ def run_integration_tests(runner: TestRunner):
 
     # Test workflow: read and process
     async def test_workflow():
-        client = MockMCPClient(server)
+        client = TestMCPClient(server)
         await client.initialize()
 
         # List tools

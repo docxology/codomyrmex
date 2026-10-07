@@ -2,7 +2,6 @@ import json
 from pathlib import Path
 
 from codomyrmex.cli.utils import (
-    TERMINAL_INTERFACE_AVAILABLE,
     TerminalFormatter,
     print_error,
     print_header,
@@ -163,7 +162,7 @@ def handle_project_list() -> bool:
         manager = get_project_manager()
         projects = manager.list_projects()
 
-        formatter = TerminalFormatter() if TERMINAL_INTERFACE_AVAILABLE else None
+        formatter = TerminalFormatter()
 
         print_header("📁 Available Projects")
 
@@ -177,18 +176,12 @@ def handle_project_list() -> bool:
                 status_color = (
                     "BRIGHT_GREEN" if project.status.value == "active" else "YELLOW"
                 )
-                if formatter:
-                    print(f"  {formatter.color(project_name, 'BRIGHT_CYAN')}")
-                    print(
-                        f"    Status: {formatter.color(project.status.value, status_color)}"
-                    )
-                    print(f"    Type: {project.type.value}")
-                    print(f"    Path: {project.path}")
-                else:
-                    print(f"  {project_name}")
-                    print(f"    Status: {project.status.value}")
-                    print(f"    Type: {project.type.value}")
-                    print(f"    Path: {project.path}")
+                print(f"  {formatter.color(project_name, 'BRIGHT_CYAN')}")
+                print(
+                    f"    Status: {formatter.color(project.status.value, status_color)}"
+                )
+                print(f"    Type: {project.type.value}")
+                print(f"    Path: {project.path}")
                 print()
 
         return True
@@ -257,7 +250,7 @@ def handle_orchestration_health() -> bool:
         engine = get_orchestration_engine()
         health = engine.health_check()
 
-        formatter = TerminalFormatter() if TERMINAL_INTERFACE_AVAILABLE else None
+        formatter = TerminalFormatter()
 
         overall_status = health.get("overall_status", "unknown")
         status_color = (
@@ -269,12 +262,9 @@ def handle_orchestration_health() -> bool:
         )
 
         print_header("🏥 Orchestration Health Check")
-        if formatter:
-            print(
-                f"Overall Status: {formatter.color(overall_status.upper(), status_color)}"
-            )
-        else:
-            print(f"Overall Status: {overall_status.upper()}")
+        print(
+            f"Overall Status: {formatter.color(overall_status.upper(), status_color)}"
+        )
 
         # Component health
         components = health.get("components", {})
@@ -288,10 +278,7 @@ def handle_orchestration_health() -> bool:
                 else "RED"
             )
 
-            if formatter:
-                print(f"  {component_name}: {formatter.color(comp_status, comp_color)}")
-            else:
-                print(f"  {component_name}: {comp_status}")
+            print(f"  {component_name}: {formatter.color(comp_status, comp_color)}")
 
         # Issues
         issues = health.get("issues", [])
@@ -322,7 +309,7 @@ def list_workflows() -> bool:
         manager = get_workflow_manager()
         workflows = manager.list_workflows()
 
-        formatter = TerminalFormatter() if TERMINAL_INTERFACE_AVAILABLE else None
+        formatter = TerminalFormatter()
 
         print_header("🎯 Available Workflows")
 
@@ -333,16 +320,10 @@ def list_workflows() -> bool:
             return True
 
         for name, info in workflows.items():
-            if formatter:
-                print(f"  {formatter.color(name, 'BRIGHT_GREEN')}")
-                print(f"    Steps: {info['steps']}")
-                print(f"    Modules: {', '.join(info['modules'])}")
-                print(f"    Estimated Duration: {info['estimated_duration']}s")
-            else:
-                print(f"  {name}")
-                print(f"    Steps: {info['steps']}")
-                print(f"    Modules: {', '.join(info['modules'])}")
-                print(f"    Estimated Duration: {info['estimated_duration']}s")
+            print(f"  {formatter.color(name, 'BRIGHT_GREEN')}")
+            print(f"    Steps: {info['steps']}")
+            print(f"    Modules: {', '.join(info['modules'])}")
+            print(f"    Estimated Duration: {info['estimated_duration']}s")
             print()
 
         return True

@@ -38,13 +38,13 @@ def main():
     setup_logging()
     print_info("Running Advanced build_synthesis Workflow...")
 
-    # Import validation
+    # Import validation (build_synthesis now lives in ci_cd_automation.build)
     try:
-        import codomyrmex.build_synthesis
+        import codomyrmex.ci_cd_automation.build
 
-        print_info("Successfully imported codomyrmex.build_synthesis")
+        print_info("Successfully imported codomyrmex.ci_cd_automation.build")
     except ImportError as e:
-        print_info(f"Warning: Could not import codomyrmex.build_synthesis: {e}")
+        print_info(f"Warning: Could not import codomyrmex.ci_cd_automation.build: {e}")
         # We don't exit here because we want the script to be 'resilient' for testing purposes
 
     # Advanced logic here

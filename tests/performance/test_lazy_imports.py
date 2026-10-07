@@ -19,6 +19,18 @@ import pytest
 
 from tests.support.repo_paths import PACKAGE_ROOT, REPO_ROOT
 
+# ``scripts`` is a package at the repository root; the importlib import mode
+# does not put the root on sys.path (same pattern as
+# tests/unit/model_context_protocol/test_mcp_launcher_security.py).
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from scripts.performance.benchmark_startup import (
+    analyse_import_weights,
+    benchmark_cli_startup,
+    measure_import_time,
+)
+
 pytestmark = pytest.mark.performance
 
 # ── Core import time ──────────────────────────────────────────────────
@@ -79,11 +91,7 @@ class TestLazyDependencies:
     def test_chromadb_not_eagerly_loaded(self) -> None:
         """chromadb should not be imported by the vector store module."""
         # Verify that chromadb is imported conditionally
-        try:
-            from codomyrmex.search import vector_store
-            # If we get here without chromadb, the import is lazy
-        except ImportError:
-            pass  # Module might not exist, that's fine
+        from codomyrmex import vector_store
 
         # chromadb should not be in sys.modules from our import
         # (unless it was loaded before the test)
@@ -108,92 +116,40 @@ class TestLazyDependencies:
 # ── benchmark_startup utilities ───────────────────────────────────────
 
 
-# Locate scripts/performance relative to the repo root so the tests are not
-# tied to a developer-specific absolute path.
-_REPO_ROOT = REPO_ROOT
-_BENCHMARK_STARTUP_DIR = _REPO_ROOT / "scripts" / "performance"
-_BENCHMARK_STARTUP_AVAILABLE = (
-    _BENCHMARK_STARTUP_DIR / "benchmark_startup.py"
-).exists()
-
-
 class TestBenchmarkStartupUtilities:
     """Verify benchmark_startup.py works correctly."""
 
     def test_measure_import_time_returns_dict(self) -> None:
         """measure_import_time should return a proper dict."""
-        if not _BENCHMARK_STARTUP_AVAILABLE:
-            import pytest
-
-            pytest.skip("benchmark_startup.py not found at scripts/performance/")
-        sys.path.insert(0, str(_BENCHMARK_STARTUP_DIR))
-        try:
-            from benchmark_startup import measure_import_time
-
-            result = measure_import_time("json")
-            assert "module" in result
-            assert "import_time_seconds" in result
-            assert result["module"] == "json"
-            assert result["import_time_seconds"] >= 0
-        finally:
-            sys.path.pop(0)
+        result = measure_import_time("json")
+        assert "module" in result
+        assert "import_time_seconds" in result
+        assert result["module"] == "json"
+        assert result["import_time_seconds"] >= 0
 
     def test_measure_import_time_nonexistent_module(self) -> None:
         """Nonexistent module should return negative time."""
-        if not _BENCHMARK_STARTUP_AVAILABLE:
-            import pytest
-
-            pytest.skip("benchmark_startup.py not found at scripts/performance/")
-        sys.path.insert(0, str(_BENCHMARK_STARTUP_DIR))
-        try:
-            from benchmark_startup import measure_import_time
-
-            result = measure_import_time("nonexistent_module_xyz_12345")
-            assert result["import_time_seconds"] == -1.0
-        finally:
-            sys.path.pop(0)
+        result = measure_import_time("nonexistent_module_xyz_12345")
+        assert result["import_time_seconds"] == -1.0
 
     def test_benchmark_cli_startup_returns_dict(self) -> None:
         """benchmark_cli_startup should return timing data."""
-        if not _BENCHMARK_STARTUP_AVAILABLE:
-            import pytest
-
-            pytest.skip("benchmark_startup.py not found at scripts/performance/")
-        sys.path.insert(0, str(_BENCHMARK_STARTUP_DIR))
-        try:
-            from benchmark_startup import benchmark_cli_startup
-
-            result = benchmark_cli_startup(
-                command=[sys.executable, "-c", "pass"],
-                iterations=2,
-            )
-            assert "avg_seconds" in result
-            assert "min_seconds" in result
-            assert "max_seconds" in result
-            assert result["iterations"] == 2
-            assert result["avg_seconds"] > 0
-        finally:
-            sys.path.pop(0)
+        result = benchmark_cli_startup(
+            command=[sys.executable, "-c", "pass"],
+            iterations=2,
+        )
+        assert "avg_seconds" in result
+        assert "min_seconds" in result
+        assert "max_seconds" in result
+        assert result["iterations"] == 2
+        assert result["avg_seconds"] > 0
 
     def test_analyse_import_weights(self) -> None:
         """analyse_import_weights should return sorted list."""
-        if not _BENCHMARK_STARTUP_AVAILABLE:
-            import pytest
-
-            pytest.skip("benchmark_startup.py not found at scripts/performance/")
-        sys.path.insert(0, str(_BENCHMARK_STARTUP_DIR))
-        try:
-            from benchmark_startup import analyse_import_weights
-
-            # Make sure codomyrmex is loaded
-
-            results = analyse_import_weights("codomyrmex")
-            assert isinstance(results, list)
-            # Results should be sorted by import_time descending
-            if len(results) >= 2:
-                assert (
-                    results[0]["import_time_seconds"]
-                    >= results[-1]["import_time_seconds"]
-                )
-        finally:
-            sys.path.pop(0)
+        results = analyse_import_weights("codomyrmex")
+        assert isinstance(results, list)
+        # Results should be sorted by import_time descending
+        if len(results) >= 2:
+            assert (
+                results[0]["import_time_seconds"] >= results[-1]["import_time_seconds"]
+            )

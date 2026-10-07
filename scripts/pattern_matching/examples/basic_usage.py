@@ -46,7 +46,7 @@ def main():
     # 1. Pattern Matching Analysis
     print_info("Testing Pattern Matching initialization...")
     try:
-        from codomyrmex.pattern_matching import get_embedding_function
+        from codomyrmex.coding.pattern_matching import get_embedding_function
 
         # Test embedding function if available
         try:

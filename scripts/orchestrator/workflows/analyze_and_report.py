@@ -33,7 +33,7 @@ async def run_static_analysis(
     path: Path | None = None, _task_results: dict | None = None
 ) -> dict:
     """Run static analysis on the codebase."""
-    from codomyrmex.static_analysis import analyze_code_quality
+    from codomyrmex.coding.static_analysis import analyze_code_quality
 
     target_path = path or project_root / "src"
     logger.info(f"Running static analysis on {target_path}")
@@ -54,7 +54,7 @@ async def run_static_analysis(
 
 async def analyze_dependencies(_task_results: dict | None = None) -> dict:
     """Analyze project dependencies."""
-    from codomyrmex.tools.dependency_analyzer import DependencyAnalyzer
+    from codomyrmex.maintenance import DependencyAnalyzer
 
     logger.info("Analyzing dependencies")
 

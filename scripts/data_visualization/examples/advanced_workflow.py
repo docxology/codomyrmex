@@ -47,7 +47,7 @@ def main():
     print_info("Running Advanced Data Visualization Workflow...")
 
     try:
-        from codomyrmex.data_visualization import (
+        from codomyrmex.data_visualization.engines.advanced_plotter import (
             ChartStyle,
             ColorPalette,
         )

@@ -25,6 +25,22 @@ except ImportError:
     _GIT_OPS = False
 
 
+def _parse_commit_date(date_str: str) -> datetime | None:
+    """Parse ISO dates and git's default ``%ad`` format (``Wed Oct 7 18:00:00 2026 +0000``)."""
+    if not isinstance(date_str, str) or not date_str:
+        return None
+    try:
+        return datetime.fromisoformat(date_str)
+    except ValueError:
+        pass
+    for fmt in ("%Y-%m-%d %H:%M:%S", "%a %b %d %H:%M:%S %Y %z"):
+        try:
+            return datetime.strptime(date_str if "%z" in fmt else date_str[:19], fmt)
+        except ValueError:
+            continue
+    return None
+
+
 class GitChartsMixin:
     """Tree/branch PNG, Mermaid tree, and commit-activity chart generation.
 
@@ -236,15 +252,9 @@ class GitChartsMixin:
 
             commit_dates = []
             for commit in commits:
-                try:
-                    date_str = commit.get("date", "")
-                    if "T" in date_str:
-                        date = datetime.fromisoformat(date_str)
-                    else:
-                        date = datetime.strptime(date_str[:19], "%Y-%m-%d %H:%M:%S")
+                date = _parse_commit_date(commit.get("date", ""))
+                if date is not None:
                     commit_dates.append(date.date())
-                except (ValueError, TypeError):
-                    continue
 
             if not commit_dates:
                 logger.warning("No valid commit dates found")

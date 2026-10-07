@@ -23,12 +23,11 @@ except ImportError:
 import argparse
 import asyncio
 
-from codomyrmex.model_context_protocol.testing import (
-    MockMCPClient,
-    ServerTester,
-)
-
 from codomyrmex.model_context_protocol import MCPServer
+from codomyrmex.model_context_protocol.quality.testing import (
+    ServerTester,
+    TestMCPClient,
+)
 from codomyrmex.model_context_protocol.validators import (
     MessageValidator,
 )
@@ -75,7 +74,7 @@ async def run_tool_tests(server, tool_name: str) -> None:
     """Run tests for a specific tool."""
     print(f"🔧 Testing Tool: {tool_name}\n")
 
-    client = MockMCPClient(server)
+    client = TestMCPClient(server)
 
     # Initialize first
     await client.initialize()

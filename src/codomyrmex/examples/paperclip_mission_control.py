@@ -8,9 +8,8 @@ PaperclipClient.
 
 import json
 
-from codomyrmex.logging_monitoring.logger import get_logger
-
 from codomyrmex.agents.paperclip.paperclip_client import PaperclipClient
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

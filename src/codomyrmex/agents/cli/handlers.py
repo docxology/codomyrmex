@@ -6,6 +6,7 @@ Intended to be called by the thin orchestrator script.
 
 import contextlib
 import json
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -297,55 +298,66 @@ def _handle_api_key_check(
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Dispatch table — replaces 15 trivial one-liner pass-throughs
+# Per-agent execute/stream/check handlers
 #
 # CLI agents: availability checked via command lookup (e.g. jules/gemini/opencode)
 # API-key agents: availability checked via config key + env-var hint
 # ─────────────────────────────────────────────────────────────────────────────
 
-_CLI_AGENTS = [
-    ("jules", JulesClient, "Jules"),
-    ("gemini", GeminiClient, "Gemini"),
-    ("opencode", OpenCodeClient, "OpenCode"),
-]
-
-_API_KEY_AGENTS = [
-    ("claude", ClaudeClient, "Claude", "claude", "ANTHROPIC_API_KEY"),
-    ("codex", CodexClient, "Codex", "codex", "OPENAI_API_KEY"),
-]
+AgentHandler = Callable[[Any], bool]
 
 
-# Generate execute/stream/check handlers from the registry tables.
-# The resulting names (handle_<agent>_execute, etc.) are identical to what
-# was previously written out by hand, so all importers see the same interface.
-def _register_agent_handlers(namespace: dict[str, Any]) -> None:
-    """Define handle_<agent>_{execute,stream,check} for every table entry."""
-    for name, cls, display in _CLI_AGENTS:
-        namespace[f"handle_{name}_execute"] = lambda args, c=cls, d=display: (
-            _handle_agent_execute(c, d, args)
-        )
-        namespace[f"handle_{name}_stream"] = lambda args, c=cls, d=display: (
-            _handle_agent_stream(c, d, args)
-        )
-        namespace[f"handle_{name}_check"] = lambda args, c=cls, d=display: (
-            _handle_cli_agent_check(c, d, args)
-        )
+def _cli_agent_handlers(
+    client_class: Any, client_name: str
+) -> tuple[AgentHandler, AgentHandler, AgentHandler]:
+    """Build the (execute, stream, check) handlers for a CLI-based agent."""
 
-    for name, cls, display, prefix, env in _API_KEY_AGENTS:
-        namespace[f"handle_{name}_execute"] = lambda args, c=cls, d=display: (
-            _handle_agent_execute(c, d, args)
-        )
-        namespace[f"handle_{name}_stream"] = lambda args, c=cls, d=display: (
-            _handle_agent_stream(c, d, args)
-        )
-        namespace[f"handle_{name}_check"] = (
-            lambda args, c=cls, d=display, p=prefix, e=env: _handle_api_key_check(
-                c, d, p, e, args
-            )
-        )
+    def execute(args: Any) -> bool:
+        return _handle_agent_execute(client_class, client_name, args)
+
+    def stream(args: Any) -> bool:
+        return _handle_agent_stream(client_class, client_name, args)
+
+    def check(args: Any) -> bool:
+        return _handle_cli_agent_check(client_class, client_name, args)
+
+    return execute, stream, check
 
 
-_register_agent_handlers(globals())
+def _api_key_agent_handlers(
+    client_class: Any, client_name: str, config_prefix: str, api_key_env: str
+) -> tuple[AgentHandler, AgentHandler, AgentHandler]:
+    """Build the (execute, stream, check) handlers for an API-key-based agent."""
+
+    def execute(args: Any) -> bool:
+        return _handle_agent_execute(client_class, client_name, args)
+
+    def stream(args: Any) -> bool:
+        return _handle_agent_stream(client_class, client_name, args)
+
+    def check(args: Any) -> bool:
+        return _handle_api_key_check(
+            client_class, client_name, config_prefix, api_key_env, args
+        )
+
+    return execute, stream, check
+
+
+handle_jules_execute, handle_jules_stream, handle_jules_check = _cli_agent_handlers(
+    JulesClient, "Jules"
+)
+handle_gemini_execute, handle_gemini_stream, handle_gemini_check = _cli_agent_handlers(
+    GeminiClient, "Gemini"
+)
+handle_opencode_execute, handle_opencode_stream, handle_opencode_check = (
+    _cli_agent_handlers(OpenCodeClient, "OpenCode")
+)
+handle_claude_execute, handle_claude_stream, handle_claude_check = (
+    _api_key_agent_handlers(ClaudeClient, "Claude", "claude", "ANTHROPIC_API_KEY")
+)
+handle_codex_execute, handle_codex_stream, handle_codex_check = _api_key_agent_handlers(
+    CodexClient, "Codex", "codex", "OPENAI_API_KEY"
+)
 
 
 def handle_jules_help(args):

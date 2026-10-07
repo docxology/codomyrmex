@@ -24,24 +24,19 @@ class Queue:
         """Initialize queue.
 
         Args:
-            backend: Queue backend (in_memory, redis)
+            backend: Queue backend. Only ``in_memory`` is implemented;
+                ``redis`` raises RequestedBackendUnavailable.
         """
         self.backend = backend
         if backend == "in_memory":
             self._queue = InMemoryQueue()
         elif backend == "redis":
-            try:
-                from .backends.redis_queue import RedisQueue
+            from codomyrmex.exceptions import RequestedBackendUnavailable
 
-                self._queue = RedisQueue()
-            except ImportError:
-                from codomyrmex.exceptions import RequestedBackendUnavailable
-
-                raise RequestedBackendUnavailable(
-                    "Redis backend requested but redis_queue module not available: "
-                    "install redis or add backends/redis_queue.py",
-                    backend="redis",
-                ) from None
+            raise RequestedBackendUnavailable(
+                "Redis queue backend is not implemented; use backend='in_memory'",
+                backend="redis",
+            )
         else:
             logger.warning("Unknown backend %s, using in-memory queue", backend)
             self._queue = InMemoryQueue()

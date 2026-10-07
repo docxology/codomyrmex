@@ -18,11 +18,13 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.data_visualization import (
+from codomyrmex.data_visualization.engines.advanced_plotter import (
     AdvancedPlotter,
-    MermaidDiagramGenerator,
     get_available_palettes,
     get_available_styles,
+)
+from codomyrmex.data_visualization.mermaid.mermaid_generator import (
+    MermaidDiagramGenerator,
 )
 from codomyrmex.utils.cli_helpers import (
     print_error,
@@ -57,8 +59,8 @@ def main():
     try:
         styles = get_available_styles()
         palettes = get_available_palettes()
-        print_success(f"  Available styles: {', '.join(styles)}")
-        print_success(f"  Available palettes: {', '.join(palettes)}")
+        print_success(f"  Available styles: {', '.join(s.value for s in styles)}")
+        print_success(f"  Available palettes: {', '.join(p.value for p in palettes)}")
     except Exception as e:
         print_error(f"  Failed to get styles/palettes: {e}")
 

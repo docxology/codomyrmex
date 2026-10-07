@@ -20,7 +20,11 @@ Example::
 
 from __future__ import annotations
 
+import importlib
 import logging
+import pkgutil
+from collections.abc import Iterable, Iterator
+from types import ModuleType
 from typing import Any
 
 try:
@@ -32,35 +36,62 @@ except ImportError:
     logger = logging.getLogger(__name__)
 
 
-def get_deprecated_tools() -> list[dict[str, Any]]:
-    """Scan the MCP tool registry for tools with ``deprecated_in`` set.
+def _mcp_tool_modules() -> Iterator[ModuleType]:
+    """Import every ``codomyrmex.*.mcp_tools`` module.
+
+    Modules are found at run time with ``pkgutil``, like the tool listing in
+    ``model_context_protocol.mcp_tools``; a module that fails to import is
+    logged and skipped so one broken integration does not hide the rest.
+    """
+    import codomyrmex
+
+    def _on_package_error(name: str) -> None:
+        logger.warning("Could not import package %s while scanning MCP tools", name)
+
+    for _, modname, _ in pkgutil.walk_packages(
+        codomyrmex.__path__, prefix="codomyrmex.", onerror=_on_package_error
+    ):
+        if modname.rsplit(".", 1)[-1] != "mcp_tools":
+            continue
+        try:
+            yield importlib.import_module(modname)
+        except Exception as e:
+            logger.warning(
+                "Could not import %s while scanning MCP tools: %s", modname, e
+            )
+
+
+def get_deprecated_tools(
+    modules: Iterable[ModuleType] | None = None,
+) -> list[dict[str, Any]]:
+    """List ``@mcp_tool`` functions whose ``deprecated_in`` is set.
+
+    Args:
+        modules: Modules to inspect. Defaults to every ``codomyrmex`` module
+            named ``mcp_tools``.
 
     Returns:
         list of dicts with keys: ``name``, ``module``, ``deprecated_in``,
         ``description``.
     """
     deprecated: list[dict[str, Any]] = []
-
-    try:
-        from codomyrmex.model_context_protocol import get_all_tools
-
-        tools = get_all_tools()
-    except ImportError:
-        logger.warning("MCP get_all_tools not available")
-        return deprecated
-
-    for tool in tools:
-        meta = getattr(tool, "metadata", {}) or {}
-        dep_version = meta.get("deprecated_in")
-        if dep_version:
-            deprecated.append(
-                {
-                    "name": getattr(tool, "name", str(tool)),
-                    "module": getattr(tool, "module", "unknown"),
-                    "deprecated_in": dep_version,
-                    "description": getattr(tool, "description", ""),
-                }
-            )
+    seen: set[int] = set()
+    for module in _mcp_tool_modules() if modules is None else modules:
+        for obj in vars(module).values():
+            meta = getattr(obj, "_mcp_tool_meta", None)
+            if not callable(obj) or not isinstance(meta, dict) or id(obj) in seen:
+                continue
+            seen.add(id(obj))
+            dep_version = meta.get("deprecated_in")
+            if dep_version:
+                deprecated.append(
+                    {
+                        "name": meta.get("name") or obj.__name__,
+                        "module": meta.get("module", module.__name__),
+                        "deprecated_in": dep_version,
+                        "description": meta.get("description", ""),
+                    }
+                )
 
     logger.info("Found %d deprecated MCP tools", len(deprecated))
     return deprecated

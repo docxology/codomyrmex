@@ -18,7 +18,11 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.static_analysis import StaticAnalyzer, analyze_file, get_available_tools
+from codomyrmex.coding.static_analysis import (
+    StaticAnalyzer,
+    analyze_file,
+    get_available_tools,
+)
 from codomyrmex.utils.cli_helpers import (
     print_error,
     print_info,

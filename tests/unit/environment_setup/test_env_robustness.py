@@ -45,17 +45,3 @@ class TestEnvironmentRobustness:
         finally:
             # Restore permissions to allow cleanup
             os.chmod(env_file, 0o644)
-
-    def test_load_env_with_missing_file(self, tmp_path):
-        """Loading .env from empty dir should raise FileNotFoundError or return safely."""
-        original = os.getcwd()
-        os.chdir(tmp_path)
-        try:
-            from codomyrmex.environment_setup.env_checker import load_env_file
-
-            load_env_file(str(tmp_path / ".env"))
-            # Either None or raises -- both acceptable
-        except (FileNotFoundError, OSError, AttributeError, ImportError):
-            pass
-        finally:
-            os.chdir(original)

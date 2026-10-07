@@ -102,9 +102,6 @@ try:
         ComplianceResult,
         ComplianceStandard,
     )
-    from .compliance_checker import (
-        check_compliance as check_compliance_new,
-    )
 
     COMPLIANCE_CHECKING_AVAILABLE = True
 except ImportError:
@@ -154,7 +151,6 @@ if COMPLIANCE_CHECKING_AVAILABLE:
             "ComplianceControl",
             "ComplianceResult",
             "ComplianceStandard",
-            "check_compliance_new",
         ]
     )
 

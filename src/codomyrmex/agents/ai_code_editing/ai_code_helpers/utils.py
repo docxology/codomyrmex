@@ -2,19 +2,10 @@
 
 import os
 
-try:
-    from codomyrmex.llm.providers.ollama_manager import OLLAMA_AVAILABLE
-except ImportError:
-    OLLAMA_AVAILABLE = False
-
-import contextlib
-
+from codomyrmex.environment_setup.env_checker import check_and_setup_env_vars
 from codomyrmex.logging_monitoring import get_logger
 
 from .models import CodeLanguage
-
-with contextlib.suppress(ImportError):
-    from environment_setup.env_checker import check_and_setup_env_vars
 
 logger = get_logger(__name__)
 
@@ -26,10 +17,7 @@ def get_supported_languages() -> list[CodeLanguage]:
 
 def get_supported_providers() -> list[str]:
     """Get list of supported LLM providers."""
-    providers = ["openai", "anthropic", "google"]
-    if OLLAMA_AVAILABLE:
-        providers.append("ollama")
-    return providers
+    return ["openai", "anthropic", "google", "ollama"]
 
 
 def get_available_models(provider: str) -> list[str]:
@@ -49,23 +37,24 @@ def get_available_models(provider: str) -> list[str]:
     return models.get(provider.lower(), [])
 
 
+# Providers that run without an API key (Ollama serves local models).
+_KEYLESS_PROVIDERS = frozenset({"ollama"})
+
+
 def validate_api_keys() -> dict[str, bool]:
-    """Validate API keys for all supported providers."""
-    validation_results = {}
-
-    for provider in get_supported_providers():
-        key_name = f"{provider.upper()}_API_KEY"
-        validation_results[provider] = bool(os.environ.get(key_name))
-
-    return validation_results
+    """Report whether ``<PROVIDER>_API_KEY`` is set for each key-based provider."""
+    return {
+        provider: bool(os.environ.get(f"{provider.upper()}_API_KEY"))
+        for provider in get_supported_providers()
+        if provider not in _KEYLESS_PROVIDERS
+    }
 
 
 def setup_environment() -> bool:
     # Setup environment variables and check dependencies.
     try:
-        # Check and setup environment variables if available
-        if check_and_setup_env_vars:
-            check_and_setup_env_vars()
+        # Load .env and check environment variables
+        check_and_setup_env_vars()
 
         # Validate API keys
         api_keys = validate_api_keys()

@@ -6,6 +6,7 @@ Functions that only need git (not visualization) are tested even without the opt
 
 import shutil
 import subprocess
+from pathlib import Path
 
 import pytest
 
@@ -156,43 +157,38 @@ class TestGetStructureStats:
 
 
 # ---------------------------------------------------------------------------
-# Functions that require VISUALIZATION_AVAILABLE
-# These return an error dict when the dep is missing, which is valid behaviour.
+# Rendering functions (outputs always go under tmp_path)
 # ---------------------------------------------------------------------------
 
 
 class TestCreateGitAnalysisReport:
-    """Tests for create_git_analysis_report — graceful degradation."""
-
-    def test_returns_dict(self, tmp_path):
-        _make_git_repo(tmp_path)
-        result = viz_mod.create_git_analysis_report(str(tmp_path))
-        assert isinstance(result, dict)
+    def test_creates_report(self, tmp_path):
+        repo = tmp_path / "repo"
+        repo.mkdir()
+        _make_git_repo(repo)
+        result = viz_mod.create_git_analysis_report(
+            str(repo), output_dir=str(tmp_path / "out")
+        )
+        assert result["success"] is True
+        assert result["files_created"]
+        assert all(Path(f).exists() for f in result["files_created"])
 
     def test_non_repo_returns_error(self, tmp_path):
-        result = viz_mod.create_git_analysis_report(str(tmp_path))
+        result = viz_mod.create_git_analysis_report(
+            str(tmp_path), output_dir=str(tmp_path / "out")
+        )
         assert "error" in result
-
-    def test_returns_error_when_visualization_unavailable(self, tmp_path):
-        """If data_visualization is not installed, function returns error dict."""
-        _make_git_repo(tmp_path)
-        if not viz_mod.VISUALIZATION_AVAILABLE:
-            result = viz_mod.create_git_analysis_report(str(tmp_path))
-            assert "error" in result
-            assert "not available" in result["error"].lower()
-        else:
-            # If visualization IS available, it should succeed on a valid repo
-            result = viz_mod.create_git_analysis_report(
-                str(tmp_path), output_dir=str(tmp_path / "out")
-            )
-            assert isinstance(result, dict)
 
 
 class TestVisualizeGitBranches:
-    def test_returns_dict(self, tmp_path):
-        _make_git_repo(tmp_path)
-        result = viz_mod.visualize_git_branches(str(tmp_path))
-        assert isinstance(result, dict)
+    def test_writes_png(self, tmp_path):
+        repo = tmp_path / "repo"
+        repo.mkdir()
+        _make_git_repo(repo)
+        out = tmp_path / "branches.png"
+        result = viz_mod.visualize_git_branches(str(repo), output_path=str(out))
+        assert result["success"] is True
+        assert out.exists()
 
     def test_non_repo_returns_error(self, tmp_path):
         result = viz_mod.visualize_git_branches(str(tmp_path))
@@ -200,10 +196,14 @@ class TestVisualizeGitBranches:
 
 
 class TestVisualizeCommitActivity:
-    def test_returns_dict(self, tmp_path):
-        _make_git_repo(tmp_path)
-        result = viz_mod.visualize_commit_activity(str(tmp_path))
-        assert isinstance(result, dict)
+    def test_writes_png(self, tmp_path):
+        repo = tmp_path / "repo"
+        repo.mkdir()
+        _make_git_repo(repo)
+        out = tmp_path / "activity.png"
+        result = viz_mod.visualize_commit_activity(str(repo), output_path=str(out))
+        assert result["success"] is True
+        assert out.exists()
 
     def test_non_repo_returns_error(self, tmp_path):
         result = viz_mod.visualize_commit_activity(str(tmp_path))
@@ -211,21 +211,22 @@ class TestVisualizeCommitActivity:
 
 
 class TestCreateGitWorkflowDiagram:
-    def test_returns_dict(self):
-        result = viz_mod.create_git_workflow_diagram()
-        assert isinstance(result, dict)
-
-    def test_returns_error_when_viz_unavailable(self):
-        if not viz_mod.VISUALIZATION_AVAILABLE:
-            result = viz_mod.create_git_workflow_diagram()
-            assert "error" in result
+    def test_writes_mermaid(self, tmp_path):
+        out = tmp_path / "workflow.mmd"
+        result = viz_mod.create_git_workflow_diagram(output_path=str(out))
+        assert result["success"] is True
+        assert out.read_text().strip()
 
 
 class TestAnalyzeRepositoryStructure:
-    def test_returns_dict(self, tmp_path):
-        _make_git_repo(tmp_path)
-        result = viz_mod.analyze_repository_structure(str(tmp_path))
-        assert isinstance(result, dict)
+    def test_writes_structure(self, tmp_path):
+        repo = tmp_path / "repo"
+        repo.mkdir()
+        _make_git_repo(repo)
+        out = tmp_path / "structure.mmd"
+        result = viz_mod.analyze_repository_structure(str(repo), output_path=str(out))
+        assert result["success"] is True
+        assert out.exists()
 
     def test_non_repo_returns_error(self, tmp_path):
         result = viz_mod.analyze_repository_structure(str(tmp_path))

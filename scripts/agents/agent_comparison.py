@@ -17,9 +17,8 @@ except ImportError:
 
 import logging
 
-from codomyrmex.agents.exceptions import AgentConfigurationError
-
 from codomyrmex.agents import AgentRequest
+from codomyrmex.agents.core.exceptions import AgentConfigurationError
 from codomyrmex.utils.cli_helpers import (
     print_error,
     print_info,
