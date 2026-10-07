@@ -92,9 +92,15 @@ class TestSerializationManagerBasic:
         mgr = SerializationManager()
         mgr.get_serializer("yaml")
         mgr.get_serializer("json")
-        mgr.get_serializer("toml")
+        mgr.get_serializer("pickle")
         formats = mgr.supported_formats()
         assert formats == sorted(formats)
+
+    def test_unknown_format_is_rejected(self):
+        mgr = SerializationManager()
+        with pytest.raises(ValueError, match="toml"):
+            mgr.get_serializer("toml")
+        assert "toml" not in mgr.supported_formats()
 
 
 # ── SerializationManager — serialize ──────────────────────────────────
