@@ -1,11 +1,8 @@
 # Data Visualization - MCP Tool Specification
 
-This document specifies the MCP tools **currently implemented** in the Data Visualization module.
+This document specifies the MCP tools implemented in the Data Visualization module. They are defined with `@mcp_tool` and surfaced by the PAI MCP bridge as `codomyrmex.<name>`.
 
-> **Note:** This spec was updated to reflect the actual implementation in `mcp_tools.py`.
-> Previously documented per-chart-type tools (`create_heatmap`, `create_line_plot`, `create_scatter_plot`,
-> `create_bar_chart`, `create_histogram`, `create_pie_chart`) are **not yet implemented** as MCP tools.
-> The implementation uses a unified `generate_chart` tool with a `chart_type` parameter. See Planned Tools.
+> **Note:** Charts are produced by the single `generate_chart` tool with a `chart_type` parameter. The per-chart Python functions (`create_bar_chart`, `create_line_plot`, ...) are not MCP tools themselves; see [Chart Functions Without MCP Tools](#chart-functions-without-mcp-tools).
 
 ## General Considerations
 
@@ -28,7 +25,7 @@ Generate a visualization chart of the specified type using provided data. Option
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--- | :--- | :--- | :--- | :--- |
 | `chart_type` | `string` | Yes | One of: `'bar'`, `'pie'`, `'line'`, `'scatter'`, `'area'`, `'histogram'` | `"bar"` |
 | `data` | `object` | Yes | Chart data (structure depends on `chart_type` — see examples) | `{"categories": [...], "values": [...]}` |
 | `title` | `string` | No | Chart title. Default: `"Chart"` | `"Monthly Sales"` |
@@ -36,15 +33,21 @@ Generate a visualization chart of the specified type using provided data. Option
 
 **Data structure by chart_type:**
 
-| `chart_type` | Notes |
-|:-------------|:------|
-| `bar` | `data` passed as positional argument to `dv.create_bar_chart(data, title=title)` |
-| `pie`, `line`, `scatter`, `area`, `histogram` | `data` keys are unpacked as kwargs to the factory function |
+| `chart_type` | Factory called with `**data` |
+| :--- | :--- |
+| `bar` | `create_bar_chart` |
+| `pie` | `create_pie_chart` |
+| `line` | `create_line_plot` |
+| `scatter` | `create_scatter_plot` |
+| `area` | `create_area_chart` |
+| `histogram` | `create_histogram` |
+
+For every chart type the keys of `data` are passed as keyword arguments to the factory, with `title` added when `data` does not set it. Any other `chart_type` returns `{"status": "error", "message": "Unsupported chart type: <type>"}`. When `output_path` is given, the string form of the factory's result is written to that file.
 
 ### 4. Output Schema
 
 | Field | Type | Description |
-|:------|:-----|:------------|
+| :--- | :--- | :--- |
 | `status` | `string` | `"success"` or `"error"` |
 | `rendered` | `boolean` | `true` if chart was generated (success only) |
 | `chart_type` | `string` | The chart type that was generated |
@@ -86,14 +89,14 @@ Generate and export a comprehensive HTML dashboard report to a specified directo
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--- | :--- | :--- | :--- | :--- |
 | `report_type` | `string` | No | One of: `'general'`, `'finance'`, `'marketing'`, `'logistics'`. Default: `"general"` | `"finance"` |
 | `output_dir` | `string` | No | Directory to save the HTML report. Default: `"."` | `"/tmp/reports"` |
 
 ### 4. Output Schema
 
 | Field | Type | Description |
-|:------|:-----|:------------|
+| :--- | :--- | :--- |
 | `status` | `string` | `"success"` or `"error"` |
 | `message` | `string` | Success or error description |
 | `file_path` | `string` | Path of the generated HTML file (on success) |
@@ -117,17 +120,23 @@ Generate and export a comprehensive HTML dashboard report to a specified directo
 
 ---
 
-## Planned Tools (Not Yet Implemented as MCP)
+## Mermaid Diagram Tools
 
-The following per-chart-type tools are documented as future work. The underlying Python functions
-exist in `src/codomyrmex/data_visualization/` but are not individually exposed as MCP tools yet.
-Use `generate_chart` with the appropriate `chart_type` parameter instead.
+`mermaid/mermaid_generator.py` also defines `@mcp_tool` functions. Each returns Mermaid diagram source as a string and saves it when `output_path` is given:
 
-| Tool Name | Equivalent `chart_type` |
-|:----------|:------------------------|
-| `create_bar_chart` | `"bar"` |
-| `create_pie_chart` | `"pie"` |
-| `create_line_plot` | `"line"` |
-| `create_scatter_plot` | `"scatter"` |
-| `create_histogram` | `"histogram"` |
-| `create_heatmap` | *(no current equivalent — planned)* |
+| Tool | Parameters |
+| :--- | :--- |
+| `create_git_branch_diagram` | `branches`, `commits`, `title` (default `"Git Branch Diagram"`), `output_path` |
+| `create_git_workflow_diagram` | `workflow_steps`, `title` (default `"Git Workflow"`), `output_path` |
+| `create_repository_structure_diagram` | `repo_structure`, `title` (default `"Repository Structure"`), `output_path` |
+| `create_commit_timeline_diagram` | `commits`, `title` (default `"Commit Timeline"`), `output_path` |
+
+All parameters are optional.
+
+---
+
+## Chart Functions Without MCP Tools
+
+The chart factories `create_bar_chart`, `create_pie_chart`, `create_line_plot`, `create_scatter_plot`, `create_area_chart` and `create_histogram` are reached through `generate_chart`. Other Python functions such as `create_heatmap` and `create_box_plot` have no MCP tool and no `chart_type`; call them from Python.
+
+<!-- markdownlint-configure-file { "MD024": { "siblings_only": true } } -->

@@ -1,14 +1,12 @@
 # Orchestrator - MCP Tool Specification
 
-This document specifies the MCP tools **currently implemented** in the Orchestrator module.
+This document specifies the MCP tools implemented in the Orchestrator module's `mcp_tools.py`. They are surfaced by the PAI MCP bridge as `codomyrmex.<name>`. The fractal task tool is documented in `fractals/MCP_TOOL_SPECIFICATION.md`.
 
-> **Note:** This spec was updated to reflect the actual implementation in `mcp_tools.py`.
-> Previously documented tools (`run_workflow`, `list_workflows`, `create_workflow`, `cancel_workflow`)
-> are **not yet implemented** — they are planned future additions. See the Planned Tools section below.
+> **Note:** The orchestrator has no MCP tools to run, create or cancel named workflows. Listing Claude Code workflows is provided by the PAI bridge's static `codomyrmex.list_workflows` tool.
 
 ## General Considerations
 
-- **Tool Integration**: This module provides scheduler metrics and workflow DAG analysis.
+- **Tool Integration**: This module provides scheduler metrics, workflow DAG analysis and swarm-topology task execution.
 - **Category**: `orchestrator`
 - **Auto-discovered**: Yes (via `@mcp_tool` decorator in `mcp_tools.py`)
 
@@ -31,7 +29,7 @@ None — this tool takes no parameters.
 ### 4. Output Schema
 
 | Field | Type | Description |
-|:------|:-----|:------------|
+| :--- | :--- | :--- |
 | `status` | `string` | `"success"` or `"error"` |
 | `metrics.total_jobs` | `integer` | Total jobs scheduled |
 | `metrics.completed` | `integer` | Jobs completed successfully |
@@ -72,20 +70,20 @@ Analyze a proposed workflow task graph (DAG) for cyclic dependencies. Validates 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--- | :--- | :--- | :--- | :--- |
 | `tasks` | `array[object]` | Yes | List of task descriptors with id and dependencies | See example |
 
 Each task object:
 
 | Field | Type | Required | Description |
-|:------|:-----|:---------|:------------|
+| :--- | :--- | :--- | :--- |
 | `id` | `string` | Yes | Unique task identifier |
 | `dependencies` | `array[string]` | No | IDs of tasks this task depends on |
 
 ### 4. Output Schema
 
 | Field | Type | Description |
-|:------|:-----|:------------|
+| :--- | :--- | :--- |
 | `status` | `string` | `"success"` or `"error"` |
 | `valid_dag` | `boolean` | `true` if no cycles detected |
 | `execution_order` | `array[string]` | Topological order of task IDs (on success) |
@@ -120,14 +118,68 @@ Each task object:
 
 ---
 
-## Planned Tools (Not Yet Implemented)
+## Tool: `orchestrator_run_dag`
 
-The following tools are documented as future work. They do **not** exist in the current implementation
-and will raise `NotImplementedError` until implemented.
+### 1. Tool Purpose and Description
 
-| Tool Name | Description |
-|:----------|:------------|
-| `run_workflow` | Execute a named workflow with parameters and dry-run support |
-| `list_workflows` | List all available workflow definitions |
-| `create_workflow` | Create a new workflow definition from a task graph |
-| `cancel_workflow` | Cancel a running workflow by ID |
+Executes a list of tasks with a swarm topology (`fan_out`, `fan_in`, `pipeline` or `broadcast`) and aggregates their outputs. Tasks can only run bounded expressions or callables from a fixed registry; arbitrary code is rejected.
+
+### 2. Invocation Name
+
+`orchestrator_run_dag`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name | Type | Required | Description | Example Value |
+| :--- | :--- | :--- | :--- | :--- |
+| `topology` | `string` | Yes | `"fan_out"`, `"fan_in"`, `"pipeline"` or `"broadcast"` | `"fan_out"` |
+| `tasks` | `array[object]` | Yes | 1-256 task objects (see below) | see example |
+| `broadcast_message` | `object` | No | Payload injected in `broadcast` mode | `{"event": "start"}` |
+| `max_workers` | `integer` | No | Parallel workers, 1-32 (default `8`) | `4` |
+
+Each task object has:
+
+- `id` (string): unique, non-empty task ID (default `task_<index>`);
+- `fn_expr` (string): a bounded expression over pure builtins, e.g. `"len('hello')"`, **or** `fn` (string): one of `builtins.abs`, `builtins.int`, `builtins.len`, `builtins.max`, `builtins.min`, `builtins.round`, `builtins.str`, `builtins.sum`; with neither, the task echoes its arguments;
+- optional `args` (array), `kwargs` (object) and `metadata` (object).
+
+### 4. Output Schema
+
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `status` | `string` | `"success"` when no task failed, `"failed"` when some did, `"error"` for invalid input |
+| `topology` | `string` | Topology used |
+| `success_count` / `error_count` | `integer` | Task outcome counts |
+| `results` | `array` | Per task: `task_id`, `output`, `error`, `duration_ms` |
+| `merged_outputs` | `object` | Merged outputs (topology dependent) |
+| `errors` | `array` | Task errors |
+| `message` | `string` | `"DAG execution failed: <reason>"` (only for `"error"`) |
+
+### 5. Example Usage
+
+```json
+// Request:
+{
+  "topology": "fan_out",
+  "tasks": [
+    {"id": "a", "fn_expr": "len('hello')"},
+    {"id": "b", "fn": "builtins.abs", "args": [-3]}
+  ]
+}
+
+// Response:
+{
+  "status": "success",
+  "topology": "fan_out",
+  "success_count": 2,
+  "error_count": 0,
+  "results": [
+    {"task_id": "a", "output": 5, "error": "", "duration_ms": 0.01},
+    {"task_id": "b", "output": 3, "error": "", "duration_ms": 0.001}
+  ],
+  "merged_outputs": {},
+  "errors": []
+}
+```
+
+<!-- markdownlint-configure-file { "MD024": { "siblings_only": true } } -->

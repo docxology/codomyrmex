@@ -17,13 +17,13 @@ Scans installed Python packages for plugins registered under a given `importlib.
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--- | :--- | :--- | :--- | :--- |
 | `entry_point_group` | `string` | No | Entry point group name to scan (default: `"codomyrmex.plugins"`) | `"codomyrmex.plugins"` |
 
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :--- | :--- | :--- | :--- |
 | `status` | `string` | `"ok"` on success, `"error"` on failure | `"ok"` |
 | `plugin_count` | `integer` | Total number of discovered plugins | `3` |
 | `plugins` | `array[object]` | List of plugin descriptors | See below |
@@ -33,7 +33,7 @@ Scans installed Python packages for plugins registered under a given `importlib.
 **Plugin object structure:**
 
 | Field Name | Type | Description |
-|:-----------|:-----|:------------|
+| :--- | :--- | :--- |
 | `name` | `string` | Plugin name from entry point metadata |
 | `module` | `string` | Importable module path (e.g. `"mypkg.plugin"`) |
 | `state` | `string` | Discovery state value (e.g. `"discovered"`, `"error"`) |
@@ -59,6 +59,7 @@ Scans installed Python packages for plugins registered under a given `importlib.
 ```
 
 **Example response:**
+
 ```json
 {
   "status": "ok",
@@ -91,20 +92,20 @@ Resolves plugin dependencies using a topological sort and produces a valid load 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--- | :--- | :--- | :--- | :--- |
 | `plugins` | `array[object]` | Yes | List of plugin descriptor objects | See below |
 
 **Plugin descriptor object:**
 
 | Field Name | Type | Required | Description |
-|:-----------|:-----|:---------|:------------|
+| :--- | :--- | :--- | :--- |
 | `name` | `string` | Yes | Unique plugin identifier |
 | `dependencies` | `array[string]` | No | List of plugin names this plugin depends on (default: `[]`) |
 
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
+| :--- | :--- | :--- | :--- |
 | `status` | `string` | `"ok"` on success, `"error"` on failure | `"ok"` |
 | `resolution_status` | `string` | Dependency resolution result (e.g. `"resolved"`, `"missing"`, `"circular"`) | `"resolved"` |
 | `load_order` | `array[string]` | Plugin names in dependency-safe load order | `["base", "plugin-a", "plugin-b"]` |
@@ -137,6 +138,7 @@ Resolves plugin dependencies using a topological sort and produces a valid load 
 ```
 
 **Example response:**
+
 ```json
 {
   "status": "ok",
@@ -160,3 +162,5 @@ Resolves plugin dependencies using a topological sort and produces a valid load 
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
+
+<!-- markdownlint-configure-file { "MD024": { "siblings_only": true } } -->

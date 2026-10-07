@@ -1,14 +1,25 @@
 # Project Orchestration - MCP Tool Specification
 
-This document outlines the Model Context Protocol (MCP) tools provided by the Project Orchestration module for AI-driven project management and workflow automation.
+This document describes the Model Context Protocol (MCP) tools provided by the Project Orchestration package for project management and workflow automation.
 
 ## General Considerations
 
-- **Session Management**: Tools can operate within orchestration sessions for context preservation
-- **Resource Awareness**: All operations respect system resource limits and availability  
-- **Error Recovery**: Tools include automatic retry and error recovery mechanisms
-- **Performance Monitoring**: All tool executions are monitored for performance metrics
-- **Dependency Resolution**: Tools automatically handle inter-module dependencies
+- **Class-based adapter**: The tools are served by `OrchestrationMCPTools` in `mcp_tools.py`. `get_mcp_tool_definitions()` returns their schemas and `execute_mcp_tool(tool_name, arguments)` runs one. They do not use `@mcp_tool`, so the PAI MCP bridge does not auto-discover them; a host must register the adapter itself.
+- **Shared state**: The adapter uses the process-wide orchestration engine, workflow manager, task orchestrator, project manager and resource manager, so workflows and projects persist across calls within one process.
+- **Result format**: Every call returns an `MCPToolResult` with `status` (`"success"` or `"failure"`) and `data` of the form `{"data": <tool result>, "metadata": {"timestamp": "<ISO 8601>", ...}}`. Failures carry an `error` (`MCPErrorDetail`) with `error_type` and `error_message`; unknown tool names fail with `"Tool '<name>' not found"`.
+
+| Tool | Purpose |
+| :--- | :--- |
+| `execute_workflow` | Execute a registered workflow |
+| `create_workflow` | Register a workflow from a list of steps |
+| `list_workflows` | List registered workflows |
+| `create_project` | Create a project, optionally from a template |
+| `list_projects` | List projects |
+| `execute_task` | Execute a single module action as a task |
+| `get_system_status` | Return the orchestration engine's system status |
+| `get_health_status` | Return the orchestration engine's health status |
+| `allocate_resources` | Allocate resources for a user |
+| `create_complex_workflow` | Create and execute a workflow with dependencies |
 
 ---
 
@@ -16,7 +27,7 @@ This document outlines the Model Context Protocol (MCP) tools provided by the Pr
 
 ### 1. Tool Purpose and Description
 
-Executes a predefined or custom workflow with AI-guided parameter optimization and intelligent error handling.
+Executes a workflow with the orchestration engine.
 
 ### 2. Invocation Name
 
@@ -25,76 +36,60 @@ Executes a predefined or custom workflow with AI-guided parameter optimization a
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--- | :--- | :--- | :--- | :--- |
 | `workflow_name` | `string` | Yes | Name of the workflow to execute | `"ai-analysis"` |
-| `parameters` | `object` | No | Workflow-specific parameters | `{"code_path": "./src", "output_path": "./reports"}` |
-| `session_id` | `string` | No | Orchestration session ID for context | `"session_123"` |
-| `mode` | `string` | No | Execution mode: "sequential", "parallel", "resource_aware" | `"resource_aware"` |
-| `timeout_seconds` | `integer` | No | Maximum execution time in seconds | `3600` |
-| `resource_requirements` | `object` | No | Required resources for execution | `{"cpu": {"cores": 2}, "memory": {"gb": 4}}` |
-| `priority` | `string` | No | Execution priority: "low", "normal", "high", "critical" | `"normal"` |
+| `parameters` | `object` | No | Workflow parameters (default `{}`) | `{"code_path": "./src"}` |
+| `session_id` | `string` | No | Session ID for tracking | `"session_123"` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
-| `status` | `string` | Execution status: "success", "failure", "timeout", "cancelled" | `"success"` |
-| `session_id` | `string` | Session ID used for execution | `"session_123"` |
-| `workflow_results` | `object` | Detailed results from each workflow step | `{"analyze_code": {"score": 8.5}, "generate_report": {"file": "report.html"}}` |
-| `execution_time` | `number` | Total execution time in seconds | `245.67` |
-| `resources_used` | `object` | Resources consumed during execution | `{"cpu_seconds": 120, "memory_mb": 512}` |
-| `steps_completed` | `integer` | Number of workflow steps completed | `3` |
-| `steps_total` | `integer` | Total number of workflow steps | `3` |
-| `error_message` | `string` | Error description if status is "failure" | `"Module 'static_analysis' timeout after 300s"` |
-| `metrics` | `object` | Performance and execution metrics | `{"tasks_executed": 5, "avg_task_time": 49.2}` |
+`data.data` is the engine's execution result; `data.metadata` adds `workflow_name` and `session_id`. `status` is `"success"` when the result reports `success: true`.
 
-### 5. Error Handling
+## Tool: `create_workflow`
 
-- **Resource Unavailable**: Returns failure with resource allocation details
-- **Timeout**: Returns partial results with timeout status
-- **Module Unavailable**: Returns failure with missing module information
-- **Workflow Not Found**: Returns failure with available workflow list
-- **Parameter Validation**: Returns failure with parameter requirements
+### 1. Tool Purpose and Description
 
-### 6. Idempotency
+Registers a new workflow from a list of steps.
 
-- **Idempotent**: No (by default)
-- **Session-based Idempotency**: Available with session_id parameter
-- **Explanation**: Workflow execution may have side effects (file creation, API calls). Use session management for controlled re-execution.
+### 2. Invocation Name
 
-### 7. Usage Examples (for MCP context)
+`create_workflow`
 
-```json
-{
-  "tool_name": "execute_workflow",
-  "arguments": {
-    "workflow_name": "ai-analysis",
-    "parameters": {
-      "code_path": "./src/myproject",
-      "output_path": "./analysis_results",
-      "include_visualization": true,
-      "ai_provider": "openai"
-    },
-    "mode": "resource_aware",
-    "timeout_seconds": 1800
-  }
-}
-```
+### 3. Input Schema (Parameters)
 
-### 8. Security Considerations
+| Parameter Name | Type | Required | Description | Example Value |
+| :--- | :--- | :--- | :--- | :--- |
+| `name` | `string` | Yes | Workflow name | `"lint-and-test"` |
+| `steps` | `array[object]` | Yes | Steps as `{"name", "module", "action", "parameters"?, "dependencies"?, "timeout"?}` | `[{"name": "lint", "module": "static_analysis", "action": "analyze_file"}]` |
+| `description` | `string` | No | Workflow description | `"Lint then test"` |
 
-- **Path Validation**: All file paths are validated and sandboxed
-- **Resource Limits**: Execution respects system resource quotas
-- **API Security**: External API calls use secure credential management
-- **Isolation**: Workflow execution is isolated from system processes
+### 4. Output Schema (Return Value)
 
----
+`data.data` contains `workflow_name`, `steps_count` and `description`.
+
+## Tool: `list_workflows`
+
+### 1. Tool Purpose and Description
+
+Lists the registered workflows.
+
+### 2. Invocation Name
+
+`list_workflows`
+
+### 3. Input Schema (Parameters)
+
+None.
+
+### 4. Output Schema (Return Value)
+
+`data.data` contains `workflows` and `count`.
 
 ## Tool: `create_project`
 
 ### 1. Tool Purpose and Description
 
-Creates a new project from a template with intelligent configuration and optional workflow execution.
+Creates a project, optionally from a template.
 
 ### 2. Invocation Name
 
@@ -103,80 +98,39 @@ Creates a new project from a template with intelligent configuration and optiona
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `project_name` | `string` | Yes | Unique name for the new project | `"ai-chatbot-analysis"` |
-| `template_name` | `string` | No | Project template to use | `"ai_analysis"` |
-| `description` | `string` | No | Project description | `"AI analysis of chatbot conversation data"` |
-| `project_path` | `string` | No | Custom project directory path | `"./projects/chatbot-analysis"` |
-| `author` | `string` | No | Project author/owner | `"John Doe"` |
-| `tags` | `array` | No | Project tags for organization | `["ai", "chatbot", "analysis"]` |
-| `config_overrides` | `object` | No | Override default template configuration | `{"ai": {"provider": "anthropic"}}` |
-| `execute_workflow` | `string` | No | Workflow to execute after project creation | `"ai-analysis"` |
-| `workflow_parameters` | `object` | No | Parameters for the workflow execution | `{"include_sentiment": true}` |
+| :--- | :--- | :--- | :--- | :--- |
+| `name` | `string` | Yes | Project name | `"chatbot-analysis"` |
+| `template` | `string` | No | Project template (default `"ai_analysis"`) | `"ai_analysis"` |
+| `description` | `string` | No | Project description | `"Analyse chatbot logs"` |
+| `path` | `string` | No | Project directory path | `"./projects/chatbot-analysis"` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
-| `status` | `string` | Creation status: "success", "failure" | `"success"` |
-| `project_id` | `string` | Unique project identifier | `"ai-chatbot-analysis"` |
-| `project_path` | `string` | Full path to created project | `"/home/user/projects/ai-chatbot-analysis"` |
-| `template_used` | `string` | Template used for project creation | `"ai_analysis"` |
-| `files_created` | `array` | List of files and directories created | `["src/", "data/", "config/analysis.json"]` |
-| `workflow_executed` | `boolean` | Whether initial workflow was executed | `true` |
-| `workflow_result` | `object` | Results from initial workflow execution | `{"success": true, "reports_generated": 3}` |
-| `next_steps` | `array` | Suggested next actions | `["Configure data sources", "Run initial analysis"]` |
-| `error_message` | `string` | Error description if status is "failure" | `"Project directory already exists"` |
+`data.data` contains `project_name`, `project_type`, `project_path`, `template_used` and `workflows`.
 
-### 5. Error Handling
+## Tool: `list_projects`
 
-- **Name Conflicts**: Returns failure if project name already exists
-- **Directory Issues**: Returns failure if target directory is not writable
-- **Template Not Found**: Returns failure with available template list
-- **Resource Constraints**: Returns failure if insufficient disk space
-- **Permission Errors**: Returns failure with permission requirements
+### 1. Tool Purpose and Description
 
-### 6. Idempotency
+Lists the known projects.
 
-- **Idempotent**: No
-- **Explanation**: Creates files and directories that persist. Subsequent calls with same name will fail unless project is deleted first.
+### 2. Invocation Name
 
-### 7. Usage Examples (for MCP context)
+`list_projects`
 
-```json
-{
-  "tool_name": "create_project",
-  "arguments": {
-    "project_name": "ecommerce-code-review",
-    "template_name": "ai_analysis", 
-    "description": "AI-powered code review for e-commerce platform",
-    "author": "Development Team",
-    "tags": ["code-review", "ecommerce", "quality"],
-    "config_overrides": {
-      "analysis": {
-        "focus_areas": ["security", "performance", "maintainability"],
-        "exclude_patterns": ["*/vendor/*", "*/node_modules/*"]
-      }
-    },
-    "execute_workflow": "ai-analysis"
-  }
-}
-```
+### 3. Input Schema (Parameters)
 
-### 8. Security Considerations
+None.
 
-- **Path Security**: Project paths are validated and restricted to safe locations
-- **Template Security**: Templates are validated for malicious content
-- **File Permissions**: Created files have appropriate security permissions
-- **Resource Quotas**: Disk usage is monitored and limited
+### 4. Output Schema (Return Value)
 
----
+`data.data` contains `projects` (each with `name`, `type`, `status`, `path`, `created_at`) and `count`.
 
 ## Tool: `execute_task`
 
 ### 1. Tool Purpose and Description
 
-Executes a single task with intelligent resource management and integration with other Codomyrmex modules.
+Runs one module action as an orchestrated task.
 
 ### 2. Invocation Name
 
@@ -185,81 +139,23 @@ Executes a single task with intelligent resource management and integration with
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `task_name` | `string` | Yes | Descriptive name for the task | `"analyze_python_code"` |
-| `module` | `string` | Yes | Codomyrmex module to use | `"static_analysis"` |
-| `action` | `string` | Yes | Module action/function to execute | `"analyze_code_quality"` |
-| `parameters` | `object` | Yes | Parameters for the module action | `{"path": "./src", "include_security": true}` |
-| `dependencies` | `array` | No | Task IDs this task depends on | `["task_123", "task_124"]` |
-| `priority` | `string` | No | Task priority: "low", "normal", "high", "critical" | `"high"` |
-| `timeout_seconds` | `integer` | No | Maximum execution time | `600` |
-| `retry_count` | `integer` | No | Number of retries on failure | `3` |
-| `resource_requirements` | `object` | No | Required resources | `{"memory": {"gb": 2}}` |
-| `session_id` | `string` | No | Session for context preservation | `"session_456"` |
+| :--- | :--- | :--- | :--- | :--- |
+| `name` | `string` | Yes | Task name | `"analyze_python_code"` |
+| `module` | `string` | Yes | Module to execute | `"static_analysis"` |
+| `action` | `string` | Yes | Action to execute | `"analyze_file"` |
+| `parameters` | `object` | No | Action parameters (default `{}`) | `{"file_path": "src/app.py"}` |
+| `priority` | `string` | No | `low`, `normal`, `high` or `critical` (default `normal`) | `"high"` |
+| `dependencies` | `array[string]` | No | Task dependencies (default `[]`) | `[]` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
-| `status` | `string` | Task status: "completed", "failed", "cancelled", "timeout" | `"completed"` |
-| `task_id` | `string` | Unique identifier for the executed task | `"task_789"` |
-| `result` | `object` | Result data from the module action | `{"quality_score": 8.5, "issues_found": 12}` |
-| `execution_time` | `number` | Task execution time in seconds | `45.2` |
-| `memory_used_mb` | `number` | Peak memory usage during execution | `256` |
-| `retry_attempts` | `integer` | Number of retry attempts made | `0` |
-| `dependencies_satisfied` | `boolean` | Whether all dependencies were met | `true` |
-| `resource_allocation` | `object` | Resources allocated to the task | `{"cpu_cores": 1, "memory_mb": 512}` |
-| `error_message` | `string` | Error description if status is "failed" | `"Module timeout: static_analysis took too long"` |
-| `metadata` | `object` | Additional execution metadata | `{"module_version": "1.2.0", "start_time": "2024-01-01T10:00:00Z"}` |
-
-### 5. Error Handling
-
-- **Module Import Errors**: Returns failure with module availability information
-- **Parameter Validation**: Returns failure with required parameter details
-- **Resource Allocation**: Returns failure if required resources unavailable
-- **Timeout Handling**: Returns timeout status with partial results if available
-- **Dependency Failures**: Returns failure if dependent tasks failed
-
-### 6. Idempotency
-
-- **Idempotent**: Depends on module action
-- **Explanation**: Idempotency depends on the specific module action being executed. Read-only operations are typically idempotent.
-
-### 7. Usage Examples (for MCP context)
-
-```json
-{
-  "tool_name": "execute_task",
-  "arguments": {
-    "task_name": "generate_visualization",
-    "module": "data_visualization", 
-    "action": "create_bar_chart",
-    "parameters": {
-      "categories": ["Security", "Performance", "Maintainability"],
-      "values": [8.5, 7.2, 9.1],
-      "title": "Code Quality Metrics",
-      "output_path": "./reports/quality_chart.png"
-    },
-    "priority": "normal",
-    "dependencies": ["analyze_python_code"]
-  }
-}
-```
-
-### 8. Security Considerations
-
-- **Module Sandboxing**: Tasks execute in controlled environments
-- **Resource Isolation**: Resource usage is monitored and limited
-- **Parameter Sanitization**: Input parameters are validated and sanitized
-- **Output Validation**: Task outputs are validated before storage
-
----
+`data.data` is the task result; `data.metadata` adds `task_name`, `module` and `action`.
 
 ## Tool: `get_system_status`
 
 ### 1. Tool Purpose and Description
 
-Retrieves comprehensive system status including orchestration health, resource usage, and performance metrics.
+Returns the orchestration engine's system status.
 
 ### 2. Invocation Name
 
@@ -267,215 +163,66 @@ Retrieves comprehensive system status including orchestration health, resource u
 
 ### 3. Input Schema (Parameters)
 
-| Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `include_detailed_metrics` | `boolean` | No | Include detailed performance metrics | `true` |
-| `include_resource_health` | `boolean` | No | Include resource health information | `true` |
-| `include_active_sessions` | `boolean` | No | Include active session information | `false` |
-| `time_range_hours` | `integer` | No | Time range for historical metrics | `24` |
+None.
 
-### 4. Output Schema (Return Value)
-
-| Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
-| `overall_status` | `string` | System health: "healthy", "degraded", "unhealthy" | `"healthy"` |
-| `timestamp` | `string` | Status check timestamp | `"2024-01-01T12:00:00Z"` |
-| `orchestration_engine` | `object` | Orchestration engine status | `{"active_sessions": 3, "healthy": true}` |
-| `workflow_manager` | `object` | Workflow manager status | `{"total_workflows": 15, "running": 2}` |
-| `task_orchestrator` | `object` | Task orchestrator status | `{"pending_tasks": 5, "running": 2, "completed": 45}` |
-| `project_manager` | `object` | Project manager status | `{"total_projects": 8, "active": 3}` |
-| `resource_manager` | `object` | Resource utilization | `{"cpu_usage": 45.2, "memory_usage": 60.1}` |
-| `performance_metrics` | `object` | Performance statistics | `{"avg_task_time": 23.5, "success_rate": 98.2}` |
-| `issues` | `array` | Current system issues | `["High memory usage on worker-2"]` |
-| `recommendations` | `array` | System optimization suggestions | `["Consider adding more workers during peak hours"]` |
-
-### 5. Error Handling
-
-- **Component Unavailable**: Returns partial status with unavailable component list
-- **Permission Errors**: Returns limited status information based on access level
-- **Metric Collection Errors**: Returns status with warnings about incomplete metrics
-
-### 6. Idempotency
-
-- **Idempotent**: Yes
-- **Explanation**: Read-only operation that returns current system state without side effects.
-
-### 7. Usage Examples (for MCP context)
-
-```json
-{
-  "tool_name": "get_system_status",
-  "arguments": {
-    "include_detailed_metrics": true,
-    "include_resource_health": true,
-    "time_range_hours": 6
-  }
-}
-```
-
-### 8. Security Considerations
-
-- **Information Security**: Sensitive system information is filtered based on access level
-- **Performance Impact**: Status collection is optimized to minimize system impact
-- **Rate Limiting**: Frequent status requests are rate-limited to prevent abuse
-
----
-
-## Tool: `manage_project`
+## Tool: `get_health_status`
 
 ### 1. Tool Purpose and Description
 
-Manages project lifecycle operations including status updates, milestone tracking, and configuration management.
+Returns the orchestration engine's health status.
 
 ### 2. Invocation Name
 
-`manage_project`
+`get_health_status`
+
+### 3. Input Schema (Parameters)
+
+None.
+
+## Tool: `allocate_resources`
+
+### 1. Tool Purpose and Description
+
+Allocates system resources to a user through the resource manager.
+
+### 2. Invocation Name
+
+`allocate_resources`
 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `project_name` | `string` | Yes | Name of the project to manage | `"chatbot-analysis"` |
-| `operation` | `string` | Yes | Management operation: "status", "update", "milestone", "archive" | `"milestone"` |
-| `parameters` | `object` | No | Operation-specific parameters | `{"milestone_name": "analysis_complete", "data": {...}}` |
+| :--- | :--- | :--- | :--- | :--- |
+| `user_id` | `string` | Yes | User identifier | `"agent-1"` |
+| `requirements` | `object` | Yes | Resource requirements | `{"cpu": {"cores": 2}}` |
 
-### 4. Output Schema (Return Value)
+## Tool: `create_complex_workflow`
 
-| Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
-| `status` | `string` | Operation status: "success", "failure" | `"success"` |
-| `project_status` | `object` | Current project status | `{"name": "chatbot-analysis", "status": "active"}` |
-| `operation_result` | `object` | Result of the management operation | `{"milestone_added": true, "total_milestones": 3}` |
-| `error_message` | `string` | Error description if status is "failure" | `"Project not found"` |
+### 1. Tool Purpose and Description
 
-### 5. Error Handling
+Creates and executes a workflow with multiple dependent steps.
 
-- **Project Not Found**: Returns failure with available project list
-- **Invalid Operation**: Returns failure with supported operation list
-- **Permission Errors**: Returns failure with required permission details
+### 2. Invocation Name
 
-### 6. Idempotency
+`create_complex_workflow`
 
-- **Idempotent**: Depends on operation
-- **Explanation**: Read operations (status) are idempotent, modification operations (update, milestone) may not be.
+### 3. Input Schema (Parameters)
 
-### 7. Usage Examples (for MCP context)
+| Parameter Name | Type | Required | Description | Example Value |
+| :--- | :--- | :--- | :--- | :--- |
+| `name` | `string` | Yes | Workflow name | `"release-pipeline"` |
+| `workflow_definition` | `object` | Yes | Workflow definition with steps and dependencies | `{"steps": []}` |
 
-```json
-{
-  "tool_name": "manage_project",
-  "arguments": {
-    "project_name": "ecommerce-analysis",
-    "operation": "milestone",
-    "parameters": {
-      "milestone_name": "initial_analysis_complete",
-      "data": {
-        "completion_date": "2024-01-01T15:30:00Z",
-        "quality_score": 8.7,
-        "issues_found": 23,
-        "files_analyzed": 156
-      }
-    }
-  }
-}
+---
+
+## Usage Example
+
+```python
+from codomyrmex.logistics.orchestration.project import execute_mcp_tool
+
+result = execute_mcp_tool("list_projects", {})
+print(result.status, result.data["data"]["count"])
 ```
-
-### 8. Security Considerations
-
-- **Project Access Control**: Operations are restricted based on project permissions
-- **Data Validation**: All project data is validated before storage
-- **Audit Trail**: All project modifications are logged for audit purposes
-
----
-
-## Integration Examples
-
-### AI-Driven Code Analysis Workflow
-```json
-{
-  "tool_name": "create_project",
-  "arguments": {
-    "project_name": "ai-code-review",
-    "template_name": "ai_analysis",
-    "execute_workflow": "ai-analysis",
-    "workflow_parameters": {
-      "code_path": "./source-code",
-      "focus_areas": ["security", "performance"],
-      "ai_provider": "openai",
-      "include_suggestions": true
-    }
-  }
-}
-```
-
-### Multi-Step Analysis Pipeline
-```json
-[
-  {
-    "tool_name": "execute_task",
-    "arguments": {
-      "task_name": "static_analysis",
-      "module": "static_analysis",
-      "action": "analyze_code_quality",
-      "parameters": {"path": "./src"}
-    }
-  },
-  {
-    "tool_name": "execute_task", 
-    "arguments": {
-      "task_name": "generate_chart",
-      "module": "data_visualization",
-      "action": "create_bar_chart",
-      "dependencies": ["static_analysis"],
-      "parameters": {
-        "data_source": "${static_analysis.result}",
-        "chart_type": "quality_metrics"
-      }
-    }
-  },
-  {
-    "tool_name": "execute_task",
-    "arguments": {
-      "task_name": "ai_summary",
-      "module": "ai_code_editing", 
-      "action": "generate_code_snippet",
-      "dependencies": ["static_analysis", "generate_chart"],
-      "parameters": {
-        "prompt": "Summarize code analysis: ${static_analysis.result}",
-        "language": "markdown"
-      }
-    }
-  }
-]
-```
-
----
-
-## Best Practices for AI Integration
-
-1. **Context Preservation**: Use session_id for related operations
-2. **Resource Planning**: Specify resource requirements for complex tasks
-3. **Error Recovery**: Implement retry logic for critical operations
-4. **Progress Monitoring**: Use get_system_status to track long-running operations
-5. **Result Chaining**: Use dependency mechanisms to chain related tasks
-6. **Performance Optimization**: Monitor execution metrics and adjust parameters
-
----
-
-## Error Codes Reference
-
-- `RESOURCE_UNAVAILABLE`: Required resources not available
-- `MODULE_NOT_FOUND`: Specified module not installed
-- `WORKFLOW_NOT_FOUND`: Workflow definition not found
-- `PROJECT_EXISTS`: Project name already in use
-- `PERMISSION_DENIED`: Insufficient permissions for operation
-- `TIMEOUT_EXCEEDED`: Operation exceeded time limit
-- `DEPENDENCY_FAILED`: Required dependency task failed
-- `INVALID_PARAMETERS`: Input parameters validation failed
-
----
-
-*These MCP tools enable sophisticated AI-driven project management and workflow orchestration, providing intelligent automation capabilities across the entire Codomyrmex ecosystem.*
 
 ## Navigation Links
 
@@ -483,3 +230,5 @@ Manages project lifecycle operations including status updates, milestone trackin
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
+
+<!-- markdownlint-configure-file { "MD024": { "siblings_only": true } } -->
