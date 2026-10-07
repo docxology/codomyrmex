@@ -11,6 +11,7 @@ Zero-mock policy: all tests use real objects and tmp_path for filesystem.
 import asyncio
 import json
 import os
+from pathlib import Path
 
 import pytest
 import yaml
@@ -201,6 +202,27 @@ class TestCreatePipeline:
         assert pipeline.stages[1].dependencies == ["build"]
         assert pipeline.stages[0].jobs[0].retry_count == 1
 
+    def test_create_from_mapping(self, tmp_path):
+        mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
+        pipeline = mgr.create_pipeline(_minimal_config())
+        assert pipeline.name == "test_pipeline"
+        assert pipeline.stages[0].jobs[0].commands == ["echo hello"]
+        assert "test_pipeline" in mgr.pipelines
+
+    def test_create_from_pathlike(self, tmp_path):
+        path = Path(_write_config(tmp_path, _minimal_config(), "pipeline.yaml"))
+        mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
+        assert mgr.create_pipeline(path).name == "test_pipeline"
+
+    def test_module_level_functions(self):
+        from codomyrmex.ci_cd_automation import (
+            create_pipeline,
+            validate_pipeline_config,
+        )
+
+        assert validate_pipeline_config(_minimal_config()) == (True, [])
+        assert create_pipeline(_minimal_config()).name == "test_pipeline"
+
     def test_create_pipeline_bad_path_raises(self, tmp_path):
         mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
         with pytest.raises((FileNotFoundError, OSError)):
@@ -323,13 +345,24 @@ class TestValidatePipelineConfig:
 
     def test_valid_triggers(self, tmp_path):
         mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
-        config = {
-            "name": "p1",
-            "stages": [],
-            "triggers": ["push", "pull_request", "manual", "schedule"],
-        }
-        is_valid, _errors = mgr.validate_pipeline_config(config)
-        assert is_valid is True
+        config = _minimal_config()
+        config["triggers"] = ["push", "pull_request", "manual", "schedule"]
+        is_valid, errors = mgr.validate_pipeline_config(config)
+        assert is_valid is True, errors
+
+    def test_empty_name_rejected(self, tmp_path):
+        mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
+        config = _minimal_config()
+        config["name"] = "  "
+        is_valid, errors = mgr.validate_pipeline_config(config)
+        assert is_valid is False
+        assert "Pipeline name cannot be empty" in errors
+
+    def test_empty_stage_list_rejected(self, tmp_path):
+        mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
+        is_valid, errors = mgr.validate_pipeline_config({"name": "p1", "stages": []})
+        assert is_valid is False
+        assert errors == ["Pipeline must define at least one stage"]
 
     def test_triggers_not_list(self, tmp_path):
         mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
