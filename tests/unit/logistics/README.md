@@ -7,6 +7,7 @@
 Validation coverage, fixtures, and regression checks for Logistics.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -19,8 +20,12 @@ Validation coverage, fixtures, and regression checks for Logistics.
 - `test_orchestration_engine.py` – File
 - `test_orchestration_session.py` – File
 - `test_parallel_executor.py` – File
+- `test_project_resource_reporting.py` – File
+- `test_task_dispatch.py` – File
+- `test_workflow_execution.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: ../../../../../README.md
 

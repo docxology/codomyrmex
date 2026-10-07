@@ -3,6 +3,12 @@ Parallel Executor for Codomyrmex Workflow Management
 
 This module provides parallel execution capabilities for workflow tasks,
 including dependency management, worker pools, and execution monitoring.
+
+Each task dictionary names its code with ``module`` and ``action``; these are
+dispatched exactly like :class:`~.task_orchestrator.TaskOrchestrator` tasks
+(explicit :class:`~.task_orchestrator.ActionRegistry` registrations first, then
+``codomyrmex.<module>.<action>`` by import) and called with
+``**task["parameters"]``.
 """
 
 import time
@@ -10,6 +16,8 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any
+
+from .task_orchestrator import ActionRegistry, describe_exception, invoke_action
 
 # Import logging
 try:
@@ -70,16 +78,24 @@ class ParallelExecutor:
     - Error handling and recovery
     """
 
-    def __init__(self, max_workers: int = 4, timeout: float = 300.0):
+    def __init__(
+        self,
+        max_workers: int = 4,
+        timeout: float = 300.0,
+        actions: ActionRegistry | None = None,
+    ):
         """
         Initialize the parallel executor.
 
         Args:
             max_workers: Maximum number of worker threads
             timeout: Default timeout for task execution in seconds
+            actions: Registry consulted before import-based dispatch of
+                ``module``/``action``. A new, empty registry is used if omitted.
         """
         self.max_workers = max_workers
         self.default_timeout = timeout
+        self.actions = actions if actions is not None else ActionRegistry()
         self.executor = ThreadPoolExecutor(
             max_workers=max_workers, thread_name_prefix="workflow_executor"
         )
@@ -94,6 +110,11 @@ class ParallelExecutor:
         """
         Execute tasks with dependency management.
 
+        A task runs once all of its dependencies (the union of
+        ``dependencies[name]`` and the task's own ``"dependencies"`` key)
+        completed successfully. A task whose dependency failed is marked
+        ``FAILED`` without running.
+
         Args:
             tasks: list of task dictionaries
             dependencies: dict mapping task names to their dependencies
@@ -101,9 +122,15 @@ class ParallelExecutor:
 
         Returns:
             Dictionary mapping task names to their execution results
+
+        Raises:
+            ValueError: If task names are duplicated or the dependencies name
+                unknown tasks or contain a cycle.
         """
         if timeout is None:
             timeout = self.default_timeout
+
+        dependencies = _merge_dependencies(tasks, dependencies)
 
         # Convert tasks to execution format
         task_dict = {task["name"]: task for task in tasks}
@@ -115,16 +142,38 @@ class ParallelExecutor:
                 task_name=task_name, status=ExecutionStatus.PENDING
             )
 
-        # Track completed tasks
-        completed = set()
+        # Track finished tasks (any final state) and successful ones
+        completed: set[str] = set()
+        succeeded: set[str] = set()
         futures = {}
 
         start_time = time.time()
 
         try:
             while len(completed) < len(tasks) and (time.time() - start_time) < timeout:
-                # Find ready tasks (all dependencies completed)
-                ready_tasks = self._get_ready_tasks(tasks, completed, dependencies)
+                # Tasks whose dependency failed can never run
+                for task in tasks:
+                    name = task["name"]
+                    if name in completed:
+                        continue
+                    failed_deps = [
+                        dep
+                        for dep in dependencies.get(name, [])
+                        if dep in completed and dep not in succeeded
+                    ]
+                    if failed_deps:
+                        now = time.time()
+                        results[name] = ExecutionResult(
+                            task_name=name,
+                            status=ExecutionStatus.FAILED,
+                            error=f"Dependencies did not complete: {failed_deps}",
+                            end_time=now,
+                        )
+                        completed.add(name)
+
+                # Find ready tasks (all dependencies completed successfully)
+                ready_tasks = self._get_ready_tasks(tasks, succeeded, dependencies)
+                ready_tasks = [t for t in ready_tasks if t["name"] not in completed]
 
                 if not ready_tasks:
                     # No tasks ready, wait a bit and check again
@@ -152,6 +201,7 @@ class ParallelExecutor:
                             results[task_name] = result
 
                             if result.status == ExecutionStatus.COMPLETED:
+                                succeeded.add(task_name)
                                 logger.info(
                                     "Task '%s' completed successfully", task_name
                                 )
@@ -318,17 +368,13 @@ class ParallelExecutor:
         start_time = time.time()
 
         try:
-            # Extract task parameters
             module = task.get("module", "")
             action = task.get("action", "")
-            task.get("parameters", {})
+            parameters = task.get("parameters", {})
 
-            # Here we would normally call the actual module function
-            # For now, we'll simulate execution
             logger.info("Executing task '%s': %s.%s", task_name, module, action)
-
-            # Simulate task execution (replace with actual module calls)
-            result = self._simulate_task_execution(task)
+            func = self.actions.resolve(module, action)
+            result = invoke_action(func, parameters)
 
             end_time = time.time()
             duration = end_time - start_time
@@ -351,39 +397,11 @@ class ParallelExecutor:
             return ExecutionResult(
                 task_name=task_name,
                 status=ExecutionStatus.FAILED,
-                error=str(e),
+                error=describe_exception(e),
                 start_time=start_time,
                 end_time=end_time,
                 duration=duration,
             )
-
-    def _simulate_task_execution(self, task: dict[str, Any]) -> Any:
-        """
-        Simulate task execution (replace with actual module calls).
-
-        Args:
-            task: Task dictionary
-
-        Returns:
-            Simulated result
-        """
-        # Simulate different execution times and results based on task type
-        task_name = task["name"]
-        task.get("module", "")
-        task.get("action", "")
-
-        # Simulate varying execution times
-        if "analysis" in task_name.lower():
-            time.sleep(0.5)  # Simulate analysis task
-            return {"analysis_result": "completed", "findings": 5}
-        if "build" in task_name.lower():
-            time.sleep(0.8)  # Simulate build task
-            return {"build_status": "success", "artifacts": ["app.jar"]}
-        if "test" in task_name.lower():
-            time.sleep(0.3)  # Simulate test task
-            return {"tests_passed": 95, "total_tests": 100}
-        time.sleep(0.2)  # Default simulation
-        return {"status": "completed", "message": f"Task {task_name} executed"}
 
     def shutdown(self, wait: bool = True) -> None:
         """
@@ -406,6 +424,41 @@ class ParallelExecutor:
 
 
 # Utility functions for workflow management
+
+
+def _merge_dependencies(
+    tasks: list[dict[str, Any]], dependencies: dict[str, list[str]]
+) -> dict[str, list[str]]:
+    """Combine the dependency mapping with per-task ``dependencies`` and validate.
+
+    Raises:
+        ValueError: On duplicate task names, unknown dependencies or cycles.
+    """
+    from .workflow_dag import WorkflowDAG
+
+    names = [task["name"] for task in tasks]
+    duplicates = sorted({name for name in names if names.count(name) > 1})
+    if duplicates:
+        raise ValueError(f"Duplicate task names: {duplicates}")
+
+    unknown_keys = sorted(set(dependencies) - set(names))
+    if unknown_keys:
+        raise ValueError(f"Dependencies given for unknown tasks: {unknown_keys}")
+
+    merged: dict[str, list[str]] = {}
+    for task in tasks:
+        name = task["name"]
+        deps = list(dependencies.get(name, []))
+        deps += [dep for dep in task.get("dependencies", []) if dep not in deps]
+        merged[name] = deps
+
+    dag = WorkflowDAG(
+        [{"name": name, "dependencies": deps} for name, deps in merged.items()]
+    )
+    is_valid, errors = dag.validate_dag()
+    if not is_valid:
+        raise ValueError(f"Invalid task dependencies: {'; '.join(errors)}")
+    return merged
 
 
 def validate_workflow_dependencies(tasks: list[dict[str, Any]]) -> list[str]:

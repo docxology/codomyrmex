@@ -45,14 +45,9 @@ except ImportError:
 
 
 from .orchestration_engine import get_orchestration_engine
-from .project_manager import get_project_manager
-from .resource_manager import get_resource_manager
-from .task_orchestrator import (
-    Task,
-    TaskPriority,
-    get_task_orchestrator,
-)
-from .workflow_manager import WorkflowStep, get_workflow_manager
+from .project_manager import ProjectType
+from .task_orchestrator import Task, TaskPriority
+from .workflow_manager import WorkflowStep
 
 _PRIORITY_MAP = {
     "low": TaskPriority.LOW,
@@ -71,12 +66,17 @@ class OrchestrationMCPTools:
     """
 
     def __init__(self):
-        """Initialize MCP tools."""
+        """Initialize MCP tools.
+
+        All tools operate on the global orchestration engine's components, so a
+        workflow created with ``create_workflow`` is the one ``execute_workflow``
+        runs.
+        """
         self.engine = get_orchestration_engine()
-        self.wf_manager = get_workflow_manager()
-        self.task_orchestrator = get_task_orchestrator()
-        self.project_manager = get_project_manager()
-        self.resource_manager = get_resource_manager()
+        self.wf_manager = self.engine.workflow_manager
+        self.task_orchestrator = self.engine.task_orchestrator
+        self.project_manager = self.engine.project_manager
+        self.resource_manager = self.engine.resource_manager
 
         if not MCP_AVAILABLE:
             raise RuntimeError(
@@ -160,7 +160,8 @@ class OrchestrationMCPTools:
                         },
                         "template": {
                             "type": "string",
-                            "description": "Project template to use",
+                            "description": "Project template (a ProjectType value)",
+                            "enum": [t.value for t in ProjectType],
                             "default": "ai_analysis",
                         },
                         "description": {
@@ -397,53 +398,51 @@ class OrchestrationMCPTools:
         name = arguments["name"]
         template = arguments.get("template", "ai_analysis")
         description = arguments.get("description", "")
-        arguments.get("path")
 
-        try:
-            project = self.project_manager.create_project(
-                name=name,
-                type=__import__(
-                    "codomyrmex.logistics.orchestration.project.models"
-                ).logistics.orchestration.project.models.ProjectType.CUSTOM,
-                description=description,
-            )
-
-            return MCPToolResult(
-                status="success",
-                data={
-                    "data": {
-                        "project_name": project.name,
-                        "project_type": project.type.value,
-                        "project_path": project.path,
-                        "template_used": template,
-                        "workflows": project.workflows,
-                    },
-                    "metadata": {"timestamp": datetime.now(UTC).isoformat()},
-                },
-            )
-        except Exception as e:
+        project_type = ProjectType(template)
+        project = self.project_manager.create_project(
+            name=name,
+            type=project_type,
+            description=description,
+            path=arguments.get("path"),
+        )
+        if project is None:
             return MCPToolResult(
                 status="failure",
-                error=MCPErrorDetail(error_type=type(e).__name__, error_message=str(e)),
+                error=MCPErrorDetail(
+                    error_type="ProjectCreationError",
+                    error_message=(
+                        f"Project '{name}' could not be created (already "
+                        "registered, directory exists, or scaffolding failed)"
+                    ),
+                ),
             )
+
+        return MCPToolResult(
+            status="success",
+            data={
+                "data": {
+                    "project_name": project.name,
+                    "project_type": project.type.value,
+                    "project_path": str(project.path),
+                    "template_used": template,
+                },
+                "metadata": {"timestamp": datetime.now(UTC).isoformat()},
+            },
+        )
 
     def _list_projects_tool(self, arguments: dict[str, Any]) -> MCPToolResult:
         """list projects tool."""
-        projects = self.project_manager.list_projects()
-        project_details = []
-
-        for project_name in projects:
-            project = self.project_manager.get_project(project_name)
-            if project:
-                project_details.append(
-                    {
-                        "name": project.name,
-                        "type": project.type.value,
-                        "status": project.status.value,
-                        "path": project.path,
-                        "created_at": project.created_at.isoformat(),
-                    }
-                )
+        project_details = [
+            {
+                "name": project.name,
+                "type": project.type.value,
+                "status": project.status.value,
+                "path": str(project.path),
+                "created_at": project.created_at.isoformat(),
+            }
+            for project in self.project_manager.list_projects()
+        ]
 
         return MCPToolResult(
             status="success" if True else "failure",

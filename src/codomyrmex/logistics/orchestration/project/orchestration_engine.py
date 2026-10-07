@@ -13,6 +13,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum
+from pathlib import Path
 from typing import Any
 
 # Import Codomyrmex modules
@@ -44,10 +45,20 @@ import importlib.util as _ilu
 MCP_AVAILABLE = _ilu.find_spec("codomyrmex.model_context_protocol") is not None
 
 # Import orchestration components
-from .project_manager import ProjectManager
-from .resource_manager import ResourceManager
-from .task_orchestrator import Task, TaskOrchestrator, TaskStatus
-from .workflow_manager import WorkflowManager
+from .project_manager import (
+    ProjectManager,
+    ProjectType,
+    get_project_manager,
+)
+from .resource_manager import ResourceManager, get_resource_manager
+from .task_orchestrator import Task, TaskOrchestrator, get_task_orchestrator
+from .workflow_manager import (
+    WorkflowExecution,
+    WorkflowManager,
+    WorkflowStatus,
+    WorkflowStep,
+    get_workflow_manager,
+)
 
 
 class OrchestrationMode(Enum):
@@ -160,24 +171,82 @@ class OrchestrationSession:
         return sess
 
 
+def _optional_path(value: Any) -> Path | None:
+    return Path(value) if value is not None else None
+
+
+def _workflow_result(execution: WorkflowExecution) -> dict[str, Any]:
+    """Convert a finished workflow execution into the engine's result dict."""
+    return {
+        "success": execution.success,
+        "status": execution.status.value,
+        "execution_id": execution.execution_id,
+        "result": execution.step_results,
+        "error": execution.error,
+        "execution_time": execution.duration,
+        "steps_executed": sum(
+            1
+            for step in execution.step_results.values()
+            if step.get("start_time") is not None
+        ),
+    }
+
+
 class OrchestrationEngine:
     """Main orchestration engine coordinating all components."""
 
-    def __init__(self, config: dict[str, Any] | None = None):
-        """Initialize the orchestration engine."""
+    def __init__(
+        self,
+        config: dict[str, Any] | None = None,
+        *,
+        workflow_manager: WorkflowManager | None = None,
+        task_orchestrator: TaskOrchestrator | None = None,
+        project_manager: ProjectManager | None = None,
+        resource_manager: ResourceManager | None = None,
+    ):
+        """Initialize the orchestration engine.
+
+        Components that are not passed in are created from ``config`` and wired
+        together: tasks allocate from the engine's resource manager and
+        workflows run on the engine's task orchestrator. :meth:`shutdown` stops
+        the task orchestrator only if the engine created it.
+
+        Args:
+            config: Optional settings: ``workflows_dir``, ``projects_dir``,
+                ``max_workers``.
+            workflow_manager: Workflow manager to use.
+            task_orchestrator: Task orchestrator to use.
+            project_manager: Project manager to use.
+            resource_manager: Resource manager to use.
+        """
         self.config = config or {}
+        self._owns_task_orchestrator = task_orchestrator is None
 
         # Initialize component managers
-        self.workflow_manager = WorkflowManager(
-            config_dir=self.config.get("workflows_dir")
+        self.resource_manager = (
+            resource_manager if resource_manager is not None else ResourceManager()
         )
-        self.task_orchestrator = TaskOrchestrator(
-            max_workers=self.config.get("max_workers", 4)
+        self.task_orchestrator = (
+            task_orchestrator
+            if task_orchestrator is not None
+            else TaskOrchestrator(
+                max_workers=self.config.get("max_workers", 4),
+                resource_manager=self.resource_manager,
+            )
         )
-        self.project_manager = ProjectManager(
-            projects_root=self.config.get("projects_dir"),
+        self.workflow_manager = (
+            workflow_manager
+            if workflow_manager is not None
+            else WorkflowManager(
+                config_dir=_optional_path(self.config.get("workflows_dir")),
+                task_orchestrator=self.task_orchestrator,
+            )
         )
-        self.resource_manager = ResourceManager()
+        self.project_manager = (
+            project_manager
+            if project_manager is not None
+            else ProjectManager(projects_root=self.config.get("projects_dir"))
+        )
 
         # Performance monitoring
         self.performance_monitor = (
@@ -278,62 +347,26 @@ class OrchestrationEngine:
                     session_id, context.resource_requirements, context.timeout_seconds
                 )
                 if not allocated:
+                    context.status = SessionStatus.FAILED
+                    context.completed_at = datetime.now(UTC)
                     return {
                         "success": False,
                         "error": "Failed to allocate required resources",
                     }
 
-            # Execute workflow (async)
-            import asyncio
-
+            # WorkflowManager.execute_workflow is synchronous: it returns once
+            # every step has finished.
             try:
-                loop = asyncio.get_event_loop()
-                if loop.is_running():
-                    # If loop is already running, we need to handle differently
-                    # For now, create a new thread with its own event loop
-                    import concurrent.futures
-
-                    def run_async():
-                        """
-                        Run workflow execution in a new event loop.
-
-                        Returns:
-                            Result of the workflow execution.
-                        """
-                        new_loop = asyncio.new_event_loop()
-                        asyncio.set_event_loop(new_loop)
-                        try:
-                            return new_loop.run_until_complete(
-                                self.workflow_manager.execute_workflow(
-                                    workflow_name, **params
-                                )
-                            )
-                        finally:
-                            new_loop.close()
-
-                    with concurrent.futures.ThreadPoolExecutor() as executor:
-                        future = executor.submit(run_async)
-                        workflow_result = future.result(timeout=300)  # 5 minute timeout
-                else:
-                    workflow_result = loop.run_until_complete(
-                        self.workflow_manager.execute_workflow(workflow_name, **params)
-                    )
-            except Exception as e:
-                logger.error("Async workflow execution failed: %s", e)
+                execution = self.workflow_manager.execute_workflow(
+                    workflow_name, **params
+                )
+            except (ValueError, NotImplementedError) as e:
+                context.status = SessionStatus.FAILED
+                context.completed_at = datetime.now(UTC)
+                logger.error("Workflow execution failed: %s", e)
                 return {"success": False, "error": f"Workflow execution failed: {e}"}
 
-            # Convert WorkflowExecution to dict format
-            result = {
-                "success": workflow_result.success,
-                "result": workflow_result.result,
-                "error": workflow_result.error,
-                "execution_time": workflow_result.execution_time,
-                "steps_executed": (
-                    len(workflow_result.step_results)
-                    if workflow_result.step_results
-                    else 0
-                ),
-            }
+            result = _workflow_result(execution)
 
             # Update context
             context.status = (
@@ -380,28 +413,40 @@ class OrchestrationEngine:
         if isinstance(task, dict):
             task = Task(**task)
 
+        unknown_deps = [
+            dep
+            for dep in task.dependencies
+            if self.task_orchestrator.get_task(dep) is None
+        ]
+        if unknown_deps:
+            return {
+                "success": False,
+                "error": f"Task {task.name} depends on unknown task ids {unknown_deps}",
+            }
+
         try:
-            # Add task to orchestrator
+            # Add task to orchestrator and wait for it to finish
             task_id = self.task_orchestrator.submit_task(task)
-
-            # Wait for completion (simplified - in practice might be async)
-            import time
-
-            while True:
-                task_obj = self.task_orchestrator.get_task(task_id)
-                if task_obj and task_obj.status in [
-                    TaskStatus.COMPLETED,
-                    TaskStatus.FAILED,
-                    TaskStatus.CANCELLED,
-                ]:
-                    break
-                time.sleep(0.1)
+            finished = self.task_orchestrator.wait_for_tasks(
+                [task_id], timeout=context.timeout_seconds
+            )
+            if not finished:
+                self.task_orchestrator.cancel_task(task_id)
+                return {
+                    "success": False,
+                    "error": (
+                        f"Task {task.name} did not finish within "
+                        f"{context.timeout_seconds}s and was cancelled"
+                    ),
+                    "task_id": task_id,
+                }
 
             result = self.task_orchestrator.get_task_result(task_id)
 
             return {
                 "success": result.success if result else False,
                 "result": result.to_dict() if result else None,
+                "error": result.error if result else "No result recorded",
                 "task_id": task_id,
             }
 
@@ -417,7 +462,14 @@ class OrchestrationEngine:
         session_id: str | None = None,
         **params,
     ) -> dict[str, Any]:
-        """Execute a workflow for a specific project."""
+        """Execute a workflow for a registered project and record the outcome.
+
+        The workflow runs through :meth:`execute_workflow` (``params`` are passed
+        to its steps unchanged). Every run, successful or not, updates the
+        project's metrics: ``workflow_executions``,
+        ``successful_workflow_executions``, ``last_workflow``,
+        ``last_workflow_success`` and ``last_workflow_execution``.
+        """
         if not session_id:
             session_id = self.create_session()
 
@@ -425,24 +477,28 @@ class OrchestrationEngine:
         if not context:
             return {"success": False, "error": f"Session {session_id} not found"}
 
-        try:
-            result = self.project_manager.execute_project_workflow(
-                project_name, workflow_name, **params
-            )
+        project = self.project_manager.get_project(project_name)
+        if project is None:
+            return {"success": False, "error": f"Project {project_name} not found"}
 
-            # Update project metrics
-            if result["success"]:
-                metrics = {
-                    "last_workflow_execution": datetime.now(UTC).isoformat(),
-                    "workflow_executions": 1,
-                }
-                self.project_manager.update_project_metrics(project_name, metrics)
+        result = self.execute_workflow(workflow_name, session_id=session_id, **params)
+        result["project_name"] = project_name
 
-            return result
-
-        except Exception as e:
-            logger.error("Project workflow execution failed: %s", e)
-            return {"success": False, "error": str(e)}
+        executions = project.metrics.get("workflow_executions", 0) + 1
+        successes = project.metrics.get("successful_workflow_executions", 0) + int(
+            result["success"]
+        )
+        self.project_manager.update_project_metrics(
+            project_name,
+            {
+                "workflow_executions": executions,
+                "successful_workflow_executions": successes,
+                "last_workflow": workflow_name,
+                "last_workflow_success": result["success"],
+                "last_workflow_execution": datetime.now(UTC).isoformat(),
+            },
+        )
+        return result
 
     def execute_complex_workflow(
         self, workflow_definition: dict[str, Any], session_id: str | None = None
@@ -456,50 +512,49 @@ class OrchestrationEngine:
             return {"success": False, "error": f"Session {session_id} not found"}
 
         try:
-            # Parse workflow definition
-            steps = workflow_definition.get("steps", [])
+            # Parse workflow definition. Dependencies may be given per step
+            # ("dependencies" key) and/or in the top-level mapping.
             dependencies = workflow_definition.get("dependencies", {})
-            workflow_definition.get("parallel_groups", [])
-
-            # Create tasks from steps
-            tasks = {}
-            for step in steps:
-                step_name = step["name"]
-                dep_names = dependencies.get(step_name, [])
-                task_deps = [tasks.get(dep) for dep in dep_names if dep in tasks]
-
-                task = Task(
-                    name=step_name,
-                    module=step["module"],
-                    action=step["action"],
-                    parameters=step.get("parameters", {}),
-                    dependencies=task_deps,
-                )
-                task_id = self.task_orchestrator.submit_task(task)
-                tasks[step_name] = task_id
-
-            # Wait for all tasks to complete
-            completed = self.task_orchestrator.wait_for_completion(
-                timeout=context.timeout_seconds
+            unknown = sorted(
+                set(dependencies)
+                - {step["name"] for step in workflow_definition.get("steps", [])}
             )
+            if unknown:
+                raise ValueError(f"Dependencies given for unknown steps: {unknown}")
 
-            if completed:
-                # Collect results
-                results = {}
-                for step_name, task_id in tasks.items():
-                    result = self.task_orchestrator.get_task_result(task_id)
-                    results[step_name] = result.to_dict() if result else None
+            steps = []
+            for step in workflow_definition.get("steps", []):
+                step_deps = list(dependencies.get(step["name"], []))
+                step_deps += [
+                    dep for dep in step.get("dependencies", []) if dep not in step_deps
+                ]
+                steps.append(
+                    WorkflowStep(
+                        name=step["name"],
+                        module=step["module"],
+                        action=step["action"],
+                        parameters=step.get("parameters", {}),
+                        dependencies=step_deps,
+                    )
+                )
 
-                return {
-                    "success": True,
-                    "results": results,
-                    "execution_stats": self.task_orchestrator.get_execution_stats(),
-                }
-            return {"success": False, "error": "Workflow execution timed out"}
-
-        except Exception as e:
+            execution = self.workflow_manager.execute_steps(
+                workflow_definition.get("name", "complex_workflow"),
+                steps,
+                timeout=context.timeout_seconds,
+            )
+        except (KeyError, ValueError, NotImplementedError) as e:
             logger.error("Complex workflow execution failed: %s", e)
-            return {"success": False, "error": str(e)}
+            return {"success": False, "error": f"Invalid workflow definition: {e}"}
+
+        result: dict[str, Any] = {
+            "success": execution.success,
+            "results": execution.step_results,
+            "execution_stats": self.task_orchestrator.get_execution_stats(),
+        }
+        if execution.error:
+            result["error"] = execution.error
+        return result
 
     def get_system_status(self) -> dict[str, Any]:
         """Get comprehensive system status."""
@@ -514,7 +569,11 @@ class OrchestrationEngine:
             },
             "workflow_manager": {
                 "total_workflows": len(self.workflow_manager.workflows),
-                "running_workflows": len(self.workflow_manager.executions),
+                "running_workflows": sum(
+                    1
+                    for execution in self.workflow_manager.executions.values()
+                    if execution.status == WorkflowStatus.RUNNING
+                ),
             },
             "task_orchestrator": self.task_orchestrator.get_execution_stats(),
             "project_manager": self.project_manager.get_projects_summary(),
@@ -531,39 +590,76 @@ class OrchestrationEngine:
         project_name: str,
         workflow_name: str,
         template_name: str = "ai_analysis",
-        **kwargs,
+        description: str = "",
+        session_id: str | None = None,
+        **params,
     ) -> dict[str, Any]:
-        """Create a project and execute a workflow for it."""
+        """Create a project and execute a workflow for it.
+
+        Args:
+            project_name: Name of the project to create.
+            workflow_name: Registered workflow to run for the project.
+            template_name: Project template; its name is the
+                :class:`ProjectType` value (``ai_analysis``, ``web_application``,
+                ``data_pipeline``, ...).
+            description: Project description.
+            session_id: Optional orchestration session.
+            **params: Parameters passed to the workflow's steps.
+
+        Returns:
+            ``success`` mirrors the workflow outcome; ``project_created`` and
+            ``project`` describe the created project and ``workflow_result``
+            holds the :meth:`execute_project_workflow` result. A successful run
+            records a ``workflow_<name>_completed`` milestone on the project.
+        """
         try:
-            # Create project
-            self.project_manager.create_project(
-                name=project_name,
-                type=__import__(
-                    "codomyrmex.logistics.orchestration.project.models"
-                ).logistics.orchestration.project.models.ProjectType.CUSTOM,
-                **kwargs,
+            project_type = ProjectType(template_name)
+        except ValueError:
+            return {
+                "success": False,
+                "project_created": False,
+                "error": (
+                    f"Unknown project template '{template_name}'; expected one of "
+                    f"{[t.value for t in ProjectType]}"
+                ),
+            }
+
+        project = self.project_manager.create_project(
+            name=project_name, type=project_type, description=description
+        )
+        if project is None:
+            return {
+                "success": False,
+                "project_created": False,
+                "error": (
+                    f"Project {project_name} could not be created under "
+                    f"{self.project_manager.projects_root} (already registered, "
+                    "directory exists, or scaffolding failed; see logs)"
+                ),
+            }
+
+        result = self.execute_project_workflow(
+            project_name, workflow_name, session_id=session_id, **params
+        )
+
+        if result["success"]:
+            self.project_manager.add_project_milestone(
+                project_name,
+                f"workflow_{workflow_name}_completed",
+                {
+                    "workflow": workflow_name,
+                    "execution_time": result.get("execution_time"),
+                    "success": True,
+                },
             )
 
-            # Execute workflow for project
-            result = self.execute_project_workflow(project_name, workflow_name)
-
-            if result["success"]:
-                # Add completion milestone
-                self.project_manager.add_project_milestone(
-                    project_name,
-                    f"workflow_{workflow_name}_completed",
-                    {
-                        "workflow": workflow_name,
-                        "execution_time": result.get("execution_time", 0),
-                        "success": True,
-                    },
-                )
-
-            return {"success": True, "project_created": True, "workflow_result": result}
-
-        except Exception as e:
-            logger.error("Failed to create project and execute workflow: %s", e)
-            return {"success": False, "error": str(e)}
+        return {
+            "success": result["success"],
+            "project_created": True,
+            "project": project.to_dict(),
+            "workflow_result": result,
+            **({"error": result["error"]} if result.get("error") else {}),
+        }
 
     def health_check(self) -> dict[str, Any]:
         """Perform comprehensive health check."""
@@ -634,15 +730,13 @@ class OrchestrationEngine:
 
         # Session metrics
         for session in self.active_sessions.values():
-            status = session.status
+            status = session.status.value
             metrics["sessions"]["by_status"][status] = (
                 metrics["sessions"]["by_status"].get(status, 0) + 1
             )
 
         # Component metrics
-        if hasattr(self.workflow_manager, "get_metrics"):
-            metrics["workflows"] = self.workflow_manager.get_metrics()  # type: ignore
-
+        metrics["workflows"] = self.workflow_manager.get_performance_summary()
         metrics["tasks"] = self.task_orchestrator.get_execution_stats()
         metrics["projects"] = self.project_manager.get_projects_summary()
         metrics["resources"] = self.resource_manager.get_resource_usage()
@@ -667,8 +761,9 @@ class OrchestrationEngine:
                     f"Warning: error closing session {session_id} during shutdown: {e}"
                 )
 
-        # Stop components
-        self.task_orchestrator.stop_execution()
+        # Stop components (a shared, injected orchestrator keeps running)
+        if self._owns_task_orchestrator:
+            self.task_orchestrator.stop_execution()
 
         # Save state
         if hasattr(self.resource_manager, "save_resources"):
@@ -769,8 +864,19 @@ _orchestration_engine = None
 
 
 def get_orchestration_engine() -> OrchestrationEngine:
-    """Get the global orchestration engine instance."""
+    """Get the global orchestration engine instance.
+
+    The global engine is built on the global component singletons
+    (``get_workflow_manager()``, ``get_task_orchestrator()``,
+    ``get_project_manager()``, ``get_resource_manager()``), so workflows and
+    projects registered through those accessors are visible to it.
+    """
     global _orchestration_engine
     if _orchestration_engine is None:
-        _orchestration_engine = OrchestrationEngine()
+        _orchestration_engine = OrchestrationEngine(
+            workflow_manager=get_workflow_manager(),
+            task_orchestrator=get_task_orchestrator(),
+            project_manager=get_project_manager(),
+            resource_manager=get_resource_manager(),
+        )
     return _orchestration_engine
