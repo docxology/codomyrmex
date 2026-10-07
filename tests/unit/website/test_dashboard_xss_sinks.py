@@ -26,6 +26,7 @@ import shutil
 import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import cast
 
 import pytest
 
@@ -90,7 +91,8 @@ class Token:
     parts: list[list[Token]] = field(default_factory=list)
 
 
-_PUNCTUATORS = sorted(
+# cast: with key=len, ty infers list[Sized] for sorted().
+_PUNCTUATORS = cast("list[str]", sorted(
     [
         ">>>=", "...", "===", "!==", "**=", "<<=", ">>=", ">>>", "&&=", "||=",
         "??=", "=>", "==", "!=", "<=", ">=", "&&", "||", "??", "?.", "++", "--",
@@ -100,7 +102,7 @@ _PUNCTUATORS = sorted(
     ],
     key=len,
     reverse=True,
-)  # fmt: skip
+))  # fmt: skip
 _NAME_RE = re.compile(r"[A-Za-z_$][\w$]*")
 _NUM_RE = re.compile(r"0[xX][0-9a-fA-F]+|(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?")
 # After these keywords a ``/`` starts a regex literal rather than a division.
