@@ -1,28 +1,91 @@
 """Unit tests for GitHistoryAnalyzer.
 
-Tests run against the actual codomyrmex repository at the project root.
-No mocking — per codomyrmex zero-mock policy.
+Tests run against a small fixture repository with a fully known history
+(see ``conftest.py``). No mocking — per codomyrmex zero-mock policy.
 """
 
 from __future__ import annotations
 
 import re
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import git
 import pytest
-from tests.support.repo_paths import PACKAGE_ROOT, REPO_ROOT
 
 from codomyrmex.git_analysis.core.history_analyzer import GitHistoryAnalyzer
 
-# Project root — the git repo these tests run inside
-PROJECT_ROOT = str(REPO_ROOT)
+if TYPE_CHECKING:
+    from .conftest import HistoryRepo
 
 
 @pytest.fixture(scope="module")
-def analyzer() -> GitHistoryAnalyzer:
-    """Shared analyzer instance for the codomyrmex repository."""
-    return GitHistoryAnalyzer(PROJECT_ROOT)
+def analyzer(history_repo: HistoryRepo) -> GitHistoryAnalyzer:
+    """Analyzer bound to the fixture repository."""
+    return GitHistoryAnalyzer(history_repo.path)
+
+
+@pytest.mark.unit
+def test_history_matches_fixture_exactly(
+    analyzer: GitHistoryAnalyzer, history_repo: HistoryRepo
+) -> None:
+    commits = analyzer.get_commit_history(max_count=50)
+    assert [c["message"] for c in commits] == [
+        "README: badges",
+        "Engine: use clamp",
+        "Document usage",
+        "Add util helpers",
+        "Engine: handle errors",
+        "Add engine tests",
+        "Engine: add step",
+        "Initial layout",
+    ]
+    assert commits[0]["sha"] == history_repo.head_sha[:12]
+    assert commits[-1]["files_changed"] == 3
+
+
+@pytest.mark.unit
+def test_contributor_stats_match_fixture(analyzer: GitHistoryAnalyzer) -> None:
+    stats = {entry["author"]: entry for entry in analyzer.get_contributor_stats()}
+    assert {name: entry["commits"] for name, entry in stats.items()} == {
+        "Ada Lovelace": 5,
+        "Grace Hopper": 3,
+    }
+    assert stats["Grace Hopper"]["first_commit"].startswith("2026-01-20")
+    assert stats["Ada Lovelace"]["last_commit"].startswith("2026-03-12")
+
+
+@pytest.mark.unit
+def test_churn_and_frequency_match_fixture(analyzer: GitHistoryAnalyzer) -> None:
+    churn = analyzer.get_code_churn(top_n=2)
+    assert churn == [
+        {"file": "src/core/engine.py", "change_count": 4},
+        {"file": "README.md", "change_count": 3},
+    ]
+    assert analyzer.get_commit_frequency(by="month") == {
+        "2026-01": 3,
+        "2026-02": 2,
+        "2026-03": 3,
+    }
+    assert len(analyzer.get_file_history("README.md", max_count=10)) == 3
+    filtered = analyzer.get_commit_history_filtered(max_count=50, author="grace")
+    assert [c["message"] for c in filtered] == [
+        "Engine: use clamp",
+        "Add util helpers",
+        "Add engine tests",
+    ]
+    since = analyzer.get_commit_history_filtered(max_count=50, since="2026-03-01")
+    assert len(since) == 3
+
+
+@pytest.mark.unit
+def test_branch_topology_matches_fixture(analyzer: GitHistoryAnalyzer) -> None:
+    topology = analyzer.get_branch_topology()
+    assert topology["active_branch"] == "trunk"
+    assert sorted(b["name"] for b in topology["branches"]) == [
+        "feature/cli",
+        "trunk",
+    ]
 
 
 @pytest.mark.unit
