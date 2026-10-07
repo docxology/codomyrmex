@@ -135,7 +135,7 @@ jobs:
       pull-requests: 'write'
     with:
       additional_context: '${{ needs.dispatch.outputs.additional_context }}'
-    secrets: 'inherit'
+    secrets: 'inherit' # pragma: allowlist secret
 
   triage:
     needs: 'dispatch'
@@ -149,7 +149,7 @@ jobs:
       pull-requests: 'write'
     with:
       additional_context: '${{ needs.dispatch.outputs.additional_context }}'
-    secrets: 'inherit'
+    secrets: 'inherit' # pragma: allowlist secret
 
   invoke:
     needs: 'dispatch'
@@ -163,7 +163,7 @@ jobs:
       pull-requests: 'write'
     with:
       additional_context: '${{ needs.dispatch.outputs.additional_context }}'
-    secrets: 'inherit'
+    secrets: 'inherit' # pragma: allowlist secret
 
   fallthrough:
     needs:

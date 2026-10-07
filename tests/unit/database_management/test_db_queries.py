@@ -224,10 +224,9 @@ class TestErrorHandling:
 
     def test_connection_not_found_error(self):
         """Test error when connection not found."""
-        manager = DatabaseManager()
-
-        with pytest.raises(Exception, match="No database connection available"):
-            manager.execute("SELECT 1", connection_name="nonexistent")
+        with DatabaseManager() as manager:
+            with pytest.raises(Exception, match="No database connection available"):
+                manager.execute("SELECT 1", connection_name="nonexistent")
 
     def test_execute_without_connection(self):
         """Test error when executing on connector without connection."""
@@ -272,31 +271,29 @@ class TestErrorHandling:
 
     def test_migration_not_found_error(self, tmp_path):
         """Test error when migration not found."""
-        manager = MigrationManager(workspace_dir=str(tmp_path))
-
-        with pytest.raises(CodomyrmexError, match="Migration not found"):
-            manager.apply_migration("nonexistent_migration")
+        with MigrationManager(workspace_dir=str(tmp_path)) as manager:
+            with pytest.raises(CodomyrmexError, match="Migration not found"):
+                manager.apply_migration("nonexistent_migration")
 
     def test_rollback_without_sql(self, tmp_path):
         """Test error when rolling back migration without rollback SQL."""
         db_path = str(tmp_path / "test.db")
-        manager = MigrationManager(
+        with MigrationManager(
             workspace_dir=str(tmp_path), database_url=f"sqlite:///{db_path}"
-        )
+        ) as manager:
+            migration = manager.create_migration(
+                name="no_rollback",
+                description="Migration without rollback",
+                sql="CREATE TABLE test (id INTEGER);",
+                # No rollback_sql provided
+            )
 
-        migration = manager.create_migration(
-            name="no_rollback",
-            description="Migration without rollback",
-            sql="CREATE TABLE test (id INTEGER);",
-            # No rollback_sql provided
-        )
+            manager.apply_migration(migration.id)
 
-        manager.apply_migration(migration.id)
+            with pytest.raises(CodomyrmexError, match="No rollback SQL"):
+                manager.rollback_migration(migration.id)
 
-        with pytest.raises(CodomyrmexError, match="No rollback SQL"):
-            manager.rollback_migration(migration.id)
-
-        manager.close()
+            manager.close()
 
 
 # ==============================================================================
@@ -310,13 +307,13 @@ class TestConvenienceFunctions:
 
     def test_manage_databases_function(self):
         """Test manage_databases convenience function."""
-        result = manage_databases()
-        assert isinstance(result, DatabaseManager)
+        with manage_databases() as result:
+            assert isinstance(result, DatabaseManager)
 
     def test_manage_databases_without_url(self):
         """Test manage_databases without database URL returns a manager."""
-        result = manage_databases()
-        assert isinstance(result, DatabaseManager)
+        with manage_databases() as result:
+            assert isinstance(result, DatabaseManager)
 
     def test_database_connector_convenience(self, tmp_path):
         """Test DatabaseConnector as convenience for connecting."""

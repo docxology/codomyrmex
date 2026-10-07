@@ -78,7 +78,7 @@ class ResourceTuner:
             if candidate is not None:
                 with contextlib.suppress(Exception):
                     candidate.close()
-            logger.debug("Could not connect to Docker: %s", e)
+            logger.debug("Could not connect to Docker: {}", e)
             self.client = None
 
     def close(self) -> None:
@@ -108,6 +108,13 @@ class ResourceTuner:
 
         try:
             container = self.client.containers.get(container_id)
+            if container.status != "running":
+                # The daemon answers stats for a stopped container with an
+                # empty body, which surfaced as an opaque JSONDecodeError.
+                raise ValueError(
+                    f"Container '{container_id}' is not running "
+                    f"(status: {container.status})"
+                )
             stats = container.stats(stream=False)
 
             # CPU calculation
@@ -142,7 +149,7 @@ class ResourceTuner:
         except docker_errors.NotFound as exc:
             raise ValueError(f"Container '{container_id}' not found") from exc
         except Exception as e:
-            logger.error("Failed to analyze container %s: %s", container_id, e)
+            logger.error("Failed to analyze container {}: {}", container_id, e)
             raise
 
     def suggest_limits(self, usage: ResourceUsage) -> dict[str, str]:

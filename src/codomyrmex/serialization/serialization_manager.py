@@ -57,11 +57,10 @@ class SerializationManager:
 
         """
         if format not in self._serializers:
-            fmt = (
-                SerializationFormat(format)
-                if format in [f.value for f in SerializationFormat]
-                else SerializationFormat.JSON
-            )
+            try:
+                fmt = SerializationFormat(format)
+            except ValueError:
+                fmt = SerializationFormat.JSON
             self._serializers[format] = Serializer(default_format=fmt)
         return self._serializers[format]
 
@@ -142,11 +141,10 @@ class SerializationManager:
                 )
         serializer = self.get_serializer(format)
         # Convert format string to SerializationFormat enum for the Serializer
-        fmt_enum = (
-            SerializationFormat(format)
-            if format in [f.value for f in SerializationFormat]
-            else SerializationFormat.JSON
-        )
+        try:
+            fmt_enum = SerializationFormat(format)
+        except ValueError:
+            fmt_enum = SerializationFormat.JSON
         data_bytes = data.encode("utf-8") if isinstance(data, str) else data
         return serializer.deserialize(data_bytes, fmt_enum)
 

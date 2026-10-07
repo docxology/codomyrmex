@@ -11,8 +11,8 @@ from __future__ import annotations
 
 import hashlib
 import math
-import random
 import re
+import secrets
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -117,10 +117,25 @@ def mask_email(email: str) -> str:
 # ─── Differential Privacy ──────────────────────────────────────────────
 
 
+# Differential-privacy noise must not come from a predictable PRNG: an
+# adversary who can reconstruct the Mersenne Twister state could subtract
+# the noise and recover the true value.
+_CSPRNG = secrets.SystemRandom()
+
+
+def _sample_laplace(scale: float) -> float:
+    """Draw one Laplace(0, scale) sample by inverse-CDF on an open interval."""
+    u = _CSPRNG.random() - 0.5
+    while u == -0.5:  # log(0) is undefined; resample the single bad point
+        u = _CSPRNG.random() - 0.5
+    return -scale * math.copysign(1.0, u) * math.log(1.0 - 2.0 * abs(u))
+
+
 def laplace_noise(epsilon: float, sensitivity: float = 1.0) -> float:
     """Generate a single sample from the Laplace distribution.
 
-    Calibrated for (ε, 0)-differential privacy.
+    Calibrated for (ε, 0)-differential privacy: the scale is
+    ``sensitivity / epsilon``.
 
     Args:
         epsilon: Privacy budget (smaller = more privacy, more noise).
@@ -131,9 +146,7 @@ def laplace_noise(epsilon: float, sensitivity: float = 1.0) -> float:
     """
     if epsilon <= 0:
         raise ValueError("Epsilon must be positive")
-    sensitivity / epsilon
-    return random.random() - 0.5  # Uniform approx; proper Laplace below
-    # Proper Laplace: sign * scale * ln(1 - uniform)
+    return _sample_laplace(sensitivity / epsilon)
 
 
 def add_laplace_noise(value: float, epsilon: float, sensitivity: float = 1.0) -> float:
@@ -147,13 +160,7 @@ def add_laplace_noise(value: float, epsilon: float, sensitivity: float = 1.0) ->
     Returns:
         Noised value.
     """
-    if epsilon <= 0:
-        raise ValueError("Epsilon must be positive")
-    scale = sensitivity / epsilon
-    # Proper Laplace distribution sampling
-    u = random.random() - 0.5
-    noise = -scale * math.copysign(1, u) * math.log(1 - 2 * abs(u))
-    return value + noise
+    return value + laplace_noise(epsilon, sensitivity)
 
 
 def dp_mean(values: list[float], epsilon: float, lower: float, upper: float) -> float:
