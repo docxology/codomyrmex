@@ -1081,7 +1081,10 @@ class TestAgentDispatchEndpoint:
 
         dispatch_thread = WebsiteServer._dispatch_thread
         assert dispatch_thread is not None
-        dispatch_thread.join(timeout=10)
+        # Each agent retries the unreachable LLM with 0.5 s + 1 s backoff, so
+        # the run takes several seconds; a macOS runner needed more than 10.
+        # join() returns as soon as the thread ends, so the ceiling is free.
+        dispatch_thread.join(timeout=120)
         assert not dispatch_thread.is_alive()
 
     def test_running_thread_returns_429(self, live_server):

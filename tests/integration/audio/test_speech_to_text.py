@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 
+from codomyrmex.audio.exceptions import SynthesisError
 from codomyrmex.audio.speech_to_text.models import WhisperModelSize
 from codomyrmex.audio.speech_to_text.providers import (
     WHISPER_AVAILABLE,
@@ -28,9 +29,14 @@ def generated_audio_file(tmp_path_factory):
     tmp_dir = tmp_path_factory.mktemp("stt_test_data")
     audio_path = tmp_dir / "test_audio.wav"
 
-    # Generate real audio
+    # Generate real audio. Some hosts (headless macOS runners) cannot render
+    # speech; the provider now says so instead of returning ~5 ms of audio
+    # that made every transcription assertion fail.
     tts_provider = Pyttsx3Provider()
-    result = tts_provider.synthesize(TEST_TEXT)
+    try:
+        result = tts_provider.synthesize(TEST_TEXT)
+    except SynthesisError as exc:
+        pytest.skip(f"text-to-speech produced no audio on this host: {exc}")
     result.save(audio_path)
 
     return audio_path
