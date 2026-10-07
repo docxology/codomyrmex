@@ -9,6 +9,7 @@ import json
 import os
 import sys
 import tempfile
+import weakref
 from pathlib import Path
 
 # Hypothesis seeds NumPy's RNG when available; on some Python/NumPy combos that
@@ -51,6 +52,23 @@ os.environ["CODOMYRMEX_HERMES_SESSION_DB"] = str(
 # explicitly owned idle loop available for that hand-off and close it at the
 # end of the session so strict ResourceWarning runs remain deterministic.
 _TEST_BOOTSTRAP_LOOP: asyncio.AbstractEventLoop | None = None
+
+# Every asyncio loop created during the session, tracked weakly so idle loops
+# can be closed between tests without scanning the whole heap. The previous
+# implementation walked gc.get_objects() in both setup and teardown of every
+# test; with ML libraries imported the heap holds millions of objects, which
+# made each test pay seconds of overhead and stretched CI past its timeout.
+_CREATED_LOOPS: weakref.WeakSet[asyncio.AbstractEventLoop] = weakref.WeakSet()
+_original_base_event_loop_init = asyncio.BaseEventLoop.__init__
+
+
+@functools.wraps(_original_base_event_loop_init)
+def _tracking_base_event_loop_init(self, *args, **kwargs):
+    _original_base_event_loop_init(self, *args, **kwargs)
+    _CREATED_LOOPS.add(self)
+
+
+asyncio.BaseEventLoop.__init__ = _tracking_base_event_loop_init  # type: ignore[method-assign]
 
 
 def _patch_hypothesis_is_local_module_file() -> None:
@@ -121,10 +139,7 @@ def _close_event_loop(candidate: asyncio.AbstractEventLoop) -> None:
 
 def _close_orphaned_event_loops() -> None:
     """Close idle loops left behind by synchronous test helpers/plugins."""
-    for candidate in gc.get_objects():
-        candidate_type = type(candidate)
-        if asyncio.BaseEventLoop not in candidate_type.__mro__:
-            continue
+    for candidate in list(_CREATED_LOOPS):
         if candidate is _TEST_BOOTSTRAP_LOOP:
             continue
         _close_event_loop(candidate)
@@ -257,7 +272,7 @@ def sample_code_with_vulnerability(tmp_path):
     """Fixture providing sample code with potential security issues."""
     code_file = tmp_path / "vulnerable.py"
     code_content = """import os
-password = "secret123"
+password = "secret123"  # pragma: allowlist secret
 def login(username, pwd):
     if pwd == password:
         return True

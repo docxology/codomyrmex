@@ -30,9 +30,8 @@ EXPLICIT_SAFE_TOOLS: frozenset[str] = frozenset(
         "codomyrmex.git_diff",
         "codomyrmex.json_query",
         "codomyrmex.checksum_file",
-        "codomyrmex.get_package_version",
-        "codomyrmex.tool_list_modules",
-        "codomyrmex.tool_module_info",
+        "codomyrmex.list_modules",
+        "codomyrmex.module_info",
     }
 )
 

@@ -108,8 +108,6 @@ class TestLazyDependencies:
 # ── benchmark_startup utilities ───────────────────────────────────────
 
 
-from tests.support.repo_paths import REPO_ROOT
-
 # Locate scripts/performance relative to the repo root so the tests are not
 # tied to a developer-specific absolute path.
 _REPO_ROOT = REPO_ROOT

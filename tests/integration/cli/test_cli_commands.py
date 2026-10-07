@@ -57,6 +57,8 @@ def test_doctor_command_documented_aliases():
 
     json_start = result.stdout.find("{")
     assert json_start >= 0
-    data = json.loads(result.stdout[json_start:].removesuffix("\nTrue\n"))
+    # Regression: fire used to echo the handler's bool after the JSON payload.
+    assert not result.stdout.rstrip().endswith(("True", "False"))
+    data = json.loads(result.stdout[json_start:])
     assert data["status"] == "ok"
     assert len(data["checks"]) >= 3

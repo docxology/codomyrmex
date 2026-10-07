@@ -33,6 +33,17 @@ class GitHistoryAnalyzer:
         self._path = str(Path(repo_path).resolve())
         self._repo = git.Repo(self._path, search_parent_directories=True)
 
+    def _default_ref(self) -> str:
+        """Return the active branch name, or ``HEAD`` when HEAD is detached.
+
+        CI checkouts of pull requests (and ``git checkout <sha>``) leave HEAD
+        detached, where ``Repo.active_branch`` raises ``TypeError``; walking
+        from ``HEAD`` yields the same history the checkout is on.
+        """
+        if self._repo.head.is_detached:
+            return "HEAD"
+        return self._repo.active_branch.name
+
     def get_commit_history(
         self, max_count: int = 50, branch: str | None = None
     ) -> list[dict[str, Any]]:
@@ -43,9 +54,10 @@ class GitHistoryAnalyzer:
 
         Args:
             max_count: Maximum number of commits to return.
-            branch: Branch name to walk. Defaults to the active branch.
+            branch: Branch name to walk. Defaults to the active branch
+                (or ``HEAD`` when HEAD is detached).
         """
-        ref = branch or self._repo.active_branch.name
+        ref = branch or self._default_ref()
         commits = []
         for commit in self._repo.iter_commits(ref, max_count=max_count):
             stats = commit.stats.total
@@ -120,8 +132,10 @@ class GitHistoryAnalyzer:
         """Return branch names, their tip commits, and active branch.
 
         Returns:
-            dict with keys: active_branch (str), branches (list), branch_count (int).
-            Each branch entry: name, tip_sha, tip_message, tip_date.
+            dict with keys: active_branch (str, or None when HEAD is
+            detached), detached (bool), head_sha (str), branches (list),
+            branch_count (int). Each branch entry: name, tip_sha, tip_message,
+            tip_date.
         """
         branches = []
         for branch in self._repo.branches:
@@ -133,8 +147,11 @@ class GitHistoryAnalyzer:
                     "tip_date": branch.commit.authored_datetime.isoformat(),
                 }
             )
+        detached = self._repo.head.is_detached
         return {
-            "active_branch": self._repo.active_branch.name,
+            "active_branch": None if detached else self._repo.active_branch.name,
+            "detached": detached,
+            "head_sha": self._repo.head.commit.hexsha[:12],
             "branches": branches,
             "branch_count": len(branches),
         }
@@ -177,10 +194,11 @@ class GitHistoryAnalyzer:
             since: ISO-8601 date string — only commits after this date.
             until: ISO-8601 date string — only commits before this date.
             author: Author name substring filter (case-insensitive).
-            branch: Branch to walk. Defaults to active branch.
+            branch: Branch to walk. Defaults to the active branch (or
+                ``HEAD`` when HEAD is detached).
         """
         max_count = min(max(1, max_count), 10000)
-        ref = branch or self._repo.active_branch.name
+        ref = branch or self._default_ref()
         kwargs: dict[str, Any] = {"max_count": max_count}
         if since:
             kwargs["after"] = since

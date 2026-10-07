@@ -264,3 +264,40 @@ def test_manuscript_integrity_rejects_unused_bibliography_record(
     report = validate_manuscript_integrity(tmp_path)
     assert report["status"] == "invalid"
     assert any("unused bibliography keys" in error for error in report["errors"])
+
+
+def _set_claim_evidence(root: Path, evidence: list[str]) -> None:
+    ledger_path = root / "docs/manuscript/claim_ledger.yaml"
+    ledger = yaml.safe_load(ledger_path.read_text(encoding="utf-8"))
+    ledger["claims"][0]["evidence"] = evidence
+    ledger_path.write_text(yaml.safe_dump(ledger), encoding="utf-8")
+
+
+def test_unrendered_check_defers_missing_pdf_receipts(tmp_path: Path) -> None:
+    # Regression: CI's offline gate validates without rendering a PDF, so the
+    # veraPDF receipts a claim cites cannot exist yet.
+    _write_minimal_bundle(tmp_path)
+    receipt = "output/validation/paper-pdf-validation.json"
+    _set_claim_evidence(tmp_path, ["docs/manuscript/source.md", receipt])
+    report = validate_manuscript_integrity(tmp_path)
+    assert report["status"] == "valid", report["errors"]
+    assert report["claim_source_audit"]["deferred_render_evidence"] == [receipt]
+
+
+def test_rendered_check_requires_cited_pdf_receipts(tmp_path: Path) -> None:
+    _write_minimal_bundle(tmp_path)
+    receipt = "output/validation/paper-pdf-validation.json"
+    _set_claim_evidence(tmp_path, ["docs/manuscript/source.md", receipt])
+    report = validate_manuscript_integrity(tmp_path, require_rendered=True)
+    assert f"claim 0 references missing path: {receipt}" in report["errors"]
+
+
+def test_missing_non_receipt_evidence_is_never_deferred(tmp_path: Path) -> None:
+    _write_minimal_bundle(tmp_path)
+    _set_claim_evidence(tmp_path, ["output/data/absent.json"])
+    report = validate_manuscript_integrity(tmp_path)
+    assert report["status"] == "invalid"
+    assert (
+        "claim 0 references missing path: output/data/absent.json" in report["errors"]
+    )
+    assert report["claim_source_audit"]["deferred_render_evidence"] == []

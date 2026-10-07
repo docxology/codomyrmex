@@ -82,8 +82,6 @@ COUNTEREXAMPLE: required if VERDICT is FALSE, empty otherwise.\
 """
 
 # Default paths
-import os
-
 MODULE_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_RUNS_DIR = os.path.join(MODULE_DIR, "output", "runs")
 DEFAULT_LOGS_DIR = os.path.join(MODULE_DIR, "output", "logs")

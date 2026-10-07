@@ -448,8 +448,11 @@ class TestTCPClient:
 
     def test_tcp_client_initialization(self):
         client = TCPClient("localhost", 8080)
-        assert client.host == "localhost"
-        assert client.port == 8080
+        try:
+            assert client.host == "localhost"
+            assert client.port == 8080
+        finally:
+            client.close()
 
     def test_tcp_client_connect_send_receive(self):
         server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -483,7 +486,10 @@ class TestTCPServer:
 
     def test_tcp_server_initialization(self):
         server = TCPServer("0.0.0.0", 0)
-        assert server.host == "0.0.0.0"
+        try:
+            assert server.host == "0.0.0.0"
+        finally:
+            server.close()
 
     def test_tcp_server_start_and_accept(self):
         server = TCPServer("127.0.0.1", 0)
@@ -515,8 +521,11 @@ class TestUDPClient:
 
     def test_udp_client_initialization(self):
         client = UDPClient("localhost", 5000)
-        assert client.host == "localhost"
-        assert client.port == 5000
+        try:
+            assert client.host == "localhost"
+            assert client.port == 5000
+        finally:
+            client.close()
 
     def test_udp_client_send_receive(self):
         server_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

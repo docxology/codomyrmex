@@ -2230,8 +2230,17 @@ def compute_variables(
         if colony_kernel_dir.is_dir()
         else str(project_root / "src")
     )
+    # Use the ruff installed with this interpreter (the locked version) rather
+    # than whichever ruff happens to be first on PATH.
     ruff_result = subprocess.run(
-        ["ruff", "check", "--output-format=json", colony_kernel_src_str],
+        [
+            sys.executable,
+            "-m",
+            "ruff",
+            "check",
+            "--output-format=json",
+            colony_kernel_src_str,
+        ],
         capture_output=True,
         text=True,
         timeout=30,
@@ -2245,7 +2254,15 @@ def compute_variables(
     ruff_errors: int = len(findings)
 
     ty_result = subprocess.run(
-        ["ty", "check", "--output-format", "concise", colony_kernel_src_str],
+        [
+            sys.executable,
+            "-m",
+            "ty",
+            "check",
+            "--output-format",
+            "concise",
+            colony_kernel_src_str,
+        ],
         capture_output=True,
         text=True,
         timeout=60,

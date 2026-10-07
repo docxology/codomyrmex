@@ -479,6 +479,12 @@ filterwarnings = [
     "ignore:'_UnionGenericAlias' is deprecated:DeprecationWarning",
     # google-genai 1.68 with pydantic >= 2.12: model_validator mode='after' classmethod deprecation at import.
     "ignore:Using `@model_validator` with mode='after' on a classmethod is deprecated.*:",
+    # matplotlib 3.10 date-axis default intervals use bare-integer timedelta
+    # arithmetic that NumPy 2.5 deprecates; raised inside matplotlib, not here.
+    "ignore:The 'generic' unit for NumPy timedelta is deprecated:DeprecationWarning",
+    # pytest-benchmark disables itself under pytest-xdist and says so with a
+    # warning during configure; the CI suites run with xdist (-n auto).
+    "ignore:Benchmarks are automatically disabled because xdist plugin is active",
 ]
 
 
@@ -708,10 +714,6 @@ ignore = [
     "PLR0133",  # comparison of constant (1)
     "G003",     # logging string concat (2)
     "LOG015",   # root logger call (2)
-    "F811",     # redefined while unused (2 — overload patterns)
-    "F822",     # undefined export (3 — lazy module __getattr__)
-    "F823",     # undefined local (2 — conditional definition)
-    "F821",     # undefined name (4 — TYPE_CHECKING imports)
     "F403",     # undefined local with import star (1 — __init__ re-export)
     "ARG004",   # unused static method argument (3)
     "FURB116",  # f-string number format (1)
