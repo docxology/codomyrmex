@@ -371,7 +371,7 @@ else:
     logger.error("Failed to create branch")
 
 # With visualization
-from codomyrmex.git_operations.visualization_integration import (
+from codomyrmex.git_operations.api.visualization import (
     create_git_analysis_report
 )
 

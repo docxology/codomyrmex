@@ -7,6 +7,7 @@ The Repository Metadata System provides comprehensive tracking and management of
 ## Features
 
 ### 🏗️ **Comprehensive Metadata Tracking**
+
 - **Access & Permissions**: Read/write status, admin rights, private/public status
 - **Clone & Sync Status**: Clone dates, sync status, local repository information
 - **Version Information**: Branches, tags, releases, commit tracking
@@ -15,6 +16,7 @@ The Repository Metadata System provides comprehensive tracking and management of
 - **Custom Fields**: Tags, priority, category, notes for organization
 
 ### 🔧 **GitHub API Integration**
+
 - **Automatic Data Fetching**: Real-time repository information from GitHub
 - **Permission Detection**: Automatic access level determination
 - **Statistics Updates**: Live stats including stars, forks, issues
@@ -22,6 +24,7 @@ The Repository Metadata System provides comprehensive tracking and management of
 - **Activity Tracking**: Last activity and update timestamps
 
 ### 💻 **Command Line Interface**
+
 - **Metadata Management**: Update, show, and manage repository metadata
 - **Comprehensive Reporting**: Detailed reports with filtering and analysis
 - **Sync Status Monitoring**: Track repository synchronization status
@@ -32,6 +35,7 @@ The Repository Metadata System provides comprehensive tracking and management of
 ## Metadata Structure
 
 ### Core Repository Information
+
 ```json
 {
   "full_name": "docxology/codomyrmex",
@@ -45,6 +49,7 @@ The Repository Metadata System provides comprehensive tracking and management of
 ```
 
 ### Access & Permissions
+
 ```json
 {
   "access_level": "read_write",
@@ -56,6 +61,7 @@ The Repository Metadata System provides comprehensive tracking and management of
 ```
 
 ### Clone & Sync Information
+
 ```json
 {
   "clone_status": "cloned",
@@ -68,6 +74,7 @@ The Repository Metadata System provides comprehensive tracking and management of
 ```
 
 ### Version Information
+
 ```json
 {
   "default_branch": "main",
@@ -80,6 +87,7 @@ The Repository Metadata System provides comprehensive tracking and management of
 ```
 
 ### Repository Statistics
+
 ```json
 {
   "total_commits": 150,
@@ -96,6 +104,7 @@ The Repository Metadata System provides comprehensive tracking and management of
 ```
 
 ### Local Repository Information
+
 ```json
 {
   "path": "/Users/user/repos/project",
@@ -114,6 +123,7 @@ The Repository Metadata System provides comprehensive tracking and management of
 ```
 
 ### Custom Fields
+
 ```json
 {
   "tags": ["important", "active-development"],
@@ -140,6 +150,7 @@ alias metadata-cli="python /path/to/codomyrmex/src/codomyrmex/git_operations/met
 ### Basic Commands
 
 #### 1. **Update Metadata**
+
 ```bash
 # Update single repository
 python metadata_cli.py update --repository docxology/codomyrmex --type OWN --path /local/path
@@ -152,6 +163,7 @@ python metadata_cli.py --token YOUR_GITHUB_TOKEN update --repository docxology/c
 ```
 
 #### 2. **Show Metadata**
+
 ```bash
 # Show specific repository
 python metadata_cli.py show --repository docxology/codomyrmex
@@ -164,6 +176,7 @@ python metadata_cli.py -v show
 ```
 
 #### 3. **Generate Reports**
+
 ```bash
 # Basic report
 python metadata_cli.py report
@@ -176,6 +189,7 @@ python metadata_cli.py report --detailed --export report.json
 ```
 
 #### 4. **Check Sync Status**
+
 ```bash
 # Check synchronization status
 python metadata_cli.py sync-status
@@ -185,6 +199,7 @@ python metadata_cli.py -v sync-status
 ```
 
 #### 5. **Cleanup Metadata**
+
 ```bash
 # Dry run to see what would be removed
 python metadata_cli.py cleanup --dry-run
@@ -200,7 +215,7 @@ python metadata_cli.py cleanup
 ### Basic Metadata Management
 
 ```python
-from codomyrmex.git_operations.repository_metadata import (
+from codomyrmex.git_operations.core.metadata import (
     RepositoryMetadataManager, AccessLevel, CloneStatus
 )
 
@@ -289,7 +304,7 @@ print(f"Outdated repositories: {report['outdated_repositories']}")
 ### Enhanced Repository Manager
 
 ```python
-from codomyrmex.git_operations.repository_manager import RepositoryManager
+from codomyrmex.git_operations.core.repository import RepositoryManager
 
 # Initialize with metadata support
 manager = RepositoryManager(
@@ -336,17 +351,20 @@ for repo_name in repos_to_clone:
 ## Metadata Fields Reference
 
 ### Repository Types
+
 - **OWN**: Your original repositories for development
 - **FORK**: Forked repositories for contributions
 - **USE**: External repositories for reference/usage
 
 ### Access Levels
+
 - **READ_ONLY**: Can read repository content
 - **READ_WRITE**: Can read and push changes
 - **ADMIN**: Full administrative access
 - **UNKNOWN**: Access level not determined
 
 ### Clone Status
+
 - **NOT_CLONED**: Repository not cloned locally
 - **CLONED**: Repository successfully cloned
 - **OUTDATED**: Local copy needs updating
@@ -354,6 +372,7 @@ for repo_name in repos_to_clone:
 - **UNKNOWN**: Status not determined
 
 ### Sync Status
+
 - **UP_TO_DATE**: Local and remote are synchronized
 - **AHEAD**: Local has commits not pushed to remote
 - **BEHIND**: Remote has commits not pulled locally
@@ -369,23 +388,23 @@ for repo_name in repos_to_clone:
 ```python
 def monitor_repository_health(manager):
     """Monitor repository health and generate alerts."""
-    
+
     # Check for repositories with uncommitted changes
     all_repos = list(manager.metadata.values())
     uncommitted = [r for r in all_repos if r.local_info.uncommitted_changes]
-    
+
     if uncommitted:
         print("⚠️ Repositories with uncommitted changes:")
         for repo in uncommitted:
             print(f"   {repo.full_name}: {len(repo.local_info.modified_files)} modified files")
-    
+
     # Check for outdated repositories
     outdated = manager.get_outdated_repositories(7)  # 7 days
     if outdated:
         print("📅 Repositories not synced in 7 days:")
         for repo in outdated:
             print(f"   {repo.full_name}: {repo.last_sync_date or 'Never'}")
-    
+
     # Check for repositories with issues
     issues = [r for r in all_repos if r.stats.issues > 0]
     if issues:
@@ -402,22 +421,22 @@ monitor_repository_health(manager)
 ```python
 def development_workflow_status(manager):
     """Check development workflow status."""
-    
+
     # Get development repositories
     dev_repos = [r for r in manager.metadata.values() if r.repo_type == "OWN"]
-    
+
     print(f"📊 Development Repository Status ({len(dev_repos)} repos)")
     print("-" * 50)
-    
+
     for repo in dev_repos:
         status_icon = "✅" if repo.clone_status.value == "cloned" else "❌"
         changes_icon = "📝" if repo.local_info.uncommitted_changes else "🔒"
-        
+
         print(f"{status_icon} {changes_icon} {repo.full_name}")
         print(f"   Branch: {repo.local_info.current_branch}")
         print(f"   Last Commit: {repo.local_info.last_commit_date}")
         print(f"   Stars: {repo.stats.stars}, Forks: {repo.stats.forks}")
-        
+
         if repo.local_info.uncommitted_changes:
             print(f"   ⚠️ {len(repo.local_info.modified_files)} modified, "
                   f"{len(repo.local_info.untracked_files)} untracked files")
@@ -432,12 +451,12 @@ development_workflow_status(manager)
 ```python
 def generate_weekly_report(manager):
     """Generate weekly repository activity report."""
-    
+
     from datetime import datetime, timedelta
-    
+
     # Get repositories active in the last week
     week_ago = datetime.now() - timedelta(days=7)
-    
+
     active_repos = []
     for repo in manager.metadata.values():
         if repo.stats.last_activity:
@@ -449,16 +468,16 @@ def generate_weekly_report(manager):
                     active_repos.append((repo, last_activity))
             except ValueError:
                 continue
-    
+
     # Sort by activity
     active_repos.sort(key=lambda x: x[1], reverse=True)
-    
+
     print("📊 WEEKLY REPOSITORY ACTIVITY REPORT")
     print("=" * 50)
     print(f"Report Period: {week_ago.strftime('%Y-%m-%d')} to {datetime.now().strftime('%Y-%m-%d')}")
     print(f"Active Repositories: {len(active_repos)}")
     print()
-    
+
     for repo, activity_date in active_repos[:10]:  # Top 10
         print(f"🔥 {repo.full_name}")
         print(f"   Last Activity: {activity_date.strftime('%Y-%m-%d %H:%M')}")
@@ -475,6 +494,7 @@ generate_weekly_report(manager)
 ## Best Practices
 
 ### 1. **Regular Metadata Updates**
+
 ```bash
 # Set up a cron job or scheduled task to update metadata regularly
 # Daily update of all repositories
@@ -485,6 +505,7 @@ python metadata_cli.py report --detailed --export weekly_report.json
 ```
 
 ### 2. **GitHub Token Usage**
+
 ```bash
 # Use GitHub token for enhanced metadata and higher API limits
 export GITHUB_TOKEN="your_personal_access_token"
@@ -492,6 +513,7 @@ python metadata_cli.py --token $GITHUB_TOKEN update --from-library library.txt
 ```
 
 ### 3. **Metadata Organization**
+
 ```python
 # Use custom fields for organization
 metadata.tags = ["important", "active-development", "python"]
@@ -501,20 +523,22 @@ metadata.notes = "Primary development repository with CI/CD"
 ```
 
 ### 4. **Monitoring and Alerts**
+
 ```python
 # Set up monitoring for important repositories
 def check_critical_repos(manager):
     critical_repos = [r for r in manager.metadata.values() if r.priority >= 1]
-    
+
     for repo in critical_repos:
         if repo.local_info.uncommitted_changes:
             print(f"🚨 CRITICAL: {repo.full_name} has uncommitted changes")
-        
+
         if not repo.last_sync_date:
             print(f"⚠️ WARNING: {repo.full_name} never synced")
 ```
 
 ### 5. **Backup and Recovery**
+
 ```bash
 # Regular backup of metadata
 cp repository_metadata.json repository_metadata.backup.$(date +%Y%m%d)
@@ -530,6 +554,7 @@ cp repository_metadata.backup.20250829 repository_metadata.json
 ### Common Issues
 
 #### 1. **Metadata Not Saving**
+
 ```python
 # Check if metadata manager is properly initialized
 manager = RepositoryMetadataManager()
@@ -542,6 +567,7 @@ print(f"Save successful: {success}")
 ```
 
 #### 2. **GitHub API Rate Limits**
+
 ```bash
 # Use GitHub token to increase rate limits
 python metadata_cli.py --token YOUR_TOKEN update --repository owner/repo
@@ -551,6 +577,7 @@ curl -H "Authorization: token YOUR_TOKEN" https://api.github.com/rate_limit
 ```
 
 #### 3. **Local Repository Detection Issues**
+
 ```python
 # Check local repository information
 metadata = manager.get_repository_metadata("owner/repo")
@@ -561,6 +588,7 @@ if metadata:
 ```
 
 #### 4. **Permission Issues**
+
 ```bash
 # Check file permissions
 ls -la repository_metadata.json
@@ -605,17 +633,17 @@ jobs:
 #!/usr/bin/env python3
 """Development environment status checker."""
 
-from codomyrmex.git_operations.repository_metadata import RepositoryMetadataManager
+from codomyrmex.git_operations.core.metadata import RepositoryMetadataManager
 
 def main():
     manager = RepositoryMetadataManager()
-    
+
     # Check development environment status
     dev_repos = [r for r in manager.metadata.values() if r.repo_type == "OWN"]
-    
+
     print("🔧 Development Environment Status")
     print("=" * 40)
-    
+
     for repo in dev_repos:
         if repo.clone_status.value == "cloned":
             if repo.local_info.uncommitted_changes:

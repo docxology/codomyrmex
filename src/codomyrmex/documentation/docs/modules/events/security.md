@@ -38,12 +38,14 @@ The Events module provides event-driven communication capabilities including eve
 **Description**: Attackers inject malicious or unauthorized events into the event system.
 
 **Attack Scenarios**:
+
 - Injecting events that trigger privileged actions
 - Spoofing event sources to bypass authorization
 - Injecting malformed events to crash handlers
 - Using events to propagate malicious payloads
 
 **Mitigations**:
+
 - Validate event sources and authenticate emitters
 - Implement strict event schema validation
 - Use signed events for critical operations
@@ -68,12 +70,14 @@ def validate_event_source(event):
 **Description**: Attackers overwhelm the event system with excessive events, causing resource exhaustion.
 
 **Attack Scenarios**:
+
 - Publishing high-volume events to exhaust queue capacity
 - Creating many event subscriptions to consume resources
 - Triggering expensive event handlers repeatedly
 - Causing event storms through circular event chains
 
 **Mitigations**:
+
 - Implement rate limiting on event publishing
 - Set queue size limits with overflow policies
 - Monitor event volumes and alert on anomalies
@@ -95,12 +99,14 @@ event_bus = EventBus(
 **Description**: Attackers subscribe to events they should not have access to.
 
 **Attack Scenarios**:
+
 - Subscribing to authentication events to capture credentials
 - Listening to internal events to map system architecture
 - Capturing sensitive business events for competitive intelligence
 - Subscribing with malicious handlers to intercept and modify events
 
 **Mitigations**:
+
 - Implement subscription authorization
 - Use event namespaces with access controls
 - Audit subscription registrations
@@ -127,12 +133,14 @@ else:
 **Description**: Attackers capture and replay legitimate events to cause unauthorized actions.
 
 **Attack Scenarios**:
+
 - Replaying authentication success events
 - Replaying transaction events to duplicate operations
 - Replaying admin commands to gain privileges
 - Replaying events out of order to cause inconsistencies
 
 **Mitigations**:
+
 - Include timestamps and nonces in events
 - Implement idempotency for critical handlers
 - Track processed event IDs
@@ -166,25 +174,28 @@ class ReplayProtectedHandler:
 ### Event Schema Validation
 
 ```python
-from codomyrmex.events import EventSchema, EventValidator
+from codomyrmex.events import EventSchema, EventType, EventValidationError
 
-# Define strict event schema
-user_event_schema = EventSchema(
-    event_type="user.*",
-    required_fields=["user_id", "timestamp", "source"],
-    optional_fields=["metadata"],
-    field_validators={
-        "user_id": lambda x: isinstance(x, str) and len(x) == 36,
-        "timestamp": lambda x: isinstance(x, (int, float)) and x > 0,
-    }
-)
+# Define strict event schema (JSON Schema for event.data)
+validator = EventSchema()
+validator.register_event_schema(EventType.USER_ACTION, {
+    "type": "object",
+    "properties": {
+        "user_id": {"type": "string", "minLength": 36, "maxLength": 36},
+        "timestamp": {"type": "number", "exclusiveMinimum": 0},
+        "metadata": {"type": "object"},
+    },
+    "required": ["user_id", "timestamp"],
+    "additionalProperties": False,
+})
 
 # Validate events before processing
-validator = EventValidator([user_event_schema])
-
 def secure_handler(event):
-    if not validator.validate(event):
-        raise InvalidEventError("Event failed schema validation")
+    is_valid, errors = validator.validate_event(event)
+    if not is_valid:
+        raise EventValidationError(
+            "Event failed schema validation", validation_errors=errors
+        )
     # Process validated event
 ```
 
@@ -220,17 +231,13 @@ def verify_event_signature(event, secret_key):
 ### Rate Limiting
 
 ```python
-from codomyrmex.events import RateLimiter
+from codomyrmex.api import RateLimitExceeded, TokenBucketLimiter
 
-# Configure rate limiting
-rate_limiter = RateLimiter(
-    events_per_second=100,
-    burst_size=500,
-    per_source=True
-)
+# Configure rate limiting: 100 events/s per source, bursts up to 500
+rate_limiter = TokenBucketLimiter(capacity=500, refill_rate=100)
 
 def publish_with_limit(event):
-    if not rate_limiter.allow(event.source):
+    if not rate_limiter.acquire(event.source).allowed:
         raise RateLimitExceeded("Event rate limit exceeded")
     event_bus.publish(event)
 ```
@@ -257,6 +264,7 @@ audit_logger.log_event(event, include_payload=False)
 ### Do's
 
 1. **Validate All Events**
+
    ```python
    def handler(event):
        # Always validate before processing
@@ -267,6 +275,7 @@ audit_logger.log_event(event, include_payload=False)
    ```
 
 2. **Use Typed Events**
+
    ```python
    from dataclasses import dataclass
    from typing import Optional
@@ -281,6 +290,7 @@ audit_logger.log_event(event, include_payload=False)
    ```
 
 3. **Implement Handler Isolation**
+
    ```python
    async def isolated_handler(event):
        try:
@@ -294,6 +304,7 @@ audit_logger.log_event(event, include_payload=False)
    ```
 
 4. **Sanitize Event Data in Logs**
+
    ```python
    def log_event(event):
        safe_payload = redact_sensitive_fields(event.payload)
@@ -301,6 +312,7 @@ audit_logger.log_event(event, include_payload=False)
    ```
 
 5. **Set Appropriate Timeouts**
+
    ```python
    event_bus = EventBus(
        handler_timeout=30,  # 30 seconds max
@@ -311,6 +323,7 @@ audit_logger.log_event(event, include_payload=False)
 ### Don'ts
 
 1. **Never Include Credentials in Events**
+
    ```python
    # BAD: Including password in event
    event_bus.publish(Event("user.login", {"user": user, "password": password}))
@@ -320,6 +333,7 @@ audit_logger.log_event(event, include_payload=False)
    ```
 
 2. **Avoid Unbounded Event Queues**
+
    ```python
    # BAD: No queue limits
    event_bus = EventBus()
@@ -329,6 +343,7 @@ audit_logger.log_event(event, include_payload=False)
    ```
 
 3. **Don't Trust Event Sources Blindly**
+
    ```python
    # BAD: Trusting event source claim
    if event.source == "admin_service":
@@ -340,6 +355,7 @@ audit_logger.log_event(event, include_payload=False)
    ```
 
 4. **Avoid Wildcard Subscriptions in Production**
+
    ```python
    # BAD: Overly broad subscription
    event_bus.subscribe("*", handler)
@@ -358,7 +374,7 @@ No known CVEs at this time. This section will be updated as vulnerabilities are 
 ### Security Advisories
 
 | Date | Severity | Description | Resolution |
-|------|----------|-------------|------------|
+| --- | --- | --- | --- |
 | - | - | No current advisories | - |
 
 ### Deprecated Features
@@ -444,7 +460,7 @@ We take all security reports seriously.
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email security@codomyrmex.dev with the subject line: "SECURITY Vulnerability Report: Events Module - [Brief Description]".
+Instead, please email <security@codomyrmex.dev> with the subject line: "SECURITY Vulnerability Report: Events Module - [Brief Description]".
 
 Please include the following information in your report:
 

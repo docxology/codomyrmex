@@ -11,25 +11,23 @@ The Orchestrator module provides DAG-based workflow construction and execution f
 ### Workflow Engine
 
 ```python
-from codomyrmex.orchestrator import WorkflowEngine
-
-engine = WorkflowEngine()
+from codomyrmex.orchestrator import Workflow
 
 # Define DAG-based workflows
-workflow = engine.create_workflow("code_review_pipeline")
-workflow.add_step("scan", handler=scan_code)
-workflow.add_step("review", handler=review_code, depends_on=["scan"])
-workflow.add_step("fix", handler=apply_fixes, depends_on=["review"])
-workflow.add_step("verify", handler=verify_fixes, depends_on=["fix"])
+workflow = Workflow("code_review_pipeline")
+workflow.add_task("scan", scan_code)
+workflow.add_task("review", review_code, dependencies=["scan"])
+workflow.add_task("fix", apply_fixes, dependencies=["review"])
+workflow.add_task("verify", verify_fixes, dependencies=["fix"])
 
 # Execute with dependency resolution
-results = await engine.execute(workflow)
+results = await workflow.run()
 ```
 
 ### Workflow Patterns
 
 | Pattern | Description | Use Case |
-|---------|-------------|----------|
+| --- | --- | --- |
 | **Pipeline** | A -> B -> C | Sequential multi-step processing |
 | **Fan-out** | A -> [B, C, D] | Parallel task dispatch |
 | **Fan-in** | [B, C, D] -> E | Result aggregation |
@@ -41,18 +39,19 @@ results = await engine.execute(workflow)
 For lightweight scripting without full DAG construction:
 
 ```python
-from codomyrmex.orchestrator import run, pipe, batch, chain_scripts, step, shell
+from codomyrmex.orchestrator import batch, pipe, run, shell
 
-# Run a single function
-result = run(my_func, arg1, arg2)
+# Run a single script or command
+result = run("scripts/check.py", timeout=60)
 
-# Chain steps in a pipeline
-result = pipe(step("lint", shell("ruff check src/")),
-              step("test", shell("pytest")),
-              step("build", shell("python -m build")))
+# Chain shell commands in a pipeline (stops on first failure)
+result = pipe(["ruff check src/", "pytest", "python -m build"])
 
-# Run tasks in parallel
-results = batch([func_a, func_b, func_c])
+# Run scripts in parallel
+results = batch(["scripts/a.py", "scripts/b.py", "scripts/c.py"])
+
+# One-off shell command
+status = shell("git status --short")
 ```
 
 ### Scheduler
@@ -84,7 +83,7 @@ task = Task(id="deploy", func=deploy, retry_policy=policy)
 ## Key Exports
 
 | Export | Type | Purpose |
-|--------|------|---------|
+| --- | --- | --- |
 | `Workflow` | Class | DAG workflow construction with tasks and dependencies |
 | `Task` | Class | Individual unit of work within a workflow |
 | `AsyncScheduler` | Class | Asynchronous job scheduling with metrics |
@@ -99,7 +98,7 @@ task = Task(id="deploy", func=deploy, retry_policy=policy)
 ## PAI Algorithm Phase Mapping
 
 | Phase | Orchestrator Contribution |
-|-------|---------------------------|
+| --- | --- |
 | **OBSERVE** | `discover_scripts` scans project for available scripts and workflows; `SchedulerMetrics` reports on job completion rates |
 | **THINK** | `analyze_workflow_dependencies` validates proposed DAGs for cycles; workflow patterns inform approach selection |
 | **PLAN** | Construct `Workflow` DAGs from task requirements; define `Task` dependencies, `RetryPolicy`, and conditional gates |
@@ -111,14 +110,14 @@ task = Task(id="deploy", func=deploy, retry_policy=policy)
 ## MCP Tools Available
 
 | Tool | Description | Trust Level |
-|------|-------------|-------------|
+| --- | --- | --- |
 | `get_scheduler_metrics` | Retrieve AsyncScheduler metrics (active jobs, completion rates, execution time) | Safe |
 | `analyze_workflow_dependencies` | Validate a proposed workflow DAG for cyclic dependencies and return execution order | Safe |
 
 ## Agent Capabilities
 
 | Agent Type | Orchestrator Role |
-|------------|-------------------|
+| --- | --- |
 | **Engineer** | Consumes `pipe` and `step` to chain build-lint-test cycles |
 | **Architect** | Uses `analyze_workflow_dependencies` to validate proposed workflow structures |
 | **QATester** | Reads `SchedulerMetrics` to verify execution health; validates `TaskResult` outcomes |

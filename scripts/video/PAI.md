@@ -3,21 +3,19 @@
 ## PAI Phase Mapping
 
 | PAI Phase | Action | Script |
-|-----------|--------|--------|
+| --- | --- | --- |
 | BUILD | Generate video from text prompt | `orchestrate.py` |
 | EXECUTE | Run generation with config params | `orchestrate.py --prompt "..."` |
 | OBSERVE | Check output in `output/videos/` | (filesystem) |
 
 ## PAI Tool Invocation
 
-```python
-# Via codomyrmex coding module (PAI BUILD phase)
-from codomyrmex.coding import code_execute
-result = code_execute(
-    code_path="scripts/video/orchestrate.py",
-    env={"GEMINI_API_KEY": "<key>"}
-)
+```bash
+# Via the script (reads config/video/config.yaml; needs GEMINI_API_KEY)
+uv run python scripts/video/orchestrate.py --prompt "A mountain at dawn"
+```
 
+```python
 # Via direct Python (recommended for PAI agents)
 from codomyrmex.video.generation.video_generator import VideoGenerator
 generator = VideoGenerator()

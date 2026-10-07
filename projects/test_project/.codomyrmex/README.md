@@ -8,7 +8,7 @@ The `.codomyrmex` directory serves as the local configuration and state manageme
 
 ## Directory Structure
 
-```
+```text
 .codomyrmex/
 ├── AGENTS.md          # Agent coordination documentation
 ├── README.md          # This file
@@ -18,6 +18,7 @@ The `.codomyrmex` directory serves as the local configuration and state manageme
 ## Configuration
 
 This directory may contain:
+
 - Project-specific configuration overrides
 - Module enablement settings
 - Environment-specific parameters
@@ -46,22 +47,22 @@ The files in this directory are managed automatically by Codomyrmex. Manual edit
 The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
 
 ### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+
+1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
+2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
+3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
+4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
 
 ### Technical Implementation
+
 The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
 
 ## Example Usage
 
 ```python
-from codomyrmex import core
+from codomyrmex.config_management import ConfigurationManager
 
-def main():
-    # Standard usage pattern
-    app = core.Application()
-    app.run()
+manager = ConfigurationManager(config_dir=".codomyrmex")
+project = manager.load_configuration_from_file(".codomyrmex/project.json")
+log_level = project.get_value("config.logging.level")
 ```
-

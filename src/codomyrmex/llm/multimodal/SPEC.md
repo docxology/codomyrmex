@@ -16,7 +16,7 @@ Three-layer design: **Models** define the data structures (`MediaContent`, `Imag
 
 | Method | Parameters | Returns | Description |
 | --- | --- | --- | --- |
-| `to_base64` | --- | `str` | Base64-encode raw bytes |
+| `to_base64` | -- | `str` | Base64-encode raw bytes |
 | `from_base64` | `b64_string, media_type, format` | `MediaContent` | Class method to create from base64 string |
 | `from_file` | `file_path: str` | `MediaContent` | Class method; auto-detects type from extension |
 
@@ -29,7 +29,7 @@ Properties: `size_bytes`, `hash` (SHA-256 truncated to 16 chars)
 | `add_text` | `text: str` | `self` | Sets text content |
 | `add_image` | `image: bytes \ | str \ | ImageContent` `self` Adds image (auto-detects input type) |
 | `add_audio` | `audio: bytes \ | str \ | AudioContent` `self` Adds audio content |
-| `to_dict` | --- | `dict` | Serializes to API-compatible format with `role` and `content` array |
+| `to_dict` | -- | `dict` | Serializes to API-compatible format with `role` and `content` array |
 
 Properties: `has_images`, `has_audio`, `image_count`
 
@@ -43,7 +43,7 @@ Properties: `has_images`, `has_audio`, `image_count`
 | `image_file` | `path: str` | `self` | Add image from file path |
 | `audio` | `data: bytes, format: str` | `self` | Add audio from bytes |
 | `audio_file` | `path: str` | `self` | Add audio from file path |
-| `build` | --- | `MultimodalMessage` | Finalize and return message |
+| `build` | -- | `MultimodalMessage` | Finalize and return message |
 
 ### `ImageProcessor`
 

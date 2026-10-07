@@ -10,45 +10,6 @@ This document provides the complete API specification for the `performance` modu
 
 The `performance` module provides utilities for optimizing application execution, including lazy loading, intelligent caching, and comprehensive performance monitoring.
 
-## Public API
-
-### Main Functions
-
-#### `function_name()`
-
-**Description**: Executes a specific operation with performance tracking.
-
-**Parameters**:
-- `param1` (type): Description
-- `param2` (type, optional): Description
-
-**Returns**: Return type and description
-
-**Example**:
-```python
-from codomyrmex.performance import function_name
-
-result = function_name(param1="value")
-```
-
-## Classes
-
-### `ClassName`
-
-**Description**: Base class for performance-optimized components.
-
-**Methods**:
-- `method1()`: Description
-- `method2(param)`: Description
-
-## Constants
-
-- `CONSTANT_NAME`: Description
-
-## Exceptions
-
-- `ModuleException`: Description
-
 ## Related Documentation
 
 - [Module README](./README.md)
@@ -63,8 +24,8 @@ result = function_name(param1="value")
 
 - **Description**: Creates a lazy loader for importing modules on-demand to improve startup performance.
 - **Parameters**:
-    - `module_name`: Name of the module to lazy load.
-    - `**kwargs`: Additional configuration options.
+  - `module_name`: Name of the module to lazy load.
+  - `**kwargs`: Additional configuration options.
 - **Return Value**: LazyLoader object that imports the module when first accessed.
 - **Errors**: Raises `ImportError` if the module cannot be found when accessed.
 
@@ -72,9 +33,9 @@ result = function_name(param1="value")
 
 - **Description**: Decorator that adds caching to functions to improve performance for expensive operations.
 - **Parameters**:
-    - `ttl_seconds`: Time-to-live for cached results (default: 300 seconds).
-    - `max_size`: Maximum number of cached results (default: 128).
-    - `**kwargs`: Additional cache configuration options.
+  - `ttl_seconds`: Time-to-live for cached results (default: 300 seconds).
+  - `max_size`: Maximum number of cached results (default: 128).
+  - `**kwargs`: Additional cache configuration options.
 - **Return Value**: Decorated function with caching capability.
 - **Errors**: Raises `CacheError` for cache configuration issues.
 
@@ -87,20 +48,24 @@ result = function_name(param1="value")
 #### Methods
 
 **`__init__(default_ttl: int = 300, max_memory_mb: int = 100, **kwargs)`**
+
 - Initialize cache manager with default settings.
 - **Parameters**: `default_ttl`, `max_memory_mb`, cache configuration options.
 - **Errors**: Raises `CacheError` for invalid configuration.
 
 **`get_cache(name: str) -> Cache`**
+
 - Retrieve or create a named cache instance.
 - **Parameters**: `name`, cache identifier.
 - **Return Value**: Cache instance for the given name.
 
 **`clear_cache(name: str = None)`**
+
 - Clear specific cache or all caches.
 - **Parameters**: `name`, optional cache name (clears all if None).
 
 **`get_stats() -> Dict`**
+
 - Get cache performance statistics.
 - **Return Value**: Dictionary with hit rates, memory usage, and performance metrics.
 
@@ -111,14 +76,17 @@ result = function_name(param1="value")
 #### Methods
 
 **`__init__(loader: Callable, **kwargs)`**
+
 - Initialize lazy loader with loading function.
 - **Parameters**: `loader`, function that performs the actual loading.
 
 **`load() -> Any`**
+
 - Perform the actual loading operation.
 - **Return Value**: Loaded resource or module.
 
 **`is_loaded() -> bool`**
+
 - Check if the resource has been loaded.
 - **Return Value**: True if loaded, False otherwise.
 
@@ -129,24 +97,30 @@ result = function_name(param1="value")
 #### Methods
 
 **`start_monitoring(interval_seconds: float = 1.0)`**
+
 - Start performance monitoring with specified interval.
 - **Parameters**: `interval_seconds`, monitoring frequency.
 
 **`stop_monitoring()`**
+
 - Stop performance monitoring.
 
 **`get_metrics() -> Dict`**
+
 - Get current performance metrics.
 - **Return Value**: Dictionary with CPU, memory, disk, and network metrics.
 
 **`get_report() -> str`**
+
 - Generate performance report.
 - **Return Value**: Formatted performance report string.
 
 ## Data Structures
 
 ### CacheConfig
+
 Configuration for cache instances:
+
 ```python
 {
     "ttl_seconds": <int>,
@@ -158,7 +132,9 @@ Configuration for cache instances:
 ```
 
 ### PerformanceMetrics
+
 Performance monitoring data:
+
 ```python
 {
     "timestamp": <datetime>,
@@ -175,6 +151,7 @@ Performance monitoring data:
 ## Integration Examples
 
 ### Lazy Loading for Heavy Imports
+
 ```python
 from codomyrmex.performance import lazy_import
 
@@ -187,6 +164,7 @@ model = torch.load("model.pth")  # Imports torch here
 ```
 
 ### Function Caching
+
 ```python
 from codomyrmex.performance import cached_function
 
@@ -203,6 +181,7 @@ data2 = expensive_api_call("user123")  # Returns cached data
 ```
 
 ### Performance Monitoring
+
 ```python
 from codomyrmex.performance import PerformanceMonitor
 
@@ -225,3 +204,5 @@ monitor.stop_monitoring()
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
+
+<!-- markdownlint-configure-file { "MD024": { "siblings_only": true } } -->

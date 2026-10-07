@@ -9,5 +9,6 @@
 ## Quick Use
 
 ```python
-from codomyrmex.containerization.docker import DockerManager
+from codomyrmex.containerization.docker import DockerClient, DockerComposeClient
+from codomyrmex.containerization.docker.docker_manager import DockerManager
 ```

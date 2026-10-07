@@ -5,7 +5,7 @@
 ## Overview
 
 The Maintenance module provides automated codebase health management — health checks,
-scheduled maintenance tasks, RASP documentation auditing, stale dependency detection,
+scheduled maintenance tasks, RASP documentation auditing, dependency health checks,
 and automated cleanup operations. For PAI, it is the primary tool for keeping the
 codomyrmex toolbox in a known-good state before and after Algorithm runs.
 
@@ -41,36 +41,47 @@ result = checker.run("mcp_bridge")
 Register and schedule recurring maintenance operations:
 
 ```python
-from codomyrmex.maintenance.health.scheduler import MaintenanceScheduler
+import time
+
+from codomyrmex.documentation.mcp_tools import audit_rasp_compliance
+from codomyrmex.maintenance.health.scheduler import (
+    MaintenanceScheduler, MaintenanceTask, ScheduleConfig
+)
 
 scheduler = MaintenanceScheduler()
-scheduler.register_task(
+scheduler.register(MaintenanceTask(
     name="rasp_audit",
-    fn=lambda: audit_rasp_docs(),
-    interval_hours=24,
-)
-scheduler.run_all()
+    description="Daily RASP documentation audit",
+    action=audit_rasp_compliance,
+    schedule=ScheduleConfig(interval_seconds=24 * 3600),
+))
+for task in scheduler.get_due_tasks(time.time()):
+    scheduler.execute(task.name)
 ```
 
 ### RASP Documentation Auditing
 
 Verify that all modules have the required RASP documentation files
-(`README.md`, `AGENTS.md`, `SPEC.md`, `PAI.md`):
+(`README.md`, `AGENTS.md`, `SPEC.md`, `PAI.md`). The audit is provided by the
+`documentation` module:
 
 ```python
-from codomyrmex.maintenance import audit_rasp_compliance
+from pathlib import Path
 
-results = audit_rasp_compliance()
-# Returns per-module compliance status with missing file lists
+from codomyrmex.documentation.mcp_tools import audit_rasp_compliance
+from codomyrmex.documentation.quality.audit import find_rasp_gaps
+
+summary = audit_rasp_compliance()  # {"status", "compliant", "missing_count", "modules_with_gaps"}
+gaps = find_rasp_gaps(Path("src/codomyrmex"))  # {package_path: [missing files]}
 ```
 
-### Stale Dependency Detection
+### Dependency Health
 
 ```python
-from codomyrmex.maintenance import check_dependency_freshness
+from codomyrmex.maintenance.deps import check_dependencies, check_security
 
-report = check_dependency_freshness()
-# Returns packages with newer versions available
+installed = check_dependencies()  # {category: {package: {"installed": bool, "status": str}}}
+security = check_security()       # pip-audit findings when pip-audit is installed
 ```
 
 ## MCP Tools
@@ -78,13 +89,14 @@ report = check_dependency_freshness()
 The following tools are auto-discovered via `@mcp_tool` and available through the PAI MCP bridge:
 
 | Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
+| --- | --- | --- | --- |
 | `codomyrmex.maintenance_health_check` | Run a named health check and return its status | Safe | maintenance |
 | `codomyrmex.maintenance_list_tasks` | List all registered maintenance tasks and their status | Safe | maintenance |
 
 ### MCP Tool Usage Examples
 
 **Run a health check:**
+
 ```python
 # Via MCP (agent-facing)
 result = mcp_call("codomyrmex.maintenance_health_check", {
@@ -102,6 +114,7 @@ result = mcp_call("codomyrmex.maintenance_health_check", {
 ```
 
 **List maintenance tasks:**
+
 ```python
 result = mcp_call("codomyrmex.maintenance_list_tasks")
 # Returns:
@@ -115,10 +128,10 @@ result = mcp_call("codomyrmex.maintenance_list_tasks")
 ## PAI Algorithm Phase Mapping
 
 | Phase | Maintenance Contribution | Key Functions |
-|-------|--------------------------|---------------|
+| --- | --- | --- |
 | **OBSERVE** (1/7) | Audit RASP compliance; verify module health before work begins | `audit_rasp_compliance()`, `HealthChecker.run()` |
 | **PLAN** (3/7) | Identify which modules have degraded health before targeting them | `maintenance_health_check` MCP tool |
-| **VERIFY** (6/7) | Confirm documentation coverage and dependency freshness post-change | `check_dependency_freshness()`, `audit_rasp_compliance()` |
+| **VERIFY** (6/7) | Confirm documentation coverage and dependency health post-change | `check_dependencies()`, `audit_rasp_compliance()` |
 | **LEARN** (7/7) | Track maintenance metrics over time; schedule follow-up tasks | `MaintenanceScheduler`, health trend logging |
 
 ### Concrete PAI Usage Pattern
@@ -136,7 +149,7 @@ if result["health_status"] != "healthy":
 ## PAI Configuration
 
 | Environment Variable | Default | Purpose |
-|---------------------|---------|---------|
+| --- | --- | --- |
 | `CODOMYRMEX_MAINTENANCE_LOG_DIR` | `logs/maintenance/` | Where maintenance logs are written |
 | `CODOMYRMEX_HEALTH_TIMEOUT_MS` | `5000` | Health check timeout in milliseconds |
 

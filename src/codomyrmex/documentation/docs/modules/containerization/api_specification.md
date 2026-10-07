@@ -10,12 +10,13 @@ This API specification documents the programmatic interfaces for the Containeriz
 
 - **Description**: Build Docker containers from source code with optimization and security scanning.
 - **Parameters**:
-    - `image_name`: Name/tag for the resulting container image.
-    - `dockerfile_path`: Path to Dockerfile (default: "Dockerfile").
-    - `context_path`: Build context directory (default: ".").
-    - `build_args`: Optional build arguments for Dockerfile.
-    - `**kwargs`: Additional build options (cache, target, labels, etc.).
+  - `image_name`: Name/tag for the resulting container image.
+  - `dockerfile_path`: Path to Dockerfile (default: "Dockerfile").
+  - `context_path`: Build context directory (default: ".").
+  - `build_args`: Optional build arguments for Dockerfile.
+  - `**kwargs`: Additional build options (cache, target, labels, etc.).
 - **Return Value**:
+
     ```python
     {
         "image_name": <str>,
@@ -28,17 +29,19 @@ This API specification documents the programmatic interfaces for the Containeriz
         "optimization_applied": <bool>
     }
     ```
+
 - **Errors**: Raises `ContainerBuildError` for build failures or security issues.
 
 ### Function: `manage_containers(operation: str, container_name: str, config: Optional[Dict] = None, **kwargs) -> Dict`
 
 - **Description**: Manage container lifecycle including creation, starting, stopping, and removal.
 - **Parameters**:
-    - `operation`: Operation type (create, start, stop, remove, restart, logs).
-    - `container_name`: Name of the container to manage.
-    - `config`: Container configuration for create operations.
-    - `**kwargs`: Operation-specific parameters.
+  - `operation`: Operation type (create, start, stop, remove, restart, logs).
+  - `container_name`: Name of the container to manage.
+  - `config`: Container configuration for create operations.
+  - `**kwargs`: Operation-specific parameters.
 - **Return Value**:
+
     ```python
     {
         "operation": <str>,
@@ -51,16 +54,17 @@ This API specification documents the programmatic interfaces for the Containeriz
         "error_message": <str>
     }
     ```
+
 - **Errors**: Raises `ContainerManagementError` for operation failures.
 
 ### Function: `orchestrate_kubernetes(deployment_name: str, manifest_path: str, namespace: str = "default", **kwargs) -> KubernetesDeployment`
 
 - **Description**: Orchestrate Kubernetes deployments, services, and configmaps.
 - **Parameters**:
-    - `deployment_name`: Name of the Kubernetes deployment.
-    - `manifest_path`: Path to Kubernetes manifest files.
-    - `namespace`: Kubernetes namespace (default: "default").
-    - `**kwargs`: Deployment options (replicas, resources, labels, etc.).
+  - `deployment_name`: Name of the Kubernetes deployment.
+  - `manifest_path`: Path to Kubernetes manifest files.
+  - `namespace`: Kubernetes namespace (default: "default").
+  - `**kwargs`: Deployment options (replicas, resources, labels, etc.).
 - **Return Value**: KubernetesDeployment object with status tracking and management.
 - **Errors**: Raises `KubernetesError` for orchestration failures.
 
@@ -68,9 +72,9 @@ This API specification documents the programmatic interfaces for the Containeriz
 
 - **Description**: Scan container images for security vulnerabilities and compliance issues.
 - **Parameters**:
-    - `image_name`: Name of container image to scan.
-    - `scan_type`: Scan scope (full, quick, compliance).
-    - `**kwargs`: Scanning options (severity_threshold, ignore_rules, etc.).
+  - `image_name`: Name of container image to scan.
+  - `scan_type`: Scan scope (full, quick, compliance).
+  - `**kwargs`: Scanning options (severity_threshold, ignore_rules, etc.).
 - **Return Value**: SecurityScanResult with vulnerabilities, compliance status, and recommendations.
 - **Errors**: Raises `SecurityScanError` for scanning failures.
 
@@ -78,11 +82,12 @@ This API specification documents the programmatic interfaces for the Containeriz
 
 - **Description**: Manage container registry operations including push, pull, and tagging.
 - **Parameters**:
-    - `operation`: Registry operation (push, pull, tag, list, delete).
-    - `image_name`: Container image name.
-    - `registry_url`: Registry URL (optional, uses default if not specified).
-    - `**kwargs`: Operation-specific parameters (credentials, tags, etc.).
+  - `operation`: Registry operation (push, pull, tag, list, delete).
+  - `image_name`: Container image name.
+  - `registry_url`: Registry URL (optional, uses default if not specified).
+  - `**kwargs`: Operation-specific parameters (credentials, tags, etc.).
 - **Return Value**:
+
     ```python
     {
         "operation": <str>,
@@ -95,16 +100,18 @@ This API specification documents the programmatic interfaces for the Containeriz
         "error_message": <str>
     }
     ```
+
 - **Errors**: Raises `RegistryError` for registry operation failures.
 
 ### Function: `optimize_containers(image_name: str, optimization_type: str = "size", **kwargs) -> Dict`
 
 - **Description**: Optimize container images for performance, size, or security.
 - **Parameters**:
-    - `image_name`: Base image to optimize.
-    - `optimization_type`: Optimization focus (size, performance, security, multi).
-    - `**kwargs`: Optimization parameters (target_size, layers_to_remove, etc.).
+  - `image_name`: Base image to optimize.
+  - `optimization_type`: Optimization focus (size, performance, security, multi).
+  - `**kwargs`: Optimization parameters (target_size, layers_to_remove, etc.).
 - **Return Value**:
+
     ```python
     {
         "original_image": <str>,
@@ -117,12 +124,15 @@ This API specification documents the programmatic interfaces for the Containeriz
         "build_time": <float>
     }
     ```
+
 - **Errors**: Raises `OptimizationError` for optimization failures.
 
 ## Data Structures
 
 ### ContainerConfig
+
 Configuration for container creation and management:
+
 ```python
 {
     "image": <str>,
@@ -144,7 +154,9 @@ Configuration for container creation and management:
 ```
 
 ### KubernetesDeployment
+
 Kubernetes deployment configuration and status:
+
 ```python
 {
     "name": <str>,
@@ -166,7 +178,9 @@ Kubernetes deployment configuration and status:
 ```
 
 ### ContainerRegistry
+
 Container registry connection and management:
+
 ```python
 {
     "url": <str>,
@@ -183,7 +197,9 @@ Container registry connection and management:
 ```
 
 ### SecurityScanResult
+
 Results of container security scanning:
+
 ```python
 {
     "image_name": <str>,
@@ -210,7 +226,9 @@ Results of container security scanning:
 ```
 
 ### ContainerMetrics
+
 Container performance and resource metrics:
+
 ```python
 {
     "container_name": <str>,
@@ -243,6 +261,7 @@ All functions follow consistent error handling patterns:
 ## Integration Patterns
 
 ### With CI/CD Automation
+
 ```python
 from codomyrmex.containerization import build_containers
 from codomyrmex.ci_cd_automation import create_pipeline
@@ -263,6 +282,7 @@ pipeline = create_pipeline("container_pipeline", [
 ```
 
 ### With Security Audit
+
 ```python
 from codomyrmex.containerization import scan_container_security
 from codomyrmex.security.digital import generate_security_report
@@ -275,27 +295,24 @@ report = generate_security_report(scan_result, format="pdf")
 ```
 
 ### With Build Synthesis
+
 ```python
-from codomyrmex.containerization import build_containers, manage_container_registry
-from codomyrmex.deployment import create_build_target
+from codomyrmex.ci_cd_automation.build import create_build_manifest
+from codomyrmex.containerization import ContainerConfig, build_containers
 
 # Create container build target
-container_target = create_build_target(
-    name="production_container",
-    build_type="container",
-    config={
-        "image_name": "myapp:prod",
-        "dockerfile_path": "Dockerfile.prod",
-        "registry_push": True
-    }
+container_config = ContainerConfig(
+    image_name="myapp",
+    tag="prod",
+    dockerfile_path="Dockerfile.prod",
 )
+manifest = create_build_manifest({
+    "name": "production_container",
+    "image": container_config.get_full_image_name(),
+})
 
 # Build and push container
-build_result = build_containers(
-    image_name="myapp:prod",
-    dockerfile_path="Dockerfile.prod",
-    push_to_registry=True
-)
+build_result = build_containers(container_config, push=True)
 ```
 
 ## Security Considerations
@@ -314,7 +331,6 @@ build_result = build_containers(
 - **Scalability**: Support for concurrent container operations
 - **Monitoring Overhead**: Minimal performance impact from health monitoring
 - **Registry Performance**: Efficient image transfer with compression and caching
-
 
 ## Navigation Links
 
