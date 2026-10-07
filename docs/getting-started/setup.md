@@ -173,9 +173,9 @@ For AI-powered features, create a `.env` file in the project root:
 # Create .env file
 cat > .env << EOF
 # LLM API Keys (optional - only needed for AI features)
-OPENAI_API_KEY="sk-..."
-ANTHROPIC_API_KEY="sk-ant-..."
-GOOGLE_API_KEY="AIzaSy..."
+OPENAI_API_KEY="sk-..."  # pragma: allowlist secret
+ANTHROPIC_API_KEY="sk-ant-..."  # pragma: allowlist secret
+GOOGLE_API_KEY="AIzaSy..."  # pragma: allowlist secret
 
 # Logging Configuration (optional)
 CODOMYRMEX_LOG_LEVEL="INFO"
@@ -264,19 +264,19 @@ result = create_line_plot(x, y, title="Test Plot", output_path="test_plot.png")
 print(f"✅ Visualization test: {result is not None}")
 
 # Test AI code generation (requires API key)
-from codomyrmex.agents import generate_code_snippet
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
 try:
     ai_result = generate_code_snippet("Create a hello world function", "python")
-    print(f"✅ AI test: {ai_result['status'] == 'success'}")
+    print(f"✅ AI test: {bool(ai_result['generated_code'])}")
 except Exception as e:
     print(f"⚠️ AI test skipped (no API key): {e}")
 
 # Test code execution sandbox
 from codomyrmex.coding import execute_code
 
-sandbox_result = execute_code("python", "print('Hello from sandbox!')")
-print(f"✅ Sandbox test: {sandbox_result['success']}")
+sandbox_result = execute_code("python", "print('Hello from sandbox!')")  # requires Docker
+print(f"✅ Sandbox test: {sandbox_result['status'] == 'success'}")
 ```
 
 ### **Step 4: Run Comprehensive Tests**
@@ -450,9 +450,9 @@ echo "Anthropic: ${ANTHROPIC_API_KEY:+SET}"
 
 # 2. Create .env file if missing
 cat > .env << EOF
-OPENAI_API_KEY="your-openai-key-here"
-ANTHROPIC_API_KEY="your-anthropic-key-here"
-GOOGLE_API_KEY="your-google-key-here"
+OPENAI_API_KEY="your-openai-key-here"  # pragma: allowlist secret
+ANTHROPIC_API_KEY="your-anthropic-key-here"  # pragma: allowlist secret
+GOOGLE_API_KEY="your-google-key-here"  # pragma: allowlist secret
 EOF
 
 # 3. Test API connectivity

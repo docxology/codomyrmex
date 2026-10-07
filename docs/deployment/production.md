@@ -254,7 +254,7 @@ spec:
 export CODOMYRMEX_ENV=production
 export LOG_LEVEL=INFO
 export SECRET_KEY=$(openssl rand -hex 32)
-export DATABASE_URL=postgresql://user:pass@db:5432/codomyrmex
+export DATABASE_URL=postgresql://user:pass@db:5432/codomyrmex  # pragma: allowlist secret
 export REDIS_URL=redis://cache:6379/0
 
 # API Keys (use secret management)
@@ -311,7 +311,7 @@ server {
 ```sql
 -- Create production database with proper permissions
 CREATE DATABASE codomyrmex_prod;
-CREATE USER codomyrmex_app WITH PASSWORD 'secure_random_password';
+CREATE USER codomyrmex_app WITH PASSWORD 'secure_random_password';  -- pragma: allowlist secret
 
 -- Grant minimal required permissions
 GRANT CONNECT ON DATABASE codomyrmex_prod TO codomyrmex_app;
@@ -331,7 +331,7 @@ CREATE POLICY user_data_policy ON sensitive_data FOR ALL TO codomyrmex_app USING
 ```python
 # Health check endpoint
 from flask import Flask, jsonify
-from codomyrmex.logging_monitoring import get_system_metrics
+from codomyrmex.performance import get_system_metrics
 
 app = Flask(__name__)
 
@@ -505,8 +505,8 @@ def cache_result(expiry=3600, key_prefix='codomyrmex'):
 @cache_result(expiry=1800)  # 30 minutes
 def analyze_large_codebase(codebase_path):
     """Cache expensive static analysis results."""
-    from codomyrmex.coding.static_analysis import analyze_codebase
-    return analyze_codebase(codebase_path)
+    from codomyrmex.coding.static_analysis import analyze_project
+    return analyze_project(codebase_path)
 ```
 
 ### **Async Processing**
@@ -514,7 +514,7 @@ def analyze_large_codebase(codebase_path):
 ```python
 # async_workers.py - Background task processing
 from celery import Celery
-from codomyrmex.agents import enhance_code
+from codomyrmex.agents.ai_code_editing import refactor_code_snippet
 from codomyrmex.logging_monitoring import get_logger
 
 # Configure Celery for async processing
@@ -526,9 +526,12 @@ logger = get_logger(__name__)
 
 @celery_app.task(bind=True, max_retries=3)
 def async_code_enhancement(self, code, enhancement_options):
-    """Process code enhancement asynchronously."""
+    """Process code enhancement asynchronously.
+
+    ``enhancement_options`` must include ``refactoring_type`` and ``language``.
+    """
     try:
-        result = enhance_code(code, **enhancement_options)
+        result = refactor_code_snippet(code, **enhancement_options)
         logger.info(f"Code enhancement completed for task {self.request.id}")
         return result
 

@@ -5,6 +5,7 @@ Optimization strategies and real-time monitoring for Codomyrmex.
 ## ⚡ Optimization Strategies
 
 ### **Caching Implementation**
+
 ```python
 # High-performance caching for expensive operations
 import hashlib
@@ -81,11 +82,12 @@ cache = PerformanceCache(default_ttl=1800, compression=True)
 @cache.cached(ttl=3600)  # 1 hour cache
 def expensive_static_analysis(codebase_path):
     """Cache expensive static analysis results."""
-    from codomyrmex.coding.static_analysis import analyze_codebase
-    return analyze_codebase(codebase_path)
+    from codomyrmex.coding.static_analysis import analyze_project
+    return analyze_project(codebase_path)
 ```
 
 ### **Parallel Processing**
+
 ```python
 # Optimized parallel processing for CPU-bound tasks
 import multiprocessing as mp
@@ -165,6 +167,7 @@ def analyze_files_parallel(file_paths: List[str]) -> dict:
 ```
 
 ### **Memory Optimization**
+
 ```python
 # Memory-efficient processing for large datasets
 import gc
@@ -238,6 +241,7 @@ def process_large_dataset_efficiently(data_source, chunk_size=10000):
 ```
 
 ### **Async I/O Optimization**
+
 ```python
 # High-performance async I/O for AI API calls
 import asyncio
@@ -340,7 +344,7 @@ class AsyncAPIProcessor:
 # Usage example for AI code enhancement
 async def batch_code_execution(code_snippets: List[str]) -> List[Dict]:
     """Process multiple code executions efficiently (ACTUAL IMPLEMENTATION)."""
-    from codomyrmex.coding.code_executor import execute_code
+    from codomyrmex.coding.execution import execute_code
     import asyncio
 
     async def execute_single_code(code: str) -> Dict:
@@ -350,10 +354,7 @@ async def batch_code_execution(code_snippets: List[str]) -> List[Dict]:
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(
             None,
-            execute_code,
-            code,
-            "python",
-            30  # timeout
+            lambda: execute_code(language="python", code=code, timeout=30)
         )
 
     # Process code snippets concurrently
@@ -366,6 +367,7 @@ async def batch_code_execution(code_snippets: List[str]) -> List[Dict]:
 ## 📈 Performance Monitoring
 
 ### **Real-time Metrics Collection**
+
 ```python
 # performance_monitoring.py - Production performance monitoring
 import time

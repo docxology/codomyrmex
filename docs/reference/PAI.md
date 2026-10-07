@@ -15,21 +15,24 @@ This directory contains API references. AI agents should:
 ## Directory Structure
 
 | File | Description |
-|------|-------------|
-| `api_index.md` | Index of all APIs |
-| `type_reference.md` | Type definitions |
-| `constants.md` | Global constants |
-| `exceptions.md` | Exception types |
+| --- | --- |
+| `api.md` | API overview by module |
+| `api-complete.md` | Detailed API reference |
+| `cli.md` | CLI reference |
+| `inventory.md` | Module and MCP tool inventory |
 
 ## PAI Integration
 
 ```python
-from codomyrmex.system_discovery import get_api_reference
+from pathlib import Path
 
-# Query API documentation
-api = get_api_reference("codomyrmex.llm")
-print(api.functions)
-print(api.classes)
+from codomyrmex.system_discovery import CapabilityScanner
+
+# Query the API surface of a module (runtime import + AST introspection)
+scanner = CapabilityScanner(Path("."))
+api = scanner.scan_module("llm", Path("src/codomyrmex/llm"))
+print([f.name for f in api.functions])
+print([c.name for c in api.classes])
 ```
 
 ## Cross-References

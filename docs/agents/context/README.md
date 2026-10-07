@@ -1,27 +1,34 @@
 # Context Management
 
-
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 **Module**: `codomyrmex.agents.context` | **Category**: Infrastructure | **Last Updated**: March 2026
 
 ## Overview
 
-Repository indexing, project scanning, and context building for agents. Provides file tree analysis, dependency graph construction, and relevance-ranked context windows.
+Repository indexing, project scanning, and tool selection for agents. Provides Python symbol and import indexing, project file inventories, and file-type/task-based tool recommendations.
 
 ## Key Classes
 
 | Class | Purpose |
-|:---|:---|
-| `ContextBuilder` | Project-aware context construction |
-| `RepositoryIndexer` | File tree and dependency indexing |
+| :--- | :--- |
+| `RepoIndexer` | Symbol and import indexing for Python files (`indexer.py`) |
+| `ProjectScanner` | Directory scan producing a `ProjectContext` file inventory (`project.py`) |
+| `ToolSelector` | Recommends tools for a file extension and task type (`project.py`) |
 
 ## Usage
 
 ```python
-from codomyrmex.agents.context import ContextBuilder
+from codomyrmex.agents.context.indexer import RepoIndexer
+from codomyrmex.agents.context.project import ProjectScanner, ToolSelector
 
-client = ContextBuilder()
+ctx = ProjectScanner().scan(".")
+print(f"Found {ctx.file_count} files in {ctx.module_count} modules")
+
+index = RepoIndexer().index_directory("src")
+print(f"Indexed {index.symbol_count} symbols")
+
+print(ToolSelector().select(file_ext="py", task_type="review"))
 ```
 
 ## Source Module

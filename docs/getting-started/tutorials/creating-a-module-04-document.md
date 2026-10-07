@@ -2,6 +2,7 @@
 ## 🧪 Step 6: Test Your Module
 
 ### **Run the Tests**
+
 ```bash
 # Navigate to project root
 cd ../../../
@@ -17,8 +18,10 @@ pytest tests/unit/test_text_analysis.py -v
 ```
 
 ### **Manual Testing**
+
 Create a test script to verify functionality:
 
+<!-- docs-check: skip-imports -->
 ```python
 # test_my_module.py
 import sys
@@ -56,6 +59,7 @@ print("
 ## 🔧 Step 7: Integration Testing
 
 ### **Add to System Discovery**
+
 Your module should automatically be discovered by the system. Test this:
 
 ```bash
@@ -71,8 +75,10 @@ print(modules.get('text_analysis', 'Not found'))
 ```
 
 ### **Test with Other Modules**
+
 Create integration examples:
 
+<!-- docs-check: skip-imports -->
 ```python
 # integration_test.py
 import sys
@@ -110,9 +116,10 @@ print("✅ Integration test completed! Check text_readability.png")
 ## 📚 Step 8: Documentation and Examples
 
 ### **Create Usage Examples**
+
 Update `USAGE_EXAMPLES.md`:
 
-```markdown
+````markdown
 # Text Analysis Usage Examples
 
 ## Basic Text Analysis
@@ -196,13 +203,15 @@ with open('text_analysis_results.json', 'w') as f:
 
 print(f"Analyzed {len(results)} files")
 ```
-```
+````
 
 ## 🚀 Step 9: Final Integration
 
 ### **Add to Main Test Suite**
+
 Create `tests/unit/test_text_analysis.py`:
 
+<!-- docs-check: skip-imports -->
 ```python
 """Integration tests for text_analysis module with main test suite"""
 
@@ -234,9 +243,11 @@ class TestTextAnalysisIntegration:
 ```
 
 ### **Update Project Documentation**
+
 Add your module to the main documentation in `docs/modules/overview.md` (add to the appropriate table).
 
 ### **Run Full Test Suite**
+
 ```bash
 # Run all tests to ensure no regressions
 pytest tests/ -v
@@ -269,15 +280,18 @@ discovery.run_full_discovery()
 - [ ] Performance tested with reasonable limits
 
 ### **Create Pull Request**
+
 If contributing back to Codomyrmex:
 
 1. **Commit your changes**:
+
    ```bash
    git add .
    git commit -m "feat: add text_analysis module with comprehensive text analysis capabilities"
    ```
 
 2. **Push and create PR**:
+
    ```bash
    git push origin feature/text-analysis-module
    ```
@@ -289,7 +303,7 @@ If contributing back to Codomyrmex:
    - Performance characteristics
    - Future enhancement possibilities
 
-## 🎉 Congratulations!
+## 🎉 Congratulations
 
 You've successfully created a complete Codomyrmex module! Your `text_analysis` module now provides:
 
@@ -303,6 +317,7 @@ You've successfully created a complete Codomyrmex module! Your `text_analysis` m
 ## 🚀 Next Steps
 
 ### **Enhance Your Module**
+
 - Add support for more languages
 - Implement advanced sentiment analysis with ML models
 - Add text classification capabilities
@@ -310,12 +325,14 @@ You've successfully created a complete Codomyrmex module! Your `text_analysis` m
 - Add export formats (CSV, JSON, XML)
 
 ### **Share with Community**
+
 - Submit a pull request to the main Codomyrmex repository
 - Create blog posts about your module
 - Present at community meetups
 - Help others create their own modules
 
 ### **Integrate with Other Modules**
+
 - Create workflows combining text analysis with AI code editing
 - Build documentation analysis tools
 - Add text analysis to build pipelines

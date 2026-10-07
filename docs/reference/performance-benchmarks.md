@@ -5,6 +5,7 @@ Detailed benchmark results and testing framework for Codomyrmex modules.
 ## 📊 Module Performance Benchmarks
 
 ### **Data Visualization Module**
+
 ```python
 # Benchmark: data_visualization performance
 import time
@@ -13,7 +14,6 @@ from codomyrmex.data_visualization import create_line_plot, create_bar_chart
 
 def benchmark_data_visualization():
     """Performance benchmarks for visualization module (ACTUAL IMPLEMENTATION)."""
-    from codomyrmex.data_visualization.line_plot import create_line_plot
     import numpy as np
     import time
 
@@ -54,22 +54,23 @@ def benchmark_data_visualization():
 ```
 
 **Expected Performance**:
+
 | Dataset Size | Target Time | Typical Memory | Notes |
-|-------------|-------------|----------------|--------|
-| 1K points   | < 100ms     | ~10MB         | Interactive response |
-| 100K points | < 2s        | ~50MB         | Smooth user experience |
-| 1M points   | < 10s       | ~200MB        | Batch processing acceptable |
-| 10M+ points | < 60s       | ~1GB          | Background processing + streaming |
+| --- | --- | --- | --- |
+| 1K points | < 100ms | ~10MB | Interactive response |
+| 100K points | < 2s | ~50MB | Smooth user experience |
+| 1M points | < 10s | ~200MB | Batch processing acceptable |
+| 10M+ points | < 60s | ~1GB | Background processing + streaming |
 
 ### **Static Analysis Module**
+
 ```python
 # Benchmark: static_analysis performance
-from codomyrmex.coding.static_analysis import analyze_codebase, analyze_file
+from codomyrmex.coding.static_analysis import analyze_project, analyze_file, run_pyrefly
 from pathlib import Path
 
 def benchmark_static_analysis():
     """Performance benchmarks for static analysis (ACTUAL IMPLEMENTATION)."""
-    from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis, parse_pyrefly_output
     import time
     import tempfile
     from pathlib import Path
@@ -77,39 +78,30 @@ def benchmark_static_analysis():
     # Single file analysis
     with tempfile.TemporaryDirectory() as temp_dir:
         test_file = Path(temp_dir) / "sample_module.py"
-        test_file.write_text("def sample_function():
-    return True
-" * 250)  # ~500 lines
+        test_file.write_text("def sample_function():\n    return True\n" * 250)  # ~500 lines
 
         start_time = time.time()
-        # Test with actual function signature
-        result = run_pyrefly_analysis(
-            target_paths=[str(test_file)],
-            project_root=temp_dir
-        )
+        # Test with actual function signatures
+        result = analyze_file(str(test_file))
+        pyrefly_result = run_pyrefly(str(test_file))  # requires the pyrefly CLI
         single_duration = time.time() - start_time
 
     # Small codebase (10-50 files)
     small_codebase = Path("test_data/small_project/")
     start_time = time.time()
-    result = analyze_codebase(small_codebase, parallel=True)
+    result = analyze_project(str(small_codebase))
     small_duration = time.time() - start_time
 
     # Medium codebase (100-500 files)
     medium_codebase = Path("test_data/medium_project/")
     start_time = time.time()
-    result = analyze_codebase(medium_codebase, parallel=True, cache=True)
+    result = analyze_project(str(medium_codebase))
     medium_duration = time.time() - start_time
 
     # Large codebase (1000+ files)
     large_codebase = Path("test_data/large_project/")
     start_time = time.time()
-    result = analyze_codebase(
-        large_codebase,
-        parallel=True,
-        cache=True,
-        incremental=True
-    )
+    result = analyze_project(str(large_codebase))
     large_duration = time.time() - start_time
 
     return {
@@ -121,21 +113,29 @@ def benchmark_static_analysis():
 ```
 
 **Expected Performance**:
+
 | Codebase Size | Files | Target Time | Memory Usage | Parallelization |
-|--------------|-------|-------------|--------------|----------------|
+| --- | --- | --- | --- | --- |
 | Single File | 1 | < 1s | ~20MB | N/A |
 | Small Project | 10-50 | < 5s | ~50MB | 4 workers |
 | Medium Project | 100-500 | < 30s | ~200MB | 8 workers |
 | Large Project | 1000+ | < 5min | ~500MB | 16 workers |
 
 ### **AI Code Editing Module**
+
 ```python
 # Benchmark: agents performance
-from codomyrmex.agents import enhance_code, generate_code
-import asyncio
+import time
 
-async def benchmark_agents():
-    """Performance benchmarks for AI code editing (async)."""
+from codomyrmex.agents.ai_code_editing import (
+    CodeGenerationRequest,
+    CodeLanguage,
+    generate_code_batch,
+    refactor_code_snippet,
+)
+
+def benchmark_agents():
+    """Performance benchmarks for AI code editing (requires an LLM provider API key)."""
 
     # Simple code enhancement
     simple_code = """
@@ -144,18 +144,14 @@ def add_numbers(a, b):
 """
 
     start_time = time.time()
-    result = await enhance_code(simple_code, enhancement_type="documentation")
+    result = refactor_code_snippet(simple_code, refactoring_type="add documentation", language="python")
     simple_duration = time.time() - start_time
 
     # Complex code enhancement
     complex_code = open("test_data/complex_module.py").read()  # ~200 lines
 
     start_time = time.time()
-    result = await enhance_code(
-        complex_code,
-        enhancement_type="full_optimization",
-        include_tests=True
-    )
+    result = refactor_code_snippet(complex_code, refactoring_type="optimize", language="python")
     complex_duration = time.time() - start_time
 
     # Batch code generation
@@ -166,10 +162,10 @@ def add_numbers(a, b):
     ]
 
     start_time = time.time()
-    results = await asyncio.gather(*[
-        generate_code(spec, include_tests=True)
-        for spec in specifications
-    ])
+    results = generate_code_batch(
+        [CodeGenerationRequest(prompt=spec, language=CodeLanguage.PYTHON) for spec in specifications],
+        parallel=True,
+    )
     batch_duration = time.time() - start_time
 
     return {
@@ -180,8 +176,9 @@ def add_numbers(a, b):
 ```
 
 **Expected Performance** (varies by AI provider):
+
 | Operation Type | Input Size | Target Time | API Calls | Notes |
-|----------------|------------|-------------|-----------|--------|
+| --- | --- | --- | --- | --- |
 | Simple Enhancement | < 50 lines | < 5s | 1-2 | Documentation, formatting |
 | Complex Enhancement | 100-500 lines | < 30s | 3-5 | Optimization, refactoring |
 | Code Generation | Per function | < 15s | 1-2 | With tests and docs |
@@ -190,6 +187,7 @@ def add_numbers(a, b):
 ## 🎯 Performance Testing Framework
 
 ### **Benchmark Suite**
+
 ```python
 # benchmark_suite.py - Comprehensive performance testing
 import pytest
@@ -344,17 +342,20 @@ def test_performance_benchmarks():
 ## 🔗 Related Documentation
 
 ### **Performance Resources**
+
 - **[Production Deployment](../deployment/production.md)**: Production performance optimization
 - **[Testing Strategy](../development/testing-strategy.md)**: Performance testing integration
 - **[Architecture Overview](../project/architecture.md)**: System design for performance
 
 ### **Development Resources**
+
 - **[Development Environment](../development/environment-setup.md)**: Development performance setup
 - **[Module System](../modules/overview.md)**: Module architecture and performance considerations
 
 ---
 
 **Performance Monitoring Checklist** ✅:
+
 - [ ] Benchmarks established for all critical operations
 - [ ] Performance monitoring integrated into CI/CD
 - [ ] Production performance dashboards configured

@@ -11,10 +11,11 @@ The Concurrency module provides distributed locks, semaphores, async worker pool
 ### Distributed Locking
 
 ```python
-from codomyrmex.concurrency import DistributedLock, LockManager
+from codomyrmex.concurrency import LocalLock, LockManager
 
 manager = LockManager()
-async with manager.acquire("file_edit:main.py"):
+manager.register_lock("file_edit:main.py", LocalLock("file_edit_main_py"))
+with manager.get_lock("file_edit:main.py"):
     # Exclusive access to resource
     pass
 ```
@@ -26,26 +27,31 @@ from codomyrmex.concurrency import AsyncWorkerPool, PoolStats, TaskResult
 
 pool = AsyncWorkerPool(max_workers=4)
 results: list[TaskResult] = await pool.map(analyze_files, file_list)
-stats: PoolStats = pool.stats()
+stats: PoolStats = pool.stats
 ```
 
 ### Semaphores and Dead Letter Queues
 
 ```python
-from codomyrmex.concurrency import Semaphore, DeadLetterQueue
+from codomyrmex.concurrency import DeadLetterQueue, LocalSemaphore
 
-sem = Semaphore(max_concurrent=3)
+sem = LocalSemaphore(value=3)
 dlq = DeadLetterQueue()
-# Failed tasks automatically routed to DLQ for retry/investigation
+with sem:
+    try:
+        run_agent_task()
+    except Exception as exc:
+        # Record failed tasks in the DLQ for retry/investigation
+        dlq.add(operation="run_agent_task", error=str(exc))
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
-|--------|------|---------|
-| `DistributedLock` | Class | Cross-process resource locking |
+| --- | --- | --- |
+| `LocalLock` / `RedisLock` | Class | Cross-process (file) / distributed (Redis) resource locking |
 | `LockManager` | Class | Lock lifecycle management |
-| `Semaphore` | Class | Concurrency-limited resource access |
+| `LocalSemaphore` / `AsyncLocalSemaphore` | Class | Concurrency-limited resource access |
 | `AsyncWorkerPool` | Class | Parallel async task execution |
 | `PoolStats` | Class | Worker pool statistics |
 | `TaskResult` | Class | Individual task outcome |
@@ -54,7 +60,7 @@ dlq = DeadLetterQueue()
 ## PAI Algorithm Phase Mapping
 
 | Phase | Concurrency Contribution |
-|-------|--------------------------|
+| --- | --- |
 | **PLAN** | Configure parallelism level for workflow steps |
 | **EXECUTE** | Run multiple agent tasks in parallel with resource locking |
 | **VERIFY** | Check DLQ for failed tasks; inspect pool stats |

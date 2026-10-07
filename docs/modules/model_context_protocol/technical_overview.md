@@ -10,11 +10,11 @@ This overview elaborates on the concepts introduced in the main `README.md` and 
 
 MCP is built on the following core principles:
 
--   **Simplicity and Clarity**: Protocol messages and tool specifications should be easy to understand and implement.
--   **Flexibility and Extensibility**: The protocol should accommodate a wide variety of tools and allow for future evolution without breaking existing implementations unnecessarily.
--   **Machine Readability**: Tool specifications and message schemas should be structured to allow for automated parsing, validation, and potentially code generation for client/server interactions. JSON Schema is the recommended standard for this.
--   **Discoverability**: While full dynamic discovery is a more advanced feature, the standardized specification format aids in understanding available tools.
--   **Robustness**: Clear error reporting and versioning are essential for building reliable systems.
+- **Simplicity and Clarity**: Protocol messages and tool specifications should be easy to understand and implement.
+- **Flexibility and Extensibility**: The protocol should accommodate a wide variety of tools and allow for future evolution without breaking existing implementations unnecessarily.
+- **Machine Readability**: Tool specifications and message schemas should be structured to allow for automated parsing, validation, and potentially code generation for client/server interactions. JSON Schema is the recommended standard for this.
+- **Discoverability**: While full dynamic discovery is a more advanced feature, the standardized specification format aids in understanding available tools.
+- **Robustness**: Clear error reporting and versioning are essential for building reliable systems.
 
 ## 3. Formal Data Structure Definitions
 
@@ -23,6 +23,7 @@ MCP is built on the following core principles:
 **Python Implementation**: `MCPToolCall` (Pydantic model in `mcp_schemas.py`)
 
 **JSON Schema**:
+
 ```json
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
@@ -47,8 +48,9 @@ MCP is built on the following core principles:
 ```
 
 **Pydantic Model**:
+
 ```python
-from codomyrmex.model_context_protocol.mcp_schemas import MCPToolCall
+from codomyrmex.model_context_protocol.schemas.mcp_schemas import MCPToolCall
 
 # Fields:
 # - tool_name: str (required) - Unique invocation name
@@ -58,6 +60,7 @@ from codomyrmex.model_context_protocol.mcp_schemas import MCPToolCall
 **Serialization Format**: JSON (UTF-8 encoded)
 
 **Example**:
+
 ```json
 {
   "tool_name": "agents.generate_code",
@@ -74,6 +77,7 @@ from codomyrmex.model_context_protocol.mcp_schemas import MCPToolCall
 **Python Implementation**: `MCPToolResult` (Pydantic model in `mcp_schemas.py`)
 
 **JSON Schema**:
+
 ```json
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
@@ -130,8 +134,9 @@ from codomyrmex.model_context_protocol.mcp_schemas import MCPToolCall
 ```
 
 **Pydantic Model**:
+
 ```python
-from codomyrmex.model_context_protocol.mcp_schemas import MCPToolResult, MCPErrorDetail
+from codomyrmex.model_context_protocol.schemas.mcp_schemas import MCPToolResult, MCPErrorDetail
 
 # Fields:
 # - status: str (required) - Execution outcome
@@ -141,11 +146,13 @@ from codomyrmex.model_context_protocol.mcp_schemas import MCPToolResult, MCPErro
 ```
 
 **Validation Rules**:
+
 - If `status` contains "failure", `error` field must be populated
 - If `status` contains "failure", `data` field should be null or omitted
 - If `status` is "success", `data` may be null for tools with no specific output
 
 **Example Success**:
+
 ```json
 {
   "status": "success",
@@ -161,6 +168,7 @@ from codomyrmex.model_context_protocol.mcp_schemas import MCPToolResult, MCPErro
 ```
 
 **Example Failure**:
+
 ```json
 {
   "status": "failure",
@@ -183,6 +191,7 @@ from codomyrmex.model_context_protocol.mcp_schemas import MCPToolResult, MCPErro
 **Python Implementation**: `MCPErrorDetail` (Pydantic model in `mcp_schemas.py`)
 
 **JSON Schema**:
+
 ```json
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
@@ -213,6 +222,7 @@ from codomyrmex.model_context_protocol.mcp_schemas import MCPToolResult, MCPErro
 ```
 
 **Standard Error Types**:
+
 - `ValidationError`: Input validation failed
 - `FileNotFoundError`: Required file not found
 - `AuthenticationError`: Authentication/authorization failure
@@ -270,10 +280,12 @@ Every `MCP_TOOL_SPECIFICATION.md` file must follow this structure:
 ### 4.2. JSON Schema Requirements
 
 All tools **must** provide JSON Schema definitions for:
+
 - Input parameters (`arguments` object)
 - Output data (`data` object in success results)
 
 **Minimum Schema Elements**:
+
 - `type`: Data type (object, string, integer, boolean, array, null)
 - `description`: Human-readable description
 - `required`: Array of required property names (for objects)
@@ -294,6 +306,7 @@ The Model Context Protocol itself follows semantic versioning:
 **Current Protocol Version**: `1.0.0`
 
 **Version Components**:
+
 - Core message structures (Tool Call, Tool Result)
 - Error reporting format
 - Meta-specification requirements
@@ -305,12 +318,14 @@ Each individual tool has its own version, independent of the protocol version:
 **Version Format**: `X.Y.Z` (semantic versioning)
 
 **Breaking Changes** (Major version increment):
+
 - Adding required parameters
 - Removing parameters
 - Changing parameter types
 - Incompatible changes to output schema
 
 **Non-Breaking Changes** (Minor/Patch increment):
+
 - Adding optional parameters
 - Adding new fields to output (without removing existing ones)
 - Bug fixes
@@ -318,6 +333,7 @@ Each individual tool has its own version, independent of the protocol version:
 
 **Version Declaration**:
 Tools must declare their version in their `MCP_TOOL_SPECIFICATION.md`:
+
 ```markdown
 ## Tool: `module_name.tool_name`
 
@@ -342,7 +358,7 @@ Tools must declare their version in their `MCP_TOOL_SPECIFICATION.md`:
 ### 6.2. Data Type Mapping
 
 | Python Type | JSON Type | Notes |
-|------------|-----------|-------|
+| --- | --- | --- |
 | `str` | `string` | UTF-8 encoded |
 | `int` | `number` | Integer |
 | `float` | `number` | Floating point |
@@ -358,7 +374,7 @@ Tools must declare their version in their `MCP_TOOL_SPECIFICATION.md`:
 The MCP schemas use Pydantic for validation and serialization:
 
 ```python
-from codomyrmex.model_context_protocol.mcp_schemas import MCPToolCall, MCPToolResult
+from codomyrmex.model_context_protocol.schemas.mcp_schemas import MCPToolCall, MCPToolResult
 
 # Serialize to JSON
 tool_call = MCPToolCall(tool_name="example.tool", arguments={"param": "value"})
@@ -384,13 +400,14 @@ The primary interaction pattern is synchronous:
 5. Tool returns result to agent
 
 **Flow Diagram**:
-```
+
+```text
 Agent -> [MCPToolCall] -> Tool -> [Execution] -> [MCPToolResult] -> Agent
 ```
 
 ### 7.2. Error Handling Flow
 
-```
+```text
 Agent -> [MCPToolCall] -> Tool
                         |
                         v
@@ -422,6 +439,7 @@ This is the message an AI agent sends to invoke a specific tool.
 **Format**: JSON Object
 
 **Key Fields**:
+
 - `tool_name` (string, required): The unique invocation name of the tool to be called (e.g., `"agents.generate_code_snippet"`). This name must match the `Invocation Name` defined in the tool's `MCP_TOOL_SPECIFICATION.md`.
 - `arguments` (object, required): A JSON object containing the parameters for the tool, as specified by the tool's `Input Schema`. The keys in this object are the parameter names, and the values are the arguments provided by the agent.
 
@@ -449,6 +467,7 @@ This is the message a tool sends back to the AI agent after processing a tool ca
 **Format**: JSON Object
 
 **Key Fields**:
+
 - `status` (string, required): Indicates the outcome of the tool execution (e.g., "success", "failure", "no_change_needed").
 - `data` (object | null, optional): The output data from the tool if successful. The structure of this object is tool-specific and should match the tool's `Output Schema`.
 - `error` (object | null, optional): Details of the error if execution failed. Should be an `MCPErrorDetail` object.
@@ -495,27 +514,27 @@ See Section 3.2 for the complete JSON Schema definition.
 
 As referenced in the Tool Result schema, a standard error object is recommended when `status` is `"failure"`:
 
--   **`error_type`** (string, required): A machine-readable string identifying the general category of the error (e.g., `"ValidationError"`, `"AuthenticationError"`, `"ResourceNotFound"`, `"ToolExecutionError"`, `"ApiLimitExceeded"`). Tools should try to use a consistent set of error types.
--   **`error_message`** (string, required): A human-readable message describing the error.
--   **`error_details`** (object | string, optional): Provides additional, structured (or string) information about the error. For a `ValidationError`, this might include which parameter failed validation and why. For a `FileNotFoundError`, it might include the path that was not found.
+- **`error_type`** (string, required): A machine-readable string identifying the general category of the error (e.g., `"ValidationError"`, `"AuthenticationError"`, `"ResourceNotFound"`, `"ToolExecutionError"`, `"ApiLimitExceeded"`). Tools should try to use a consistent set of error types.
+- **`error_message`** (string, required): A human-readable message describing the error.
+- **`error_details`** (object | string, optional): Provides additional, structured (or string) information about the error. For a `ValidationError`, this might include which parameter failed validation and why. For a `FileNotFoundError`, it might include the path that was not found.
 
 ## 9. Design Rationale for Key Decisions
 
--   **JSON as Primary Data Format**: Chosen for its ubiquity, human readability, and wide support across programming languages and platforms.
--   **JSON Schema for Definitions**: Provides a standardized and robust way to define and validate the structure of `arguments` and `data` objects, enabling clear contracts and automated checks.
--   **Pydantic Models for Python**: Provides runtime validation, type safety, and automatic serialization/deserialization.
--   **Emphasis on Module-Owned Tool Specifications**: Each module is responsible for defining and versioning its own tools. This decentralized approach scales better and aligns with the modular architecture of Codomyrmex. The `model_context_protocol` module provides the *template* and *rules* for these specifications.
--   **Explicit `status` Field**: Ensures that the success or failure of a tool call is always clearly and immediately communicated.
--   **Separate Error Object**: Allows for structured error information while keeping the main result structure clean.
+- **JSON as Primary Data Format**: Chosen for its ubiquity, human readability, and wide support across programming languages and platforms.
+- **JSON Schema for Definitions**: Provides a standardized and robust way to define and validate the structure of `arguments` and `data` objects, enabling clear contracts and automated checks.
+- **Pydantic Models for Python**: Provides runtime validation, type safety, and automatic serialization/deserialization.
+- **Emphasis on Module-Owned Tool Specifications**: Each module is responsible for defining and versioning its own tools. This decentralized approach scales better and aligns with the modular architecture of Codomyrmex. The `model_context_protocol` module provides the *template* and *rules* for these specifications.
+- **Explicit `status` Field**: Ensures that the success or failure of a tool call is always clearly and immediately communicated.
+- **Separate Error Object**: Allows for structured error information while keeping the main result structure clean.
 
 ## 10. Future Considerations
 
--   **Asynchronous Operations**: Defining patterns for long-running tools, including how to initiate them, check status, and retrieve results later.
--   **Streaming**: Support for tools that can stream partial results or logs back to the agent.
--   **Tool Discovery**: Mechanisms for agents to dynamically discover available tools and their specifications (e.g., via a central registry or by querying modules).
--   **More Complex Data Types**: Guidelines for handling binary data or other complex data types in tool arguments or results.
--   **Standardized Context Object**: Defining a more formal schema for common contextual information that might be passed to tools or agents.
--   **Batch Tool Calls**: Support for invoking multiple tools in a single request.
+- **Asynchronous Operations**: Defining patterns for long-running tools, including how to initiate them, check status, and retrieve results later.
+- **Streaming**: Support for tools that can stream partial results or logs back to the agent.
+- **Tool Discovery**: Mechanisms for agents to dynamically discover available tools and their specifications (e.g., via a central registry or by querying modules).
+- **More Complex Data Types**: Guidelines for handling binary data or other complex data types in tool arguments or results.
+- **Standardized Context Object**: Defining a more formal schema for common contextual information that might be passed to tools or agents.
+- **Batch Tool Calls**: Support for invoking multiple tools in a single request.
 
 ## 11. Implementation Guidelines
 

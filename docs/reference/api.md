@@ -41,7 +41,7 @@ Codomyrmex provides **4 distinct API layers** to accommodate different integrati
 ## 📋 **API Status Legend**
 
 | Status | Description | Stability |
-|--------|-------------|-----------|
+| --- | --- | --- |
 | **✅ Stable** | Production-ready, fully tested | High - Breaking changes rare |
 | **🔄 Evolving** | Feature-complete, minor updates | Medium - Minor changes possible |
 | **🚧 Developing** | Core functionality, active development | Low - API may change |
@@ -57,10 +57,10 @@ These modules provide essential infrastructure used by all other Codomyrmex modu
 
 #### **[📋 logging_monitoring](../../src/codomyrmex/logging_monitoring/API_SPECIFICATION.md)**
 
-**Centralized logging and monitoring system**
+Centralized logging and monitoring system
 
 | Function | Description | Status |
-|----------|-------------|--------|
+| --- | --- | --- |
 | **`setup_logging()`** | Initialize structured logging system | ✅ Stable |
 | **`get_logger(name)`** | Get logger instance with proper configuration | ✅ Stable |
 | **`log_performance(func)`** | Decorator for automatic performance logging | ✅ Stable |
@@ -81,10 +81,10 @@ logger.info("Application started successfully")
 
 #### **[🌱 environment_setup](../../src/codomyrmex/environment_setup/API_SPECIFICATION.md)**
 
-**Development environment validation and setup automation**
+Development environment validation and setup automation
 
 | Function | Description | Status |
-|----------|-------------|--------|
+| --- | --- | --- |
 | **`ensure_dependencies_installed()`** | Validate all required dependencies | ✅ Stable |
 | **`check_and_setup_env_vars(root_path)`** | Environment variable validation and setup | ✅ Stable |
 | **`setup_development_environment()`** | Complete development environment setup | ✅ Stable |
@@ -105,10 +105,10 @@ print(f"Environment: {'✅ Good' if env_status['valid'] else '❌ Issues found'}
 
 #### **[🔗 model_context_protocol](../../src/codomyrmex/model_context_protocol/API_SPECIFICATION.md)**
 
-**Standardized AI/LLM communication framework**
+Standardized AI/LLM communication framework
 
 | Component | Description | Status |
-|-----------|-------------|--------|
+| --- | --- | --- |
 | **`MCPToolCall`** | Schema for AI tool invocation requests | ✅ Stable |
 | **`MCPToolResult`** | Schema for tool execution responses | ✅ Stable |
 | **`validate_mcp_tool()`** | Tool definition validation | ✅ Stable |
@@ -122,13 +122,13 @@ from codomyrmex.model_context_protocol import MCPToolCall, MCPToolResult
 # Create a tool call (as would be sent by an AI)
 tool_call = MCPToolCall(
     tool_name="generate_code_snippet",
-    parameters={"prompt": "Create a hello world function", "language": "python"}
+    arguments={"prompt": "Create a hello world function", "language": "python"}
 )
 
 # Execute tool and return result
 result = MCPToolResult(
-    success=True,
-    result={"generated_code": "def hello(): print('Hello, World!')"},
+    status="success",
+    data={"generated_code": "def hello(): print('Hello, World!')"},
     metadata={"execution_time": 0.5}
 )
 ```
@@ -137,10 +137,10 @@ result = MCPToolResult(
 
 #### **[🤖 agents](../../src/codomyrmex/agents/API_SPECIFICATION.md)**
 
-**AI-powered code generation, refactoring, and analysis**
+AI-powered code generation, refactoring, and analysis
 
 | Function | Description | Status | Example |
-|----------|-------------|--------|---------|
+| --- | --- | --- | --- |
 | **`generate_code_snippet()`** | Generate code from natural language | 🔄 Evolving | `generate_code_snippet("Create fibonacci function", "python")` |
 | **`refactor_code_snippet()`** | Refactor existing code | 🔄 Evolving | `refactor_code_snippet(code, "optimize", "python")` |
 | **`analyze_code_quality()`** | Analyze code quality and suggest improvements | 🔄 Evolving | `analyze_code_quality(code, "python")` |
@@ -150,27 +150,26 @@ result = MCPToolResult(
 **Quick Example:**
 
 ```python
-from codomyrmex.agents import generate_code_snippet
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
-# Generate a complete function
+# Generate a complete function (raises RuntimeError if generation fails)
 result = generate_code_snippet(
     prompt="Create a secure user authentication system",
     language="python",
     provider="openai"
 )
 
-if result["status"] == "success":
-    print("🤖 Generated Code:")
-    print(result["generated_code"])
-    print(f"⏱️ Generated in {result['execution_time']:.2f}s")
+print("🤖 Generated Code:")
+print(result["generated_code"])
+print(f"⏱️ Generated in {result['execution_time']:.2f}s")
 ```
 
 #### **[📊 data_visualization](../../src/codomyrmex/data_visualization/API_SPECIFICATION.md)**
 
-**Rich plotting and charting capabilities**
+Rich plotting and charting capabilities
 
 | Function | Description | Status | Example |
-|----------|-------------|--------|---------|
+| --- | --- | --- | --- |
 | **`create_line_plot()`** | Line charts for trends and time series | ✅ Stable | `create_line_plot(x_data, y_data, title="Trends")` |
 | **`create_bar_chart()`** | Bar charts for comparisons and rankings | ✅ Stable | `create_bar_chart(categories, values)` |
 | **`create_scatter_plot()`** | Scatter plots for correlations | ✅ Stable | `create_scatter_plot(x_data, y_data)` |
@@ -202,38 +201,35 @@ create_bar_chart(
 
 #### **[🔍 static_analysis](../../src/codomyrmex/static_analysis/API_SPECIFICATION.md)**
 
-**Multi-language code quality and security analysis**
+Multi-language code quality and security analysis
 
 | Function | Description | Status | Example |
-|----------|-------------|--------|---------|
-| **`run_pyrefly_analysis()`** | Python-specific static analysis | 🔄 Evolving | `run_pyrefly_analysis(["src/"], ".")` |
-| **`analyze_code_quality()`** | General code quality assessment | 🔄 Evolving | `analyze_code_quality(code, "python")` |
+| --- | --- | --- | --- |
+| **`run_pyrefly()`** | Python-specific static analysis (requires the `pyrefly` CLI) | 🔄 Evolving | `run_pyrefly("src/")` |
+| **`analyze_code_quality()`** | General code quality assessment of a path | 🔄 Evolving | `analyze_code_quality("src/")` |
 | **`check_security_issues()`** | Security vulnerability scanning | 🔄 Evolving | `check_security_issues(codebase_path)` |
 | **`analyze_dependencies()`** | Dependency analysis and suggestions | 🔄 Evolving | `analyze_dependencies("pyproject.toml")` |
 
 **Quick Example:**
 
 ```python
-from codomyrmex.coding.static_analysis import run_pyrefly_analysis
+from codomyrmex.coding.static_analysis import run_pyrefly
 
-# Analyze your Python project
-analysis = run_pyrefly_analysis(
-    target_paths=["src/codomyrmex/"],
-    project_root="."
-)
+# Analyze your Python project (returns a PyreflyResult)
+analysis = run_pyrefly("src/codomyrmex/")
 
 print(f"📊 Analysis Results:")
-print(f"📁 Files analyzed: {analysis.get('files_analyzed', 0)}")
-print(f"🚨 Issues found: {analysis.get('issue_count', 0)}")
-print(f"⚡ Performance score: {analysis.get('performance_score', 'N/A')}")
+print(f"✅ Success: {analysis.success} {analysis.error_message or ''}")
+print(f"📁 Files analyzed: {analysis.files_analyzed}")
+print(f"🚨 Issues found: {len(analysis.issues)}")
 ```
 
 #### **[🏃 code](../../src/codomyrmex/coding/README.md)**
 
-**Secure multi-language code execution**
+Secure multi-language code execution
 
 | Function | Description | Status | Example |
-|----------|-------------|--------|---------|
+| --- | --- | --- | --- |
 | **`execute_code()`** | Execute code in secure Docker containers | ✅ Stable | `execute_code("python", "print('Hello')")` |
 | **`validate_language()`** | Check if language is supported | ✅ Stable | `validate_language("python")` |
 | **`list_supported_languages()`** | Get all supported languages | ✅ Stable | `list_supported_languages()` |
@@ -251,8 +247,8 @@ result = execute_code(
     timeout=10  # 10 second timeout
 )
 
-print(f"✅ Success: {result['success']}")
-print(f"📄 Output: {result['output']}")
+print(f"✅ Success: {result['status'] == 'success'}")
+print(f"📄 Output: {result['stdout']}")
 print(f"⏱️ Execution time: {result['execution_time']:.3f}s")
 ```
 
@@ -446,7 +442,7 @@ ensure_dependencies_installed()
 
 # Use core modules
 from codomyrmex.data_visualization import create_line_plot
-from codomyrmex.agents import generate_code_snippet
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
 # Create visualization
 plot_result = create_line_plot(x_data, y_data, title="My Plot")
@@ -463,15 +459,14 @@ from codomyrmex.model_context_protocol import MCPToolCall, MCPToolResult
 # Create tool call
 tool_call = MCPToolCall(
     tool_name="generate_code_snippet",
-    parameters={
+    arguments={
         "prompt": "Create a data processing function",
         "language": "python",
         "provider": "openai"
     }
 )
 
-# Execute tool (handled by MCP framework)
-result = mcp_framework.execute_tool(tool_call)
+# Execute tool (handled by the MCP server that registered the tool)
 ```
 
 ### **CLI Integration Pattern**
@@ -518,7 +513,7 @@ codomyrmex docs generate --module agents --format markdown
 ### **Module-Specific API Documentation**
 
 | Module | API Reference | MCP Tools | Status |
-|--------|---------------|-----------|--------|
+| --- | --- | --- | --- |
 | **agents** | [API Docs](../../src/codomyrmex/agents/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/agents/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
 | **data_visualization** | [API Docs](../../src/codomyrmex/data_visualization/API_SPECIFICATION.md) | None | ✅ Stable |
 | **code** | [API Docs](../../src/codomyrmex/coding/README.md) | [MCP Tools](../../src/codomyrmex/coding/README.md#mcp-tools) | 🔄 Evolving |

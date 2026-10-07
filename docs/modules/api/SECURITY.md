@@ -9,7 +9,7 @@ We take all security reports seriously.
 
 **DO NOT report security vulnerabilities through public GitHub issues.**
 
-Instead, please email security@codomyrmex.dev with the subject line: "SECURITY Vulnerability Report: API Module - [Brief Description]".
+Instead, please email <security@codomyrmex.dev> with the subject line: "SECURITY Vulnerability Report: API Module - [Brief Description]".
 
 Please include the following information in your report:
 
@@ -85,22 +85,26 @@ The following security headers should be configured:
 
 ```python
 # Example secure API configuration
-from codomyrmex.api import APIClient
+import os
 
-# Configure with authentication
-client = APIClient(
-    base_url="https://api.example.com",
-    api_key="your-secure-api-key",
-    timeout=30,
-    verify_ssl=True  # Always verify SSL certificates
-)
+from codomyrmex.api import APIKeyAuthenticator, TokenBucketLimiter
 
-# Use proper error handling
-try:
-    response = client.request("GET", "/secure-endpoint")
-except APIError as e:
-    # Log error without exposing sensitive details
-    logger.error(f"API request failed: {e.error_code}")
+# Configure with authentication (keys come from the environment, never source)
+auth = APIKeyAuthenticator(header_name="X-API-Key")
+auth.register_key(os.environ["SERVICE_API_KEY"], identity="reporting-service", scopes=["read"])
+
+# Rate-limit each authenticated caller
+limiter = TokenBucketLimiter(capacity=100, refill_rate=10)
+
+def handle(request: dict) -> dict:
+    result = auth.authenticate(request)
+    if not result.authenticated:
+        # Log error without exposing sensitive details
+        logger.warning(f"Authentication failed: {result.error}")
+        return {"status": 401}
+    if not limiter.acquire(result.identity).allowed:
+        return {"status": 429}
+    return {"status": 200}
 ```
 
 ## Security Audit Checklist
