@@ -183,10 +183,19 @@ class Forecaster:
         """Calculate risk metrics for a portfolio.
 
         Args:
-            portfolio: Portfolio schema as defined in SPEC.md.
+            portfolio: Portfolio schema as defined in SPEC.md. An optional
+                ``value_history`` list (total portfolio value per period,
+                oldest first) enables ``max_drawdown``.
 
         Returns:
-            Risk metrics output as defined in SPEC.md.
+            Risk metrics output as defined in SPEC.md. ``max_drawdown`` is the
+            largest peak-to-trough decline in ``value_history`` as a fraction
+            of the peak (``Decimal("0.25")`` = 25%), or ``None`` when no
+            history is supplied: a single snapshot has no drawdown to measure.
+
+        Raises:
+            ForecastError: If ``value_history`` is malformed (see
+                :meth:`max_drawdown`).
         """
         total_value = Decimal("0.00")
         total_cost = Decimal("0.00")
@@ -207,15 +216,49 @@ class Forecaster:
         # Using a fixed 5% volatility for this implementation
         var_95 = total_value * Decimal("1.645") * Decimal("0.05")
 
+        history = portfolio.get("value_history")
+        max_drawdown = self.max_drawdown(history) if history is not None else None
+
         return {
             "total_value": total_value,
             "total_pnl": total_pnl,
             "pnl_percent": pnl_percent,
             "var_95": var_95,
-            "max_drawdown": Decimal("0.00"),  # Placeholder
+            "max_drawdown": max_drawdown,
             "sharpe_ratio": None,
             "currency": currency,
         }
+
+    @staticmethod
+    def max_drawdown(values: list[Decimal | float]) -> Decimal:
+        """Largest peak-to-trough decline as a fraction of the running peak.
+
+        Args:
+            values: Values ordered oldest-first (e.g. portfolio value per day).
+
+        Returns:
+            ``(peak - trough) / peak`` for the worst decline, ``Decimal(0)``
+            when the series never falls below a previous peak.
+
+        Raises:
+            ForecastError: If fewer than two values are given or a running
+                peak is not positive.
+        """
+        if len(values) < 2:
+            raise ForecastError(
+                f"max_drawdown needs at least 2 values; got {len(values)}."
+            )
+        series = [Decimal(str(v)) for v in values]
+        peak = series[0]
+        worst = Decimal(0)
+        for value in series:
+            peak = max(peak, value)
+            if peak <= 0:
+                raise ForecastError(
+                    f"max_drawdown requires positive values; running peak is {peak}."
+                )
+            worst = max(worst, (peak - value) / peak)
+        return worst
 
     # ------------------------------------------------------------------
     # Forecasting

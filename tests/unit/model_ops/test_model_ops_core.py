@@ -133,29 +133,36 @@ class TestFineTuningJobLifecycle:
         job = self._make_job()
         assert job.job_id is None
 
-    def test_run_sets_status_to_running(self):
-        job = self._make_job()
-        job.run()
-        assert job.status == "running"
+    def test_run_missing_training_file_raises(self, tmp_path):
+        ds = FTDataset(name="train", path=str(tmp_path / "missing.jsonl"))
+        job = FTJob(base_model="gpt-4o-mini", dataset=ds)
+        with pytest.raises(FileNotFoundError, match="missing.jsonl"):
+            job.run()
+        assert job.status == "pending"
+        assert job.job_id is None
 
-    def test_run_sets_job_id(self):
-        job = self._make_job()
-        job_id = job.run()
-        assert job.job_id is not None
-        assert job.job_id == job_id
+    def test_run_rejects_non_jsonl_dataset(self, tmp_path):
+        path = tmp_path / "train.csv"
+        path.write_text("prompt,completion\nq,a\n")
+        ds = FTDataset(name="train", path=str(path), format="csv")
+        job = FTJob(base_model="gpt-4o-mini", dataset=ds)
+        with pytest.raises(ValueError, match="JSONL"):
+            job.run()
+        assert job.job_id is None
 
-    def test_run_returns_job_id_string(self):
-        job = self._make_job()
-        result = job.run()
-        assert isinstance(result, str)
-        assert len(result) > 0
+    def test_run_rejects_empty_training_file(self, tmp_path):
+        path = tmp_path / "train.jsonl"
+        path.write_text("")
+        job = FTJob(
+            base_model="gpt-4o-mini", dataset=FTDataset(name="t", path=str(path))
+        )
+        with pytest.raises(ValueError, match="empty"):
+            job.run()
 
-    def test_refresh_status_transitions_running_to_completed(self):
+    def test_refresh_status_before_run_stays_pending(self):
         job = self._make_job()
-        job.run()
-        status = job.refresh_status()
-        assert status == "completed"
-        assert job.status == "completed"
+        assert job.refresh_status() == "pending"
+        assert job.job_id is None
 
     def test_base_model_stored(self):
         ds = FTDataset(name="ds", path="/tmp/ds.jsonl")

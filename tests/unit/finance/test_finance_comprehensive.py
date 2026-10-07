@@ -9,6 +9,7 @@ import pytest
 from codomyrmex.finance import (
     AccountType,
     Forecaster,
+    ForecastError,
     Ledger,
     LedgerError,
     PayrollProcessor,
@@ -191,6 +192,31 @@ class TestForecasting:
         assert risk["total_value"] == Decimal("1500.00")
         assert risk["total_pnl"] == Decimal("500.00")
         assert risk["var_95"] > 0
+        # A snapshot without value history has no measurable drawdown.
+        assert risk["max_drawdown"] is None
+
+    def test_risk_metrics_max_drawdown_from_value_history(self):
+        portfolio = {
+            "positions": [{"quantity": 1, "cost_basis": 100, "current_price": 130}],
+            "value_history": [100, 120, 90, 110, 130, 104],
+        }
+        risk = Forecaster().risk_metrics(portfolio)
+        # Worst decline: peak 120 -> trough 90 = 25% (130 -> 104 is 20%).
+        assert risk["max_drawdown"] == Decimal("0.25")
+
+    def test_max_drawdown_monotonic_rise_is_zero(self):
+        assert Forecaster.max_drawdown([1, 2, 3, 4]) == Decimal(0)
+
+    def test_max_drawdown_full_loss(self):
+        assert Forecaster.max_drawdown([Decimal(50), Decimal(0)]) == Decimal(1)
+
+    def test_max_drawdown_invalid_history(self):
+        with pytest.raises(ForecastError, match="at least 2"):
+            Forecaster.max_drawdown([100])
+        with pytest.raises(ForecastError, match="positive"):
+            Forecaster.max_drawdown([0, -5])
+        with pytest.raises(ForecastError):
+            Forecaster().risk_metrics({"positions": [], "value_history": [10]})
 
     def test_moving_average(self):
         fc = Forecaster([100, 110, 120])

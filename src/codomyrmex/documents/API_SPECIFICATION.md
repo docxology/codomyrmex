@@ -21,6 +21,7 @@ def read_document(
 Read a document from a file with automatic format and encoding detection.
 
 **Parameters:**
+
 - `file_path` (str | Path): Path to the document file
 - `format` (Optional[DocumentFormat]): Optional format hint. If None, format is auto-detected from file extension
 - `encoding` (Optional[str]): Optional encoding hint. If None, encoding is auto-detected
@@ -28,10 +29,12 @@ Read a document from a file with automatic format and encoding detection.
 **Returns:** `Document` object with content and metadata
 
 **Raises:**
+
 - `DocumentReadError`: If reading fails
 - `UnsupportedFormatError`: If format is not supported
 
 **Example:**
+
 ```python
 from codomyrmex.documents import read_document
 
@@ -53,16 +56,19 @@ def write_document(
 Write a document to a file.
 
 **Parameters:**
+
 - `document` (Document): Document object to write
 - `file_path` (str | Path): Path where document should be written
 - `format` (Optional[DocumentFormat]): Optional format override. Uses document.format if not provided
 - `encoding` (Optional[str]): Optional encoding override. Uses document.encoding if not provided
 
 **Raises:**
+
 - `DocumentWriteError`: If writing fails
 - `UnsupportedFormatError`: If format is not supported
 
 **Example:**
+
 ```python
 from codomyrmex.documents import write_document, Document, DocumentFormat
 
@@ -83,6 +89,7 @@ def parse_document(
 Parse content string into a Document object.
 
 **Parameters:**
+
 - `content` (str): Content string to parse
 - `format` (DocumentFormat): Format of the content
 - `file_path` (str | None): Optional file path for context
@@ -90,6 +97,7 @@ Parse content string into a Document object.
 **Returns:** `Document` object
 
 **Raises:**
+
 - `DocumentParseError`: If parsing fails
 
 ### validate_document
@@ -104,6 +112,7 @@ def validate_document(
 Validate a document against a schema or format rules.
 
 **Parameters:**
+
 - `document` (Document): Document to validate
 - `schema` (Optional[dict]): Optional JSON schema for validation
 
@@ -210,12 +219,14 @@ def convert_document(document: Document, target_format: DocumentFormat) -> Docum
 Convert a document to a different format.
 
 **Parameters:**
+
 - `document` (Document): Document to convert
 - `target_format` (DocumentFormat): Target format
 
 **Returns:** New `Document` in target format
 
 **Raises:**
+
 - `DocumentConversionError`: If conversion fails
 - `UnsupportedFormatError`: If conversion is not supported
 
@@ -231,12 +242,14 @@ def merge_documents(
 Merge multiple documents into a single document.
 
 **Parameters:**
+
 - `documents` (List[Document]): List of documents to merge
 - `target_format` (DocumentFormat): Optional target format. Uses first document's format if not provided
 
 **Returns:** Merged `Document`
 
 **Raises:**
+
 - `DocumentConversionError`: If merging fails
 - `ValueError`: If documents list is empty
 
@@ -249,11 +262,13 @@ def split_document(document: Document, criteria: dict) -> List[Document]
 Split a document into multiple documents based on criteria.
 
 **Parameters:**
+
 - `document` (Document): Document to split
 - `criteria` (dict): Split criteria. Options:
   - `{"method": "by_sections"}` - Split by markdown sections
   - `{"method": "by_size", "max_size": 10000}` - Split by character size
   - `{"method": "by_lines", "lines_per_chunk": 100}` - Split by number of lines
+  - `{"method": "by_pages", "pages": 1}` - PDF only: re-read the source PDF (`document.file_path`) with pypdf and split into chunks of `pages` pages; chunk `custom_fields` hold `page_start`/`page_end`. Raises `DocumentConversionError` without a source file or without pypdf (`uv sync --extra documents`)
 
 **Returns:** List of split `Document` objects
 
@@ -266,6 +281,7 @@ def format_document(document: Document, style: str = "default") -> Document
 Format a document according to a style.
 
 **Parameters:**
+
 - `document` (Document): Document to format
 - `style` (str): Formatting style - "default", "compact", or "pretty"
 

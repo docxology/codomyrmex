@@ -15,7 +15,7 @@ Strategy pattern for delivery (`NotificationProvider` ABC with channel-specific 
 ### `Notification`
 
 | Field | Type | Description |
-|-------|------|-------------|
+| --- | --- | --- |
 | `id` | `str` | Unique notification identifier |
 | `subject` | `str` | Notification subject line |
 | `body` | `str` | Notification body text |
@@ -28,14 +28,14 @@ Strategy pattern for delivery (`NotificationProvider` ABC with channel-specific 
 ### `NotificationProvider` (ABC)
 
 | Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
+| --- | --- | --- | --- |
 | `channel` | — (property) | `NotificationChannel` | The channel this provider handles |
 | `send` | `notification: Notification` | `NotificationResult` | Deliver a notification |
 
 ### `NotificationService`
 
 | Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
+| --- | --- | --- | --- |
 | `__init__` | `router: NotificationRouter \ | None` | `None` Initialize with optional router |
 | `register_provider` | `provider: NotificationProvider` | `None` | Register a delivery provider |
 | `register_template` | `template: NotificationTemplate` | `None` | Register a named template |
@@ -48,7 +48,7 @@ Strategy pattern for delivery (`NotificationProvider` ABC with channel-specific 
 ### `NotificationRouter`
 
 | Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
+| --- | --- | --- | --- |
 | `add_rule` | `condition: Callable[[Notification], bool]`, `channel` | `self` | Add routing rule (chainable) |
 | `add_default` | `channel: NotificationChannel` | `self` | Set fallback channel (chainable) |
 | `route` | `notification: Notification` | `NotificationChannel` | Evaluate rules and return target channel |
@@ -56,7 +56,7 @@ Strategy pattern for delivery (`NotificationProvider` ABC with channel-specific 
 ### `NotificationTemplate`
 
 | Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
+| --- | --- | --- | --- |
 | `__init__` | `name`, `subject_template`, `body_template`, `default_channel`, `default_priority` | `None` | Define template with format strings |
 | `render` | `id`, `channel`, `priority`, `recipient`, `**variables` | `Notification` | Interpolate variables and return notification |
 
@@ -70,7 +70,7 @@ Strategy pattern for delivery (`NotificationProvider` ABC with channel-specific 
 - `NotificationRouter` evaluates rules in insertion order; first match wins.
 - `NotificationService.broadcast()` creates cloned notifications with `{id}_{channel.value}` suffixed IDs.
 - `FileProvider` appends one JSON line per notification; the file is not truncated.
-- `WebhookProvider.send()` stores notifications in `_sent` list; real HTTP delivery is reserved for a transport-backed provider.
+- `WebhookProvider.send()` POSTs `notification.to_dict()` as JSON (stdlib `urllib`, honours proxy environment variables); a 2xx response is `SENT`, any HTTP or connection error is `FAILED` with the error recorded. Only `http`/`https` URLs are accepted.
 - Pre-built templates: `ALERT_TEMPLATE` (HIGH priority), `INFO_TEMPLATE` (LOW), `ERROR_TEMPLATE` (CRITICAL).
 - `NotificationResult.is_success` returns `True` for both SENT and DELIVERED statuses.
 

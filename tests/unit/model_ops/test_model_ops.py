@@ -202,30 +202,31 @@ def test_fine_tuning_job_initial_state():
 
 
 @pytest.mark.unit
-def test_fine_tuning_job_run():
-    """Test running a fine-tuning job transitions to running."""
+def test_fine_tuning_job_unsupported_provider_raises():
+    """A provider without an implementation raises instead of inventing a job."""
     ds = Dataset([{"prompt": "A", "completion": "B"}])
-    job = FineTuningJob(base_model="gpt-4o", dataset=ds)
-    job_id = job.run()
-    assert job_id is not None
-    assert job_id.startswith("ft-")
-    assert job.status == "running"
+    job = FineTuningJob(base_model="gpt-4o-mini", dataset=ds, provider="anthropic")
+    with pytest.raises(NotImplementedError, match="anthropic"):
+        job.run()
+    assert job.status == "pending"
+    assert job.job_id is None
 
 
 @pytest.mark.unit
-def test_fine_tuning_job_refresh_completes():
-    """Test refresh_status transitions running to completed."""
-    job = FineTuningJob()
-    job.run()
-    status = job.refresh_status()
-    assert status == "completed"
-    assert job.status == "completed"
+def test_fine_tuning_job_empty_dataset_raises():
+    """An in-memory dataset with no examples is rejected before any upload."""
+    job = FineTuningJob(base_model="gpt-4o-mini", dataset=Dataset([]))
+    with pytest.raises(ValueError, match="no examples"):
+        job.run()
+    assert job.job_id is None
 
 
 @pytest.mark.unit
 def test_fine_tuning_job_refresh_pending_stays_pending():
-    """Test refresh_status on pending job stays pending."""
-    job = FineTuningJob()
+    """refresh_status on an unsubmitted job does not contact the provider."""
+    job = FineTuningJob(
+        base_model="gpt-4o-mini", dataset=Dataset([{"prompt": "A", "completion": "B"}])
+    )
     status = job.refresh_status()
     assert status == "pending"
 

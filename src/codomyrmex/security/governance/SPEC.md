@@ -39,6 +39,7 @@ Provides governance capabilities for the Codomyrmex platform, including contract
 - `PolicyEngine()`: Manages a collection of policies
 - `PolicyEngine.add_policy(policy)`: Register a policy
 - `PolicyEngine.enforce(context)`: Run all policies; raises `PolicyError` with aggregated violations
+- `PolicyEngine.compliance_stats(policy_name=None)`: Counts of recorded evaluations (`evaluations`, `passed`, `failed`); every `evaluate`/`get_violations`/`enforce` call records one outcome
 
 ### Dispute Resolution (`dispute_resolution.py`)
 
@@ -51,11 +52,12 @@ Provides governance capabilities for the Codomyrmex platform, including contract
 
 ### Visualization (`visualization.py`)
 
-- `plot_policy_compliance(engine)`: Render a pie chart of policy compliance rates
+- `plot_policy_compliance(engine, policy_name=None, output_path=None)`: Pie chart (matplotlib `Figure`) of the engine's recorded pass/fail evaluations; raises `ValueError` when nothing has been evaluated
 
 ## Error Handling
 
 All operations handle errors gracefully:
+
 - Contract signing validates signer identity and prevents duplicate signatures
 - Policy enforcement aggregates all violations before raising a single error
 - Dispute filing rejects duplicate dispute IDs
@@ -64,6 +66,7 @@ All operations handle errors gracefully:
 ## Configuration
 
 Module uses default configurations:
+
 - Contracts auto-activate upon receiving all required signatures
 - PolicyEngine runs all registered rules on each `enforce()` call
 - Dispute resolution tracks status transitions via the `DisputeStatus` enum

@@ -12,7 +12,6 @@ Submodules:
 
 import contextlib
 import json
-import uuid
 from collections.abc import Callable
 from typing import Any, Optional
 
@@ -76,6 +75,10 @@ with contextlib.suppress(ImportError):
 
 with contextlib.suppress(ImportError):
     from . import fine_tuning
+
+# Fine-tuning jobs are submitted to a real provider (OpenAI); see
+# fine_tuning/fine_tuning.py. The in-memory Dataset below is accepted directly.
+from .fine_tuning.fine_tuning import FineTuningJob
 
 
 class Dataset:
@@ -194,53 +197,6 @@ class DatasetSanitizer:
             new_example = {k: v for k, v in example.items() if k not in keys}
             stripped.append(new_example)
         return Dataset(data=stripped)
-
-
-class FineTuningJob:
-    """
-    Fine-tuning job management.
-
-    Simulates fine-tuning operations for ML models.
-    """
-
-    def __init__(
-        self,
-        base_model: str = "gpt-3.5-turbo",
-        dataset: Dataset = None,  # type: ignore
-    ):
-        """
-        Initialize a fine-tuning job.
-
-        Args:
-            base_model: Base model identifier
-            dataset: Training dataset
-        """
-        self.base_model = base_model
-        self.dataset = dataset
-        self.job_id: str | None = None
-        self.status: str = "pending"
-
-    def run(self) -> str:
-        """
-        Start the fine-tuning job.
-
-        Returns:
-            Job ID
-        """
-        self.job_id = f"ft-{uuid.uuid4().hex[:8]}"
-        self.status = "running"
-        return self.job_id
-
-    def refresh_status(self) -> str:
-        """
-        Get current job status. Transitions running jobs to completed.
-
-        Returns:
-            Status string
-        """
-        if self.status == "running":
-            self.status = "completed"
-        return self.status
 
 
 class Evaluator:

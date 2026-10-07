@@ -96,9 +96,62 @@ def _split_by_size(document: Document, criteria: dict) -> list[Document]:
 
 
 def _split_by_pages(document: Document, criteria: dict) -> list[Document]:
-    """Split PDF document by pages."""
-    # Placeholder for actual PDF splitting logic
-    return [document]
+    """Split a PDF document into chunks of ``criteria["pages"]`` pages (default 1).
+
+    Extracted PDF text does not keep page boundaries, so the source PDF is
+    re-read page by page with pypdf from ``document.file_path`` (or the
+    ``file_path`` of a ``PDFDocument`` content object). Each chunk's text is its
+    pages' extracted text joined by newlines; ``custom_fields`` records
+    ``chunk_index``, ``page_start``, ``page_end`` (1-based, inclusive) and
+    ``source_file``.
+
+    Raises:
+        DocumentConversionError: If ``pages`` is not a positive integer, no
+            source file is known, or pypdf is not installed.
+    """
+    pages_per_chunk = criteria.get("pages", 1)
+    if (
+        isinstance(pages_per_chunk, bool)
+        or not isinstance(pages_per_chunk, int)
+        or pages_per_chunk < 1
+    ):
+        raise DocumentConversionError(
+            f"'pages' must be a positive integer, got {pages_per_chunk!r}"
+        )
+
+    source = document.file_path or getattr(document.content, "file_path", None)
+    if not source:
+        raise DocumentConversionError(
+            "Splitting a PDF by pages needs the source file (document.file_path); "
+            "page boundaries are not kept in extracted text."
+        )
+
+    try:
+        from pypdf import PdfReader
+    except ImportError as exc:
+        raise DocumentConversionError(
+            "pypdf is required to split PDFs by pages. "
+            "Install it with: uv sync --extra documents"
+        ) from exc
+
+    page_texts = [page.extract_text() or "" for page in PdfReader(str(source)).pages]
+
+    split_docs = []
+    for chunk_index, start in enumerate(range(0, len(page_texts), pages_per_chunk)):
+        chunk = page_texts[start : start + pages_per_chunk]
+        new_metadata = document.metadata.copy()
+        new_metadata.custom_fields["chunk_index"] = chunk_index
+        new_metadata.custom_fields["page_start"] = start + 1
+        new_metadata.custom_fields["page_end"] = start + len(chunk)
+        new_metadata.custom_fields["source_file"] = str(source)
+        split_docs.append(
+            Document(
+                content="\n".join(chunk),
+                format=document.format,
+                metadata=new_metadata,
+            )
+        )
+    return split_docs
 
 
 def _split_by_rows(document: Document, criteria: dict) -> list[Document]:

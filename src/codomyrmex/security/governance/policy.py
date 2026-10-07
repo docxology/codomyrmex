@@ -61,11 +61,13 @@ class PolicyEngine:
     """Manages and enforces collections of governance policies.
 
     Policies are named containers of PolicyRules. Rules within a policy
-    are evaluated in descending priority order.
+    are evaluated in descending priority order. Every evaluation outcome
+    (pass or fail) is counted per policy; see :meth:`compliance_stats`.
     """
 
     def __init__(self) -> None:
         self._policies: dict[str, dict[str, Any]] = {}
+        self._outcomes: dict[str, dict[str, int]] = {}
 
     def create_policy(self, name: str, description: str = "") -> dict[str, Any]:
         """Create a new named policy.
@@ -144,6 +146,9 @@ class PolicyEngine:
             if not passed:
                 violations += 1
 
+        outcomes = self._outcomes.setdefault(policy_name, {"passed": 0, "failed": 0})
+        outcomes["passed" if violations == 0 else "failed"] += 1
+
         return {
             "passed": violations == 0,
             "violations": violations,
@@ -192,6 +197,32 @@ class PolicyEngine:
     def list_policies(self) -> list[str]:
         """Return names of all registered policies."""
         return list(self._policies.keys())
+
+    def compliance_stats(self, policy_name: str | None = None) -> dict[str, int]:
+        """Count recorded policy evaluations that passed or failed.
+
+        Each call to :meth:`evaluate` records one outcome; :meth:`get_violations`
+        and :meth:`enforce` evaluate the policy, so they record one too. An
+        evaluation passes when no rule is violated.
+
+        Args:
+            policy_name: Restrict the counts to one policy; ``None`` sums all.
+
+        Returns:
+            dict with 'evaluations', 'passed' and 'failed' counts.
+
+        Raises:
+            PolicyError: If ``policy_name`` is given but does not exist.
+        """
+        if policy_name is not None:
+            if policy_name not in self._policies:
+                raise PolicyError(f"Policy '{policy_name}' does not exist")
+            selected = [self._outcomes.get(policy_name, {})]
+        else:
+            selected = list(self._outcomes.values())
+        passed = sum(o.get("passed", 0) for o in selected)
+        failed = sum(o.get("failed", 0) for o in selected)
+        return {"evaluations": passed + failed, "passed": passed, "failed": failed}
 
     def add_policy(self, policy: PolicyRule) -> None:
         """Add a policy rule directly (wraps in unnamed policy)."""

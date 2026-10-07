@@ -11,7 +11,7 @@ Complete financial management: double-entry bookkeeping, tax compliance, payroll
 ### Ledger
 
 | Interface | Signature | Description |
-|-----------|-----------|-------------|
+| --- | --- | --- |
 | `Ledger()` | Constructor | Create empty ledger |
 | `ledger.post_transaction(entries, desc)` | `post_transaction(list[dict], str) → Transaction` | Record a balanced transaction |
 | `ledger.trial_balance()` | `→ dict` | Compute trial balance |
@@ -19,7 +19,7 @@ Complete financial management: double-entry bookkeeping, tax compliance, payroll
 ### Transactions
 
 | Constraint | Description |
-|------------|-------------|
+| --- | --- |
 | Immutability | Transactions cannot be modified after creation |
 | Balance | `debit_amount == credit_amount` (enforced at record time) |
 | Account naming | Must follow `Category:Subcategory` format |
@@ -27,7 +27,7 @@ Complete financial management: double-entry bookkeeping, tax compliance, payroll
 ### Tax and Payroll
 
 | Interface | Description |
-|-----------|-------------|
+| --- | --- |
 | `TaxCalculator(jurisdiction)` | Tax estimation for a given jurisdiction |
 | `PayrollProcessor()` | Employee payment processing and stub generation |
 | `Forecaster()` | Financial projection and trend modeling |
@@ -41,7 +41,7 @@ Complete financial management: double-entry bookkeeping, tax compliance, payroll
 ## Error Conditions
 
 | Error | Trigger | Resolution |
-|-------|---------|------------|
+| --- | --- | --- |
 | `InsufficientDataError` | Not enough historical data for forecasting (e.g., < 3 data points for trend) | Provide more transaction history; `Forecaster` requires minimum 3 periods |
 | `CalculationError` | Numerical overflow during tax/payroll computation (extremely large amounts) | Use `Decimal` with explicit precision; check for values exceeding `Decimal("999999999999.99")` |
 | `RateError` | Missing exchange rate for currency conversion | Pre-load exchange rates via `RateProvider.load(date, currency_pair)` before calculations |
@@ -108,6 +108,7 @@ Complete financial management: double-entry bookkeeping, tax compliance, payroll
         ...
     ],
     "base_currency": str,            # Portfolio reporting currency
+    "value_history": [Decimal, ...], # Optional: total value per period, oldest first
 }
 ```
 
@@ -120,7 +121,8 @@ Complete financial management: double-entry bookkeeping, tax compliance, payroll
     "total_pnl": Decimal,           # Unrealized profit/loss
     "pnl_percent": Decimal,         # PnL as percentage
     "var_95": Decimal,              # Value at Risk (95% confidence)
-    "max_drawdown": Decimal,        # Maximum peak-to-trough decline
+    "max_drawdown": Decimal | None, # Max peak-to-trough decline of value_history as a
+                                    # fraction of the peak; None without value_history
     "sharpe_ratio": Decimal | None, # Risk-adjusted return (None if < 30 days data)
     "currency": str,                # Reporting currency
 }
@@ -129,7 +131,7 @@ Complete financial management: double-entry bookkeeping, tax compliance, payroll
 ## Performance SLOs
 
 | Operation | Target Latency | Notes |
-|-----------|---------------|-------|
+| --- | --- | --- |
 | `ledger.record(txn)` | < 5ms | Validation + append; no disk I/O until flush |
 | `ledger.trial_balance()` | < 100ms | Aggregation over all entries; cached after first call |
 | `TaxCalculator.estimate()` | < 200ms | Depends on jurisdiction complexity |
@@ -138,6 +140,7 @@ Complete financial management: double-entry bookkeeping, tax compliance, payroll
 | `Forecaster.project(periods=12)` | < 2s | 12-month projection with Monte Carlo simulation |
 
 **Precision Guarantees:**
+
 - All monetary values: `Decimal` with 2 decimal places minimum
 - No floating point operations on money -- ever
 - Rounding mode: `ROUND_HALF_EVEN` (banker's rounding)
@@ -154,7 +157,7 @@ Complete financial management: double-entry bookkeeping, tax compliance, payroll
 ## PAI Algorithm Integration
 
 | Phase | Usage | Example |
-|-------|-------|---------|
+| --- | --- | --- |
 | **OBSERVE** | Read current financial state | `ledger.trial_balance()` to assess account positions |
 | **THINK** | Analyze risk metrics and trends | `forecaster.risk_metrics(portfolio)` to evaluate exposure |
 | **PLAN** | Model future scenarios | `forecaster.project(periods=6)` for cash flow projections |

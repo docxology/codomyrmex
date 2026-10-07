@@ -57,7 +57,15 @@ class ModelOpsScript(ScriptBase):
         group.add_argument(
             "--base-model",
             default="gpt-3.5-turbo",
-            help="Base model for fine-tuning simulation (default: gpt-3.5-turbo)",
+            help="OpenAI base model for fine-tuning (default: gpt-3.5-turbo)",
+        )
+        group.add_argument(
+            "--submit-fine-tuning",
+            action="store_true",
+            help=(
+                "Submit a real (billed) OpenAI fine-tuning job; requires "
+                "OPENAI_API_KEY and the llm_providers extra"
+            ),
         )
         group.add_argument(
             "--export-dataset", type=Path, help="Export synthetic dataset to JSONL file"
@@ -127,24 +135,31 @@ class ModelOpsScript(ScriptBase):
             self.log_error(f"Sanitization failed: {e}")
         results["tests_run"] += 1
 
-        # Test 3: Fine-tuning job simulation
-        self.log_info(f"\n3. Simulating FineTuningJob (base: {args.base_model})")
-        try:
-            job = FineTuningJob(base_model=args.base_model, dataset=dataset)
-            job_id = job.run()
-            status = job.refresh_status()
-
-            results["fine_tuning"] = {
-                "base_model": args.base_model,
-                "job_id": job_id,
-                "final_status": status,
-                "dataset_size": len(dataset.data),
-            }
-            results["tests_passed"] += 1
-            self.log_success(f"Fine-tuning job: {job_id}, status={status}")
-        except Exception as e:
-            self.log_error(f"Fine-tuning simulation failed: {e}")
-        results["tests_run"] += 1
+        # Test 3: Fine-tuning job (real OpenAI submission only on request)
+        self.log_info(f"\n3. FineTuningJob (base: {args.base_model})")
+        job = FineTuningJob(base_model=args.base_model, dataset=dataset)
+        if args.submit_fine_tuning:
+            results["tests_run"] += 1
+            try:
+                job.run()
+                job.refresh_status()
+                results["tests_passed"] += 1
+                self.log_success(
+                    f"Fine-tuning job submitted: {job.job_id}, status={job.status}"
+                )
+            except Exception as e:
+                # The caller explicitly asked for a real job: fail the run.
+                self.log_error(f"Fine-tuning submission failed: {e}")
+                raise
+        else:
+            self.log_info(
+                "Not submitted (billed provider call); pass --submit-fine-tuning "
+                "with OPENAI_API_KEY set to create a real job"
+            )
+        results["fine_tuning"] = {
+            **job.to_dict(),
+            "dataset_size": len(dataset.data),
+        }
 
         # Test 4: Model evaluation
         self.log_info("\n4. Testing Evaluator with metrics")
