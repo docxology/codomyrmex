@@ -351,6 +351,13 @@ def tool_run_tests(
         return {"error": str(exc)}
 
 
+# Directory documentation that lives beside workflow definitions but is not a
+# workflow itself. Shared with ``codomyrmex doctor``'s workflow check.
+WORKFLOW_DOC_FILES: frozenset[str] = frozenset(
+    {"AGENTS.md", "README.md", "SPEC.md", "PAI.md"}
+)
+
+
 def tool_list_workflows(project_root=None, **_kwargs: Any) -> dict[str, Any]:
     """list available Claude Code workflows from .agent/workflows.
 
@@ -368,7 +375,9 @@ def tool_list_workflows(project_root=None, **_kwargs: Any) -> dict[str, Any]:
     results = []
     warnings = []
 
-    for item in workflows_dir.glob("*.md"):
+    for item in sorted(workflows_dir.glob("*.md")):
+        if item.name in WORKFLOW_DOC_FILES:
+            continue
         try:
             content = item.read_text(encoding="utf-8")
             # Parse YAML frontmatter

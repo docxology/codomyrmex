@@ -128,7 +128,7 @@ class ContainerOptimizer:
             if candidate is not None:
                 with contextlib.suppress(Exception):
                     candidate.close()
-            logger.debug("Could not connect to Docker: %s", e)
+            logger.debug("Could not connect to Docker: {}", e)
             self.client = None
 
     def close(self) -> None:
@@ -197,7 +197,7 @@ class ContainerOptimizer:
         except _DOCKER_IMAGE_NOT_FOUND as exc:
             raise ValueError(f"Image '{image_name}' not found") from exc
         except Exception as e:
-            logger.error("Failed to analyze image %s: %s", image_name, e)
+            logger.error("Failed to analyze image {}: {}", image_name, e)
             raise
 
     def suggest_optimizations(self, image_name: str) -> list[OptimizationSuggestion]:
@@ -271,7 +271,7 @@ class ContainerOptimizer:
                     if match:
                         return match.group(1).strip()
         except Exception as e:
-            logger.debug("Failed to extract base image from history: %s", e)
+            logger.debug("Failed to extract base image from history: {}", e)
         return "unknown"
 
     def _analyze_optimizations(self, analysis: ImageAnalysis) -> list[str]:

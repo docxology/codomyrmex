@@ -6,6 +6,8 @@ record_hit/miss/write/eviction/delete, hit_rate_window, hottest_keys,
 reset, snapshot, to_dict, text).
 """
 
+import time
+
 import pytest
 
 from codomyrmex.cache.stats import CacheStats
@@ -144,6 +146,24 @@ class TestCacheStatsWindowedHitRate:
         s.record_hit()
         s.record_miss()
         assert s.hit_rate_window(60.0) == pytest.approx(0.5)
+
+    def test_entries_outside_window_are_excluded(self):
+        """Older entries before the cutoff are skipped by the bisected window."""
+        s = CacheStats()
+        now = time.monotonic()
+        # Old misses well outside a 60s window, then recent hits inside it.
+        s._timestamps.extend([(now - 600.0, False), (now - 300.0, False)])
+        s._timestamps.extend([(now - 5.0, True), (now - 1.0, True), (now, False)])
+        assert s.hit_rate_window(60.0) == pytest.approx(2 / 3)
+        assert s.hit_rate_window(1000.0) == pytest.approx(2 / 5)
+
+    def test_window_uses_monotonic_clock(self):
+        """Recorded timestamps share time.monotonic()'s timebase."""
+        s = CacheStats()
+        before = time.monotonic()
+        s.record_hit()
+        after = time.monotonic()
+        assert before <= s._timestamps[-1][0] <= after
 
 
 # ── Hottest Keys ──────────────────────────────────────────────────────

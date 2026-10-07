@@ -12,7 +12,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any
+from typing import Any, Self
 
 from codomyrmex.config_management.defaults import (
     DEFAULT_POSTGRES_HOST,
@@ -126,6 +126,14 @@ class DatabaseConnection:
     def is_connected(self) -> bool:
         """Check if connected."""
         return self._connection is not None
+
+    def __enter__(self) -> Self:
+        """Use the connection as a context manager that disconnects on exit."""
+        return self
+
+    def __exit__(self, *_: object) -> None:
+        """Close the underlying connection."""
+        self.disconnect()
 
     def execute(
         self, query: str, params: tuple | None = None, commit: bool = True
@@ -242,6 +250,14 @@ class DatabaseManager:
         """Disconnect all databases."""
         for conn in self.connections.values():
             conn.disconnect()
+
+    def __enter__(self) -> Self:
+        """Use the manager as a context manager that disconnects everything."""
+        return self
+
+    def __exit__(self, *_: object) -> None:
+        """Close every managed connection."""
+        self.disconnect_all()
 
     def connect(self, database_url: str) -> DatabaseConnection:
         """Establish a database connection from URL."""

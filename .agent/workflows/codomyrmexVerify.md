@@ -15,7 +15,7 @@ to VERIFIED trust level.
 1. Run the verify capabilities audit:
 
 ```bash
-cd /Users/mini/Documents/GitHub/codomyrmex && uv run python -c "
+cd "$(git rev-parse --show-toplevel)" && uv run python -c "
 from codomyrmex.agents.pai.trust_gateway import verify_capabilities
 import json
 report = verify_capabilities()

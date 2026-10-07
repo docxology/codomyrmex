@@ -1105,6 +1105,10 @@ textarea:focus-visible {
     color: var(--accent-color);
 }
 
+.doc-link.active {
+    font-weight: 700;
+}
+
 .markdown-body {
     padding: 2rem;
     background-color: var(--bg-secondary);
