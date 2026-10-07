@@ -746,6 +746,39 @@ docstring-code-format = true
 # Repository type checker: ty (from Astral)
 [tool.ty.environment]
 python-version = "3.11"
+# Helpers that scripts/review/*.py import as siblings (they run as files).
+extra-paths = ["scripts/review"]
+
+[tool.ty.analysis]
+# Only packages that no extra installs may be unresolved; any other unresolved
+# import (above all a first-party one) is an error.
+allowed-unresolved-imports = [
+    # Optional third-party integrations, imported lazily and guarded at use.
+    "PyPDF2",
+    "chromadb",
+    "fpdf",
+    "imageio",
+    "kubernetes.**",
+    "mlx.**",
+    "moviepy.**",
+    "psycopg2",
+    "pymysql",
+    "qrcode",
+    "qwen_agent.**",
+    "reportlab.**",
+    "toml",
+    "vertexai.**",
+    "zstandard",
+    # External checkouts placed on sys.path at runtime (hermes-agent, OpenGauss,
+    # hermes evolution submodule).
+    "agent.context_references",
+    "evolution.**",
+    "gauss_*",
+    "gauss_cli.**",
+    "hermes_cli.**",
+    "hermes_tools",
+    "open_gauss_client",
+]
 
 # Excluded: ty panics on this module (infer_expression_type_impl cycle limit).
 [tool.ty.src]
@@ -767,8 +800,8 @@ exclude = [
 possibly-unresolved-reference = "error"
 unsupported-base = "error"
 deprecated = "error"
+unresolved-import = "error"
 # Still lenient (too many existing diagnostics to enforce yet).
-unresolved-import = "ignore"
 invalid-argument-type = "ignore"
 not-subscriptable = "ignore"
 unresolved-attribute = "ignore"
