@@ -258,20 +258,20 @@ try:
         version="1.0.0",
         formats=['json', 'html']
     )
-    
+
     # Validate OpenAPI spec
     spec = docs.to_dict()
     is_valid, errors = validate_openapi_spec(spec, strict=True)
-    
+
     if not is_valid:
         print("❌ Documentation validation failed:")
         for error in errors:
             print(f"  {error}")
         sys.exit(1)
-    
+
     print(f"✅ Generated documentation for {len(docs.endpoints)} endpoints")
     sys.exit(0)
-    
+
 except Exception as e:
     print(f"❌ Documentation generation failed: {e}")
     sys.exit(1)
@@ -283,22 +283,20 @@ Combine with static analysis for comprehensive documentation:
 
 ```python
 from codomyrmex.api.documentation import generate_api_docs
-from codomyrmex.static_analysis import analyze_code_quality
+from codomyrmex.coding.static_analysis import analyze_code_quality
 
 # Generate API documentation
 api_docs = generate_api_docs(
-    source_path="./src/api",
-    output_path="./docs/api"
+    title="My API",
+    version="1.0.0",
+    source_paths=["./src/api"],
 )
 
 # Analyze API code quality
-quality_results = analyze_code_quality(
-    code_path="./src/api",
-    analysis_types=["quality", "security", "complexity"]
-)
+quality_results = analyze_code_quality("./src/api")
 
 print(f"📚 Generated docs for {len(api_docs.endpoints)} endpoints")
-print(f"📊 Code quality score: {quality_results.get('score', 'N/A')}/10")
+print(f"📊 Code quality issues: {quality_results['issues_count']}")
 ```
 
 ## Real-World Scenarios
@@ -383,17 +381,17 @@ Ensure your API code has detailed docstrings:
 def get_user(user_id: int) -> dict:
     """
     Retrieve user information by ID.
-    
+
     Args:
         user_id: Unique user identifier
-        
+
     Returns:
         User information dictionary with id, name, email
-        
+
     Raises:
         ValueError: If user_id is invalid
         NotFoundError: If user not found
-        
+
     Example:
         >>> user = get_user(123)
         >>> print(user['name'])
@@ -435,8 +433,6 @@ Regenerate documentation as part of your development workflow:
 # In your pre-commit hook or CI/CD pipeline
 python -c "from codomyrmex.api.documentation import generate_api_docs; generate_api_docs('./src/api', './docs/api')"
 ```
-
-
 
 ## Navigation Links
 

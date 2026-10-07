@@ -132,7 +132,7 @@ class CodomyrmexDatabase:
 async def analyze_codebase_with_db_cache(codebase_path: str,
                                        db: CodomyrmexDatabase) -> Dict:
     """Analyze codebase with database caching."""
-    from codomyrmex.coding.static_analysis import analyze_codebase
+    from codomyrmex.coding.static_analysis import analyze_code_quality
     import hashlib
 
     # Generate cache key
@@ -152,8 +152,8 @@ async def analyze_codebase_with_db_cache(codebase_path: str,
 
     start_time = time.time()
     try:
-        # Perform analysis
-        result = analyze_codebase(codebase_path)
+        # Perform analysis (returns a JSON-serializable dict)
+        result = analyze_code_quality(codebase_path)
         execution_time = int((time.time() - start_time) * 1000)
 
         # Store results
@@ -254,10 +254,10 @@ class CodomyrmexMongoDB:
 async def ai_enhancement_with_history(code: str, user_id: str,
                                     mongo_db: CodomyrmexMongoDB):
     """AI code enhancement with history tracking."""
-    from codomyrmex.agents import enhance_code
+    from codomyrmex.agents.ai_code_editing import refactor_code_snippet
 
-    # Enhance code
-    result = await enhance_code(code, user_context=user_id)
+    # Enhance code (synchronous LLM call; returns a dict)
+    result = refactor_code_snippet(code, refactoring_type="improve", language="python")
 
     # Store in history
     await mongo_db.store_analysis_result(
@@ -265,15 +265,14 @@ async def ai_enhancement_with_history(code: str, user_id: str,
         {
             'user_id': user_id,
             'original_code': code,
-            'enhancement_type': result.enhancement_type
+            'enhancement_type': result['refactoring_type']
         },
         {
-            'enhanced_code': result.enhanced_code,
-            'improvements': result.improvements,
-            'confidence_score': result.confidence_score
+            'enhanced_code': result['refactored_code'],
+            'provider': result['provider'],
+            'model': result['model']
         }
     )
 
     return result
 ```
-

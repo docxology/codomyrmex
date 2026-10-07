@@ -11,25 +11,23 @@ The Orchestrator module provides DAG-based workflow construction and execution f
 ### Workflow Engine
 
 ```python
-from codomyrmex.orchestrator import WorkflowEngine
-
-engine = WorkflowEngine()
+from codomyrmex.orchestrator import Workflow
 
 # Define DAG-based workflows
-workflow = engine.create_workflow("code_review_pipeline")
-workflow.add_step("scan", handler=scan_code)
-workflow.add_step("review", handler=review_code, depends_on=["scan"])
-workflow.add_step("fix", handler=apply_fixes, depends_on=["review"])
-workflow.add_step("verify", handler=verify_fixes, depends_on=["fix"])
+workflow = Workflow("code_review_pipeline")
+workflow.add_task("scan", scan_code)
+workflow.add_task("review", review_code, dependencies=["scan"])
+workflow.add_task("fix", apply_fixes, dependencies=["review"])
+workflow.add_task("verify", verify_fixes, dependencies=["fix"])
 
 # Execute with dependency resolution
-results = await engine.execute(workflow)
+results = await workflow.run()
 ```
 
 ### Workflow Patterns
 
 | Pattern | Description | Use Case |
-|---------|-------------|----------|
+| --- | --- | --- |
 | **Pipeline** | A → B → C | Sequential multi-step processing |
 | **Fan-out** | A → [B, C, D] | Parallel task dispatch |
 | **Fan-in** | [B, C, D] → E | Result aggregation |
@@ -39,14 +37,14 @@ results = await engine.execute(workflow)
 ## Key Exports
 
 | Export | Type | Purpose |
-|--------|------|---------|
-| `WorkflowEngine` | Class | DAG workflow construction and execution |
+| --- | --- | --- |
+| `Workflow` | Class | DAG workflow construction (`add_task`) and execution (`run`) |
 | Workflow models | Various | Step, dependency, and result types |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Orchestrator Contribution |
-|-------|---------------------------|
+| --- | --- |
 | **PLAN** | Construct DAG workflows from task requirements |
 | **EXECUTE** | Execute workflows with dependency resolution and parallelism |
 | **VERIFY** | Validate workflow completion and step outcomes |

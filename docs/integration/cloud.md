@@ -145,23 +145,24 @@ class AWSIntegration:
 # Usage example for cloud-native analysis workflow
 async def cloud_analysis_workflow(codebase_path: str, aws_integration: AWSIntegration):
     """Complete cloud-native analysis workflow."""
-    from codomyrmex.coding.static_analysis import analyze_codebase
-    from codomyrmex.data_visualization import create_analysis_dashboard
+    from codomyrmex.coding.static_analysis import analyze_code_quality
+    from codomyrmex.data_visualization import Dashboard
 
     analysis_id = f"analysis_{int(time.time())}"
 
     try:
-        # 1. Perform static analysis
-        analysis_result = analyze_codebase(codebase_path)
+        # 1. Perform static analysis (returns a JSON-serializable dict)
+        analysis_result = analyze_code_quality(codebase_path)
 
         # 2. Generate visualization artifacts
-        dashboard_data = create_analysis_dashboard(analysis_result)
+        dashboard = Dashboard(title=f"Static analysis: {codebase_path}")
+        dashboard.add_section("Issues", analysis_result.get("issues_count", 0))
+        dashboard.add_section("Summary", analysis_result.get("summary", ""))
 
         # 3. Store artifacts in S3
         artifacts = {
-            'analysis_report.json': json.dumps(analysis_result, indent=2).encode(),
-            'dashboard.html': dashboard_data['html'].encode(),
-            'metrics.json': json.dumps(dashboard_data['metrics'], indent=2).encode()
+            'analysis_report.json': json.dumps(analysis_result, indent=2, default=str).encode(),
+            'dashboard.html': dashboard.render().encode(),
         }
 
         stored_keys = await aws_integration.store_analysis_artifacts(
@@ -233,4 +234,3 @@ async def cloud_analysis_workflow(codebase_path: str, aws_integration: AWSIntegr
 
         raise
 ```
-

@@ -4,7 +4,7 @@
 
 ## Overview
 
-The Relations module is the **social relationship management engine** for the Codomyrmex ecosystem. It provides CRM capabilities including contact management with tagging, interaction history logging across multiple communication channels (email, call, meeting, social media), search, and social graph visualization.
+The Relations module is the **social relationship management engine** for the Codomyrmex ecosystem. It provides CRM capabilities including contact management with tagging, interaction history logging across communication channels (email, call, meeting, note), search, and social graph summaries.
 
 ## PAI Capabilities
 
@@ -13,46 +13,43 @@ The Relations module is the **social relationship management engine** for the Co
 Create contacts and log interactions:
 
 ```python
-from codomyrmex.relations.crm import Contact, Interaction, InteractionType, CRM
+from codomyrmex.relations.crm import ContactManager
 
-crm = CRM()
-contact = Contact(name="Jane Doe", email="jane@example.com")
-contact.add_tag("partner")
-contact.log_interaction(Interaction(type=InteractionType.EMAIL, summary="Initial outreach"))
-crm.add_contact(contact)
+crm = ContactManager()
+contact = crm.add_contact("Jane Doe", "jane@example.com", tags=["partner"])
+crm.add_interaction(contact.id, type="email", notes="Initial outreach")
 
-results = crm.search("jane")  # Case-insensitive search by name or email
+results = crm.search_contacts("jane")  # Case-insensitive search by name, email or tag
 ```
 
 ### Social Graph Visualization
 
-Render contact networks as Mermaid diagrams:
+Build a graph definition of the contact network:
 
 ```python
 from codomyrmex.relations.visualization import render_social_graph
 
-diagram = render_social_graph(crm)
-# Returns MermaidDiagram with contact nodes
+graph = render_social_graph(crm)
+# Returns {"title": ..., "node_count": ..., "nodes": [...]} with one node per contact
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
-|--------|------|---------|
-| `Contact` | Dataclass | External entity with name, email, phone, tags, and interaction history |
-| `Interaction` | Dataclass | Record of a communication event with type, summary, and timestamp |
-| `InteractionType` | Enum | Communication channels: EMAIL, CALL, MEETING, SOCIAL_MEDIA |
-| `CRM` | Class | Contact storage engine with search and retrieval |
-| `render_social_graph()` | Function | Mermaid diagram of the social contact network |
+| --- | --- | --- |
+| `Contact` | Dataclass | External entity with name, email, tags, metadata, and interaction history |
+| `Interaction` | Dataclass | Record of a communication event with type (e.g. `"email"`), notes, and timestamp |
+| `ContactManager` | Class | Contact storage engine with tagging, interaction logging, and search |
+| `visualization.render_social_graph()` | Function | Graph definition (nodes per contact) of the social network |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Relations Module Contribution |
-|-------|------------------------------|
+| --- | --- |
 | **OBSERVE** | Interaction history provides observability into communication patterns |
 | **PLAN** | Contact tags and search help identify stakeholders for planning |
-| **EXECUTE** | `log_interaction()` records communication events during execution |
-| **VERIFY** | Social graph visualization verifies relationship network topology |
+| **EXECUTE** | `add_interaction()` records communication events during execution |
+| **VERIFY** | Social graph summaries verify relationship network topology |
 | **LEARN** | Interaction history and tagging patterns support relationship analytics |
 
 ## MCP Tools
@@ -60,12 +57,12 @@ diagram = render_social_graph(crm)
 One tool is auto-discovered via `@mcp_tool` and available through the PAI MCP bridge:
 
 | Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
+| --- | --- | --- | --- |
 | `relations_score_strength` | Score the relationship strength between two entities given interaction history | Safe | relations |
 
 ## Architecture Role
 
-**Application Layer** -- Domain-specific CRM module. Depends on the `visualization` module for Mermaid diagram rendering. Has no upward dependencies from other modules.
+**Application Layer** -- Domain-specific CRM module. Renders its own graph summaries in `relations.visualization` (no dependency on `data_visualization`). Has no upward dependencies from other modules.
 
 ## Navigation
 

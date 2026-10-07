@@ -33,23 +33,23 @@ pipeline = GraphRAGPipeline()
 ### Data Models
 
 ```python
-from codomyrmex.graph_rag.models import Entity, Relationship, GraphDocument
+from codomyrmex.graph_rag.models import Entity, EntityType, GraphContext, Relationship, RelationType
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
-|--------|------|---------|
+| --- | --- | --- |
 | `KnowledgeGraph` | Class | Graph storage and traversal engine |
 | `GraphRAGPipeline` | Class | End-to-end graph-based retrieval pipeline |
 | `Entity` | Model | Node in the knowledge graph |
 | `Relationship` | Model | Edge between entities |
-| `GraphDocument` | Model | Document with extracted graph structure |
+| `GraphContext` | Model | Retrieved entities, relationships and paths, renderable as LLM context via `to_text()` |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Graph RAG Contribution |
-|-------|------------------------|
+| --- | --- |
 | **OBSERVE** | Extract entities and relationships from codebase and documentation |
 | **THINK** | Traverse knowledge graph to find contextually relevant information for reasoning |
 | **PLAN** | Use relationship data to understand module dependencies and plan changes |
@@ -62,6 +62,7 @@ from codomyrmex.graph_rag.models import Entity, Relationship, GraphDocument
 ## MCP Tools
 
 This module does not expose MCP tools directly. Access its capabilities via:
+
 - Direct Python import: `from codomyrmex.graph_rag import ...`
 - CLI: `codomyrmex graph_rag <command>`
 

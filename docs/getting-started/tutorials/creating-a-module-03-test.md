@@ -1,6 +1,7 @@
 ## 🧪 Step 4: Write Comprehensive Tests
 
 ### **Update test_template.py**
+
 Rename and update the test file:
 
 ```bash
@@ -9,6 +10,7 @@ mv tests/test_template.py tests/test_text_analysis.py
 
 Edit `tests/test_text_analysis.py`:
 
+<!-- docs-check: skip-imports -->
 ```python
 """
 Comprehensive tests for the text_analysis module.
@@ -310,7 +312,8 @@ if __name__ == "__main__":
 
 ## ⚙️ Step 5: Update Module Configuration
 
-### **Update __init__.py**
+### **Update **init**.py**
+
 Edit `__init__.py` to expose the module API:
 
 ```python
@@ -341,6 +344,7 @@ __all__ = [
 ```
 
 ### **Update `pyproject.toml`**
+
 Edit `pyproject.toml`:
 
 ```txt
@@ -351,6 +355,7 @@ textblob>=0.17.1
 ```
 
 ### **Update CHANGELOG.md**
+
 ```markdown
 # Changelog
 

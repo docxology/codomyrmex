@@ -126,7 +126,7 @@ Antigravity connects via HTTP through the `AntigravityAgent` adapter, which wrap
 **15 installed workflows** (`.agent/workflows/`):
 
 | Workflow | Purpose |
-|----------|---------|
+| --- | --- |
 | `/codomyrmexAnalyze` | Deep project/file analysis |
 | `/codomyrmexDocs` | Retrieve module documentation |
 | `/codomyrmexMemory` | Add to agentic long-term memory |
@@ -148,7 +148,7 @@ Antigravity connects via HTTP through the `AntigravityAgent` adapter, which wrap
 Claude Code consumes Codomyrmex through two mechanisms:
 
 | Mechanism | Language | Discovery | Examples |
-|-----------|----------|-----------|----------|
+| --- | --- | --- | --- |
 | **MCP Tools** | Python (`@mcp_tool`) | Auto-discovered via pkgutil | `data_visualization`, `git_analysis` |
 | **External Skills** | Markdown (`SKILL.md`) | Loaded from `~/.claude/skills/` | `visual-explainer`, `Codomyrmex` |
 
@@ -189,7 +189,7 @@ graph TD
 ### Core Agent Modules (`src/codomyrmex/agents/`)
 
 | Agent | Type | Module Path | Best For |
-|-------|------|-------------|----------|
+| --- | --- | --- | --- |
 | **Claude** | API | `agents/claude/` | High-quality reasoning, production use |
 | **Codex** | API | `agents/codex/` | Code-focused OpenAI tasks |
 | **O1/O3** | API | `agents/o1/` | Complex reasoning, chain-of-thought |
@@ -209,7 +209,7 @@ graph TD
 ### Capability Matrix
 
 | Capability | Claude | O1 | DeepSeek | Gemini | Every Code | Ollama |
-|:-----------|:------:|:--:|:--------:|:------:|:----------:|:------:|
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | Extended Reasoning | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
 | Multi-agent | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
 | Browser Integration | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
@@ -272,25 +272,34 @@ sequenceDiagram
 ```
 
 ```python
-from codomyrmex.orchestrator.core import AgentOrchestrator
+import asyncio
+
+from codomyrmex.orchestrator import AgentOrchestrator
 
 orchestrator = AgentOrchestrator()
 
-# Register agents
+# Register agents: objects with an async execute(task)/run(task) method, or async callables
 orchestrator.register_agent("claude", claude_agent)
 orchestrator.register_agent("gemini", gemini_agent)
 
-# Execute a task with automatic agent selection
-result = orchestrator.execute(
-    task="Refactor the validation module",
-    strategy="best_match",  # or "round_robin", "parallel"
+# Execute a task on a named agent
+result = asyncio.run(
+    orchestrator.run_agent_task("claude", "Refactor the validation module")
 )
+# {"success": True, "agent": "claude", "result": ...}
+
+# Or chain agent tasks into a dependency-aware workflow
+workflow = orchestrator.create_agent_workflow([
+    {"name": "refactor", "agent": "claude", "task": "Refactor the validation module"},
+    {"name": "review", "agent": "gemini", "task": "Review the refactor", "depends_on": ["refactor"]},
+])
+results = asyncio.run(workflow.run())
 ```
 
 **Key submodules:**
 
 | Submodule | Purpose |
-|-----------|---------|
+| --- | --- |
 | `execution/` | `async_runner.py`, `parallel_runner.py` — concurrent agent execution |
 | `resilience/` | `retry_engine.py`, `agent_circuit_breaker.py` — fault tolerance |
 | `scheduler/` | `scheduler.py`, `triggers.py` — cron/event-based scheduling |
@@ -326,7 +335,7 @@ flowchart LR
 ### PAI Bridge Components (`src/codomyrmex/agents/pai/`)
 
 | Component | File | Purpose |
-|-----------|------|---------|
+| --- | --- | --- |
 | **PAI Bridge** | `pai_bridge.py` | Discovery, validation — reads PAI's filesystem (read-only) |
 | **Trust Gateway** | `trust_gateway.py` | 3-tier security gating for tool execution |
 | **MCP Bridge** | `mcp_bridge.py` | JSON-RPC protocol for tool invocation |
@@ -494,7 +503,7 @@ result = manager.execute_skill("code_review", {
 Skills are also accessible as **Claude Code plugins** via `~/.claude/skills/` and as **Antigravity workflows** via `.agent/workflows/`.
 
 | Skill | Source | Version | Slash Commands |
-|-------|--------|---------|---------------|
+| --- | --- | --- | --- |
 | **visual-explainer** | [nicobailon/visual-explainer](https://github.com/nicobailon/visual-explainer) | v0.4.4 | `/generate-web-diagram`, `/generate-visual-plan`, `/generate-slides`, `/diff-review`, `/plan-review`, `/project-recap`, `/fact-check` |
 | **Codomyrmex** | This repo | v1.3.0 | `/codomyrmexVerify`, `/codomyrmexTrust`, `/codomyrmexAnalyze`, `/codomyrmexSearch`, `/codomyrmexDocs`, `/codomyrmexStatus`, `/codomyrmexMemory` |
 
@@ -532,7 +541,7 @@ print(f"{len(rules)} rules apply to this file")
 ```
 
 | Component | Purpose |
-|-----------|---------|
+| --- | --- |
 | `rules/` | 75 `.cursorrules` files governing agent behavior per module |
 | `obsidian/` | Obsidian vault integration for persistent knowledge |
 | `long_term/` | Long-term memory with TTL, tagging, cross-session retrieval |
@@ -656,7 +665,7 @@ print(health)  # {"status": "ok", "events_received": 42, ...}
 ## Quick Reference
 
 | What | Command / Import |
-|------|-----------------|
+| --- | --- |
 | Run diagnostics | `uv run codomyrmex doctor --all` |
 | List MCP tools | `from codomyrmex.agents.pai.mcp_bridge import get_tool_registry` |
 | Execute orchestrated task | `from codomyrmex.orchestrator.core import AgentOrchestrator` |

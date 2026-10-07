@@ -28,7 +28,7 @@ HTTPClient(
 ```
 
 | Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
+| --- | --- | --- | --- |
 | `timeout` | `int` | `30` | Request timeout in seconds |
 | `max_retries` | `int` | `3` | Maximum retry attempts |
 | `retry_backoff` | `float` | `1.0` | Backoff factor between retries |
@@ -77,7 +77,7 @@ def request(method: str, url: str, **kwargs) -> Response
 Send custom HTTP request.
 
 | Parameter | Type | Description |
-|-----------|------|-------------|
+| --- | --- | --- |
 | `method` | `str` | HTTP method (GET, POST, PUT, DELETE, etc.) |
 | `url` | `str` | Request URL |
 | `**kwargs` | - | Additional request options (headers, params, json, etc.) |
@@ -166,10 +166,10 @@ Close WebSocket connection.
 ### NetworkingError
 
 ```python
-from codomyrmex.networking import NetworkingError
+from codomyrmex.networking.http_client import NetworkingError
 ```
 
-Raised when network operations fail. Inherits from `CodomyrmexError`.
+Raised by `HTTPClient` when a request or JSON decoding fails. Inherits from `CodomyrmexError`.
 
 ---
 
@@ -211,7 +211,8 @@ response = client.get("https://api.example.com/protected")
 ### Error Handling
 
 ```python
-from codomyrmex.networking import HTTPClient, NetworkingError
+from codomyrmex.networking import HTTPClient
+from codomyrmex.networking.http_client import NetworkingError
 
 client = HTTPClient()
 
@@ -244,6 +245,7 @@ client.close()
 ## Integration
 
 ### Dependencies
+
 - `requests` - HTTP client library
 - `websocket-client` - WebSocket support (optional)
 - `urllib3` - Retry utilities
@@ -251,6 +253,7 @@ client.close()
 - `codomyrmex.exceptions` for error handling
 
 ### Related Modules
+
 - [`api`](../api/API_SPECIFICATION.md) - API infrastructure
 - [`scrape`](../scrape/API_SPECIFICATION.md) - Web scraping
 - [`cloud`](../cloud/API_SPECIFICATION.md) - Cloud service integrations
@@ -263,3 +266,5 @@ client.close()
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent**: [codomyrmex](../AGENTS.md)
+
+<!-- markdownlint-configure-file { "MD024": { "siblings_only": true } } -->

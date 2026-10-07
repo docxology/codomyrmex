@@ -1,6 +1,5 @@
 # Agent Evaluation
 
-
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 **Module**: `codomyrmex.agents.evaluation` | **Category**: Infrastructure | **Last Updated**: March 2026
@@ -12,16 +11,26 @@ Quality evaluation and benchmarking infrastructure. Provides metrics collection,
 ## Key Classes
 
 | Class | Purpose |
-|:---|:---|
-| `Evaluator` | Response quality scoring |
-| `BenchmarkRunner` | Comparative agent benchmark suite |
+| :--- | :--- |
+| `AgentBenchmark` | Runs `TestCase`s against one or more agents and compares the results |
+| `TestCase` / `BenchmarkResult` / `EvalResult` | Test definitions and per-case / aggregate results |
+| `ExactMatchScorer`, `ContainsScorer`, `LengthScorer`, `CompositeScorer` | Response quality scorers (subclasses of `Scorer`) |
 
 ## Usage
 
 ```python
-from codomyrmex.agents.evaluation import Evaluator
+from codomyrmex.agents.evaluation import AgentBenchmark, TestCase
 
-client = Evaluator()
+benchmark = AgentBenchmark()
+benchmark.add_test_case(
+    TestCase(id="greeting", prompt="Say hello", expected_contains=["hello"])
+)
+
+# Any object works as an "agent"; the executor maps (agent, prompt) -> output text.
+results = benchmark.run(
+    agents={"echo": str.upper}, executor=lambda agent, prompt: agent(prompt)
+)
+print(benchmark.compare(results))
 ```
 
 ## Source Module

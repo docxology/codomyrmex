@@ -126,29 +126,28 @@ print("🎉 Check your output files: sine_wave.png and language_popularity.png")
 Experience the future of coding with AI assistance (requires API key):
 
 ```python
-from codomyrmex.agents import generate_code_snippet
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
 print("🤖 Generating code with AI assistance...")
 
-# Generate a complete function with AI
-result = generate_code_snippet(
-    prompt="Create a secure REST API endpoint for user registration with input validation",
-    language="python",
-    provider="openai"  # or "anthropic", "google"
-)
-
-if result["status"] == "success":
+# Generate a complete function with AI (raises RuntimeError on failure)
+try:
+    result = generate_code_snippet(
+        prompt="Create a secure REST API endpoint for user registration with input validation",
+        language="python",
+        provider="openai"  # or "anthropic", "google", "ollama"
+    )
     print("🤖 AI Generated Code:")
     print("=" * 60)
     print(result["generated_code"])
     print("=" * 60)
     print(f"⏱️ Generated in {result['execution_time']:.2f} seconds")
     print(f"🔢 Tokens used: {result.get('tokens_used', 'N/A')}")
-else:
-    print(f"❌ Generation failed: {result['error_message']}")
+except RuntimeError as e:
+    print(f"❌ Generation failed: {e}")
 
 # You can also refactor existing code
-from codomyrmex.agents import refactor_code_snippet
+from codomyrmex.agents.ai_code_editing import refactor_code_snippet
 
 code_to_refactor = """
 def calculate_total(items):
@@ -164,9 +163,8 @@ refactored = refactor_code_snippet(
     language="python"
 )
 
-if refactored["status"] == "success":
-    print("🔧 Refactored Code:")
-    print(refactored["refactored_code"])
+print("🔧 Refactored Code:")
+print(refactored["refactored_code"])
 ```
 
 ### **3. 🏃 Safe Code Execution Sandbox**
@@ -193,12 +191,12 @@ for i in range(10):
 result = execute_code(
     language="python",
     code=python_code,
-    timeout=30  # 30 second timeout
+    timeout=30  # 30 second timeout; requires Docker
 )
 
 print("📊 Execution Results:")
-print(f"✅ Success: {result['success']}")
-print(f"📄 Output: {result['output']}")
+print(f"✅ Success: {result['status'] == 'success'}")
+print(f"📄 Output: {result['stdout']}")
 print(f"⏱️ Execution time: {result['execution_time']:.3f}s")
 
 # Test JavaScript code too!
@@ -215,7 +213,7 @@ js_result = execute_code(
     code=js_code
 )
 
-print(f"JavaScript Output: {js_result['output']}")
+print(f"JavaScript Output: {js_result['stdout']}")
 ```
 
 ### **4. 🔍 Comprehensive Code Analysis**
@@ -223,27 +221,21 @@ print(f"JavaScript Output: {js_result['output']}")
 Analyze your codebase for quality, security, and performance issues:
 
 ```python
-from codomyrmex.coding.static_analysis import run_pyrefly_analysis
+from codomyrmex.coding.static_analysis import run_pyrefly
 
 print("🔍 Analyzing code quality...")
 
-# Analyze your current project
-analysis_result = run_pyrefly_analysis(
-    target_paths=["src/codomyrmex/"],  # Analyze the main source code
-    project_root="."
-)
+# Analyze your current project (requires the pyrefly CLI)
+analysis_result = run_pyrefly("src/codomyrmex/")  # Analyze the main source code
 
 print("📊 Analysis Summary:")
-print(f"📁 Files analyzed: {analysis_result.get('files_analyzed', 0)}")
-print(f"🚨 Issues found: {analysis_result.get('issue_count', 0)}")
-print(f"⚡ Performance score: {analysis_result.get('performance_score', 'N/A')}")
+print(f"✅ Success: {analysis_result.success} {analysis_result.error_message or ''}")
+print(f"📁 Files analyzed: {analysis_result.files_analyzed}")
+print(f"🚨 Issues found: {len(analysis_result.issues)}")
 
 # You can also analyze specific files
-single_file_result = run_pyrefly_analysis(
-    target_paths=["README.md"],  # This won't have Python issues
-    project_root="."
-)
-print(f"📄 Single file analysis completed")
+single_file_result = run_pyrefly("src/codomyrmex/__init__.py")
+print(f"📄 Single file analysis: {len(single_file_result.issues)} issues")
 ```
 
 ### **5. 🎮 Interactive Exploration**
@@ -301,22 +293,22 @@ For AI features, create a `.env` file in the project root:
 ```bash
 # Create .env file with your API keys
 cat > .env << EOF
-OPENAI_API_KEY="your-key-here"
-ANTHROPIC_API_KEY="your-key-here"
-GOOGLE_API_KEY="your-key-here"
+OPENAI_API_KEY="your-key-here"  # pragma: allowlist secret
+ANTHROPIC_API_KEY="your-key-here"  # pragma: allowlist secret
+GOOGLE_API_KEY="your-key-here"  # pragma: allowlist secret
 EOF
 ```
 
 ### **Module Quick Access**
 
-| Module                 | Import                                                            | Main Function               |
-| ---------------------- | ----------------------------------------------------------------- | --------------------------- |
-| **Data Visualization** | `from codomyrmex.data_visualization import create_bar_chart`      | `create_bar_chart()`        |
-| **AI Agents**          | `from codomyrmex.agents import generate_code_snippet`    | `generate_code_snippet()`   |
-| **Code Execution**     | `from codomyrmex.coding import execute_code`      | `execute_code()`            |
-| **Static Analysis**    | `from codomyrmex.coding.static_analysis import run_pyrefly_analysis`     | `run_pyrefly_analysis()`    |
-| **Pattern Matching**   | `from codomyrmex.coding.pattern_matching import analyze_repository_path` | `analyze_repository_path()` |
-| **Secure Identity**    | `from codomyrmex.identity import IdentityManager`                 | `IdentityManager()`         |
+| Module | Import | Main Function |
+| --- | --- | --- |
+| **Data Visualization** | `from codomyrmex.data_visualization import create_bar_chart` | `create_bar_chart()` |
+| **AI Agents** | `from codomyrmex.agents import generate_code_snippet` | `generate_code_snippet()` |
+| **Code Execution** | `from codomyrmex.coding import execute_code` | `execute_code()` |
+| **Static Analysis** | `from codomyrmex.coding.static_analysis import run_pyrefly_analysis` | `run_pyrefly_analysis()` |
+| **Pattern Matching** | `from codomyrmex.coding.pattern_matching import analyze_repository_path` | `analyze_repository_path()` |
+| **Secure Identity** | `from codomyrmex.identity import IdentityManager` | `IdentityManager()` |
 
 ---
 
@@ -327,21 +319,20 @@ EOF
 ### **Code Quality Pipeline**
 
 ```python
-from codomyrmex.coding.static_analysis import run_pyrefly_analysis
+from codomyrmex.coding.static_analysis import run_pyrefly
 from codomyrmex.coding import execute_code
-from codomyrmex.agents import refactor_code_snippet
+from codomyrmex.agents.ai_code_editing import refactor_code_snippet
 
 # 1. Analyze code quality
-issues = run_pyrefly_analysis(["src/"], "/project")
+issues = run_pyrefly("src/").issues
 
 # 2. Test code execution
 result = execute_code("python", "print('test')")
 
 # 3. Refactor if needed
 refactored = refactor_code_snippet(
-    code_snippet="def func():
-    return True",
-    refactoring_instruction="Add type hints",
+    code="def func():\n    return True",
+    refactoring_type="Add type hints",
     language="python"
 )
 ```
@@ -373,7 +364,7 @@ create_scatter_plot(
 ### **AI-Enhanced Development**
 
 ```python
-from codomyrmex.agents import generate_code_snippet, refactor_code_snippet
+from codomyrmex.agents.ai_code_editing import generate_code_snippet, refactor_code_snippet
 from codomyrmex.coding import execute_code
 
 # Generate new feature
@@ -387,8 +378,8 @@ test_result = execute_code("python", feature_code["generated_code"])
 
 # Refactor for production
 production_code = refactor_code_snippet(
-    code_snippet=feature_code["generated_code"],
-    refactoring_instruction="Add error handling and logging",
+    code=feature_code["generated_code"],
+    refactoring_type="Add error handling and logging",
     language="python"
 )
 ```
@@ -413,7 +404,7 @@ production_code = refactor_code_snippet(
 
 **🎉 Congratulations!** You've successfully set up Codomyrmex and tried the core features. You're ready to explore the modular toolkit for code analysis, generation, and workflow automation.
 
-**Happy coding! 🐜✨**
+Happy coding! 🐜✨
 
 ## Navigation Links
 

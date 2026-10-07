@@ -8,11 +8,12 @@ The CEREBRUM-FPF integration provides a complete analysis pipeline that applies 
 
 ## Key Components
 
-### 1. FPFOrchestrator (`fpf_orchestration.py`)
+### 1. FPFOrchestrator (`orchestration.py`)
 
 Main orchestration class that applies CEREBRUM methods to FPF:
 
 **Capabilities:**
+
 - Converts FPF patterns to cases for case-based reasoning
 - Builds Bayesian networks from pattern relationships
 - Applies active inference for intelligent exploration
@@ -20,6 +21,7 @@ Main orchestration class that applies CEREBRUM methods to FPF:
 - Creates visualizations of networks and results
 
 **Key Methods:**
+
 - `create_pattern_cases()`: Convert FPF patterns to CEREBRUM cases
 - `build_bayesian_network_from_fpf()`: Build Bayesian network from relationships
 - `analyze_with_case_based_reasoning()`: Case-based analysis
@@ -29,11 +31,12 @@ Main orchestration class that applies CEREBRUM methods to FPF:
 - `generate_visualizations()`: Generate all visualizations
 - `run_comprehensive_analysis()`: Run complete pipeline
 
-### 2. FPFCombinatoricsAnalyzer (`fpf_combinatorics.py`)
+### 2. FPFCombinatoricsAnalyzer (`combinatorics.py`)
 
 Analyzes all combinatorics of FPF patterns:
 
 **Capabilities:**
+
 - Pattern pair analysis (all pairs)
 - Dependency chain analysis
 - Concept co-occurrence analysis
@@ -41,6 +44,7 @@ Analyzes all combinatorics of FPF patterns:
 - Comprehensive visualizations
 
 **Key Methods:**
+
 - `analyze_pattern_pairs()`: Analyze all pattern pairs
 - `analyze_dependency_chains()`: Find and analyze dependency chains
 - `analyze_concept_cooccurrence()`: Analyze concept co-occurrence
@@ -52,7 +56,7 @@ Analyzes all combinatorics of FPF patterns:
 
 ### Case-Based Reasoning Analysis
 
-1. **Case Creation**: 
+1. **Case Creation**:
    - Extracts features from FPF patterns (status, part, keywords, dependencies)
    - Creates cases for each pattern
    - Adds cases to case base
@@ -137,7 +141,7 @@ Analyzes all combinatorics of FPF patterns:
 
 ## Output Structure
 
-```
+```text
 output/fpf_cerebrum_comprehensive/
 ├── orchestration/
 │   ├── comprehensive_analysis.json
@@ -160,8 +164,7 @@ output/fpf_cerebrum_comprehensive/
 ### Python API
 
 ```python
-from codomyrmex.cerebrum.fpf_orchestration import FPFOrchestrator
-from codomyrmex.cerebrum.fpf_combinatorics import FPFCombinatoricsAnalyzer
+from codomyrmex.cerebrum.fpf import FPFCombinatoricsAnalyzer, FPFOrchestrator
 
 # Main orchestration
 orchestrator = FPFOrchestrator(output_dir="output/fpf_analysis")
@@ -175,14 +178,13 @@ combinatorics_results = combinatorics.run_comprehensive_combinatorics()
 ### Command Line
 
 ```bash
-# Comprehensive analysis
-python -m codomyrmex.cerebrum.scripts.run_comprehensive_fpf_analysis
+# Comprehensive analysis (fetches FPF-Spec.md from GitHub)
+python -m codomyrmex.cerebrum.fpf.orchestration
 
 # With options
-python -m codomyrmex.cerebrum.scripts.run_comprehensive_fpf_analysis \
+python -m codomyrmex.cerebrum.fpf.orchestration \
     --fpf-spec FPF-Spec.md \
-    --output-dir output/my_analysis \
-    --skip-combinatorics
+    --output-dir output/my_analysis
 ```
 
 ## Results Interpretation
@@ -233,8 +235,6 @@ python -m codomyrmex.cerebrum.scripts.run_comprehensive_fpf_analysis \
 - [FPF Integration Guide](README.md)
 - [Usage Examples](README.md)
 - [FPF Module](../../fpf/README.md)
-
-
 
 ## Navigation Links
 

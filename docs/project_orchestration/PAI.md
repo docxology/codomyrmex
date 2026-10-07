@@ -15,22 +15,29 @@ This directory covers cross-project coordination. AI agents should:
 ## Directory Structure
 
 | File | Description |
-|------|-------------|
-| `orchestration_patterns.md` | Common orchestration patterns |
-| `automation_guide.md` | Automation setup |
-| `multi_project.md` | Managing multiple projects |
+| --- | --- |
+| `task-orchestration-guide.md` | Task creation, execution, and monitoring |
+| `dispatch-coordination.md` | Dispatch and coordination patterns |
+| `config-driven-operations.md` | Workflow, project, and resource configuration |
+| `project-lifecycle-guide.md` | Managing projects through their lifecycle |
 
 ## PAI Integration
 
+The orchestration API lives in `codomyrmex.logistics.orchestration.project` (formerly `codomyrmex.project_orchestration`):
+
 ```python
-from codomyrmex.project_orchestration import ProjectOrchestrator
+from codomyrmex.logistics.orchestration.project import ProjectType, get_orchestration_engine
 
-# Orchestrate multiple projects
-orchestrator = ProjectOrchestrator()
-orchestrator.discover_projects("./projects/")
+engine = get_orchestration_engine()
 
-# Run across all projects
-results = orchestrator.run_all("pytest")
+# Create a project and run a task for it
+project = engine.project_manager.create_project("demo", ProjectType.CUSTOM)
+result = engine.execute_task(
+    {"name": "greet", "module": "demo", "action": "echo", "parameters": {"message": "hi"}}
+)
+print(result["success"], result["result"]["result"])  # True hi
+
+print(engine.health_check()["overall_status"])
 ```
 
 ## Cross-References

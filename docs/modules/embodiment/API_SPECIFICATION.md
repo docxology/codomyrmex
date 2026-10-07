@@ -4,6 +4,8 @@
 
 ## Public API
 
+`codomyrmex.embodiment` exports `SensorPayload`, `TelemetryStream`, and `EmbodimentBridge`; the other symbols are imported from the `sensors`, `actuators`, `ros`, and `transformation` subpackages (for example `from codomyrmex.embodiment.ros import ROS2Bridge`).
+
 | Symbol | Type | Purpose |
 | :--- | :--- | :--- |
 | `SensorPayload` | Class | Structured sensor reading |
@@ -23,12 +25,18 @@
 ## Example
 
 ```python
-from codomyrmex.embodiment import ROS2Bridge, SimulatedActuator
+import asyncio
+
+from codomyrmex.embodiment.actuators import ActuatorCommand, SimulatedActuator
+from codomyrmex.embodiment.ros import ROS2Bridge
 
 bridge = ROS2Bridge()
 bridge.create_topic("/events")
-bridge.publish("/events", {"status": "ok"})
+message = asyncio.run(bridge.publish("/events", {"status": "ok"}))  # publish is async
 
 actuator = SimulatedActuator("arm")
-result = actuator.execute({"target": "home"})
+actuator.connect()
+accepted = actuator.execute(
+    ActuatorCommand(actuator_id="arm", command_type="move", parameters={"target": "home"})
+)
 ```
