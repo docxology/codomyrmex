@@ -43,4 +43,6 @@ families (see `CHANGELOG.md` Unreleased). Palette must not re-propose:
 icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
-proposed attribute on `main`.
+proposed attribute on `main`.## 2026-10-07 - Submodule PR Rejection
+**Learning:** PRs containing only submodule pointer updates with no file changes tracked in the root repository are typically rejected and considered obsolete/unmergeable, especially if the actual modifications were supposed to target files within that submodule.
+**Action:** When working on submodules, do not create a PR in the root repo for those changes unless specifically instructed. If instructed to do so, be aware that it might trigger a rejection.
