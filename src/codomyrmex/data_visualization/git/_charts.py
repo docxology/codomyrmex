@@ -25,7 +25,6 @@ except ImportError:
     _GIT_OPS = False
 
 
-
 def _parse_commit_date(date_str: str) -> datetime | None:
     """Parse ISO dates and git's default ``%ad`` format (``Wed Oct 7 18:00:00 2026 +0000``)."""
     if not isinstance(date_str, str) or not date_str:
@@ -40,6 +39,7 @@ def _parse_commit_date(date_str: str) -> datetime | None:
         except ValueError:
             continue
     return None
+
 
 class GitChartsMixin:
     """Tree/branch PNG, Mermaid tree, and commit-activity chart generation.

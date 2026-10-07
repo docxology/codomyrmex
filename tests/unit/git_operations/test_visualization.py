@@ -6,7 +6,6 @@ Functions that only need git (not visualization) are tested even without the opt
 
 import shutil
 import subprocess
-
 from pathlib import Path
 
 import pytest

@@ -85,7 +85,8 @@ def test_pr_analyzer_git_repo(tmp_path: Path) -> None:
     )
     subprocess.run(["git", "checkout", "-b", "feature"], cwd=tmp_path, check=True)
     (tmp_path / "new.py").write_text(
-        "api_key = 'notreallysecret123456'\n", encoding="utf-8"
+        "api_key = 'notreallysecret123456'\n",
+        encoding="utf-8",  # pragma: allowlist secret
     )
     subprocess.run(["git", "add", "-A"], cwd=tmp_path, check=True)
     subprocess.run(
