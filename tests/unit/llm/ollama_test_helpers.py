@@ -6,22 +6,13 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-try:
-    from codomyrmex.llm.ollama import (
-        ModelRunner,
-        OllamaAttributes,
-        OllamaManager,
-        OllamaModel,
-        OllamaResponse,
-        OllamaRunner,
-    )
-    from codomyrmex.llm.ollama.config_manager import ConfigManager
-    from codomyrmex.llm.ollama.model_runner import ExecutionOptions
-    from codomyrmex.llm.ollama.output_manager import OutputManager
-
-    OLLAMA_AVAILABLE = True
-except ImportError:
-    OLLAMA_AVAILABLE = False
+from codomyrmex.llm.ollama import (
+    ConfigManager,
+    ModelRunner,
+    OllamaManager,
+    OutputManager,
+)
+from codomyrmex.llm.ollama.model_runner import ExecutionOptions
 
 """
 Test Utilities and Helpers for Ollama Integration Tests
@@ -77,9 +68,6 @@ class OllamaTestFixture:
             output_dir: Custom output directory (default: temp directory)
             auto_cleanup: Whether to cleanup on exit (default: True)
         """
-        if not OLLAMA_AVAILABLE:
-            raise ImportError("Ollama integration not available")
-
         self.use_http_api = use_http_api
         self.auto_cleanup = auto_cleanup
 

@@ -78,21 +78,18 @@ def main():
 
     # Step 3: Set up validation schema
     print_info("\n3. Defining validation schema...")
-    try:
-        from codomyrmex.validation import is_valid
+    from codomyrmex.validation.validator import Validator
 
-        schema = {
-            "type": "object",
-            "properties": {
-                "operation": {"type": "string"},
-                "data": {"type": "object"},
-            },
-            "required": ["operation"],
-        }
-        print_success("   Validation schema defined")
-    except ImportError as e:
-        print_info(f"   Validation import: {e}")
-        is_valid = None
+    validator = Validator()
+    schema = {
+        "type": "object",
+        "properties": {
+            "operation": {"type": "string"},
+            "data": {"type": "object"},
+        },
+        "required": ["operation"],
+    }
+    print_success("   Validation schema defined")
 
     # Step 4: Process sample data
     print_info("\n4. Processing sample workflow...")
@@ -102,12 +99,11 @@ def main():
     }
 
     # Validate input
-    if is_valid:
-        try:
-            valid = is_valid(sample_request, schema)
-            print(f"   Input valid: {valid}")
-        except Exception as e:
-            print_info(f"   Validation: {e}")
+    try:
+        valid = validator.is_valid(sample_request, schema)
+        print(f"   Input valid: {valid}")
+    except Exception as e:
+        print_info(f"   Validation: {e}")
 
     # Check cache
     if cache:

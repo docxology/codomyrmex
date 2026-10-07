@@ -25,14 +25,11 @@ from pathlib import Path
 try:
     from codomyrmex.orchestrator.core import main
 except ImportError as e:
-    print(
+    raise SystemExit(
         "Error: Could not import codomyrmex.orchestrator. "
         "Run with 'uv run --locked python scripts/run_all_scripts.py' so the "
-        "project package is importable.",
-        file=sys.stderr,
-    )
-    print(f"Traceback: {e}", file=sys.stderr)
-    sys.exit(1)
+        f"project package is importable.\nTraceback: {e}"
+    ) from e
 
 if __name__ == "__main__":
     argv = sys.argv[1:]

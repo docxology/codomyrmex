@@ -8,6 +8,7 @@ for high-performance code quality assessment, security scanning, and maintainabi
 import os
 import subprocess
 import time
+import tomllib
 from pathlib import Path
 from typing import Any
 
@@ -95,8 +96,6 @@ class CodeReviewer(
         # Try to load from .pyscn.toml or pyproject.toml
         if self.config_path and os.path.exists(self.config_path):
             try:
-                import tomllib
-
                 with open(self.config_path, "rb") as f:
                     file_config = tomllib.load(f)
 

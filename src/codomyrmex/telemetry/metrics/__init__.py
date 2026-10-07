@@ -17,6 +17,8 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Optional
 
+from codomyrmex.exceptions import CodomyrmexError
+
 from .aggregator import MetricAggregator
 
 try:
@@ -28,13 +30,6 @@ try:
     from .statsd_client import StatsDClient
 except ImportError:
     StatsDClient = None  # type: ignore[misc, assignment]
-
-try:
-    from codomyrmex.exceptions import CodomyrmexError
-except ImportError:
-
-    class CodomyrmexError(Exception):
-        pass
 
 
 class MetricType(Enum):

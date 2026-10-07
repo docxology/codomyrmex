@@ -15,7 +15,7 @@ import argparse
 import os
 import time
 import uuid
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Optional
 
@@ -38,6 +38,16 @@ from scripts.sair.utils import (
 )
 
 logger = get_logger(__name__)
+
+
+def _utc_timestamp() -> str:
+    """Return the current UTC time as ISO-8601 with a ``Z`` suffix.
+
+    Matches the historical ``datetime.utcnow().isoformat() + "Z"`` format
+    (e.g. ``2026-01-01T12:00:00.123456Z``) used in saved runs and telemetry.
+    """
+    return datetime.now(UTC).isoformat().replace("+00:00", "Z")
+
 
 # -------------------------------------------------------------------
 # Competition constants (SAIR Stage 1)
@@ -265,7 +275,7 @@ def evaluate_problem(
                 "usage": completion.usage,
                 "model": model_name,
                 "cheatsheet_hash": cheatsheet_hash,
-                "timestamp": datetime.utcnow().isoformat() + "Z",
+                "timestamp": _utc_timestamp(),
                 "attempts": attempt + 1,
             }
         except Exception as e:
@@ -293,7 +303,7 @@ def evaluate_problem(
         "ground_truth": ground_truth,
         "confidence_status": "error" if stage2 else "not_requested",
         "error": str(last_error),
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": _utc_timestamp(),
     }
 
 
@@ -339,7 +349,7 @@ def run_evaluation(
     run_id = run_id or str(uuid.uuid4())[:8]
     correlation_id = new_correlation_id()
     set_correlation_id(correlation_id)
-    timestamp_start = datetime.utcnow().isoformat() + "Z"
+    timestamp_start = _utc_timestamp()
 
     logger.info("Starting SAIR evaluation run %s (corr=%s)", run_id, correlation_id)
 
@@ -401,7 +411,7 @@ def run_evaluation(
 
     # Compute summary -------------------------------------------------------
     summary_stats = summarize_results(results)
-    timestamp_end = datetime.utcnow().isoformat() + "Z"
+    timestamp_end = _utc_timestamp()
     wall_time = sum(r.get("latency", 0.0) for r in results if "error" not in r)
 
     summary = {

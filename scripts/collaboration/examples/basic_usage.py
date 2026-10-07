@@ -112,7 +112,9 @@ class CollaborationScript(ScriptBase):
             results["tests_passed"] += 1
             self.log_success(f"Swarm created with {swarm.pool.size} agents")
         except Exception as e:
+            # Every later test drives this swarm, so stop here.
             self.log_error(f"Swarm creation failed: {e}")
+            raise
         results["tests_run"] += 1
 
         # Test 2: Task decomposition

@@ -172,8 +172,10 @@ class TreeSitterScript(ScriptBase):
                 self._print_ast(root_node, indent=3)
 
         except Exception as e:
+            # Query, incremental and traversal tests need this parse, so stop here.
             self.log_error(f"Parsing failed: {e}")
             results["parser_tests"]["parsing"] = {"error": str(e)}
+            raise
         results["tests_run"] += 1
 
         # Test 4: Query execution

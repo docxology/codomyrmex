@@ -55,6 +55,9 @@ def mutate(genome: list, rate: float = 0.1) -> list:
 def run_evolution(generations: int = 10, pop_size: int = 20) -> dict:
     """Run evolutionary algorithm."""
     population = create_population(pop_size)
+    # Score the initial population so ``final_best`` is defined even when
+    # ``generations`` is 0; the loop re-scores each generation it evolves.
+    fitnesses = [evaluate_fitness(g) for g in population]
     history = []
 
     for gen in range(generations):

@@ -10,6 +10,7 @@ import sys
 from datetime import datetime
 
 import pytest
+from tests.support.repo_paths import PACKAGE_ROOT
 
 # ---------------------------------------------------------------------------
 # Direct-import helper
@@ -23,7 +24,7 @@ def _load_api_versioning():
 
     spec = importlib.util.spec_from_file_location(
         name,
-        "src/codomyrmex/api/standardization/api_versioning.py",
+        PACKAGE_ROOT / "api/standardization/api_versioning.py",
     )
     mod = importlib.util.module_from_spec(spec)
     sys.modules[name] = mod
@@ -31,26 +32,16 @@ def _load_api_versioning():
     return mod
 
 
-try:
-    _av = _load_api_versioning()
-    SimpleVersion = _av.SimpleVersion
-    VersionFormat = _av.VersionFormat
-    APIVersion = _av.APIVersion
-    VersionedEndpoint = _av.VersionedEndpoint
-    APIVersionManager = _av.APIVersionManager
-    version = _av.version
-    deprecated_version = _av.deprecated_version
-    create_version_manager = _av.create_version_manager
-    create_versioned_endpoint = _av.create_versioned_endpoint
-    _AVAILABLE = True
-except Exception as _exc:
-    _AVAILABLE = False
-    _SKIP_REASON = str(_exc)
-
-pytestmark = pytest.mark.skipif(
-    not _AVAILABLE,
-    reason=f"api_versioning unavailable: {'' if _AVAILABLE else _SKIP_REASON}",
-)
+_av = _load_api_versioning()
+SimpleVersion = _av.SimpleVersion
+VersionFormat = _av.VersionFormat
+APIVersion = _av.APIVersion
+VersionedEndpoint = _av.VersionedEndpoint
+APIVersionManager = _av.APIVersionManager
+version = _av.version
+deprecated_version = _av.deprecated_version
+create_version_manager = _av.create_version_manager
+create_versioned_endpoint = _av.create_versioned_endpoint
 
 
 # ===========================================================================

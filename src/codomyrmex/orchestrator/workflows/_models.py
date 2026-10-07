@@ -31,6 +31,10 @@ class RetryPolicy:
     exponential_base: float = 2.0
     retry_on: tuple = (Exception,)
 
+    def __post_init__(self) -> None:
+        if self.max_attempts < 1:
+            raise ValueError(f"max_attempts must be >= 1, got {self.max_attempts}")
+
     def get_delay(self, attempt: int) -> float:
         """Calculate delay for attempt using exponential backoff."""
         delay = self.initial_delay * (self.exponential_base ** (attempt - 1))

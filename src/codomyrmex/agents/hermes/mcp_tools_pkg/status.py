@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import os
+import shutil
+import subprocess
 import sys
 from typing import Any
 
@@ -222,10 +225,6 @@ def hermes_honcho_status() -> dict[str, Any]:
 
     """
     try:
-        import os
-        import shutil
-        import subprocess
-
         hermes_bin = shutil.which("hermes")
         if not hermes_bin:
             return {"status": "error", "message": "Hermes CLI not available"}
@@ -267,10 +266,6 @@ def hermes_insights(days: int = 30) -> dict[str, Any]:
 
     """
     try:
-        import os
-        import shutil
-        import subprocess
-
         hermes_bin = shutil.which("hermes")
         if not hermes_bin:
             return {"status": "error", "message": "Hermes CLI not available"}
@@ -501,7 +496,6 @@ def hermes_pairing_list() -> dict[str, Any]:
     """
     try:
         import json
-        import os
         from pathlib import Path
 
         hermes_home = Path(os.environ.get("HERMES_HOME", Path.home() / ".hermes"))
@@ -548,7 +542,6 @@ def hermes_pairing_add(
     """
     try:
         import json
-        import os
         from pathlib import Path
 
         hermes_home = Path(os.environ.get("HERMES_HOME", Path.home() / ".hermes"))

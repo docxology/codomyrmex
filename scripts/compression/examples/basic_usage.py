@@ -103,6 +103,7 @@ def main():
 
     except Exception as e:
         print_error(f"  File compression failed: {e}")
+        return 1
 
     # 3. Archive Management
     print_info("Testing ArchiveManager...")

@@ -181,7 +181,7 @@ def main():
         print("=" * 80)
         for example in all_examples:
             if not example.syntax_valid:
-                print(f"\n{doc_file}:{example.line_number}")
+                print(f"\n{example.file_path}:{example.line_number}")
                 print(f"Code snippet: {example.code[:100]}...")
 
     return 0 if invalid_count == 0 else 1

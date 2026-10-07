@@ -208,6 +208,7 @@ def demo_review() -> dict:
     except Exception as e:
         print_warning(f"    Could not read file: {e}")
         content = ""
+        lines = 0
 
     # Attempt code review with Claude
     client = _get_claude_client()

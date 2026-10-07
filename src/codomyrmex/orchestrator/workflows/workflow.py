@@ -402,7 +402,6 @@ class Workflow:
                 task.execution_time = time.time() - start_time
                 return result
             except policy.retry_on as e:
-                last_error = e
                 task.execution_time = time.time() - start_time
 
                 if attempt < policy.max_attempts:
@@ -434,7 +433,9 @@ class Workflow:
                 task.execution_time = time.time() - start_time
                 raise
 
-        raise last_error
+        # Every iteration returns or re-raises on the final attempt, and
+        # RetryPolicy rejects max_attempts < 1, so the loop never falls through.
+        raise RuntimeError(f"retry loop for task {task.name!r} ran no attempts")
 
     async def _execute_task(self, task: Task) -> Any:
         """Execute a single task."""

@@ -284,6 +284,7 @@ class QualityAnalyzer:
 
         # Word repetition: check for consecutive duplicate words
         words = _tokenize(output)
+        repeat_ratio = 0.0
         if len(words) > 1:
             consecutive_repeats = sum(
                 1 for i in range(1, len(words)) if words[i] == words[i - 1]
@@ -298,7 +299,7 @@ class QualityAnalyzer:
         return DimensionScore(
             dimension=QualityDimension.COHERENCE,
             score=score,
-            explanation=f"Sentence length CV={cv:.2f}, consecutive repeat ratio={repeat_ratio if len(words) > 1 else 0:.3f}.",
+            explanation=f"Sentence length CV={cv:.2f}, consecutive repeat ratio={repeat_ratio:.3f}.",
             raw_metrics={
                 "sentence_count": sentence_count,
                 "mean_sentence_length": round(mean_len, 2),

@@ -13,6 +13,7 @@ import json
 import sys
 
 import pytest
+from tests.support.repo_paths import PACKAGE_ROOT
 
 # ---------------------------------------------------------------------------
 # Direct-import helper
@@ -26,7 +27,7 @@ def _load_webhooks():
 
     spec = importlib.util.spec_from_file_location(
         name,
-        "src/codomyrmex/api/webhooks/__init__.py",
+        PACKAGE_ROOT / "api/webhooks/__init__.py",
     )
     mod = importlib.util.module_from_spec(spec)
     sys.modules[name] = mod
@@ -34,30 +35,20 @@ def _load_webhooks():
     return mod
 
 
-try:
-    _wh = _load_webhooks()
-    WebhookEventType = _wh.WebhookEventType
-    WebhookStatus = _wh.WebhookStatus
-    SignatureAlgorithm = _wh.SignatureAlgorithm
-    WebhookEvent = _wh.WebhookEvent
-    WebhookConfig = _wh.WebhookConfig
-    DeliveryResult = _wh.DeliveryResult
-    WebhookTransport = _wh.WebhookTransport
-    HTTPWebhookTransport = _wh.HTTPWebhookTransport
-    WebhookSignature = _wh.WebhookSignature
-    WebhookRegistry = _wh.WebhookRegistry
-    WebhookDispatcher = _wh.WebhookDispatcher
-    create_webhook_registry = _wh.create_webhook_registry
-    create_webhook_dispatcher = _wh.create_webhook_dispatcher
-    _AVAILABLE = True
-except Exception as _exc:
-    _AVAILABLE = False
-    _SKIP_REASON = str(_exc)
-
-pytestmark = pytest.mark.skipif(
-    not _AVAILABLE,
-    reason=f"webhooks unavailable: {'' if _AVAILABLE else _SKIP_REASON}",
-)
+_wh = _load_webhooks()
+WebhookEventType = _wh.WebhookEventType
+WebhookStatus = _wh.WebhookStatus
+SignatureAlgorithm = _wh.SignatureAlgorithm
+WebhookEvent = _wh.WebhookEvent
+WebhookConfig = _wh.WebhookConfig
+DeliveryResult = _wh.DeliveryResult
+WebhookTransport = _wh.WebhookTransport
+HTTPWebhookTransport = _wh.HTTPWebhookTransport
+WebhookSignature = _wh.WebhookSignature
+WebhookRegistry = _wh.WebhookRegistry
+WebhookDispatcher = _wh.WebhookDispatcher
+create_webhook_registry = _wh.create_webhook_registry
+create_webhook_dispatcher = _wh.create_webhook_dispatcher
 
 
 # ---------------------------------------------------------------------------
@@ -67,7 +58,7 @@ pytestmark = pytest.mark.skipif(
 
 def _make_config(
     url="https://hooks.example.com/recv",
-    secret="test-secret",
+    secret="test-secret",  # pragma: allowlist secret
     events=None,
     active=True,
     max_retries=3,
@@ -291,7 +282,7 @@ class TestWebhookSignature:
 
     def test_verify_correct_signature(self):
         payload = '{"event":"test"}'
-        secret = "my-secret"
+        secret = "my-secret"  # pragma: allowlist secret
         sig = WebhookSignature.sign(payload, secret)
         assert WebhookSignature.verify(payload, secret, sig) is True
 
@@ -491,7 +482,7 @@ class TestWebhookDispatcher:
             received_headers.update(headers)
             return (200, "OK")
 
-        secret = "super-secret"
+        secret = "super-secret"  # pragma: allowlist secret
         r = WebhookRegistry()
         r.register(
             "signed",

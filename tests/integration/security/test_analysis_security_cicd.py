@@ -45,22 +45,16 @@ try:
 except ImportError:
     CI_CD_AVAILABLE = False
 
-try:
-    from codomyrmex.logging_monitoring import (
-        get_logger,
-        setup_logging,
-    )
-
-    LOGGING_AVAILABLE = True
-except ImportError:
-    LOGGING_AVAILABLE = False
+from codomyrmex.logging_monitoring import (
+    get_logger,
+    setup_logging,
+)
 
 # set up logging for tests
-if LOGGING_AVAILABLE and callable(setup_logging):
-    with contextlib.suppress(Exception):
-        setup_logging()
+with contextlib.suppress(Exception):
+    setup_logging()
 
-logger = get_logger(__name__) if LOGGING_AVAILABLE else None
+logger = get_logger(__name__)
 
 
 class TestAnalysisSecurityCICDWorkflow:
@@ -104,7 +98,7 @@ def unused_function():
     return x
 
 # Compliance issue - hard-coded secret
-API_KEY = "sk-1234567890abcdef1234567890abcdef12345678"
+API_KEY = "sk-1234567890abcdef1234567890abcdef12345678"  # pragma: allowlist secret
 
 class TestClass:
     """Test suite for Class."""

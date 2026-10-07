@@ -2,19 +2,16 @@
 
 import pytest
 
-try:
-    from codomyrmex.serialization import (
-        AvroSerializer,
-        MsgpackSerializer,
-        ParquetSerializer,
-    )
+from codomyrmex.serialization import (
+    AvroSerializer,
+    MsgpackSerializer,
+    ParquetSerializer,
+)
 
-    SERIALIZATION_AVAILABLE = True
-except ImportError:
-    SERIALIZATION_AVAILABLE = False
-
-MSGPACK_AVAILABLE = SERIALIZATION_AVAILABLE and MsgpackSerializer is not None
-AVRO_AVAILABLE = SERIALIZATION_AVAILABLE and AvroSerializer is not None
+# codomyrmex.serialization exports these as None when the optional
+# `serialization` extra (msgpack, fastavro, ...) is not installed.
+MSGPACK_AVAILABLE = MsgpackSerializer is not None
+AVRO_AVAILABLE = AvroSerializer is not None
 
 try:
     import pandas as pd
@@ -24,11 +21,6 @@ try:
     PARQUET_AVAILABLE = True
 except (ImportError, Exception):
     PARQUET_AVAILABLE = False
-
-pytestmark = pytest.mark.skipif(
-    not SERIALIZATION_AVAILABLE,
-    reason="serialization dependencies (msgpack, etc.) not installed",
-)
 
 
 @pytest.mark.unit

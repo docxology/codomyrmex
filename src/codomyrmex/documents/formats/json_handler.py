@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+import jsonschema
+
 from codomyrmex.documents.config import get_config
 from codomyrmex.documents.exceptions import (
     DocumentReadError,
@@ -47,15 +49,11 @@ def read_json(
         # Validate against schema if provided
         if schema:
             try:
-                import jsonschema
-
                 jsonschema.validate(instance=data, schema=schema)
             except jsonschema.ValidationError as e:
                 raise DocumentValidationError(
                     f"JSON schema validation failed: {e!s}", validation_errors=[str(e)]
                 ) from e
-            except ImportError:
-                logger.warning("jsonschema not available, skipping validation")
 
         return data
 

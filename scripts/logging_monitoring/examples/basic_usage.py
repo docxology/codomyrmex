@@ -56,6 +56,7 @@ def main():
             print_success(f"  Logger '{logger.name}' retrieved.")
     except Exception as e:
         print_error(f"  get_logger failed: {e}")
+        return 1
 
     # 2. Logging Operation
     print_info("Testing logging operations...")

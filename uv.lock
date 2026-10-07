@@ -929,7 +929,6 @@ security-audit = [
     { name = "cryptography" },
     { name = "jinja2" },
     { name = "pip-audit" },
-    { name = "pyopenssl" },
     { name = "safety" },
 ]
 serialization = [
@@ -1083,7 +1082,6 @@ requires-dist = [
     { name = "pylint", specifier = ">=3.0.0" },
     { name = "pymupdf", marker = "extra == 'dark'", specifier = ">=1.23.0" },
     { name = "pyopengl", marker = "extra == 'modeling-3d'", specifier = ">=3.1.0" },
-    { name = "pyopenssl", marker = "extra == 'security-audit'", specifier = ">=23.0.0" },
     { name = "pypdf", marker = "extra == 'documents'", specifier = ">=6.15.0" },
     { name = "pyrefly", marker = "extra == 'static-analysis'", specifier = ">=0.16.0" },
     { name = "pyrr", marker = "extra == 'modeling-3d'", specifier = ">=0.10.3" },
@@ -8247,19 +8245,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/6f/16/912b7225d56284859cd9a672827f18be43f8012f8b7b932bc4bd959a298e/pyopengl-3.1.10.tar.gz", hash = "sha256:c4a02d6866b54eb119c8e9b3fb04fa835a95ab802dd96607ab4cdb0012df8335", size = 1915580, upload-time = "2025-08-18T02:33:01.76Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/de/e4/1ba6f44e491c4eece978685230dde56b14d51a0365bc1b774ddaa94d14cd/pyopengl-3.1.10-py3-none-any.whl", hash = "sha256:794a943daced39300879e4e47bd94525280685f42dbb5a998d336cfff151d74f", size = 3194996, upload-time = "2025-08-18T02:32:59.902Z" },
-]
-
-[[package]]
-name = "pyopenssl"
-version = "26.4.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "cryptography" },
-    { name = "typing-extensions", marker = "python_full_version < '3.13'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/3f/e8/7325d258199b159eb2c03fe32107533e2832e70e63f4fb88a6aa00023201/pyopenssl-26.4.0.tar.gz", hash = "sha256:28dfcce0162b9211413e26dfbfdf1d24317fbeba18fc93c12400a1856b2a0bc7", size = 182046, upload-time = "2026-08-01T19:50:50.512Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/51/ad/2cf6d3fa2fae5c79e1ed9960c0d42badd0f94d81dd12b50604cdc839e648/pyopenssl-26.4.0-py3-none-any.whl", hash = "sha256:f0eb0cb2d581d3ad2b9c489468485e7f2ab6727d08401bcf9d824c3caddf3c1c", size = 56026, upload-time = "2026-08-01T19:50:48.94Z" },
 ]
 
 [[package]]

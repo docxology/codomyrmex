@@ -20,25 +20,17 @@ pytestmark = [
     ),
 ]
 
-try:
-    from codomyrmex.agents.ai_code_editing.ai_code_helpers import (
-        OLLAMA_AVAILABLE,
-        analyze_code_quality,
-        compare_code_versions,
-        generate_code_documentation,
-        generate_code_snippet,
-        get_available_models,
-        get_llm_client,
-        get_supported_providers,
-        refactor_code_snippet,
-    )
-
-    _HAS_AGENTS = True
-except ImportError:
-    _HAS_AGENTS = False
-
-if not _HAS_AGENTS:
-    pytest.skip("agents deps not available", allow_module_level=True)
+from codomyrmex.agents.ai_code_editing.ai_code_helpers import (
+    OLLAMA_AVAILABLE,
+    analyze_code_quality,
+    compare_code_versions,
+    generate_code_documentation,
+    generate_code_snippet,
+    get_available_models,
+    get_llm_client,
+    get_supported_providers,
+    refactor_code_snippet,
+)
 
 
 def _get_installed_ollama_models() -> list[str]:

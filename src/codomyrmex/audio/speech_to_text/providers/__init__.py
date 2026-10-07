@@ -6,20 +6,17 @@ Available providers:
 
 from .base import STTProvider
 
-# Conditionally import providers based on availability
-try:
-    from .whisper_provider import (
-        FASTER_WHISPER_AVAILABLE,
-        SUPPORTED_FORMATS,
-        WHISPER_LANGUAGES,
-        WhisperProvider,
-    )
+# The provider module guards its optional dependency itself (it only probes
+# for faster_whisper), so importing it never fails; WhisperProvider raises
+# ProviderNotAvailableError on construction when the dependency is missing.
+from .whisper_provider import (
+    FASTER_WHISPER_AVAILABLE,
+    SUPPORTED_FORMATS,
+    WHISPER_LANGUAGES,
+    WhisperProvider,
+)
 
-    WHISPER_AVAILABLE = FASTER_WHISPER_AVAILABLE
-except ImportError:
-    WHISPER_LANGUAGES = []
-    SUPPORTED_FORMATS = set()
-    WHISPER_AVAILABLE = False
+WHISPER_AVAILABLE = FASTER_WHISPER_AVAILABLE
 
 
 # Hoisted static mapping to prevent per-call allocation overhead

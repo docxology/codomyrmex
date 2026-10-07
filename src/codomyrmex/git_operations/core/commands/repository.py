@@ -5,9 +5,6 @@ from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 from codomyrmex.performance import PERFORMANCE_MONITOR_AVAILABLE
 
-if PERFORMANCE_MONITOR_AVAILABLE:
-    from codomyrmex.performance import monitor_performance
-
 logger = get_logger(__name__)
 
 
@@ -162,6 +159,8 @@ def clone_repository(url: str, destination: str, branch: str | None = None) -> b
 
 # Apply performance monitoring wrappers explicitly when psutil is available.
 if PERFORMANCE_MONITOR_AVAILABLE:
+    from codomyrmex.performance import monitor_performance
+
     initialize_git_repository = monitor_performance("git_initialize_repository")(
         initialize_git_repository
     )

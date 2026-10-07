@@ -70,10 +70,10 @@ def main():
         decrypted = decrypt(encrypted, key, algorithm="AES")
         if decrypted == data:
             print_success("  AES Decryption successful (Data matches).")
-    except ImportError:
-        print_info("  AES skipped: 'cryptography' library not installed.")
     except Exception as e:
+        # The remaining examples all need the AES key generated above.
         print_error(f"  AES operations failed: {e}")
+        return 1
 
     # 2. Key Management
     print_info("Testing KeyManager...")

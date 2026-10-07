@@ -1,33 +1,21 @@
 """Tests for StaticAnalyzer core data structures and initialization.
 
 Tests enums, dataclasses, and StaticAnalyzer init/tool discovery.
-No mocks. Import-safe: handles pyrefly_runner ImportError gracefully.
+No mocks.
 """
 
 import pytest
 
-try:
-    from codomyrmex.coding.static_analysis.static_analyzer import (
-        AnalysisResult,
-        AnalysisSummary,
-        AnalysisType,
-        CodeMetrics,
-        SeverityLevel,
-        StaticAnalyzer,
-    )
+from codomyrmex.coding.static_analysis.static_analyzer import (
+    AnalysisResult,
+    AnalysisSummary,
+    AnalysisType,
+    CodeMetrics,
+    SeverityLevel,
+    StaticAnalyzer,
+)
 
-    STATIC_ANALYZER_AVAILABLE = True
-except ImportError as e:
-    STATIC_ANALYZER_AVAILABLE = False
-    IMPORT_ERROR = str(e)
-
-pytestmark = [
-    pytest.mark.unit,
-    pytest.mark.skipif(
-        not STATIC_ANALYZER_AVAILABLE,
-        reason=f"Static analyzer import failed: {IMPORT_ERROR if not STATIC_ANALYZER_AVAILABLE else ''}",
-    ),
-]
+pytestmark = [pytest.mark.unit]
 
 
 class TestAnalysisTypeEnum:

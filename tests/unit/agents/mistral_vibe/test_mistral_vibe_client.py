@@ -8,19 +8,10 @@ paths run without credentials.
 import os
 
 import pytest
+from tests.unit.agents.helpers import VIBE_AVAILABLE
 
-try:
-    from tests.unit.agents.helpers import VIBE_AVAILABLE
-
-    from codomyrmex.agents.core import AgentCapabilities, AgentRequest
-    from codomyrmex.agents.mistral_vibe import MistralVibeClient
-
-    _HAS_AGENTS = True
-except ImportError:
-    _HAS_AGENTS = False
-
-if not _HAS_AGENTS:
-    pytest.skip("agents deps not available", allow_module_level=True)
+from codomyrmex.agents.core import AgentCapabilities, AgentRequest
+from codomyrmex.agents.mistral_vibe import MistralVibeClient
 
 
 class TestMistralVibeClient:

@@ -5,6 +5,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+import yaml
+
 from codomyrmex.documents.config import get_config
 from codomyrmex.documents.exceptions import DocumentReadError, DocumentWriteError
 from codomyrmex.logging_monitoring import get_logger
@@ -33,8 +35,6 @@ def read_yaml(
     encoding = encoding or get_config().default_encoding
 
     try:
-        import yaml
-
         with open(file_path, encoding=encoding) as f:
             data = yaml.safe_load(f)
 
@@ -43,11 +43,6 @@ def read_yaml(
 
         return data
 
-    except ImportError:
-        logger.error("PyYAML not installed. Install with: uv pip install pyyaml")
-        raise DocumentReadError(
-            "PyYAML library not available", file_path=str(file_path)
-        ) from None
     except yaml.YAMLError as e:
         logger.error("Invalid YAML in file %s: %s", file_path, e)
         raise DocumentReadError(f"Invalid YAML: {e!s}", file_path=str(file_path)) from e
@@ -80,8 +75,6 @@ def write_yaml(
     encoding = encoding or get_config().default_encoding
 
     try:
-        import yaml
-
         file_path.parent.mkdir(parents=True, exist_ok=True)
         with open(file_path, "w", encoding=encoding) as f:
             yaml.dump(
@@ -89,11 +82,6 @@ def write_yaml(
             )
         logger.debug("Wrote YAML to %s", file_path)
 
-    except ImportError:
-        logger.error("PyYAML not installed. Install with: uv pip install pyyaml")
-        raise DocumentWriteError(
-            "PyYAML library not available", file_path=str(file_path)
-        ) from None
     except Exception as e:
         logger.error("Error writing YAML file %s: %s", file_path, e)
         raise DocumentWriteError(

@@ -226,6 +226,8 @@ class PerformanceTestSuite:
 
         process = psutil.Process(os.getpid()) if HAS_PSUTIL else None
 
+        # Reported status is that of the last measured iteration.
+        status = "failed"
         for _ in range(iterations):
             # Measure memory before
             memory_before = (
@@ -410,7 +412,7 @@ def insecure_function(user_input):
     os.system(user_input)
 
 # Hard-coded password
-PASSWORD = "admin123"
+PASSWORD = "admin123"  # pragma: allowlist secret
 """)
 
         def security_test():

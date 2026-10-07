@@ -6,20 +6,11 @@ conversion logic is tested with real data structures.
 """
 
 import pytest
+from tests.unit.agents.helpers import GEMINI_AVAILABLE
 
-try:
-    from tests.unit.agents.helpers import GEMINI_AVAILABLE
-
-    from codomyrmex.agents.core import AgentRequest
-    from codomyrmex.agents.gemini import GeminiClient, GeminiIntegrationAdapter
-    from codomyrmex.agents.generic import AgentOrchestrator
-
-    _HAS_AGENTS = True
-except ImportError:
-    _HAS_AGENTS = False
-
-if not _HAS_AGENTS:
-    pytest.skip("agents deps not available", allow_module_level=True)
+from codomyrmex.agents.core import AgentRequest
+from codomyrmex.agents.gemini import GeminiClient, GeminiIntegrationAdapter
+from codomyrmex.agents.generic import AgentOrchestrator
 
 
 class TestGeminiIntegrationAdapter:

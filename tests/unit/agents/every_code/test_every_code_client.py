@@ -6,19 +6,10 @@ conversion logic is tested with real data structures.
 """
 
 import pytest
+from tests.unit.agents.helpers import EVERY_CODE_AVAILABLE
 
-try:
-    from tests.unit.agents.helpers import EVERY_CODE_AVAILABLE
-
-    from codomyrmex.agents.core import AgentCapabilities, AgentRequest
-    from codomyrmex.agents.every_code import EveryCodeClient
-
-    _HAS_AGENTS = True
-except ImportError:
-    _HAS_AGENTS = False
-
-if not _HAS_AGENTS:
-    pytest.skip("agents deps not available", allow_module_level=True)
+from codomyrmex.agents.core import AgentCapabilities, AgentRequest
+from codomyrmex.agents.every_code import EveryCodeClient
 
 
 class TestEveryCodeClient:

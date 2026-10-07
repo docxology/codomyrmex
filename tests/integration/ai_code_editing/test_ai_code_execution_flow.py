@@ -9,41 +9,24 @@ executes correctly and safely.
 
 import pytest
 
-try:
-    from codomyrmex.coding import ExecutionLimits, execute_code, execute_with_limits
-    from codomyrmex.logging_monitoring import (
-        get_logger,
-        setup_logging,
-    )
-
-    AI_CODE_EDITING_AVAILABLE = True
-except ImportError:
-    AI_CODE_EDITING_AVAILABLE = False
-
-try:
-    from codomyrmex.coding import execute_code
-
-    CODE_EXECUTION_AVAILABLE = True
-except ImportError:
-    CODE_EXECUTION_AVAILABLE = False
+from codomyrmex.coding import ExecutionLimits, execute_code, execute_with_limits
+from codomyrmex.logging_monitoring import (
+    get_logger,
+    setup_logging,
+)
 
 # set up logging for tests
-if setup_logging and callable(setup_logging):
-    try:
-        setup_logging()
-    except Exception:
-        pass  # Logging setup might fail in test environment
+try:
+    setup_logging()
+except Exception:
+    pass  # Logging setup might fail in test environment
 
-logger = get_logger(__name__) if get_logger else None
+logger = get_logger(__name__)
 
 
 class TestAICodeExecutionWorkflow:
     """Integration tests for AI code editing to execution sandbox workflow."""
 
-    @pytest.mark.skipif(
-        not AI_CODE_EDITING_AVAILABLE or not CODE_EXECUTION_AVAILABLE,
-        reason="Required modules not available",
-    )
     def test_simple_function_generation_and_execution(self):
         """Test generating a simple function and executing it successfully."""
         # Step 1: Generate code using AI
@@ -81,10 +64,6 @@ print(f"Factorial of 5 is: {result}")
         assert "Factorial of 5 is: 120" in execution_result["stdout"]
         assert execution_result["execution_time"] > 0
 
-    @pytest.mark.skipif(
-        not AI_CODE_EDITING_AVAILABLE or not CODE_EXECUTION_AVAILABLE,
-        reason="Required modules not available",
-    )
     def test_code_with_input_execution(self):
         """Test generating code that requires input and executing it."""
         # Generated code that reads from stdin
@@ -110,9 +89,6 @@ print(f"Hello, {name}! Welcome to the sandbox.")
         assert execution_result["exit_code"] == 0
         assert "Hello, Alice! Welcome to the sandbox." in execution_result["stdout"]
 
-    @pytest.mark.skipif(
-        not CODE_EXECUTION_AVAILABLE, reason="Code execution sandbox not available"
-    )
     def test_execution_with_resource_limits(self):
         """Test executing code with resource limits."""
         # Code that should complete within limits
@@ -155,9 +131,6 @@ print(f"Sum: {result}")
         assert "execution_time_seconds" in resource_usage
         assert "memory_peak_mb" in resource_usage
 
-    @pytest.mark.skipif(
-        not CODE_EXECUTION_AVAILABLE, reason="Code execution sandbox not available"
-    )
     def test_execution_timeout_handling(self):
         """Test handling of code that exceeds time limits."""
         # Code that will run too long
@@ -184,9 +157,6 @@ print("This should not print")
         assert execution_result["exit_code"] == -1
         assert "timeout" in execution_result["error_message"].lower()
 
-    @pytest.mark.skipif(
-        not CODE_EXECUTION_AVAILABLE, reason="Code execution sandbox not available"
-    )
     def test_security_isolation(self):
         """Test that dangerous code is properly isolated."""
         # Code that tries to access file system (should be blocked by Docker)
@@ -212,10 +182,6 @@ except Exception as e:
         assert "status" in execution_result
         # Should not crash the test environment
 
-    @pytest.mark.skipif(
-        not AI_CODE_EDITING_AVAILABLE or not CODE_EXECUTION_AVAILABLE,
-        reason="Required modules not available",
-    )
     def test_error_handling_workflow(self):
         """Test the complete workflow when errors occur."""
         # Code with syntax error
@@ -240,9 +206,6 @@ def broken_function(
             or "syntax" in execution_result["stderr"].lower()
         )
 
-    @pytest.mark.skipif(
-        not CODE_EXECUTION_AVAILABLE, reason="Code execution sandbox not available"
-    )
     def test_multiple_languages_integration(self):
         """Test that different language outputs are handled correctly."""
         test_cases = [

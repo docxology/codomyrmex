@@ -146,12 +146,12 @@ class TestGlobalStateIsolation:
         reg = MCPToolRegistry()
         reg.register("mutator", schema={}, handler=_mutates_global)
 
-        for _i in range(5):
-            r = reg.execute(
-                MCPToolCall(tool_name="mutator", arguments={"key": "shared"})
-            )
+        results = [
+            reg.execute(MCPToolCall(tool_name="mutator", arguments={"key": "shared"}))
+            for _i in range(5)
+        ]
 
-        assert r.data["result"]["count"] == 5
+        assert results[-1].data["result"]["count"] == 5
 
     def test_echo_has_no_side_effects(self) -> None:
         """The echo handler produces no side effects."""
