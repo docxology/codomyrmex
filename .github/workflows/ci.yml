@@ -8,8 +8,9 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  # Superseded PR pushes are cancelled; every main commit gets a full run.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions: {}
 
@@ -21,6 +22,9 @@ env:
   PYTHONIOENCODING: "utf-8"
   # Hypothesis's pytest plugin imports before conftest; conftest cannot set this in time.
   HYPOTHESIS_NO_NPY: "1"
+  # Warnings are errors via pyproject's filterwarnings ("error" first, then
+  # narrow third-party ignores). Do not pass -W error on the command line:
+  # command-line -W filters take precedence and would void those ignores.
 
 jobs:
   lint-and-format:
@@ -200,10 +204,13 @@ jobs:
           if-no-files-found: ignore
 
   coverage-gate:
+    # Single authoritative ubuntu/3.11 run of the whole tests/ tree. The
+    # test-matrix job below covers the remaining OS/Python combinations on
+    # main without re-running this one.
     name: Coverage gate (60%)
     runs-on: ubuntu-latest
     needs: lint-and-format
-    timeout-minutes: 120
+    timeout-minutes: 60
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
@@ -226,15 +233,50 @@ jobs:
         run: |
           mkdir -p output
 
+      - name: Install native integration prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends espeak-ng
+          docker pull python:3.9-slim
+          docker pull bash:5.1
+
+      - name: Cache Hugging Face models
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-models-${{ runner.os }}-whisper-base-v1
+
       - name: Full test suite with coverage floor
         run: |
           uv run pytest tests/ -q --tb=short \
-            -W error \
+            -n auto \
             -m "not performance and not benchmark and not bench" \
+            --durations=50 \
             --cov=src/codomyrmex \
-            --cov-report=term-missing \
-            --cov-report=json:coverage-gate.json \
+            --cov-report=term-missing:skip-covered \
+            --cov-report=xml \
+            --cov-report=json \
+            --junit-xml=junit-unit-ubuntu-latest-3.11.xml \
             --cov-fail-under=60
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-ubuntu-latest-3.11
+          path: |
+            junit-*.xml
+            coverage.xml
+            coverage.json
+          retention-days: 30
+
+      - name: Upload coverage to Codecov
+        if: always()
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: false
+          token: "${{ secrets['CODECOV_TOKEN'] }}"
 
   offline-research:
     name: Offline research and provenance gate
@@ -292,16 +334,21 @@ jobs:
             output/figures/figure_registry.json
 
   test-matrix:
+    # Cross-platform / cross-version confirmation on main. Pull requests rely
+    # on coverage-gate (ubuntu, 3.11), which runs the identical suite.
     name: Full Test Suite
+    if: github.event_name != 'pull_request'
     runs-on: ${{ matrix.os }}
     needs: lint-and-format
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
-        # Slim matrix for PRs: Ubuntu/Python 3.11. Main validates both supported
-        # Unix families across every supported Python version.
-        os: ${{ github.event_name == 'pull_request' && fromJSON('["ubuntu-latest"]') || fromJSON('["ubuntu-latest", "macos-latest"]') }}
-        python-version: ${{ github.event_name == 'pull_request' && fromJSON('["3.11"]') || fromJSON('["3.11", "3.12", "3.13"]') }}
+        os: [ubuntu-latest, macos-latest]
+        python-version: ["3.11", "3.12", "3.13"]
+        exclude:
+          - os: ubuntu-latest
+            python-version: "3.11"
 
     steps:
       - name: Checkout code
@@ -319,63 +366,26 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --locked --group docs --all-extras --dev
+          uv sync --locked --python ${{ matrix.python-version }} --group docs --all-extras --dev
 
       - name: Create output directory
         run: |
           mkdir -p output
 
-      - name: Run unit tests
+      - name: Run test suite
         run: >-
-          uv run pytest tests/unit/ -v --tb=short
-          -W error
-          --cov=src/codomyrmex
-          --cov-report=xml
-          --cov-report=html
-          --cov-report=term-missing
+          uv run pytest tests/ -q --tb=short
+          -n auto
+          -m "not performance and not benchmark and not bench"
           --junit-xml=junit-unit-${{ matrix.os }}-${{ matrix.python-version }}.xml
-          --cov-report=json
-          --cov-fail-under=60
-
-      - name: Run integration tests
-        run: |
-          uv run pytest tests/integration/ -v --tb=short -W error --junit-xml=junit-integration-${{ matrix.os }}-${{ matrix.python-version }}.xml
-
-      - name: Save coverage.json to root
-        shell: bash
-        run: |
-          if [ -f coverage.json ]; then
-            cp coverage.json ${{ github.workspace }}/coverage.json || true
-          fi
-
-      - name: Generate coverage report
-        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
-        shell: bash
-        run: |
-          if [ -f coverage.json ]; then
-            uv run python scripts/reports/generate_coverage_report.py || true
-          fi
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-results-${{ matrix.os }}-${{ matrix.python-version }}
-          path: |
-            junit-*.xml
-            coverage.xml
-            coverage.json
-            htmlcov/
+          path: junit-*.xml
           retention-days: 30
-
-      - name: Upload coverage to Codecov
-        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
-        uses: codecov/codecov-action@v5
-        with:
-          files: ./coverage.xml
-          fail_ci_if_error: false
-          verbose: true
-          token: "${{ secrets['CODECOV_TOKEN'] }}"
 
   windows-portability:
     name: Windows Portability
@@ -411,7 +421,6 @@ jobs:
       - name: Run blocking Windows portability contract
         run: >-
           uv run pytest -v --tb=short
-          -W error
           tests/unit/concurrency/test_distributed_lock.py
           tests/unit/coding/sandbox/test_sandbox_isolation.py
           tests/unit/environment_setup/
@@ -433,56 +442,11 @@ jobs:
           path: junit-*.xml
           retention-days: 30
 
-  comprehensive-tests:
-    name: Comprehensive Module Tests
-    runs-on: ubuntu-latest
-    needs: [test-matrix]
-    if: github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'comprehensive-tests')
-    strategy:
-      matrix:
-        test-suite:
-          - "git_operations"
-          - "static_analysis"
-          - "coding"
-          - "environment_setup"
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4.2.2
-        with:
-          fetch-depth: 0
-
-      - name: Install UV
-        uses: astral-sh/setup-uv@v5
-        with:
-          version: ${{ env.UV_VERSION }}
-
-      - name: Set up Python
-        run: uv python install ${{ env.PYTHON_VERSION }}
-
-      - name: Install dependencies
-        run: |
-          uv sync --locked --all-extras --dev
-
-      - name: Create output directory
-        run: |
-          mkdir -p output
-
-      - name: Run comprehensive tests for ${{ matrix.test-suite }}
-        run: |
-          uv run pytest tests/unit/${{ matrix.test-suite }}/ -v --tb=short -W error --junit-xml=junit-comprehensive-${{ matrix.test-suite }}.xml
-
-      - name: Upload comprehensive test results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: comprehensive-test-results-${{ matrix.test-suite }}
-          path: junit-comprehensive-${{ matrix.test-suite }}.xml
-
   build-package:
     name: Build Package
     runs-on: ubuntu-latest
     needs: [test-matrix, windows-portability, security-scan, coverage-gate]
+    if: ${{ !cancelled() && needs.coverage-gate.result == 'success' && needs.windows-portability.result == 'success' && needs.security-scan.result == 'success' && (needs.test-matrix.result == 'success' || needs.test-matrix.result == 'skipped') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
@@ -551,7 +515,7 @@ jobs:
   test-summary:
     name: Test Results Summary
     runs-on: ubuntu-latest
-    needs: [test-matrix, windows-portability, comprehensive-tests]
+    needs: [test-matrix, windows-portability, coverage-gate]
     if: always()
     steps:
       - name: Download all test artifacts
@@ -601,19 +565,19 @@ jobs:
 
       - name: Enforce test job results
         run: |
+          coverage_result="${{ needs.coverage-gate.result }}"
           test_matrix_result="${{ needs.test-matrix.result }}"
           windows_portability_result="${{ needs.windows-portability.result }}"
-          comprehensive_result="${{ needs.comprehensive-tests.result }}"
-          if [[ "$test_matrix_result" != "success" ]]; then
+          if [[ "$coverage_result" != "success" ]]; then
+            echo "Coverage gate result was $coverage_result; failing the summary job."
+            exit 1
+          fi
+          if [[ "$test_matrix_result" != "success" && "$test_matrix_result" != "skipped" ]]; then
             echo "Test matrix result was $test_matrix_result; failing the summary job."
             exit 1
           fi
           if [[ "$windows_portability_result" != "success" ]]; then
             echo "Windows portability result was $windows_portability_result; failing the summary job."
-            exit 1
-          fi
-          if [[ "$comprehensive_result" != "success" && "$comprehensive_result" != "skipped" ]]; then
-            echo "Comprehensive test result was $comprehensive_result; failing the summary job."
             exit 1
           fi
 

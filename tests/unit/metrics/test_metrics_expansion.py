@@ -58,10 +58,10 @@ def test_prometheus_exporter_initialization():
 @requires_statsd_server
 def test_statsd_client_lifecycle():
     """Test StatsDClient lifecycle with a real StatsD server."""
-    client = StatsDClient(host="localhost", port=8125, prefix="test")
-    # These send real UDP packets — the server may or may not be listening
-    client.incr("counter.name")
-    client.gauge("gauge.name", 100)
+    with StatsDClient(host="localhost", port=8125, prefix="test") as client:
+        # These send real UDP packets — the server may or may not be listening
+        client.incr("counter.name")
+        client.gauge("gauge.name", 100)
 
 
 @pytest.mark.unit

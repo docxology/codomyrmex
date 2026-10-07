@@ -35,7 +35,21 @@ def _generate_sine_wave(
     return bio.getvalue()
 
 
+# Markers proving the Whisper weights could not be fetched from the Hugging
+# Face Hub (rate limit, offline runner). Any other model-load failure still
+# fails the test.
+_HUB_UNAVAILABLE_MARKERS = (
+    "HfHubHTTPError",
+    "429 Too Many Requests",
+    "LocalEntryNotFoundError",
+    "cannot find the appropriate snapshot folder",
+    "Max retries exceeded",
+    "ConnectionError",
+)
+
+
 @pytest.mark.asyncio
+@pytest.mark.network
 async def test_audio_transcriber_integration() -> None:
     """Verify that raw bytes seamlessly route through the transcriber pipeline."""
     try:
@@ -52,4 +66,8 @@ async def test_audio_transcriber_integration() -> None:
     except Exception as e:
         if "ProviderNotAvailableError" in type(e).__name__:
             pytest.skip("Audio Provider Unavailable")
+        if type(e).__name__ == "ModelNotLoadedError" and any(
+            marker in str(e) for marker in _HUB_UNAVAILABLE_MARKERS
+        ):
+            pytest.skip(f"Whisper weights unavailable from the Hugging Face Hub: {e}")
         raise

@@ -6,6 +6,7 @@ commit timeline diagrams, file icons, and save-to-file functionality.
 
 import os
 import tempfile
+from pathlib import Path
 
 import pytest
 
@@ -78,7 +79,7 @@ class TestGitBranchDiagram:
         try:
             gen.create_git_branch_diagram(branches, commits, output_path=path)
             assert os.path.exists(path)
-            content = open(path).read()
+            content = Path(path).read_text(encoding="utf-8")
             assert len(content) > 0
         finally:
             os.unlink(path)
