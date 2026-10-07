@@ -38,13 +38,13 @@ def main():
     setup_logging()
     print_info("Running Advanced pattern_matching Workflow...")
 
-    # Import validation
+    # Import validation (pattern_matching now lives in coding.pattern_matching)
     try:
-        import codomyrmex.pattern_matching
+        import codomyrmex.coding.pattern_matching
 
-        print_info("Successfully imported codomyrmex.pattern_matching")
+        print_info("Successfully imported codomyrmex.coding.pattern_matching")
     except ImportError as e:
-        print_info(f"Warning: Could not import codomyrmex.pattern_matching: {e}")
+        print_info(f"Warning: Could not import codomyrmex.coding.pattern_matching: {e}")
         # We don't exit here because we want the script to be 'resilient' for testing purposes
 
     # Advanced logic here

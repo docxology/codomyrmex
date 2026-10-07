@@ -21,17 +21,6 @@ def _run(coro):
     return asyncio.run(coro)
 
 
-def _make_server(code_dir):
-    """Create a fully-configured MCP server (same as run_mcp_server.create_server)."""
-    if str(code_dir) not in sys.path:
-        sys.path.insert(0, str(code_dir))
-
-    # Import here so path is set up
-    from scripts_helper import create_server
-
-    return create_server()
-
-
 def _import_create_server(code_dir):
     """Import create_server from the runner script."""
     if str(code_dir) not in sys.path:

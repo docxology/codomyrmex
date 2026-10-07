@@ -30,9 +30,9 @@ def main() -> int:
     setup_logging()
     print_info("=== LLM Embeddings Demo ===")
     try:
-        from codomyrmex.llm.embeddings import EmbeddingService, MockEmbeddingProvider
+        from codomyrmex.llm.embeddings import EmbeddingService, TestEmbeddingProvider
 
-        provider = MockEmbeddingProvider()
+        provider = TestEmbeddingProvider()
         obj = EmbeddingService(provider=provider)
         print_success(f"EmbeddingService loaded: {obj!r}")
     except ImportError as e:

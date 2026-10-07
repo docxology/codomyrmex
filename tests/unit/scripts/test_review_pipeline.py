@@ -10,6 +10,14 @@ from pathlib import Path
 import pytest
 from tests.support.repo_paths import PACKAGE_ROOT, REPO_ROOT
 
+# ``scripts`` is a package at the repository root; the importlib import mode
+# does not put the root on sys.path (same pattern as
+# tests/unit/model_context_protocol/test_mcp_launcher_security.py).
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from scripts.review.sarif_utils import load_sarif, summarize_sarif
+
 REVIEW_DIR = REPO_ROOT / "scripts" / "review"
 FIXTURES = REPO_ROOT / "tests" / "fixtures" / "review"
 
@@ -53,16 +61,10 @@ def test_sarif_merge_dedupes(tmp_path: Path) -> None:
 
 @pytest.mark.unit
 def test_sarif_utils_summarize() -> None:
-    sys.path.insert(0, str(REVIEW_DIR))
-    try:
-        from sarif_utils import load_sarif, summarize_sarif
-
-        data = load_sarif(FIXTURES / "sample_a.sarif")
-        s = summarize_sarif(data)
-        assert s["total_results"] == 1
-        assert s["by_level"].get("error") == 1
-    finally:
-        sys.path.remove(str(REVIEW_DIR))
+    data = load_sarif(FIXTURES / "sample_a.sarif")
+    s = summarize_sarif(data)
+    assert s["total_results"] == 1
+    assert s["by_level"].get("error") == 1
 
 
 @pytest.mark.unit

@@ -15,9 +15,8 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.agents.exceptions import AgentConfigurationError, AgentError
-
 from codomyrmex.agents import AgentRequest, CodexClient
+from codomyrmex.agents.core.exceptions import AgentConfigurationError, AgentError
 from codomyrmex.utils.cli_helpers import (
     print_error,
     print_info,

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-scripts/audit_rasp.py
+scripts/audits/audit_rasp.py
 
-Thin wrapper around codomyrmex.documentation.audit.audit_rasp.
+Thin wrapper around codomyrmex.documentation.quality.audit.audit_rasp.
 """
 
 import argparse
@@ -10,13 +10,13 @@ import sys
 from pathlib import Path
 
 # Ensure src is in path
-PROJ_ROOT = Path(__file__).resolve().parent.parent
+PROJ_ROOT = Path(__file__).resolve().parent.parent.parent
 SRC_DIR = PROJ_ROOT / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 try:
-    from codomyrmex.documentation.audit import audit_rasp
+    from codomyrmex.documentation.quality.audit import audit_rasp
 except ImportError as e:
     print(f"Error importing codomyrmex module: {e}")
     print("Ensure you are running from the project root or have set PYTHONPATH.")

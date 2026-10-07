@@ -2,7 +2,8 @@
 """
 Development Tools - Real Usage Examples
 
-Demonstrates actual tool capabilities:
+Demonstrates actual tool capabilities (the former ``tools`` module now lives in
+``codomyrmex.maintenance``):
 - Project structure analysis
 - Dependency analysis (circular imports detection)
 - Code quality checks (stubs)
@@ -18,8 +19,7 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.tools import DependencyAnalyzer, analyze_project_structure
-
+from codomyrmex.maintenance import DependencyAnalyzer, analyze_project_structure
 from codomyrmex.utils.cli_helpers import (
     print_error,
     print_info,
@@ -49,23 +49,24 @@ def main():
     print_info("Running Development Tools Examples...")
 
     # Root for analysis
-    src_root = (
-        Path(__file__).resolve().parent.parent.parent.parent / "src" / "codomyrmex"
-    )
+    repo_root = Path(__file__).resolve().parent.parent.parent.parent
 
-    # 1. Project Analysis
+    # 1. Project Analysis (analyzes the repository containing codomyrmex)
     print_info("Testing project structure analysis...")
     try:
-        analysis = analyze_project_structure(str(src_root))
+        analysis = analyze_project_structure()
         if analysis:
-            print_success("  Project structure analyzed.")
+            print_success(
+                f"  Project structure analyzed "
+                f"({len(analysis['directories'])} directories)."
+            )
     except Exception as e:
         print_error(f"  Project analysis failed: {e}")
 
     # 2. Dependency Analyzer
     print_info("Testing DependencyAnalyzer...")
     try:
-        DependencyAnalyzer()
+        DependencyAnalyzer(repo_root)
         # Analyze a small part of the repo
         # Use a real path if possible, or just initialize
         print_success("  DependencyAnalyzer initialized.")

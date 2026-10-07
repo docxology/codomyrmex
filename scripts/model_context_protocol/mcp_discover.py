@@ -2,7 +2,8 @@
 """
 MCP Tool Discovery CLI
 
-Discovers and catalogs MCP tools across the codebase.
+Discovers and catalogs MCP tools across the codebase by scanning each
+``mcp_tools`` module for ``@mcp_tool`` definitions with ``MCPDiscovery``.
 
 Usage:
     python mcp_discover.py                    # Discover all tools
@@ -21,12 +22,17 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
+import json
 
-from codomyrmex.model_context_protocol.discovery import (
-    SpecificationScanner,
-    ToolCatalog,
+from codomyrmex.model_context_protocol.discovery import MCPDiscovery
+from codomyrmex.utils.cli_helpers import (
+    print_info,
+    print_success,
+    print_warning,
+    setup_logging,
 )
-from codomyrmex.utils.cli_helpers import print_info, print_success, setup_logging
+
+_IGNORED_PARTS = {"__pycache__", "tests", "vendor"}
 
 
 def find_spec_files(base_path: Path) -> list:
@@ -34,40 +40,45 @@ def find_spec_files(base_path: Path) -> list:
     return list(base_path.rglob("MCP_TOOL_SPECIFICATION.md"))
 
 
-def discover_all_tools(base_path: Path, module: str | None = None) -> ToolCatalog:
-    """Discover all tools from specs and modules."""
-    catalog = ToolCatalog()
-
-    # Find and parse spec files
-    spec_scanner = SpecificationScanner()
-
-    if module:
-        spec_path = (
-            base_path / "src" / "codomyrmex" / module / "MCP_TOOL_SPECIFICATION.md"
-        )
-        if spec_path.exists():
-            for tool in spec_scanner.scan_spec_file(spec_path):
-                catalog.add(tool)
-    else:
-        for spec_file in find_spec_files(base_path / "src"):
-            for tool in spec_scanner.scan_spec_file(spec_file):
-                catalog.add(tool)
-
-    return catalog
+def find_mcp_tool_modules(base_path: Path, module: str | None = None) -> list[str]:
+    """Return dotted names of ``mcp_tools`` modules under src/codomyrmex."""
+    package_root = base_path / "src" / "codomyrmex"
+    search_root = package_root / module if module else package_root
+    modules = []
+    for path in search_root.rglob("mcp_tools.py"):
+        parts = path.relative_to(package_root).with_suffix("").parts
+        if _IGNORED_PARTS.isdisjoint(parts):
+            modules.append("codomyrmex." + ".".join(parts))
+    return sorted(modules)
 
 
-def print_catalog(catalog: ToolCatalog) -> None:
-    """Print catalog in readable format."""
-    tools = catalog.list_all()
+def discover_all_tools(base_path: Path, module: str | None = None) -> MCPDiscovery:
+    """Discover all ``@mcp_tool`` tools (optionally within one module)."""
+    discovery = MCPDiscovery()
+    failed = []
+    for module_name in find_mcp_tool_modules(base_path, module):
+        failed.extend(discovery.scan_module(module_name).failed_modules)
+    for failure in failed:
+        print_warning(f"Could not scan {failure.module}: {failure.error}")
+    return discovery
+
+
+def _source(module_path: str) -> str:
+    """Top-level codomyrmex module that defines a tool."""
+    parts = module_path.split(".")
+    return parts[1] if len(parts) > 1 else module_path
+
+
+def print_catalog(discovery: MCPDiscovery) -> None:
+    """Print discovered tools in readable format."""
+    tools = discovery.list_tools()
 
     print_info(f"Discovered {len(tools)} MCP tools")
 
-    # Group by source
+    # Group by source module
     by_source = {}
     for tool in tools:
-        if tool.source not in by_source:
-            by_source[tool.source] = []
-        by_source[tool.source].append(tool)
+        by_source.setdefault(_source(tool.module_path), []).append(tool)
 
     for source, source_tools in sorted(by_source.items()):
         print(f"📂 {source.upper()} ({len(source_tools)} tools)")
@@ -88,9 +99,6 @@ def main() -> int:
     parser.add_argument("--module", "-m", help="Specific module to scan")
     parser.add_argument("--export", "-e", help="Export catalog to JSON file")
     parser.add_argument(
-        "--specs-only", action="store_true", help="Only scan specification files"
-    )
-    parser.add_argument(
         "--list-specs",
         action="store_true",
         help="List all MCP_TOOL_SPECIFICATION.md files",
@@ -108,14 +116,15 @@ def main() -> int:
         return 0
 
     # Discover tools
-    catalog = discover_all_tools(project_root, args.module)
+    discovery = discover_all_tools(project_root, args.module)
 
     if args.export:
         output_path = Path(args.export)
-        output_path.write_text(catalog.to_json())
-        print_success(f"Exported {len(catalog.list_all())} tools to {args.export}")
+        schemas = [tool.to_mcp_schema() for tool in discovery.list_tools()]
+        output_path.write_text(json.dumps(schemas, indent=2, default=str))
+        print_success(f"Exported {len(schemas)} tools to {args.export}")
     else:
-        print_catalog(catalog)
+        print_catalog(discovery)
 
     return 0
 

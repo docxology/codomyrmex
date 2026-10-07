@@ -38,13 +38,13 @@ def main():
     setup_logging()
     print_info("Running Advanced tools Workflow...")
 
-    # Import validation
+    # Import validation (tools now lives in maintenance)
     try:
-        import codomyrmex.tools
+        import codomyrmex.maintenance
 
-        print_info("Successfully imported codomyrmex.tools")
+        print_info("Successfully imported codomyrmex.maintenance")
     except ImportError as e:
-        print_info(f"Warning: Could not import codomyrmex.tools: {e}")
+        print_info(f"Warning: Could not import codomyrmex.maintenance: {e}")
         # We don't exit here because we want the script to be 'resilient' for testing purposes
 
     # Advanced logic here

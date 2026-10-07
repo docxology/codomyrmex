@@ -18,8 +18,7 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.metrics import get_metrics
-
+from codomyrmex.telemetry.metrics import get_metrics
 from codomyrmex.utils.cli_helpers import print_info, print_success, setup_logging
 
 

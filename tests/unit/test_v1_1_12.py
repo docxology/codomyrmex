@@ -257,9 +257,13 @@ class TestLiveFeed:
 
 import sys
 
-sys.path.insert(0, str(REPO_ROOT / "scripts" / "maintenance"))
+# ``scripts`` is a package at the repository root; the importlib import mode
+# does not put the root on sys.path (same pattern as
+# tests/unit/model_context_protocol/test_mcp_launcher_security.py).
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
-from release_audit import AuditCheck, ReleaseAuditor
+from scripts.maintenance.release_audit import AuditCheck, ReleaseAuditor
 
 
 class TestReleaseAuditor:

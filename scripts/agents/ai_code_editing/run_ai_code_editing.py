@@ -30,7 +30,7 @@ def main() -> int:
     print_info("AI Code Editing — probing CodeEditor...")
 
     try:
-        from codomyrmex.agents.ai_code_editing import CodeEditor
+        from codomyrmex.agents.ai_code_editing.code_editor import CodeEditor
     except ImportError as e:
         print_error(f"Import failed: {e}")
         return 1

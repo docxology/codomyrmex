@@ -38,13 +38,13 @@ def main():
     setup_logging()
     print_info("Running Advanced metrics Workflow...")
 
-    # Import validation
+    # Import validation (metrics now lives in telemetry.metrics)
     try:
-        import codomyrmex.metrics
+        import codomyrmex.telemetry.metrics
 
-        print_info("Successfully imported codomyrmex.metrics")
+        print_info("Successfully imported codomyrmex.telemetry.metrics")
     except ImportError as e:
-        print_info(f"Warning: Could not import codomyrmex.metrics: {e}")
+        print_info(f"Warning: Could not import codomyrmex.telemetry.metrics: {e}")
         # We don't exit here because we want the script to be 'resilient' for testing purposes
 
     # Advanced logic here
