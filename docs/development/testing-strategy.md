@@ -39,7 +39,7 @@ graph TB
 ```python
 # Example: Testing data visualization functions (ACTUAL IMPLEMENTATION)
 import pytest
-from codomyrmex.data_visualization.line_plot import create_line_plot
+from codomyrmex.data_visualization import create_line_plot
 import matplotlib
 matplotlib.use('Agg')  # Non-interactive backend for testing
 from pathlib import Path
@@ -82,9 +82,14 @@ def test_create_line_plot_basic():
 # Example: Static Analysis integration (ACTUAL IMPLEMENTATION)
 def test_static_analysis_real():
     """Test static analysis with real Pyrefly integration."""
-    from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis, parse_pyrefly_output
+    from codomyrmex.coding.static_analysis import check_pyrefly_available, run_pyrefly
     import tempfile
     from pathlib import Path
+
+    import pytest
+
+    if not check_pyrefly_available():
+        pytest.skip("pyrefly not installed")
 
     # Create real test file
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -100,16 +105,16 @@ def calculate_total(items):
 # result = undefined_var + 1
 """)
 
-        # Test real Pyrefly output parsing
-        pyrefly_output = f"{test_file}:8:10: error: Undefined name 'undefined_var'"
-        issues = parse_pyrefly_output(pyrefly_output, temp_dir)
+        # Run real Pyrefly on the file
+        result = run_pyrefly(str(test_file))
 
-        # Real assertions
-        assert len(issues) >= 0  # May be 0 if no real issues
-        if issues:
-            assert issues[0]["file_path"] == "test_code.py"
-            assert issues[0]["line_number"] == 8
-            assert "undefined_var" in issues[0]["message"]
+        # Real assertions on the returned PyreflyResult dataclass
+        assert result.success
+        assert result.files_analyzed == 1
+        assert isinstance(result.issues, list)  # list[PyreflyIssue]
+        for issue in result.issues:
+            assert issue.severity
+            assert issue.message
 ```
 
 ### **3. End-to-End Tests**
@@ -122,9 +127,9 @@ def test_complete_development_workflow():
     """Test full development cycle with real implemented functions."""
     import tempfile
     from pathlib import Path
-    from codomyrmex.coding.static_analysis.pyrefly_runner import parse_pyrefly_output
-    from codomyrmex.coding.code_executor import execute_code
-    from codomyrmex.data_visualization.line_plot import create_line_plot
+    from codomyrmex.coding.static_analysis import run_pyrefly
+    from codomyrmex.coding.execution import execute_code
+    from codomyrmex.data_visualization import create_line_plot
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         project_path = Path(tmp_dir)
@@ -145,19 +150,18 @@ if __name__ == "__main__":
     main()
 """)
 
-        # 2. Test static analysis parsing (real function)
-        sample_output = f"{test_file}:2:5: info: Function definition"
-        issues = parse_pyrefly_output(sample_output, str(project_path))
-        assert isinstance(issues, list)  # Real function returns list
+        # 2. Test static analysis (real function; success is False without pyrefly)
+        analysis = run_pyrefly(str(project_path))
+        assert isinstance(analysis.issues, list)  # Returns a PyreflyResult
 
-        # 3. Test code execution (real function)
+        # 3. Test code execution (real function; requires Docker)
         execution_result = execute_code(
-            code="print('Testing workflow')",
             language="python",
+            code="print('Testing workflow')",
             timeout=10
         )
-        assert execution_result['success'] == True
-        assert 'Testing workflow' in execution_result['output']
+        assert execution_result['status'] == 'success'
+        assert 'Testing workflow' in execution_result['stdout']
 
         # 4. Test visualization (real function)
         x_data = [1, 2, 3, 4, 5]
@@ -291,6 +295,36 @@ The Zero-Mock Policy distinguishes **two kinds of test interventions**. The haza
 
 **Why this distinction matters:** Environment isolation (`monkeypatch.setenv`) doesn't change the behavior of the code under test — it just controls test-time inputs. Behavior mocking does, and is the actual hazard. See [issue #175](https://github.com/docxology/codomyrmex/issues/175) for the resolution thread.
 
+### Repository guards
+
+These tests run in every test job and fail on regressions rather than relying
+on review:
+
+- `tests/unit/test_zero_mock_policy.py` — the zero-mock ratchet above. Its
+  baselines must equal the current counts (`test_baselines_have_no_slack`), so
+  lower or delete an entry in the same change that removes a use.
+- `tests/unit/test_test_package_names.py` — pytest runs with
+  `--import-mode=importlib`, so a `tests/unit/<name>/__init__.py` package is
+  imported as the top-level module `<name>`. If `<name>` is also a real module
+  (stdlib, installed, or in the repository) the test package replaces it in
+  `sys.modules` and tests silently exercise the wrong code — this hid
+  py-tree-sitter and the `soul` SDK. Directories that collide must not have an
+  `__init__.py`.
+- Tests write only under `tmp_path`. Calling an API with its default output
+  path (for example `./git_analysis/`) from a test pollutes the working tree;
+  pass an explicit path under `tmp_path`.
+
+Type checking is a ratchet too: `[tool.ty.rules]` in `pyproject.toml` makes
+`possibly-unresolved-reference`, `unsupported-base`, `deprecated` and
+`unresolved-import` errors (only optional integrations listed in
+`[tool.ty.analysis] allowed-unresolved-imports` may be missing), and
+`import-linter` enforces the layer contract. Run the same checks locally with:
+
+```bash
+uv run ty check --output-format concise --exclude src/codomyrmex/physical_management/object_manager.py src/ scripts/ tests/
+uv run lint-imports --config pyproject.toml
+```
+
 ## ⚡ Running Tests
 
 ### **Local Development**
@@ -360,9 +394,8 @@ def test_environment_validation():
     from codomyrmex.environment_setup.env_checker import (
         is_uv_available,
         is_uv_environment,
-        check_docker_available
     )
-    from codomyrmex.coding.code_executor import check_docker_available
+    from codomyrmex.coding import check_docker_available
 
     # Test real UV availability check
     uv_available = is_uv_available()
@@ -388,28 +421,25 @@ def test_environment_validation():
 # Example: Code execution testing (ACTUAL IMPLEMENTATION - AI not yet implemented)
 def test_code_execution_real():
     """Test real code execution functionality."""
-    from codomyrmex.coding.code_executor import execute_code, validate_language
+    from codomyrmex.coding.execution import execute_code, validate_language
 
     # Test language validation (real function)
     assert validate_language("python") == True
     assert validate_language("javascript") == True
     assert validate_language("nonexistent") == False
 
-    # Test real code execution
+    # Test real code execution (runs in a Docker sandbox)
     result = execute_code(
-        code="def add(a, b):
-    return a + b
-
-print(add(2, 3))",
         language="python",
+        code="def add(a, b):\n    return a + b\n\nprint(add(2, 3))",
         timeout=10
     )
 
     # Real assertions based on actual return structure
-    assert result['success'] == True
-    assert '5' in result['output']  # Result of add(2, 3)
+    assert result['status'] == 'success'
+    assert result['exit_code'] == 0
+    assert '5' in result['stdout']  # Result of add(2, 3)
     assert result['execution_time'] > 0
-    assert result['language'] == 'python'
 ```
 
 ### **Integration Modules**

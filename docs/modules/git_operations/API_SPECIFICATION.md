@@ -8,42 +8,52 @@ The git_operations module provides comprehensive Git workflow automation, reposi
 
 ## Core API
 
+The command functions are re-exported from `codomyrmex.git_operations`. Each takes an optional `repository_path` (default: the current directory) and returns `True`/`False` (or the requested value) instead of raising on git failures.
+
 ### Repository Operations
 
 ```python
-from codomyrmex.git_operations import GitRepository, clone_repository, init_repository
+from codomyrmex.git_operations import (
+    clone_repository,
+    initialize_git_repository,
+    is_git_repository,
+)
 
 # Clone a repository
-repo = clone_repository(
+cloned = clone_repository(
     url="https://github.com/example/repo.git",
-    path="/path/to/local",
+    destination="/path/to/local",
     branch="main"
 )
 
 # Initialize a new repository
-repo = init_repository(path="/path/to/new/repo")
+initialize_git_repository("/path/to/new/repo", initial_commit=True)
 
-# Open existing repository
-repo = GitRepository("/path/to/existing/repo")
+# Check an existing repository
+is_repo = is_git_repository("/path/to/existing/repo")
 ```
 
 ### Commit Operations
 
 ```python
-from codomyrmex.git_operations import commit, stage_files, get_diff
+from codomyrmex.git_operations import add_files, commit_changes, get_diff
+
+repo = "/path/to/local"
 
 # Stage files
-stage_files(repo, ["file1.py", "file2.py"])
+add_files(["file1.py", "file2.py"], repository_path=repo)
 
-# Create commit
-commit_hash = commit(
-    repo,
-    message="Add new feature",
-    author="Developer <dev@example.com>"
+# Create commit (returns the commit SHA, or None on failure)
+commit_hash = commit_changes(
+    "Add new feature",
+    repository_path=repo,
+    author_name="Developer",
+    author_email="dev@example.com",
+    stage_all=False
 )
 
-# Get diff
-diff = get_diff(repo, from_ref="HEAD~1", to_ref="HEAD")
+# Get diff against a ref (cached=True diffs the staging area)
+diff = get_diff("HEAD~1", repository_path=repo)
 ```
 
 ### Branch Operations
@@ -51,52 +61,54 @@ diff = get_diff(repo, from_ref="HEAD~1", to_ref="HEAD")
 ```python
 from codomyrmex.git_operations import (
     create_branch,
-    checkout_branch,
+    switch_branch,
     merge_branch,
     list_branches,
     delete_branch
 )
 
-# Create and checkout branch
-create_branch(repo, "feature/new-feature")
-checkout_branch(repo, "feature/new-feature")
+# Create (and check out) a branch, then switch back
+create_branch("feature/new-feature", repository_path=repo)
+switch_branch("main", repository_path=repo)
 
-# List branches
-branches = list_branches(repo, remote=True)
+# List local branches
+branches = list_branches(repository_path=repo)
 
-# Merge branch
-merge_branch(repo, source="feature/new-feature", target="main")
+# Merge branch into main
+merge_branch("feature/new-feature", target_branch="main", repository_path=repo)
+
+# Delete the merged branch
+delete_branch("feature/new-feature", repository_path=repo)
 ```
 
 ### Remote Operations
 
 ```python
-from codomyrmex.git_operations import push, pull, fetch, add_remote
+from codomyrmex.git_operations import add_remote, fetch_changes, pull_changes, push_changes
 
 # Add remote
-add_remote(repo, name="upstream", url="https://github.com/upstream/repo.git")
+add_remote("upstream", "https://github.com/upstream/repo.git", repository_path=repo)
 
 # Fetch updates
-fetch(repo, remote="origin")
+fetch_changes(remote="origin", repository_path=repo)
 
 # Pull changes
-pull(repo, remote="origin", branch="main")
+pull_changes(remote="origin", branch="main", repository_path=repo)
 
 # Push changes
-push(repo, remote="origin", branch="feature-branch")
+push_changes(remote="origin", branch="feature-branch", repository_path=repo)
 ```
 
 ## Error Handling
 
-```python
-from codomyrmex.exceptions import GitOperationError, RepositoryError
+The command functions log git failures and return `False` (or `None`/an empty value), so check return values. `GitOperationError` and `RepositoryError` in `codomyrmex.exceptions` are available for callers that want to raise:
 
-try:
-    repo = clone_repository(url, path)
-except GitOperationError as e:
-    print(f"Git command failed: {e.context.get('git_command')}")
-except RepositoryError as e:
-    print(f"Repository error: {e}")
+```python
+from codomyrmex.exceptions import GitOperationError
+from codomyrmex.git_operations import clone_repository
+
+if not clone_repository(url, path):
+    raise GitOperationError("Clone failed", git_command=f"git clone {url} {path}")
 ```
 
 ## Configuration

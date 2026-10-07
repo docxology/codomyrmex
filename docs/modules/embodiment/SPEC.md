@@ -18,10 +18,12 @@ agent workflows that need simulated telemetry or actuator behavior.
 ## Interface Contracts
 
 ```python
-from codomyrmex.embodiment import EmbodimentBridge, SimulatedSensor, Transform3D
+from codomyrmex.embodiment import EmbodimentBridge
+from codomyrmex.embodiment.sensors import SimulatedSensor
+from codomyrmex.embodiment.transformation import Transform3D
 
-sensor = SimulatedSensor("temperature", value=21.5)
-reading = sensor.read()
+sensor = SimulatedSensor("temperature", default_value=21.5)
+reading = sensor.read()  # SensorData(data={"value": 21.5}, ...)
 
 bridge = EmbodimentBridge()
 transform = Transform3D.identity()

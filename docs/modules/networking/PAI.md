@@ -13,7 +13,8 @@ The Networking module provides a robust, fault-tolerant communication layer for 
 Wrapper around `requests` with built-in retry logic for 429/5xx errors and timeout management.
 
 ```python
-from codomyrmex.networking import get_http_client, NetworkingError
+from codomyrmex.networking import get_http_client
+from codomyrmex.networking.http_client import NetworkingError
 
 client = get_http_client()
 
@@ -59,7 +60,7 @@ from codomyrmex.networking import SSHClient
 with SSHClient(hostname="remote.host", username="admin") as ssh:
     # Execute commands
     exit_code, stdout, stderr = ssh.execute_command("ls -la /var/log")
-    
+
     # SFTP operations
     sftp = ssh.get_sftp()
     sftp.put("local_file.txt", "remote_file.txt")
@@ -86,7 +87,7 @@ response = client.receive()
 ## Key Exports
 
 | Category | Exports | Purpose |
-|----------|---------|---------|
+| --- | --- | --- |
 | **HTTP** | `HTTPClient`, `Response`, `get_http_client` | REST API interactions with resilience |
 | **Real-time** | `WebSocketClient` | Persistent, event-driven streaming |
 | **Remote Access** | `SSHClient` | Secure shell command execution & file transfer |
@@ -96,7 +97,7 @@ response = client.receive()
 ## PAI Algorithm Phase Mapping
 
 | Phase | Networking Contribution |
-|-------|-------------------------|
+| --- | --- |
 | **OBSERVE** | `PortScanner`, `HTTPClient.get` — Discover services and fetch state |
 | **CONNECT** | `WebSocketClient.connect`, `SSHClient.connect` — Establish persistent links |
 | **EXECUTE** | `HTTPClient.post`, `SSHClient.execute_command` — Trigger remote actions |

@@ -11,6 +11,7 @@ This document specifies the Model Context Protocol (MCP) tools provided by the `
 **Description**: [Tool description]
 
 **Parameters**:
+
 ```json
 {
   "param1": {
@@ -30,6 +31,7 @@ This document specifies the Model Context Protocol (MCP) tools provided by the `
 **Returns**: Return value description
 
 **Example**:
+
 ```json
 {
   "tool": "tool_name",
@@ -42,12 +44,13 @@ This document specifies the Model Context Protocol (MCP) tools provided by the `
 
 ## Tool Registration
 
-Tools are automatically registered when the module is imported:
+Tools are defined with the `@mcp_tool` decorator in `mcp_tools.py` and are auto-discovered by the PAI MCP bridge; no manual registration call is needed. The decorated functions can also be called directly:
 
 ```python
-from codomyrmex.system_discovery import register_tools
+from codomyrmex.system_discovery.mcp_tools import health_check, list_modules
 
-register_tools()
+modules = list_modules()
+status = health_check()
 ```
 
 ## Related Documentation
@@ -71,7 +74,7 @@ Discovers and catalogs system capabilities, installed modules, and available res
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--- | :--- | :--- | :--- | :--- |
 | `scan_depth` | `string` | No | Depth of discovery scan (basic, detailed, full) | `"detailed"` |
 | `include_modules` | `boolean` | No | Whether to scan individual modules for capabilities | `true` |
 | `include_resources` | `boolean` | No | Whether to scan system resources | `true` |
@@ -112,7 +115,7 @@ Retrieves system status including health metrics, active processes, and system u
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--- | :--- | :--- | :--- | :--- |
 | `include_health` | `boolean` | No | Include system health metrics | `true` |
 | `include_processes` | `boolean` | No | Include running process information | `false` |
 | `include_modules` | `boolean` | No | Include module status information | `true` |
@@ -149,7 +152,7 @@ Scans specific modules for their capabilities, exported functions, and integrati
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--- | :--- | :--- | :--- | :--- |
 | `module_name` | `string` | Yes | Name of the module to scan | `"ai_code_editing"` |
 | `include_functions` | `boolean` | No | Include exported function signatures | `true` |
 | `include_dependencies` | `boolean` | No | Include module dependencies | `true` |
@@ -179,3 +182,5 @@ Scans specific modules for their capabilities, exported functions, and integrati
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
+
+<!-- markdownlint-configure-file { "MD024": { "siblings_only": true } } -->

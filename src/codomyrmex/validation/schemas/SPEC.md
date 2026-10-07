@@ -2,30 +2,34 @@
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-**Module**: `codomyrmex.validation.schemas`  
+**Module**: `codomyrmex.validation.schemas`\
 **Last Updated**: 2026-01-29
 
 ## 1. Purpose
 
-Schema registry, versioning, and evolution management
+Shared Foundation-layer type library: plain dataclasses and enums (results, tasks,
+code-analysis records, infrastructure records) that modules exchange instead of
+defining per-module equivalents.
 
 ## 2. Architecture
 
 ### 2.1 Components
 
-```
+```text
 schemas/
 ├── __init__.py          # Module exports
 ├── README.md            # Documentation
 ├── AGENTS.md            # Agent guidelines
 ├── SPEC.md              # This file
 ├── PAI.md               # Personal AI context
-└── core.py              # Core implementation
+├── core.py              # Result, Task, Config, ModuleInfo, ToolDefinition, Notification
+├── code.py              # CodeEntity, AnalysisResult, SecurityFinding, TestResult
+└── infra.py             # Deployment, Pipeline, Resource, BuildArtifact, Metric, ...
 ```
 
 ### 2.2 Dependencies
 
-- Python 3.10+
+- Python 3.10+ standard library only (`dataclasses`, `enum`, `typing`)
 - Parent module: `validation`
 
 ## 3. Interfaces
@@ -33,44 +37,54 @@ schemas/
 ### 3.1 Public API
 
 ```python
-from codomyrmex.validation.schemas import SchemaType
-from codomyrmex.validation.schemas import ValidationError
-from codomyrmex.validation.schemas import ValidationResult
-from codomyrmex.validation.schemas import FieldSchema
-from codomyrmex.validation.schemas import Constraint
-from codomyrmex.validation.schemas import TypeConstraint
-from codomyrmex.validation.schemas import MinLengthConstraint
-from codomyrmex.validation.schemas import MaxLengthConstraint
-from codomyrmex.validation.schemas import MinValueConstraint
-from codomyrmex.validation.schemas import MaxValueConstraint
+# Core types (core.py)
+from codomyrmex.validation.schemas import (
+    Config, ModuleInfo, Notification, Result, ResultStatus, Task, TaskStatus, ToolDefinition,
+)
+
+# Code types (code.py)
+from codomyrmex.validation.schemas import (
+    AnalysisResult, AnalysisSeverity, CodeEntity, CodeEntityType,
+    SecurityFinding, SecuritySeverity, TestResult, TestStatus,
+)
+
+# Infrastructure types (infra.py)
+from codomyrmex.validation.schemas import (
+    BuildArtifact, Credential, Deployment, DeploymentStatus, Metric, MetricType,
+    Permission, Pipeline, PipelineStatus, Resource, WorkflowStep,
+)
+
+ok = Result.success(data={"files": 3})
+failed = Result.failure("lint failed", errors=["E501 line too long"])
+assert ok.ok and not failed.ok
+assert Result.from_dict(ok.to_dict()).status is ResultStatus.SUCCESS
 ```
 
 ### 3.2 Configuration
 
-Environment variables:
-- `CODOMYRMEX_*`: Configuration options
+None. The types hold data only and read no environment variables.
 
 ## 4. Implementation Notes
 
 ### 4.1 Design Decisions
 
-1. **Constraint-first design**: Validation constraints (TypeConstraint, MinLengthConstraint, etc.) are composable objects, not hard-coded logic — enabling dynamic schema construction at runtime.
+1. **Plain data types**: Every type is a `dataclass` or `Enum` with `to_dict()` (and, where needed, `from_dict()`) helpers and no third-party dependencies, so any layer can import it without creating upward dependencies.
 
 ### 4.2 Limitations
 
-- No JSON Schema draft 7/2020 support — uses an internal constraint model, not JSON Schema standard.
-- Schema evolution (migrations) is not automatically applied; callers must manage version transitions.
+- No runtime validation: field types and value ranges are not enforced, and there is no constraint or JSON Schema model.
+- No schema versioning or migration; callers must manage changes to these types.
 
 ## 5. Testing
 
 ```bash
 # Run tests for this module
-pytest tests/validation_schemas/
+uv run pytest tests/unit/schemas/test_schemas.py tests/unit/validation/test_infra_schemas.py tests/unit/validation/test_hypothesis_schemas.py
 ```
 
 ## 6. Future Considerations
 
-- JSON Schema draft 7/2020-12 support: add an adapter that maps the existing constraint model to standard JSON Schema, enabling interoperability with external validators and schema registries.
+- JSON Schema draft 7/2020-12 support: derive standard JSON Schema from these dataclasses, enabling interoperability with external validators and schema registries.
 - Schema versioning and migration: track schema version history and provide migration helpers that transform data conforming to an older schema version into the current schema, reducing manual upgrade work.
 
 ## Navigation

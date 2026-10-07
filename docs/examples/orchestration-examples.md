@@ -1,12 +1,13 @@
 # Orchestration Examples Guide
 
-> **Status: stale (2026-05).** Every Python snippet on this page imports from `codomyrmex.project_orchestration` and references `scripts/project_orchestration/examples.py`. That module was renamed to `codomyrmex.orchestrator` (live at `src/codomyrmex/orchestrator/__init__.py`) and the helper functions `get_orchestration_engine`, `get_workflow_manager`, `get_task_orchestrator`, and `get_resource_manager` are no longer part of the public API. The `scripts/project_orchestration/` directory does not exist. For current usage see `src/codomyrmex/orchestrator/README.md`, `API_SPECIFICATION.md`, and `src/codomyrmex/examples/agent_orchestration_demo.py`. The rest of this page is preserved for historical reference until the orchestration-demo set is rebuilt against the new API.
+> **Status: partially stale.** The former `codomyrmex.project_orchestration` package now lives at `codomyrmex.logistics.orchestration.project` (`get_orchestration_engine`, `get_workflow_manager`, `get_task_orchestrator`, `get_resource_manager`, `WorkflowStep`, `Task`, …); the Python snippets in the later sections use that API. Examples 1-4 refer to `scripts/project_orchestration/examples.py`, which no longer exists; see `scripts/logistics/examples/` and the [Task Orchestration Guide](../project_orchestration/task-orchestration-guide.md) instead. Script-runner orchestration lives separately in `codomyrmex.orchestrator`.
 
 Documentation for orchestration examples demonstrating task, project, and workflow orchestration with complete configuration files.
 
 ## Overview
 
 Orchestration examples demonstrate the complete orchestration system including:
+
 - Task orchestration with dependencies
 - Project lifecycle management
 - Workflow execution and coordination
@@ -20,6 +21,7 @@ Orchestration examples demonstrate the complete orchestration system including:
 **Purpose**: Comprehensive demonstration of all orchestration capabilities.
 
 **Examples Included**:
+
 1. Basic workflow creation and execution
 2. Project creation and management
 3. Task orchestration with dependencies
@@ -33,12 +35,14 @@ Orchestration examples demonstrate the complete orchestration system including:
 **Configuration File**: See `config/examples/workflow-basic.json` (created below)
 
 **Execution**:
+
 ```python
 python scripts/project_orchestration/examples.py
 # Select option 1 or run specific function
 ```
 
 **Expected Output**:
+
 - Workflow created successfully
 - Workflow executed
 - Step results available
@@ -51,12 +55,14 @@ python scripts/project_orchestration/examples.py
 **Configuration**: Uses existing project templates
 
 **Execution**:
+
 ```python
 from scripts.project_orchestration.examples import example_2_project_management
 example_2_project_management()
 ```
 
 **Expected Output**:
+
 - Project created from template
 - Directory structure created
 - Documentation generated
@@ -69,12 +75,14 @@ example_2_project_management()
 **Configuration**: See task configuration below
 
 **Execution**:
+
 ```python
 from scripts.project_orchestration.examples import example_3_task_orchestration
 example_3_task_orchestration()
 ```
 
 **Expected Output**:
+
 - Tasks created with dependencies
 - Resources allocated
 - Tasks executed in order
@@ -87,12 +95,14 @@ example_3_task_orchestration()
 **Configuration**: Uses `resources.json`
 
 **Execution**:
+
 ```python
 from scripts.project_orchestration.examples import example_4_resource_management
 example_4_resource_management()
 ```
 
 **Expected Output**:
+
 - Resources listed
 - Resources allocated
 - Usage statistics available
@@ -111,7 +121,7 @@ Create `config/examples/workflow-basic.json`:
     {
       "name": "check_env",
       "module": "environment_setup",
-      "action": "check_environment",
+      "action": "validate_environment",
       "parameters": {},
       "dependencies": [],
       "timeout": 60,
@@ -119,7 +129,7 @@ Create `config/examples/workflow-basic.json`:
     },
     {
       "name": "analyze",
-      "module": "static_analysis",
+      "module": "coding.static_analysis",
       "action": "analyze_code_quality",
       "parameters": {"path": "."},
       "dependencies": ["check_env"],
@@ -141,13 +151,13 @@ Create `config/examples/workflow-with-dependencies.json`:
     {
       "name": "setup",
       "module": "environment_setup",
-      "action": "check_environment",
+      "action": "validate_environment",
       "parameters": {},
       "dependencies": []
     },
     {
       "name": "analyze_code",
-      "module": "static_analysis",
+      "module": "coding.static_analysis",
       "action": "analyze_code_quality",
       "parameters": {"path": "."},
       "dependencies": ["setup"]
@@ -170,31 +180,31 @@ Create `config/examples/workflow-with-dependencies.json`:
 }
 ```
 
+Each step calls `codomyrmex.<module>.<action>(**parameters)` once its dependencies have completed. `agents.generate_code_insights` is a placeholder and `{{...}}` placeholders are passed through verbatim, so as written `ai_insights` fails, `visualize` is failed without running, and the workflow reports `failed`. Register implementations with `TaskOrchestrator.register_action(module, action, func)` to make such steps runnable.
+
 ## Complete Orchestration Example
 
 ### Creating and Executing a Complete Workflow
 
 ```python
-from codomyrmex.project_orchestration import (
-    get_orchestration_engine,
+from codomyrmex.logistics.orchestration.project import (
     get_workflow_manager,
     WorkflowStep
 )
-import asyncio
 
-async def complete_orchestration_example():
+def complete_orchestration_example():
     # 1. Create workflow
     wf_manager = get_workflow_manager()
-    
+
     steps = [
         WorkflowStep(
             name="setup",
             module="environment_setup",
-            action="check_environment"
+            action="validate_environment"
         ),
         WorkflowStep(
             name="analyze",
-            module="static_analysis",
+            module="coding.static_analysis",
             action="analyze_code_quality",
             parameters={"path": "."},
             dependencies=["setup"]
@@ -203,24 +213,22 @@ async def complete_orchestration_example():
             name="visualize",
             module="data_visualization",
             action="create_bar_chart",
-            parameters={"data": "{{analyze.output}}"},
+            parameters={"categories": ["errors", "warnings"], "values": [0, 0]},
             dependencies=["analyze"]
         )
     ]
-    
-    wf_manager.create_workflow("complete_workflow", steps)
-    
-    # 2. Execute workflow
-    engine = get_orchestration_engine()
-    result = engine.execute_workflow("complete_workflow")
-    
-    # 3. Review results
-    if result['success']:
-        print(f"Workflow completed: {result['steps_executed']} steps")
-    else:
-        print(f"Workflow failed: {result.get('error')}")
 
-asyncio.run(complete_orchestration_example())
+    wf_manager.create_workflow("complete_workflow", steps)
+
+    # 2. Execute workflow: steps run in dependency order; the call returns when all finished
+    execution = wf_manager.execute_workflow("complete_workflow")
+
+    # 3. Review results
+    print(f"Workflow {execution.execution_id}: {execution.status.value}")
+    for step_name, step in execution.step_results.items():
+        print(f"{step_name}: {step['status']} {step['error'] or ''}")
+
+complete_orchestration_example()
 ```
 
 ## Project Creation Example
@@ -228,29 +236,37 @@ asyncio.run(complete_orchestration_example())
 ### Creating a Project and Executing Workflow
 
 ```python
-from codomyrmex.project_orchestration import get_orchestration_engine
+from codomyrmex.logistics.orchestration.project import (
+    ProjectType,
+    get_orchestration_engine,
+    get_project_manager,
+)
 
-engine = get_orchestration_engine()
-
-# Create project and execute workflow
-result = engine.create_project_from_workflow(
-    project_name="analysis_project",
-    workflow_name="ai-analysis",
-    template_name="ai_analysis",
+# Create project
+pm = get_project_manager()
+project = pm.create_project(
+    name="analysis_project",
+    type=ProjectType.AI_ANALYSIS,
     description="AI analysis project"
 )
 
-if result['success']:
-    print("Project created and workflow executed")
-    print(f"Results: {result['workflow_result']}")
+# Execute a registered workflow for it; the run is recorded in project.metrics
+if project:
+    result = get_orchestration_engine().execute_project_workflow(
+        project.name, "complete_workflow"
+    )
+    print(f"Project created; workflow {result['execution_id']} is {result['status']}")
+    print(f"Workflow runs: {project.metrics['workflow_executions']}")
 ```
+
+Keyword arguments to `execute_project_workflow` are merged into every step's parameters, so pass only parameters that every step accepts.
 
 ## Task Orchestration Example
 
 ### Complete Task Workflow
 
 ```python
-from codomyrmex.project_orchestration import (
+from codomyrmex.logistics.orchestration.project import (
     get_task_orchestrator,
     Task,
     TaskPriority,
@@ -259,35 +275,38 @@ from codomyrmex.project_orchestration import (
 )
 
 orchestrator = get_task_orchestrator()
-orchestrator.start_execution()
+orchestrator.start_processing()
 
 # Create task chain
-task1 = orchestrator.create_task(
+task1 = Task(
     name="setup",
     module="environment_setup",
-    action="check_environment",
+    action="validate_environment",
     priority=TaskPriority.HIGH
 )
 
-task2 = orchestrator.create_task(
+task2 = Task(
     name="analyze",
-    module="static_analysis",
+    module="coding.static_analysis",
     action="analyze_code_quality",
     parameters={"path": "."},
     dependencies=[task1.id],
     priority=TaskPriority.NORMAL,
     resources=[
-        TaskResource(type=ResourceType.CPU, identifier="system_cpu", mode="read")
+        TaskResource(resource_type=ResourceType.COMPUTE.value, amount=1.0, resource_id="sys-compute")
     ]
 )
 
-# Wait for completion
-completed = orchestrator.wait_for_completion(timeout=600)
+orchestrator.submit_task(task1)
+orchestrator.submit_task(task2)
 
-if completed:
+# Wait for both tasks; task2 holds 1.0 of sys-compute only while it runs
+if orchestrator.wait_for_tasks([task1.id, task2.id], timeout=600):
     result = orchestrator.get_task_result(task2.id)
-    if result and result.success:
-        print(f"Analysis completed: {result.data}")
+    if result.success:
+        print(f"Analysis completed: {result.result}")
+    else:
+        print(f"Analysis {result.status.value}: {result.error}")
 ```
 
 ## Validation and Testing
@@ -296,33 +315,39 @@ if completed:
 
 ```python
 # Validate workflow configuration
-from codomyrmex.project_orchestration import WorkflowManager, WorkflowStep
+from codomyrmex.logistics.orchestration.project import WorkflowManager, WorkflowStep
 
 manager = WorkflowManager()
+
+# Steps call registered actions (or codomyrmex.<module>.<action>)
+manager.task_orchestrator.register_action("demo", "step", lambda label: f"{label} done")
 steps = [
-    WorkflowStep(name="step1", module="module1", action="action1"),
-    WorkflowStep(name="step2", module="module2", action="action2", dependencies=["step1"])
+    WorkflowStep(name="step1", module="demo", action="step", parameters={"label": "step1"}),
+    WorkflowStep(name="step2", module="demo", action="step", parameters={"label": "step2"}, dependencies=["step1"])
 ]
 
-# Validation happens during creation
-success = manager.create_workflow("test_workflow", steps)
-assert success, "Workflow creation failed"
+# create_workflow stores the steps as given; validate dependencies explicitly
+# (execute_workflow also raises ValueError for missing dependencies or cycles)
+step_dicts = [{"name": s.name, "dependencies": s.dependencies} for s in steps]
+assert manager.validate_workflow_dependencies(step_dicts) == []
+assert manager.create_workflow("test_workflow", steps), "Workflow creation failed"
 ```
 
 ### Test Execution
 
 ```python
 # Test workflow execution
-import asyncio
-from codomyrmex.project_orchestration import get_workflow_manager
+from codomyrmex.logistics.orchestration.project import WorkflowStatus
 
-async def test_workflow():
-    manager = get_workflow_manager()
-    execution = await manager.execute_workflow("test_workflow")
-    assert execution.status == WorkflowStatus.COMPLETED
+def test_workflow():
+    # Reuses `manager` from the previous snippet; execute_workflow returns when all steps finished
+    execution = manager.execute_workflow("test_workflow")
+    assert execution.status == WorkflowStatus.COMPLETED, execution.error
+    assert execution.end_time is not None
+    assert execution.step_results["step2"]["result"] == "step2 done"
     print("Workflow test passed")
 
-asyncio.run(test_workflow())
+test_workflow()
 ```
 
 ## Expected Results
@@ -366,6 +391,7 @@ asyncio.run(test_workflow())
 **Issue**: Workflow fails to execute
 
 **Solutions**:
+
 - Check workflow configuration syntax
 - Verify module and action names
 - Review dependency chains
@@ -376,6 +402,7 @@ asyncio.run(test_workflow())
 **Issue**: Project creation fails
 
 **Solutions**:
+
 - Verify template exists
 - Check directory permissions
 - Review template configuration
@@ -386,7 +413,8 @@ asyncio.run(test_workflow())
 **Issue**: Tasks not executing
 
 **Solutions**:
-- Verify `start_execution()` called
+
+- Verify `start_processing()` called
 - Check dependencies satisfied
 - Review resource allocation
 - Check task status
@@ -397,7 +425,6 @@ asyncio.run(test_workflow())
 - [Project Lifecycle Guide](../project_orchestration/project-lifecycle-guide.md)
 - [Config-Driven Operations](../project_orchestration/config-driven-operations.md)
 - [Dispatch and Coordination](../project_orchestration/dispatch-coordination.md)
-
 
 ## Navigation Links
 

@@ -93,3 +93,12 @@ class TestVaultConfig:
         r = repr(vault)
         assert "ObsidianVault" in r
         assert "test-vault" in r
+
+
+class TestVaultPathExpansion:
+    def test_tilde_is_expanded(self, tmp_vault, monkeypatch):
+        # Point HOME at the vault's parent so "~/<name>" names the vault.
+        monkeypatch.setenv("HOME", str(tmp_vault.parent))
+        vault = ObsidianVault(f"~/{tmp_vault.name}")
+        assert vault.path == tmp_vault.resolve()
+        assert vault.has_note("My Test Note") is True

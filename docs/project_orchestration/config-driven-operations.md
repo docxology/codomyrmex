@@ -4,7 +4,7 @@ Comprehensive guide for configuration-driven operations covering workflows, proj
 
 ## Overview
 
-Codomyrmex supports fully configuration-driven operations, allowing you to define workflows, projects, and resource configurations in JSON files that are loaded and executed automatically. This guide covers all aspects of config-driven operations.
+Codomyrmex supports configuration-driven operations: workflow definitions in JSON files are loaded automatically and can be executed by name. Project templates and resource definitions are also kept as JSON, but are not loaded automatically yet. The API lives in `codomyrmex.logistics.orchestration.project` (formerly `codomyrmex.project_orchestration`).
 
 ## Configuration File Locations
 
@@ -16,15 +16,15 @@ Codomyrmex supports fully configuration-driven operations, allowing you to defin
 
 ### Project Templates
 
-- **Location**: `src/codomyrmex/project_orchestration/templates/*.json`
-- **Auto-loaded**: Yes, when ProjectManager initializes
+- **Location**: `src/codomyrmex/logistics/orchestration/project/templates/*.json`
+- **Auto-loaded**: No; reference definitions (see [Project Template Schema](./project-template-schema.md))
 - **Format**: JSON template definitions
 
 ### Resource Configurations
 
-- **Location**: `resources.json` (project root or configured path)
-- **Auto-loaded**: Yes, when ResourceManager initializes
-- **Format**: JSON resource definitions
+- **Location**: none by default; `ResourceManager` starts with built-in resources
+- **Auto-loaded**: No; load your own definitions with `Resource.from_dict()` (see [Resource Configuration](./resource-configuration.md))
+- **Format**: JSON resource definitions matching `Resource.to_dict()`
 
 ## Workflow Configuration
 
@@ -83,6 +83,8 @@ Workflows registered in code are kept in memory unless saved: `manager.create_wo
 
 ### Executing Configured Workflows
 
+`execute_workflow` runs the steps in dependency order on the shared task orchestrator and returns once every step has finished. The returned execution is `completed` when every required step completed and `failed` otherwise; a step whose dependency failed is not run. Missing dependencies or cycles raise `ValueError` before any step runs.
+
 ```python
 from codomyrmex.logistics.orchestration.project import WorkflowManager, WorkflowStatus
 
@@ -105,7 +107,7 @@ From the command line: `codomyrmex workflow run my_custom_workflow`.
 
 ### Creating Project Templates
 
-Create a JSON file in `src/codomyrmex/project_orchestration/templates/`:
+Template definitions live in `src/codomyrmex/logistics/orchestration/project/templates/`:
 
 ```json
 {
@@ -150,22 +152,17 @@ Create a JSON file in `src/codomyrmex/project_orchestration/templates/`:
 
 ### Using Templates
 
-Templates are automatically loaded and available:
+`ProjectManager` does not read template files yet; projects are created from a `ProjectType`:
 
 ```python
-from codomyrmex.project_orchestration import get_project_manager
+from codomyrmex.logistics.orchestration.project import ProjectType, get_project_manager
 
 pm = get_project_manager()
 
-# Templates are loaded automatically
-templates = pm.list_templates()
-print(f"Available templates: {templates}")
-
-# Create project from template
 project = pm.create_project(
     name="my_project",
-    template_name="my_custom_template",
-    description="Project from custom template"
+    type=ProjectType.CUSTOM,
+    description="Project for my custom workflow"
 )
 ```
 
@@ -173,7 +170,7 @@ project = pm.create_project(
 
 ### Creating Resource Configurations
 
-Create or update `resources.json`:
+The JSON below shows an earlier `resources.json` layout that the current `ResourceManager` does not read; see [Resource Configuration](./resource-configuration.md#resource-object) for the format accepted by `Resource.from_dict()`:
 
 ```json
 {
@@ -230,13 +227,17 @@ Create or update `resources.json`:
 
 ### Loading Resources
 
-Resources are automatically loaded:
-
 ```python
-from codomyrmex.project_orchestration import get_resource_manager
+import json
 
-# Resources are loaded automatically from resources.json
-rm = get_resource_manager()
+from codomyrmex.logistics.orchestration.project import Resource, get_resource_manager
+
+rm = get_resource_manager()  # starts with sys-compute, sys-memory, api-global
+
+# Load your own definitions (a list of Resource.to_dict()-style objects)
+with open("resources.json") as f:
+    for data in json.load(f)["resources"]:
+        rm.add_resource(Resource.from_dict(data))
 
 # List resources
 resources = rm.list_resources()
@@ -255,6 +256,8 @@ ConfigurationManager loads configurations in this order (later sources override 
 4. Runtime overrides
 
 ### Environment Variables
+
+The orchestration classes do not read these variables themselves; read them in your own code and pass them in the engine configuration (see [Environment-Based Configuration](#environment-based-configuration)).
 
 ```bash
 # Workflow configuration
@@ -294,17 +297,15 @@ config = cm.load_configuration(
 ### Configuration Dictionary
 
 ```python
-from codomyrmex.project_orchestration import OrchestrationEngine
+from pathlib import Path
 
+from codomyrmex.logistics.orchestration.project import OrchestrationEngine
+
+# The engine reads these keys; other keys are kept in engine.config but ignored
 config = {
-    "max_workers": 8,
-    "workflows_dir": "./workflows",
-    "projects_dir": "./projects",
-    "templates_dir": "./templates",
-    "resource_config": "./resources.json",
-    "performance_monitoring": True,
-    "session_timeout": 3600,
-    "cleanup_interval": 300
+    "max_workers": 8,                    # TaskOrchestrator worker threads
+    "workflows_dir": Path("./workflows"),  # WorkflowManager config_dir
+    "projects_dir": Path("./projects"),    # ProjectManager projects_root
 }
 
 engine = OrchestrationEngine(config=config)
@@ -314,15 +315,13 @@ engine = OrchestrationEngine(config=config)
 
 ```python
 import os
+from pathlib import Path
 
 # Load configuration from environment
 config = {
     "max_workers": int(os.getenv("CODOMYRMEX_MAX_WORKERS", "4")),
-    "workflows_dir": os.getenv("CODOMYRMEX_WORKFLOWS_DIR", "config/workflows/production"),
-    "projects_dir": os.getenv("CODOMYRMEX_PROJECTS_DIR", "projects"),
-    "templates_dir": os.getenv("CODOMYRMEX_TEMPLATES_DIR", None),  # Use default
-    "resource_config": os.getenv("CODOMYRMEX_RESOURCE_CONFIG", "resources.json"),
-    "performance_monitoring": os.getenv("CODOMYRMEX_PERFORMANCE_MONITORING", "true").lower() == "true"
+    "workflows_dir": Path(os.getenv("CODOMYRMEX_WORKFLOWS_DIR", "config/workflows/production")),
+    "projects_dir": Path(os.getenv("CODOMYRMEX_PROJECTS_DIR", "projects")),
 }
 
 engine = OrchestrationEngine(config=config)
@@ -333,42 +332,31 @@ engine = OrchestrationEngine(config=config)
 ### Workflow Validation
 
 ```python
-from codomyrmex.project_orchestration import WorkflowManager, WorkflowStep
+from codomyrmex.logistics.orchestration.project import WorkflowManager, WorkflowStep
 
 manager = WorkflowManager()
 
-# Validate workflow when creating
 steps = [
     WorkflowStep(name="step1", module="module1", action="action1"),
     WorkflowStep(name="step2", module="module2", action="action2", dependencies=["step1"])
 ]
 
-# Validation happens during create_workflow
-success = manager.create_workflow("valid_workflow", steps)
-# Returns False if validation fails, logs errors
+# create_workflow stores the steps as given; validate dependencies explicitly
+step_dicts = [{"name": s.name, "dependencies": s.dependencies} for s in steps]
+errors = manager.validate_workflow_dependencies(step_dicts)  # [] when valid
+order = manager.get_workflow_execution_order(step_dicts)  # raises ValueError on cycles
+
+if not errors:
+    manager.create_workflow("valid_workflow", steps)
 ```
 
-### Template Validation
+### Workflow File Validation
 
-Templates are validated when loaded:
-
-```python
-# Invalid templates are skipped with error logging
-# Valid templates are loaded successfully
-pm = get_project_manager()
-templates = pm.list_templates()  # Only valid templates
-```
+Workflow JSON files that fail to load are skipped with a warning in the log; the remaining files are still loaded.
 
 ### Resource Validation
 
-Resources are validated when loaded:
-
-```python
-# Invalid resources are skipped with error logging
-# Valid resources are loaded successfully
-rm = get_resource_manager()
-resources = rm.list_resources()  # Only valid resources
-```
+`Resource.from_dict()` raises `ValueError` for an unknown `type` or `status`, so validate resource files by loading them before deployment.
 
 ## Complete Config-Driven Example
 
@@ -403,11 +391,11 @@ resources = rm.list_resources()  # Only valid resources
 }
 ```
 
-Each step's parameters are static; a step cannot receive another step's output.
+The `data_visualization` actions named here (`load_dataset`, `analyze_dataset`, `create_chart`) are placeholders: register implementations with `TaskOrchestrator.register_action("data_visualization", ...)` or replace them with existing functions, otherwise the first step fails and the workflow reports `failed`.
 
-### 2. Create Project Template
+### 2. Create Project Template (reference only)
 
-`src/codomyrmex/project_orchestration/templates/data_project.json`:
+`src/codomyrmex/logistics/orchestration/project/templates/data_project.json`:
 
 ```json
 {
@@ -423,32 +411,31 @@ Each step's parameters are static; a step cannot receive another step's output.
 ### 3. Execute Config-Driven Workflow
 
 ```python
-import asyncio
-from codomyrmex.project_orchestration import (
-    get_orchestration_engine,
-    get_project_manager
+from codomyrmex.logistics.orchestration.project import (
+    ProjectType,
+    get_project_manager,
+    get_workflow_manager,
 )
 
-async def main():
-    # Create project from template
-    pm = get_project_manager()
-    project = pm.create_project(
-        name="analysis_project",
-        template_name="data_project"
-    )
+# Create project
+pm = get_project_manager()
+project = pm.create_project(
+    name="analysis_project",
+    type=ProjectType.DATA_PIPELINE
+)
 
-    # Execute workflow (automatically loaded from config)
-    engine = get_orchestration_engine()
-    result = engine.execute_workflow(
-        "data_analysis",
-        input_file="./data/input.csv",
-        output_path="./output/result.png"
-    )
+# Execute workflow (automatically loaded from config); blocks until every step finished
+manager = get_workflow_manager()
+execution = manager.execute_workflow(
+    "data_analysis",
+    input_file="./data/input.csv",
+    output_path="./output/result.png"
+)
 
-    if result['success']:
-        print("Analysis completed")
-
-asyncio.run(main())
+if execution.success:
+    print(f"Analysis completed ({execution.execution_id})")
+else:
+    print(f"Analysis failed: {execution.error}")
 ```
 
 ## Best Practices
@@ -457,9 +444,9 @@ asyncio.run(main())
 2. **Validation**: Validate configurations before deployment
 3. **Documentation**: Document configuration options and examples
 4. **Environment Separation**: Use environment-specific configs for different deployments
-5. **Parameter Substitution**: Use parameter substitution for flexibility
+5. **Workflow Parameters**: Pass shared values as `execute_workflow()` keyword arguments
 6. **Resource Management**: Configure resources based on actual system capacity
-7. **Error Handling**: Handle configuration loading errors gracefully
+7. **Error Handling**: Check the log for workflow files that were skipped during loading
 
 ## Related Documentation
 
@@ -474,3 +461,5 @@ asyncio.run(main())
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../docs/README.md)
 - **Home**: [Repository Root](../../README.md)
+
+<!-- markdownlint-configure-file { "MD024": { "siblings_only": true } } -->

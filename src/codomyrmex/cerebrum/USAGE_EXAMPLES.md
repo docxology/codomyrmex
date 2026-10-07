@@ -199,7 +199,7 @@ print(f"Learned model: {learned_model.name}")
 ### Comprehensive FPF Analysis
 
 ```python
-from codomyrmex.cerebrum.fpf_orchestration import FPFOrchestrator
+from codomyrmex.cerebrum.fpf import FPFOrchestrator
 
 # Create orchestrator (will fetch FPF from GitHub)
 orchestrator = FPFOrchestrator(output_dir="output/fpf_analysis")
@@ -216,7 +216,7 @@ print(f"Critical patterns: {len(results['fpf_analysis']['critical_patterns'])}")
 ### Combinatorics Analysis
 
 ```python
-from codomyrmex.cerebrum.fpf_combinatorics import FPFCombinatoricsAnalyzer
+from codomyrmex.cerebrum.fpf import FPFCombinatoricsAnalyzer
 
 # Create analyzer
 analyzer = FPFCombinatoricsAnalyzer(output_dir="output/combinatorics")
@@ -371,14 +371,11 @@ print(f"Bayesian results: {result.inference_results}")
 ### Command Line
 
 ```bash
-# Basic analysis
-python -m codomyrmex.cerebrum.scripts.run_fpf_analysis
-
-# Comprehensive analysis with combinatorics
-python -m codomyrmex.cerebrum.scripts.run_comprehensive_fpf_analysis
+# Comprehensive analysis (fetches FPF-Spec.md from GitHub)
+python -m codomyrmex.cerebrum.fpf.orchestration
 
 # With custom FPF spec
-python -m codomyrmex.cerebrum.scripts.run_comprehensive_fpf_analysis \
+python -m codomyrmex.cerebrum.fpf.orchestration \
     --fpf-spec path/to/FPF-Spec.md \
     --output-dir output/my_analysis
 ```
@@ -386,8 +383,7 @@ python -m codomyrmex.cerebrum.scripts.run_comprehensive_fpf_analysis \
 ### Python API
 
 ```python
-from codomyrmex.cerebrum.fpf_orchestration import FPFOrchestrator
-from codomyrmex.cerebrum.fpf_combinatorics import FPFCombinatoricsAnalyzer
+from codomyrmex.cerebrum.fpf import FPFCombinatoricsAnalyzer, FPFOrchestrator
 
 # Main orchestration
 orchestrator = FPFOrchestrator(output_dir="output/fpf_analysis")

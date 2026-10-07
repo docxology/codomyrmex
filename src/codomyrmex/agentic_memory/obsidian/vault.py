@@ -24,8 +24,8 @@ class ObsidianVault:
     """Load and navigate an Obsidian vault directory."""
 
     def __init__(self, path: str | Path) -> None:
-        """Initialize the vault from a directory path."""
-        path = Path(path)
+        """Initialize the vault from a directory path (``~`` is expanded)."""
+        path = Path(path).expanduser()
         if not path.exists():
             raise FileNotFoundError(f"Vault path does not exist: {path}")
         if not path.is_dir():

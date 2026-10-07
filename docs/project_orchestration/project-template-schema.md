@@ -4,7 +4,9 @@ This document describes the JSON schema for project templates, variable substitu
 
 ## Overview
 
-Project templates define the structure, configuration, and workflows for creating new Codomyrmex projects. Templates are stored as JSON files in `src/codomyrmex/project_orchestration/templates/` and are automatically loaded by the ProjectManager.
+Project templates define the structure, configuration, and workflows for creating new Codomyrmex projects. Templates are stored as JSON files in `src/codomyrmex/logistics/orchestration/project/templates/` (`ai_analysis.json`, `data_pipeline.json`, `web_application.json`).
+
+> **Current behaviour**: the template files are reference definitions. The current `ProjectManager` does not load them, and the variable substitution, template file copying, and documentation options described below are not applied at runtime. `ProjectManager.create_project(name, type, description)` always creates `src/`, `tests/`, `config/`, and `docs/` and generates the standard README/AGENTS documentation for the project.
 
 ## JSON Schema
 
@@ -31,7 +33,7 @@ Project templates define the structure, configuration, and workflows for creatin
 ### Field Descriptions
 
 | Field | Type | Required | Default | Description |
-|-------|------|----------|---------|-------------|
+| --- | --- | --- | --- | --- |
 | `name` | string | Yes | - | Unique template identifier |
 | `type` | string | Yes | - | Project type (see ProjectType enum) |
 | `description` | string | No | `""` | Template description |
@@ -49,6 +51,7 @@ Project templates define the structure, configuration, and workflows for creatin
 ### Project Types
 
 The `type` field must be one of:
+
 - `ai_analysis` - AI-powered code analysis projects
 - `web_application` - Full-stack web applications
 - `data_pipeline` - Data processing pipelines
@@ -131,6 +134,7 @@ Templates support variable substitution in generated files and documentation. Th
 ### Variable Usage
 
 Variables are substituted in:
+
 1. **Template Files**: When copying template files, variables in file contents are replaced
 2. **Documentation**: Variables in README.md and AGENTS.md templates are replaced
 3. **Configuration**: Variables in default_config can reference project metadata
@@ -246,10 +250,15 @@ The `workflows` array specifies which workflows are available for projects creat
 }
 ```
 
-These workflows can be executed via:
+Templates are not loaded, so this list is informational. A workflow registered with the engine's `WorkflowManager` runs for a project with:
+
 ```python
-project_manager.execute_project_workflow(project_name, "ai-analysis")
+from codomyrmex.logistics.orchestration.project import get_orchestration_engine
+
+result = get_orchestration_engine().execute_project_workflow(project_name, "ai-analysis")
 ```
+
+The run is recorded in the project's `metrics` (`workflow_executions`, `last_workflow`, `last_workflow_success`, ...).
 
 ## Module Dependencies
 
@@ -299,6 +308,7 @@ The `default_config` object provides default configuration values for the projec
 ```
 
 This configuration is:
+
 - Stored in the project's `.codomyrmex/project.json`
 - Accessible via `project.config`
 - Can be overridden per-project
@@ -391,7 +401,7 @@ This configuration is:
 
 ### Step 1: Define Template Structure
 
-Create a JSON file in `src/codomyrmex/project_orchestration/templates/`:
+Create a JSON file in `src/codomyrmex/logistics/orchestration/project/templates/`:
 
 ```json
 {
@@ -406,9 +416,9 @@ Create a JSON file in `src/codomyrmex/project_orchestration/templates/`:
 
 ### Step 2: Add Template Files (Optional)
 
-Create a directory `src/codomyrmex/project_orchestration/templates/my_custom_template/` and add files that should be copied:
+Create a directory `src/codomyrmex/logistics/orchestration/project/templates/my_custom_template/` and add files that should be copied:
 
-```
+```text
 templates/my_custom_template/
 ├── src/
 │   └── main.py.template
@@ -416,15 +426,17 @@ templates/my_custom_template/
     └── config.yaml.template
 ```
 
-### Step 3: Use the Template
+### Step 3: Create the Project
+
+`create_project` takes a `ProjectType` rather than a template name (see the note in the [Overview](#overview)):
 
 ```python
-from codomyrmex.project_orchestration import get_project_manager
+from codomyrmex.logistics.orchestration.project import ProjectType, get_project_manager
 
 pm = get_project_manager()
 project = pm.create_project(
     name="my_project",
-    template_name="my_custom_template",
+    type=ProjectType.CUSTOM,
     description="My custom project"
 )
 ```
@@ -438,10 +450,7 @@ project = pm.create_project(
 
 ### Template Loading
 
-Templates are validated when loaded:
-- Invalid JSON causes loading to fail
-- Missing required fields cause warnings
-- Invalid project types cause errors
+Templates are not loaded or validated at runtime yet; keep `type` aligned with the `ProjectType` values above so the files stay consistent with `ProjectManager`.
 
 ## Best Practices
 
@@ -457,4 +466,3 @@ Templates are validated when loaded:
 - [Project Lifecycle Guide](./project-lifecycle-guide.md)
 - [Config-Driven Operations](./config-driven-operations.md)
 - [API Specification](../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md)
-

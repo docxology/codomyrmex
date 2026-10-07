@@ -82,5 +82,6 @@ The `concurrency` module provides a suite of synchronization primitives to ensur
 ## API Usage
 
 ```python
-from codomyrmex.concurrency import BaseLock, LocalLock, LockStats
+from codomyrmex.concurrency import BaseLock, LocalLock
+from codomyrmex.concurrency.locks import LockStats
 ```

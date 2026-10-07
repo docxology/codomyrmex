@@ -124,6 +124,7 @@ docs-check:
     uv run --locked --group docs python scripts/rasp_gap_report.py --repo-root . --check
     uv run --locked --group docs python scripts/documentation/audit_readme_agents.py --repo-root . --strict
     uv run --locked --group docs python scripts/documentation/validate_links_comprehensive.py --repo-root . --format both --fail-on-broken
+    uv run --locked --group docs --all-extras python scripts/documentation/validate_code_references.py --repo-root . --output output/documentation/code_references.json --fail-on-broken
     uv run --locked --group docs python scripts/documentation/analyze_content_quality.py --repo-root . --format both --min-score 70 --fail-on-below
     uv run --locked --group docs python scripts/documentation/validate_agents_structure.py --repo-root . --format both --fail-on-invalid
     uv run --locked --group docs python scripts/documentation/enforce_quality_gate.py --repo-root . --max-broken-links 0

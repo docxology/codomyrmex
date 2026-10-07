@@ -3,9 +3,12 @@ scope: project
 version: v1.3.0
 ---
 
+<!-- The GitNexus and CogniLayer tools append sections that start with H1 markers. -->
+<!-- markdownlint-disable MD025 -->
+
 # CLAUDE.md
 
-**Version**: v1.3.0 | **Last Updated**: March 2026
+**Version**: v1.3.0 | **Last Updated**: October 2026
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -86,7 +89,7 @@ ggshield scan pre-commit
 
 ## Architecture Overview
 
-Codomyrmex is a modular development platform with **130** top-level modules under `src/codomyrmex/` organized in a **layered architecture** (see `docs/reference/inventory.md`):
+Codomyrmex is a modular development platform with **132** top-level modules under `src/codomyrmex/` organized in a **layered architecture** (see `docs/reference/inventory.md`):
 
 ### Layer Hierarchy (dependencies flow upward only)
 
@@ -129,7 +132,7 @@ Each module is self-contained with standard structure:
 - **Model Context Protocol (MCP)**: Standardized interface for AI/LLM integration across modules
 - **Upward dependencies only**: Higher layers depend on lower, preventing circular dependencies
 - **Lazy module loading**: Modules load on-demand to reduce startup time
-- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently **151** `mcp_tools.py` files are under `src/codomyrmex/` (non-test); see `docs/reference/inventory.md`.
+- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently **154** `mcp_tools.py` files are under `src/codomyrmex/` (non-test); see `docs/reference/inventory.md`.
 
 ### Extended Modules (auto-discovered via MCP)
 
@@ -166,7 +169,7 @@ Beyond the core layers above, these modules expose MCP tools via `@mcp_tool` dec
 Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielmiessler/Personal_AI_Infrastructure) (`~/.claude/PAI/`). Key integration points:
 
 - **Detection**: PAI is present when `~/.claude/PAI/SKILL.md` exists
-- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 9 static proxy tools + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; production sources contain **627** `@mcp_tool` lines and **151** `mcp_tools.py` files (**130** top-level packages). See `docs/reference/inventory.md`. The Codomyrmex PAI Skill surfaces dynamic tools with 3 resources and 10 prompts
+- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 9 static proxy tools + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; production sources contain **632** `@mcp_tool` lines and **154** `mcp_tools.py` files (**132** top-level packages). See `docs/reference/inventory.md`. The Codomyrmex PAI Skill surfaces dynamic tools with 3 resources and 10 prompts
 - **Trust Gateway**: `src/codomyrmex/agents/pai/trust_gateway.py` gates destructive tools (write, execute) behind explicit trust
 - **Workflows**: `/codomyrmexVerify` audits capabilities; `/codomyrmexTrust` enables destructive tools
 - **RASP Pattern**: Each module has `PAI.md` alongside `README.md`, `AGENTS.md`, `SPEC.md` — these describe AI capabilities the module offers
@@ -288,7 +291,7 @@ This project is indexed by GitNexus as **codomyrmex** (207963 symbols, 302104 re
 ## Resources
 
 | Resource | Use for |
-|----------|---------|
+| --- | --- |
 | `gitnexus://repo/codomyrmex/context` | Codebase overview, check index freshness |
 | `gitnexus://repo/codomyrmex/clusters` | All functional areas |
 | `gitnexus://repo/codomyrmex/processes` | All execution flows |
@@ -297,7 +300,7 @@ This project is indexed by GitNexus as **codomyrmex** (207963 symbols, 302104 re
 ## CLI
 
 | Task | Read this skill file |
-|------|---------------------|
+| --- | --- |
 | Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md` |
 | Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
 | Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md` |
@@ -318,13 +321,16 @@ This project is configured with the `qmd` skill for local hybrid search of Markd
 ## === COGNILAYER (auto-generated, do not delete) ===
 
 ## CogniLayer v3 Active
+
 Persistent memory is ON.
 ON FIRST USER MESSAGE in this session, briefly tell the user:
   'CogniLayer v3 active — persistent memory is on. Type /cognihelp for available commands.'
 Say it ONCE, keep it short, then continue with their request.
 
 ## Memory Tools
+
 You have access to the `cognilayer` MCP server:
+
 - memory_search(query) — search memory semantically
 - memory_write(content) — save important information
 - file_search(query) — search project files (PRD, docs...)
@@ -336,13 +342,17 @@ When you need info from PRD or docs, use file_search
 INSTEAD of reading the entire file.
 
 ## VERIFY-BEFORE-ACT — MANDATORY
+
 When memory_search returns a fact marked with ⚠ STALE:
+
 1. ALWAYS read the source file and verify the fact still holds
 2. If the fact changed -> update it via memory_write
 3. NEVER make changes based on STALE facts without verification
 
 ## PROACTIVE MEMORY — IMPORTANT
+
 When you discover something important during work, SAVE IT IMMEDIATELY:
+
 - Bug and fix -> memory_write(type="error_fix")
 - Pitfall/danger -> memory_write(type="gotcha")
 - Exact procedure -> memory_write(type="procedure")
@@ -352,21 +362,25 @@ When you discover something important during work, SAVE IT IMMEDIATELY:
 DO NOT wait for /harvest — session may crash.
 
 ## RUNNING BRIDGE — CRITICAL
+
 After completing each task AUTOMATICALLY update session bridge:
   session_bridge(action="save", content="Progress: ...; Open: ...")
 This is Tier 1 — do it yourself, don't announce, it's part of the job.
 
 ## Safety Rules — MANDATORY
+
 - Before ANY deploy, push, ssh, pm2, docker, db migration:
   1. ALWAYS call verify_identity(action_type="...") first
   2. If it returns BLOCKED — STOP and ask the user
   3. If it returns VERIFIED — READ the target server to the user and request confirmation
 
 ## Git Rules
+
 - Commit often, small atomic changes. Format: "[type] what and why"
 - commit = Tier 1 (do it yourself). push = Tier 3 (verify_identity).
 
 ## Project DNA: codomyrmex
+
 Stack: unknown
 Style: [unknown]
 Structure: .agent, .benchmarks, .desloppify, .gemini, .github, .gitnexus, .mypy_cache, .pipelines
@@ -375,6 +389,7 @@ Active: [new session]
 Last: [first session]
 
 ## Last Session Bridge
+
 [Emergency bridge — running bridge was not updated]
 No changes or facts in this session.
 

@@ -20,36 +20,36 @@ graph TB
         FPF_ANALYZER[FPFAnalyzer<br/>Importance, Centrality]
         TERM_ANALYZER[TermAnalyzer<br/>Co-occurrence]
     end
-    
+
     subgraph sg_fdbfc45999 [CEREBRUM Module]
         CEREBRUM_ENGINE[CerebrumEngine<br/>Orchestration]
         CASE_BASE[CaseBase<br/>Pattern Cases]
         BAYESIAN_NET[BayesianNetwork<br/>Pattern Relationships]
         ACTIVE_AGENT[ActiveInferenceAgent<br/>Exploration]
     end
-    
+
     subgraph sg_e70d8eb905 [Analysis]
         ORCHESTRATOR[FPFOrchestrator<br/>Main Analysis]
         COMBINATORICS[FPFCombinatoricsAnalyzer<br/>Combinatorics]
     end
-    
+
     subgraph sg_b2439bcb8d [Output]
         VISUALIZATIONS[Visualizations<br/>Networks, Heatmaps]
         REPORTS[Reports<br/>JSON, Markdown]
     end
-    
+
     FPF_SPEC --> ORCHESTRATOR
     FPF_SPEC --> COMBINATORICS
     FPF_ANALYZER --> ORCHESTRATOR
     TERM_ANALYZER --> COMBINATORICS
-    
+
     ORCHESTRATOR --> CEREBRUM_ENGINE
     ORCHESTRATOR --> CASE_BASE
     ORCHESTRATOR --> BAYESIAN_NET
     ORCHESTRATOR --> ACTIVE_AGENT
-    
+
     COMBINATORICS --> CASE_BASE
-    
+
     ORCHESTRATOR --> VISUALIZATIONS
     COMBINATORICS --> VISUALIZATIONS
     ORCHESTRATOR --> REPORTS
@@ -81,7 +81,7 @@ Analyzes all combinatorics of FPF patterns:
 ### Basic Orchestration
 
 ```python
-from codomyrmex.cerebrum.fpf_orchestration import FPFOrchestrator
+from codomyrmex.cerebrum.fpf import FPFOrchestrator
 
 # Create orchestrator
 orchestrator = FPFOrchestrator(output_dir="output/fpf_analysis")
@@ -93,7 +93,7 @@ results = orchestrator.run_comprehensive_analysis()
 ### Combinatorics Analysis
 
 ```python
-from codomyrmex.cerebrum.fpf_combinatorics import FPFCombinatoricsAnalyzer
+from codomyrmex.cerebrum.fpf import FPFCombinatoricsAnalyzer
 
 # Create analyzer
 analyzer = FPFCombinatoricsAnalyzer(output_dir="output/combinatorics")
@@ -105,11 +105,11 @@ results = analyzer.run_comprehensive_combinatorics()
 ### Command Line
 
 ```bash
-# Comprehensive analysis
-python -m codomyrmex.cerebrum.scripts.run_comprehensive_fpf_analysis
+# Comprehensive analysis (fetches FPF-Spec.md from GitHub)
+python -m codomyrmex.cerebrum.fpf.orchestration
 
 # With local FPF spec
-python -m codomyrmex.cerebrum.scripts.run_comprehensive_fpf_analysis \
+python -m codomyrmex.cerebrum.fpf.orchestration \
     --fpf-spec path/to/FPF-Spec.md \
     --output-dir output/my_analysis
 ```
@@ -175,12 +175,9 @@ The integration demonstrates how CEREBRUM can be applied to structured knowledge
 - [FPF Module](../fpf/README.md)
 - [Usage Examples](../../../src/codomyrmex/cerebrum/USAGE_EXAMPLES.md)
 
-
-
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../README.md)
 - **Home**: [Root README](../../README.md)
-

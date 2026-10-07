@@ -5,6 +5,7 @@ This guide covers upgrading between Codomyrmex versions, handling breaking chang
 ## 🎯 Migration Overview
 
 ### **Semantic Versioning**
+
 Codomyrmex follows [Semantic Versioning](https://semver.org/) principles:
 
 ```mermaid
@@ -28,8 +29,9 @@ graph LR
 ```
 
 ### **Compatibility Matrix**
+
 | From Version | To Version | Migration Type | Effort | Automated Tools |
-|-------------|------------|----------------|---------|-----------------|
+| --- | --- | --- | --- | --- |
 | 0.1.x | 0.1.y | Patch | Minimal | ✅ Auto-update |
 | 0.1.x | 0.2.x | Minor | Low | ✅ Migration script |
 | 0.x.x | 1.x.x | Major | Medium | ⚠️ Manual steps required |
@@ -38,28 +40,24 @@ graph LR
 ## 🚀 Current Version: 0.1.0 → Future Releases
 
 ### **Upcoming: 0.2.0 (Minor Release)**
+
 **Expected Release**: Q2 2024
 **Migration Effort**: Low
 **Backward Compatibility**: ✅ Maintained
 
 #### **New Features**
+
 - Enhanced AI model support (GPT-4 Turbo, Claude-3)
 - Advanced caching mechanisms
 - Improved performance monitoring
 - Additional data visualization types
 
 #### **API Additions**
-```python
-# New APIs (additive, backward compatible)
-from codomyrmex.agents import enhance_code_batch
-from codomyrmex.data_visualization import create_interactive_dashboard
-from codomyrmex.coding.static_analysis import analyze_security_vulnerabilities
 
-# New configuration options
-from codomyrmex.environment_setup import configure_advanced_caching
-```
+The additive APIs planned for this release in earlier versions of this guide (`enhance_code_batch`, `create_interactive_dashboard`, `analyze_security_vulnerabilities`, `configure_advanced_caching`) were not released. See the [changelog](changelog.md) for the APIs that shipped; batch code generation is available as `codomyrmex.agents.ai_code_editing.generate_code_batch`.
 
 #### **Migration Steps: 0.1.x → 0.2.0**
+
 ```bash
 # 1. Update package (using uv)
 uv pip install --upgrade codomyrmex
@@ -75,6 +73,7 @@ codomyrmex test-workflows --all
 ```
 
 **Configuration Changes**:
+
 ```yaml
 # config_v0.2.yaml - New optional settings
 codomyrmex:
@@ -99,11 +98,13 @@ codomyrmex:
 ```
 
 ### **Upcoming: 1.0.0 (Major Release)**
+
 **Expected Release**: Q4 2024
 **Migration Effort**: Medium
 **Backward Compatibility**: ⚠️ Breaking changes
 
 #### **Breaking Changes**
+
 1. **API Restructuring**
    - Module imports reorganized for better consistency
    - Some function signatures changed for improved usability
@@ -122,6 +123,7 @@ codomyrmex:
 #### **Migration Steps: 0.x.x → 1.0.0**
 
 ##### **Step 1: Pre-Migration Assessment**
+
 ```bash
 # Run pre-migration analysis
 codomyrmex analyze-migration --from $(codomyrmex --version) --to 1.0.0
@@ -134,6 +136,7 @@ cp -r ~/.codomyrmex ~/.codomyrmex.backup.$(date +%Y%m%d)
 ```
 
 ##### **Step 2: Environment Update**
+
 ```bash
 # Update Python if needed
 pyenv install 3.11
@@ -148,6 +151,7 @@ uv pip install codomyrmex==1.0.0
 ```
 
 ##### **Step 3: Configuration Migration**
+
 ```bash
 # Migrate configuration automatically
 codomyrmex migrate-config --from-version 0.x.x --to-version 1.0.0
@@ -157,24 +161,26 @@ codomyrmex validate-config --config ~/.codomyrmex/config_v1.0.yaml
 ```
 
 ##### **Step 4: Code Updates**
-```python
-# Before (v0.x.x) - DEPRECATED
-from codomyrmex.coding.data_visualization import create_plot
-from codomyrmex.analysis.static import run_analysis
 
-# After (v1.1.9) - NEW STRUCTURE
+```python
+# Before (v0.x.x) - REMOVED; these imports no longer resolve
+#   from codomyrmex.coding.data_visualization import create_plot
+#   from codomyrmex.analysis.static import run_analysis
+
+# After (v1.x) - NEW STRUCTURE
 from codomyrmex.data_visualization import create_line_plot
-from codomyrmex.coding.static_analysis import analyze_codebase
+from codomyrmex.coding.static_analysis import analyze_project
 
 # Function signature changes
 # Before
-result = run_analysis(path, options={'detailed': True})
+#   result = run_analysis(path, options={'detailed': True})
 
-# After
-result = analyze_codebase(path, detailed=True, cache=True)
+# After (returns an AnalysisSummary)
+result = analyze_project(path)
 ```
 
 ##### **Step 5: Testing & Validation**
+
 ```bash
 # Run comprehensive tests
 codomyrmex test --migration-validation
@@ -189,6 +195,7 @@ codomyrmex benchmark --compare-to 0.x.x
 ## 🔧 Migration Tools & Scripts
 
 ### **Automated Migration Script**
+
 ```python
 #!/usr/bin/env python3
 # migrate_to_v1.py - Automated migration script
@@ -259,7 +266,7 @@ class CodomyrmexMigrator:
             # v0.x.x → v1.1.9 import mappings
             'from codomyrmex.coding.data_visualization import': 'from codomyrmex.data_visualization import',
             'from codomyrmex.analysis.static import': 'from codomyrmex.coding.static_analysis import',
-            'from codomyrmex.ai.code_editing import': 'from codomyrmex.agents import',
+            'from codomyrmex.ai.code_editing import': 'from codomyrmex.agents.ai_code_editing import',
             'from codomyrmex.utils.environment import': 'from codomyrmex.environment_setup import',
         }
 
@@ -295,9 +302,8 @@ class CodomyrmexMigrator:
         """Update function calls for new API signatures."""
         function_mapping = {
             # Function signature changes
-            'run_analysis(': 'analyze_codebase(',
+            'run_analysis(': 'analyze_project(',
             'create_plot(': 'create_line_plot(',
-            'enhance_code_sync(': 'enhance_code(',
         }
 
         changes = []
@@ -492,13 +498,17 @@ if __name__ == '__main__':
 ```
 
 ### **Migration Testing Framework**
+
+The fixture below deliberately writes a legacy v0.1 project whose imports no longer resolve.
+
+<!-- docs-check: skip-imports -->
 ```python
 # test_migration.py - Migration testing framework
 import pytest
 import tempfile
 import shutil
 from pathlib import Path
-from codomyrmex_migrator import CodomyrmexMigrator
+from migrate_to_v1 import CodomyrmexMigrator  # the script above
 
 class MigrationTestSuite:
     """Test suite for migration validation."""
@@ -562,7 +572,7 @@ visualization:
         main_py_content = (test_project / "src" / "main.py").read_text()
         assert 'from codomyrmex.data_visualization import' in main_py_content
         assert 'from codomyrmex.coding.static_analysis import' in main_py_content
-        assert 'analyze_codebase(' in main_py_content
+        assert 'analyze_project(' in main_py_content
 
         # Verify backup was created
         assert Path(report['backup_path']).exists()
@@ -586,6 +596,7 @@ if __name__ == '__main__':
 ### **0.1.x → 0.2.x Migration**
 
 #### **Quick Migration Checklist**
+
 - [ ] Update package: `uv pip install --upgrade codomyrmex`
 - [ ] Run compatibility check: `codomyrmex check-compatibility`
 - [ ] Update configuration (optional): Add new caching and monitoring settings
@@ -593,11 +604,13 @@ if __name__ == '__main__':
 - [ ] Review new features: Enhanced AI models, advanced caching, performance monitoring
 
 #### **No Breaking Changes**
+
 All existing code continues to work without modification. New features are additive and optional.
 
 ### **0.x.x → 1.0.0 Migration**
 
 #### **Comprehensive Migration Checklist**
+
 - [ ] **Environment**: Update to Python 3.10+
 - [ ] **Backup**: Create full project backup
 - [ ] **Analysis**: Run migration analysis tool
@@ -613,19 +626,21 @@ All existing code continues to work without modification. New features are addit
 #### **Common Migration Issues & Solutions**
 
 ##### **Issue 1: Import Errors**
+
 ```python
 # Problem
 ModuleNotFoundError: No module named 'codomyrmex.coding.data_visualization'
 
 # Solution
-# Old import (v0.x.x)
-from codomyrmex.coding.data_visualization import create_plot
+# Old import (v0.x.x, removed)
+#   from codomyrmex.coding.data_visualization import create_plot
 
-# New import (v1.1.9)
+# New import (v1.x)
 from codomyrmex.data_visualization import create_line_plot
 ```
 
 ##### **Issue 2: Function Signature Changes**
+
 ```python
 # Problem
 TypeError: run_analysis() got an unexpected keyword argument 'options'
@@ -634,11 +649,14 @@ TypeError: run_analysis() got an unexpected keyword argument 'options'
 # Old call (v0.x.x)
 result = run_analysis(path, options={'detailed': True, 'cache': False})
 
-# New call (v1.1.9)
-result = analyze_codebase(path, detailed=True, cache=False)
+# New call (v1.x; options are replaced by target_paths / analysis_types)
+from codomyrmex.coding.static_analysis import analyze_project
+
+result = analyze_project(path)
 ```
 
 ##### **Issue 3: Configuration Format**
+
 ```yaml
 # Problem: Old config format not recognized
 
@@ -658,6 +676,7 @@ codomyrmex:
 ## 🔄 Rollback Procedures
 
 ### **Automatic Rollback**
+
 ```bash
 # If migration fails, automatic rollback is triggered
 codomyrmex rollback --to-backup /path/to/backup
@@ -668,6 +687,7 @@ uv pip install codomyrmex==$(previous_version)
 ```
 
 ### **Manual Rollback Steps**
+
 1. **Stop all Codomyrmex processes**
 2. **Restore code from backup**
 3. **Downgrade package**: `uv pip install codomyrmex==0.1.x`
@@ -677,11 +697,13 @@ uv pip install codomyrmex==$(previous_version)
 ## 🛠️ Migration Support
 
 ### **Getting Help**
+
 - **Migration Issues**: [GitHub Issues - Migration Label](https://github.com/docxology/codomyrmex/issues?q=label:migration)
 - **Community Support**: [Discussions](https://github.com/docxology/codomyrmex/discussions)
 - **Professional Support**: Contact team for enterprise migration assistance
 
 ### **Migration Tools**
+
 - **`codomyrmex migrate`**: Automated migration tool
 - **`codomyrmex check-compatibility`**: Compatibility analysis
 - **`codomyrmex test-migration`**: Migration validation
@@ -697,6 +719,7 @@ uv pip install codomyrmex==$(previous_version)
 ---
 
 **Migration Support** ✅:
+
 - [ ] Backup created before migration
 - [ ] Migration tool executed successfully
 - [ ] All tests pass in new version

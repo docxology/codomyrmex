@@ -9,5 +9,9 @@
 ## Quick Use
 
 ```python
-from codomyrmex.data_visualization.mermaid import MermaidGenerator
+from codomyrmex.data_visualization.mermaid import FlowDirection, Flowchart
+
+chart = Flowchart(direction=FlowDirection.LEFT_RIGHT)
+chart.add_node("a", "Plan").add_node("b", "Build").add_link("a", "b")
+print(chart.render())
 ```

@@ -18,7 +18,7 @@ class skeleton -- ensuring consistency across the 89+ modules in the monorepo.
 PAI agents can invoke `scaffold_new_module()` to create new modules at runtime:
 
 ```python
-from codomyrmex.module_template import scaffold_new_module, list_template_files
+from codomyrmex.module_template.scaffold import list_template_files, scaffold_new_module
 
 # Create a new module
 result_path = scaffold_new_module(
@@ -38,7 +38,7 @@ files = list_template_files()
 The scaffolding copies and customizes these files into every new module:
 
 | Template File | Purpose |
-|--------------|---------|
+| --- | --- |
 | `README.md` | Module overview, key exports, quick start |
 | `AGENTS.md` | Agent coordination documentation |
 | `SPEC.md` | Functional specification |
@@ -61,7 +61,7 @@ Additionally, `_create_core_module()` generates a `{module_name}.py` file contai
 Every Codomyrmex module follows the RASP documentation convention:
 
 | Document | Content |
-|----------|---------|
+| --- | --- |
 | **R** -- `README.md` | Human-readable overview, exports table, quick-start code |
 | **A** -- `AGENTS.md` | How agents coordinate around this module |
 | **S** -- `SPEC.md` | Functional specification and design principles |
@@ -83,7 +83,7 @@ Invalid names raise `ValueError`. This ensures:
 ## PAI Algorithm Phase Mapping
 
 | Phase | Module Template Contribution | How |
-|-------|-----------------------------|-----|
+| --- | --- | --- |
 | **OBSERVE** | Template discovery | `list_template_files()` reveals what documentation and code a new module will receive |
 | **THINK** | Module design assessment | PAI evaluates whether a new module is needed vs extending an existing one |
 | **PLAN** | Scaffolding plan | PAI plans the module name, description, and where it fits in the layer hierarchy |
@@ -99,7 +99,7 @@ Invalid names raise `ValueError`. This ensures:
 `_copy_and_customize()` performs three replacement passes on every template file:
 
 | Placeholder | Replaced With | Example |
-|------------|--------------|---------|
+| --- | --- | --- |
 | `module_template` | `module_name` (snake_case) | `my_feature` |
 | `Module Template` | Title-cased module name | `My Feature` |
 | `MODULE_TEMPLATE` | Uppercase module name | `MY_FEATURE` |
@@ -132,7 +132,7 @@ This ensures every new module starts with a typed, logged, testable skeleton.
 It imports only from Foundation (`logging_monitoring`) and uses stdlib only
 (`re`, `shutil`, `pathlib`).
 
-```
+```text
 module_template/
   __init__.py              # Package marker
   scaffold.py              # scaffold_new_module(), list_template_files()
@@ -150,7 +150,7 @@ module_template/
 ## Relationship to Other Modules
 
 | Module | Relationship |
-|--------|-------------|
+| --- | --- |
 | `logging_monitoring` | Scaffold uses `get_logger` for structured logging during creation |
 | `documentation` | Generated RASP docs follow the documentation module's standards |
 | All modules | Every module in the monorepo was (or could be) created from this template |
@@ -158,7 +158,8 @@ module_template/
 ## MCP Tools
 
 This module does not expose MCP tools directly. Access its capabilities via:
-- Direct Python import: `from codomyrmex.module_template import ...`
+
+- Direct Python import: `from codomyrmex.module_template.scaffold import ...`
 - CLI: `codomyrmex module_template <command>`
 
 ## Navigation
