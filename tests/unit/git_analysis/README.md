@@ -7,6 +7,7 @@
 Validation coverage, fixtures, and regression checks for Git Analysis.
 
 ## Directory Contents
+
 - `README.md` – File
 - `SPEC.md` – File
 - `__init__.py` – File
@@ -16,6 +17,7 @@ Validation coverage, fixtures, and regression checks for Git Analysis.
 - `test_mcp_git_analysis.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: ../../../../../README.md
 
