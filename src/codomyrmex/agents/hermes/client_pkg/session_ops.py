@@ -65,25 +65,37 @@ class HermesSessionOpsMixin:
             session_id: Session identifier matching the worktree to clean up.
 
         Returns:
-            True if cleanup succeeded.
+            True only if the worktree was removed. Removing a worktree that
+            does not exist reports False instead of claiming success.
 
         """
         worktree_path = self._worktree_base / f"hermes-{session_id}"
         branch_name = f"hermes/{session_id}"
 
         try:
-            subprocess.run(
+            removed = subprocess.run(
                 ["git", "worktree", "remove", str(worktree_path), "--force"],
                 capture_output=True,
                 text=True,
                 timeout=15,
             )
-            subprocess.run(
+            if removed.returncode != 0:
+                self.logger.warning(
+                    "Worktree cleanup failed: %s", removed.stderr.strip()
+                )
+                return False
+            deleted = subprocess.run(
                 ["git", "branch", "-D", branch_name],
                 capture_output=True,
                 text=True,
                 timeout=10,
             )
+            if deleted.returncode != 0:
+                self.logger.warning(
+                    "Removed worktree but kept branch %s: %s",
+                    branch_name,
+                    deleted.stderr.strip(),
+                )
             self.logger.info("Cleaned up worktree: %s", worktree_path)
             return True
         except Exception as e:
