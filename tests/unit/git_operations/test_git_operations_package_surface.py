@@ -121,8 +121,11 @@ class TestRepositoryManager:
         (git_repo / "tests").mkdir()
         (git_repo / "tests" / "test_main.py").write_text("def test_main(): pass\n")
 
-        result = analyze_repository_structure(str(git_repo))
-        assert result is not None
+        out = git_repo.parent / "structure.mmd"
+        result = analyze_repository_structure(str(git_repo), output_path=str(out))
+        assert result["success"] is True
+        assert result["stats"]["files"] >= 2
+        assert out.exists()
 
 
 class TestRepositoryMetadata:

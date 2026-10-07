@@ -8,10 +8,7 @@ with contextlib.suppress(ImportError):
     from openai import OpenAI
 with contextlib.suppress(ImportError):
     from anthropic import Anthropic
-try:
-    from codomyrmex.llm.providers.ollama_manager import OLLAMA_AVAILABLE, OllamaManager
-except ImportError:
-    OLLAMA_AVAILABLE = False
+from codomyrmex.llm.ollama import OllamaManager
 
 try:
     from codomyrmex.performance import monitor_performance
@@ -27,6 +24,10 @@ except ImportError:
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
+
+# The Ollama integration (codomyrmex.llm.ollama) only needs core dependencies,
+# so it is always importable; the server itself is checked when a client is made.
+OLLAMA_AVAILABLE = True
 
 # Default LLM configurations
 DEFAULT_LLM_PROVIDER = "google"
@@ -120,10 +121,6 @@ def get_llm_client(provider: str, model_name: str | None = None) -> tuple[Any, s
             ) from None
 
     elif provider == "ollama":
-        if not OLLAMA_AVAILABLE:
-            raise ImportError(
-                "Ollama integration not available. Install with: pip install codomyrmex[ollama]"
-            )
         try:
             manager = OllamaManager(auto_start_server=True)
             model = model_name or DEFAULT_LLM_MODEL["ollama"]

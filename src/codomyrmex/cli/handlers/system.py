@@ -4,7 +4,6 @@ import sys
 
 from codomyrmex.cli.utils import (
     PERFORMANCE_MONITORING_AVAILABLE,
-    TERMINAL_INTERFACE_AVAILABLE,
     TerminalFormatter,
 )
 from codomyrmex.logging_monitoring import get_logger
@@ -14,12 +13,9 @@ logger = get_logger(__name__)
 
 def check_environment() -> bool:
     """Check if the environment is properly set up."""
-    formatter = TerminalFormatter() if TERMINAL_INTERFACE_AVAILABLE else None
+    formatter = TerminalFormatter()
 
-    if formatter:
-        print(formatter.header("🔍 Codomyrmex Environment Check", "=", 60))
-    else:
-        print("🔍 Checking Codomyrmex environment...")
+    print(formatter.header("🔍 Codomyrmex Environment Check", "=", 60))
 
     success = True
 
@@ -29,11 +25,11 @@ def check_environment() -> bool:
         python_version.major == 3 and python_version.minor < 11
     ):
         msg = f"Python {python_version.major}.{python_version.minor} detected. Need Python 3.11+"
-        print(formatter.error(msg) if formatter else f"❌ {msg}")
+        print(formatter.error(msg))
         success = False
     else:
         msg = f"Python {python_version.major}.{python_version.minor}.{python_version.micro} ({platform.python_implementation()})"
-        print(formatter.success(msg) if formatter else f"✅ {msg}")
+        print(formatter.success(msg))
 
     # Check if we're in a virtual environment
     is_venv = hasattr(sys, "real_prefix") or (
@@ -42,10 +38,10 @@ def check_environment() -> bool:
     if is_venv:
         venv_path = os.environ.get("VIRTUAL_ENV", "unknown")
         msg = f"Running in virtual environment: {venv_path}"
-        print(formatter.success(msg) if formatter else f"✅ {msg}")
+        print(formatter.success(msg))
     else:
         msg = "Not running in virtual environment (consider using one)"
-        print(formatter.warning(msg) if formatter else f"⚠️  {msg}")
+        print(formatter.warning(msg))
 
     # Check core Codomyrmex modules
     core_modules = [
@@ -58,10 +54,10 @@ def check_environment() -> bool:
         try:
             __import__(module)
             msg = f"{desc} module"
-            print(formatter.success(msg) if formatter else f"✅ {msg}")
+            print(formatter.success(msg))
         except ImportError as e:
             msg = f"{desc} module - {e!s}"
-            print(formatter.error(msg) if formatter else f"❌ {msg}")
+            print(formatter.error(msg))
             success = False
 
     # Check optional AI/LLM dependencies
@@ -75,10 +71,10 @@ def check_environment() -> bool:
         try:
             __import__(dep)
             msg = f"{desc}"
-            print(formatter.success(msg) if formatter else f"✅ {desc}")
+            print(formatter.success(msg))
         except ImportError:
             msg = f"{desc} (optional)"
-            print(formatter.warning(msg) if formatter else f"⚠️  {desc} (optional)")
+            print(formatter.warning(msg))
 
     # Check analysis and visualization dependencies
     analysis_deps = [
@@ -94,17 +90,17 @@ def check_environment() -> bool:
         try:
             __import__(dep)
             msg = f"{desc}"
-            print(formatter.success(msg) if formatter else f"✅ {desc}")
+            print(formatter.success(msg))
         except ImportError:
             msg = f"{desc} (optional)"
-            print(formatter.warning(msg) if formatter else f"⚠️  {desc} (optional)")
+            print(formatter.warning(msg))
 
     return success
 
 
 def show_info():
     """Show information about Codomyrmex."""
-    formatter = TerminalFormatter() if TERMINAL_INTERFACE_AVAILABLE else None
+    formatter = TerminalFormatter()
 
     info_text = """
 🐜 Codomyrmex - A Modular, Extensible Coding Workspace
@@ -148,10 +144,7 @@ Get started:
 For help: codomyrmex --help
 """
 
-    if formatter:
-        print(formatter.box(info_text, "Codomyrmex Information"))
-    else:
-        print(info_text)
+    print(formatter.box(info_text, "Codomyrmex Information"))
 
 
 def show_modules():
@@ -182,32 +175,21 @@ def show_modules():
         },
     }
 
-    formatter = TerminalFormatter() if TERMINAL_INTERFACE_AVAILABLE else None
+    formatter = TerminalFormatter()
 
     for category, modules in modules_info.items():
-        if formatter:
-            print(formatter.header(f"📦 {category}", "-", 50))
-        else:
-            print(f"\n📦 {category}")
-            print("-" * 50)
+        print(formatter.header(f"📦 {category}", "-", 50))
 
         for module, description in modules.items():
-            if formatter:
-                print(f"  {formatter.color(module, 'BRIGHT_CYAN')}: {description}")
-            else:
-                print(f"  {module}: {description}")
+            print(f"  {formatter.color(module, 'BRIGHT_CYAN')}: {description}")
         print()
 
 
 def show_system_status():
     """Show comprehensive system status."""
-    formatter = TerminalFormatter() if TERMINAL_INTERFACE_AVAILABLE else None
+    formatter = TerminalFormatter()
 
-    if formatter:
-        print(formatter.header("🔧 System Status Dashboard", "=", 60))
-    else:
-        print("🔧 System Status Dashboard")
-        print("=" * 60)
+    print(formatter.header("🔧 System Status Dashboard", "=", 60))
 
     # Check environment
     print("\n📋 Environment Check:")
@@ -231,10 +213,10 @@ def show_system_status():
         try:
             __import__(f"codomyrmex.{module}")
             msg = f"{module.replace('_', ' ').title()}"
-            print(formatter.success(msg) if formatter else f"✅ {msg}")
+            print(formatter.success(msg))
         except ImportError:
             msg = f"{module.replace('_', ' ').title()} - Not available"
-            print(formatter.error(msg) if formatter else f"❌ {msg}")
+            print(formatter.error(msg))
 
     # System discovery
     try:
@@ -269,11 +251,6 @@ def show_system_status():
 
 def run_interactive_shell() -> bool:
     """Launch the interactive Codomyrmex shell."""
-    if not TERMINAL_INTERFACE_AVAILABLE:
-        print("❌ Interactive shell requires terminal interface module")
-        print("Install missing dependencies or use individual commands")
-        return False
-
     try:
         from codomyrmex.demos.terminal import run_terminal_demo
         from codomyrmex.terminal_interface.interactive_shell import InteractiveShell

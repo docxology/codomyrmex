@@ -306,7 +306,7 @@ class TestQwenMCPToolsOffline:
             assert result["status"] == "success"
 
     def test_all_mcp_tools_have_decorator(self):
-        """All 5 MCP tool functions should have _mcp_tool_name attribute."""
+        """All 5 MCP tool functions are registered by the @mcp_tool decorator."""
         from codomyrmex.agents.qwen.mcp_tools import (
             qwen_chat,
             qwen_chat_with_tools,
@@ -322,11 +322,12 @@ class TestQwenMCPToolsOffline:
             qwen_create_agent,
             qwen_code_review,
         ]:
-            assert hasattr(tool, "_mcp_tool_name"), (
-                f"{tool.__name__} missing _mcp_tool_name"
+            assert hasattr(tool, "_mcp_tool_meta"), (
+                f"{tool.__name__} missing _mcp_tool_meta"
             )
-            assert isinstance(tool._mcp_tool_name, str)
-            assert len(tool._mcp_tool_name) > 0
+            name = tool._mcp_tool_meta["name"]
+            assert isinstance(name, str)
+            assert name
 
     def test_mcp_tool_names_unique(self):
         """All MCP tool names must be unique."""
@@ -339,7 +340,7 @@ class TestQwenMCPToolsOffline:
         )
 
         names = [
-            t._mcp_tool_name
+            t._mcp_tool_meta["name"]
             for t in [
                 qwen_chat,
                 qwen_chat_with_tools,
@@ -366,10 +367,9 @@ class TestQwenMCPToolsOffline:
             qwen_create_agent,
             qwen_code_review,
         ]:
-            assert hasattr(tool, "_mcp_tool_description"), (
+            assert len(tool._mcp_tool_meta["description"]) > 10, (
                 f"{tool.__name__} missing description"
             )
-            assert len(tool._mcp_tool_description) > 10
 
 
 # ============================================================================

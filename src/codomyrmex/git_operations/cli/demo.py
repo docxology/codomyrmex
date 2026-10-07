@@ -1,5 +1,9 @@
 from pathlib import Path
 
+from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
+from codomyrmex.data_visualization.mermaid.mermaid_generator import (
+    MermaidDiagramGenerator,
+)
 from codomyrmex.git_operations import (
     check_git_availability,
     is_git_repository,
@@ -12,17 +16,6 @@ from codomyrmex.git_operations.api.visualization import (
     visualize_git_branches,
 )
 from codomyrmex.logging_monitoring import get_logger
-
-# Optional import for data visualization
-try:
-    from codomyrmex.data_visualization import (
-        GitVisualizer,
-        MermaidDiagramGenerator,
-    )
-
-    VISUALIZATION_AVAILABLE = True
-except ImportError:
-    VISUALIZATION_AVAILABLE = False
 
 logger = get_logger(__name__)
 
@@ -48,10 +41,6 @@ class GitVisualizationDemo:
         skip_workflows: bool = False,
     ) -> bool:
         """Run all enabled demonstrations."""
-        if not VISUALIZATION_AVAILABLE:
-            logger.error("Data visualization module not available. Cannot run demo.")
-            return False
-
         results = {}
 
         # 1. Sample data demonstrations

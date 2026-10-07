@@ -104,8 +104,6 @@ def handle_fpf_visualize(
 ) -> bool:
     """Handle FPF visualize command."""
     try:
-        from codomyrmex.fpf.visualizer_png import FPFVisualizerPNG
-
         from codomyrmex.fpf import FPFClient, FPFVisualizer
 
         client = FPFClient()
@@ -113,7 +111,9 @@ def handle_fpf_visualize(
 
         print(f"Generating {viz_type} visualization ({format})...")
         if format == "png":
-            # Use PNG visualizer
+            # PNG rendering needs matplotlib/networkx; import only on this path.
+            from codomyrmex.fpf.visualization.visualizer_png import FPFVisualizerPNG
+
             png_visualizer = FPFVisualizerPNG()
             output_path = Path(output)
 
@@ -196,10 +196,9 @@ def handle_fpf_export_section(
 ) -> bool:
     """Handle FPF export-section command."""
     try:
-        from codomyrmex.fpf.section_exporter import SectionExporter
-        from codomyrmex.fpf.section_manager import SectionManager
-
         from codomyrmex.fpf import FPFClient
+        from codomyrmex.fpf.io.section_exporter import SectionExporter
+        from codomyrmex.fpf.io.section_manager import SectionManager
 
         client = FPFClient()
         client.load_from_file(file)
@@ -229,9 +228,8 @@ def handle_fpf_export_section(
 def handle_fpf_analyze(file: str, output: str | None) -> bool:
     """Handle FPF analyze command."""
     try:
-        from codomyrmex.fpf.analyzer import FPFAnalyzer
-
         from codomyrmex.fpf import FPFClient
+        from codomyrmex.fpf.analysis.analyzer import FPFAnalyzer
 
         client = FPFClient()
         client.load_from_file(file)
@@ -256,16 +254,15 @@ def handle_fpf_analyze(file: str, output: str | None) -> bool:
 def handle_fpf_report(file: str, output: str, include_analysis: bool) -> bool:
     """Handle FPF report command."""
     try:
-        from codomyrmex.fpf.report_generator import ReportGenerator
-
         from codomyrmex.fpf import FPFClient
+        from codomyrmex.fpf.analysis.report_generator import ReportGenerator
 
         client = FPFClient()
         client.load_from_file(file)
 
         generator = ReportGenerator(client.spec)
         print(f"Generating HTML report to {output}...")
-        generator.generate_html_report(Path(output), include_analysis=include_analysis)
+        generator.generate_report(Path(output), include_analysis=include_analysis)
 
         print_success(f"Report generated at {output}")
         return True

@@ -3,7 +3,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from .account import Account, AccountType
+# Unreachable module: the finance/ledger/ package shadows this file, so it can
+# never be imported and ty resolves `.account` against that package.
+from .account import Account, AccountType  # ty: ignore[unresolved-import]
 
 logger = logging.getLogger(__name__)
 

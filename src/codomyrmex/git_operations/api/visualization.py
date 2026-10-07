@@ -10,8 +10,14 @@ with data_visualization capabilities, specifically for Git-related visualization
 """
 
 import os
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
+from codomyrmex.data_visualization.mermaid.mermaid_generator import (
+    create_git_workflow_diagram as generate_git_workflow_diagram,
+)
+from codomyrmex.data_visualization.mermaid.mermaid_generator import (
+    create_repository_structure_diagram,
+)
 from codomyrmex.git_operations.core.git import (
     check_git_availability,
     get_commit_history,
@@ -20,22 +26,24 @@ from codomyrmex.git_operations.core.git import (
     is_git_repository,
     list_stashes,
 )
-
-try:
-    from codomyrmex.data_visualization import (
-        GitVisualizer,
-    )
-    from codomyrmex.data_visualization import (
-        create_git_workflow_diagram as generate_git_workflow_diagram,
-    )
-
-    VISUALIZATION_AVAILABLE = True
-except ImportError:
-    VISUALIZATION_AVAILABLE = False
-
 from codomyrmex.logging_monitoring import get_logger
 
+if TYPE_CHECKING:
+    from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
+
 logger = get_logger(__name__)
+
+
+def _git_visualizer() -> "GitVisualizer":
+    """Create a GitVisualizer.
+
+    Imported at call time: ``data_visualization.git`` imports
+    ``git_operations.core.git``, which initialises the ``git_operations``
+    package (and this module), so a module-level import would be circular.
+    """
+    from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
+
+    return GitVisualizer()
 
 
 def create_git_analysis_report(
@@ -60,10 +68,6 @@ def create_git_analysis_report(
     """
     logger.info("Creating Git analysis report for %s", repository_path)
 
-    if not VISUALIZATION_AVAILABLE:
-        logger.error("Data visualization module not available")
-        return {"error": "Visualization module not available"}
-
     if not check_git_availability():
         logger.error("Git is not available on this system")
         return {"error": "Git not available"}
@@ -77,7 +81,7 @@ def create_git_analysis_report(
 
     os.makedirs(output_dir, exist_ok=True)
 
-    visualizer = GitVisualizer()
+    visualizer = _git_visualizer()
 
     try:
         results = visualizer.create_comprehensive_git_report(
@@ -127,9 +131,6 @@ def visualize_git_branches(
     """
     logger.debug("Creating Git branch visualization for %s", repository_path)
 
-    if not VISUALIZATION_AVAILABLE:
-        return {"error": "Visualization module not available"}
-
     if not is_git_repository(repository_path):
         return {"error": "Not a Git repository"}
 
@@ -143,7 +144,7 @@ def visualize_git_branches(
 
     try:
         if format_type == "png":
-            visualizer = GitVisualizer()
+            visualizer = _git_visualizer()
             success = visualizer.visualize_git_tree_png(
                 repository_path=repository_path,
                 title=title,
@@ -159,7 +160,7 @@ def visualize_git_branches(
             }
 
         if format_type == "mermaid":
-            visualizer = GitVisualizer()
+            visualizer = _git_visualizer()
             content = visualizer.visualize_git_tree_mermaid(
                 repository_path=repository_path, title=title, output_path=output_path
             )
@@ -198,9 +199,6 @@ def visualize_commit_activity(
     """
     logger.debug("Creating commit activity visualization for %s", repository_path)
 
-    if not VISUALIZATION_AVAILABLE:
-        return {"error": "Visualization module not available"}
-
     if not is_git_repository(repository_path):
         return {"error": "Not a Git repository"}
 
@@ -212,7 +210,7 @@ def visualize_commit_activity(
         output_path = f"./commit_activity_{base_name}.png"
 
     try:
-        visualizer = GitVisualizer()
+        visualizer = _git_visualizer()
         success = visualizer.visualize_commit_activity_png(
             repository_path=repository_path,
             title=title,
@@ -251,9 +249,6 @@ def create_git_workflow_diagram(
         Dictionary with diagram creation status and content
     """
     logger.debug("Creating Git workflow diagram: %s", workflow_type)
-
-    if not VISUALIZATION_AVAILABLE:
-        return {"error": "Visualization module not available"}
 
     # Define workflow steps for different types
     workflow_steps = {
@@ -360,9 +355,6 @@ def analyze_repository_structure(
     """
     logger.debug("Analyzing repository structure for %s", repository_path)
 
-    if not VISUALIZATION_AVAILABLE:
-        return {"error": "Visualization module not available"}
-
     if not is_git_repository(repository_path):
         return {"error": "Not a Git repository"}
 
@@ -375,8 +367,6 @@ def analyze_repository_structure(
 
     try:
         structure = _analyze_directory_structure(repository_path, max_depth)
-
-        from codomyrmex.data_visualization import create_repository_structure_diagram
 
         content = create_repository_structure_diagram(
             repo_structure=structure, title=title, output_path=output_path

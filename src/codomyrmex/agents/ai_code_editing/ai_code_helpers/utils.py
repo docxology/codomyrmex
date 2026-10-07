@@ -2,19 +2,10 @@
 
 import os
 
-try:
-    from codomyrmex.llm.providers.ollama_manager import OLLAMA_AVAILABLE
-except ImportError:
-    OLLAMA_AVAILABLE = False
-
-import contextlib
-
+from codomyrmex.environment_setup.env_checker import check_and_setup_env_vars
 from codomyrmex.logging_monitoring import get_logger
 
 from .models import CodeLanguage
-
-with contextlib.suppress(ImportError):
-    from environment_setup.env_checker import check_and_setup_env_vars
 
 logger = get_logger(__name__)
 
@@ -26,10 +17,7 @@ def get_supported_languages() -> list[CodeLanguage]:
 
 def get_supported_providers() -> list[str]:
     """Get list of supported LLM providers."""
-    providers = ["openai", "anthropic", "google"]
-    if OLLAMA_AVAILABLE:
-        providers.append("ollama")
-    return providers
+    return ["openai", "anthropic", "google", "ollama"]
 
 
 def get_available_models(provider: str) -> list[str]:
@@ -63,9 +51,8 @@ def validate_api_keys() -> dict[str, bool]:
 def setup_environment() -> bool:
     # Setup environment variables and check dependencies.
     try:
-        # Check and setup environment variables if available
-        if check_and_setup_env_vars:
-            check_and_setup_env_vars()
+        # Load .env and check environment variables
+        check_and_setup_env_vars()
 
         # Validate API keys
         api_keys = validate_api_keys()

@@ -33,32 +33,28 @@ except ImportError:
 
 
 def get_deprecated_tools() -> list[dict[str, Any]]:
-    """Scan the MCP tool registry for tools with ``deprecated_in`` set.
+    """Scan the discovered MCP tools for tools with ``deprecated_in`` set.
 
     Returns:
         list of dicts with keys: ``name``, ``module``, ``deprecated_in``,
         ``description``.
     """
+    # The PAI bridge discovery is the single production tool-registration path
+    # (see ``transport.main``); import it at call time so this module has no
+    # import-time dependency on the agents layer.
+    from codomyrmex.agents.pai.mcp.discovery import discover_dynamic_tools
+
     deprecated: list[dict[str, Any]] = []
-
-    try:
-        from codomyrmex.model_context_protocol import get_all_tools
-
-        tools = get_all_tools()
-    except ImportError:
-        logger.warning("MCP get_all_tools not available")
-        return deprecated
-
-    for tool in tools:
-        meta = getattr(tool, "metadata", {}) or {}
+    for name, description, handler, _schema in discover_dynamic_tools():
+        meta = getattr(handler, "_mcp_tool_meta", None) or {}
         dep_version = meta.get("deprecated_in")
         if dep_version:
             deprecated.append(
                 {
-                    "name": getattr(tool, "name", str(tool)),
-                    "module": getattr(tool, "module", "unknown"),
+                    "name": name,
+                    "module": meta.get("module", "unknown"),
                     "deprecated_in": dep_version,
-                    "description": getattr(tool, "description", ""),
+                    "description": description,
                 }
             )
 

@@ -6,23 +6,13 @@ Exposes Qwen-specific capabilities as MCP tools for AI agent consumption.
 from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 logger = get_logger(__name__)
 
-try:
-    from codomyrmex.mcp_integration.decorators import mcp_tool
-except ImportError:
-    # Fallback: define a no-op decorator if MCP integration is unavailable
-    def mcp_tool(*, name: str, description: str, tags: list[str] | None = None):
-        def decorator(func):
-            func._mcp_tool_name = name
-            func._mcp_tool_description = description
-            return func
-
-        return decorator
-
 
 @mcp_tool(
+    category="qwen",
     name="qwen_chat",
     description=(
         "Send a chat message to a Qwen model (DashScope API). "
@@ -82,6 +72,7 @@ def qwen_chat(
 
 
 @mcp_tool(
+    category="qwen",
     name="qwen_chat_with_tools",
     description=(
         "Run a multi-turn tool-calling conversation with Qwen. "
@@ -124,6 +115,7 @@ def qwen_chat_with_tools(
 
 
 @mcp_tool(
+    category="qwen",
     name="qwen_list_models",
     description="list all available Qwen models with their context lengths and categories.",
     tags=["qwen", "models", "registry"],
@@ -144,6 +136,7 @@ def qwen_list_models() -> dict[str, Any]:
 
 
 @mcp_tool(
+    category="qwen",
     name="qwen_create_agent",
     description=(
         "Create a Qwen-Agent framework Assistant with optional MCP server "
@@ -188,6 +181,7 @@ def qwen_create_agent(
 
 
 @mcp_tool(
+    category="qwen",
     name="qwen_code_review",
     description=(
         "Submit code to Qwen-Coder for review. Returns analysis, "

@@ -30,17 +30,6 @@ class TestEducationModuleImports:
     def test_lesson_importable(self):
         assert Lesson is not None
 
-    def test_optional_tutor_is_none_or_class(self):
-        from codomyrmex.documentation.education import Tutor
-
-        # Tutor is either None (not installed) or a class
-        assert Tutor is None or callable(Tutor)
-
-    def test_optional_assessment_is_none_or_class(self):
-        from codomyrmex.documentation.education import Assessment
-
-        assert Assessment is None or callable(Assessment)
-
 
 # ---------------------------------------------------------------------------
 # Difficulty enum

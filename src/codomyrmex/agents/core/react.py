@@ -13,8 +13,6 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     from collections.abc import Iterator
 
-    from codomyrmex.llm import BaseLLMClient
-
     from .registry import ToolRegistry
 
 from codomyrmex.logging_monitoring import get_logger
@@ -30,13 +28,16 @@ class ReActAgent(BaseAgent):
 
     Implements the ``AgentProtocol`` methods (``plan``, ``act``, ``observe``)
     and composes them inside ``_execute_impl``.
+
+    ``llm_client`` is duck-typed: it must provide either
+    ``chat(messages: list[dict]) -> str`` or ``complete(prompt: str) -> str``.
     """
 
     def __init__(
         self,
         name: str,
         tool_registry: ToolRegistry,
-        llm_client: BaseLLMClient | Any = None,
+        llm_client: Any = None,
         config: dict[str, Any] | None = None,
         max_steps: int = 10,
     ):
