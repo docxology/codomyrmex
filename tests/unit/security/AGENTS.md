@@ -3,9 +3,11 @@
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 ## Purpose
+
 Validation coverage, fixtures, and regression checks for Security.
 
 ## Active Components
+
 - `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
@@ -20,7 +22,6 @@ Validation coverage, fixtures, and regression checks for Security.
 - `test_compliance_report.py` – Project file
 - `test_dashboard.py` – Project file
 - `test_governance.py` – Project file
-- `test_mcp_security.py` – Project file
 - `test_mcp_tools.py` – Project file
 - `test_permissions.py` – Project file
 - `test_risk_assessment.py` – Project file
@@ -40,11 +41,13 @@ Validation coverage, fixtures, and regression checks for Security.
 - `unit/` – Directory containing unit components
 
 ## Operating Contracts
+
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Key Files
+
 - `AGENTS.md` - Agent coordination and navigation
 - `README.md` - Directory overview
 - `PAI.md`
@@ -56,7 +59,6 @@ Validation coverage, fixtures, and regression checks for Security.
 - `test_compliance_report.py`
 - `test_dashboard.py`
 - `test_governance.py`
-- `test_mcp_security.py`
 - `test_mcp_tools.py`
 - `test_permissions.py`
 - `test_risk_assessment.py`
@@ -74,13 +76,16 @@ Validation coverage, fixtures, and regression checks for Security.
 - `test_vulnerability_scanner_impl.py`
 
 ## Dependencies
+
 - Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
 ## Development Guidelines
+
 - Follow the universal agent protocols defined in the root `AGENTS.md`.
 - Adhere to the Python PEP 8 style guide and project-specific linting rules.
 - Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
+
 - **📁 Parent Directory**: [unit](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../../../README.md - Main project documentation
