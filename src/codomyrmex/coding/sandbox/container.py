@@ -4,6 +4,7 @@ Docker Container Management
 Handles Docker container creation, execution, and cleanup for sandboxed code execution.
 """
 
+import contextlib
 import json
 import os
 import subprocess
@@ -171,9 +172,13 @@ def run_code_in_docker(
     logger.info("Executing code in Docker: %s", " ".join(docker_cmd))  # type: ignore
 
     try:
-        # Open stdin file outside shell (no shell injection possible) (C3)
-        _stdin_fh = open(os.path.realpath(stdin_file)) if stdin_file else None
-        try:
+        # Open stdin file outside shell (no shell injection possible) (C3).
+        # Popen dups the fd, so the handle can close as soon as it starts.
+        with (
+            open(os.path.realpath(stdin_file))
+            if stdin_file
+            else contextlib.nullcontext()
+        ) as _stdin_fh:
             process = subprocess.Popen(  # type: ignore
                 docker_cmd,
                 stdout=subprocess.PIPE,
@@ -182,10 +187,6 @@ def run_code_in_docker(
                 universal_newlines=True,
                 bufsize=1,
             )
-        finally:
-            # Popen dups the fd; safe to close our handle immediately
-            if _stdin_fh is not None:
-                _stdin_fh.close()
 
         try:
             stdout, stderr = process.communicate(timeout=docker_timeout)

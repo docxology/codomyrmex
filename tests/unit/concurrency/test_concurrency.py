@@ -16,6 +16,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pytest
+from tests.support.temp_files import temp_file_path
 
 from codomyrmex.concurrency import (
     AsyncLocalSemaphore,
@@ -913,9 +914,7 @@ class TestAsyncSlidingWindowBasic:
 
 def _tmp_dlq():
     """Return (dlq, path) with an isolated temp JSONL file."""
-    f = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
-    f.close()
-    path = Path(f.name)
+    path = temp_file_path(".jsonl")
     return DeadLetterQueue(path=path), path
 
 
@@ -979,9 +978,7 @@ class TestDeadLetterQueueList:
             path.unlink(missing_ok=True)
 
     def test_nonexistent_file(self):
-        f = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
-        path = Path(f.name)
-        f.close()
+        path = temp_file_path(".jsonl")
         path.unlink()  # Remove to simulate nonexistent file
         dlq = DeadLetterQueue(path=path)
         assert dlq.list_entries() == []
