@@ -617,8 +617,14 @@ def _safe_path(root: Path, relative: object, issues: list[str]) -> Path | None:
     return path
 
 
+# Receipts that only exist after a PDF render: ``compile_manuscript.py`` writes
+# them while validating the PDF. Claims may cite them as evidence, but an
+# unrendered check cannot require them; they are reported as deferred instead.
+RENDER_RECEIPT_PREFIX = "output/validation/"
+
+
 def _validate_claim_ledger(
-    root: Path, issues: list[str]
+    root: Path, issues: list[str], *, require_render_receipts: bool = False
 ) -> tuple[int, dict[str, list[str]]]:
     path = root / "docs/manuscript/claim_ledger.yaml"
     if not path.is_file():
@@ -642,6 +648,7 @@ def _validate_claim_ledger(
     )
     seen: set[str] = set()
     claim_source_paths: set[str] = set()
+    deferred_render_evidence: set[str] = set()
     for index, claim in enumerate(claims):
         prefix = f"claim {index}"
         if not isinstance(claim, dict):
@@ -675,6 +682,11 @@ def _validate_claim_ledger(
         ]:
             resolved = _safe_path(root, entry, issues)
             if resolved is not None and not resolved.exists():
+                if not require_render_receipts and str(entry).startswith(
+                    RENDER_RECEIPT_PREFIX
+                ):
+                    deferred_render_evidence.add(str(entry))
+                    continue
                 issues.append(f"{prefix} references missing path: {entry}")
         if isinstance(sources, list):
             claim_source_paths.update(str(entry) for entry in sources)
@@ -747,6 +759,7 @@ def _validate_claim_ledger(
         "covered": sorted(covered),
         "excluded": sorted(excluded),
         "unaccounted": unaccounted,
+        "deferred_render_evidence": sorted(deferred_render_evidence),
     }
 
 
@@ -1021,7 +1034,11 @@ def validate_manuscript_integrity(
             "hydrated manuscript extended descriptions do not cover the figure registry"
         )
 
-    claim_count, claim_source_audit = _validate_claim_ledger(project_root, issues)
+    claim_count, claim_source_audit = _validate_claim_ledger(
+        project_root,
+        issues,
+        require_render_receipts=require_rendered or require_source_current,
+    )
     manuscript_sources = sorted((project_root / "docs/manuscript").glob("[0-9]*.md"))
     bibliography_audit = audit_bibliography(
         project_root / "docs/manuscript/references.bib",
