@@ -55,7 +55,7 @@ reset_trust()
 ## Trust Levels
 
 | Level | Meaning | How to reach |
-|-------|---------|--------------|
+| ------- | --------- | -------------- |
 | `UNTRUSTED` | No access via `trusted_call_tool` | Default state |
 | `VERIFIED` | Read-only tools callable | `/codomyrmexVerify` |
 | `TRUSTED` | All tools callable (including writes) | `/codomyrmexTrust` |

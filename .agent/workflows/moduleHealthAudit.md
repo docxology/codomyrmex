@@ -57,7 +57,7 @@ uv run pytest --cov=src/codomyrmex --cov-report=term-missing -q 2>&1 \
 
 ## 5. Report Format
 
-```
+```text
 MODULE HEALTH AUDIT -- <date>
 RASP: <N> complete, <M> missing files
 MCP Tools: <N> modules with mcp_tools.py, <M> phantom refs

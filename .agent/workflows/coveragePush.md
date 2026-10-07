@@ -11,6 +11,7 @@ Current gate: **60%** (`[tool.coverage.report] fail_under` in `pyproject.toml`, 
 ```bash
 uv run pytest --cov=src/codomyrmex --cov-fail-under=60 --cov-report=term-missing -q 2>&1 | grep " 0%" | head -30
 ```
+
 Focus on 0%-covered files with the most statements.
 
 ## 2. Test File Template
@@ -31,6 +32,7 @@ class Test<ClassName>Basics:
 ```
 
 Skip guard for external deps:
+
 ```python
 import os
 HAS_KEY = bool(os.getenv('API_KEY'))
