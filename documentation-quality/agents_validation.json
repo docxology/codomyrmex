@@ -25,101 +25,75 @@
   },
   {
     "file": ".jules/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": ".codex/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": "evaluations/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": "evaluations/gemini/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": "evaluations/api/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
-      "Consider adding 'Common Tasks' section",
-      "No code blocks or file references found"
+      "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": "evaluations/cli/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
-      "Consider adding 'Common Tasks' section",
-      "No code blocks or file references found"
+      "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": "config/AGENTS.md",
@@ -1443,197 +1417,147 @@
   },
   {
     "file": ".devcontainer/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": ".agents/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": ".agents/skills/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": ".agents/skills/systems-thinking/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": ".agents/skills/agent-interop/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": ".agents/skills/mcp-tool-use/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": ".agents/skills/red-team/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": ".agents/skills/first-principles/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": "data/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
-      "Consider adding 'Common Tasks' section",
-      "No code blocks or file references found"
+      "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": "data/sair/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": "data/sair/results/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": "data/sair/runs/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
-      "Consider adding 'Common Tasks' section",
-      "No code blocks or file references found"
+      "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": "scripts/AGENTS.md",
@@ -4733,67 +4657,51 @@
   },
   {
     "file": ".agent/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": ".agent/skills/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": ".agent/skills/desloppify/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": ".agent/workflows/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": "src/AGENTS.md",
@@ -5505,19 +5413,15 @@
   },
   {
     "file": "src/codomyrmex/language_detection/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Purpose",
-      "Key Files",
-      "Dependencies"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": "src/codomyrmex/git_analysis/AGENTS.md",
@@ -13825,16 +13729,14 @@
   },
   {
     "file": "docs/modules/preprocessing/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 80
+    "score": 100
   },
   {
     "file": "docs/modules/module_template/AGENTS.md",
@@ -13982,16 +13884,14 @@
   },
   {
     "file": "docs/modules/language_detection/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Common Tasks' section"
     ],
-    "score": 80
+    "score": 100
   },
   {
     "file": "docs/modules/git_analysis/AGENTS.md",
@@ -15711,20 +15611,15 @@
   },
   {
     "file": "docs/assets/demo_stills/AGENTS.md",
-    "valid": false,
-    "missing_sections": [
-      "Key Files",
-      "Dependencies",
-      "Development Guidelines"
-    ],
+    "valid": true,
+    "missing_sections": [],
     "warnings": [
       "Consider adding 'Code Style' section",
       "Consider adding 'Testing' section",
       "Consider adding 'Integration Points' section",
-      "Consider adding 'Common Tasks' section",
-      "No code blocks or file references found"
+      "Consider adding 'Common Tasks' section"
     ],
-    "score": 40
+    "score": 100
   },
   {
     "file": "docs/todo/AGENTS.md",

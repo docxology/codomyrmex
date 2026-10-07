@@ -424,11 +424,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 4,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 66,
-      "link_count": 0
+      "word_count": 312,
+      "link_count": 8
     }
   },
   {
@@ -530,11 +530,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 4,
+      "heading_count": 5,
       "placeholder_count": 0,
-      "code_block_count": 0,
-      "word_count": 60,
-      "link_count": 0
+      "code_block_count": 1,
+      "word_count": 224,
+      "link_count": 9
     }
   },
   {
@@ -727,11 +727,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 4,
+      "heading_count": 5,
       "placeholder_count": 0,
-      "code_block_count": 0,
-      "word_count": 137,
-      "link_count": 0
+      "code_block_count": 1,
+      "word_count": 280,
+      "link_count": 10
     }
   },
   {
@@ -760,16 +760,14 @@
   },
   {
     "file": "evaluations/gemini/AGENTS.md",
-    "score": 90,
-    "issues": [
-      "Document appears too short"
-    ],
+    "score": 100,
+    "issues": [],
     "metrics": {
-      "heading_count": 3,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 30,
-      "link_count": 0
+      "word_count": 167,
+      "link_count": 6
     }
   },
   {
@@ -802,16 +800,14 @@
   },
   {
     "file": "evaluations/api/AGENTS.md",
-    "score": 90,
-    "issues": [
-      "Document appears too short"
-    ],
+    "score": 100,
+    "issues": [],
     "metrics": {
-      "heading_count": 3,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 43,
-      "link_count": 0
+      "word_count": 204,
+      "link_count": 6
     }
   },
   {
@@ -842,16 +838,14 @@
   },
   {
     "file": "evaluations/cli/AGENTS.md",
-    "score": 90,
-    "issues": [
-      "Document appears too short"
-    ],
+    "score": 100,
+    "issues": [],
     "metrics": {
-      "heading_count": 3,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 29,
-      "link_count": 0
+      "word_count": 136,
+      "link_count": 6
     }
   },
   {
@@ -5315,11 +5309,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 4,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 55,
-      "link_count": 0
+      "word_count": 300,
+      "link_count": 7
     }
   },
   {
@@ -5341,11 +5335,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 4,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 74,
-      "link_count": 0
+      "word_count": 179,
+      "link_count": 9
     }
   },
   {
@@ -5365,11 +5359,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 4,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 63,
-      "link_count": 0
+      "word_count": 229,
+      "link_count": 10
     }
   },
   {
@@ -5389,11 +5383,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 4,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 71,
-      "link_count": 1
+      "word_count": 202,
+      "link_count": 6
     }
   },
   {
@@ -5427,11 +5421,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 4,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 76,
-      "link_count": 1
+      "word_count": 197,
+      "link_count": 9
     }
   },
   {
@@ -5465,11 +5459,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 4,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 68,
-      "link_count": 1
+      "word_count": 201,
+      "link_count": 8
     }
   },
   {
@@ -5503,11 +5497,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 4,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 69,
-      "link_count": 1
+      "word_count": 199,
+      "link_count": 7
     }
   },
   {
@@ -5541,11 +5535,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 4,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 71,
-      "link_count": 1
+      "word_count": 201,
+      "link_count": 6
     }
   },
   {
@@ -5579,11 +5573,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 4,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 69,
-      "link_count": 0
+      "word_count": 178,
+      "link_count": 6
     }
   },
   {
@@ -5605,11 +5599,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 4,
+      "heading_count": 5,
       "placeholder_count": 0,
-      "code_block_count": 0,
-      "word_count": 78,
-      "link_count": 0
+      "code_block_count": 1,
+      "word_count": 249,
+      "link_count": 8
     }
   },
   {
@@ -5628,16 +5622,14 @@
   },
   {
     "file": "data/sair/results/AGENTS.md",
-    "score": 90,
-    "issues": [
-      "Document appears too short"
-    ],
+    "score": 100,
+    "issues": [],
     "metrics": {
-      "heading_count": 3,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 25,
-      "link_count": 0
+      "word_count": 171,
+      "link_count": 5
     }
   },
   {
@@ -5659,11 +5651,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 3,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 53,
-      "link_count": 0
+      "word_count": 221,
+      "link_count": 4
     }
   },
   {
@@ -17878,7 +17870,7 @@
       "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 110,
+      "word_count": 116,
       "link_count": 4
     }
   },
@@ -20744,7 +20736,7 @@
       "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 128,
+      "word_count": 134,
       "link_count": 4
     }
   },
@@ -20765,11 +20757,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 3,
+      "heading_count": 6,
       "placeholder_count": 0,
-      "code_block_count": 0,
-      "word_count": 95,
-      "link_count": 0
+      "code_block_count": 1,
+      "word_count": 316,
+      "link_count": 9
     }
   },
   {
@@ -22430,7 +22422,7 @@
       "heading_count": 11,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 397,
+      "word_count": 448,
       "link_count": 4
     }
   },
@@ -52349,11 +52341,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 5,
+      "heading_count": 6,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 52,
-      "link_count": 3
+      "word_count": 197,
+      "link_count": 8
     }
   },
   {
@@ -53337,11 +53329,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 5,
+      "heading_count": 6,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 73,
-      "link_count": 3
+      "word_count": 222,
+      "link_count": 8
     }
   },
   {
@@ -62910,16 +62902,14 @@
   },
   {
     "file": "docs/assets/demo_stills/AGENTS.md",
-    "score": 90,
-    "issues": [
-      "Document appears too short"
-    ],
+    "score": 100,
+    "issues": [],
     "metrics": {
-      "heading_count": 3,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 42,
-      "link_count": 0
+      "word_count": 178,
+      "link_count": 5
     }
   },
   {
