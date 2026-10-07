@@ -3,7 +3,7 @@
 Simulates anonymous routing via an overlay network (Melange Mixnet).
 """
 
-import random
+import secrets
 import time
 import uuid
 from dataclasses import dataclass
@@ -11,6 +11,10 @@ from dataclasses import dataclass
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
+
+# Path selection and relay jitter exist to defeat traffic analysis, so they
+# must not be predictable from a seeded PRNG.
+_CSPRNG = secrets.SystemRandom()
 
 
 @dataclass
@@ -31,7 +35,7 @@ class MixNode:
     def relay(self, packet: Packet) -> Packet | None:
         """Process and forward a packet."""
         # Simulate processing delay to thwart timing analysis
-        time.sleep(random.uniform(0.01, 0.05))
+        time.sleep(_CSPRNG.uniform(0.01, 0.05))
 
         if packet.hops_remaining <= 0:
             return packet
@@ -58,7 +62,7 @@ class MixnetProxy:
         packet = Packet(payload, route_id, hops)
 
         # Select random path
-        path = random.sample(self._nodes, k=min(hops, len(self._nodes)))
+        path = _CSPRNG.sample(self._nodes, k=min(hops, len(self._nodes)))
         logger.info("Routing packet %s via %s hops", route_id, len(path))
 
         current_packet = packet

@@ -661,6 +661,34 @@ class TestProxyToolListWorkflows:
         result = tool_list_workflows(project_root=str(tmp_path / "nope"))
         assert result["count"] == 0
 
+    def test_directory_docs_are_not_workflows(self, tmp_path):
+        from codomyrmex.agents.pai.mcp.proxy_tools import tool_list_workflows
+
+        wf_dir = tmp_path / ".agent" / "workflows"
+        wf_dir.mkdir(parents=True)
+        (wf_dir / "README.md").write_text("# Workflows\n", encoding="utf-8")
+        (wf_dir / "AGENTS.md").write_text("# Agents\n", encoding="utf-8")
+        (wf_dir / "deploy.md").write_text(
+            '---\ndescription: "Deploy: staging then prod"\n---\n# Deploy\n',
+            encoding="utf-8",
+        )
+
+        result = tool_list_workflows(project_root=str(tmp_path))
+        assert [wf["name"] for wf in result["workflows"]] == ["deploy"]
+        assert result["workflows"][0]["description"] == "Deploy: staging then prod"
+
+    def test_repository_workflows_all_have_parseable_descriptions(self):
+        from codomyrmex.agents.pai.mcp.proxy_tools import tool_list_workflows
+
+        result = tool_list_workflows()
+        missing = [
+            wf["name"]
+            for wf in result["workflows"]
+            if wf["description"] == "No description"
+        ]
+        assert result["count"] > 0
+        assert not missing, f"workflows without a parseable description: {missing}"
+
 
 @pytest.mark.unit
 class TestProxyToolInvalidateCache:
