@@ -9,7 +9,7 @@ from .async_manager import (
     async_wait_for_completion,
 )
 from .builder import PipelineBuilder
-from .functions import create_pipeline, run_pipeline
+from .functions import create_pipeline, run_pipeline, validate_pipeline_config
 from .generator import Workflow, WorkflowGenerator
 from .manager import PipelineManager
 from .models import (
@@ -36,6 +36,7 @@ __all__ = [
     "async_wait_for_completion",
     "create_pipeline",
     "run_pipeline",
+    "validate_pipeline_config",
 ]
 
 from .pipeline_monitor import (
