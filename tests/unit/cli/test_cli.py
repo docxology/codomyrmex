@@ -172,38 +172,29 @@ class TestCLIInteractiveShell:
 class TestCLIWorkflows:
     """Test CLI workflow management functionality."""
 
-    def test_list_workflows(self):
-        """Test workflow listing with real output."""
-        # Capture real output
-        captured = io.StringIO()
-        sys.stdout = captured
+    # These handlers read and write ./config/workflows/production, so each test
+    # runs in its own temporary working directory.
 
-        list_workflows()
+    def test_list_workflows(self, tmp_path, monkeypatch, capsys):
+        """Listing an empty directory succeeds and says so."""
+        monkeypatch.chdir(tmp_path)
 
-        output = captured.getvalue()
-        sys.stdout = sys.__stdout__
+        assert list_workflows() is True
+        assert "No workflows found" in capsys.readouterr().out
 
-        # Should print something (may be empty if no workflows)
-        assert len(output) >= 0
+    def test_run_workflow_success(self, tmp_path, monkeypatch):
+        """A created workflow runs its real steps."""
+        monkeypatch.chdir(tmp_path)
 
-    def test_run_workflow_success(self):
-        """Test workflow execution with real implementation."""
-        # Test that function exists and is callable
-        assert callable(run_workflow)
+        assert handle_workflow_create("test_workflow") is True
+        assert run_workflow("test_workflow") is True
 
-        # Try to run a workflow (may fail if workflow doesn't exist, which is expected)
-        result = run_workflow("test_workflow")
+    def test_run_workflow_failure(self, tmp_path, monkeypatch, capsys):
+        """An unknown workflow is reported as a failure."""
+        monkeypatch.chdir(tmp_path)
 
-        # Should return True or False (not raise exception)
-        assert isinstance(result, bool)
-
-    def test_run_workflow_failure(self):
-        """Test workflow execution failure handling."""
-        # Test with non-existent workflow
-        result = run_workflow("nonexistent_workflow_12345")
-
-        # Should return False or handle gracefully
-        assert isinstance(result, bool)
+        assert run_workflow("nonexistent_workflow_12345") is False
+        assert "not found" in capsys.readouterr().out
 
 
 @pytest.mark.unit
@@ -431,43 +422,37 @@ class TestCLIDemos:
 class TestCLIWorkflowManagement:
     """Test CLI workflow creation and management."""
 
-    def test_handle_workflow_create_success(self):
-        """Test workflow creation with real implementation."""
-        # Test that function exists and is callable
-        assert callable(handle_workflow_create)
+    # Detailed coverage lives in test_cli_orchestration_handlers.py.
 
-        # Try to create workflow (may fail if orchestration not available)
-        result = handle_workflow_create("test_workflow", "ai_analysis")
+    def test_handle_workflow_create_success(self, tmp_path, monkeypatch):
+        """Creating from a template saves the definition in the working directory."""
+        monkeypatch.chdir(tmp_path)
 
-        # Should return True or False (not raise exception)
-        assert isinstance(result, bool)
+        assert handle_workflow_create("test_workflow", "ai_analysis") is True
+        assert (
+            tmp_path / "config" / "workflows" / "production" / "test_workflow.json"
+        ).is_file()
 
 
 @pytest.mark.unit
 class TestCLIProjectManagement:
     """Test CLI project creation and management."""
 
-    def test_handle_project_create_success(self):
-        """Test project creation with real implementation."""
-        # Test that function exists and is callable
-        assert callable(handle_project_create)
+    def test_handle_project_create_success(self, tmp_path, monkeypatch):
+        """Creating a project scaffolds it and saves project.json."""
+        monkeypatch.chdir(tmp_path)
 
-        # Try to create project (may fail if orchestration not available)
-        result = handle_project_create("test_project", "ai_analysis")
+        assert handle_project_create("test_project", "ai_analysis") is True
+        assert (tmp_path / "test_project" / "project.json").is_file()
 
-        # Should return True or False (not raise exception)
-        assert isinstance(result, bool)
+    def test_handle_project_list_success(self, tmp_path, monkeypatch, capsys):
+        """Listing shows the projects created in the working directory."""
+        monkeypatch.chdir(tmp_path)
+        assert handle_project_create("test_project", "custom") is True
+        capsys.readouterr()
 
-    def test_handle_project_list_success(self):
-        """Test project listing with real implementation."""
-        # Test that function exists and is callable
-        assert callable(handle_project_list)
-
-        # Try to list projects (may fail if orchestration not available)
-        result = handle_project_list()
-
-        # Should return True or False (not raise exception)
-        assert isinstance(result, bool)
+        assert handle_project_list() is True
+        assert "test_project" in capsys.readouterr().out
 
 
 @pytest.mark.unit

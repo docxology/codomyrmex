@@ -3,9 +3,11 @@
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
+
 Module implementation, resources, and local coordination for Project.
 
 ## Active Components
+
 - `API_SPECIFICATION.md` – Project file
 - `CHANGELOG.md` – Project file
 - `COMPREHENSIVE_API_DOCUMENTATION.md` – Project file
@@ -17,6 +19,7 @@ Module implementation, resources, and local coordination for Project.
 - `SPEC.md` – Project file
 - `USAGE_EXAMPLES.md` – Project file
 - `__init__.py` – Project file
+- `_json_files.py` – Project file
 - `documentation_generator.py` – Project file
 - `mcp_tools.py` – Project file
 - `orchestration_engine.py` – Project file
@@ -30,11 +33,13 @@ Module implementation, resources, and local coordination for Project.
 - `workflow_manager.py` – Project file
 
 ## Operating Contracts
+
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Key Files
+
 - `AGENTS.md` - Agent coordination and navigation
 - `README.md` - Directory overview
 - `API_SPECIFICATION.md`
@@ -48,6 +53,7 @@ Module implementation, resources, and local coordination for Project.
 - `SPEC.md`
 - `USAGE_EXAMPLES.md`
 - `__init__.py`
+- `_json_files.py`
 - `documentation_generator.py`
 - `mcp_tools.py`
 - `orchestration_engine.py`
@@ -60,13 +66,16 @@ Module implementation, resources, and local coordination for Project.
 - `workflow_manager.py`
 
 ## Dependencies
+
 - Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
 ## Development Guidelines
+
 - Follow the universal agent protocols defined in the root `AGENTS.md`.
 - Adhere to the Python PEP 8 style guide and project-specific linting rules.
 - Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
+
 - **📁 Parent Directory**: [orchestration](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../../../README.md - Main project documentation

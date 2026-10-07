@@ -3,9 +3,45 @@
 This module provides comprehensive workflow management capabilities for the Codomyrmex
 project orchestration system. It handles the creation, listing, execution, and management
 of workflows that coordinate multiple Codomyrmex modules.
+
+Workflow files
+--------------
+A workflow definition file is a JSON object:
+
+.. code-block:: json
+
+    {
+      "name": "build-and-test",
+      "steps": [
+        {
+          "name": "validate_environment",
+          "module": "environment_setup",
+          "action": "validate_environment",
+          "parameters": {},
+          "dependencies": [],
+          "timeout": null,
+          "max_retries": 0,
+          "required": true
+        }
+      ]
+    }
+
+``name`` defaults to the file stem. ``steps`` is required; each step needs
+non-empty ``name``, ``module`` and ``action`` strings and may set
+``parameters`` (object), ``dependencies`` (step names), ``timeout`` (seconds or
+null), ``max_retries`` (stored as :attr:`WorkflowStep.retry_count`) and
+``required`` (default true). Other keys, such as a top-level ``description``,
+are ignored. A step with a ``run_if`` condition is rejected because conditions
+are not supported. Parameters reach the action verbatim: there is no
+``{{step.output}}`` substitution.
+
+:class:`WorkflowManager` loads every ``*.json`` file in its ``config_dir`` when
+it is constructed; :meth:`WorkflowManager.save_workflow` (or
+``create_workflow(..., persist=True)``) writes one in the same format.
 """
 
 import json
+import re
 import uuid
 from collections.abc import Sequence
 from dataclasses import dataclass, field
@@ -16,10 +52,14 @@ from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
+from ._json_files import write_json_atomic
 from .task_orchestrator import Task, TaskOrchestrator, TaskStatus, get_task_orchestrator
 from .workflow_dag import WorkflowDAG
 
 logger = get_logger(__name__)
+
+# Workflow names that can be saved as ``<name>.json`` as they are.
+_WORKFLOW_FILE_STEM = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*")
 
 
 class WorkflowStatus(Enum):
@@ -72,6 +112,88 @@ class WorkflowExecution:
         return self.status == WorkflowStatus.COMPLETED
 
 
+def _step_to_dict(step: WorkflowStep) -> dict[str, Any]:
+    """Serialise a step in the workflow file format (see the module docstring)."""
+    return {
+        "name": step.name,
+        "module": step.module,
+        "action": step.action,
+        "parameters": step.parameters,
+        "dependencies": list(step.dependencies),
+        "timeout": step.timeout,
+        "max_retries": step.retry_count,
+        "required": step.required,
+    }
+
+
+def _step_from_dict(raw: Any, index: int) -> WorkflowStep:
+    """Parse one step of a workflow file.
+
+    Raises:
+        ValueError: If the step is not an object or a field is missing or has
+            the wrong type.
+    """
+    if not isinstance(raw, dict):
+        raise ValueError(f"step {index} must be an object")
+    for key in ("name", "module", "action"):
+        value = raw.get(key)
+        if not isinstance(value, str) or not value:
+            raise ValueError(f"step {index}: '{key}' must be a non-empty string")
+    name = raw["name"]
+
+    parameters = raw.get("parameters", {})
+    if not isinstance(parameters, dict):
+        raise ValueError(f"step '{name}': 'parameters' must be an object")
+    dependencies = raw.get("dependencies", [])
+    if not isinstance(dependencies, list) or not all(
+        isinstance(dep, str) for dep in dependencies
+    ):
+        raise ValueError(f"step '{name}': 'dependencies' must be a list of step names")
+    timeout = raw.get("timeout")
+    if timeout is not None and (
+        isinstance(timeout, bool) or not isinstance(timeout, int | float)
+    ):
+        raise ValueError(f"step '{name}': 'timeout' must be a number or null")
+    max_retries = raw.get("max_retries", 0)
+    if isinstance(max_retries, bool) or not isinstance(max_retries, int):
+        raise ValueError(f"step '{name}': 'max_retries' must be an integer")
+    if max_retries < 0:
+        raise ValueError(f"step '{name}': 'max_retries' must not be negative")
+    required = raw.get("required", True)
+    if not isinstance(required, bool):
+        raise ValueError(f"step '{name}': 'required' must be true or false")
+    if raw.get("run_if") is not None:
+        raise ValueError(f"step '{name}': run_if conditions are not supported")
+
+    return WorkflowStep(
+        name=name,
+        module=raw["module"],
+        action=raw["action"],
+        parameters=parameters,
+        dependencies=dependencies,
+        required=required,
+        timeout=timeout,
+        retry_count=max_retries,
+    )
+
+
+def _workflow_from_dict(data: Any, default_name: str) -> tuple[str, list[WorkflowStep]]:
+    """Parse a workflow file's JSON content into its name and steps.
+
+    Raises:
+        ValueError: If the content does not follow the workflow file format.
+    """
+    if not isinstance(data, dict):
+        raise ValueError("a workflow file must contain a JSON object")
+    name = data.get("name", default_name)
+    if not isinstance(name, str) or not name:
+        raise ValueError("'name' must be a non-empty string")
+    raw_steps = data.get("steps")
+    if not isinstance(raw_steps, list):
+        raise ValueError("'steps' must be a list")
+    return name, [_step_from_dict(raw, index) for index, raw in enumerate(raw_steps)]
+
+
 class WorkflowManager:
     """Manages workflow definitions and execution."""
 
@@ -85,12 +207,17 @@ class WorkflowManager:
 
         Args:
             persistence_dir: Directory for workflow execution persistence data.
-            config_dir: Directory containing workflow definition JSON files.
-                        Defaults to ``config/workflows/production`` relative to cwd.
+            config_dir: Directory containing workflow definition JSON files
+                (see the module docstring for the format). Every ``*.json``
+                file in it is loaded now; files that do not follow the format
+                are logged and skipped. Defaults to
+                ``config/workflows/production`` relative to cwd.
             task_orchestrator: Orchestrator that runs workflow steps. Defaults to
                 the global task orchestrator.
         """
         self.workflows: dict[str, list[WorkflowStep]] = {}
+        # Definition file of each workflow loaded from or saved to config_dir.
+        self.workflow_files: dict[str, Path] = {}
         self.executions: dict[str, WorkflowExecution] = {}
         self.task_orchestrator = (
             task_orchestrator
@@ -109,13 +236,108 @@ class WorkflowManager:
         # Load any workflow definitions found in config_dir
         self._load_workflows_from_config()
 
-    def create_workflow(self, name: str, steps: list[WorkflowStep]) -> bool:
-        """Create and register a new workflow."""
-        if name in self.workflows:
+    def create_workflow(
+        self, name: str, steps: list[WorkflowStep], *, persist: bool = False
+    ) -> bool:
+        """Register ``steps`` as workflow ``name``, replacing any existing one.
+
+        Args:
+            name: Workflow name.
+            steps: Step definitions.
+            persist: Also write the definition to ``config_dir`` with
+                :meth:`save_workflow`, so that managers created later (for
+                example by another ``codomyrmex`` process) load it. By default
+                the workflow is registered in memory only.
+
+        Returns:
+            True.
+
+        Raises:
+            Only with ``persist=True``, whatever :meth:`save_workflow` raises.
+            The previous registration of ``name`` (or its absence) is restored
+            before the error propagates.
+        """
+        previous = self.workflows.get(name)
+        if previous is not None:
             logger.warning("Overwriting existing workflow: %s", name)
         self.workflows[name] = steps
+        if persist:
+            try:
+                self.save_workflow(name)
+            except BaseException:
+                if previous is None:
+                    del self.workflows[name]
+                else:
+                    self.workflows[name] = previous
+                raise
         logger.info("Created workflow: %s with %s steps", name, len(steps))
         return True
+
+    def save_workflow(self, name: str) -> Path:
+        """Write a registered workflow to ``config_dir`` as a workflow file.
+
+        The file uses the format described in the module docstring, which is
+        what ``WorkflowManager`` loads on construction. A workflow that was
+        loaded from (or already saved to) a file is written back to that file;
+        otherwise it is written to ``config_dir / f"{name}.json"``. The steps
+        are validated first and the write is atomic, so nothing is written for
+        a workflow that could not be loaded or run.
+
+        Returns:
+            The path of the written file (also recorded in ``workflow_files``).
+
+        Raises:
+            KeyError: If no workflow named ``name`` is registered.
+            ValueError: If ``name`` cannot be used as a file name (it must start
+                with a letter or digit and contain only letters, digits, ``.``,
+                ``_`` and ``-``), a step is malformed, the dependencies are
+                invalid (missing step, cycle, duplicate step name), or the
+                target file exists and holds a different or unreadable
+                workflow.
+            NotImplementedError: If a step sets ``run_if`` (not supported).
+            TypeError: If a step's parameters are not JSON-serialisable.
+            OSError: If the file cannot be written.
+        """
+        steps = self.workflows.get(name)
+        if steps is None:
+            raise KeyError(f"Workflow not registered: {name}")
+
+        self._order_steps(name, steps)
+        data = {"name": name, "steps": [_step_to_dict(step) for step in steps]}
+        _workflow_from_dict(data, default_name=name)
+
+        path = self.workflow_files.get(name)
+        if path is None:
+            if not _WORKFLOW_FILE_STEM.fullmatch(name):
+                raise ValueError(
+                    f"Workflow name {name!r} cannot be used as a file name: use "
+                    "letters, digits, '.', '_' and '-', starting with a letter "
+                    "or digit"
+                )
+            path = self.config_dir / f"{name}.json"
+            if path.exists():
+                self._check_file_holds_workflow(path, name)
+
+        write_json_atomic(path, data)
+        self.workflow_files[name] = path
+        logger.info("Saved workflow '%s' to %s", name, path)
+        return path
+
+    @staticmethod
+    def _check_file_holds_workflow(path: Path, name: str) -> None:
+        """Refuse to overwrite ``path`` unless it defines workflow ``name``."""
+        try:
+            with open(path, encoding="utf-8") as f:
+                existing, _ = _workflow_from_dict(json.load(f), default_name=path.stem)
+        except (OSError, ValueError) as exc:
+            raise ValueError(
+                f"{path} exists but is not a readable workflow file ({exc}); "
+                "not overwriting it"
+            ) from exc
+        if existing != name:
+            raise ValueError(
+                f"{path} already defines workflow '{existing}'; not overwriting it"
+            )
 
     def get_workflow(self, name: str) -> list[WorkflowStep] | None:
         """Get a workflow definition."""
@@ -296,40 +518,37 @@ class WorkflowManager:
     # ------------------------------------------------------------------
 
     def _load_workflows_from_config(self) -> None:
-        """Load workflow definitions from JSON files in ``self.config_dir``."""
+        """Load workflow definitions from JSON files in ``self.config_dir``.
+
+        Files are read in name order; a file that cannot be read or does not
+        follow the workflow file format is logged and skipped. When two files
+        define the same workflow name, the later file wins and a warning is
+        logged.
+        """
         if not self.config_dir.exists():
             return
 
         for workflow_file in sorted(self.config_dir.glob("*.json")):
             try:
-                with open(workflow_file) as f:
+                with open(workflow_file, encoding="utf-8") as f:
                     data = json.load(f)
-
-                workflow_name = data.get("name", workflow_file.stem)
-                raw_steps = data.get("steps", [])
-
-                steps: list[WorkflowStep] = []
-                for raw in raw_steps:
-                    steps.append(
-                        WorkflowStep(
-                            name=raw.get("name", ""),
-                            module=raw.get("module", ""),
-                            action=raw.get("action", ""),
-                            parameters=raw.get("parameters", {}),
-                            dependencies=raw.get("dependencies", []),
-                            timeout=raw.get("timeout"),
-                            retry_count=raw.get("max_retries", 0),
-                        )
-                    )
-
-                self.workflows[workflow_name] = steps
-                logger.info(
-                    "Loaded workflow '%s' from %s", workflow_name, workflow_file
+                workflow_name, steps = _workflow_from_dict(
+                    data, default_name=workflow_file.stem
                 )
-            except Exception as exc:
+            except (OSError, ValueError) as exc:
+                logger.warning("Skipping workflow file %s: %s", workflow_file, exc)
+                continue
+
+            if workflow_name in self.workflow_files:
                 logger.warning(
-                    "Failed to load workflow from %s: %s", workflow_file, exc
+                    "Workflow '%s' from %s replaces the definition in %s",
+                    workflow_name,
+                    workflow_file,
+                    self.workflow_files[workflow_name],
                 )
+            self.workflows[workflow_name] = steps
+            self.workflow_files[workflow_name] = workflow_file
+            logger.info("Loaded workflow '%s' from %s", workflow_name, workflow_file)
 
     # ------------------------------------------------------------------
     # DAG & dependency helpers

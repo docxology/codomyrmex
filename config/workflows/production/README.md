@@ -4,21 +4,28 @@
 
 ## Overview
 
-Configuration files and templates.
+Workflow definitions loaded by default: a `WorkflowManager` created in the
+repository root (including `codomyrmex workflow list` / `run`) loads every
+`*.json` here, and `codomyrmex workflow create` writes new definitions to
+`config/workflows/production/` under the current directory. See
+[../README.md](../README.md) for the format.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
-- `test_workflow.json` – File
+- `test_workflow.json` – smoke test: `environment_setup.validate_environment`
 
 ## Navigation
+
 - **Parent Directory**: [workflows](../README.md)
 - **Project Root**: ../../../README.md
 
 ## Related Documents
 
 - **Agents**: [AGENTS.md](AGENTS.md)
+
 ## Maintenance Notes
 
 - Keep this document synchronized with adjacent source files.

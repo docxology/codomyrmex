@@ -1,15 +1,15 @@
 {
   "name": "error_test_workflow",
+  "description": "Fails on purpose: environment_setup has no action 'nonexistent_action_for_error_tests', so the step fails at dispatch. Used to exercise workflow failure handling.",
   "steps": [
     {
       "name": "invalid_step",
-      "module": "nonexistent_module",
-      "action": "nonexistent_action",
+      "module": "environment_setup",
+      "action": "nonexistent_action_for_error_tests",
       "parameters": {},
       "dependencies": [],
       "timeout": null,
-      "retry_count": 0,
-      "max_retries": 3
+      "max_retries": 0
     }
   ]
 }

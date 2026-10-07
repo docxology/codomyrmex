@@ -40,6 +40,7 @@ from .orchestration_engine import (
     get_orchestration_engine,
 )
 from .project_manager import (
+    PROJECT_FILE_NAME,
     Project,
     ProjectManager,
     ProjectStatus,
@@ -77,6 +78,7 @@ from .workflow_manager import (
 __version__ = "0.1.0"
 
 __all__ = [
+    "PROJECT_FILE_NAME",
     "ActionRegistry",
     "DocumentationGenerator",
     "OrchestrationEngine",
