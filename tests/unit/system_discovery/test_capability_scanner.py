@@ -8,6 +8,7 @@ Uses real AST parsing on this project's own source code.
 import ast
 from pathlib import Path
 
+from tests.support.permissions import requires_permission_enforcement
 from tests.support.repo_paths import PACKAGE_ROOT, REPO_ROOT
 
 from codomyrmex.system_discovery.core.capability_scanner import (
@@ -297,6 +298,7 @@ CONSTANT = 42
         assert output.endswith(".json")
         assert Path(output).exists()
 
+    @requires_permission_enforcement
     def test_export_capabilities_report_error(self, tmp_path: Path):
         # Make tmp_path read-only to trigger an Exception
         read_only_dir = tmp_path / "readonly"

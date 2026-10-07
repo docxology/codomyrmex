@@ -1,11 +1,10 @@
 name: Workflow Coordinator
 
+# Manual fan-out only. ci.yml, security.yml, documentation.yml and
+# benchmarks.yml already trigger on push/pull_request themselves; dispatching
+# them again on every push doubled CI minutes and, because dispatch and push
+# runs share a concurrency group, cancelled the push run on main.
 on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main]
-    types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch:
     inputs:
       workflows:

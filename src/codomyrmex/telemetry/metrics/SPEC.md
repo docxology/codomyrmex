@@ -12,7 +12,7 @@ Three independent metric systems: `MetricAggregator` for local in-process collec
 ### MetricAggregator
 
 | Method | Signature | Description |
-|--------|-----------|-------------|
+| -------- | ----------- | ------------- |
 | `increment` | `(name, value=1.0, labels?)` | Increment counter; optional label dimensions stored separately |
 | `set_gauge` | `(name, value)` | Set gauge to absolute value |
 | `observe` | `(name, value)` | Record histogram observation into configurable buckets |
@@ -28,7 +28,7 @@ Configurable boundaries (default: `[0.005..10.0]` plus overflow). `observe(value
 ### PrometheusExporter
 
 | Method | Signature | Description |
-|--------|-----------|-------------|
+| -------- | ----------- | ------------- |
 | `start` | `()` | Start `prometheus_client` HTTP server on `port` (default 8000) |
 
 Factory functions: `create_counter()`, `create_gauge()`, `create_histogram()` returning `prometheus_client` metric objects.
@@ -36,13 +36,14 @@ Factory functions: `create_counter()`, `create_gauge()`, `create_histogram()` re
 ### StatsDClient
 
 | Method | Signature | Description |
-|--------|-----------|-------------|
+| -------- | ----------- | ------------- |
 | `incr` | `(name, count=1, rate=1)` | Increment counter |
 | `gauge` | `(name, value, rate=1)` | Set gauge |
 | `timing` | `(name, dt, rate=1)` | Log timing in milliseconds |
 | `timer` | `(name, rate=1)` | Context manager for timing a block |
+| `close` | `()` | Close the UDP socket (idempotent) |
 
-Constructor: `StatsDClient(host?, port?, prefix="codomyrmex")`. Defaults from `STATSD_HOST`/`STATSD_PORT` env vars or `localhost:8125`.
+Constructor: `StatsDClient(host?, port?, prefix="codomyrmex")`. Defaults from `STATSD_HOST`/`STATSD_PORT` env vars or `localhost:8125`. The client is a context manager (`with StatsDClient() as client:`) that closes its socket on exit; call `close()` when not using `with`.
 
 ## Dependencies
 

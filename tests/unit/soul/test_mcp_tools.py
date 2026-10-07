@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 import pytest
 
@@ -93,7 +94,7 @@ class TestSoulInit:
             agent_name="Turing",
             description="A brilliant problem solver.",
         )
-        content = open(soul_path, encoding="utf-8").read()
+        content = Path(soul_path).read_text(encoding="utf-8")
         assert "Turing" in content
         assert "A brilliant problem solver." in content
 
@@ -104,21 +105,21 @@ class TestSoulInit:
             memory_path=memory_path,
             description="Custom description here.",
         )
-        content = open(soul_path, encoding="utf-8").read()
+        content = Path(soul_path).read_text(encoding="utf-8")
         assert "Custom description here." in content
 
     def test_memory_file_is_markdown(self, soul_path, memory_path):
         """soul_init must write a valid markdown header to MEMORY.md."""
         soul_init(soul_path=soul_path, memory_path=memory_path)
-        content = open(memory_path, encoding="utf-8").read()
+        content = Path(memory_path).read_text(encoding="utf-8")
         assert content.startswith("# Memory Log")
 
     def test_does_not_overwrite_existing_files(
         self, existing_soul_file, existing_memory_file
     ):
         """soul_init must not overwrite files that already exist."""
-        original_soul = open(existing_soul_file, encoding="utf-8").read()
-        original_memory = open(existing_memory_file, encoding="utf-8").read()
+        original_soul = Path(existing_soul_file).read_text(encoding="utf-8")
+        original_memory = Path(existing_memory_file).read_text(encoding="utf-8")
 
         result = soul_init(
             soul_path=existing_soul_file,
@@ -130,8 +131,8 @@ class TestSoulInit:
         assert existing_soul_file in result["skipped"]
         assert existing_memory_file in result["skipped"]
         # File content unchanged
-        assert open(existing_soul_file, encoding="utf-8").read() == original_soul
-        assert open(existing_memory_file, encoding="utf-8").read() == original_memory
+        assert Path(existing_soul_file).read_text(encoding="utf-8") == original_soul
+        assert Path(existing_memory_file).read_text(encoding="utf-8") == original_memory
 
     def test_created_list_empty_when_all_exist(
         self, existing_soul_file, existing_memory_file
@@ -145,7 +146,7 @@ class TestSoulInit:
     def test_default_agent_name_applied(self, soul_path, memory_path):
         """soul_init must use 'Assistant' as the default agent_name."""
         soul_init(soul_path=soul_path, memory_path=memory_path)
-        content = open(soul_path, encoding="utf-8").read()
+        content = Path(soul_path).read_text(encoding="utf-8")
         assert "# Assistant" in content
 
 
@@ -220,7 +221,7 @@ class TestSoulAskLive:
             remember=True,
         )
         assert os.path.exists(memory_path)
-        content = open(memory_path, encoding="utf-8").read()
+        content = Path(memory_path).read_text(encoding="utf-8")
         assert len(content) > 0
 
     def test_soul_ask_no_remember_does_not_create_memory(self, soul_path, memory_path):
@@ -245,7 +246,7 @@ class TestSoulAskLive:
         )
         assert result["status"] == "success"
         assert os.path.exists(memory_path)
-        content = open(memory_path, encoding="utf-8").read()
+        content = Path(memory_path).read_text(encoding="utf-8")
         assert "2 + 2 = 4" in content
 
     def test_soul_reset_returns_success(self, soul_path, memory_path):

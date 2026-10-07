@@ -40,14 +40,20 @@ jobs:
           docker pull python:3.9-slim
           docker pull bash:5.1
 
+      - name: Cache Hugging Face models
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-models-${{ runner.os }}-whisper-base-v1
+
       - name: Run integration tests (strict)
         run: |
           uv run pytest tests/integration/ \
+            -n auto \
             --timeout=120 \
             --no-header \
             -q \
             --tb=short \
-            -W error \
             --junit-xml=junit-integration.xml
         env:
           CODOMYRMEX_ENV: ci

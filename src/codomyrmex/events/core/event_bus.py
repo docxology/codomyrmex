@@ -50,7 +50,7 @@ class Subscription:
         self._literal_patterns = set()
         self._regex_patterns = []
         for pattern in self.event_patterns:
-            p_str = pattern.value if hasattr(pattern, "value") else str(pattern)
+            p_str = pattern.value if isinstance(pattern, EventType) else str(pattern)
             if any(c in p_str for c in "*?[]"):
                 self._regex_patterns.append(re.compile(fnmatch.translate(p_str)))
             else:

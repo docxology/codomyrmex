@@ -50,3 +50,14 @@ def test_language_detection_detect_probs_empty():
     res = language_detection_detect_probs("")
     assert res["status"] == "success"
     assert res["results"] == []
+
+
+def test_package_exports_and_deterministic_detection():
+    import codomyrmex.language_detection as pkg
+
+    assert set(pkg.__all__) == {
+        "detect_language",
+        "detect_languages_with_probabilities",
+    }
+    sample = "Bonjour tout le monde, comment allez-vous aujourd'hui ?"
+    assert {pkg.detect_language(sample) for _ in range(5)} == {"fr"}

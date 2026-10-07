@@ -1,8 +1,7 @@
 name: Code Health Dashboard
 
 on:
-  push:
-    branches: [main]
+  # Weekly dashboard; per-push health is already enforced by ci.yml.
   schedule:
     # Weekly on Sundays at 8 AM UTC
     - cron: '0 8 * * 0'
@@ -22,6 +21,7 @@ jobs:
   health-report:
     name: Code Health Report
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     permissions:
       contents: read
     steps:
@@ -55,6 +55,8 @@ jobs:
         id: coverage
         run: |
           uv run pytest tests/unit/ \
+            -n auto -p no:benchmark \
+            -m "not performance and not benchmark and not bench" \
             --cov=src/codomyrmex \
             --cov-report=json:health-results/coverage.json \
             -q --tb=no 2>/dev/null || true

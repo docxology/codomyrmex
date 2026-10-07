@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
@@ -40,6 +41,7 @@ from datetime import datetime, timezone
 GH = "gh"
 GRAPHQL_LIMIT = 60
 FILE_LIMIT = 50
+DEFAULT_REPO = "docxology/codomyrmex"
 
 CLOSE_COMMENT_TEMPLATE = (
     "Closing as a duplicate of #{rep} ({rep_title}).\n\n"
@@ -63,11 +65,12 @@ def gh_graphql(query: str, variables: dict | None = None) -> dict:
     return json.loads(out.stdout)["data"]
 
 
-def list_open_prs() -> list[dict]:
-    """Return all open PRs with title/author/dates and up to FILE_LIST files."""
+def list_open_prs(repo: str = DEFAULT_REPO) -> list[dict]:
+    """Return all open PRs with title/author/dates and up to FILE_LIMIT files."""
+    owner, name = repo.split("/", 1)
     query = f"""
-    query($cursor: String) {{
-      repository(owner: "docxology", name: "codomyrmex") {{
+    query($cursor: String, $owner: String!, $name: String!) {{
+      repository(owner: $owner, name: $name) {{
         pullRequests(first: {GRAPHQL_LIMIT}, after: $cursor, states: OPEN, orderBy: {{field: CREATED_AT, direction: ASC}}) {{
           pageInfo {{ hasNextPage endCursor }}
           nodes {{
@@ -83,7 +86,9 @@ def list_open_prs() -> list[dict]:
     prs: list[dict] = []
     cursor = None
     while True:
-        data = gh_graphql(query, {"cursor": cursor})["repository"]["pullRequests"]
+        data = gh_graphql(query, {"cursor": cursor, "owner": owner, "name": name})[
+            "repository"
+        ]["pullRequests"]
         prs.extend(data["nodes"])
         if not data["pageInfo"]["hasNextPage"]:
             break
@@ -130,6 +135,36 @@ def file_overlap(paths_a: set[str], paths_b: set[str]) -> float:
     return len(paths_a & paths_b) / min(len(paths_a), len(paths_b))
 
 
+JOURNAL_PREFIXES = (".jules/",)
+
+
+def substantive_paths(pr: dict) -> set[str]:
+    """Changed paths excluding agent journal notes (``.jules/``)."""
+    return {
+        f["path"]
+        for f in pr.get("_files", [])
+        if not f["path"].startswith(JOURNAL_PREFIXES)
+    }
+
+
+def substantive_file_count(pr: dict) -> int:
+    """Count changed files that are not agent journal notes."""
+    return len(substantive_paths(pr))
+
+
+def order_family(cluster: list[dict]) -> None:
+    """Sort a family in place so its representative comes first.
+
+    Representative = member with the most substantive (non-journal) file
+    changes; the newest PR wins ties. Journal-only PRs therefore never
+    represent a family while a member with real changes exists.
+    """
+    cluster.sort(
+        key=lambda p: (substantive_file_count(p), p["createdAt"]),
+        reverse=True,
+    )
+
+
 def build_families(prs: list[dict], min_similarity: float) -> list[list[dict]]:
     """Greedy agglomeration: same token signature or high similarity + file overlap."""
     by_sig: dict[str, list[dict]] = defaultdict(list)
@@ -141,18 +176,20 @@ def build_families(prs: list[dict], min_similarity: float) -> list[list[dict]]:
     for sig, members in by_sig.items():
         if len(members) == 1:
             continue
-        # Refine: only same-family when file paths overlap (or both are empty).
+        # Refine: only same-family when substantive file paths overlap with
+        # the cluster so far (journal-only members join on title alone).
         clusters: list[list[dict]] = []
         for pr in members:
-            paths = {f["path"] for f in pr.get("_files", [])}
+            paths = substantive_paths(pr)
             placed = False
             for cluster in clusters:
-                ref = cluster[0]
-                if similarity(pr["_tokens"], ref["_tokens"]) >= min_similarity and (
-                    file_overlap(paths, {f["path"] for f in ref.get("_files", [])})
-                    >= 0.5
-                    or not paths
-                    or not ref.get("_files")
+                cluster_paths = set().union(*(substantive_paths(m) for m in cluster))
+                if similarity(
+                    pr["_tokens"], cluster[0]["_tokens"]
+                ) >= min_similarity and (
+                    not paths
+                    or not cluster_paths
+                    or file_overlap(paths, cluster_paths) >= 0.5
                 ):
                     cluster.append(pr)
                     placed = True
@@ -162,19 +199,49 @@ def build_families(prs: list[dict], min_similarity: float) -> list[list[dict]]:
         clusters = [c for c in clusters if len(c) > 1]
         if clusters:
             for cluster in clusters:
-                # Representative = member with the most substantive file
-                # changes; newest wins ties. Journal-only PRs (empty file
-                # lists) never represent a family.
-                cluster.sort(
-                    key=lambda p: (-len(p.get("_files", [])), p["createdAt"]),
-                    reverse=True,
-                )
+                order_family(cluster)
             families.extend(clusters)
     return families
 
 
-def close_comment(rep_number: int) -> str:
-    return CLOSE_COMMENT_TEMPLATE.format(rep=rep_number)
+def close_comment(rep_number: int, rep_title: str) -> str:
+    return CLOSE_COMMENT_TEMPLATE.format(rep=rep_number, rep_title=rep_title)
+
+
+def plan_closures(
+    prs: list[dict],
+    *,
+    now: datetime,
+    min_similarity: float,
+    older_than: int = 0,
+    limit: int = 0,
+) -> tuple[list[list[dict]], list[tuple[int, int]], dict[int, str]]:
+    """Group PRs and return ``(families, candidates, representative titles)``.
+
+    ``candidates`` holds ``(pr_number, representative_number)`` pairs. PRs
+    younger than ``older_than`` days are never candidates; ``limit`` caps the
+    number of closures (0 = no cap). Pure: performs no I/O.
+    """
+    for pr in prs:
+        pr["_files"] = (
+            pr.pop("files")["nodes"] if "files" in pr else pr.get("_files", [])
+        )
+        created = datetime.fromisoformat(pr["createdAt"])
+        pr["_age_days"] = (now - created).days
+
+    families = build_families(prs, min_similarity)
+    candidates: list[tuple[int, int]] = []
+    rep_titles: dict[int, str] = {}
+    for family in families:
+        rep = family[0]
+        rep_titles[rep["number"]] = rep["title"]
+        for member in family[1:]:
+            if older_than > 0 and member["_age_days"] < older_than:
+                continue
+            candidates.append((member["number"], rep["number"]))
+    if limit:
+        candidates = candidates[:limit]
+    return families, candidates, rep_titles
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -191,30 +258,24 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--min-similarity", type=float, default=0.6)
     parser.add_argument(
+        "--repo",
+        default=os.environ.get("GITHUB_REPOSITORY", DEFAULT_REPO),
+        help="owner/name (default: $GITHUB_REPOSITORY or docxology/codomyrmex)",
+    )
+    parser.add_argument(
         "--limit", type=int, default=0, help="cap number of closes (0 = no cap)"
     )
     args = parser.parse_args(argv)
 
-    prs = list_open_prs()
-    today = datetime.now(tz=timezone.utc)  # noqa: UP017 (datetime.UTC absent in this runtime)
-    for pr in prs:
-        pr["_files"] = (
-            pr.pop("files")["nodes"] if "files" in pr else pr.get("_files", [])
-        )
-        created = datetime.fromisoformat(pr["createdAt"])
-        pr["_age_days"] = (today - created).days
-
-    families = build_families(prs, args.min_similarity)
-    stale_only = args.older_than > 0
-    candidates: list[tuple[int, int]] = []  # (pr_number, representative_number)
-    for family in families:
-        rep = family[0]
-        for member in family[1:]:
-            if stale_only and member["_age_days"] < args.older_than:
-                continue
-            candidates.append((member["number"], rep["number"]))
-    if args.limit:
-        candidates = candidates[: args.limit]
+    prs = list_open_prs(args.repo)
+    plan = plan_closures(
+        prs,
+        now=datetime.now(tz=timezone.utc),  # noqa: UP017 (datetime.UTC absent in this runtime)
+        min_similarity=args.min_similarity,
+        older_than=args.older_than,
+        limit=args.limit,
+    )
+    families, candidates, rep_titles = plan
 
     print(
         f"open PRs: {len(prs)} | duplicate families: {len(families)} | close candidates: {len(candidates)}"
@@ -228,9 +289,18 @@ def main(argv: list[str] | None = None) -> int:
 
     failed = 0
     for pr_number, rep_number in candidates:
-        comment = close_comment(rep_number)
+        comment = close_comment(rep_number, rep_titles[rep_number])
         result = subprocess.run(
-            [GH, "pr", "close", str(pr_number), "--comment", comment],
+            [
+                GH,
+                "pr",
+                "close",
+                str(pr_number),
+                "--repo",
+                args.repo,
+                "--comment",
+                comment,
+            ],
             capture_output=True,
             text=True,
         )
