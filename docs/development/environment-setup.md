@@ -5,6 +5,7 @@ This guide helps you set up a complete development environment for contributing 
 ## 🎯 Overview
 
 Setting up a development environment for Codomyrmex involves:
+
 1. **Local Development Setup** - Core tools and dependencies
 2. **Development Tools** - Linting, formatting, and testing tools
 3. **Module Development** - Tools for creating and testing new modules
@@ -14,6 +15,7 @@ Setting up a development environment for Codomyrmex involves:
 ## 🛠️ Core Development Setup
 
 ### **Prerequisites**
+
 - Python 3.11+ (the supported range is defined in `pyproject.toml`)
 - Git 2.30+
 - Node.js 18+ (for documentation)
@@ -21,6 +23,7 @@ Setting up a development environment for Codomyrmex involves:
 - `uv` (recommended) or `pip`
 
 ### **Quick Development Setup**
+
 ```bash
 # 1. Fork and clone your fork
 git clone https://github.com/YOUR_USERNAME/codomyrmex.git
@@ -35,6 +38,7 @@ pytest tests/unit/ -x  # Run tests (stop at first failure)
 ```
 
 ### **Manual Development Setup**
+
 ```bash
 # 1. Create virtual environment
 uv venv .venv
@@ -60,6 +64,7 @@ codomyrmex check
 The development environment includes additional tools beyond the base installation:
 
 ### **Code Quality Tools**
+
 ```bash
 # Linting, formatting, typing, and security
 ruff               # Linting and formatting
@@ -74,6 +79,7 @@ uv run bandit -r src/codomyrmex -lll -iii
 ```
 
 ### **Testing Tools**
+
 ```bash
 # Testing framework and coverage
 pytest             # Testing framework
@@ -86,6 +92,7 @@ pytest --cov=src/codomyrmex --cov-report=html  # Coverage report
 ```
 
 ### **Development Utilities**
+
 ```bash
 # Git and development workflow
 pre-commit         # Git hooks for quality checks
@@ -99,7 +106,9 @@ uv                 # Fast package manager (recommended)
 ## 🔧 IDE Setup
 
 ### **VS Code (Recommended)**
+
 Create `.vscode/settings.json`:
+
 ```json
 {
     "python.defaultInterpreterPath": "./.venv/bin/python",
@@ -120,6 +129,7 @@ Create `.vscode/settings.json`:
 ```
 
 ### **PyCharm/IntelliJ**
+
 1. Set Python interpreter to `.venv/bin/python`
 2. Configure pytest as default test runner
 3. Enable Ruff as formatter and import organizer
@@ -130,6 +140,7 @@ Create `.vscode/settings.json`:
 Pre-commit hooks ensure code quality before commits:
 
 ### **Setup Pre-commit**
+
 ```bash
 # Install hooks
 pre-commit install
@@ -142,6 +153,7 @@ pre-commit run --all-files
 ```
 
 ### **Pre-commit Configuration (`.pre-commit-config.yaml`)**
+
 ```yaml
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -173,6 +185,7 @@ repos:
 ## 🧪 Testing Environment
 
 ### **Running Tests**
+
 ```bash
 # Run all tests
 pytest
@@ -193,45 +206,54 @@ pytest -n auto  # Requires pytest-xdist
 ```
 
 ### **Test Coverage Requirements**
+
 - **Minimum coverage**: 60% line coverage (enforced by `pyproject.toml`, CI, and `make test`)
 - **Target coverage**: 90%+ for new modules where practical; targets are not release floors
 - **Coverage reporting**: HTML reports are generated in the repository `htmlcov/` directory
 
 ### **Writing Tests**
+
 Follow the existing patterns (zero-mock policy -- use skip-when-unavailable guards for external dependencies):
+
 ```python
-# tests/unit/test_my_module.py
-import pytest
+# tests/unit/crypto/test_hashing.py
 import shutil
+import subprocess
 
-from codomyrmex.my_module import my_function
+import pytest
 
-HAS_EXTERNAL_DEP = shutil.which("external_tool") is not None
+from codomyrmex.crypto import HashError
+from codomyrmex.crypto.graphy.hashing import hash_data
+
+HAS_OPENSSL = shutil.which("openssl") is not None
+ABC_SHA256 = "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"  # pragma: allowlist secret
 
 
-class TestMyModule:
-    """Test suite for my_module"""
+class TestHashData:
+    """Test suite for hash_data"""
 
-    def test_my_function_success(self):
-        """Test successful execution of my_function"""
-        result = my_function("input")
-        assert result == "expected_output"
+    def test_hash_data_success(self):
+        """Test successful execution of hash_data"""
+        assert hash_data(b"abc") == ABC_SHA256
 
-    def test_my_function_error_handling(self):
-        """Test error handling in my_function"""
-        with pytest.raises(ValueError):
-            my_function("invalid_input")
+    def test_hash_data_error_handling(self):
+        """Test error handling in hash_data"""
+        with pytest.raises(HashError):
+            hash_data(b"abc", algorithm="not-a-hash")
 
-    @pytest.mark.skipif(not HAS_EXTERNAL_DEP, reason="external_tool not available")
-    def test_my_function_with_external_dep(self):
-        """Test my_function with real external dependency"""
-        result = my_function("input")
-        assert result is not None
+    @pytest.mark.skipif(not HAS_OPENSSL, reason="openssl not available")
+    def test_hash_data_matches_openssl(self):
+        """Test hash_data against a real external dependency"""
+        out = subprocess.run(
+            ["openssl", "dgst", "-sha256"], input=b"abc", capture_output=True, check=True
+        ).stdout.decode()
+        assert ABC_SHA256 in out
 ```
 
 ## 📚 Documentation Development
 
 ### **Local Documentation Development**
+
 ```bash
 # Start documentation development server
 cd src/codomyrmex/documentation
@@ -245,11 +267,14 @@ npm run serve
 ```
 
 ### **Documentation Structure**
+
 The documentation system has two parts:
+
 - **`/docs/`**: Documentation about Codomyrmex itself (this guide!)
 - **`src/codomyrmex/documentation/`**: Tool for generating documentation websites
 
 ### **Writing Documentation**
+
 - Use Markdown with clear headers and structure
 - Include code examples that actually work
 - Add screenshots for UI-related features
@@ -258,6 +283,7 @@ The documentation system has two parts:
 ## 🔧 Module Development
 
 ### **Creating a New Module**
+
 ```bash
 # Use the module template
 cp -r src/codomyrmex/module_template src/codomyrmex/my_new_module
@@ -271,6 +297,7 @@ cp -r src/codomyrmex/module_template src/codomyrmex/my_new_module
 ```
 
 ### **Module Development Workflow**
+
 1. **Design Phase**
    - Define module purpose and API
    - Identify dependencies on other modules
@@ -303,6 +330,7 @@ cp -r src/codomyrmex/module_template src/codomyrmex/my_new_module
 ## 🚀 Development Workflow
 
 ### **Daily Development Workflow**
+
 ```bash
 # 1. Start development session
 source .venv/bin/activate
@@ -330,6 +358,7 @@ git push origin feature/my-new-feature
 ```
 
 ### **Code Review Process**
+
 1. **Self-Review**
    - Run all tests locally
    - Check code coverage
@@ -351,6 +380,7 @@ git push origin feature/my-new-feature
 ## 🔐 Security Considerations
 
 ### **Security Development Practices**
+
 - Never commit secrets or API keys
 - Use environment variables for configuration
 - Validate and sanitize all inputs
@@ -358,6 +388,7 @@ git push origin feature/my-new-feature
 - Regular security scanning with bandit
 
 ### **Secure Development Workflow**
+
 ```bash
 # Security scanning
 bandit -r src/codomyrmex/          # Python security issues
@@ -371,6 +402,7 @@ pre-commit run --all-files        # Includes secret detection
 ## 🎯 Performance Development
 
 ### **Performance Testing**
+
 ```bash
 # Profile module performance
 python -m cProfile -o profile.stats my_script.py
@@ -385,6 +417,7 @@ python -m memory_profiler my_script.py
 ```
 
 ### **Performance Guidelines**
+
 - Profile before optimizing
 - Focus on algorithmic improvements
 - Use lazy loading for expensive operations
@@ -394,12 +427,14 @@ python -m memory_profiler my_script.py
 ## 📞 Getting Help
 
 ### **Development Support**
+
 - **Documentation**: This guide and [Architecture Overview](../project/architecture.md)
 - **Code Examples**: Look at existing modules for patterns
 - **Community**: [GitHub Discussions](https://github.com/docxology/codomyrmex/discussions)
 - **Issues**: [GitHub Issues](https://github.com/docxology/codomyrmex/issues)
 
 ### **Debugging Tips**
+
 ```python
 # Use the logging system for debugging
 from codomyrmex.logging_monitoring import get_logger

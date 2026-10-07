@@ -95,10 +95,10 @@ graph TD
 
 ### **🏗️ Foundation Modules**
 
-*Essential infrastructure used by all other modules*
+Essential infrastructure used by all other modules
 
 | Module | Purpose | Key Features |
-|--------|---------|-------------|
+| --- | --- | --- |
 | **`logging_monitoring`** | Centralized logging system | Structured logging, multiple formats, log aggregation |
 | **`environment_setup`** | Environment validation | Dependency checking, API key management, setup automation, dependency resolution |
 | **`model_context_protocol`** | AI communication standard | Standardized LLM interfaces, tool specifications, auto-discovery |
@@ -114,10 +114,10 @@ graph TD
 
 ### **⚙️ Core Functional Modules**
 
-*Primary capabilities that users directly interact with*
+Primary capabilities that users directly interact with
 
 | Module | Purpose | Key Features |
-|--------|---------|-------------|
+| --- | --- | --- |
 | **`coding`** | Code execution and review | Multi-language sandboxing, code review, **static analysis**, **pattern matching** |
 | **`data_visualization`** | Charts and plots | Static/interactive plots, multiple formats, customizable styling, **multi-format export** |
 | **`git_operations`** | Version control automation | Git workflows, branch management, commit automation, **merge conflict resolution** |
@@ -134,10 +134,10 @@ graph TD
 
 ### **🔧 Service Modules**
 
-*Higher-level services that orchestrate core modules*
+Higher-level services that orchestrate core modules
 
 | Module | Purpose | Key Features |
-|--------|---------|-------------|
+| --- | --- | --- |
 | **`documentation`** | Documentation generation | Website generation, API docs, tutorial creation, **education & tutoring** |
 | **`api`** | API infrastructure | OpenAPI/Swagger specs, REST API building, versioning, **rate limiting** |
 | **`ci_cd_automation`** | CI/CD pipeline management | Pipeline orchestration, deployment automation, monitoring, **build synthesis** |
@@ -158,10 +158,10 @@ graph TD
 
 ### **🎮 Application Modules**
 
-*User-facing applications and interfaces*
+User-facing applications and interfaces
 
 | Module | Purpose | Key Features |
-|--------|---------|-------------|
+| --- | --- | --- |
 | **`system_discovery`** | System exploration | Module scanning, capability discovery, health monitoring |
 | **`terminal_interface`** | Interactive exploration | Command shell, foraging interface, guided discovery |
 | **`cli`** | Command-line interface | CLI commands, scripting support, interactive shell, **shell completion** |
@@ -172,10 +172,10 @@ graph TD
 
 ### **🛡️ Secure Cognitive Modules**
 
-*Autonomous security and economic capabilities*
+Autonomous security and economic capabilities
 
 | Module | Purpose | Key Features |
-|--------|---------|-------------|
+| --- | --- | --- |
 | **`identity`** | Identity & Verification | 3-Tier personas, bio-cognitive verification, revocation |
 | **`wallet`** | Self-Custody | Secure key management, Natural Ritual recovery, key rotation, **smart contracts** |
 | **`defense`** | Active Defense | Exploit detection, context poisoning, rabbit hole containment |
@@ -185,10 +185,10 @@ graph TD
 
 ### **🧠 Intelligence Modules**
 
-*AI reasoning and agent capabilities*
+AI reasoning and agent capabilities
 
 | Module | Purpose | Key Features |
-|--------|---------|-------------|
+| --- | --- | --- |
 | **`agents`** | Agentic framework integrations | Jules, Claude, Codex integration, agent orchestration, **benchmarks** |
 | **`cerebrum`** | Case-based reasoning | Bayesian inference, active inference, reasoning engine |
 | **`fpf`** | Feed-Parse-Format Pipeline | Combinator engine, transformation pipelines, composition |
@@ -202,10 +202,10 @@ graph TD
 
 ### **🔗 Integration Modules**
 
-*Standards, protocols, and IDE integrations*
+Standards, protocols, and IDE integrations
 
 | Module | Purpose | Key Features |
-|--------|---------|-------------|
+| --- | --- | --- |
 | **`model_context_protocol`** | AI communication standard | Standardized LLM interfaces, tool specifications |
 | **`module_template`** | Module creation template | Template for creating new modules with standard structure |
 | **`ide`** | IDE integrations | Antigravity, Cursor, VS Code automation and control |
@@ -215,10 +215,10 @@ graph TD
 
 ### **🚀 Advanced Modules**
 
-*Specialized capabilities for advanced use cases*
+Specialized capabilities for advanced use cases
 
 | Module | Purpose | Key Features |
-|--------|---------|-------------|
+| --- | --- | --- |
 | **`spatial`** | 3D/4D modeling and visualization | 3D model creation, manipulation, rendering, world models |
 | **`physical_management`** | Physical system simulation | System monitoring, resource management, performance tracking |
 | **`bio_simulation`** | Ant colony simulation | Pheromone foraging, genetic algorithms, colony dynamics |
@@ -231,10 +231,10 @@ graph TD
 
 ### **🛠️ Utility Modules**
 
-*Common utilities and development tools*
+Common utilities and development tools
 
 | Module | Purpose | Key Features |
-|--------|---------|-------------|
+| --- | --- | --- |
 | **`exceptions`** | Exception hierarchy | Centralized exception classes, error handling, error codes |
 | **`utils`** | Common utilities | Helper functions, CLI helpers, shared utilities, **hashing**, **retry**, **i18n** |
 | **`templating`** | Template engine | Jinja2-style templating, code generation, scaffolding |
@@ -253,7 +253,7 @@ Modules expose public functions and classes:
 
 ```python
 from codomyrmex.data_visualization import create_line_plot
-from codomyrmex.agents import generate_code_snippet
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
 # Direct function calls
 plot_result = create_line_plot(x_data, y_data, title="Sample Plot")
@@ -299,7 +299,7 @@ def enhance_code_pipeline(source_code):
 
 2. **Follow the Structure**:
 
-   ```
+   ```text
    my_new_module/
    ├── __init__.py                 # Module initialization
    ├── README.md                   # Module overview and usage

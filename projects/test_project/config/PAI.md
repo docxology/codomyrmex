@@ -26,10 +26,11 @@ Configuration layer demonstrating YAML-based configuration management with codom
 ### Configuration Loading Pattern
 
 ```python
-from codomyrmex.config_management import ConfigManager
-from pathlib import Path
+from codomyrmex.config_management import ConfigurationManager
 
-config = ConfigManager(Path("config/settings.yaml"))
+manager = ConfigurationManager(config_dir="config")
+config = manager.load_configuration("settings")  # settings.yaml + env overrides
+log_level = config.get_value("logging.level")
 ```
 
 ## Navigation

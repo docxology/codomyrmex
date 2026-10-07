@@ -154,7 +154,7 @@ The authoritative bridge document is [`/PAI.md`](../../PAI.md) at the project ro
 ```python
 from pathlib import Path
 from codomyrmex.static_analysis import scan_imports, check_layer_violations, audit_exports
-from codomyrmex.security import scan_directory  # Security scanning
+from codomyrmex.security import analyze_directory_security  # Security scanning
 
 src = Path("src/codomyrmex")
 
@@ -162,52 +162,62 @@ src = Path("src/codomyrmex")
 edges = scan_imports(src)
 violations = check_layer_violations(edges)
 export_findings = audit_exports(src)
+security_findings = analyze_directory_security(str(src))
 
 # Review results
 for v in violations:
     print(f"Layer violation: {v['src']} → {v['dst']}: {v['reason']}")
 for f in export_findings:
     print(f"Export issue: {f['module']}: {f['detail']}")
+for s in security_findings:
+    print(f"Security [{s.severity}]: {s.file_path}:{s.line_number} {s.description}")
 ```
 
 ### 2. Knowledge-Augmented Generation
 
-> [!NOTE]
-> The following example is illustrative of the intended PAI pattern.
-> Class names represent planned API targets; check module `__init__.py` for current exports.
-
 ```python
-from codomyrmex.cerebrum import CerebrumEngine, CaseBase
-from codomyrmex.llm import create_provider
+import os
+
+from codomyrmex.cerebrum import Case, CerebrumEngine
+from codomyrmex.llm.providers import Message, ProviderType, get_provider
 
 # Use case-based reasoning to enhance AI generation
 cerebrum = CerebrumEngine()
-case_base = CaseBase.load("project_patterns")
+cerebrum.add_case(
+    Case(case_id="fix-42", features={"error": "ImportError"}, outcome="re-export in __init__")
+)
 
-# Get similar past cases
-similar_cases = cerebrum.retrieve_similar(current_context)
+# Reason over similar past cases
+reasoning = cerebrum.reason(Case(case_id="current", features={"error": "ImportError"}))
 
 # Generate with context via LLM provider
-provider = create_provider("ollama")
-result = provider.generate(
-    prompt=user_request,
-    context=similar_cases.as_context()
+provider = get_provider(ProviderType.ANTHROPIC, api_key=os.environ["ANTHROPIC_API_KEY"])
+response = provider.complete(
+    messages=[
+        Message(role="system", content=f"Similar past cases suggest: {reasoning.prediction}"),
+        Message(role="user", content=user_request),
+    ]
 )
+print(response.content)
 ```
 
 ### 3. Autonomous Workflow
 
 ```python
-from codomyrmex.orchestrator import WorkflowEngine
-from codomyrmex.events import EventBus
+import asyncio
 
-# Define AI-driven workflow
-workflow = WorkflowEngine()
+from codomyrmex.events import Event, EventBus, EventType
+from codomyrmex.orchestrator import Workflow
+
 events = EventBus()
 
-@events.on("code_committed")
-async def auto_review(event):
-    workflow.trigger("ai_review_pipeline", code=event.data)
+# Define AI-driven workflow, triggered when an analysis finishes
+def auto_review(event: Event) -> None:
+    workflow = Workflow("ai_review_pipeline", event_bus=events)
+    workflow.add_task("review", run_review, kwargs={"code": event.data})
+    asyncio.run(workflow.run())
+
+events.subscribe(EventType.ANALYSIS_COMPLETE, auto_review)
 
 # Workflow executes autonomously with AI agents
 ```
@@ -219,8 +229,8 @@ async def auto_review(event):
 ```bash
 # AI Model Configuration
 export OLLAMA_HOST="http://localhost:11434"
-export OPENAI_API_KEY="sk-..."  # Optional
-export ANTHROPIC_API_KEY="sk-..."  # Optional
+export OPENAI_API_KEY="sk-..."  # Optional  # pragma: allowlist secret
+export ANTHROPIC_API_KEY="sk-..."  # Optional  # pragma: allowlist secret
 
 # PAI Settings
 export CODOMYRMEX_PAI_LOCAL_ONLY=true  # Privacy mode

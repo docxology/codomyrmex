@@ -11,28 +11,29 @@ Demo registry and execution system for running and managing demonstration script
 ### Demo Discovery and Execution
 
 ```python
-from codomyrmex.demos import DemoRegistry, DemoInfo, DemoResult
+from codomyrmex.demos import get_registry
+from codomyrmex.demos.registry import DemoInfo, DemoResult
 
-registry = DemoRegistry()
+registry = get_registry()  # global DemoRegistry populated by @demo
 available: list[DemoInfo] = registry.list_demos()
 
 result: DemoResult = registry.run_demo("example_demo")
-print(f"Status: {result.status}, Output: {result.output}")
+print(f"Success: {result.success}, Output: {result.output}")
 ```
 
 ## PAI Phase Mapping
 
-| Phase   | Tool/Class   | Usage                                     |
-|---------|--------------|-------------------------------------------|
-| EXECUTE | DemoRegistry | Run registered demos and collect results   |
+| Phase | Tool/Class | Usage |
+| --- | --- | --- |
+| EXECUTE | DemoRegistry | Run registered demos and collect results |
 
 ## Key Exports
 
-| Export       | Type      | Description                          |
-|--------------|-----------|--------------------------------------|
-| DemoRegistry | Class     | Demo discovery, registration, runner |
-| DemoInfo     | Dataclass | Metadata about a registered demo     |
-| DemoResult   | Dataclass | Execution outcome from a demo run    |
+| Export | Type | Description |
+| --- | --- | --- |
+| DemoRegistry | Class | Demo discovery, registration, runner |
+| DemoInfo | Dataclass | Metadata about a registered demo (`codomyrmex.demos.registry`) |
+| DemoResult | Dataclass | Execution outcome from a demo run (`codomyrmex.demos.registry`) |
 
 ## Integration Notes
 

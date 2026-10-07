@@ -34,9 +34,12 @@ It performs, in order:
 1. scoped RASP README/AGENTS pair checking;
 2. package-wide README/AGENTS command, skill, and relative-link auditing;
 3. comprehensive repository link validation;
-4. content-quality and agent-structure validation;
-5. the documentation quality gate and triple-check;
-6. a strict MkDocs build.
+4. code-reference validation: every `import codomyrmex…` / `from codomyrmex…
+   import …` in a fenced Python block is imported for real
+   (`scripts/documentation/validate_code_references.py`);
+5. content-quality and agent-structure validation;
+6. the documentation quality gate and triple-check;
+7. a strict MkDocs build.
 
 The equivalent `just docs-check` recipe is kept in parity. Validation may write
 receipts beneath `output/` and the MkDocs build beneath `site/`; it does not
@@ -213,6 +216,19 @@ logger.info("documentation example")
 Avoid wildcard imports, invented result shapes, placeholder secrets, and APIs
 that exist only in prose. Test executable examples when practical; otherwise
 label them as illustrative and keep them outside copy-paste command blocks.
+
+`make docs-check` imports every `codomyrmex` name shown in a Python block, so a
+moved or renamed API fails the gate instead of silently rotting in a README.
+Check a single file while editing:
+
+```bash
+uv run python scripts/documentation/validate_code_references.py --repo-root . docs/path/to/page.md
+```
+
+A block that deliberately shows code which does not exist yet — for example a
+tutorial step that creates a new module — is skipped when the line directly
+above its opening fence is `<!-- docs-check: skip-imports -->`. Use the marker
+only for that; documentation of shipped APIs must import cleanly.
 
 ## Mermaid diagrams
 

@@ -7,6 +7,7 @@ Documentation for integration examples demonstrating multi-module workflows and 
 ## Overview
 
 Integration examples demonstrate how multiple Codomyrmex modules work together to create comprehensive workflows. These examples showcase:
+
 - Cross-module coordination
 - Multi-step workflows
 - Data flow between modules
@@ -22,17 +23,20 @@ Integration examples demonstrate how multiple Codomyrmex modules work together t
 **Purpose**: Complete code quality analysis workflow combining environment validation, static analysis, and data visualization.
 
 **Modules Used**:
+
 - `environment_setup` - Environment validation
 - `static_analysis` - Code quality analysis
 - `data_visualization` - Results visualization
 - `logging_monitoring` - Structured logging
 
 **Configuration**:
+
 - Target directory: Current directory or `--target=PATH`
 - Analysis tools: Pylint, Flake8, Bandit (automatic selection)
 - Output format: JSON, HTML, PNG
 
 **Execution**:
+
 ```bash
 ./scripts/examples/integration/code-quality-pipeline.sh
 # Or with custom target
@@ -40,6 +44,7 @@ Integration examples demonstrate how multiple Codomyrmex modules work together t
 ```
 
 **Workflow Steps**:
+
 1. Environment validation and setup
 2. Static code analysis
 3. Quality metrics calculation
@@ -47,6 +52,7 @@ Integration examples demonstrate how multiple Codomyrmex modules work together t
 5. Report compilation
 
 **Expected Output**:
+
 - Analysis reports in `scripts/output/code-quality-pipeline/`
 - Quality metrics dashboard
 - Visualization charts
@@ -61,21 +67,25 @@ Integration examples demonstrate how multiple Codomyrmex modules work together t
 **Purpose**: Demonstrates AI-powered code analysis combining static analysis with AI insights.
 
 **Modules Used**:
+
 - `static_analysis` - Initial code analysis
 - `agents` - AI-powered insights
 - `data_visualization` - Results visualization
 
 **Configuration**:
+
 - AI provider: OpenAI (configurable)
 - Analysis depth: Comprehensive
 - Output formats: JSON, HTML
 
 **Execution**:
+
 ```bash
 ./scripts/examples/integration/ai-enhanced-analysis.sh
 ```
 
 **Workflow Steps**:
+
 1. Static analysis of codebase
 2. AI analysis of findings
 3. Insight generation
@@ -83,6 +93,7 @@ Integration examples demonstrate how multiple Codomyrmex modules work together t
 5. Report generation
 
 **Expected Output**:
+
 - AI-enhanced analysis reports
 - Insight visualizations
 - Recommendations and suggestions
@@ -97,20 +108,24 @@ Integration examples demonstrate how multiple Codomyrmex modules work together t
 **Purpose**: Monitors system health and environment status across multiple components.
 
 **Modules Used**:
+
 - `environment_setup` - Environment checks
 - `logging_monitoring` - Health metrics
 - `data_visualization` - Health dashboards
 
 **Configuration**:
+
 - Check interval: Configurable
 - Metrics tracked: System resources, module status, dependencies
 
 **Execution**:
+
 ```bash
 ./scripts/examples/integration/environment-health-monitor.sh
 ```
 
 **Expected Output**:
+
 - Health status reports
 - System metrics dashboards
 - Environment validation results
@@ -125,18 +140,22 @@ Integration examples demonstrate how multiple Codomyrmex modules work together t
 **Purpose**: Complete development workflow from code analysis to visualization.
 
 **Modules Used**:
+
 - Multiple modules coordinated through orchestration
 
 **Configuration**:
+
 - Workflow definition: Configurable
 - Resource allocation: Automatic
 
 **Execution**:
+
 ```bash
 ./scripts/examples/integration/development-workflow-orchestrator.sh
 ```
 
 **Expected Output**:
+
 - Complete workflow results
 - Execution metrics
 - Generated artifacts
@@ -151,21 +170,25 @@ Integration examples demonstrate how multiple Codomyrmex modules work together t
 **Purpose**: Comprehensive analysis combining multiple analysis types and visualization.
 
 **Modules Used**:
+
 - `static_analysis` - Code analysis
 - `pattern_matching` - Pattern detection
 - `data_visualization` - Visualization
 - `agents` - AI insights
 
 **Configuration**:
+
 - Analysis types: Configurable
 - Output formats: Multiple
 
 **Execution**:
+
 ```bash
 ./scripts/examples/integration/comprehensive_analysis_pipeline.sh
 ```
 
 **Expected Output**:
+
 - Comprehensive analysis reports
 - Pattern detection results
 - Multi-dimensional visualizations
@@ -180,20 +203,24 @@ Integration examples demonstrate how multiple Codomyrmex modules work together t
 **Purpose**: AI-assisted development workflow from code generation to analysis.
 
 **Modules Used**:
+
 - `agents` - Code generation
 - `static_analysis` - Code analysis
 - `data_visualization` - Results visualization
 
 **Configuration**:
+
 - AI provider: Configurable
 - Generation parameters: Customizable
 
 **Execution**:
+
 ```bash
 ./scripts/examples/integration/ai_driven_development_workflow.sh
 ```
 
 **Expected Output**:
+
 - Generated code samples
 - Analysis of generated code
 - Quality metrics
@@ -209,8 +236,8 @@ Some integration examples require environment variables:
 
 ```bash
 # AI provider API keys
-export OPENAI_API_KEY="your-key"
-export ANTHROPIC_API_KEY="your-key"
+export OPENAI_API_KEY="your-key"  # pragma: allowlist secret
+export ANTHROPIC_API_KEY="your-key"  # pragma: allowlist secret
 
 # Configuration paths
 export CODOMYRMEX_WORKFLOWS_DIR="./workflows"
@@ -222,12 +249,12 @@ export CODOMYRMEX_RESOURCE_CONFIG="./resources.json"
 Integration examples require multiple modules:
 
 ```python
-# Check module availability
-from codomyrmex.project_orchestration import get_orchestration_engine
+# Check orchestration component health
+from codomyrmex.logistics.orchestration.project import get_orchestration_engine
 
 engine = get_orchestration_engine()
-status = engine.get_system_status()
-print(status)
+health = engine.health_check()
+print(health["overall_status"], list(health["components"]))
 ```
 
 ## Coordination Patterns
@@ -236,7 +263,7 @@ print(status)
 
 Modules execute in sequence:
 
-```
+```text
 Module A → Module B → Module C
 ```
 
@@ -244,7 +271,7 @@ Module A → Module B → Module C
 
 Independent modules execute in parallel:
 
-```
+```text
 Module A ──┐
            ├─> Module D
 Module B ──┘
@@ -256,7 +283,7 @@ Module C ──┐
 
 Modules execute based on conditions:
 
-```
+```text
 Module A → [condition] → Module B or Module C
 ```
 
@@ -285,6 +312,7 @@ Integration examples handle errors across modules:
 **Error**: Module not found or import fails
 
 **Solution**:
+
 ```bash
 # Verify module installation
 uv run python -c "import codomyrmex.static_analysis; print('OK')"
@@ -298,6 +326,7 @@ uv sync
 **Error**: Resources not available
 
 **Solution**:
+
 ```bash
 # Check resource configuration
 cat resources.json
@@ -311,6 +340,7 @@ python -c "from codomyrmex.project_orchestration import get_resource_manager; rm
 **Error**: Workflow fails or times out
 
 **Solution**:
+
 - Check workflow configuration
 - Verify module dependencies
 - Review execution logs
@@ -322,7 +352,6 @@ python -c "from codomyrmex.project_orchestration import get_resource_manager; rm
 - [Orchestration Examples Guide](./orchestration-examples.md)
 - [Dispatch and Coordination](../project_orchestration/dispatch-coordination.md)
 - [Config-Driven Operations](../project_orchestration/config-driven-operations.md)
-
 
 ## Navigation Links
 

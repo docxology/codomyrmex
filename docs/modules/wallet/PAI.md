@@ -11,12 +11,14 @@ The Wallet module provides self-custody key management and "Natural Ritual" reco
 ### Self-Custody Key Management
 
 ```python
-from codomyrmex.wallet import Wallet
+from codomyrmex.wallet import WalletManager
 
-wallet = Wallet()
-# Store and retrieve cryptographic keys
+wallet = WalletManager()  # optional storage_path=Path(...)
 # Self-custody: keys never leave the local system
-# Hierarchical key derivation for agent-specific keys
+address = wallet.create_wallet("agent-7")
+signature = wallet.sign_message("agent-7", b"deploy approved")
+assert wallet.verify_signature("agent-7", b"deploy approved", signature)
+new_address = wallet.rotate_keys("agent-7", reason="scheduled")
 ```
 
 ### Natural Ritual Recovery (ZKP)
@@ -28,14 +30,14 @@ wallet = Wallet()
 ## Key Exports
 
 | Export | Type | Purpose |
-|--------|------|---------|
-| `Wallet` | Class | Self-custody key management engine |
-| ZKP recovery | Various | Zero-knowledge proof based key recovery |
+| --- | --- | --- |
+| `WalletManager` | Class | Self-custody key management engine (create, sign, verify, rotate, backup) |
+| `NaturalRitualRecovery`, `ZKProof`, `generate_zk_proof`, `verify_zk_proof` | Various | Ritual- and zero-knowledge-proof-based key recovery |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Wallet Contribution |
-|-------|---------------------|
+| --- | --- |
 | **EXECUTE** | Retrieve keys and credentials for secure API access |
 | **VERIFY** | Validate key integrity and custody chain |
 

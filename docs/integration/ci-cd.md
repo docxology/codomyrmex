@@ -26,9 +26,6 @@ class GitHubIntegration:
 
     async def create_pull_request_analysis(self, pr_number: int) -> Dict:
         """Analyze pull request and create detailed analysis."""
-        from codomyrmex.coding.static_analysis import analyze_diff
-        from codomyrmex.agents import review_code_changes
-
         async with aiohttp.ClientSession() as session:
             # Get PR details
             pr_url = f"{self.base_url}/repos/{self.owner}/{self.repo}/pulls/{pr_number}"
@@ -82,29 +79,38 @@ class GitHubIntegration:
     async def _analyze_file_changes(self, filename: str, content: str,
                                   patch: str, session: aiohttp.ClientSession) -> Dict:
         """Analyze individual file changes."""
-        from codomyrmex.coding.static_analysis import analyze_code_quality
-        from codomyrmex.coding.pattern_matching import find_code_patterns
+        import tempfile
+        from pathlib import Path
+
+        from codomyrmex.coding.pattern_matching import PatternDetector
+        from codomyrmex.coding.static_analysis import analyze_file
 
         try:
-            # Static analysis
-            quality_analysis = analyze_code_quality(content, filename)
+            # Static analysis (analyze_file works on a path and returns list[AnalysisResult])
+            with tempfile.TemporaryDirectory() as tmp:
+                local_path = Path(tmp) / Path(filename).name
+                local_path.write_text(content)
+                results = analyze_file(str(local_path))
+            issues = [
+                {'severity': r.severity.value, 'message': r.message, 'line': r.line_number}
+                for r in results
+            ]
 
-            # Pattern analysis
-            pattern_analysis = find_code_patterns(content, filename)
+            # Design-pattern detection (Python sources)
+            patterns = PatternDetector().detect_patterns(content) if filename.endswith('.py') else []
 
-            # AI review (if enabled)
+            # AI review (if enabled; LLM-backed, needs a provider API key)
             ai_review = None
             if os.getenv('ENABLE_AI_REVIEW', 'false').lower() == 'true':
-                from codomyrmex.agents import review_code_changes
-                ai_review = await review_code_changes(content, patch, filename)
+                from codomyrmex.agents.ai_code_editing import analyze_code_quality
+                ai_review = analyze_code_quality(content, language="python", context=patch)
 
             return {
                 'filename': filename,
-                'quality_score': quality_analysis.overall_score,
-                'issues': quality_analysis.issues,
-                'patterns': pattern_analysis.patterns_found,
+                'issues': issues,
+                'patterns': patterns,
                 'ai_review': ai_review,
-                'recommendations': self._file_recommendations(quality_analysis, pattern_analysis)
+                'recommendations': self._file_recommendations(issues, patterns)
             }
 
         except Exception as e:
@@ -309,4 +315,3 @@ jobs:
           --min-quality-score 80
 """
 ```
-

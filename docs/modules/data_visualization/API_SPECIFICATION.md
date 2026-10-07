@@ -146,10 +146,14 @@ From the basic charts module. For an advanced version, see `create_heatmap_advan
 
 ## AdvancedPlotter Class
 
-The `AdvancedPlotter` class provides a stateful, composable plotting API built on Matplotlib and Seaborn.
+The `AdvancedPlotter` class provides a stateful, composable plotting API built on Matplotlib and Seaborn. It lives in `codomyrmex.data_visualization.engines.advanced_plotter`, which also re-exports `PlotConfig`, the enums and the helper functions below.
 
 ```python
-from codomyrmex.data_visualization import AdvancedPlotter, PlotConfig
+from codomyrmex.data_visualization.engines.advanced_plotter import (
+    AdvancedPlotter,
+    ChartStyle,
+    PlotConfig,
+)
 
 plotter = AdvancedPlotter(config=PlotConfig(title="My Chart", style=ChartStyle.WHITEGRID))
 plotter.plot_line([1, 2, 3], [4, 5, 6], label="Series A")
@@ -168,7 +172,7 @@ class AdvancedPlotter:
 ### Key Methods
 
 | Method | Returns | Description |
-|--------|---------|-------------|
+| --- | --- | --- |
 | `create_figure(subplots=(1,1), **kwargs)` | `tuple[Figure, Axes]` | Create a new figure with optional subplots |
 | `plot_line(x_data, y_data, label="", color=None, linewidth=2.0, linestyle="-", marker=None, markersize=6.0, alpha=1.0, **kwargs)` | `Line2D` | Add a line to the current axes |
 | `plot_scatter(x_data, y_data, label="", color=None, size=50, alpha=0.7, marker="o", **kwargs)` | `PathCollection` | Add a scatter plot |
@@ -185,34 +189,38 @@ class AdvancedPlotter:
 
 ## Helper Functions
 
-### `get_available_styles() -> list[str]`
+### `get_available_styles() -> list[ChartStyle]`
 
-Returns list of available chart style values (e.g., `["default", "minimal", "dark", ...]`).
+Returns all `ChartStyle` members (e.g., `[ChartStyle.DEFAULT, ChartStyle.MINIMAL, ChartStyle.DARK, ...]`).
 
-### `get_available_palettes() -> list[str]`
+### `get_available_palettes() -> list[ColorPalette]`
 
-Returns list of available color palette values (e.g., `["default", "viridis", "plasma", ...]`).
+Returns all `ColorPalette` members (e.g., `[ColorPalette.DEFAULT, ColorPalette.VIRIDIS, ...]`).
 
-### `get_available_plot_types() -> list[str]`
+### `get_available_plot_types() -> list[PlotType]`
 
-Returns list of available plot type values (e.g., `["line", "scatter", "bar", ...]`).
+Returns all `PlotType` members (e.g., `[PlotType.LINE, PlotType.SCATTER, PlotType.BAR, ...]`).
 
 ## Data Structures
 
 ### Enums
 
 #### `PlotType(Enum)`
+
 Available plot types: `LINE`, `SCATTER`, `BAR`, `HISTOGRAM`, `PIE`, `HEATMAP`, `BOX`, `VIOLIN`, `DENSITY`, `CORRELATION`, `TIMESERIES`, `DASHBOARD`, `INTERACTIVE`.
 
 #### `ChartStyle(Enum)`
+
 Chart styling options: `DEFAULT`, `MINIMAL`, `DARK`, `WHITE`, `TICKS`, `DARKGRID`, `WHITEGRID`.
 
 #### `ColorPalette(Enum)`
+
 Color palette options: `DEFAULT`, `VIRIDIS`, `PLASMA`, `INFERNO`, `MAGMA`, `COOLWARM`, `RAINBOW`, `PASTEL`, `DARK`, `BRIGHT`.
 
 ### Dataclasses
 
 #### `PlotConfig`
+
 ```python
 @dataclass
 class PlotConfig:
@@ -234,6 +242,7 @@ class PlotConfig:
 ```
 
 #### `DataPoint`
+
 ```python
 @dataclass
 class DataPoint:
@@ -246,6 +255,7 @@ class DataPoint:
 ```
 
 #### `Dataset`
+
 ```python
 @dataclass
 class Dataset:

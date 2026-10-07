@@ -103,7 +103,7 @@ When codomyrmex is used with the [PAI system](../../../PAI.md) (`~/.claude/PAI/`
 PAI defines three tiers of agents. Each tier maps to codomyrmex components:
 
 | PAI Tier | PAI Agents | Codomyrmex Mapping |
-|----------|-----------|-------------------|
+| --- | --- | --- |
 | **Task Subagents** | `Engineer`, `Architect`, `QATester`, `Designer`, `Pentester`, `Algorithm` | `AgentOrchestrator` dispatches to provider clients based on capability needs |
 | **Named Agents** | Serena, Marcus, Remy, Johannes (personality + voice + specialty) | Consume codomyrmex tools via MCP; use `CodeEditor`, `AgentPool`, provider clients |
 | **Custom Agents** | `ComposeAgent` (dynamic composition) | `BaseAgent` / `AgentIntegrationAdapter` base classes for custom implementations |
@@ -113,7 +113,7 @@ PAI defines three tiers of agents. Each tier maps to codomyrmex components:
 Each PAI subagent type maps to specific codomyrmex capabilities:
 
 | PAI Subagent | Primary Codomyrmex Modules | What It Uses |
-|-------------|---------------------------|-------------|
+| --- | --- | --- |
 | **Engineer** | `agents/ai_code_editing/`, `coding/`, `static_analysis/` | `CodeEditor.refactor()`, `CodeEditor.generate()`, sandbox execution |
 | **Architect** | `agents/theory/`, `cerebrum/`, `pattern_matching/` | `DeliberativeArchitecture`, case-based reasoning, pattern analysis |
 | **QATester** | `static_analysis/`, `security/`, `coding/` | `SecurityScanner.scan()`, test runners, browser automation |
@@ -126,7 +126,7 @@ Each PAI subagent type maps to specific codomyrmex capabilities:
 
 PAI's named agents (e.g., Serena for research, Marcus for engineering) operate in Claude Code sessions and access codomyrmex through the MCP bridge:
 
-```
+```text
 Named Agent (PAI)  →  MCP Client  →  Codomyrmex MCP Server  →  Module Tools
     │                                                              │
     │  "Analyze this codebase"                                     │
@@ -145,7 +145,7 @@ The PAI Algorithm's THINK phase selects which capabilities (agents, skills, tool
 ### Two-Pass Selection
 
 | Pass | Source | Authority |
-|------|--------|-----------|
+| --- | --- | --- |
 | **Pass 1: Hook Hints** | `FormatReminder` hook analyzes raw prompt | Draft suggestions |
 | **Pass 2: THINK Validation** | Algorithm validates against ISC criteria | **Authoritative** |
 
@@ -159,7 +159,7 @@ Pass 2 can override Pass 1 based on what OBSERVE discovered. For example:
 PAI composes capabilities using named patterns. These map to codomyrmex orchestration:
 
 | PAI Pattern | Shape | Codomyrmex Implementation |
-|-------------|-------|--------------------------|
+| --- | --- | --- |
 | **Pipeline** | A → B → C | `WorkflowEngine` with DAG dependencies |
 | **TDD Loop** | A ↔ B | `AgentOrchestrator` review-fix cycle |
 | **Fan-out** | → [A, B, C] | `AgentPool` parallel dispatch |
@@ -171,7 +171,7 @@ PAI composes capabilities using named patterns. These map to codomyrmex orchestr
 ### Algorithm Phase → Agent Activity
 
 | Phase | Agent Activity | Codomyrmex Module |
-|-------|---------------|-------------------|
+| --- | --- | --- |
 | **OBSERVE** | Explore agent reads codebase, searches patterns | `system_discovery`, `pattern_matching`, `search` |
 | **THINK** | Capability selection, ISC expansion | `cerebrum` (reasoning), `agents/theory/` |
 | **PLAN** | Workflow definition | `orchestrator` (DAG construction) |
@@ -243,10 +243,10 @@ graph TB
 
 ```bash
 # API Keys (optional - only for cloud providers)
-export ANTHROPIC_API_KEY="sk-..."
-export OPENAI_API_KEY="sk-..."   # for Codex and O1
-export DEEPSEEK_API_KEY="sk-..."
-export DASHSCOPE_API_KEY="sk-..." # for Qwen
+export ANTHROPIC_API_KEY="sk-..."  # pragma: allowlist secret
+export OPENAI_API_KEY="sk-..."   # for Codex and O1  # pragma: allowlist secret
+export DEEPSEEK_API_KEY="sk-..."  # pragma: allowlist secret
+export DASHSCOPE_API_KEY="sk-..." # for Qwen  # pragma: allowlist secret
 
 # Default provider (local-first)
 export CODOMYRMEX_DEFAULT_AGENT="ollama"
@@ -304,16 +304,19 @@ orchestrator.on_action(lambda action:
 
 ```python
 # Always review AI-generated code
-result = editor.generate(spec)
+from pathlib import Path
 
-# Automatic security scan
-from codomyrmex.security import SecurityScanner
-scanner = SecurityScanner()
-scan_result = scanner.scan(result.code)
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
-if scan_result.has_vulnerabilities:
-    logger.warning("AI generated code with vulnerabilities",
-                   issues=scan_result.issues)
+result = generate_code_snippet(spec, language="python")
+Path("generated.py").write_text(result["generated_code"])
+
+# Automatic security scan (bandit-backed; returns a list of findings)
+from codomyrmex.security import security_audit_code
+findings = security_audit_code("generated.py")
+
+if findings:
+    logger.warning("AI generated code with vulnerabilities: %s", findings)
 ```
 
 ## Signposting

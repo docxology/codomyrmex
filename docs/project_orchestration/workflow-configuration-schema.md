@@ -4,7 +4,7 @@ This document describes the JSON schema for workflow definitions, parameter subs
 
 ## Overview
 
-Workflows in Codomyrmex are defined as JSON files that specify a sequence of steps, each representing an action to be executed in a Codomyrmex module. Workflows are stored in `config/workflows/production/` directory and loaded automatically when the WorkflowManager is initialized.
+Workflows in Codomyrmex are defined as JSON files that specify a sequence of steps, each representing an action to be executed in a Codomyrmex module. Workflows are stored in `config/workflows/production/` directory (relative to the working directory, or the `config_dir` passed to `WorkflowManager`) and loaded automatically when the WorkflowManager is initialized. The API lives in `codomyrmex.logistics.orchestration.project` (formerly `codomyrmex.project_orchestration`).
 
 ## JSON Schema
 
@@ -32,15 +32,14 @@ Workflows in Codomyrmex are defined as JSON files that specify a sequence of ste
 Each workflow step is defined with the following structure:
 
 | Field | Type | Required | Default | Description |
-|-------|------|----------|---------|-------------|
+| --- | --- | --- | --- | --- |
 | `name` | string | Yes | - | Unique identifier for this step within the workflow |
 | `module` | string | Yes | - | Codomyrmex module name (e.g., "static_analysis", "data_visualization") |
 | `action` | string | Yes | - | Specific action/function to call within the module |
 | `parameters` | object | No | `{}` | Parameters to pass to the action function |
 | `dependencies` | array | No | `[]` | List of step names that must complete before this step |
 | `timeout` | integer/null | No | `null` | Maximum execution time in seconds (null = no limit) |
-| `retry_count` | integer | No | `0` | Current retry count (internal use, typically 0) |
-| `max_retries` | integer | No | `3` | Maximum number of retry attempts before marking as failed |
+| `max_retries` | integer | No | `0` | Loaded into `WorkflowStep.retry_count`; automatic retries are not implemented yet |
 
 ### Example Workflow Definition
 
@@ -99,7 +98,9 @@ Each workflow step is defined with the following structure:
 
 ## Parameter Substitution
 
-Workflow steps support parameter substitution using the `{{variable}}` syntax. This allows steps to reference outputs from previous steps or global workflow parameters.
+Workflow steps are designed to support parameter substitution using the `{{variable}}` syntax, so that steps can reference outputs from previous steps or global workflow parameters.
+
+> **Not yet implemented**: the current `WorkflowManager` passes `{{...}}` strings through unchanged. `execute_workflow(name, **params)` merges its keyword arguments into every step's `parameters` (overriding keys with the same name).
 
 ### Syntax
 
@@ -156,28 +157,27 @@ Workflow steps support parameter substitution using the `{{variable}}` syntax. T
 ```
 
 When executed with:
+
 ```python
-await workflow_manager.execute_workflow(
+workflow_manager.execute_workflow(
     "data_pipeline",
-    parameters={
-        "input_file": "./data/input.csv",
-        "processing_operations": ["normalize", "filter"],
-        "output_directory": "./output"
-    }
+    input_file="./data/input.csv",
+    processing_operations=["normalize", "filter"],
+    output_directory="./output"
 )
 ```
 
-The parameters are substituted accordingly.
+each step receives `input_file`, `processing_operations`, and `output_directory` as additional parameters.
 
 ## Dependency Resolution
 
-Dependencies define the execution order of workflow steps. Steps are executed in dependency order, not definition order.
+Dependencies define the execution order of workflow steps.
 
 ### Dependency Rules
 
-1. **Circular Dependencies**: Circular dependencies are detected and will cause workflow execution to fail with a `ValueError`.
+1. **Definition Order**: `execute_workflow()` submits steps in list order and maps each dependency to the task ID of an already-submitted step, so list a step after the steps it depends on.
 
-2. **Missing Dependencies**: If a step depends on a step name that doesn't exist, a warning is logged but execution continues. The step will never become ready and will eventually timeout.
+2. **Missing or Circular Dependencies**: Dependencies that do not name an earlier step are dropped silently at execution time. Use `validate_workflow_dependencies()` (missing and self-dependencies) and `get_workflow_execution_order()` (raises `ValueError` on cycles) to check a definition first.
 
 3. **Dependency Resolution Algorithm**:
    - Steps with no dependencies are executed first
@@ -187,7 +187,7 @@ Dependencies define the execution order of workflow steps. Steps are executed in
 
 ### Example Dependency Graph
 
-```
+```text
 Step A (no dependencies)
   └─> Step B (depends on A)
        └─> Step C (depends on B)
@@ -199,35 +199,38 @@ Execution order: A → (B, D) → C → E
 
 ### Parallel Execution
 
-Steps with no dependencies on each other can execute in parallel. The WorkflowManager executes steps sequentially by default, but the OrchestrationEngine can execute independent steps in parallel when configured with `mode="parallel"` or `mode="resource_aware"`.
+Steps with no dependencies on each other can execute in parallel: `execute_workflow()` hands every step to the shared `TaskOrchestrator`, which runs ready tasks on its worker pool. `WorkflowManager.execute_parallel_workflow()` runs a workflow dictionary through a `ParallelExecutor` instead.
 
 ## Validation
 
 ### Required Fields Validation
 
 A workflow definition must have:
+
 - `name`: Non-empty string
 - `steps`: Non-empty array with at least one step
 
 Each step must have:
+
 - `name`: Non-empty string
 - `module`: Non-empty string
 - `action`: Non-empty string
 
 ### Step Name Uniqueness
 
-All step names within a workflow must be unique. Duplicate step names will cause workflow creation to fail.
+All step names within a workflow must be unique; dependencies are resolved by name.
 
 ### Dependency Validation
 
-- Dependencies must reference existing step names
-- Circular dependencies are detected and cause failure
-- Self-referential dependencies (step depends on itself) are treated as circular
+`create_workflow()` stores the steps as given. Check definitions with:
+
+- `validate_workflow_dependencies(steps)`: reports dependencies on missing steps and self-dependencies
+- `get_workflow_execution_order(steps)`: returns parallel execution levels and raises `ValueError` on cycles
 
 ### Example Validation
 
 ```python
-from codomyrmex.project_orchestration import WorkflowManager, WorkflowStep
+from codomyrmex.logistics.orchestration.project import WorkflowManager, WorkflowStep
 
 manager = WorkflowManager()
 
@@ -236,20 +239,22 @@ steps = [
     WorkflowStep(name="step1", module="module1", action="action1"),
     WorkflowStep(name="step2", module="module2", action="action2", dependencies=["step1"])
 ]
-manager.create_workflow("valid_workflow", steps)  # Success
+manager.create_workflow("valid_workflow", steps)  # Returns True
+
+# The DAG helpers take step dictionaries
+step_dicts = [{"name": s.name, "dependencies": s.dependencies} for s in steps]
+manager.validate_workflow_dependencies(step_dicts)  # [] -> valid
+manager.get_workflow_execution_order(step_dicts)  # [['step1'], ['step2']]
 
 # Invalid: Circular dependency
-steps = [
-    WorkflowStep(name="step1", module="module1", action="action1", dependencies=["step2"]),
-    WorkflowStep(name="step2", module="module2", action="action2", dependencies=["step1"])
+circular = [
+    {"name": "step1", "dependencies": ["step2"]},
+    {"name": "step2", "dependencies": ["step1"]}
 ]
-manager.create_workflow("circular_workflow", steps)  # Will fail during execution
+manager.get_workflow_execution_order(circular)  # Raises ValueError (cycle detected)
 
 # Invalid: Missing required field
-steps = [
-    WorkflowStep(name="step1", module="module1")  # Missing 'action'
-]
-manager.create_workflow("invalid_workflow", steps)  # Will fail
+WorkflowStep(name="step1", module="module1")  # Raises TypeError (missing 'action')
 ```
 
 ## Workflow File Location
@@ -261,7 +266,7 @@ Workflows are stored in JSON files in the `config/workflows/production/` directo
 Workflows are automatically loaded when WorkflowManager is initialized:
 
 ```python
-from codomyrmex.project_orchestration import WorkflowManager
+from codomyrmex.logistics.orchestration.project import WorkflowManager
 
 # Workflows are loaded from config/workflows/production/ automatically
 manager = WorkflowManager()
@@ -272,33 +277,23 @@ workflows = manager.list_workflows()
 
 ### Saving Workflows
 
-Workflows are automatically saved when created with `save=True` (default):
-
-```python
-manager.create_workflow("my_workflow", steps, save=True)  # Saved to config/workflows/production/my_workflow.json
-```
+`create_workflow()` registers a workflow in memory only; there is no `save` option. To persist a workflow, write a JSON file in the format above to `manager.config_dir`.
 
 ## Error Handling and Retry Logic
 
 ### Step-Level Error Handling
 
 Each step can specify:
-- `timeout`: Maximum execution time before the step is considered failed
-- `max_retries`: Number of times to retry the step if it fails
 
-### Retry Behavior
+- `timeout`: Recorded on the step's `Task`
+- `max_retries`: Recorded as `WorkflowStep.retry_count`
 
-- Failed steps are retried up to `max_retries` times
-- Retries happen automatically with exponential backoff (future enhancement)
-- After all retries are exhausted, the step is marked as failed
-- Failed steps do not prevent execution of independent steps
+### Current Behaviour
 
-### Workflow-Level Error Handling
-
-- If a step fails after all retries, the workflow continues executing other steps
-- The workflow status is set to `FAILED` if any step fails
-- All step errors are collected in `execution.errors`
-- Partial results are available in `execution.results` for completed steps
+- Automatic retries are not implemented yet; a failed step's task is marked `FAILED`
+- Failed steps do not prevent execution of independent steps; dependent steps stay `BLOCKED`
+- `execute_workflow()` returns a `WorkflowExecution` immediately with status `RUNNING` and does not update it as steps finish (`step_results` stays empty). Check step outcomes on the task orchestrator with `get_task_orchestrator().list_tasks()` and `get_task_result(task_id)`
+- If submission itself fails, the execution's `status` is `FAILED` and `error` holds the message
 
 ## Best Practices
 
@@ -306,7 +301,7 @@ Each step can specify:
 2. **Dependencies**: Keep dependency chains as short as possible to maximize parallelism
 3. **Timeouts**: Set appropriate timeouts based on expected execution time
 4. **Error Handling**: Configure `max_retries` based on step reliability
-5. **Parameter Substitution**: Use parameter substitution to avoid hardcoding values
+5. **Workflow Parameters**: Pass shared values as `execute_workflow()` keyword arguments rather than hardcoding them
 6. **Modularity**: Design workflows to be reusable across different contexts
 
 ## Related Documentation
@@ -315,7 +310,6 @@ Each step can specify:
 - [Task Orchestration Guide](./task-orchestration-guide.md)
 - [Dispatch and Coordination](./dispatch-coordination.md)
 - [Config-Driven Operations](./config-driven-operations.md)
-
 
 ## Navigation Links
 

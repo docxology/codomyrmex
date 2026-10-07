@@ -10,47 +10,35 @@ The module consolidates property-based testing, fuzz testing, fixture lifecycle 
 
 ## PAI Capabilities
 
-### AI-Generated Tests
+### Generated Test Scaffolds
 
-Use AI to generate test cases from source code, producing tests that respect the zero-mock policy and use appropriate pytest markers:
+Generate test scaffolds from source code for an agent to fill in. The generator lives in the `coding` module:
 
 ```python
-from codomyrmex.testing import TestGenerator
-from codomyrmex.llm import LLMClient
+from pathlib import Path
 
-# Generate tests from code
-generator = TestGenerator(llm=LLMClient())
+from codomyrmex.coding.test_generator import TestGenerator
 
-test_code = generator.generate_tests(
-    source_file="src/auth.py",
-    coverage_target=0.8
-)
+# Generate test stubs from code
+generator = TestGenerator()
+suite = generator.from_source(Path("src/auth.py").read_text(), module_name="auth")
 
 # Write generated tests
-with open("tests/test_auth.py", "w") as f:
-    f.write(test_code)
+Path("tests/test_auth.py").write_text(suite.render())
 ```
 
-The `TestGenerator` analyzes the source file's imports, function signatures, and docstrings to produce tests that cover happy paths, edge cases, and error conditions. Generated tests use real data factories rather than mocks.
+`TestGenerator` parses the source with `ast` and emits one stub per public function, class and public method (`# TODO` plus `assert True`). It does not call an LLM; the agent replaces each stub body with real assertions against real implementations.
 
 ### Test Execution
 
-Run tests programmatically with coverage tracking and structured result reporting:
+The module does not wrap the test runner; run pytest (with pytest-cov) directly:
 
 ```python
-from codomyrmex.testing import TestRunner, CoverageReporter
+import pytest
 
-# Run tests
-runner = TestRunner()
-result = runner.run("tests/")
-
-print(f"Passed: {result.passed}")
-print(f"Failed: {result.failed}")
-
-# Coverage report
-coverage = CoverageReporter()
-coverage.run_with_coverage("tests/")
-print(f"Coverage: {coverage.total_coverage}%")
+# Run tests with coverage; a non-zero exit code means failures or coverage below the floor
+exit_code = pytest.main(["tests/", "-q", "--cov=src/codomyrmex", "--cov-fail-under=60"])
+print(f"pytest exit code: {exit_code}")
 ```
 
 Test results feed directly into PAI's VERIFY phase. A failing test suite signals the Algorithm to loop back through BUILD with the failure context, while a passing suite with sufficient coverage advances to LEARN.
@@ -109,17 +97,15 @@ All generators implement the `GeneratorStrategy` abstract base class with a sing
 Verify invariants across thousands of generated inputs:
 
 ```python
-from codomyrmex.testing import property_test, PropertyTestResult
+from codomyrmex.testing import property_test
 from codomyrmex.testing.strategies import IntGenerator
 
-# Define and run a property test
-result: PropertyTestResult = property_test(
-    fn=lambda x: abs(x) >= 0,
-    strategies={"x": IntGenerator(min_val=-10000, max_val=10000)},
-    num_cases=1000
-)
+# Decorate a property; returning False or raising records a failure
+@property_test(iterations=1000, x=IntGenerator(min_val=-10000, max_val=10000))
+def check_abs_non_negative(x):
+    return abs(x) >= 0
 
-assert result.passed, f"Property violated: {result.counterexample}"
+check_abs_non_negative()  # raises AssertionError naming the first failing input
 ```
 
 ### Fuzz Testing
@@ -127,42 +113,36 @@ assert result.passed, f"Property violated: {result.counterexample}"
 Discover edge cases through targeted fuzzing:
 
 ```python
-from codomyrmex.testing import Fuzzer, FuzzingStrategy, FuzzResult
+from codomyrmex.testing import Fuzzer, FuzzingStrategy, FuzzResult, StringGenerator
 
-fuzzer = Fuzzer(
-    target=parse_input,
-    strategy=FuzzingStrategy.RANDOM,
-    max_iterations=5000
-)
+fuzzer = Fuzzer(strategy=FuzzingStrategy.MUTATION, max_iterations=5000)
 
-result: FuzzResult = fuzzer.run()
-if result.crashes:
-    print(f"Found {len(result.crashes)} crash inputs")
+results: list[FuzzResult] = fuzzer.fuzz(parse_input, StringGenerator(max_length=256))
+crashes = fuzzer.get_crashes()
+if crashes:
+    print(f"Found {len(crashes)} crash inputs")
 ```
 
 ## MCP Tools
 
-No direct MCP tools are exposed via `@mcp_tool` decorators. This is a known gap — the testing module is critical for the VERIFY phase but currently requires access through the `call_module_function` universal proxy tool:
+Two tools are exposed via `@mcp_tool` in `mcp_tools.py` and auto-discovered by the PAI MCP bridge:
 
-```
-call_module_function(
-    module="testing",
-    function="property_test",
-    kwargs={"fn": "...", "strategies": {...}, "num_cases": 500}
-)
-```
+| Tool | Description |
+| --- | --- |
+| `testing_generate_data` | Generate `count` synthetic values with a named strategy (`int`, `float`, `string`, `list`, `dict`) |
+| `testing_list_strategies` | List the available generator strategy names |
 
-Future work should expose `run_tests`, `generate_tests`, and `get_coverage` as first-class MCP tools to eliminate the proxy overhead and enable direct PAI invocation.
+Test execution, test generation and coverage are not exposed as MCP tools. Future work should expose `run_tests`, `generate_tests`, and `get_coverage` as first-class MCP tools to eliminate the proxy overhead and enable direct PAI invocation.
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Testing Contribution |
-|-------|---------------------|
-| **OBSERVE** | Scan existing test suites to assess current coverage, identify untested modules, and detect test quality gaps. `CoverageReporter` provides the quantitative baseline. |
+| --- | --- |
+| **OBSERVE** | Scan existing test suites to assess current coverage, identify untested modules, and detect test quality gaps. `pytest --cov` provides the quantitative baseline. |
 | **THINK** | Evaluate which test strategies (unit, integration, property-based, fuzz) are needed based on the task's ISC. Determine coverage thresholds and marker categories. |
 | **PLAN** | Structure the test plan: which modules need new tests, which existing tests need updating, what fixtures are required, and what the coverage delta target is. |
-| **BUILD** | `TestGenerator` produces test code from source analysis. AI agents write tests BEFORE implementation (TDD). Generated tests must fail initially (Red phase). |
-| **EXECUTE** | `TestRunner` executes the test suite. `Fuzzer` runs fuzz campaigns. Property tests verify invariants across generated inputs. |
+| **BUILD** | `coding.test_generator.TestGenerator` scaffolds test stubs from source analysis. AI agents write tests BEFORE implementation (TDD). Generated tests must fail initially (Red phase). |
+| **EXECUTE** | pytest executes the test suite. `Fuzzer` runs fuzz campaigns. Property tests verify invariants across generated inputs. |
 | **VERIFY** | **Primary phase.** Compare test results against ISC: pass rate, coverage percentage, no regressions, no security marker failures. This is the hill-climbing gate — failure here loops back to BUILD. |
 | **LEARN** | Capture test result trends, flaky test patterns, coverage progression, and generator effectiveness into `agentic_memory` for future test strategy optimization. |
 
@@ -192,7 +172,7 @@ export CODOMYRMEX_FUZZ_MAX_ITERATIONS=5000
 Defined in `pyproject.toml` (`[tool.pytest.ini_options]` → `markers`), these markers categorize tests for selective execution:
 
 | Marker | Description | When to Use |
-|--------|-------------|-------------|
+| --- | --- | --- |
 | `@pytest.mark.unit` | Isolated component tests | Fast feedback, no external deps |
 | `@pytest.mark.integration` | Cross-component tests | Real service interactions |
 | `@pytest.mark.slow` | Long-running tests | CI only, not local dev loops |
@@ -215,9 +195,8 @@ Run specific categories: `uv run pytest -m unit` or combine: `uv run pytest -m "
 The PAI Algorithm enforces test-driven development by generating tests in the BUILD phase before writing implementation code. This is the Red-Green-Refactor cycle:
 
 ```python
-# Step 1 (RED): AI generates tests that define expected behavior
-generator = TestGenerator(llm=LLMClient())
-tests = generator.generate_tests("src/new_feature.py", coverage_target=0.85)
+# Step 1 (RED): AI writes tests that define expected behavior,
+# optionally starting from TestGenerator().from_source(...) stubs
 # Tests MUST fail — the implementation does not exist yet
 
 # Step 2 (GREEN): AI writes minimal implementation to pass tests
@@ -235,14 +214,14 @@ This project prohibits `unittest.mock`, `MagicMock`, and `pytest-mock` for repla
 import os
 import pytest
 
-HAS_REDIS = os.getenv("REDIS_URL") is not None
+HAS_REDIS = os.getenv("REDIS_HOST") is not None
 
 @pytest.mark.skipif(not HAS_REDIS, reason="Redis not available")
 @pytest.mark.external
 def test_cache_operations():
     """Test against a real Redis instance — no mocks."""
-    from codomyrmex.cache import CacheClient
-    client = CacheClient(os.getenv("REDIS_URL"))
+    from codomyrmex.cache.backends.redis_backend import RedisCache
+    client = RedisCache()  # host/port from REDIS_HOST / REDIS_PORT
     client.set("key", "value")
     assert client.get("key") == "value"
 ```
@@ -254,6 +233,8 @@ When an external service is unavailable, the test is **skipped** — never faked
 Integrate coverage thresholds into the PAI Algorithm's ISC so the VERIFY phase treats insufficient coverage as a failure, triggering another BUILD iteration:
 
 ```python
+import pytest
+
 # In PAI ISC definition:
 isc_criteria = {
     "tests_pass": True,
@@ -262,11 +243,11 @@ isc_criteria = {
     "security_markers_clean": True,   # All @pytest.mark.security tests pass
 }
 
-# VERIFY phase checks:
-coverage = CoverageReporter()
-report = coverage.run_with_coverage("tests/")
+# VERIFY phase checks (pytest-cov enforces the floor):
+floor = int(isc_criteria["coverage_minimum"] * 100)
+exit_code = pytest.main(["tests/", "--cov=src/codomyrmex", f"--cov-fail-under={floor}"])
 
-if report.total_coverage < isc_criteria["coverage_minimum"]:
+if exit_code != pytest.ExitCode.OK:
     # Loop back to BUILD — generate more tests
     pass
 ```
@@ -275,7 +256,7 @@ if report.total_coverage < isc_criteria["coverage_minimum"]:
 
 **Core Layer** — The testing module sits in the Core layer of Codomyrmex's architecture.
 
-- **Dependencies**: `llm/` (AI-powered test generation via `LLMClient`), `logging_monitoring/` (structured test output and result logging), `validation/` (shared `Result`/`ResultStatus` schemas)
+- **Dependencies**: `logging_monitoring/` (structured test output and result logging), `validation/` (shared `Result`/`ResultStatus` schemas)
 - **Consumed by**: `ci_cd_automation/` (pipeline test execution), `orchestrator/` (test workflows and DAG steps), `security/` (security test coordination)
 - **Consolidates**: `workflow/` (end-to-end workflow testing), `chaos/` (fault injection and resilience testing)
 

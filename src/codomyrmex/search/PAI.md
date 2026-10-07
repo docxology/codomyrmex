@@ -35,12 +35,12 @@ for r in results:
 
 ### Indexed Search
 
-Build a persistent in-memory or disk-backed index for repeated queries:
+Build an in-memory index for repeated queries:
 
 ```python
 from codomyrmex.search import create_index, Document
 
-index = create_index(backend="memory")  # or backend="disk"
+index = create_index(backend="memory")  # the only backend currently implemented
 for path in python_files:
     index.index(Document(id=path, content=open(path).read()))
 
@@ -54,21 +54,25 @@ Tolerate typos and approximate names in user queries:
 ```python
 from codomyrmex.search import FuzzyMatcher
 
-matcher = FuzzyMatcher()
 candidates = ["trust_gateway", "mcp_bridge", "event_schema", "collaboration"]
-matches = matcher.match("trst_gatway", candidates, threshold=0.7)
-# Returns: [("trust_gateway", 0.89), ...]
+best = FuzzyMatcher.find_best_match("trst_gatway", candidates, threshold=0.7)
+# Returns: "trust_gateway" (None when no candidate reaches the threshold)
+score = FuzzyMatcher.similarity_ratio("trst_gatway", "trust_gateway")  # ~0.85
 ```
 
-### File Pattern Search
+### File Path Matching
 
-Search file paths by pattern with fuzzy tolerance:
+The module has no filesystem walker; combine `pathlib` with `FuzzyMatcher` to
+match file paths with typo tolerance:
 
 ```python
-from codomyrmex.search import search_files
+from pathlib import Path
 
-results = search_files("pai.md", root="src/codomyrmex/", fuzzy=True)
-# Returns all PAI.md paths across all modules
+from codomyrmex.search import FuzzyMatcher
+
+modules = [p.parent.name for p in Path("src/codomyrmex").glob("*/PAI.md")]
+module = FuzzyMatcher.find_best_match("relatons", modules, threshold=0.7)
+# Returns: "relations"
 ```
 
 ## MCP Tools
@@ -76,7 +80,7 @@ results = search_files("pai.md", root="src/codomyrmex/", fuzzy=True)
 The following tools are auto-discovered via `@mcp_tool` and available through the PAI MCP bridge:
 
 | Tool | Description | Trust Level | Category |
-|------|-------------|-------------|----------|
+| --- | --- | --- | --- |
 | `codomyrmex.search_documents` | Quick full-text search across a list of text strings | Safe | search |
 | `codomyrmex.search_index_query` | Build an index from documents, then query it | Safe | search |
 | `codomyrmex.search_fuzzy` | Fuzzy-match a query against a list of candidate strings | Safe | search |
@@ -84,6 +88,7 @@ The following tools are auto-discovered via `@mcp_tool` and available through th
 ### MCP Tool Usage Examples
 
 **Quick search across strings:**
+
 ```python
 result = mcp_call("codomyrmex.search_documents", {
     "query": "publish_event trust level",
@@ -101,6 +106,7 @@ result = mcp_call("codomyrmex.search_documents", {
 ```
 
 **Index and query:**
+
 ```python
 result = mcp_call("codomyrmex.search_index_query", {
     "query": "event bus integration",
@@ -109,6 +115,7 @@ result = mcp_call("codomyrmex.search_index_query", {
 ```
 
 **Fuzzy match:**
+
 ```python
 result = mcp_call("codomyrmex.search_fuzzy", {
     "query": "trst_gatway",
@@ -121,7 +128,7 @@ result = mcp_call("codomyrmex.search_fuzzy", {
 ## PAI Algorithm Phase Mapping
 
 | Phase | Search Contribution | Key Functions |
-|-------|---------------------|---------------|
+| --- | --- | --- |
 | **OBSERVE** (1/7) | Find relevant code, files, and patterns in the codebase | `quick_search()`, `search_files()`, `search_index_query` MCP |
 | **THINK** (2/7) | Retrieve past work, related PRDs, and prior Algorithm reflections | `FuzzyMatcher`, `search_documents` MCP |
 | **VERIFY** (6/7) | Confirm absence of prohibited patterns (anti-criteria verification) | `quick_search()` with regex patterns |
@@ -157,7 +164,7 @@ assert result["results"] == [], f"Anti-criterion violated: {pending_marker} foun
 ## PAI Configuration
 
 | Environment Variable | Default | Purpose |
-|---------------------|---------|---------|
+| --- | --- | --- |
 | `CODOMYRMEX_SEARCH_MAX_RESULTS` | `50` | Default maximum results per query |
 | `CODOMYRMEX_SEARCH_INDEX_BACKEND` | `memory` | Index backend: `memory` or `disk` |
 | `CODOMYRMEX_SEARCH_FUZZY_THRESHOLD` | `0.6` | Minimum similarity score for fuzzy matches |

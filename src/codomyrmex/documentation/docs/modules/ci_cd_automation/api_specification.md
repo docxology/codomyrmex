@@ -10,10 +10,10 @@ This API specification documents the programmatic interfaces for the CI/CD Autom
 
 - **Description**: Create and configure a CI/CD pipeline with specified stages and configuration.
 - **Parameters**:
-    - `name`: Unique pipeline name identifier.
-    - `stages`: List of pipeline stage configurations with jobs and tasks.
-    - `config`: Optional pipeline-level configuration (triggers, environments, etc.).
-    - `**kwargs`: Additional pipeline configuration options.
+  - `name`: Unique pipeline name identifier.
+  - `stages`: List of pipeline stage configurations with jobs and tasks.
+  - `config`: Optional pipeline-level configuration (triggers, environments, etc.).
+  - `**kwargs`: Additional pipeline configuration options.
 - **Return Value**: Configured Pipeline object ready for execution.
 - **Errors**: Raises `ValueError` for invalid configurations and `RuntimeError` for system errors.
 
@@ -21,10 +21,11 @@ This API specification documents the programmatic interfaces for the CI/CD Autom
 
 - **Description**: Execute a configured pipeline with full orchestration and monitoring.
 - **Parameters**:
-    - `pipeline`: Pipeline object to execute.
-    - `environment`: Target deployment environment.
-    - `**kwargs`: Execution-specific parameters (dry_run, timeout, etc.).
+  - `pipeline`: Pipeline object to execute.
+  - `environment`: Target deployment environment.
+  - `**kwargs`: Execution-specific parameters (dry_run, timeout, etc.).
 - **Return Value**:
+
     ```python
     {
         "status": "success|failed|cancelled",
@@ -36,15 +37,16 @@ This API specification documents the programmatic interfaces for the CI/CD Autom
         "reports": {<execution_reports>}
     }
     ```
+
 - **Errors**: Raises `PipelineExecutionError` for execution failures.
 
 ### Function: `manage_deployments(deployment_config: Dict, environment: str, **kwargs) -> Deployment`
 
 - **Description**: Handle deployment orchestration with rollback capabilities.
 - **Parameters**:
-    - `deployment_config`: Deployment configuration including artifacts and targets.
-    - `environment`: Target environment for deployment.
-    - `**kwargs`: Deployment-specific options (strategy, timeout, etc.).
+  - `deployment_config`: Deployment configuration including artifacts and targets.
+  - `environment`: Target environment for deployment.
+  - `**kwargs`: Deployment-specific options (strategy, timeout, etc.).
 - **Return Value**: Deployment object with status tracking and management capabilities.
 - **Errors**: Raises `DeploymentError` for deployment failures.
 
@@ -52,9 +54,10 @@ This API specification documents the programmatic interfaces for the CI/CD Autom
 
 - **Description**: Real-time monitoring of pipeline execution health and metrics.
 - **Parameters**:
-    - `pipeline_id`: ID of pipeline to monitor.
-    - `**kwargs`: Monitoring configuration options.
+  - `pipeline_id`: ID of pipeline to monitor.
+  - `**kwargs`: Monitoring configuration options.
 - **Return Value**:
+
     ```python
     {
         "pipeline_id": <str>,
@@ -66,16 +69,18 @@ This API specification documents the programmatic interfaces for the CI/CD Autom
         "alerts": [<list_of_alerts>]
     }
     ```
+
 - **Errors**: Raises `MonitoringError` for monitoring system failures.
 
 ### Function: `generate_pipeline_reports(pipeline_id: str, report_types: List[str] = None, **kwargs) -> Dict`
 
 - **Description**: Generate comprehensive pipeline execution reports and analytics.
 - **Parameters**:
-    - `pipeline_id`: ID of pipeline to report on.
-    - `report_types`: Types of reports to generate (performance, quality, deployment).
-    - `**kwargs`: Report generation options.
+  - `pipeline_id`: ID of pipeline to report on.
+  - `report_types`: Types of reports to generate (performance, quality, deployment).
+  - `**kwargs`: Report generation options.
 - **Return Value**:
+
     ```python
     {
         "pipeline_id": <str>,
@@ -88,16 +93,18 @@ This API specification documents the programmatic interfaces for the CI/CD Autom
         "format": "json|html|pdf"
     }
     ```
+
 - **Errors**: Raises `ReportGenerationError` for report creation failures.
 
 ### Function: `handle_rollback(deployment_id: str, strategy: str = "immediate", **kwargs) -> Dict`
 
 - **Description**: Execute automated rollback for failed deployments.
 - **Parameters**:
-    - `deployment_id`: ID of deployment to rollback.
-    - `strategy`: Rollback strategy (immediate, gradual, blue-green).
-    - `**kwargs`: Rollback-specific configuration.
+  - `deployment_id`: ID of deployment to rollback.
+  - `strategy`: Rollback strategy (immediate, gradual, blue-green).
+  - `**kwargs`: Rollback-specific configuration.
 - **Return Value**:
+
     ```python
     {
         "rollback_id": <str>,
@@ -108,16 +115,18 @@ This API specification documents the programmatic interfaces for the CI/CD Autom
         "verification_results": {<rollback_verification>}
     }
     ```
+
 - **Errors**: Raises `RollbackError` for rollback execution failures.
 
 ### Function: `optimize_pipeline_performance(pipeline: Pipeline, metrics: Dict, **kwargs) -> Dict`
 
 - **Description**: Analyze and optimize pipeline performance based on execution metrics.
 - **Parameters**:
-    - `pipeline`: Pipeline to optimize.
-    - `metrics`: Performance metrics from previous executions.
-    - `**kwargs`: Optimization configuration options.
+  - `pipeline`: Pipeline to optimize.
+  - `metrics`: Performance metrics from previous executions.
+  - `**kwargs`: Optimization configuration options.
 - **Return Value**:
+
     ```python
     {
         "optimized_pipeline": <Pipeline>,
@@ -126,12 +135,15 @@ This API specification documents the programmatic interfaces for the CI/CD Autom
         "estimated_gain": <float>
     }
     ```
+
 - **Errors**: Raises `OptimizationError` for optimization analysis failures.
 
 ## Data Structures
 
 ### Pipeline
+
 Represents a CI/CD pipeline configuration:
+
 ```python
 {
     "id": <str>,
@@ -144,7 +156,9 @@ Represents a CI/CD pipeline configuration:
 ```
 
 ### PipelineStage
+
 Represents an individual pipeline stage:
+
 ```python
 {
     "name": <str>,
@@ -157,7 +171,9 @@ Represents an individual pipeline stage:
 ```
 
 ### Deployment
+
 Represents a deployment configuration and status:
+
 ```python
 {
     "id": <str>,
@@ -172,7 +188,9 @@ Represents a deployment configuration and status:
 ```
 
 ### Environment
+
 Represents a deployment environment:
+
 ```python
 {
     "name": <str>,
@@ -184,7 +202,9 @@ Represents a deployment environment:
 ```
 
 ### PipelineReport
+
 Represents comprehensive pipeline execution analytics:
+
 ```python
 {
     "pipeline_id": <str>,
@@ -199,7 +219,9 @@ Represents comprehensive pipeline execution analytics:
 ```
 
 ### RollbackStrategy
+
 Defines rollback execution strategy:
+
 ```python
 {
     "type": "immediate|gradual|blue_green",
@@ -224,22 +246,28 @@ All functions follow consistent error handling patterns:
 ## Integration Patterns
 
 ### With Build Synthesis
+
 ```python
-from codomyrmex.deployment import create_build_target
 from codomyrmex.ci_cd_automation import create_pipeline
+from codomyrmex.ci_cd_automation.build import validate_build_config
 
-# Create build target
-build_target = create_build_target("my_app", source_path="src")
+# Describe and validate the build target
+build_config = {"name": "my_app", "build_commands": [["uv", "build"]]}
+is_valid, errors = validate_build_config(build_config)
 
-# Create pipeline with build stage
-pipeline = create_pipeline("app_pipeline", [
-    {"name": "build", "jobs": [build_target]},
-    {"name": "test", "jobs": [...]},
-    {"name": "deploy", "jobs": [...]}
-])
+# Create pipeline with build stage (config mapping or YAML/JSON path)
+pipeline = create_pipeline({
+    "name": "app_pipeline",
+    "stages": [
+        {"name": "build", "jobs": [{"name": "build", "commands": ["uv build"]}]},
+        {"name": "test", "jobs": [{"name": "test", "commands": ["uv run pytest"]}]},
+        {"name": "deploy", "jobs": [...]},
+    ],
+})
 ```
 
 ### With Project Orchestration
+
 ```python
 from codomyrmex.logistics.orchestration.project import execute_workflow
 from codomyrmex.ci_cd_automation import run_pipeline
@@ -269,7 +297,6 @@ result = execute_workflow("ci_cd_pipeline", {
 - **Monitoring Overhead**: Minimal performance impact from monitoring systems
 - **Caching**: Build artifacts and test results are cached for efficiency
 - **Parallelization**: Pipeline stages can execute in parallel when dependencies allow
-
 
 ## Navigation Links
 

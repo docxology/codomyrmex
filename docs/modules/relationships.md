@@ -7,7 +7,7 @@ This document provides a comprehensive overview of how Codomyrmex modules intera
 ## 📋 Module Overview
 
 | Module | Primary Role | Key Dependencies | Consumes From | Provides To |
-|--------|-------------|------------------|---------------|-------------|
+| --- | --- | --- | --- | --- |
 | **`environment_setup`** | Environment validation & dependency management | System packages | None | All modules |
 | **`logging_monitoring`** | Centralized logging framework | None | All modules | All modules |
 | **`model_context_protocol`** | AI communication standard, auto-discovery | JSON Schema | AI modules | AI modules |
@@ -172,7 +172,7 @@ graph TD
 
   ```python
   # Universal logging interface across all modules
-  from codomyrmex.logging_monitoring.logger_config import get_logger
+  from codomyrmex.logging_monitoring import get_logger
   logger = get_logger(__name__)
 
   # Consistent log format across entire project
@@ -186,10 +186,11 @@ graph TD
 
   ```python
   # AI modules implement MCP tools
-  from codomyrmex.model_context_protocol.mcp_schemas import MCPToolCall, MCPToolResult
+  from codomyrmex.model_context_protocol import MCPToolCall, MCPToolResult
 
   # Standardized request/response format
-  tool_call = MCPToolCall(tool_name="agents.generate_code", arguments={...})
+  tool_call = MCPToolCall(tool_name="codomyrmex.memory_search", arguments={"query": "auth", "k": 5})
+  tool_result = MCPToolResult(status="success", data={"results": []})
   ```
 
 ### **🤖 AI & Intelligence Modules**
@@ -202,10 +203,10 @@ graph TD
 
   ```python
   # Used by pattern_matching for code understanding
-  from codomyrmex.agents.ai_code_helpers import generate_code
+  from codomyrmex.agents.ai_code_editing import generate_code_snippet
 
   # Used by documentation for example generation
-  result = generate_code("Create a hello world function", "python")
+  result = generate_code_snippet("Create a hello world function", "python")
   ```
 
 #### **`coding.pattern_matching` Integration Points**
@@ -219,8 +220,8 @@ graph TD
   # Pattern matching is now part of the coding module
   from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import analyze_repository_path
 
-  # Comprehensive analysis workflow
-  analysis_results = analyze_repository_path(repo_path="./src", output_dir="./analysis")
+  # Repository analysis entry point (currently returns a status dictionary)
+  analysis_results = analyze_repository_path("./src")
   ```
 
 ### **🔍 Analysis & Quality Modules**
@@ -234,10 +235,10 @@ graph TD
 
   ```python
   # Static analysis is now part of the coding module
-  from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis
+  from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly
 
-  # Quality check before build
-  issues = run_pyrefly_analysis(target_paths=["src/"], project_root=".")
+  # Quality check before build (PyreflyResult; requires the pyrefly CLI)
+  issues = run_pyrefly("src/").issues
   ```
 
 #### **`coding` Integration Points**
@@ -253,7 +254,7 @@ graph TD
 
   # Test generated code before applying
   result = execute_code(language="python", code="print('test')")
-  
+
   # Code review integration
   from codomyrmex.coding.review import CodeReviewer, analyze_file
   reviewer = CodeReviewer()
@@ -272,16 +273,15 @@ graph TD
   ```python
   # Build automation is now part of ci_cd_automation
   from codomyrmex.ci_cd_automation.build.build_orchestrator import orchestrate_build_pipeline
-  from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis
+  from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly
 
-  # Complete build workflow
-  build_config = {"target": "python_wheel", "clean": True}
-  result = orchestrate_build_pipeline(build_config)
+  # Complete build workflow (argument-vector commands, no shell)
+  build_config = {"build_commands": [["uv", "build"]]}
 
   # Quality-gated build process
-  analysis = run_pyrefly_analysis(paths, root)
-  if not analysis["issues"]:
-      build_result = trigger_build("production")
+  analysis = run_pyrefly("src/")
+  if analysis.success and not analysis.issues:
+      build_result = orchestrate_build_pipeline(build_config, project_path=".")
   ```
 
 #### **`git_operations` Integration Points**
@@ -292,11 +292,11 @@ graph TD
 
   ```python
   # Used by ci_cd_automation.build for version control integration
-  from codomyrmex.git_operations.git_wrapper import create_branch, commit_changes
+  from codomyrmex.git_operations import create_branch, commit_changes
 
   # Automated release workflow
-  create_branch("release/v1.1.9")
-  commit_changes("Release version 1.0.0")
+  create_branch("release/v1.3.0")
+  commit_changes("Release version 1.3.0")
   ```
 
 ### **📊 Visualization & Reporting Modules**
@@ -308,13 +308,13 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  # Used by coding.pattern_matching for analysis visualization
-  from codomyrmex.data_visualization.plotter import create_heatmap
-  from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import analyze_repository_path
+  # Used for analysis visualization
+  from codomyrmex.data_visualization import create_heatmap
 
-  # Visualize analysis results
-  analysis = analyze_repository_path(path, config)
-  create_heatmap(analysis["dependency_matrix"], title="Code Dependencies")
+  # Visualize a module dependency matrix
+  modules = ["agents", "coding", "logging_monitoring"]
+  dependency_matrix = [[0, 1, 1], [0, 0, 1], [0, 0, 0]]
+  create_heatmap(dependency_matrix, x_labels=modules, y_labels=modules, title="Code Dependencies")
   ```
 
 #### **`documentation` Integration Points**
@@ -340,12 +340,13 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.cerebrum import CaseLibrary, CBREngine
+  from codomyrmex.cerebrum import Case, CaseBase, CaseRetriever
 
-  # Build reasoning engine from prior cases
-  library = CaseLibrary()
-  engine = CBREngine(library)
-  solution = engine.retrieve_and_adapt(problem_description)
+  # Build a case base from prior cases, then retrieve the most similar ones
+  case_base = CaseBase()
+  case_base.add_case(Case("c1", features={"files_changed": 3, "tests_failed": 1}, outcome="rerun flaky test"))
+  retriever = CaseRetriever(case_base)
+  matches = retriever.retrieve(Case("query", features={"files_changed": 2, "tests_failed": 1}), k=3)
   ```
 
 #### **`graph_rag` Integration Points**
@@ -355,13 +356,14 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.graph_rag import KnowledgeGraph, GraphRAGRetriever
-  from codomyrmex.vector_store import VectorStore
+  from codomyrmex.graph_rag import Entity, GraphRAGPipeline, KnowledgeGraph
 
-  # Build knowledge graph from documents, then query with RAG
+  # Build knowledge graph from documents, then retrieve context for RAG
   kg = KnowledgeGraph()
-  retriever = GraphRAGRetriever(kg, vector_store=VectorStore())
-  context = retriever.query("How do modules interact?")
+  kg.add_entity(Entity(id="orchestrator", name="orchestrator"))
+  pipeline = GraphRAGPipeline(kg)  # optional embedding_fn for semantic matching
+  context = pipeline.retrieve("How do modules interact?")
+  print(context.to_text())
   ```
 
 #### **`agentic_memory` Integration Points**
@@ -371,11 +373,11 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.agentic_memory import MemoryStore, EpisodicMemory
+  from codomyrmex.agentic_memory import AgentMemory, JSONFileStore, MemoryType
 
   # Agents persist and recall information across sessions
-  memory = MemoryStore()
-  memory.store(episode="Resolved merge conflict in auth module")
+  memory = AgentMemory(store=JSONFileStore("memories.json"))
+  memory.remember("Resolved merge conflict in auth module", memory_type=MemoryType.EPISODIC)
   relevant = memory.recall("authentication issues")
   ```
 
@@ -386,10 +388,10 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.prompt_engineering import PromptTemplate, PromptChain
+  from codomyrmex.prompt_engineering import PromptTemplate
 
   # Build reusable prompt templates for agents
-  template = PromptTemplate("Analyze {code} for {language} best practices")
+  template = PromptTemplate(name="code_review", template_str="Analyze {code} for {language} best practices")
   result = template.render(code=source, language="python")
   ```
 
@@ -401,11 +403,12 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.model_ops.evaluation import Evaluator, BenchmarkSuite
+  from codomyrmex.model_ops.evaluation import BenchmarkSuite, create_default_scorer
 
   # Score LLM outputs against reference answers
-  evaluator = Evaluator(metrics=["bleu", "rouge", "semantic_similarity"])
-  scores = evaluator.evaluate(predictions, references)
+  suite = BenchmarkSuite(name="qa", scorer=create_default_scorer())
+  suite.add_case("What is 2 + 2?", "4")
+  scores = suite.run(model_fn=llm_complete)  # model_fn: str -> str; returns a SuiteResult
   ```
 
 #### **`model_ops.optimization` Integration Points**
@@ -416,11 +419,12 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.model_ops.optimization import optimize_model, quantize
+  from codomyrmex.model_ops.optimization import InferenceOptimizer, OptimizationConfig, QuantizationType
 
-  # Optimize model for production inference
-  optimized = optimize_model(model_path, target="onnx")
-  quantized = quantize(optimized, precision="int8")
+  # Wrap a batch model function with request batching and result caching
+  config = OptimizationConfig(quantization=QuantizationType.INT8, max_batch_size=16)
+  optimizer = InferenceOptimizer(model_fn=run_model_batch, config=config)
+  result = optimizer.infer(input_data)  # InferenceResult(output, latency_ms, from_cache, ...)
   ```
 
 ### **⚙️ Infrastructure & Runtime Modules**
@@ -432,11 +436,13 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.concurrency import TaskPool, DistributedLock
+  from codomyrmex.concurrency import AsyncWorkerPool, LocalLock
 
   # Parallel execution with coordination
-  pool = TaskPool(max_workers=8)
-  results = pool.map(process_item, items)
+  pool = AsyncWorkerPool(max_workers=8)
+  results = await pool.map(process_item, items)  # process_item is an async function
+  with LocalLock("shared_report"):
+      write_report(results)
   ```
 
 #### **`cache` Integration Points**
@@ -446,12 +452,17 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.cache import CacheManager, cache_result
+  from codomyrmex.cache import get_cache
 
   # Cache expensive computations
-  @cache_result(ttl=3600)
+  cache = get_cache("analysis")
+
   def expensive_analysis(repo_path):
-      return analyze_repository(repo_path)
+      result = cache.get(repo_path)
+      if result is None:
+          result = analyze_repository(repo_path)
+          cache.set(repo_path, result, ttl=3600)
+      return result
   ```
 
 #### **`events` Integration Points**
@@ -461,12 +472,12 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.events import EventBus, subscribe
+  from codomyrmex.events import Event, EventBus, EventType
 
   # Cross-module event communication
   bus = EventBus()
-  bus.subscribe("build.completed", on_build_complete)
-  bus.publish("build.completed", {"status": "success"})
+  bus.subscribe([EventType.BUILD_COMPLETE], on_build_complete)
+  bus.publish(Event(event_type=EventType.BUILD_COMPLETE, source="ci_cd_automation", data={"status": "success"}))
   ```
 
 #### **`orchestrator` Integration Points** (includes scheduler)
@@ -476,19 +487,21 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.orchestrator import Workflow, Step
+  import asyncio
+
+  from codomyrmex.orchestrator import Workflow
   from codomyrmex.orchestrator.scheduler import Scheduler, CronTrigger
 
   # Define multi-step workflows
   workflow = Workflow("deploy_pipeline")
-  workflow.add_step(Step("test", run_tests))
-  workflow.add_step(Step("build", build_artifacts, depends_on="test"))
-  workflow.add_step(Step("deploy", deploy, depends_on="build"))
-  workflow.execute()
+  workflow.add_task("test", run_tests)
+  workflow.add_task("build", build_artifacts, dependencies=["test"])
+  workflow.add_task("deploy", deploy, dependencies=["build"])
+  asyncio.run(workflow.run())
 
   # Schedule recurring analysis
   scheduler = Scheduler()
-  scheduler.add_job(run_analysis, CronTrigger(hour=2))
+  scheduler.schedule(run_analysis, name="nightly_analysis", trigger=CronTrigger(minute="0", hour="2"))
   scheduler.start()
   ```
 
@@ -499,11 +512,11 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.networking.service_mesh import CircuitBreaker, RetryPolicy
+  from codomyrmex.networking.service_mesh import CircuitBreaker, CircuitBreakerConfig
 
   # Resilient external service calls
-  breaker = CircuitBreaker(failure_threshold=5, reset_timeout=30)
-  result = breaker.call(external_api, request_data)
+  breaker = CircuitBreaker("external_api", CircuitBreakerConfig(failure_threshold=5, timeout_seconds=30))
+  result = breaker.execute(external_api, request_data)
   ```
 
 ### **🔐 Security & Identity Modules**
@@ -515,12 +528,12 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.security import scan_for_vulnerabilities, ThreatModel
+  from codomyrmex.security import analyze_threats, create_threat_model, scan_vulnerabilities
 
   # Security scanning in CI/CD
-  vulnerabilities = scan_for_vulnerabilities(repo_path=".")
-  model = ThreatModel(application="web_api")
-  threats = model.analyze()
+  report = scan_vulnerabilities(".")  # VulnerabilityReport
+  model = create_threat_model("web_api", assets=["user_data"], attack_surface=["http_api"])
+  threats = analyze_threats(model)
   ```
 
 #### **`identity` / `privacy` / `defense` Integration Points**
@@ -531,14 +544,14 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.identity import PersonaManager
-  from codomyrmex.privacy import DataScrubber
-  from codomyrmex.defense import IntrusionDetector
+  from codomyrmex.identity import IdentityManager
+  from codomyrmex.privacy import CrumbCleaner
+  from codomyrmex.defense import ThreatDetector
 
   # Layered security architecture
-  persona = PersonaManager().get_active_persona()
-  scrubbed = DataScrubber().scrub(sensitive_data)
-  detector = IntrusionDetector(alert_callback=notify_admin)
+  persona = IdentityManager().active_persona
+  scrubbed = CrumbCleaner().scrub(sensitive_data)
+  threat_events = ThreatDetector().evaluate(request, source="api")
   ```
 
 #### **`encryption` Integration Points**
@@ -548,10 +561,11 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.encryption import encrypt, decrypt, KeyManager
+  from codomyrmex.encryption import encrypt, decrypt, generate_key, KeyManager
 
   # Used by identity, privacy, defense, wallet modules
   key_mgr = KeyManager()
+  key_mgr.store_key("primary", generate_key())
   encrypted = encrypt(data, key_mgr.get_key("primary"))
   ```
 
@@ -564,12 +578,11 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.cloud import CloudProvider, StorageClient
+  from codomyrmex.cloud import S3Client
 
-  # Cloud-agnostic resource management
-  provider = CloudProvider.from_config()
-  storage = StorageClient(provider)
-  storage.upload("artifacts/build.tar.gz", bucket="releases")
+  # Object storage (GCSClient and AzureBlobClient cover the other providers)
+  storage = S3Client(region_name="eu-west-1")
+  storage.upload_file("releases", "build.tar.gz", "artifacts/build.tar.gz")
   ```
 
 #### **`containerization` Integration Points**
@@ -579,12 +592,12 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.containerization import DockerManager, K8sClient
+  from codomyrmex.containerization import ContainerConfig, DockerManager
 
-  # Build and deploy containers
+  # Build containers (Kubernetes deployment lives in
+  # codomyrmex.containerization.kubernetes and needs the `kubernetes` package)
   docker = DockerManager()
-  image = docker.build(".", tag="codomyrmex:latest")
-  K8sClient().deploy(image, namespace="production")
+  image = docker.build_image(ContainerConfig(image_name="codomyrmex", tag="latest"))
   ```
 
 #### **`deployment` Integration Points**
@@ -594,11 +607,12 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.deployment import DeploymentStrategy, CanaryDeploy
+  from codomyrmex.deployment import CanaryDeployment, DeploymentTarget
 
   # Canary deployment with automatic rollback
-  strategy = CanaryDeploy(initial_percent=5, step_percent=10)
-  strategy.execute(image="codomyrmex:latest", health_check=check_health)
+  strategy = CanaryDeployment(stages=[0.05, 0.15, 0.5, 1.0], health_check=check_health)
+  targets = [DeploymentTarget(id=f"node-{i}", name=f"node-{i}", address=f"10.0.0.{i}") for i in range(4)]
+  result = strategy.deploy(targets, version="codomyrmex:latest", deploy_fn=deploy_to_target)
   ```
 
 ## 🔄 Common Integration Patterns
@@ -710,7 +724,7 @@ graph LR
 **Key Modules Dependency Matrix** (showing core module dependencies, post-consolidation):
 
 | Consumer Module | environment_setup | logging_monitoring | model_context_protocol | agents | data_visualization | coding | security | git_operations | ci_cd_automation | documentation |
-|-----------------|-------------------|-------------------|-------------------------|----------------|-------------------|--------|----------|---------------|-----------------|---------------|
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | **environment_setup** | ✅ Self | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **logging_monitoring** | ❌ | ✅ Self | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **model_context_protocol** | ❌ | ❌ | ✅ Self | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
@@ -745,34 +759,32 @@ graph LR
 ### **Adding AI Enhancement to Any Module**
 
 ```python
-from codomyrmex.agents.ai_code_helpers import generate_code_snippet
-from codomyrmex.model_context_protocol.mcp_schemas import MCPToolCall
+from codomyrmex.agents.ai_code_editing import refactor_code_snippet
 
 def enhance_code_with_ai(code_snippet, enhancement_request):
     """Add AI enhancement capability to any module"""
-    result = generate_code_snippet(
-        prompt=f"Enhance this code: {enhancement_request}",
-        language="python",
-        context_code=code_snippet
+    result = refactor_code_snippet(
+        code=code_snippet,
+        refactoring_type=enhancement_request,
+        language="python"
     )
-    return result
+    return result["refactored_code"]
 ```
 
 ### **Adding Visualization to Analysis Results**
 
 ```python
-from codomyrmex.data_visualization.plotter import create_bar_chart
-from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis
+from codomyrmex.data_visualization import create_bar_chart
+from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly
 
-def visualize_analysis_results(target_paths, project_root):
+def visualize_analysis_results(target_path):
     """Create visual representation of analysis results"""
-    analysis = run_pyrefly_analysis(target_paths, project_root)
+    analysis = run_pyrefly(target_path)
 
     # Extract issue counts by severity
     severity_counts = {}
-    for issue in analysis["issues"]:
-        severity = issue.get("severity", "unknown")
-        severity_counts[severity] = severity_counts.get(severity, 0) + 1
+    for issue in analysis.issues:
+        severity_counts[issue.severity] = severity_counts.get(issue.severity, 0) + 1
 
     # Create visualization
     create_bar_chart(
@@ -790,9 +802,9 @@ def visualize_analysis_results(target_paths, project_root):
 ```python
 from codomyrmex.environment_setup.env_checker import ensure_dependencies_installed
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.agents.ai_code_helpers import generate_code_snippet
-from codomyrmex.coding.code_executor import execute_code
-from codomyrmex.data_visualization.plotter import create_line_plot
+from codomyrmex.agents.ai_code_editing import generate_code_snippet
+from codomyrmex.coding import execute_code
+from codomyrmex.data_visualization import create_line_plot
 
 def complete_development_workflow():
     """Complete workflow using multiple modules"""
@@ -800,31 +812,34 @@ def complete_development_workflow():
     ensure_dependencies_installed()
     logger = get_logger(__name__)
 
-    # 2. Generate code with AI
-    code_result = generate_code_snippet(
-        "Create a function to calculate fibonacci numbers",
-        "python"
+    # 2. Generate code with AI (raises RuntimeError on failure)
+    try:
+        code_result = generate_code_snippet(
+            "Create a program that reads n from stdin and prints the first n fibonacci numbers",
+            "python"
+        )
+    except RuntimeError:
+        logger.error("Code generation failed")
+        return
+
+    # 3. Test the generated code (Docker sandbox)
+    exec_result = execute_code(
+        "python",
+        code_result["generated_code"],
+        stdin="10"
     )
 
-    # 3. Test the generated code
-    if code_result["status"] == "success":
-        exec_result = execute_code(
-            "python",
-            code_result["generated_code"],
-            stdin="10"
-        )
-
-        # 4. Visualize results
+    # 4. Visualize results
+    if exec_result["status"] == "success":
         create_line_plot(
             x_data=list(range(10)),
-            y_data=[int(x) for x in exec_result["output"].split()],
+            y_data=[int(x) for x in exec_result["stdout"].split()],
             title="Fibonacci Sequence",
             output_path="fibonacci_plot.png"
         )
-
         logger.info("Complete workflow executed successfully")
     else:
-        logger.error("Code generation failed")
+        logger.error("Execution failed: %s", exec_result["error_message"])
 ```
 
 This comprehensive integration guide shows how Codomyrmex modules work together to create powerful, interconnected development workflows.

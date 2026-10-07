@@ -50,17 +50,29 @@ class SerializationManager:
         """Get or create a serializer for a format.
 
         Args:
-            format: Serialization format (json, yaml, toml, pickle, etc.)
+            format: A built-in format (``json``, ``yaml``, ``pickle``) or a name
+                registered with :meth:`register_serializer`.
 
         Returns:
             Serializer instance.
+
+        Raises:
+            ValueError: If the format is neither built in nor registered.
+                (It used to fall back to JSON silently, so e.g. ``"toml"``
+                produced JSON and was then listed as supported.)
 
         """
         if format not in self._serializers:
             try:
                 fmt = SerializationFormat(format)
             except ValueError:
-                fmt = SerializationFormat.JSON
+                known = sorted(
+                    {f.value for f in SerializationFormat} | set(self._serializers)
+                )
+                raise ValueError(
+                    f"Unsupported serialization format {format!r}; "
+                    f"use one of {known} or register_serializer()"
+                ) from None
             self._serializers[format] = Serializer(default_format=fmt)
         return self._serializers[format]
 

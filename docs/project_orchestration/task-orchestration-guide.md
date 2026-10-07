@@ -4,12 +4,16 @@ Complete end-to-end guide for task orchestration, from task creation to executio
 
 ## Overview
 
-Task orchestration in Codomyrmex allows you to coordinate individual tasks with dependency management, resource allocation, and priority-based execution. This guide walks through the complete workflow from creating tasks to reviewing results.
+Task orchestration in Codomyrmex allows you to coordinate individual tasks with dependency management, resource requirements, and priority-based execution. This guide walks through the complete workflow from creating tasks to reviewing results.
+
+The API lives in `codomyrmex.logistics.orchestration.project` (formerly `codomyrmex.project_orchestration`).
+
+> **Current behaviour**: `TaskOrchestrator` does not yet import `module` and call `action`. It runs the built-in actions `echo` (returns `parameters["message"]`), `sleep` (waits `parameters["duration"]` seconds), and `fail` (raises), and records every other action as executed with the result `{"status": "executed", "action": ...}`. Resource requirements are recorded on the task but not allocated.
 
 ## Quick Start
 
 ```python
-from codomyrmex.project_orchestration import (
+from codomyrmex.logistics.orchestration.project import (
     get_task_orchestrator,
     Task,
     TaskPriority,
@@ -17,10 +21,10 @@ from codomyrmex.project_orchestration import (
     ResourceType
 )
 
-# Get task orchestrator
+# Get the global task orchestrator (4 worker threads)
 orchestrator = get_task_orchestrator()
 
-# Start execution engine
+# Start execution engine (submit_task also starts it on demand)
 orchestrator.start_processing()
 
 # Create and execute tasks
@@ -32,7 +36,7 @@ orchestrator.start_processing()
 ### Basic Task Creation
 
 ```python
-from codomyrmex.project_orchestration import Task, TaskPriority
+from codomyrmex.logistics.orchestration.project import Task, TaskPriority
 
 # Create a simple task
 task = Task(
@@ -42,24 +46,29 @@ task = Task(
     parameters={"path": "./src"}
 )
 
-# Add task to orchestrator
+# Add task to orchestrator (returns task.id)
 task_id = orchestrator.submit_task(task)
+
+# Or submit and block until the task finishes
+result = orchestrator.execute_task(Task(name="greet", module="demo", action="echo", parameters={"message": "hi"}))
+print(result.result)  # "hi"
 ```
 
 ### Task with Dependencies
 
+Dependencies are task IDs. A task whose dependencies have not completed is held in the `BLOCKED` state and queued once they finish.
+
 ```python
 # Create first task
-setup_task = orchestrator.create_task(
+setup_task = Task(
     name="setup_environment",
     module="environment_setup",
     action="check_environment",
-    parameters={},
     priority=TaskPriority.HIGH
 )
 
 # Create dependent task
-analysis_task = orchestrator.create_task(
+analysis_task = Task(
     name="analyze_code",
     module="static_analysis",
     action="analyze_code_quality",
@@ -67,81 +76,71 @@ analysis_task = orchestrator.create_task(
     dependencies=[setup_task.id],  # Depends on setup_task
     priority=TaskPriority.NORMAL
 )
+
+orchestrator.submit_task(setup_task)
+orchestrator.submit_task(analysis_task)
 ```
 
 ### Task with Resources
 
 ```python
-from codomyrmex.project_orchestration import TaskResource, ResourceType
+from codomyrmex.logistics.orchestration.project import TaskResource, ResourceType
 
-task = orchestrator.create_task(
+task = Task(
     name="heavy_analysis",
     module="static_analysis",
     action="comprehensive_analysis",
     parameters={"path": "./src"},
     priority=TaskPriority.HIGH,
     resources=[
-        TaskResource(
-            type=ResourceType.CPU,
-            identifier="system_cpu",
-            mode="read"
-        ),
-        TaskResource(
-            type=ResourceType.MEMORY,
-            identifier="system_memory",
-            mode="read"
-        )
+        TaskResource(resource_type=ResourceType.COMPUTE.value, amount=2.0, resource_id="sys-compute"),
+        TaskResource(resource_type=ResourceType.MEMORY.value, amount=512.0, resource_id="sys-memory"),
     ],
     timeout=600  # 10 minute timeout
 )
+orchestrator.submit_task(task)
 ```
 
 ## Step 2: Configure Resources and Priorities
 
 ### Priority Levels
 
+Ready tasks are dequeued in priority order: `CRITICAL`, `HIGH`, `NORMAL`, `LOW`, `BACKGROUND`.
+
 ```python
-from codomyrmex.project_orchestration import TaskPriority
+from codomyrmex.logistics.orchestration.project import TaskPriority
 
 # Critical priority (executes first)
-critical_task = Task(..., priority=TaskPriority.CRITICAL)
+critical_task = Task(name="hotfix", module="demo", action="echo", priority=TaskPriority.CRITICAL)
 
 # High priority
-high_task = Task(..., priority=TaskPriority.HIGH)
+high_task = Task(name="build", module="demo", action="echo", priority=TaskPriority.HIGH)
 
 # Normal priority (default)
-normal_task = Task(..., priority=TaskPriority.NORMAL)
+normal_task = Task(name="analyze", module="demo", action="echo", priority=TaskPriority.NORMAL)
 
 # Low priority
-low_task = Task(..., priority=TaskPriority.LOW)
+low_task = Task(name="report", module="demo", action="echo", priority=TaskPriority.LOW)
 ```
 
 ### Resource Requirements
 
+`TaskResource` takes a resource type string, an amount, and an optional specific resource ID. The default `ResourceManager` registers `sys-compute`, `sys-memory`, and `api-global`.
+
 ```python
-# CPU resource
-cpu_resource = TaskResource(
-    type=ResourceType.CPU,
-    identifier="system_cpu",
-    mode="read"  # or "write" or "exclusive"
-)
+# Compute resource
+cpu_resource = TaskResource(resource_type=ResourceType.COMPUTE.value, amount=1.0, resource_id="sys-compute")
 
-# Memory resource
-memory_resource = TaskResource(
-    type=ResourceType.MEMORY,
-    identifier="system_memory",
-    mode="read"
-)
+# Memory resource (MB)
+memory_resource = TaskResource(resource_type=ResourceType.MEMORY.value, amount=256.0, resource_id="sys-memory")
 
-# External API resource
-api_resource = TaskResource(
-    type=ResourceType.EXTERNAL_API,
-    identifier="openai_api",
-    mode="exclusive"
-)
+# External API quota
+api_resource = TaskResource(resource_type=ResourceType.API_QUOTA.value, amount=10.0, resource_id="api-global")
 
 task = Task(
-    ...,
+    name="llm_review",
+    module="agents",
+    action="review",
     resources=[cpu_resource, memory_resource, api_resource]
 )
 ```
@@ -155,10 +154,8 @@ task = Task(
     action="process_large_dataset",
     parameters={"file": "large_data.csv"},
     timeout=3600,  # 1 hour timeout
-    max_retries=3,  # Retry up to 3 times
-    retry_delay=5.0,  # Wait 5 seconds between retries
-    tags=["data-processing", "visualization"],
-    metadata={"description": "Process large dataset"}
+    max_retries=3,  # Retry budget recorded on the task
+    metadata={"description": "Process large dataset", "tags": ["data-processing", "visualization"]}
 )
 ```
 
@@ -167,7 +164,7 @@ task = Task(
 ### Start Execution
 
 ```python
-# Start the execution engine (must be called before tasks execute)
+# Start the execution engine (submit_task calls this automatically)
 orchestrator.start_processing()
 
 # Tasks are now processed automatically in the background
@@ -176,13 +173,13 @@ orchestrator.start_processing()
 ### Wait for Completion
 
 ```python
-# Wait for all tasks to complete
+# Wait for all tasks to reach COMPLETED, FAILED or CANCELLED
 completed = orchestrator.wait_for_completion(timeout=300.0)  # 5 minute timeout
 
 if completed:
-    print("All tasks completed successfully")
+    print("All tasks finished")
 else:
-    print("Task execution timed out or failed")
+    print("Task execution timed out")
 ```
 
 ### Monitor Execution
@@ -193,11 +190,11 @@ import time
 # Monitor task status
 while True:
     stats = orchestrator.get_execution_stats()
-    print(f"Pending: {stats['pending']}, Running: {stats['running']}, Completed: {stats['completed']}")
-    
-    if stats['pending'] == 0 and stats['running'] == 0:
+    print(f"Total: {stats['total_tasks']}, Running: {stats['running']}, Completed: {stats['completed']}, Failed: {stats['failed']}")
+
+    if stats['completed'] + stats['failed'] == stats['total_tasks']:
         break
-    
+
     time.sleep(1)
 ```
 
@@ -219,35 +216,35 @@ if task:
 ### Get Task Result
 
 ```python
-# Get task result
+# Get task result (a TaskResult)
 result = orchestrator.get_task_result(task_id)
 
 if result:
     if result.success:
-        print(f"Task completed: {result.data}")
-        print(f"Execution time: {result.execution_time}s")
+        print(f"Task completed: {result.result}")
+        print(f"Execution time: {result.duration}s")
     else:
-        print(f"Task failed: {result.error_message}")
-        print(f"Error type: {result.error_type}")
+        print(f"Task failed: {result.error}")
+        print(f"Status: {result.status.value}")
 ```
 
 ### Handle Task Failures
 
 ```python
+from codomyrmex.logistics.orchestration.project import TaskStatus
+
 # Check for failed tasks
-failed_tasks = orchestrator.list_tasks(status=TaskStatus.FAILED)
+failed_tasks = [t for t in orchestrator.list_tasks() if t.status == TaskStatus.FAILED]
 
 for task in failed_tasks:
     result = orchestrator.get_task_result(task.id)
     if result:
-        print(f"Task {task.name} failed: {result.error_message}")
-        
-        # Check if task can be retried
-        if task.can_retry():
-            # Reset task and retry
-            task.status = TaskStatus.PENDING
-            task.retry_count = 0
-            orchestrator.submit_task(task)
+        print(f"Task {task.name} failed: {result.error}")
+
+    # Resubmit while retries remain
+    if task.retry_count < task.max_retries:
+        task.retry_count += 1
+        orchestrator.submit_task(task)
 ```
 
 ### Cancel Tasks
@@ -267,29 +264,27 @@ else:
 ### Execution Statistics
 
 ```python
-# Get comprehensive execution statistics
+# Get execution statistics
 stats = orchestrator.get_execution_stats()
 
 print(f"Total tasks: {stats['total_tasks']}")
+print(f"Running: {stats['running']}")
 print(f"Completed: {stats['completed']}")
 print(f"Failed: {stats['failed']}")
-print(f"Average execution time: {stats['average_execution_time']:.2f}s")
-print(f"Total execution time: {stats['total_execution_time']:.2f}s")
 ```
 
 ### Task Results
 
 ```python
 # Get results for all completed tasks
-completed_tasks = orchestrator.list_tasks(status=TaskStatus.COMPLETED)
+completed_tasks = [t for t in orchestrator.list_tasks() if t.status == TaskStatus.COMPLETED]
 
 for task in completed_tasks:
     result = orchestrator.get_task_result(task.id)
     if result and result.success:
-        print(f"
-Task: {task.name}")
-        print(f"  Execution time: {result.execution_time:.2f}s")
-        print(f"  Data: {result.data}")
+        print(f"\nTask: {task.name}")
+        print(f"  Execution time: {result.duration:.2f}s")
+        print(f"  Data: {result.result}")
         print(f"  Metadata: {result.metadata}")
 ```
 
@@ -305,7 +300,7 @@ for task in tasks:
         execution_times.append({
             'name': task.name,
             'time': task.execution_time,
-            'priority': task.priority.value
+            'priority': task.priority.name
         })
 
 # Sort by execution time
@@ -319,28 +314,27 @@ for item in execution_times[:5]:
 ## Complete Example
 
 ```python
-from codomyrmex.project_orchestration import (
-    get_task_orchestrator,
+from codomyrmex.logistics.orchestration.project import (
+    TaskOrchestrator,
     Task,
     TaskPriority,
     TaskResource,
     ResourceType,
-    TaskStatus
 )
 
 # Initialize orchestrator
-orchestrator = get_task_orchestrator(max_workers=4)
+orchestrator = TaskOrchestrator(max_workers=4)
 orchestrator.start_processing()
 
 # Create task chain
-setup_task = orchestrator.create_task(
+setup_task = Task(
     name="setup",
     module="environment_setup",
     action="check_environment",
     priority=TaskPriority.HIGH
 )
 
-analysis_task = orchestrator.create_task(
+analysis_task = Task(
     name="analyze",
     module="static_analysis",
     action="analyze_code_quality",
@@ -348,19 +342,22 @@ analysis_task = orchestrator.create_task(
     dependencies=[setup_task.id],
     priority=TaskPriority.NORMAL,
     resources=[
-        TaskResource(type=ResourceType.CPU, identifier="system_cpu", mode="read")
+        TaskResource(resource_type=ResourceType.COMPUTE.value, amount=1.0)
     ],
     timeout=300
 )
 
-visualization_task = orchestrator.create_task(
+visualization_task = Task(
     name="visualize",
     module="data_visualization",
     action="create_bar_chart",
-    parameters={"data": "placeholder", "title": "Code Quality"},
+    parameters={"title": "Code Quality"},
     dependencies=[analysis_task.id],
     priority=TaskPriority.NORMAL
 )
+
+for task in (setup_task, analysis_task, visualization_task):
+    orchestrator.submit_task(task)
 
 # Wait for completion
 completed = orchestrator.wait_for_completion(timeout=600)
@@ -369,48 +366,45 @@ if completed:
     # Get results
     analysis_result = orchestrator.get_task_result(analysis_task.id)
     visualization_result = orchestrator.get_task_result(visualization_task.id)
-    
+
     # Print statistics
     stats = orchestrator.get_execution_stats()
-    print(f"Completed {stats['completed']} tasks in {stats['total_execution_time']:.2f}s")
-    
-    # Stop execution
-    orchestrator.stop_execution()
+    total_time = sum(t.execution_time or 0 for t in orchestrator.list_tasks())
+    print(f"Completed {stats['completed']} tasks in {total_time:.2f}s")
 else:
-    print("Execution timed out or failed")
+    print("Execution timed out")
+
+# Stop execution
+orchestrator.stop_execution()
 ```
 
 ## Best Practices
 
 1. **Dependency Management**: Keep dependency chains as short as possible
-2. **Resource Allocation**: Specify resource requirements for better scheduling
+2. **Resource Requirements**: Record resource requirements on tasks so they can be scheduled once allocation is wired in
 3. **Priority Setting**: Use appropriate priorities for task importance
 4. **Timeout Configuration**: Set realistic timeouts based on expected execution time
 5. **Error Handling**: Check task results and handle failures appropriately
-6. **Resource Cleanup**: Resources are automatically released, but ensure tasks complete
+6. **Shutdown**: Call `stop_execution()` when you own the orchestrator instance
 7. **Monitoring**: Monitor execution statistics for performance optimization
 
 ## Troubleshooting
 
 ### Tasks Not Executing
 
-- Ensure `start_processing()` has been called
-- Check that dependencies are satisfied
-- Verify resources are available
+- Ensure `start_processing()` has been called (or that tasks were added with `submit_task`)
+- Check that dependencies are satisfied (blocked tasks have `TaskStatus.BLOCKED`)
 - Check task status with `orchestrator.get_task(task_id)`
 
 ### Tasks Failing
 
-- Check `task.result.error_message` for details
-- Verify module and action exist
+- Check `orchestrator.get_task_result(task_id).error` for details
 - Check parameter types and values
-- Review resource availability
 
 ### Slow Execution
 
 - Check execution statistics for bottlenecks
-- Review resource allocation
-- Consider adjusting priorities
+- Consider adjusting priorities or `max_workers`
 - Verify dependencies are optimal
 
 ## Related Documentation
@@ -418,7 +412,6 @@ else:
 - [Dispatch and Coordination](./dispatch-coordination.md)
 - [Resource Configuration](./resource-configuration.md)
 - [API Specification](../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md)
-
 
 ## Navigation Links
 

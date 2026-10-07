@@ -11,6 +11,7 @@ This document specifies the Model Context Protocol (MCP) tools provided by the `
 **Description**: [Tool description]
 
 **Parameters**:
+
 ```json
 {
   "param1": {
@@ -30,6 +31,7 @@ This document specifies the Model Context Protocol (MCP) tools provided by the `
 **Returns**: Return value description
 
 **Example**:
+
 ```json
 {
   "tool": "tool_name",
@@ -42,12 +44,13 @@ This document specifies the Model Context Protocol (MCP) tools provided by the `
 
 ## Tool Registration
 
-Tools are automatically registered when the module is imported:
+Tools are defined with the `@mcp_tool` decorator in `mcp_tools.py` and are auto-discovered by the PAI MCP bridge; no manual registration call is needed. The decorated functions can also be called directly:
 
 ```python
-from codomyrmex.terminal_interface import register_tools
+from codomyrmex.terminal_interface.mcp_tools import terminal_info, terminal_list_themes
 
-register_tools()
+info = terminal_info()
+themes = terminal_list_themes()
 ```
 
 ## Related Documentation
@@ -71,7 +74,7 @@ Execute terminal commands and capture output for system administration and devel
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--- | :--- | :--- | :--- | :--- |
 | `command` | `string` | Yes | Terminal command to execute | `"ls -la"` |
 | `working_directory` | `string` | No | Directory to execute command in | `"/path/to/project"` |
 | `timeout_seconds` | `integer` | No | Command execution timeout | `30` |
@@ -107,7 +110,7 @@ Format and enhance terminal output with colors, tables, and structured display f
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--- | :--- | :--- | :--- | :--- |
 | `content` | `string` | Yes | Content to format | `"Error: Connection failed"` |
 | `format_type` | `string` | No | Type of formatting (success, error, warning, info, table, json) | `"error"` |
 | `table_headers` | `array[string]` | No | Headers for table formatting | `["Name", "Status", "Size"]` |
@@ -137,7 +140,7 @@ Launch an interactive terminal shell session for complex multi-step operations a
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--- | :--- | :--- | :--- | :--- |
 | `shell_type` | `string` | No | Type of shell to launch (bash, zsh, python, codomyrmex) | `"codomyrmex"` |
 | `working_directory` | `string` | No | Initial working directory | `"/path/to/project"` |
 | `prompt` | `string` | No | Custom shell prompt | `"codomyrmex> "` |
@@ -162,3 +165,5 @@ Launch an interactive terminal shell session for complex multi-step operations a
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
+
+<!-- markdownlint-configure-file { "MD024": { "siblings_only": true } } -->

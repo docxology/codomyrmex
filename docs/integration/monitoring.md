@@ -259,7 +259,7 @@ monitoring_grafana = GrafanaIntegration(
 
 async def monitored_analysis_workflow(codebase_path: str):
     """Analysis workflow with comprehensive monitoring."""
-    from codomyrmex.coding.static_analysis import analyze_codebase
+    from codomyrmex.coding.review import CodeReviewer
     import time
 
     start_time = time.time()
@@ -268,8 +268,8 @@ async def monitored_analysis_workflow(codebase_path: str):
     monitoring_prometheus.update_active_jobs('static_analysis', 1)
 
     try:
-        # Perform analysis
-        result = analyze_codebase(codebase_path)
+        # Perform analysis (QualityDashboard; requires the pyscn CLI)
+        result = CodeReviewer(codebase_path).generate_quality_dashboard()
         duration = time.time() - start_time
 
         # Record successful analysis
@@ -284,7 +284,7 @@ async def monitored_analysis_workflow(codebase_path: str):
         monitoring_prometheus.record_quality_score(
             Path(codebase_path).name,
             'overall',
-            result.overall_quality_score
+            result.overall_score
         )
 
         # Push metrics

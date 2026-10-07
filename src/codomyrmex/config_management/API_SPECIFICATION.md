@@ -10,10 +10,10 @@ This API specification documents the programmatic interfaces for the Configurati
 
 - **Description**: Load and merge configuration from multiple sources with environment-specific overrides.
 - **Parameters**:
-    - `config_paths`: List of file paths or URLs to configuration files.
-    - `environment`: Target environment (development, staging, production).
-    - `overrides`: Optional runtime configuration overrides.
-    - `**kwargs`: Additional loading options (format, validation, etc.).
+  - `config_paths`: List of file paths or URLs to configuration files.
+  - `environment`: Target environment (development, staging, production).
+  - `overrides`: Optional runtime configuration overrides.
+  - `**kwargs`: Additional loading options (format, validation, etc.).
 - **Return Value**: Merged and validated Configuration object.
 - **Errors**: Raises `ConfigurationError` for loading failures or validation errors.
 
@@ -21,10 +21,11 @@ This API specification documents the programmatic interfaces for the Configurati
 
 - **Description**: Validate configuration against schemas and business rules.
 - **Parameters**:
-    - `config`: Configuration to validate (dict or Configuration object).
-    - `schema`: Optional JSON schema for validation.
-    - `**kwargs`: Validation options (strict_mode, custom_validators, etc.).
+  - `config`: Configuration to validate (dict or Configuration object).
+  - `schema`: Optional JSON schema for validation.
+  - `**kwargs`: Validation options (strict_mode, custom_validators, etc.).
 - **Return Value**:
+
     ```python
     {
         "valid": <bool>,
@@ -34,17 +35,19 @@ This API specification documents the programmatic interfaces for the Configurati
         "business_rules_passed": <bool>
     }
     ```
+
 - **Errors**: Raises `ValidationError` for schema violations or business rule failures.
 
 ### Function: `manage_secrets(operation: str, secret_path: str, value: Optional[str] = None, **kwargs) -> Dict`
 
 - **Description**: Secure secret management including storage, retrieval, and rotation.
 - **Parameters**:
-    - `operation`: Operation type (get, set, rotate, delete).
-    - `secret_path`: Path/key for the secret.
-    - `value`: Value for set operations.
-    - `**kwargs`: Operation-specific options (encryption, ttl, etc.).
+  - `operation`: Operation type (get, set, rotate, delete).
+  - `secret_path`: Path/key for the secret.
+  - `value`: Value for set operations.
+  - `**kwargs`: Operation-specific options (encryption, ttl, etc.).
 - **Return Value**:
+
     ```python
     {
         "operation": <str>,
@@ -58,16 +61,17 @@ This API specification documents the programmatic interfaces for the Configurati
         }
     }
     ```
+
 - **Errors**: Raises `SecretManagementError` for security or access failures.
 
 ### Function: `deploy_configuration(config: Configuration, target: str, strategy: str = "rolling", **kwargs) -> ConfigDeployment`
 
 - **Description**: Deploy configuration to target environments with rollback capabilities.
 - **Parameters**:
-    - `config`: Configuration to deploy.
-    - `target`: Deployment target (environment, service, file path).
-    - `strategy`: Deployment strategy (rolling, blue_green, canary).
-    - `**kwargs`: Deployment options (timeout, validation, backup, etc.).
+  - `config`: Configuration to deploy.
+  - `target`: Deployment target (environment, service, file path).
+  - `strategy`: Deployment strategy (rolling, blue_green, canary).
+  - `**kwargs`: Deployment options (timeout, validation, backup, etc.).
 - **Return Value**: ConfigDeployment object with tracking and rollback capabilities.
 - **Errors**: Raises `DeploymentError` for deployment failures.
 
@@ -75,9 +79,9 @@ This API specification documents the programmatic interfaces for the Configurati
 
 - **Description**: Monitor configuration files for changes and drift detection.
 - **Parameters**:
-    - `config_path`: Path to configuration file or directory to monitor.
-    - `callback`: Optional callback function for change notifications.
-    - `**kwargs`: Monitoring options (interval, patterns, recursive, etc.).
+  - `config_path`: Path to configuration file or directory to monitor.
+  - `callback`: Optional callback function for change notifications.
+  - `**kwargs`: Monitoring options (interval, patterns, recursive, etc.).
 - **Return Value**: ConfigurationMonitor object providing real-time change tracking.
 - **Errors**: Raises `MonitoringError` for filesystem or permission issues.
 
@@ -85,16 +89,18 @@ This API specification documents the programmatic interfaces for the Configurati
 
 - **Description**: Audit configuration for compliance, security, and best practices.
 - **Parameters**:
-    - `config`: Configuration to audit.
-    - `audit_rules`: Optional custom audit rules to apply.
-    - `**kwargs`: Audit options (severity_levels, categories, etc.).
+  - `config`: Configuration to audit.
+  - `audit_rules`: Optional custom audit rules to apply.
+  - `**kwargs`: Audit options (severity_levels, categories, etc.).
 - **Return Value**: ConfigAudit object with findings, recommendations, and compliance status.
 - **Errors**: Raises `AuditError` for audit execution failures.
 
 ## Data Structures
 
 ### Configuration
+
 Represents a loaded and validated configuration:
+
 ```python
 {
     "data": {<configuration_data>},
@@ -111,7 +117,9 @@ Represents a loaded and validated configuration:
 ```
 
 ### ConfigSchema
+
 JSON schema definition for configuration validation:
+
 ```python
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -128,7 +136,9 @@ JSON schema definition for configuration validation:
 ```
 
 ### ConfigDeployment
+
 Tracks configuration deployment status and history:
+
 ```python
 {
     "id": <str>,
@@ -146,7 +156,9 @@ Tracks configuration deployment status and history:
 ```
 
 ### ConfigAudit
+
 Results of configuration audit and compliance checking:
+
 ```python
 {
     "config_id": <str>,
@@ -172,7 +184,9 @@ Results of configuration audit and compliance checking:
 ```
 
 ### SecretManager
+
 Manages encrypted secrets and credentials:
+
 ```python
 {
     "backend": <str>,  # vault, aws_secretsmanager, azure_keyvault, etc.
@@ -197,37 +211,38 @@ All functions follow consistent error handling patterns:
 ## Integration Patterns
 
 ### With Environment Setup
+
 ```python
 from codomyrmex.config_management import load_configuration
-from codomyrmex.environment_setup import setup_environment
+from codomyrmex.environment_setup import validate_environment
 
-# Load environment-specific configuration
-config = load_configuration([
-    "config/default.yaml",
-    "config/production.yaml"
-], environment="production")
+# Validate the runtime environment before loading configuration
+env_report = validate_environment(min_python="3.11")
+if not env_report.valid:
+    raise RuntimeError(f"Environment incomplete: {env_report.missing_items}")
 
-# Setup environment with loaded configuration
-env_result = setup_environment(config)
+# Load environment-specific configuration: config/app.yaml merged with
+# config/environments/$ENVIRONMENT/app.yaml and APP_* environment variables
+config = load_configuration("app")
 ```
 
 ### With Security Audit
+
 ```python
-from codomyrmex.config_management import audit_configuration
-from codomyrmex.security.digital import scan_vulnerabilities
+from codomyrmex.config_management import ConfigurationMonitor
+from codomyrmex.security.digital import scan_secrets
 
-# Audit configuration for security issues
-config_audit = audit_configuration(config, audit_rules=[
-    "no_plaintext_secrets",
-    "secure_defaults",
-    "access_control"
-])
+# Audit configuration files for compliance issues
+monitor = ConfigurationMonitor()
+config_audit = monitor.audit_configuration("production", "config/")
+print(config_audit.compliance_status, config_audit.issues_found)
 
-# Follow up with security scanning
-security_scan = scan_security(config.data)
+# Follow up with secret scanning
+secret_findings = scan_secrets("config/")
 ```
 
 ### With Project Orchestration
+
 ```python
 from codomyrmex.config_management import deploy_configuration
 from codomyrmex.logistics.orchestration.project import execute_workflow
@@ -258,7 +273,6 @@ result = execute_workflow("config_deployment", {
 - **Efficient Validation**: Schema validation is optimized for large configurations
 - **Monitoring Overhead**: Minimal performance impact from configuration monitoring
 - **Secret Retrieval**: Efficient secret caching with automatic refresh
-
 
 ## Navigation Links
 
