@@ -26,20 +26,23 @@ class FPFClient:
 #### Methods
 
 **`load_from_file(file_path: str) -> FPFSpec`**
+
 - Load and parse FPF specification from a local file
 - **Parameters**: `file_path` - Path to FPF-Spec.md file
 - **Returns**: Parsed FPFSpec object
 - **Raises**: `FileNotFoundError` if file doesn't exist, `ValueError` on parse errors
 
 **`fetch_and_load(repo: str, branch: str) -> FPFSpec`**
+
 - Fetch latest FPF specification from GitHub and load it
-- **Parameters**: 
+- **Parameters**:
   - `repo` - GitHub repository (default: "ailev/FPF")
   - `branch` - Branch name (default: "main")
 - **Returns**: Parsed FPFSpec object
 - **Raises**: `requests.RequestException` on network errors
 
 **`search(query: str, filters: dict = None) -> list[Pattern]`**
+
 - Search for patterns
 - **Parameters**:
   - `query` - Search query string
@@ -48,17 +51,20 @@ class FPFClient:
 - **Raises**: `ValueError` if no specification loaded
 
 **`get_pattern(pattern_id: str) -> Pattern`**
+
 - Get a pattern by ID
 - **Parameters**: `pattern_id` - Pattern identifier (e.g., "A.1")
 - **Returns**: Pattern object
 - **Raises**: `ValueError` if pattern not found or no spec loaded
 
 **`export_json(output_path: str) -> None`**
+
 - Export the specification to JSON
 - **Parameters**: `output_path` - Path to output JSON file
 - **Raises**: `ValueError` if no specification loaded
 
 **`build_context(pattern_id: str = None, filters: dict = None) -> str`**
+
 - Build context string for prompt engineering
 - **Parameters**:
   - `pattern_id` - Optional pattern ID to build context for
@@ -239,7 +245,7 @@ class FPFAnalyzer:
 ```python
 class ReportGenerator:
     def __init__(self, spec: FPFSpec)
-    def generate_html_report(self, output_path: Path, include_analysis: bool = True) -> None
+    def generate_report(self, output_path: Path, include_analysis: bool = True) -> None
 ```
 
 ## Data Models
@@ -247,6 +253,7 @@ class ReportGenerator:
 See `models.py` for complete Pydantic model definitions.
 
 ### Pattern
+
 - `id: str`
 - `title: str`
 - `status: PatternStatus` (enum: Stable, Draft, Stub, New)
@@ -260,6 +267,7 @@ See `models.py` for complete Pydantic model definitions.
 - `cluster: Optional[str]`
 
 ### Concept
+
 - `name: str`
 - `definition: str`
 - `pattern_id: str`
@@ -269,6 +277,7 @@ See `models.py` for complete Pydantic model definitions.
 - `metadata: Dict[str, Any]`
 
 ### Relationship
+
 - `source: str`
 - `target: str`
 - `type: RelationshipType` (enum: BUILDS_ON, PREREQUISITE_FOR, etc.)
@@ -277,6 +286,7 @@ See `models.py` for complete Pydantic model definitions.
 - `metadata: Dict[str, Any]`
 
 ### FPFSpec
+
 - `version: Optional[str]`
 - `last_updated: Optional[datetime]`
 - `source_url: Optional[str]`
@@ -290,6 +300,7 @@ See `models.py` for complete Pydantic model definitions.
 ## Error Handling
 
 All methods may raise:
+
 - `ValueError` - Invalid input or missing data
 - `FileNotFoundError` - File not found
 - `requests.RequestException` - Network errors (fetcher only)
@@ -298,7 +309,6 @@ All methods may raise:
 ## Examples
 
 See [README.md](README.md) for usage examples.
-
 
 ## Navigation Links
 
