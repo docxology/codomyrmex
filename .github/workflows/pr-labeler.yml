@@ -13,64 +13,45 @@ jobs:
     name: Auto-label PR
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
       - name: Detect changes and apply labels
+        # Fork PRs get a read-only token, so labelling them would always fail.
+        if: github.event.pull_request.head.repo.full_name == github.repository
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_BRANCH: ${{ github.event.pull_request.head.ref }}
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          ADDITIONS: ${{ github.event.pull_request.additions }}
+          DELETIONS: ${{ github.event.pull_request.deletions }}
         run: |
+          set -euo pipefail
           echo "🏷️ Auto-labeling PR #$PR_NUMBER..."
           labels=()
 
-          # --- Source detection from changed files ---
-          changed=$(gh pr diff "$PR_NUMBER" --name-only 2>/dev/null || echo "")
+          # --- Source detection from changed files (REST handles up to 3000 files) ---
+          changed=$(gh api --paginate "repos/$REPO/pulls/$PR_NUMBER/files?per_page=100" -q '.[].filename')
 
-          # CI / Workflows
-          if echo "$changed" | grep -qE '\.github/'; then
-            labels+=("ci")
-          fi
+          has() { grep -qE "$1" <<<"$changed"; }
+          has '^\.github/' && labels+=("ci")
+          grep -qiE '\.(md|rst)$|(^|/)docs?/|documentation/' <<<"$changed" && labels+=("documentation")
+          has '(^|/)tests?/|(^|/)test_[^/]*\.py$|_test\.py$' && labels+=("tests")
+          has '(^|/)(pyproject\.toml|uv\.lock|requirements[^/]*\.txt)$' && labels+=("dependencies")
+          has '^src/codomyrmex/.*\.py$' && labels+=("source")
 
-          # Documentation
-          if echo "$changed" | grep -qiE '\.(md|rst)$|docs/|documentation/'; then
-            labels+=("documentation")
-          fi
-
-          # Tests
-          if echo "$changed" | grep -qE 'test_|_test\.py|testing/|tests/'; then
-            labels+=("tests")
-          fi
-
-          # Dependencies
-          if echo "$changed" | grep -qE 'pyproject\.toml|uv\.lock|requirements'; then
-            labels+=("dependencies")
-          fi
-
-          # Source code
-          if echo "$changed" | grep -qE 'src/codomyrmex/.*\.py$'; then
-            labels+=("source")
-          fi
-
-          # --- Agent detection from branch name ---
-          # Jules branches
-          if echo "$PR_BRANCH" | grep -qE '^(fix|feat|improve|refactor|add|cleanup|code-health|defense|bolt|feature|ai-gateway|simulation|bio-simulation|calendar)-'; then
+          # --- Agent detection from branch name (Jules branches) ---
+          if grep -qE '^(fix|feat|improve|refactor|add|cleanup|code-health|defense|bolt|feature|ai-gateway|simulation|bio-simulation|calendar)-' <<<"$PR_BRANCH"; then
             # Never add the auto-merge label here: merging is a reviewer decision.
             labels+=("jules" "agent-pr")
           fi
 
           # Dependabot
-          if [[ "$PR_AUTHOR" == "dependabot"* ]]; then
+          if [[ "$PR_AUTHOR" == dependabot* ]]; then
             labels+=("dependencies" "automated")
           fi
 
           # --- Size detection ---
-          additions=$(gh pr view "$PR_NUMBER" --json additions -q '.additions' 2>/dev/null || echo "0")
-          deletions=$(gh pr view "$PR_NUMBER" --json deletions -q '.deletions' 2>/dev/null || echo "0")
-          total=$((additions + deletions))
-
+          total=$((ADDITIONS + DELETIONS))
           if [ "$total" -lt 50 ]; then
             labels+=("size/xs")
           elif [ "$total" -lt 200 ]; then
@@ -83,23 +64,34 @@ jobs:
             labels+=("size/xl")
           fi
 
-          # --- Module detection ---
-          modules=$(echo "$changed" | grep -oP 'src/codomyrmex/\K[^/]+' | sort -u | head -5)
-          for mod in $modules; do
-            if [ "$mod" != "__pycache__" ] && [ "$mod" != "output" ]; then
-              labels+=("module:$mod")
+          # --- Module detection (top-level package names only) ---
+          while IFS= read -r mod; do
+            [ -n "$mod" ] && labels+=("module:$mod")
+          done < <(grep -oP '^src/codomyrmex/\K[a-z0-9_]+(?=/)' <<<"$changed" | sort -u | head -5)
+
+          if [ ${#labels[@]} -eq 0 ]; then
+            echo "ℹ️ No labels to apply"
+            exit 0
+          fi
+          mapfile -t unique_labels < <(printf '%s\n' "${labels[@]}" | sort -u)
+
+          # --- Create any label the repo does not have yet (unknown labels are rejected) ---
+          existing=$(gh api --paginate "repos/$REPO/labels?per_page=100" -q '.[].name')
+          for lbl in "${unique_labels[@]}"; do
+            if ! grep -qxF "$lbl" <<<"$existing"; then
+              color="ededed"
+              [[ "$lbl" == module:* ]] && color="c5def5"
+              [[ "$lbl" == size/* ]] && color="fbca04"
+              gh api -X POST "repos/$REPO/labels" -f name="$lbl" -f color="$color" \
+                -f description="Applied by the PR Auto-Labeler workflow" >/dev/null
+              echo "➕ Created label $lbl"
             fi
           done
 
-          # --- Apply labels ---
-          if [ ${#labels[@]} -gt 0 ]; then
-            unique_labels=($(printf '%s\n' "${labels[@]}" | sort -u))
-            label_args=""
-            for lbl in "${unique_labels[@]}"; do
-              label_args="$label_args --add-label \"$lbl\""
-            done
-            eval "gh pr edit $PR_NUMBER $label_args" 2>/dev/null || true
-            echo "✅ Applied labels: ${unique_labels[*]}"
-          else
-            echo "ℹ️ No labels to apply"
-          fi
+          # --- Apply labels (REST; adds to any labels already on the PR) ---
+          args=()
+          for lbl in "${unique_labels[@]}"; do
+            args+=(-f "labels[]=$lbl")
+          done
+          gh api -X POST "repos/$REPO/issues/$PR_NUMBER/labels" "${args[@]}" >/dev/null
+          echo "✅ Applied labels: ${unique_labels[*]}"
