@@ -9,9 +9,10 @@ check:
 * unittest.mock, pytest_mock and the ``mocker`` fixture are rejected outright;
 * ``monkeypatch.setattr`` calls and hand-rolled ``Mock*`` classes are held to
   the per-file counts that existed when this guard was added (a ratchet): a
-  file may drop below its baseline, never rise above it, and files not listed
-  may not use them at all. Prefer ``setenv``/``delenv``/``chdir``/``tmp_path``
-  or a real implementation; lower the baseline when you remove a use.
+  file may never rise above its baseline and files not listed may not use them
+  at all. Prefer ``setenv``/``delenv``/``chdir``/``tmp_path`` or a real
+  implementation, and lower the baseline in the same change that removes a use
+  (``test_baselines_have_no_slack`` enforces this).
 """
 
 from __future__ import annotations
@@ -27,7 +28,6 @@ FORBIDDEN_MODULES = ("unittest.mock", "pytest_mock", "mock")
 
 # Per-file baselines (relative to the repository root) when the guard landed.
 MONKEYPATCH_SETATTR_BASELINE: dict[str, int] = {
-    "tests/integration/calendar_integration/test_mcp_calendar_integration_integration.py": 1,
     "tests/integration/calendar_integration/test_mcp_tools.py": 1,
     "tests/integration/hermes/test_gateway_context_summarization.py": 1,
     "tests/integration/hermes/test_gateway_coverage_loop.py": 6,
@@ -154,6 +154,25 @@ def test_monkeypatch_setattr_and_mock_classes_do_not_grow() -> None:
     assert not grown, (
         "zero-mock policy: use setenv/delenv/chdir/tmp_path, a real "
         "implementation, or a documented Fake* double instead:\n" + "\n".join(grown)
+    )
+
+
+@pytest.mark.unit
+def test_baselines_have_no_slack() -> None:
+    """Baselines must equal current counts so removed uses cannot creep back."""
+    counts = _counts()
+    slack = []
+    for name, baseline, index in (
+        ("monkeypatch.setattr", MONKEYPATCH_SETATTR_BASELINE, 0),
+        ("Mock* classes", MOCK_CLASS_BASELINE, 1),
+    ):
+        for path, allowed in baseline.items():
+            current = counts[path][index] if path in counts else 0
+            if current < allowed:
+                slack.append(f"{path}: {name} x{current} (baseline {allowed})")
+    assert not slack, (
+        "lower (or delete) these baseline entries in "
+        "tests/unit/test_zero_mock_policy.py:\n" + "\n".join(slack)
     )
 
 
