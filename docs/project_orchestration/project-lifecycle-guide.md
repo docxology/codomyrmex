@@ -1,245 +1,102 @@
 # Project Lifecycle Guide
 
-Complete guide for managing projects from template selection through creation, execution, monitoring, and completion.
+Guide for managing projects from creation through workflow execution, tracking and completion.
 
 ## Overview
 
-Projects in Codomyrmex represent organized work units with defined structure, workflows, and configuration. This guide covers the complete project lifecycle from template selection to project completion or archival.
+A project is a scaffolded directory plus a `Project` record (name, type, status, metrics, milestones) managed by `ProjectManager` in `codomyrmex.logistics.orchestration.project`. Every project is saved as `<project directory>/project.json`, so a `ProjectManager` created later (for example by another `codomyrmex` process) finds it again.
 
-## Step 1: Select and Customize Template
+## Step 1: Choose a Project Type
 
-### List Available Templates
+`ProjectType` values (also accepted by `codomyrmex project create --template`, where hyphens may replace underscores):
 
-```python
-from codomyrmex.project_orchestration import get_project_manager
-
-pm = get_project_manager()
-
-# List all available templates
-templates = pm.list_templates()
-print(f"Available templates: {templates}")
-# Output: ['ai_analysis', 'web_application', 'data_pipeline', ...]
-```
-
-### Get Template Details
-
-```python
-# Get template information
-template = pm.get_template("ai_analysis")
-
-if template:
-    print(f"Template: {template.name}")
-    print(f"Type: {template.type.value}")
-    print(f"Description: {template.description}")
-    print(f"Required modules: {template.required_modules}")
-    print(f"Workflows: {template.workflows}")
-    print(f"Directory structure: {template.directory_structure}")
-```
-
-### Template Types
-
-Available template types:
 - `ai_analysis` - AI-powered code analysis
-- `web_application` - Full-stack web applications
+- `web_application` - Web applications
 - `data_pipeline` - Data processing pipelines
 - `ml_model` - Machine learning projects
 - `documentation` - Documentation projects
 - `research` - Research projects
-- `custom` - Custom project types
+- `custom` - Anything else
 
-## Step 2: Create Project with Configuration
+The type is recorded on the project and in its generated documentation; every type is scaffolded the same way.
 
-### Basic Project Creation
+## Step 2: Create the Project
+
+### From the Command Line
+
+```bash
+codomyrmex project create my_ai_project --template ai_analysis --description "AI analysis of my codebase"
+codomyrmex project list
+```
+
+`project create` scaffolds `./my_ai_project/` (or `--path DIRECTORY`) and saves its `project.json`; `project list` shows the projects saved as `*/project.json` under the current directory. An unknown template, an existing project name or an existing directory is reported as an error.
+
+### From Python
 
 ```python
-# Create project from template
+from codomyrmex.logistics.orchestration.project import ProjectType, get_project_manager
+
+# The global manager (shared with get_orchestration_engine()); its projects_root
+# is the current directory when it is first created. ProjectManager(projects_root)
+# creates an independent one.
+pm = get_project_manager()
+
 project = pm.create_project(
     name="my_ai_project",
-    template_name="ai_analysis",
+    type=ProjectType.AI_ANALYSIS,
     description="AI analysis of my codebase",
-    author="Developer Name"
 )
+if project is None:
+    raise RuntimeError("project not created; see the log for the reason")
 
 print(f"Created project: {project.name}")
 print(f"Path: {project.path}")
-print(f"Type: {project.type.value}")
+print(f"Metadata: {project.metadata_file}")  # <path>/project.json
 ```
 
-### Custom Project Path
+`create_project` returns None (and logs why) if the name is already registered, the directory exists, or scaffolding failed; a partially created directory is removed. Pass `path=` to create the project elsewhere; it is then found by a `ProjectManager` whose `projects_root` is that directory's parent.
+
+## Step 3: Execute Workflows for the Project
+
+Workflows are registered with the `WorkflowManager` (see [Workflow Configuration Schema](./workflow-configuration-schema.md)), for example with `codomyrmex workflow create ai-analysis --template ai-analysis` in the same directory. Running one through the orchestration engine records the run in the project's metrics:
 
 ```python
-# Create project in custom location
-project = pm.create_project(
-    name="custom_project",
-    template_name="ai_analysis",
-    path="/path/to/custom/location",
-    description="Custom location project"
-)
-```
-
-### Custom Project (No Template)
-
-```python
-# Create project without template
-project = pm.create_project(
-    name="custom_project",
-    description="Custom project without template",
-    author="Developer"
-)
-# Project type will be CUSTOM
-```
-
-### Project with Custom Configuration
-
-```python
-# Create project and override default config
-project = pm.create_project(
-    name="configured_project",
-    template_name="ai_analysis",
-    description="Project with custom configuration",
-    # Additional kwargs are passed to project creation
-    # Default config from template can be overridden later
-)
-```
-
-## Step 3: Execute Project Workflows
-
-### List Available Workflows
-
-```python
-# Get project
-project = pm.get_project("my_ai_project")
-
-if project:
-    print(f"Available workflows: {project.workflows}")
-    # Output: ['ai-analysis', 'build-and-test']
-```
-
-### Execute Workflow
-
-```python
-# Execute a workflow for the project
-result = pm.execute_project_workflow(
-    project_name="my_ai_project",
-    workflow_name="ai-analysis",
-    code_path="./src",
-    output_path="./reports",
-    ai_provider="openai"
-)
-
-if result['success']:
-    print(f"Workflow completed successfully")
-    print(f"Results: {result.get('results', {})}")
-else:
-    print(f"Workflow failed: {result.get('error', 'Unknown error')}")
-```
-
-### Execute via OrchestrationEngine
-
-```python
-from codomyrmex.project_orchestration import get_orchestration_engine
+from codomyrmex.logistics.orchestration.project import get_orchestration_engine
 
 engine = get_orchestration_engine()
 
-# Execute with session management
-result = engine.execute_project_workflow(
-    project_name="my_ai_project",
-    workflow_name="ai-analysis",
-    code_path="./src"
-)
+result = engine.execute_project_workflow("my_ai_project", "ai-analysis")
+
+if result["success"]:
+    print("Workflow completed successfully")
+else:
+    print(f"Workflow failed: {result['error']}")
 ```
 
-## Step 4: Track Milestones and Metrics
+The engine uses the global managers (`get_project_manager()`, `get_workflow_manager()`), which load from the current directory when first created. `execute_project_workflow` updates the metrics `workflow_executions`, `successful_workflow_executions`, `last_workflow`, `last_workflow_success` and `last_workflow_execution`.
 
-### Add Milestone
+## Step 4: Track Milestones, Metrics and Status
 
 ```python
-# Add milestone to track progress
+from codomyrmex.logistics.orchestration.project import ProjectStatus
+
 pm.add_project_milestone(
-    name="my_ai_project",
-    milestone_name="initial_analysis_complete",
-    milestone_data={
-        "quality_score": 8.5,
-        "insights_generated": 23,
-        "files_analyzed": 150
-    }
+    "my_ai_project",
+    "initial_analysis_complete",
+    {"files_analyzed": 150},
 )
+pm.update_project_metrics("my_ai_project", {"success_rate": 0.95})
+pm.update_project_status("my_ai_project", ProjectStatus.COMPLETED)
 ```
 
-### Update Metrics
+Each call returns False for an unknown project, sets `updated_at` and saves `project.json`. Values must be JSON-serialisable: a `TypeError` (or `ValueError` for NaN/infinity, `OSError` for a failed write) propagates and leaves the project unchanged.
+
+After changing a `Project` object directly (for example `project.config`), save it explicitly:
 
 ```python
-# Update project metrics
-pm.update_project_metrics(
-    name="my_ai_project",
-    metrics={
-        "total_executions": 10,
-        "success_rate": 0.95,
-        "average_execution_time": 45.2,
-        "last_execution": "2025-01-15T10:30:00Z"
-    }
-)
-```
-
-### Get Project Status
-
-```python
-# Get detailed project status
-status = pm.get_project_status("my_ai_project")
-
-if status:
-    print(f"Project: {status['name']}")
-    print(f"Status: {status['status']}")
-    print(f"Version: {status['version']}")
-    print(f"Workflows: {status['workflows']}")
-    print(f"Active workflows: {status['active_workflows']}")
-    print(f"Milestones: {list(status['milestones'].keys())}")
-    print(f"Metrics: {status['metrics']}")
-```
-
-## Step 5: Archive or Complete Project
-
-### Complete Project
-
-```python
-# Mark project as completed
 project = pm.get_project("my_ai_project")
-if project:
-    project.status = ProjectStatus.COMPLETED
-    project.save()
-    
-    # Add final milestone
-    pm.add_project_milestone(
-        "my_ai_project",
-        "project_completed",
-        {
-            "completion_date": datetime.now(timezone.utc).isoformat(),
-            "final_metrics": project.metrics
-        }
-    )
-```
-
-### Archive Project
-
-```python
-# Archive project (creates tar.gz archive)
-success = pm.archive_project(
-    name="my_ai_project",
-    archive_path="./archives/my_ai_project.tar.gz"
-)
-
-if success:
-    print("Project archived successfully")
-```
-
-### Delete Project
-
-```python
-# Delete project (remove from manager)
-success = pm.delete_project("my_ai_project", remove_files=False)
-
-# Or delete project and remove files
-success = pm.delete_project("my_ai_project", remove_files=True)
+project.config["analysis_depth"] = "full"
+pm.save_project("my_ai_project")
 ```
 
 ## Project Management
@@ -247,15 +104,13 @@ success = pm.delete_project("my_ai_project", remove_files=True)
 ### List Projects
 
 ```python
-# List all projects
-projects = pm.list_projects()
-print(f"Projects: {projects}")
+for project in pm.list_projects():
+    print(project.name, project.status.value, project.path)
 ```
 
 ### Get Projects Summary
 
 ```python
-# Get summary of all projects
 summary = pm.get_projects_summary()
 
 print(f"Total projects: {summary['total_projects']}")
@@ -264,118 +119,64 @@ print(f"By type: {summary['by_type']}")
 print(f"Recent activity: {summary['recent_activity'][:5]}")
 ```
 
+### Persistence
+
+`project.json` holds `Project.to_dict()`:
+
+```json
+{
+  "name": "my_ai_project",
+  "path": "/work/my_ai_project",
+  "type": "ai_analysis",
+  "description": "AI analysis of my codebase",
+  "status": "active",
+  "config": {},
+  "created_at": "2026-10-07T22:27:56.957872+00:00",
+  "updated_at": "2026-10-07T22:27:56.957879+00:00",
+  "owner": null,
+  "version": "0.1.0",
+  "metrics": {},
+  "milestones": {}
+}
+```
+
+`ProjectManager(projects_root)` registers every `<projects_root>/*/project.json` it can read with `Project.from_dict`; a file that is not valid JSON or not a valid project (missing field, unknown type or status, timestamp without a UTC offset) is logged and skipped. If a project directory was moved, its new location replaces the recorded `path`.
+
 ### Project File Structure
 
-Projects created from templates have the following structure:
-
-```
+```text
 my_ai_project/
-├── README.md              # Auto-generated project documentation
-├── AGENTS.md              # Auto-generated agent configuration
-├── src/                   # Source code directory
-│   ├── README.md          # Nested documentation
-│   └── AGENTS.md          # Nested agent config
-├── data/                  # Data directory
+├── README.md              # Generated project documentation
+├── AGENTS.md              # Generated agent documentation
+├── project.json           # Saved Project record
+├── src/
 │   ├── README.md
 │   └── AGENTS.md
-├── output/                # Output directory
+├── tests/
 │   ├── README.md
 │   └── AGENTS.md
-├── reports/               # Reports directory
+├── config/
 │   ├── README.md
 │   └── AGENTS.md
-├── config/                # Configuration directory
-│   ├── README.md
-│   └── AGENTS.md
-└── .codomyrmex/          # Project metadata
-    └── project.json       # Project configuration
-```
-
-## Complete Example
-
-```python
-from codomyrmex.project_orchestration import (
-    get_project_manager,
-    ProjectStatus
-)
-from datetime import datetime, timezone
-
-# Initialize project manager
-pm = get_project_manager()
-
-# 1. List templates
-templates = pm.list_templates()
-print(f"Available templates: {templates}")
-
-# 2. Create project
-project = pm.create_project(
-    name="codebase_analysis",
-    template_name="ai_analysis",
-    description="Comprehensive analysis of codebase quality",
-    author="Development Team"
-)
-
-print(f"Created project: {project.name} at {project.path}")
-
-# 3. Execute workflow
-result = pm.execute_project_workflow(
-    project_name="codebase_analysis",
-    workflow_name="ai-analysis",
-    code_path="./src",
-    output_path="./reports",
-    ai_provider="openai"
-)
-
-if result['success']:
-    # 4. Track milestone
-    pm.add_project_milestone(
-        "codebase_analysis",
-        "initial_analysis_complete",
-        {
-            "quality_score": 8.5,
-            "files_analyzed": 250,
-            "insights_generated": 45
-        }
-    )
-    
-    # 5. Update metrics
-    pm.update_project_metrics(
-        "codebase_analysis",
-        {
-            "workflow_executions": 1,
-            "success_rate": 1.0,
-            "last_execution": datetime.now(timezone.utc).isoformat()
-        }
-    )
-    
-    # 6. Get status
-    status = pm.get_project_status("codebase_analysis")
-    print(f"Project status: {status}")
-    
-    # 7. Complete project
-    project = pm.get_project("codebase_analysis")
-    if project:
-        project.status = ProjectStatus.COMPLETED
-        project.save()
-        print("Project completed")
+└── docs/
+    ├── README.md
+    └── AGENTS.md
 ```
 
 ## Best Practices
 
-1. **Template Selection**: Choose templates that match your project type
+1. **Type selection**: Choose the type that matches the project's purpose
 2. **Naming**: Use descriptive project names
 3. **Milestones**: Track progress with meaningful milestones
-4. **Metrics**: Update metrics regularly for monitoring
-5. **Documentation**: Review auto-generated documentation
-6. **Workflows**: Execute workflows appropriate for project stage
-7. **Completion**: Archive completed projects for reference
+4. **Metrics**: Keep metric values JSON-serialisable
+5. **Documentation**: Review and extend the generated documentation
+6. **Location**: Keep projects in one parent directory so `project list` finds them
 
 ## Related Documentation
 
 - [Project Template Schema](./project-template-schema.md)
 - [Config-Driven Operations](./config-driven-operations.md)
 - [API Specification](../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md)
-
 
 ## Navigation Links
 

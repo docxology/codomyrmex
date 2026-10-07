@@ -20,7 +20,7 @@ Codomyrmex supports fully configuration-driven operations, allowing you to defin
 - **Auto-loaded**: Yes, when ProjectManager initializes
 - **Format**: JSON template definitions
 
-### Resource Configuration
+### Resource Configurations
 
 - **Location**: `resources.json` (project root or configured path)
 - **Auto-loaded**: Yes, when ResourceManager initializes
@@ -28,9 +28,11 @@ Codomyrmex supports fully configuration-driven operations, allowing you to defin
 
 ## Workflow Configuration
 
+The file format is specified in [Workflow Configuration Schema](./workflow-configuration-schema.md).
+
 ### Creating Workflow Configurations
 
-Create a JSON file in `config/workflows/production/`:
+Create a JSON file in `config/workflows/production/`, or let the CLI write one from a template (`codomyrmex workflow create my_custom_workflow --template build-and-test`):
 
 ```json
 {
@@ -38,70 +40,66 @@ Create a JSON file in `config/workflows/production/`:
   "steps": [
     {
       "name": "step1",
-      "module": "static_analysis",
-      "action": "analyze_code_quality",
+      "module": "coding.static_analysis",
+      "action": "analyze_project",
       "parameters": {
-        "path": "."
+        "project_root": "."
       },
       "dependencies": [],
       "timeout": 300,
-      "max_retries": 3
+      "max_retries": 0
     },
     {
       "name": "step2",
-      "module": "data_visualization",
-      "action": "create_bar_chart",
+      "module": "security",
+      "action": "scan_secrets",
       "parameters": {
-        "data": "{{step1.output}}",
-        "title": "Analysis Results"
+        "target_path": "."
       },
       "dependencies": ["step1"],
       "timeout": 60,
-      "max_retries": 1
+      "max_retries": 0
     }
   ]
 }
 ```
 
+Parameters are passed to each action verbatim (`{{step.output}}` substitution is not supported), and `timeout`/`max_retries` are recorded but not enforced.
+
 ### Loading Workflows
 
-Workflows are automatically loaded:
+Workflows are loaded when a `WorkflowManager` is constructed; invalid files are logged and skipped:
 
 ```python
-from codomyrmex.project_orchestration import get_workflow_manager
+from codomyrmex.logistics.orchestration.project import WorkflowManager
 
-# Workflows are loaded automatically
-manager = get_workflow_manager()
+manager = WorkflowManager()  # loads config/workflows/production/*.json under cwd
 
-# List loaded workflows
-workflows = manager.list_workflows()
-print(f"Loaded workflows: {list(workflows.keys())}")
+print(f"Loaded workflows: {manager.list_workflows()}")
+print(f"Definition files: {manager.workflow_files}")
 ```
+
+Workflows registered in code are kept in memory unless saved: `manager.create_workflow(name, steps, persist=True)` (or `manager.save_workflow(name)`) writes them to the same directory in the same format.
 
 ### Executing Configured Workflows
 
 ```python
-import asyncio
-from codomyrmex.project_orchestration import get_workflow_manager
+from codomyrmex.logistics.orchestration.project import WorkflowManager, WorkflowStatus
 
-async def main():
-    manager = get_workflow_manager()
-    
-    # Execute workflow from configuration
-    execution = await manager.execute_workflow(
-        "my_custom_workflow",
-        parameters={
-            "custom_param": "value"
-        }
-    )
-    
-    if execution.status == WorkflowStatus.COMPLETED:
-        print("Workflow completed")
-        for step_name, result in execution.results.items():
-            print(f"{step_name}: {result}")
+manager = WorkflowManager()
 
-asyncio.run(main())
+# Blocks until every step has finished
+execution = manager.execute_workflow("my_custom_workflow")
+
+if execution.status == WorkflowStatus.COMPLETED:
+    print("Workflow completed")
+    for step_name, result in execution.step_results.items():
+        print(f"{step_name}: {result['result']}")
+else:
+    print(f"Workflow failed: {execution.error}")
 ```
+
+From the command line: `codomyrmex workflow run my_custom_workflow`.
 
 ## Project Template Configuration
 
@@ -377,38 +375,40 @@ resources = rm.list_resources()  # Only valid resources
 ### 1. Create Workflow Configuration
 
 `config/workflows/production/data_analysis.json`:
+
 ```json
 {
   "name": "data_analysis",
   "steps": [
     {
-      "name": "load_data",
+      "name": "chart",
       "module": "data_visualization",
-      "action": "load_dataset",
-      "parameters": {"file_path": "{{input_file}}"},
+      "action": "create_bar_chart",
+      "parameters": {
+        "categories": ["A", "B", "C"],
+        "values": [10, 20, 15],
+        "title": "Sample Data",
+        "output_path": "output/sample.png"
+      },
       "dependencies": []
     },
     {
-      "name": "analyze_data",
-      "module": "data_visualization",
-      "action": "analyze_dataset",
-      "parameters": {"data": "{{load_data.output}}"},
-      "dependencies": ["load_data"]
-    },
-    {
-      "name": "visualize",
-      "module": "data_visualization",
-      "action": "create_chart",
-      "parameters": {"data": "{{analyze_data.output}}", "output": "{{output_path}}"},
-      "dependencies": ["analyze_data"]
+      "name": "report",
+      "module": "environment_setup",
+      "action": "generate_environment_report",
+      "parameters": {},
+      "dependencies": ["chart"]
     }
   ]
 }
 ```
 
+Each step's parameters are static; a step cannot receive another step's output.
+
 ### 2. Create Project Template
 
 `src/codomyrmex/project_orchestration/templates/data_project.json`:
+
 ```json
 {
   "name": "data_project",
@@ -436,7 +436,7 @@ async def main():
         name="analysis_project",
         template_name="data_project"
     )
-    
+
     # Execute workflow (automatically loaded from config)
     engine = get_orchestration_engine()
     result = engine.execute_workflow(
@@ -444,7 +444,7 @@ async def main():
         input_file="./data/input.csv",
         output_path="./output/result.png"
     )
-    
+
     if result['success']:
         print("Analysis completed")
 
@@ -467,7 +467,6 @@ asyncio.run(main())
 - [Project Template Schema](./project-template-schema.md)
 - [Resource Configuration](./resource-configuration.md)
 - [API Specification](../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md)
-
 
 ## Navigation Links
 
