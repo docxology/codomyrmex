@@ -35,6 +35,32 @@ from codomyrmex.logging_monitoring import get_logger
 
 from .base import TTSProvider
 
+# A spoken sentence is tens of kilobytes; anything below ~0.09 s of 16-bit
+# mono audio at 22.05 kHz means the engine wrote (almost) nothing.
+_MIN_AUDIO_BYTES = 4096
+_WRITE_SETTLE_SECONDS = 10.0
+
+
+def _read_completed_audio(path: Path) -> bytes | None:
+    """Return the file's bytes once its size has stopped changing.
+
+    macOS's NSSpeechSynthesizer driver can return from ``runAndWait()``
+    before the output file is fully written; reading immediately produced a
+    header-only file (5 ms of "audio"). Returns None if the file never
+    reaches a plausible size.
+    """
+    deadline = time.monotonic() + _WRITE_SETTLE_SECONDS
+    previous = -1
+    while time.monotonic() < deadline:
+        size = path.stat().st_size
+        if size >= _MIN_AUDIO_BYTES and size == previous:
+            break
+        previous = size
+        time.sleep(0.1)
+    data = path.read_bytes()
+    return data if len(data) >= _MIN_AUDIO_BYTES else None
+
+
 logger = get_logger(__name__)
 
 # Check both the Python package and the native speech backend. Importing
@@ -188,15 +214,21 @@ class Pyttsx3Provider(TTSProvider):
             audio_path = Path(tmp_path)
             if not audio_path.exists():
                 raise SynthesisError("Failed to generate audio file")
-
-            audio_data = audio_path.read_bytes()
+            try:
+                audio_data = _read_completed_audio(audio_path)
+            finally:
+                audio_path.unlink(missing_ok=True)
+            if audio_data is None:
+                # Previously returned as a "successful" near-empty result.
+                raise SynthesisError(
+                    "TTS engine produced no usable audio",
+                    text=text,
+                    voice_id=config.voice,
+                )
 
             # Calculate approximate duration (rough estimate)
             # WAV file size / (sample_rate * channels * bytes_per_sample)
             duration = len(audio_data) / (22050 * 1 * 2)  # Approximate
-
-            # Clean up
-            audio_path.unlink(missing_ok=True)
 
             # Reset rate
             self._engine.setProperty("rate", base_rate)

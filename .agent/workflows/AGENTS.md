@@ -43,16 +43,15 @@ YAML frontmatter `description` and numbered steps.
 - Workflows encode codomyrmex trust/verify patterns (codomyrmexTrust, codomyrmexVerify) —
   do not weaken their verification steps when editing.
 - Start every workflow with `---` frontmatter containing `description:`, and
-  quote the value when it contains a colon followed by a space —
-  `moduleHealthAudit.md` currently fails YAML parsing for that reason and is
-  listed with "No description".
-- Both readers glob every `*.md` file, so `README.md` and this file are listed
-  as description-less workflows and reported invalid by `codomyrmex doctor`;
-  do not add further non-workflow Markdown here.
-- `// turbo` lines mark the following step for auto-run in Antigravity; never
-  place one before a trust-escalating or destructive step (`codomyrmexTrust.md`
-  currently does).
-- Use repository-relative commands: nine workflows hardcode
-  `cd /Users/mini/Documents/GitHub/codomyrmex`, which only works on one machine.
+  quote the value when it contains a colon followed by a space, or YAML
+  parsing fails and the workflow is listed with "No description".
+- `codomyrmex doctor` and `tool_list_workflows()` skip the directory's own
+  documentation (`AGENTS.md`, `README.md`, `SPEC.md`, `PAI.md`); any other
+  Markdown file here is treated as a workflow.
+- `// turbo` lines mark the following step for auto-run in Antigravity; only
+  place one before a trust-escalating or destructive step when invoking the
+  workflow is itself the user's explicit consent (as with `/codomyrmexTrust`).
+- Use repository-relative commands (`cd "$(git rev-parse --show-toplevel)"`),
+  never a machine-specific absolute checkout path.
 - Quote numeric gates from `pyproject.toml` (`fail_under = 60`), not from
-  memory; `coveragePush.md` still states 40%.
+  memory.

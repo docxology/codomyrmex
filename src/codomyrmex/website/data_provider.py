@@ -52,8 +52,8 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
             "status": "Operational",
             "version": "0.1.0",
             "environment": os.getenv("CODOMYRMEX_ENV", "Development"),
-            "module_count": len(self.get_modules()),
-            "agent_count": len(self.get_actual_agents()),
+            "module_count": self._get_module_count(),
+            "agent_count": self._get_agent_count(),
             "last_build": self._get_last_build_time(),
         }
 
@@ -77,6 +77,30 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
             return "SyntaxError"
         except Exception as _exc:
             return "Unknown"
+
+    def _get_module_count(self) -> int:
+        """Returns count of active modules."""
+        src_path = self.root_dir / "src/codomyrmex"
+        if not src_path.exists():
+            return 0
+        return sum(
+            1
+            for item in src_path.iterdir()
+            if item.is_dir() and (item / "__init__.py").exists()
+        )
+
+    def _get_agent_count(self) -> int:
+        """Returns count of actual agents."""
+        agents_path = self.root_dir / "src/codomyrmex/agents"
+        if not agents_path.exists():
+            return 0
+        return sum(
+            1
+            for item in agents_path.iterdir()
+            if item.is_dir()
+            and item.name not in ["tests", "__pycache__"]
+            and (item / "__init__.py").exists()
+        )
 
     def get_modules(self) -> list[dict[str, Any]]:
         """
@@ -394,7 +418,7 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
         file_path = (self.root_dir / filename).resolve()
         root_resolved = self.root_dir.resolve()
 
-        if not str(file_path).startswith(str(root_resolved)):
+        if not file_path.is_relative_to(root_resolved):
             raise ValueError("Path escapes project root")
 
         # Restrict to safe extensions
@@ -419,7 +443,7 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
         root_resolved = self.root_dir.resolve()
 
         # Verify path stays within root_dir
-        if not str(file_path).startswith(str(root_resolved)):
+        if not file_path.is_relative_to(root_resolved):
             raise ValueError("Path escapes project root")
 
         # Only allow updating existing files - refuse to create new ones
@@ -503,7 +527,7 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
         file_path = (self.root_dir / doc_path).resolve()
         root_resolved = self.root_dir.resolve()
 
-        if not str(file_path).startswith(str(root_resolved)):
+        if not file_path.is_relative_to(root_resolved):
             raise ValueError("Path traversal not allowed")
         if not file_path.exists():
             raise FileNotFoundError(f"Document not found: {doc_path}")

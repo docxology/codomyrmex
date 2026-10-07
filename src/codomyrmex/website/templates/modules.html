@@ -16,7 +16,7 @@
 
 <div class="grid" id="modulesGrid">
     {% for module in modules %}
-    <div class="card module-card" data-name="{{ module.name }}" style="cursor: pointer;" onclick="showModuleDetail('{{ module.name }}')">
+    <div class="card module-card" data-name="{{ module.name }}" style="cursor: pointer;" onclick="showModuleDetail(this.dataset.name)">
         <h2 class="card-title">
             {{ module.name }}
             <span class="status-badge active">{{ module.status }}</span>
@@ -140,19 +140,19 @@
             ];
             badgesEl.innerHTML = badges.map(b =>
                 '<span class="module-badge ' + (b.ok ? 'pass' : 'fail') + '">'
-                + (b.ok ? '&#10003;' : '&#10007;') + ' ' + b.label + '</span>'
+                + (b.ok ? '&#10003;' : '&#10007;') + ' ' + escapeHtml(b.label) + '</span>'
             ).join('');
 
             statsEl.innerHTML =
                 '<p style="font-size: 0.85rem; color: var(--text-secondary);">'
-                + '<strong>Python files:</strong> ' + data.python_file_count
-                + ' &nbsp;|&nbsp; <strong>Path:</strong> <code>' + data.path + '</code></p>';
+                + '<strong>Python files:</strong> ' + escapeHtml(data.python_file_count)
+                + ' &nbsp;|&nbsp; <strong>Path:</strong> <code>' + escapeHtml(data.path) + '</code></p>';
 
             if (data.submodules && data.submodules.length > 0) {
                 submodulesEl.innerHTML =
-                    '<p style="font-size: 0.85rem; font-weight: 600;">Submodules (' + data.submodules.length + '):</p>'
+                    '<p style="font-size: 0.85rem; font-weight: 600;">Submodules (' + escapeHtml(data.submodules.length) + '):</p>'
                     + '<ul style="padding-left: 1rem; font-size: 0.8rem; color: var(--text-secondary);">'
-                    + data.submodules.map(s => '<li>' + s.name + '</li>').join('')
+                    + data.submodules.map(s => '<li>' + escapeHtml(s.name) + '</li>').join('')
                     + '</ul>';
             }
         } catch (err) {

@@ -13,7 +13,7 @@ Performs a high-performance search across the codebase using Codomyrmex's search
 1. Execute the search:
 
 ```bash
-cd /Users/mini/Documents/GitHub/codomyrmex && uv run python -c "
+cd "$(git rev-parse --show-toplevel)" && uv run python -c "
 from codomyrmex.model_context_protocol.tools import search_codebase
 import sys
 import json

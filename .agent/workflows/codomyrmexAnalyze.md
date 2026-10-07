@@ -13,7 +13,7 @@ Runs a comprehensive analysis of the specified path using the Codomyrmex coding 
 1. Run the analysis:
 
 ```bash
-cd /Users/mini/Documents/GitHub/codomyrmex && uv run python -c "
+cd "$(git rev-parse --show-toplevel)" && uv run python -c "
 from codomyrmex.coding import analyze_project
 import json
 import sys
