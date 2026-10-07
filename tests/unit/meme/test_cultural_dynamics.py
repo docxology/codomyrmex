@@ -6,6 +6,7 @@ CulturalDynamicsEngine with real computation and real dataclass instances.
 
 from __future__ import annotations
 
+import math
 import time
 
 import pytest
@@ -212,33 +213,99 @@ class TestCulturalDynamicsEngineOscillation:
         assert fm.period == 0.0
         assert fm.dominant_frequency == 0.0
 
-    def test_two_states_compute_amplitude(self) -> None:
-        """Two states with different values produce nonzero amplitude."""
+    def test_two_states_are_a_nyquist_oscillation(self) -> None:
+        """[0, 1] is 0.5 + 0.5*cos(pi*n + pi): period 2 samples, amplitude 0.5."""
         engine = CulturalDynamicsEngine()
         states = [
             CulturalState(dimensions={"d": 0.0}),
             CulturalState(dimensions={"d": 1.0}),
         ]
         fm = engine.oscillation_spectrum(states, "d")
+        assert fm.dominant_frequency == pytest.approx(0.5)
+        assert fm.period == pytest.approx(2.0)
         assert fm.amplitude == pytest.approx(0.5, abs=1e-9)
 
-    def test_amplitude_computed_as_half_range(self) -> None:
-        """Amplitude = (max - min) / 2 over dimension values."""
+    @pytest.mark.parametrize(
+        ("n_samples", "period", "amplitude", "phase", "offset"),
+        [
+            (64, 8, 0.7, 0.0, 0.2),
+            (64, 16, 0.3, 1.1, -0.4),
+            (60, 12, 0.9, 2.5, 0.0),
+            (48, 3, 0.25, 0.4, 0.5),
+        ],
+    )
+    def test_recovers_known_sinusoid(
+        self,
+        n_samples: int,
+        period: int,
+        amplitude: float,
+        phase: float,
+        offset: float,
+    ) -> None:
+        """A sinusoid whose period divides N is recovered exactly."""
         engine = CulturalDynamicsEngine()
         states = [
-            CulturalState(dimensions={"x": -0.4}),
-            CulturalState(dimensions={"x": 0.6}),
-            CulturalState(dimensions={"x": 0.2}),
+            CulturalState(
+                dimensions={
+                    "x": offset + amplitude * math.sin(2 * math.pi * i / period + phase)
+                }
+            )
+            for i in range(n_samples)
         ]
         fm = engine.oscillation_spectrum(states, "x")
-        assert fm.amplitude == pytest.approx(0.5, abs=1e-9)
+        assert fm.period == pytest.approx(period)
+        assert fm.dominant_frequency == pytest.approx(1.0 / period)
+        assert fm.amplitude == pytest.approx(amplitude, abs=1e-9)
 
-    def test_period_is_half_series_length(self) -> None:
-        """Period = len(series) / 2 for series longer than 1."""
+    def test_dominant_of_two_tones_is_the_stronger(self) -> None:
+        """With two tones the larger-amplitude one is reported."""
         engine = CulturalDynamicsEngine()
-        states = [CulturalState(dimensions={"x": float(i)}) for i in range(4)]
+        states = [
+            CulturalState(
+                dimensions={
+                    "x": 0.2 * math.sin(2 * math.pi * i / 4)
+                    + 0.6 * math.cos(2 * math.pi * i / 20)
+                }
+            )
+            for i in range(120)
+        ]
         fm = engine.oscillation_spectrum(states, "x")
-        assert fm.period == pytest.approx(2.0, abs=1e-9)
+        assert fm.period == pytest.approx(20.0)
+        assert fm.amplitude == pytest.approx(0.6, abs=1e-9)
+
+    def test_period_depends_on_data_not_length(self) -> None:
+        """Same length, different oscillations: different periods."""
+        engine = CulturalDynamicsEngine()
+        fast = [
+            CulturalState(dimensions={"x": math.cos(2 * math.pi * i / 4)})
+            for i in range(32)
+        ]
+        slow = [
+            CulturalState(dimensions={"x": math.cos(2 * math.pi * i / 16)})
+            for i in range(32)
+        ]
+        assert engine.oscillation_spectrum(fast, "x").period == pytest.approx(4.0)
+        assert engine.oscillation_spectrum(slow, "x").period == pytest.approx(16.0)
+
+    def test_alternating_series_is_nyquist(self) -> None:
+        """+a, -a, +a, ... oscillates every 2 samples with amplitude a."""
+        engine = CulturalDynamicsEngine()
+        states = [
+            CulturalState(dimensions={"x": 0.8 if i % 2 == 0 else -0.8})
+            for i in range(10)
+        ]
+        fm = engine.oscillation_spectrum(states, "x")
+        assert fm.period == pytest.approx(2.0)
+        assert fm.amplitude == pytest.approx(0.8)
+
+    def test_constant_series_has_no_oscillation(self) -> None:
+        """A constant non-zero series yields zeros, not an invented period."""
+        engine = CulturalDynamicsEngine()
+        states = [CulturalState(dimensions={"x": 0.3}) for _ in range(12)]
+        fm = engine.oscillation_spectrum(states, "x")
+        assert fm.dominant_frequency == 0.0
+        assert fm.period == 0.0
+        assert fm.amplitude == 0.0
 
     def test_frequency_is_inverse_of_period(self) -> None:
         """dominant_frequency = 1 / period when period > 0."""

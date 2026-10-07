@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import numpy as np
+
 from codomyrmex.meme.cultural_dynamics.models import (
     CulturalState,
     FrequencyMap,
@@ -22,22 +24,37 @@ class CulturalDynamicsEngine:
     def oscillation_spectrum(
         self, time_series: list[CulturalState], dimension: str
     ) -> FrequencyMap:
-        """Perform spectral analysis on a cultural dimension."""
-        # Mock spectral analysis
-        if not time_series:
+        """Find the dominant oscillation of a dimension with a discrete Fourier transform.
+
+        The states are treated as evenly spaced samples (their timestamps are
+        not used), so frequency is in cycles per sample and period in samples.
+        A missing dimension counts as 0.0. The mean is removed, the real FFT
+        is taken, and the strongest non-DC bin ``k`` gives
+        ``dominant_frequency = k / N``, ``period = N / k`` and
+        ``amplitude = 2 * |X_k| / N`` (``|X_k| / N`` for the Nyquist bin).
+        A dominant period is only exact when it divides ``N``; otherwise
+        energy leaks into neighbouring bins.
+
+        Fewer than two samples, or a constant series, has no oscillation:
+        frequency, period and amplitude are all 0.0.
+        """
+        values = np.array(
+            [s.dimensions.get(dimension, 0.0) for s in time_series], dtype=float
+        )
+        n = values.size
+        if n < 2 or np.ptp(values) == 0.0:
             return FrequencyMap(dimension, 0.0, 0.0, 0.0)
 
-        values = [s.dimensions.get(dimension, 0.0) for s in time_series]
-        # Detect peaks/troughs to estimate period
-        # (Simplified heuristic)
-        amplitude = (max(values) - min(values)) / 2
-        period = len(values) / 2.0 if len(values) > 1 else 0.0
+        magnitudes = np.abs(np.fft.rfft(values - values.mean()))
+        k = int(np.argmax(magnitudes[1:])) + 1
+        is_nyquist = n % 2 == 0 and k == n // 2
+        amplitude = magnitudes[k] / n if is_nyquist else 2.0 * magnitudes[k] / n
 
         return FrequencyMap(
             dimension=dimension,
-            dominant_frequency=1.0 / period if period > 0 else 0.0,
-            period=period,
-            amplitude=amplitude,
+            dominant_frequency=k / n,
+            period=n / k,
+            amplitude=float(amplitude),
         )
 
     def zeitgeist_trajectory(self, signals: list[Signal]) -> Trajectory:

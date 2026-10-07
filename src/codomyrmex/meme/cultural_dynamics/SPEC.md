@@ -15,8 +15,8 @@ Engine-and-models pattern: `CulturalDynamicsEngine` operates on immutable datacl
 ### `CulturalDynamicsEngine`
 
 | Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
-| `oscillation_spectrum` | `time_series: list[CulturalState], dimension: str` | `FrequencyMap` | Spectral analysis estimating dominant frequency, period, and amplitude |
+| --- | --- | --- | --- |
+| `oscillation_spectrum` | `time_series: list[CulturalState], dimension: str` | `FrequencyMap` | Real FFT of the mean-removed, evenly-sampled series; strongest non-DC bin `k` gives frequency `k/N` (cycles per sample), period `N/k` (samples), amplitude 2·\|X_k\|/N (\|X_k\|/N at Nyquist) |
 | `zeitgeist_trajectory` | `signals: list[Signal]` | `Trajectory` | Aggregate signals via exponential moving average into state sequence |
 | `mutation_probability` | `state: CulturalState, perturbation: Meme` | `float` | Probability (0.0-0.9) based on state energy |
 | `power_topology` | `nodes: list[str], interactions: list[tuple]` | `PowerMap` | Degree-centrality power mapping from interaction pairs |
@@ -24,7 +24,7 @@ Engine-and-models pattern: `CulturalDynamicsEngine` operates on immutable datacl
 ### Data Models
 
 | Class | Key Fields | Description |
-|-------|-----------|-------------|
+| --- | --- | --- |
 | `CulturalState` | `dimensions: dict[str, float]`, `momentum`, `energy`, `timestamp` | Snapshot of cultural dimensions (-1 to 1) |
 | `Signal` | `source`, `content`, `strength`, `valence`, `dimension`, `timestamp` | Discrete cultural signal event |
 | `Trajectory` | `states: list[CulturalState]`, `trend_vector` | Temporal sequence of cultural states |
@@ -34,7 +34,7 @@ Engine-and-models pattern: `CulturalDynamicsEngine` operates on immutable datacl
 ## Dependencies
 
 - **Internal**: `codomyrmex.meme.memetics.models` (Meme dataclass)
-- **External**: None (stdlib only)
+- **External**: `numpy` (FFT in `oscillation_spectrum`)
 
 ## Constraints
 
@@ -45,7 +45,7 @@ Engine-and-models pattern: `CulturalDynamicsEngine` operates on immutable datacl
 
 ## Error Handling
 
-- `oscillation_spectrum` returns a zero-valued `FrequencyMap` for empty time series.
+- `oscillation_spectrum` returns a zero-valued `FrequencyMap` for fewer than two samples or a constant series.
 - All errors logged before propagation.
 
 ## Navigation
