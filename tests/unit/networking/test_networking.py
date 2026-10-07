@@ -227,13 +227,14 @@ class TestHTTPClient:
 
     def test_request_error_handling(self):
         """Test that request errors are wrapped in NetworkingError."""
-        client = HTTPClient()
+        # No retries: three retries with the default 1 s backoff took ~6 s.
+        client = HTTPClient(max_retries=0)
         with pytest.raises(NetworkingError):
             client.get("http://nonexistent-host-xyz-12345.invalid/data")
 
     def test_request_connection_error(self):
-        """Test connection error handling."""
-        client = HTTPClient()
+        """Test connection error handling (retries still run, quickly)."""
+        client = HTTPClient(max_retries=3, retry_backoff=0.01)
         with pytest.raises(NetworkingError):
             client.get("http://127.0.0.1:1/impossible")
 
@@ -649,6 +650,6 @@ class TestNetworkingErrorHandling:
         assert isinstance(NetworkingError("Test"), CodomyrmexError)
 
     def test_http_client_wraps_request_exceptions(self):
-        client = HTTPClient()
+        client = HTTPClient(max_retries=0)
         with pytest.raises(NetworkingError):
             client.get("http://nonexistent-host-xyz-12345.invalid")

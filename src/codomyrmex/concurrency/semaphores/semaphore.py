@@ -1,8 +1,7 @@
-import contextlib
-
 """Managed semaphores for resource throttling."""
 
 import asyncio
+import contextlib
 import threading
 import time
 from abc import ABC, abstractmethod
@@ -15,21 +14,26 @@ logger = get_logger(__name__)
 class BaseSemaphore(ABC):
     """Abstract base class for all semaphore implementations."""
 
-    def __init__(self, value: int = 1):
+    def __init__(self, value: int = 1, acquire_timeout: float = 10.0):
         """Initialize base semaphore.
 
         Args:
             value: Initial number of available units.
+            acquire_timeout: Seconds ``with sem:`` waits before raising
+                ``TimeoutError``.
 
         Raises:
-            ValueError: If value is negative.
+            ValueError: If value or acquire_timeout is negative.
 
         Example:
             >>> sem = LocalSemaphore(value=5)
         """
         if value < 0:
             raise ValueError("Semaphore value must be >= 0")
+        if acquire_timeout < 0:
+            raise ValueError("acquire_timeout must be >= 0")
         self.initial_value = value
+        self.acquire_timeout = acquire_timeout
 
     @abstractmethod
     def acquire(self, timeout: float = 10.0) -> bool:
@@ -67,7 +71,7 @@ class BaseSemaphore(ABC):
             >>> with LocalSemaphore(2) as sem:
             ...     pass
         """
-        if not self.acquire():
+        if not self.acquire(timeout=self.acquire_timeout):
             raise TimeoutError("Could not acquire semaphore")
         return self
 
@@ -83,16 +87,18 @@ class BaseSemaphore(ABC):
 class LocalSemaphore(BaseSemaphore):
     """Local thread-safe semaphore wrapper."""
 
-    def __init__(self, value: int = 1):
+    def __init__(self, value: int = 1, acquire_timeout: float = 10.0):
         """Initialize a local thread-safe semaphore.
 
         Args:
             value: Initial number of available units.
+            acquire_timeout: Seconds ``with sem:`` waits before raising
+                ``TimeoutError``.
 
         Example:
             >>> sem = LocalSemaphore(value=3)
         """
-        super().__init__(value)
+        super().__init__(value, acquire_timeout)
         self._semaphore = threading.Semaphore(value)
 
     def acquire(self, timeout: float = 10.0) -> bool:
@@ -122,16 +128,18 @@ class LocalSemaphore(BaseSemaphore):
 class AsyncLocalSemaphore(BaseSemaphore):
     """Asyncio-compatible local semaphore."""
 
-    def __init__(self, value: int = 1):
+    def __init__(self, value: int = 1, acquire_timeout: float = 10.0):
         """Initialize a local asyncio-compatible semaphore.
 
         Args:
             value: Initial number of available units.
+            acquire_timeout: Seconds ``with sem:`` waits before raising
+                ``TimeoutError``.
 
         Example:
             >>> sem = AsyncLocalSemaphore(value=10)
         """
-        super().__init__(value)
+        super().__init__(value, acquire_timeout)
         self._semaphore = asyncio.Semaphore(value)
         self._sync_lock = threading.Lock()
         self._sync_count = value
