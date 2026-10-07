@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+import tomllib
 from pathlib import Path
 
 import pytest
@@ -586,5 +587,16 @@ def test_release_and_ci_workflows_use_blocking_evidence_paths():
         ci_workflow
     )
     assert "|| true" not in integration_workflow
-    assert "-W error" in integration_workflow
+    # Warnings block through pyproject's filterwarnings, which starts with
+    # "error" and then lists reviewed third-party exceptions. A command-line
+    # "-W error" is applied after those ini filters and would void them.
+    for workflow in (integration_workflow, ci_workflow):
+        commands = "\n".join(
+            line for line in workflow.splitlines() if not line.lstrip().startswith("#")
+        )
+        assert "-W error" not in commands
+    pyproject = tomllib.loads(
+        (repo_root / "pyproject.toml").read_text(encoding="utf-8")
+    )
+    assert pyproject["tool"]["pytest"]["ini_options"]["filterwarnings"][0] == "error"
     assert "junit-integration.xml" in integration_workflow

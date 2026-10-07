@@ -24,7 +24,7 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
-          version: "latest"
+          version: "0.10.8"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -33,8 +33,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --frozen --extra physical_management
-          uv pip install mkdocs-material mkdocstrings[python]
+          uv sync --locked --group docs --all-extras
 
       - name: Build docs
         run: uv run mkdocs build --strict
@@ -45,8 +44,8 @@ jobs:
           configPath: .github/lighthouse-ci.json
           uploadArtifacts: true
           temporaryPublicStorage: true
-          urls: |
-            file://${{ github.workspace }}/site/index.html
+          # Lighthouse rejects file:// URLs (INVALID_URL). The config's
+          # staticDistDir makes LHCI serve ./site over a local HTTP server.
 
       - name: Comment results on PR
         if: github.event_name == 'pull_request'

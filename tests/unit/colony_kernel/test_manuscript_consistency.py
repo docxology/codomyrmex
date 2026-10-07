@@ -437,12 +437,9 @@ REQUIRED_CLAIMS = {
         "{{RESULT_RESEARCH_ROADMAP_DECISION_ROWS}}",
         "not a delivery timeline",
     ],
-    "README.md": [
-        "612 runtime MCP tools",
-        "627 decorators",
-        "1,204",
-        "36,049",
-    ],
+    # README counts are measured snapshots; test_public_inventory_counts_
+    # match_live_tree checks them against the live tree instead of pinning
+    # literal numbers here (which went stale on every inventory refresh).
 }
 
 

@@ -41,7 +41,9 @@ def test_failure_is_retained_and_blocks_dependants() -> None:
 
     assert not report.succeeded
     assert report.by_track()["R2"].status is TrackStatus.FAILED
-    assert report.by_track()["R2"].reason == "RuntimeError: external witness unavailable"
+    assert (
+        report.by_track()["R2"].reason == "RuntimeError: external witness unavailable"
+    )
     assert report.by_track()["R4"].status is TrackStatus.BLOCKED
 
 

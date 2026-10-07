@@ -168,8 +168,6 @@ class HermesSessionOpsMixin:
             list of dicts with keys ``prompt``, ``status``, ``content``, ``error``.
 
         """
-        from codomyrmex.agents.core import AgentRequest
-
         if backend:
             orig_backend = self._active_backend
             self._active_backend = backend
