@@ -8,6 +8,7 @@ This is the module referenced by ``[project.scripts]`` in ``pyproject.toml``.
 
 import json
 import sys
+from typing import Any
 
 import fire
 
@@ -445,10 +446,21 @@ class Cli:
         return handle_quick_workflow(definition, params=params, verbose=verbose)
 
 
+def _serialize_result(result: Any) -> Any:
+    """Hide bare boolean status returns instead of echoing ``True``/``False``.
+
+    Handlers return a bool to signal success; printing it appended a stray
+    ``True``/``False`` line to command output (corrupting ``doctor --json``).
+    """
+    if isinstance(result, bool):
+        return None
+    return result
+
+
 def main():
     """Run the Codomyrmex CLI entry point."""
     try:
-        fire.Fire(Cli)
+        fire.Fire(Cli, serialize=_serialize_result)
     except KeyboardInterrupt:
         print("\n👋 Goodbye!")
         sys.exit(0)

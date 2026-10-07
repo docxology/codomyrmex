@@ -98,7 +98,10 @@ class TestToolClassification:
         assert _is_destructive("codomyrmex.cache.clear_cache")
         assert _is_destructive("codomyrmex.git_reset")
         assert _is_destructive("codomyrmex.execute_code")
-        assert not _is_destructive("codomyrmex.encryption.generate_aes_key")
+        # Fail-closed: a tool without a destructive verb is still restricted
+        # unless it is listed in EXPLICIT_SAFE_TOOLS.
+        assert _is_destructive("codomyrmex.encryption.generate_aes_key")
+        assert not _is_destructive("codomyrmex.list_modules")
 
     @pytest.mark.parametrize(
         "tool_name",

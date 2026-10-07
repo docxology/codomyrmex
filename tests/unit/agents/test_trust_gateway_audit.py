@@ -175,9 +175,13 @@ class TestDestructiveDetection:
         assert _is_destructive("codomyrmex.auth.delete_user") is True
         assert _is_destructive("codomyrmex.cache.clear_all") is True
 
-    def test_safe_auto_discovered(self):
-        """Auto-discovered tools without destructive patterns are safe."""
-        assert _is_destructive("codomyrmex.cache.get_stats") is False
+    def test_unlisted_auto_discovered_tools_fail_closed(self):
+        """Unlisted auto-discovered tools are restricted even without a mutating verb.
+
+        Only tools named in ``EXPLICIT_SAFE_TOOLS`` are safe (fail-closed policy).
+        """
+        assert _is_destructive("codomyrmex.cache.get_stats") is True
+        assert _is_destructive("codomyrmex.module_info") is False
 
 
 def _make_isolated_registry(levels: dict) -> "TrustRegistry":

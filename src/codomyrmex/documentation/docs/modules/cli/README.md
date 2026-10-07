@@ -11,6 +11,7 @@ Codomyrmex CLI Module
 This module provides the command-line interface for the Codomyrmex development platform.
 It serves as the primary entry point for user interaction with all Codomyrmex capabilities.
 
+```text
 Available Commands:
     codomyrmex --help          Show help and available commands
     codomyrmex check           Verify environment setup and dependencies
@@ -69,6 +70,7 @@ Architecture:
     - core.py: Main CLI entry point and argument parsing
     - handlers/: Command handler implementations
     - Each handler corresponds to a specific command group
+```
 
 ## Public Exports
 

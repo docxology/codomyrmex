@@ -32,11 +32,14 @@ try:
         AgentResponse,
         BaseAgent,
     )
-except ImportError:
-    # Handle missing optional dependencies (e.g., aiohttp)
+except ImportError as exc:
+    # Handle missing optional dependencies (e.g., aiohttp). ``exc`` is unbound
+    # once the except block ends, so keep a reference for the fallback main().
+    _IMPORT_ERROR = exc
+
     def main():
         setup_logging()
-        print_info(f"Agents module dependencies not available: {exc}")
+        print_info(f"Agents module dependencies not available: {_IMPORT_ERROR}")
         print_info("Install with: pip install aiohttp")
         print_info("Skipping agents examples - success.")
         return 0

@@ -6,7 +6,7 @@
 repos:
   # Python linting and import sorting
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.4
+    rev: v0.15.7
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
@@ -70,7 +70,7 @@ repos:
     rev: v0.47.0
     hooks:
       - id: markdownlint
-        args: [--disable=MD013, MD033, MD041]
+        args: ["--disable", "MD013", "MD033", "MD041", "--"]
 
   # Trailing whitespace
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -81,6 +81,13 @@ repos:
       - id: check-json
       - id: check-toml
       - id: check-yaml
+        exclude: ^mkdocs\.yml$
+      # mkdocs.yml uses !!python/name tags (pymdownx custom fences), which
+      # safe loading rejects; check its syntax without constructing objects.
+      - id: check-yaml
+        name: check yaml (mkdocs, syntax only)
+        args: [--unsafe]
+        files: ^mkdocs\.yml$
       - id: check-added-large-files
 
   # Dependency validation

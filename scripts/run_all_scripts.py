@@ -39,8 +39,7 @@ if __name__ == "__main__":
 
     # Missing-mode invocations stay read-only: no explicit scope means dry-run.
     if not any(
-        arg == "--dry-run" or arg.startswith(("--subdirs", "--filter"))
-        for arg in argv
+        arg == "--dry-run" or arg.startswith(("--subdirs", "--filter")) for arg in argv
     ):
         argv.append("--dry-run")
 

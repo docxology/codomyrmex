@@ -42,15 +42,12 @@ class Theme:
         """Get a sequence of n colors based on a base color."""
         import matplotlib.pyplot as plt
         import numpy as np
+        from matplotlib.colors import to_hex
 
-        if base_color == "primary":
-            pass
-        else:
-            pass
-
-        # Generate varied colors
+        # ``base_color`` is accepted for API compatibility with ``Theme``;
+        # the sequence is always sampled from viridis.
         cmap = plt.get_cmap("viridis")
-        return [cmap(i) for i in np.linspace(0, 1, n)]
+        return [to_hex(cmap(i)) for i in np.linspace(0, 1, n)]
 
     def get_status_color(self, status: str) -> str:
         """Get color for a status string."""
