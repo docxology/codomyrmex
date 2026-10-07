@@ -370,15 +370,19 @@ class TestProjectList:
         assert "No projects found" in capsys.readouterr().out
 
 
-def run_cli(workdir, *args: str) -> str:
-    completed = subprocess.run(
-        [sys.executable, "-m", "codomyrmex.cli.core", *args],
+def run_cli_process(workdir, *args: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [sys.executable, "-m", "codomyrmex.cli", *args],
         cwd=workdir,
         capture_output=True,
         text=True,
         timeout=120,
         check=False,
     )
+
+
+def run_cli(workdir, *args: str) -> str:
+    completed = run_cli_process(workdir, *args)
     assert completed.returncode == 0, completed.stderr
     return completed.stdout
 
@@ -403,3 +407,11 @@ def test_cli_state_survives_between_processes(workdir):
     listed = run_cli(workdir, "project", "list")
     assert "alpha" in listed
     assert "Type: ai_analysis" in listed
+
+
+@pytest.mark.slow
+def test_cli_process_exit_status_reflects_failure(workdir):
+    """Regression: failed commands exited 0, hiding failures from scripts."""
+    failed = run_cli_process(workdir, "workflow", "run", "does-not-exist")
+    assert failed.returncode == 1
+    assert "does-not-exist" in failed.stdout + failed.stderr

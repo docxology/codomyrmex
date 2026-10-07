@@ -8,7 +8,8 @@ The `cli` module is the command-line interface entry point for Codomyrmex. It pr
 ## 2. Core Components
 
 ### 2.1 Entry Point
-- **`main()`**: The primary execution function invoked by the `codomyrmex` command.
+- **`main(argv: list[str] | None = None) -> int`**: The entry point invoked by the `codomyrmex` command. It runs the command (``argv`` defaults to `sys.argv[1:]`) and returns the process exit status; the console script passes it to `sys.exit`.
+- **`exit_code(result) -> int`** (in `codomyrmex.cli.core`): Maps a command's return value to that status. `False` is 1, an `int` is used as-is (out-of-range values become 1), anything else is 0. Bool and int results are not printed.
 
 ### 2.2 Handlers
 The module exports numerous handlers for specific command groups:
@@ -34,7 +35,8 @@ codomyrmex shell
 ```
 
 ```python
-# Programmatic invocation
+# Programmatic invocation: returns the exit status instead of exiting
 from codomyrmex.cli import main
-main()
+
+status = main(["workflow", "list"])
 ```

@@ -47,6 +47,7 @@ from codomyrmex.cli import (
     show_modules,
     show_system_status,
 )
+from codomyrmex.cli.core import exit_code
 
 
 @pytest.mark.unit
@@ -484,69 +485,60 @@ class TestCLIOrchestration:
 
 @pytest.mark.unit
 class TestCLIMain:
-    """Test CLI main function and argument parsing."""
+    """Test CLI main function, argument parsing and exit status."""
 
     def test_main_help(self):
-        """Test main function with help argument."""
-        # Save original argv
-        original_argv = sys.argv.copy()
+        """``--help`` exits through Fire with status 0."""
+        with pytest.raises(SystemExit) as excinfo:
+            main(["--help"])
+        assert excinfo.value.code == 0
 
-        try:
-            sys.argv = ["codomyrmex", "--help"]
-            # Should exit with SystemExit for help
-            with pytest.raises(SystemExit):
-                main()
-        finally:
-            sys.argv = original_argv
-
-    def test_main_check_command(self):
-        """Test main function with check command."""
-        # Save original argv
-        original_argv = sys.argv.copy()
-
-        try:
-            sys.argv = ["codomyrmex", "check"]
-            # Should not raise exception
-            main()
-        finally:
-            sys.argv = original_argv
+    def test_main_check_command_reports_environment_status(self):
+        """``check`` exits non-zero exactly when the environment check fails."""
+        expected = 0 if check_environment() else 1
+        assert main(["check"]) == expected
 
     def test_main_info_command(self):
-        """Test main function with info command."""
-        # Save original argv
-        original_argv = sys.argv.copy()
-
-        try:
-            sys.argv = ["codomyrmex", "info"]
-            # Should not raise exception
-            main()
-        finally:
-            sys.argv = original_argv
+        assert main(["info"]) == 0
 
     def test_main_modules_command(self):
-        """Test main function with modules command."""
-        # Save original argv
-        original_argv = sys.argv.copy()
-
-        try:
-            sys.argv = ["codomyrmex", "modules"]
-            # Should not raise exception
-            main()
-        finally:
-            sys.argv = original_argv
+        assert main(["modules"]) == 0
 
     def test_main_invalid_command(self):
-        """Test main function with invalid command."""
-        # Save original argv
-        original_argv = sys.argv.copy()
+        """Unknown commands are a usage error, not a silent success."""
+        with pytest.raises(SystemExit) as excinfo:
+            main(["invalid_command"])
+        assert excinfo.value.code != 0
 
-        try:
-            sys.argv = ["codomyrmex", "invalid_command"]
-            # Should exit with SystemExit for invalid command
-            with pytest.raises(SystemExit):
-                main()
-        finally:
-            sys.argv = original_argv
+    def test_failed_command_exits_non_zero(self, tmp_path, monkeypatch):
+        """Regression: ``workflow run`` of a missing workflow used to exit 0."""
+        monkeypatch.chdir(tmp_path)
+        assert main(["workflow", "run", "does-not-exist"]) == 1
+
+    def test_status_values_are_not_printed(self, capsys):
+        """Bool and int status returns are exit codes, not command output."""
+        assert main(["info"]) == 0
+        out_lines = capsys.readouterr().out.strip().splitlines()
+        assert out_lines[-1] not in {"True", "False", "0", "1"}
+
+
+@pytest.mark.unit
+@pytest.mark.parametrize(
+    ("result", "expected"),
+    [
+        (False, 1),
+        (True, 0),
+        (None, 0),
+        (0, 0),
+        (3, 3),
+        (999, 1),
+        (-1, 1),
+        ({"status": "ok"}, 0),
+        ("text output", 0),
+    ],
+)
+def test_exit_code_mapping(result, expected):
+    assert exit_code(result) == expected
 
 
 if __name__ == "__main__":
