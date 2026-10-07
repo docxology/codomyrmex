@@ -82,6 +82,8 @@ def test_execution_tool_integration(monkeypatch):
     # Needs a real execution run
     res = execute_code(language="bash", code=script, timeout=10)
 
+    if res.get("status") in ("setup_error", "execution_error") and "docker" in res.get("error_message", "").lower():
+        pytest.skip("Docker not fully available.")
     assert res["exit_code"] == 0
     stdout = res["stdout"]
 

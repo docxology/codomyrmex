@@ -25,3 +25,10 @@ print(language_detection.__all__)  # Inspect supported public exports
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
 
+
+## Development Guidelines
+Language detection integrations should not block core paths.
+
+
+## Development Guidelines
+Language detection integrations should not block core paths.

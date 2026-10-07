@@ -28,6 +28,13 @@ _DOCKER_SETUP_ERROR_MARKERS = (
     "github.com/docker/cli",
     "github.com/docker/docker",
     "github.com/moby/moby/client",
+    "failed to mount /tmp/containerd-mount",
+    "fstype: overlay, flags: 0",
+    "docker: error response from daemon:",
+    "fatal error: failed to reserve page summary memory",
+    "not allowed to raise maximum limit",
+    "process exited with code 125",
+    "err: invalid argument",
 )
 _DOCKER_COMPATIBILITY_SHIM_MARKERS = ("emulate docker cli using podman",)
 

@@ -12,3 +12,22 @@ Output data for the SAIR Mathematics Distillation submodule (`scripts/sair/`).
   generate their own files.
 - Dataset referenced by runs (`data/sair/public/data/normal.jsonl`) lives under the
   SAIR submodule tree, not here.
+
+## Key Files
+None.
+
+## Dependencies
+None.
+
+## Development Guidelines
+Follow standard practices.
+
+
+## Key Files
+None.
+
+## Dependencies
+None.
+
+## Development Guidelines
+Follow standard practices.

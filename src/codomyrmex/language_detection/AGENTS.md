@@ -8,3 +8,22 @@
 
 ## Test
 Unit tests for the module are found in `src/codomyrmex/tests/unit/language_detection/test_mcp_tools.py` and must follow the strictly zero-mock policy (since the network isn't used by `langdetect`).
+
+## Purpose
+Provides language detection tools.
+
+## Key Files
+- : Main detection logic.
+
+## Dependencies
+-
+
+
+## Purpose
+Provides language detection tools.
+
+## Key Files
+- `detector.py`: Main detection logic.
+
+## Dependencies
+- `langdetect`

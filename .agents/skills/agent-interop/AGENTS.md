@@ -9,3 +9,22 @@ Portable repository-scoped skill: Keep Codex, Claude Code, and Hermes workflows 
 ## Gotchas
 - Treat `.agents/skills/` as the portable, repository-scoped skill library; mirror into runtime-specific folders rather than forking content.
 - Runtime adapters (`.cursor/skills/`, `.agent/skills/`) may mirror this skill; edit the canonical copy here first.
+
+## Key Files
+None.
+
+## Dependencies
+None.
+
+## Development Guidelines
+Follow standard practices.
+
+
+## Key Files
+None.
+
+## Dependencies
+None.
+
+## Development Guidelines
+Follow standard practices.

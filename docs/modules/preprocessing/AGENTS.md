@@ -24,3 +24,10 @@ print(preprocessing.__all__)  # Inspect supported public exports
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
 
+
+## Development Guidelines
+Ensure preprocessing routines are heavily tested and handle edge cases gracefully.
+
+
+## Development Guidelines
+Ensure preprocessing routines are heavily tested and handle edge cases gracefully.
