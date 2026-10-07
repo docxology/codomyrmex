@@ -71,9 +71,8 @@ print(f"Factorial of 5 is: {result}")
 
         # Step 3: Validate execution results
         if (
-            (execution_result["status"] == "setup_error" and "docker" in execution_result.get("error_message", "").lower())
-            or (execution_result["status"] == "execution_error" and execution_result.get("exit_code") == 125 and "docker" in execution_result.get("error_message", "").lower())
-            or (execution_result["status"] == "execution_error" and execution_result.get("exit_code") == 125 and "docker" in execution_result.get("stderr", "").lower())
+            execution_result["status"] == "setup_error"
+            and "docker" in execution_result.get("error_message", "").lower()
         ):
             pytest.skip("Docker not available")
 
@@ -102,9 +101,8 @@ print(f"Hello, {name}! Welcome to the sandbox.")
         )
 
         if (
-            (execution_result["status"] == "setup_error" and "docker" in execution_result.get("error_message", "").lower())
-            or (execution_result["status"] == "execution_error" and execution_result.get("exit_code") == 125 and "docker" in execution_result.get("error_message", "").lower())
-            or (execution_result["status"] == "execution_error" and execution_result.get("exit_code") == 125 and "docker" in execution_result.get("stderr", "").lower())
+            execution_result["status"] == "setup_error"
+            and "docker" in execution_result.get("error_message", "").lower()
         ):
             pytest.skip("Docker not available")
 
@@ -137,9 +135,8 @@ print(f"Sum: {result}")
         )
 
         if (
-            (execution_result["status"] == "setup_error" and "docker" in execution_result.get("error_message", "").lower())
-            or (execution_result["status"] == "execution_error" and execution_result.get("exit_code") == 125 and "docker" in execution_result.get("error_message", "").lower())
-            or (execution_result["status"] == "execution_error" and execution_result.get("exit_code") == 125 and "docker" in execution_result.get("stderr", "").lower())
+            execution_result["status"] == "setup_error"
+            and "docker" in execution_result.get("error_message", "").lower()
         ):
             pytest.skip("Docker not available")
 
@@ -178,9 +175,8 @@ print("This should not print")
 
         # Should timeout or setup error if docker missing
         if (
-            (execution_result["status"] == "setup_error" and "docker" in execution_result.get("error_message", "").lower())
-            or (execution_result["status"] == "execution_error" and execution_result.get("exit_code") == 125 and "docker" in execution_result.get("error_message", "").lower())
-            or (execution_result["status"] == "execution_error" and execution_result.get("exit_code") == 125 and "docker" in execution_result.get("stderr", "").lower())
+            execution_result["status"] == "setup_error"
+            and "docker" in execution_result.get("error_message", "").lower()
         ):
             pytest.skip("Docker not available")
 
@@ -232,9 +228,8 @@ def broken_function(
 
         # Should handle the error gracefully
         if (
-            (execution_result["status"] == "setup_error" and "docker" in execution_result.get("error_message", "").lower())
-            or (execution_result["status"] == "execution_error" and execution_result.get("exit_code") == 125 and "docker" in execution_result.get("error_message", "").lower())
-            or (execution_result["status"] == "execution_error" and execution_result.get("exit_code") == 125 and "docker" in execution_result.get("stderr", "").lower())
+            execution_result["status"] == "setup_error"
+            and "docker" in execution_result.get("error_message", "").lower()
         ):
             pytest.skip("Docker not available")
 
@@ -273,10 +268,9 @@ def broken_function(
                 output = execution_result["stdout"] + execution_result["stderr"]
                 assert expected_output in output or "Hello from" in output
             elif (
-            (execution_result["status"] == "setup_error" and "docker" in execution_result.get("error_message", "").lower())
-            or (execution_result["status"] == "execution_error" and execution_result.get("exit_code") == 125 and "docker" in execution_result.get("error_message", "").lower())
-            or (execution_result["status"] == "execution_error" and execution_result.get("exit_code") == 125 and "docker" in execution_result.get("stderr", "").lower())
-        ):
+                execution_result["status"] == "setup_error"
+                and "docker" in execution_result.get("error_message", "").lower()
+            ):
                 continue  # Skip check if docker missing
 
     def test_workflow_performance_monitoring(self):
@@ -295,9 +289,8 @@ def broken_function(
         # Should complete quickly
         assert total_time < 10  # Less than 10 seconds for the whole workflow
         if (
-            (result["status"] == "setup_error" and "docker" in result.get("error_message", "").lower())
-            or (result["status"] == "execution_error" and result.get("exit_code") == 125 and "docker" in result.get("error_message", "").lower())
-            or (result["status"] == "execution_error" and result.get("exit_code") == 125 and "docker" in result.get("stderr", "").lower())
+            result["status"] == "setup_error"
+            and "docker" in result.get("error_message", "").lower()
         ):
             pytest.skip("Docker not available")
 
@@ -331,9 +324,8 @@ for i in range(100):
         result = execute_code("python", large_output_code, timeout=10)
 
         if (
-            (result["status"] == "setup_error" and "docker" in result.get("error_message", "").lower())
-            or (result["status"] == "execution_error" and result.get("exit_code") == 125 and "docker" in result.get("error_message", "").lower())
-            or (result["status"] == "execution_error" and result.get("exit_code") == 125 and "docker" in result.get("stderr", "").lower())
+            result["status"] == "setup_error"
+            and "docker" in result.get("error_message", "").lower()
         ):
             pytest.skip("Docker not available")
 

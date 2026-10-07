@@ -47,8 +47,3 @@ executors.
   (proposals #482/#484 rejected).
 - Transcription/STT command injection was fixed by merged #423 at the live
   call site; the `transcription_tools.py` file does not exist on `main`.
-
-## 2026-10-06 - MCP Protocol Handler Bypasses Trust Gateway
-**Vulnerability:** The `MCPServer._call_tool()` method handles `tools/call` requests without checking the trust level, bypassing the `trusted_call_tool()` gateway.
-**Learning:** Any MCP client connecting via stdio or HTTP could invoke any of the registered tools (including destructive operations) without trust verification, because the trust check was only enforced in the direct Python API `call_tool()` and not properly injected into the `MCPServer`.
-**Prevention:** Ensure that the trust-enforcing proxy function (e.g. `call_tool`) is explicitly injected when initializing servers (e.g. `MCPServer(..., call_tool_fn=call_tool)`) so that all protocol paths funnel through the single security checkpoint.
