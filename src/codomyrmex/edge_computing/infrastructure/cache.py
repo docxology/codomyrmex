@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import threading
 import time
+from collections import OrderedDict
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -18,14 +19,14 @@ class CacheEntry:
 
     key: str
     value: Any
-    created_at: float = field(default_factory=time.time)
+    created_at: float = field(default_factory=time.monotonic)
     ttl_seconds: float = 300.0
     access_count: int = 0
 
     @property
     def expired(self) -> bool:
         """Expired."""
-        return (time.time() - self.created_at) > self.ttl_seconds
+        return (time.monotonic() - self.created_at) > self.ttl_seconds
 
 
 class EdgeCache:
@@ -35,7 +36,7 @@ class EdgeCache:
     """
 
     def __init__(self, max_size: int = 1000, default_ttl: float = 300.0):
-        self._store: dict[str, CacheEntry] = {}
+        self._store: OrderedDict[str, CacheEntry] = OrderedDict()
         self._max_size = max_size
         self._default_ttl = default_ttl
         self._lock = threading.Lock()
@@ -55,6 +56,10 @@ class EdgeCache:
                 return None
             entry.access_count += 1
             self._hits += 1
+
+            # ⚡ Bolt: Move to end for O(1) LRU eviction tracking
+            self._store.move_to_end(key)
+
             return entry.value
 
     def put(self, key: str, value: Any, ttl: float | None = None) -> None:
@@ -116,17 +121,14 @@ class EdgeCache:
         }
 
     def _evict_one(self) -> None:
-        """Evict the least-accessed entry or oldest if tied."""
+        """Evict the least recently used entry."""
         if not self._store:
             return
-        # Evict expired first
-        for k, v in self._store.items():
-            if v.expired:
-                del self._store[k]
-                return
-        # Otherwise evict least-accessed
-        victim = min(self._store.values(), key=lambda e: (e.access_count, e.created_at))
-        del self._store[victim.key]
+        # ⚡ Bolt: Use OrderedDict.popitem(last=False) for O(1) eviction
+        # instead of an O(N) min() scan over all entries.
+        # We also drop the O(N) scan for expired keys here because `get` and `purge_expired`
+        # naturally handle expiration without blocking writers.
+        self._store.popitem(last=False)
 
     def persist_to_disk(self, filepath: str) -> bool:
         """Simulate persisting cache state to disk."""

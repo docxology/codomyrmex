@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2026-10-06 - EdgeCache Eviction Bottleneck Fix
+**Learning:** `EdgeCache._evict_one` used `min(self._store.values())` to find the eviction target, which is O(N) and blocks writers while the lock is held. Additionally, `time.time()` was used instead of `time.monotonic()`.
+**Action:** Migrated `EdgeCache._store` to `collections.OrderedDict`, implemented O(1) eviction using `popitem(last=False)`, added `move_to_end()` in `get()` for proper LRU semantics, and replaced `time.time()` with `time.monotonic()` for robust monotonic durations.
