@@ -18,7 +18,7 @@
 
 | # | Workflow | File | Status |
 | :---: | --- | --- | :---: |
-| 6 | Auto-Merge Agent PRs | `auto-merge.yml` | ✅ |
+| 6 | Auto-Merge Labelled PRs | `auto-merge.yml` | ✅ |
 | 7 | PR Auto-Labeler | `pr-labeler.yml` | ✅ |
 | 8 | PR Title Semantic Check | `pr-title-check.yml` | ✅ |
 | 9 | PR Auto-Assigner | `auto-assign.yml` | ✅ |

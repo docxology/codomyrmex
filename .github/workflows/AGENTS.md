@@ -24,7 +24,7 @@ documentation, benchmarks, PR automation, and repository maintenance. 37 workflo
 
 | File | Trigger | Purpose |
 |------|---------|---------|
-| `auto-merge.yml` | check_suite, label | Squash-merge PRs with `jules`/`auto-merge` labels |
+| `auto-merge.yml` | check_suite, label | Squash-merge PRs a reviewer labelled `auto-merge` once every check passes (never applied by automation) |
 | `pr-labeler.yml` | PR opened/sync | Auto-label by paths, branch, size, module |
 | `pr-title-check.yml` | PR open/edit/sync | Enforce Semantic/Conventional Commits for PR titles |
 | `auto-assign.yml` | PR opened | Auto-assign PR creator as assignee |
