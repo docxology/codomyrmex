@@ -45,12 +45,12 @@ jobs:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get workflow runs
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const workflows = [
@@ -275,7 +275,7 @@ jobs:
           echo "*This dashboard is automatically updated by the [Workflow Status Dashboard](../../actions/workflows/workflow-status.yml) workflow.*" >> workflow-status.md
 
       - name: Upload status artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: workflow-status-report
           path: |
@@ -325,7 +325,7 @@ jobs:
           " >> $GITHUB_STEP_SUMMARY
 
       - name: Post status to issue (if failures detected)
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const fs = require('fs');

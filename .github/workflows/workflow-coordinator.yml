@@ -43,13 +43,13 @@ jobs:
       all-files: ${{ steps.changes.outputs.all-files }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Detect file changes
         id: changes
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@v4
         with:
           filters: |
             source:
@@ -101,7 +101,7 @@ jobs:
       contents: read
     steps:
       - name: Trigger CI Workflow
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const ref = context.payload.pull_request ? context.payload.pull_request.head.ref : context.ref.replace('refs/heads/', '') || 'main';
@@ -128,7 +128,7 @@ jobs:
       contents: read
     steps:
       - name: Trigger Security Workflow
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const ref = context.payload.pull_request ? context.payload.pull_request.head.ref : context.ref.replace('refs/heads/', '') || 'main';
@@ -152,7 +152,7 @@ jobs:
       contents: read
     steps:
       - name: Trigger Documentation Workflow
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const ref = context.payload.pull_request ? context.payload.pull_request.head.ref : context.ref.replace('refs/heads/', '') || 'main';
@@ -177,7 +177,7 @@ jobs:
       contents: read
     steps:
       - name: Trigger Benchmarks Workflow
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const ref = context.payload.pull_request ? context.payload.pull_request.head.ref : context.ref.replace('refs/heads/', '') || 'main';
@@ -198,7 +198,7 @@ jobs:
       affected-modules: ${{ steps.strategy.outputs.modules }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
