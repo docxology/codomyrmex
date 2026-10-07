@@ -54,8 +54,6 @@ jobs:
             --no-header \
             -q \
             --tb=short \
-            -W error \
-            -W "ignore::pytest_benchmark.logger.PytestBenchmarkWarning" \
             --junit-xml=junit-integration.xml
         env:
           CODOMYRMEX_ENV: ci

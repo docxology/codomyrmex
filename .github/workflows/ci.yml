@@ -22,9 +22,9 @@ env:
   PYTHONIOENCODING: "utf-8"
   # Hypothesis's pytest plugin imports before conftest; conftest cannot set this in time.
   HYPOTHESIS_NO_NPY: "1"
-  # pytest-benchmark warns (PytestBenchmarkWarning) that it disables itself
-  # under xdist; with -W error that warning would abort the session.
-  PYTEST_XDIST_WARNING_FILTER: "ignore::pytest_benchmark.logger.PytestBenchmarkWarning"
+  # Warnings are errors via pyproject's filterwarnings ("error" first, then
+  # narrow third-party ignores). Do not pass -W error on the command line:
+  # command-line -W filters take precedence and would void those ignores.
 
 jobs:
   lint-and-format:
@@ -210,7 +210,7 @@ jobs:
     name: Coverage gate (60%)
     runs-on: ubuntu-latest
     needs: lint-and-format
-    timeout-minutes: 150
+    timeout-minutes: 60
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
@@ -250,7 +250,6 @@ jobs:
         run: |
           uv run pytest tests/ -q --tb=short \
             -n auto \
-            -W error -W "$PYTEST_XDIST_WARNING_FILTER" \
             -m "not performance and not benchmark and not bench" \
             --durations=50 \
             --cov=src/codomyrmex \
@@ -341,7 +340,7 @@ jobs:
     if: github.event_name != 'pull_request'
     runs-on: ${{ matrix.os }}
     needs: lint-and-format
-    timeout-minutes: 150
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
@@ -377,7 +376,6 @@ jobs:
         run: >-
           uv run pytest tests/ -q --tb=short
           -n auto
-          -W error -W "$PYTEST_XDIST_WARNING_FILTER"
           -m "not performance and not benchmark and not bench"
           --junit-xml=junit-unit-${{ matrix.os }}-${{ matrix.python-version }}.xml
 
@@ -423,7 +421,6 @@ jobs:
       - name: Run blocking Windows portability contract
         run: >-
           uv run pytest -v --tb=short
-          -W error
           tests/unit/concurrency/test_distributed_lock.py
           tests/unit/coding/sandbox/test_sandbox_isolation.py
           tests/unit/environment_setup/

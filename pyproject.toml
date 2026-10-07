@@ -482,6 +482,9 @@ filterwarnings = [
     # matplotlib 3.10 date-axis default intervals use bare-integer timedelta
     # arithmetic that NumPy 2.5 deprecates; raised inside matplotlib, not here.
     "ignore:The 'generic' unit for NumPy timedelta is deprecated:DeprecationWarning",
+    # pytest-benchmark disables itself under pytest-xdist and says so with a
+    # warning during configure; the CI suites run with xdist (-n auto).
+    "ignore:Benchmarks are automatically disabled because xdist plugin is active",
 ]
 
 
