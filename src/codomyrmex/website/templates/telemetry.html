@@ -106,7 +106,7 @@
                 namesList.innerHTML =
                     '<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">' +
                     names.map(function (n) {
-                        return '<span class="metric-chip">' + n + '</span>';
+                        return '<span class="metric-chip">' + escapeHtml(n) + '</span>';
                     }).join('') +
                     '</div>';
             }
@@ -123,8 +123,8 @@
                     var displayVal = (typeof val === 'number') ? val.toLocaleString() : val;
                     var label = k.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
                     return '<div class="metric">' +
-                        '<span class="metric-value" style="color: var(--accent-color);">' + displayVal + '</span>' +
-                        '<span class="metric-label">' + label + '</span>' +
+                        '<span class="metric-value" style="color: var(--accent-color);">' + escapeHtml(displayVal) + '</span>' +
+                        '<span class="metric-label">' + escapeHtml(label) + '</span>' +
                         '</div>';
                 }).join('');
             } else {
@@ -142,17 +142,17 @@
                 dashList.innerHTML =
                     '<div class="dashboard-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">' +
                     dashes.map(function (d) {
-                        var tags = (d.tags || []).map(function (t) {
-                            return '<span class="tag-chip">' + t + '</span>';
+                        var tagsHtml = (d.tags || []).map(function (t) {
+                            return '<span class="tag-chip">' + escapeHtml(t) + '</span>';
                         }).join(' ');
                         return '<div class="dash-card">' +
-                            '<div class="dash-card-name">' + (d.name || d.id) + '</div>' +
-                            (d.description ? '<div class="dash-card-desc">' + d.description + '</div>' : '') +
+                            '<div class="dash-card-name">' + escapeHtml(d.name || d.id) + '</div>' +
+                            (d.description ? '<div class="dash-card-desc">' + escapeHtml(d.description) + '</div>' : '') +
                             '<div class="dash-card-meta">' +
-                            '<span>' + (d.panels ? d.panels.length : 0) + ' panels</span>' +
-                            (d.created_at ? '<span>' + new Date(d.created_at).toLocaleDateString() + '</span>' : '') +
+                            '<span>' + escapeHtml(d.panels ? d.panels.length : 0) + ' panels</span>' +
+                            (d.created_at ? '<span>' + escapeHtml(new Date(d.created_at).toLocaleDateString()) + '</span>' : '') +
                             '</div>' +
-                            (tags ? '<div style="margin-top: 0.5rem;">' + tags + '</div>' : '') +
+                            (tagsHtml ? '<div style="margin-top: 0.5rem;">' + tagsHtml + '</div>' : '') +
                             '</div>';
                     }).join('') +
                     '</div>';

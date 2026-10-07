@@ -15,7 +15,7 @@ audit what's available.
 1. Trust all tools for full execution:
 
 ```bash
-cd /Users/mini/Documents/GitHub/codomyrmex && uv run python -c "
+cd "$(git rev-parse --show-toplevel)" && uv run python -c "
 from codomyrmex.agents.pai.trust_gateway import trust_all, get_trust_report
 import json
 result = trust_all()
@@ -26,7 +26,7 @@ print(json.dumps(result, indent=2, default=str))
 1. (Optional) Trust a specific tool only:
 
 ```bash
-cd /Users/mini/Documents/GitHub/codomyrmex && uv run python -c "
+cd "$(git rev-parse --show-toplevel)" && uv run python -c "
 from codomyrmex.agents.pai.trust_gateway import trust_tool
 import json
 result = trust_tool('codomyrmex.write_file')
@@ -55,7 +55,7 @@ reset_trust()
 ## Trust Levels
 
 | Level | Meaning | How to reach |
-|-------|---------|--------------|
+| ------- | --------- | -------------- |
 | `UNTRUSTED` | No access via `trusted_call_tool` | Default state |
 | `VERIFIED` | Read-only tools callable | `/codomyrmexVerify` |
 | `TRUSTED` | All tools callable (including writes) | `/codomyrmexTrust` |

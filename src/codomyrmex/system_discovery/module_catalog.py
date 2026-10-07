@@ -8,6 +8,7 @@ src/codomyrmex?" without changing the higher-impact public
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal
@@ -193,7 +194,12 @@ def build_module_catalog(
     for path in sorted(package_root.iterdir(), key=lambda item: item.name):
         if not path.is_dir() or path.name == "__pycache__":
             continue
-        has_init = (path / "__init__.py").is_file()
+
+        # One scandir() instead of nine stat() calls per module; DirEntry.is_file
+        # uses the cached d_type, so file-vs-directory semantics are preserved.
+        with os.scandir(path) as children:
+            child_names = {child.name for child in children if child.is_file()}
+
         kind: ModuleKind = (
             "support_surface"
             if path.name in support_surface_names
@@ -204,15 +210,15 @@ def build_module_catalog(
                 name=path.name,
                 relative_path=path.relative_to(root).as_posix(),
                 kind=kind,
-                has_init=has_init,
-                has_readme=(path / "README.md").is_file(),
-                has_agents=(path / "AGENTS.md").is_file(),
-                has_spec=(path / "SPEC.md").is_file(),
-                has_pai=(path / "PAI.md").is_file(),
-                has_api_spec=(path / "API_SPECIFICATION.md").is_file(),
-                has_mcp_tools=(path / "mcp_tools.py").is_file(),
-                has_mcp_spec=(path / "MCP_TOOL_SPECIFICATION.md").is_file(),
-                has_py_typed=(path / "py.typed").is_file(),
+                has_init="__init__.py" in child_names,
+                has_readme="README.md" in child_names,
+                has_agents="AGENTS.md" in child_names,
+                has_spec="SPEC.md" in child_names,
+                has_pai="PAI.md" in child_names,
+                has_api_spec="API_SPECIFICATION.md" in child_names,
+                has_mcp_tools="mcp_tools.py" in child_names,
+                has_mcp_spec="MCP_TOOL_SPECIFICATION.md" in child_names,
+                has_py_typed="py.typed" in child_names,
                 has_tests=_has_tests_for_module(root, path.name),
                 docs_module_exists=(docs_root / path.name).is_dir(),
             )

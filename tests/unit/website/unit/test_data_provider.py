@@ -264,6 +264,26 @@ class TestGetConfigContent:
         with pytest.raises(FileNotFoundError):
             provider.get_config_content("nonexistent.toml")
 
+    def test_symlink_into_sibling_with_shared_prefix_is_rejected(self, tmp_path):
+        """Containment must be path-based, not a string-prefix comparison.
+
+        ``/x/repo-secrets`` starts with the string ``/x/repo`` but is outside
+        ``/x/repo``; a symlink inside the root must not reach it.
+        """
+        root = tmp_path / "repo"
+        sibling = tmp_path / "repo-secrets"
+        root.mkdir()
+        sibling.mkdir()
+        (sibling / "token.yaml").write_text("secret: 1", encoding="utf-8")
+        (root / "link").symlink_to(sibling, target_is_directory=True)
+
+        provider = DataProvider(root)
+        with pytest.raises(ValueError, match="escapes project root"):
+            provider.get_config_content("link/token.yaml")
+        with pytest.raises(ValueError, match="escapes project root"):
+            provider.save_config_content("link/token.yaml", "secret: 2")
+        assert (sibling / "token.yaml").read_text(encoding="utf-8") == "secret: 1"
+
 
 @pytest.mark.unit
 class TestSaveConfigContent:

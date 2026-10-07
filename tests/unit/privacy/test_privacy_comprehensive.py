@@ -386,11 +386,12 @@ class TestLaplaceNoise:
         result = laplace_noise(epsilon=1.0)
         assert isinstance(result, float)
 
-    def test_bounded_range(self):
-        """Result is between -0.5 and 0.5 (uniform approx)."""
-        for _ in range(50):
-            result = laplace_noise(epsilon=1.0)
-            assert -0.5 <= result <= 0.5
+    def test_noise_scale_grows_with_sensitivity(self):
+        """Larger sensitivity/epsilon ratios produce proportionally larger noise."""
+        n = 5_000
+        small = sum(abs(laplace_noise(epsilon=1.0, sensitivity=0.1)) for _ in range(n))
+        large = sum(abs(laplace_noise(epsilon=1.0, sensitivity=10.0)) for _ in range(n))
+        assert large / small == pytest.approx(100.0, rel=0.15)
 
     def test_zero_epsilon_raises(self):
         """Epsilon of 0 raises ValueError."""
@@ -404,8 +405,6 @@ class TestLaplaceNoise:
 
     def test_different_sensitivities_accepted(self):
         """Various sensitivity values do not raise."""
-        # The function accepts sensitivity but the uniform approx doesn't
-        # fully use it -- just verify no error.
         for s in [0.1, 1.0, 10.0, 100.0]:
             result = laplace_noise(epsilon=1.0, sensitivity=s)
             assert isinstance(result, float)
@@ -714,7 +713,11 @@ class TestPrivacyClass:
         p.add_rule(PrivacyRule("email", "email"))
         p.add_rule(PrivacyRule("ssn", "redact"))
         p.add_rule(PrivacyRule("secret", "hash"))
-        data = {"email": "a@b.com", "ssn": "111-22-3333", "secret": "pwd"}
+        data = {
+            "email": "a@b.com",
+            "ssn": "111-22-3333",
+            "secret": "pwd",  # pragma: allowlist secret
+        }
         result = p.process(data)
         assert "@b.com" in result["email"]
         assert result["ssn"] == "***"

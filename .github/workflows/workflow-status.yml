@@ -2,7 +2,7 @@ name: Workflow Status Dashboard
 
 on:
   workflow_run:
-    workflows: 
+    workflows:
       - "Continuous Integration"
       - "Pre-commit Checks"
       - "Security Scanning and Dependency Management"
@@ -55,7 +55,7 @@ jobs:
           script: |
             const workflows = [
               'Continuous Integration',
-              'Pre-commit Checks', 
+              'Pre-commit Checks',
               'Security Scanning and Dependency Management',
               'Documentation Build and Deploy',
               'Performance Benchmarks',
@@ -75,7 +75,7 @@ jobs:
               'Release Drafter',
               'First PR Merged Celebration'
             ];
-            
+
             // Proper name-to-filename mapping
             const workflowFileMap = {
               'Continuous Integration': 'ci.yml',
@@ -99,12 +99,12 @@ jobs:
               'Release Drafter': 'release-drafter.yml',
               'First PR Merged Celebration': 'first-pr-merged.yml'
             };
-            
+
             let statusData = {
               updated: new Date().toISOString(),
               workflows: {}
             };
-            
+
             for (const workflowName of workflows) {
               try {
                 const workflowRuns = await github.rest.actions.listWorkflowRuns({
@@ -113,9 +113,9 @@ jobs:
                   workflow_id: workflowFileMap[workflowName],
                   per_page: 5
                 });
-                
+
                 const latestRun = workflowRuns.data.workflow_runs[0];
-                
+
                 statusData.workflows[workflowName] = {
                   status: latestRun?.conclusion || 'unknown',
                   url: latestRun?.html_url || '',
@@ -136,7 +136,7 @@ jobs:
                 };
               }
             }
-            
+
             // Save status data as JSON
             const fs = require('fs');
             fs.writeFileSync('workflow-status.json', JSON.stringify(statusData, null, 2));
@@ -149,15 +149,15 @@ jobs:
           echo "" >> workflow-status.md
           echo "## Current Status Overview" >> workflow-status.md
           echo "" >> workflow-status.md
-          
+
           # Process JSON with Python for better formatting
           python3 << 'EOF'
           import json
           from datetime import datetime
-          
+
           with open('workflow-status.json', 'r') as f:
               data = json.load(f)
-          
+
           def get_status_emoji(status):
               if status == 'success':
                   return '✅'
@@ -169,14 +169,14 @@ jobs:
                   return '🔄'
               else:
                   return '❓'
-          
+
           print("| Workflow | Status | Last Run | Branch | Event |")
           print("|----------|--------|----------|---------|-------|")
-          
+
           for name, info in data['workflows'].items():
               emoji = get_status_emoji(info['status'])
               status = info['status'].title()
-              
+
               # Format date
               if info['updatedAt']:
                   try:
@@ -186,21 +186,21 @@ jobs:
                       date_str = info['updatedAt'][:16]
               else:
                   date_str = 'N/A'
-              
+
               url = info['url'] if info['url'] else '#'
               branch = info['branch'] if info['branch'] else 'N/A'
               event = info['event'] if info['event'] else 'N/A'
-              
+
               print(f"| [{name}]({url}) | {emoji} {status} | {date_str} | {branch} | {event} |")
           EOF
-          
+
           python3 -c "
           import json
           from datetime import datetime
-          
+
           with open('workflow-status.json', 'r') as f:
               data = json.load(f)
-          
+
           def get_status_emoji(status):
               if status == 'success':
                   return '✅'
@@ -212,15 +212,15 @@ jobs:
                   return '🔄'
               else:
                   return '❓'
-          
+
           print()
           print('| Workflow | Status | Last Run | Branch | Event |')
           print('|----------|--------|----------|---------|-------|')
-          
+
           for name, info in data['workflows'].items():
               emoji = get_status_emoji(info['status'])
               status = info['status'].title()
-              
+
               # Format date
               if info['updatedAt']:
                   try:
@@ -230,14 +230,14 @@ jobs:
                       date_str = info['updatedAt'][:16]
               else:
                   date_str = 'N/A'
-              
+
               url = info['url'] if info['url'] else '#'
               branch = info['branch'] if info['branch'] else 'N/A'
               event = info['event'] if info['event'] else 'N/A'
-              
+
               print(f'| [{name}]({url}) | {emoji} {status} | {date_str} | {branch} | {event} |')
           " >> workflow-status.md
-          
+
           echo "" >> workflow-status.md
           echo "## Quick Actions" >> workflow-status.md
           echo "" >> workflow-status.md
@@ -249,27 +249,27 @@ jobs:
           echo "" >> workflow-status.md
           echo "## Workflow Health Metrics" >> workflow-status.md
           echo "" >> workflow-status.md
-          
+
           # Calculate success rates
           python3 -c "
           import json
-          
+
           with open('workflow-status.json', 'r') as f:
               data = json.load(f)
-          
+
           total = len(data['workflows'])
           successful = sum(1 for w in data['workflows'].values() if w['status'] == 'success')
           failed = sum(1 for w in data['workflows'].values() if w['status'] == 'failure')
           other = total - successful - failed
-          
+
           success_rate = (successful / total * 100) if total > 0 else 0
-          
+
           print(f'- **Total Workflows**: {total}')
           print(f'- **Currently Successful**: {successful} ({success_rate:.1f}%)')
           print(f'- **Currently Failed**: {failed}')
           print(f'- **Other States**: {other}')
           " >> workflow-status.md
-          
+
           echo "" >> workflow-status.md
           echo "---" >> workflow-status.md
           echo "*This dashboard is automatically updated by the [Workflow Status Dashboard](../../actions/workflows/workflow-status.yml) workflow.*" >> workflow-status.md
@@ -289,14 +289,14 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Update Time**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           # Show current status in summary
           python3 -c "
           import json
-          
+
           with open('workflow-status.json', 'r') as f:
               data = json.load(f)
-          
+
           def get_status_emoji(status):
               if status == 'success':
                   return '✅'
@@ -308,15 +308,15 @@ jobs:
                   return '🔄'
               else:
                   return '❓'
-          
+
           print('## Current Workflow Status')
           print()
-          
+
           for name, info in data['workflows'].items():
               emoji = get_status_emoji(info['status'])
               status = info['status'].title()
               print(f'{emoji} **{name}**: {status}')
-          
+
           print()
           total = len(data['workflows'])
           successful = sum(1 for w in data['workflows'].values() if w['status'] == 'success')
@@ -330,15 +330,15 @@ jobs:
           script: |
             const fs = require('fs');
             const data = JSON.parse(fs.readFileSync('workflow-status.json', 'utf8'));
-            
+
             // Check for any failed workflows
             const failures = Object.entries(data.workflows)
               .filter(([name, info]) => info.status === 'failure')
               .map(([name, info]) => ({ name, url: info.url }));
-            
+
             if (failures.length > 0) {
               console.log(`Found ${failures.length} failed workflows`);
-              
+
               // You could create an issue or send notifications here
               // For now, just log the failures
               failures.forEach(failure => {

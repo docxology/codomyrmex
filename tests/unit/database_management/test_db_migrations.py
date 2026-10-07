@@ -38,11 +38,11 @@ class TestMigrationSupport:
         """Create a MigrationManager for testing."""
         workspace = str(tmp_path / "migrations")
         db_path = str(tmp_path / "migration_test.db")
-        manager = MigrationManager(
+        with MigrationManager(
             workspace_dir=workspace, database_url=f"sqlite:///{db_path}"
-        )
-        yield manager
-        manager.close()
+        ) as manager:
+            yield manager
+            manager.close()
 
     def test_migration_creation(self, migration_manager):
         """Test creating a new migration."""
@@ -628,41 +628,40 @@ class TestIntegration:
         db_path = str(tmp_path / "migration_workflow.db")
 
         # Create migration manager
-        manager = MigrationManager(
+        with MigrationManager(
             workspace_dir=workspace, database_url=f"sqlite:///{db_path}"
-        )
+        ) as manager:
+            # Create migrations without dependencies for simpler test
+            m1 = manager.create_migration(
+                name="create_users",
+                description="Create users table",
+                sql="CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT);",
+                rollback_sql="DROP TABLE users;",
+            )
 
-        # Create migrations without dependencies for simpler test
-        m1 = manager.create_migration(
-            name="create_users",
-            description="Create users table",
-            sql="CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT);",
-            rollback_sql="DROP TABLE users;",
-        )
+            m2 = manager.create_migration(
+                name="create_posts",
+                description="Create posts table",
+                sql="CREATE TABLE posts (id INTEGER PRIMARY KEY, user_id INTEGER);",
+                rollback_sql="DROP TABLE posts;",
+                # No dependencies
+            )
 
-        m2 = manager.create_migration(
-            name="create_posts",
-            description="Create posts table",
-            sql="CREATE TABLE posts (id INTEGER PRIMARY KEY, user_id INTEGER);",
-            rollback_sql="DROP TABLE posts;",
-            # No dependencies
-        )
+            # Apply migrations one by one
+            result1 = manager.apply_migration(m1.id)
+            assert result1.success
 
-        # Apply migrations one by one
-        result1 = manager.apply_migration(m1.id)
-        assert result1.success
+            result2 = manager.apply_migration(m2.id)
+            assert result2.success
 
-        result2 = manager.apply_migration(m2.id)
-        assert result2.success
+            # Check status
+            status = manager.get_migration_status(m1.id)
+            assert status["status"] == "applied"
 
-        # Check status
-        status = manager.get_migration_status(m1.id)
-        assert status["status"] == "applied"
+            status2 = manager.get_migration_status(m2.id)
+            assert status2["status"] == "applied"
 
-        status2 = manager.get_migration_status(m2.id)
-        assert status2["status"] == "applied"
-
-        manager.close()
+            manager.close()
 
     def test_backup_and_monitor_integration(self, tmp_path):
         """Test backup and monitoring integration."""
@@ -981,23 +980,23 @@ class TestMigrationManager:
             MigrationManager,
         )
 
-        mgr = MigrationManager(workspace_dir=str(tmp_path))
-        assert mgr is not None
+        with MigrationManager(workspace_dir=str(tmp_path)) as mgr:
+            assert mgr is not None
 
     def test_create_and_list(self, tmp_path):
         from codomyrmex.database_management.migration.migration_manager import (
             MigrationManager,
         )
 
-        mgr = MigrationManager(workspace_dir=str(tmp_path))
-        m = mgr.create_migration(
-            name="init",
-            description="Initial",
-            sql="CREATE TABLE t (id INT);",
-        )
-        assert m.name == "init"
-        migrations = mgr.list_migrations()
-        assert isinstance(migrations, list)
+        with MigrationManager(workspace_dir=str(tmp_path)) as mgr:
+            m = mgr.create_migration(
+                name="init",
+                description="Initial",
+                sql="CREATE TABLE t (id INT);",
+            )
+            assert m.name == "init"
+            migrations = mgr.list_migrations()
+            assert isinstance(migrations, list)
 
     def test_with_sqlite(self, tmp_path):
         from codomyrmex.database_management.migration.migration_manager import (
@@ -1005,14 +1004,27 @@ class TestMigrationManager:
         )
 
         db = tmp_path / "migrations.db"
-        mgr = MigrationManager(
+        with MigrationManager(
             workspace_dir=str(tmp_path),
             database_url=f"sqlite:///{db}",
-        )
+        ) as mgr:
+            mgr.create_migration(
+                name="init",
+                description="Initial",
+                sql="CREATE TABLE t (id INT);",
+            )
+            pending = mgr.get_pending_migrations()
+            assert isinstance(pending, list)
+
+
+def test_migration_manager_context_closes_connector(tmp_path):
+    """Leaving a ``with`` block closes the migration database connection."""
+    with MigrationManager(
+        workspace_dir=str(tmp_path), database_url=f"sqlite:///{tmp_path / 'm.db'}"
+    ) as mgr:
         mgr.create_migration(
-            name="init",
-            description="Initial",
-            sql="CREATE TABLE t (id INT);",
+            name="init", description="Initial", sql="CREATE TABLE t (id INT);"
         )
-        pending = mgr.get_pending_migrations()
-        assert isinstance(pending, list)
+        assert len(mgr.get_pending_migrations()) == 1
+        assert mgr._connector is not None
+    assert mgr._connector is None

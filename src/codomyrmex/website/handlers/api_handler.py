@@ -14,7 +14,7 @@ import sys
 import threading
 import time
 from typing import TYPE_CHECKING, Any, cast
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -164,7 +164,8 @@ class APIHandler:
 
     def handle_config_get(self, path: str) -> None:
         """Handle config get request."""
-        filename = path.replace("/api/config/", "")
+        # The dashboard percent-encodes the filename segment.
+        filename = unquote(path.removeprefix("/api/config/"))
         if not self.data_provider:
             self.send_json_response({"error": "Data provider missing"}, status=500)
             return
@@ -196,7 +197,7 @@ class APIHandler:
         if not filename:
             # Extract from URL path
             parsed_path = urlparse(self.path)
-            filename = parsed_path.path.replace("/api/config/", "")
+            filename = unquote(parsed_path.path.removeprefix("/api/config/"))
 
         if content is None or not filename:
             self.send_error(400, "Missing filename or content")
@@ -239,9 +240,7 @@ class APIHandler:
 
     def handle_docs_get(self, path: str) -> None:
         """Handle GET /api/docs/{path} -- return doc file content."""
-        from urllib.parse import unquote
-
-        doc_path = unquote(path.replace("/api/docs/", "", 1))
+        doc_path = unquote(path.removeprefix("/api/docs/"))
         if not self.data_provider:
             self.send_error(500, "Data provider missing")
             return

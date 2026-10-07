@@ -13,6 +13,20 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
+    <script>
+        // Shared helper for page scripts that build markup from API responses,
+        // file contents, tool output or user input before assigning innerHTML.
+        // Defined in <head> so it exists before any page script runs
+        // (assets/js/app.js loads at the end of <body>).
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+    </script>
     {% block extra_head %}{% endblock %}
 </head>
 
