@@ -27,7 +27,7 @@ function optionalLib(spec) {
     return file ? fs.readFileSync(file, 'utf8') : '';
 }
 const CDN_SCRIPTS = {
-    'marked.min.js': optionalLib('marked/lib/marked.umd.js'),
+    'marked.umd.js': optionalLib('marked/lib/marked.umd.js'),
     'purify.min.js': optionalLib('dompurify/dist/purify.min.js'),
 };
 
@@ -75,7 +75,12 @@ async function handle(route, requests, broken) {
     if (url.origin === ORIGIN) {
         const file = path.join(SITE, decodeURIComponent(url.pathname));
         if (!file.startsWith(SITE) || !fs.existsSync(file) || !fs.statSync(file).isFile()) return route.fulfill({ status: 404, body: '' });
-        return route.fulfill({ status: 200, contentType: TYPES[path.extname(file)] || 'application/octet-stream', body: fs.readFileSync(file) });
+        let body = fs.readFileSync(file);
+        // CDN requests are answered locally (below), so the bytes cannot match
+        // the pages' Subresource Integrity hashes and Chromium would refuse
+        // them. SRI itself is covered by test_template_external_assets.py.
+        if (path.extname(file) === '.html') body = body.toString('utf8').replace(/\sintegrity="[^"]*"/g, '');
+        return route.fulfill({ status: 200, contentType: TYPES[path.extname(file)] || 'application/octet-stream', body });
     }
     if (url.host === 'localhost:8080') {
         return route.fulfill({
