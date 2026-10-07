@@ -479,6 +479,9 @@ filterwarnings = [
     "ignore:'_UnionGenericAlias' is deprecated:DeprecationWarning",
     # google-genai 1.68 with pydantic >= 2.12: model_validator mode='after' classmethod deprecation at import.
     "ignore:Using `@model_validator` with mode='after' on a classmethod is deprecated.*:",
+    # matplotlib 3.10 date-axis default intervals use bare-integer timedelta
+    # arithmetic that NumPy 2.5 deprecates; raised inside matplotlib, not here.
+    "ignore:The 'generic' unit for NumPy timedelta is deprecated:DeprecationWarning",
 ]
 
 
