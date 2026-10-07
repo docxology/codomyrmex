@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 import pytest
+from tests.support.permissions import requires_permission_enforcement
 
 from codomyrmex.system_discovery.core.dependency_analyzer import DependencyAnalyzer
 
@@ -83,6 +84,7 @@ class TestGetLastModified:
         result = analyzer.get_last_modified(mod_dir)
         assert result == "unknown"
 
+    @requires_permission_enforcement
     def test_get_last_modified_exception(self, tmp_path):
         """Test get_last_modified handles exceptions without mocking."""
         analyzer = DependencyAnalyzer(project_root=tmp_path, testing_path=tmp_path)
@@ -151,6 +153,7 @@ class TestDependencyAnalyzerVersion:
         )
         assert analyzer.get_module_version(mod_dir) == "unknown"
 
+    @requires_permission_enforcement
     def test_get_module_version_error(self, tmp_path: Path):
         """Test returning 'unknown' when an error occurs reading __init__.py."""
         mod_dir = tmp_path / "mymod"
