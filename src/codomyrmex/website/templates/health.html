@@ -444,7 +444,12 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
             });
-            const startData = await startResp.json();
+            let startData;
+            try {
+                startData = await startResp.json();
+            } catch (_e) {
+                startData = { error: 'Server error: non-JSON response (HTTP ' + startResp.status + ')' };
+            }
 
             if (startData.error) {
                 resultsDiv.innerHTML = `<p class="status-err">${escapeHtml(startData.error)}</p>`;
@@ -512,14 +517,49 @@
         }
     });
 
-    // Auto-refresh uptime
+    // Auto-refresh all health metrics; report a lost connection only after
+    // two consecutive failures so a single slow response does not flap it.
     const uptimeEl = document.getElementById('uptime');
     if (uptimeEl) {
+        let healthFailCount = 0;
+        const setText = (id, value) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+            return el;
+        };
+        const updateBar = (barId, pctId, value) => {
+            const bar = document.getElementById(barId);
+            if (bar) {
+                const fill = bar.querySelector('.coverage-fill');
+                if (fill) fill.style.width = value + '%';
+                bar.setAttribute('aria-valuenow', value);
+            }
+            setText(pctId, value + '%');
+        };
         setInterval(async () => {
             try {
                 const resp = await fetch('/api/health');
                 const data = await resp.json();
+                healthFailCount = 0;
                 uptimeEl.textContent = data.uptime;
+
+                if (data.modules) {
+                    setText('module-count', data.modules.total);
+                    updateBar('api-spec-bar', 'api-spec-pct', data.modules.api_spec_pct);
+                    updateBar('test-coverage-bar', 'test-coverage-pct', data.modules.test_coverage_pct);
+                    updateBar('mcp-spec-bar', 'mcp-spec-pct', data.modules.mcp_spec_pct);
+                }
+                const systemStatusEl = setText('system-status', data.status_text);
+                if (systemStatusEl) systemStatusEl.className = 'metric-value status-' + data.status_class;
+                if (data.git) {
+                    setText('git-branch', data.git.branch);
+                    setText('git-commits', data.git.commit_count);
+                    setText('git-last-commit', data.git.last_commit);
+                    const gitStatusEl = setText('git-status', data.git.status);
+                    if (gitStatusEl) {
+                        gitStatusEl.className = 'metric-value ' + (data.git.dirty_files === 0 ? 'status-ok' : 'status-warn');
+                    }
+                }
 
                 // Update connection status
                 const connStatus = document.getElementById('connection-status');
@@ -529,10 +569,11 @@
                     connText.textContent = 'Connected';
                 }
             } catch (e) {
+                healthFailCount++;
                 // Update connection status
                 const connStatus = document.getElementById('connection-status');
                 const connText = document.getElementById('connection-text');
-                if (connStatus) {
+                if (connStatus && healthFailCount >= 2) {
                     connStatus.className = 'connection-status connection-err';
                     connText.textContent = 'Disconnected';
                 }

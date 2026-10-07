@@ -62,7 +62,7 @@
     function appendMessage(role, text) {
         const log = document.getElementById('chat-messages');
         const div = document.createElement('div');
-        div.className = 'message ' + role;
+        div.className = 'message ' + role + ' fade-in';
         div.textContent = text;
         log.appendChild(div);
         log.scrollTop = log.scrollHeight;
@@ -85,11 +85,13 @@
             btn.innerHTML = '<span class="loader" aria-hidden="true"></span> Sending...';
         }
 
+        const log = document.getElementById('chat-messages');
+        log.setAttribute('aria-busy', 'true');
         const thinking = document.createElement('div');
         thinking.className = 'message assistant thinking';
         thinking.setAttribute('aria-busy', 'true');
         thinking.textContent = '…';
-        document.getElementById('chat-messages').appendChild(thinking);
+        log.appendChild(thinking);
 
         try {
             const resp = await fetch('/api/chat', {
@@ -97,7 +99,12 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: message, model: model })
             });
-            const data = await resp.json();
+            let data;
+            try {
+                data = await resp.json();
+            } catch (_e) {
+                data = { success: false, error: 'non-JSON response (HTTP ' + resp.status + ')' };
+            }
             thinking.remove();
             if (data.success) {
                 appendMessage('assistant', data.response);
@@ -108,6 +115,7 @@
             thinking.remove();
             appendMessage('assistant', 'Connection error: ' + err.message);
         } finally {
+            log.removeAttribute('aria-busy');
             input.disabled = false;
             if (btn) {
                 btn.disabled = false;

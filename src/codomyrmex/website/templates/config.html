@@ -53,6 +53,15 @@
         const saveStatus = document.getElementById('save-status');
         let activeFilename = null;
 
+        // Parse a JSON body; a non-JSON reply becomes an error the UI can show.
+        async function readJson(resp) {
+            try {
+                return await resp.json();
+            } catch (_e) {
+                return { success: false, error: 'non-JSON response (HTTP ' + resp.status + ')' };
+            }
+        }
+
         // Load file content via GET /api/config/{filename}
         async function loadFile(filename) {
             emptyState.style.display = 'none';
@@ -64,14 +73,13 @@
 
             try {
                 const resp = await fetch('/api/config/' + encodeURIComponent(filename));
-                if (resp.ok) {
-                    const data = await resp.json();
-                    configEditor.value = data.content || '';
+                const data = await readJson(resp);
+                if (resp.ok && typeof data.content === 'string') {
+                    configEditor.value = data.content;
                     configEditor.disabled = false;
                     saveBtn.disabled = false;
                     activeFilename = filename;
                 } else {
-                    const data = await resp.json();
                     configEditor.value = '';
                     saveStatus.textContent = 'Error loading file: ' + (data.error || resp.status);
                     saveStatus.style.color = 'var(--error-color)';
@@ -95,10 +103,14 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ filename: activeFilename, content: configEditor.value })
                 });
-                const data = await resp.json();
+                const data = await readJson(resp);
                 if (data.success) {
                     saveStatus.textContent = '✓ Saved';
                     saveStatus.style.color = 'var(--success-color)';
+                    // Clear the confirmation like a toast, unless a newer status replaced it.
+                    setTimeout(function () {
+                        if (saveStatus.textContent === '✓ Saved') saveStatus.textContent = '';
+                    }, 3000);
                 } else {
                     saveStatus.textContent = 'Save failed: ' + (data.error || resp.status);
                     saveStatus.style.color = 'var(--error-color)';

@@ -64,6 +64,8 @@
         }
         // Without the sanitizer, show the markdown source as plain text, never as HTML.
         const pre = document.createElement('pre');
+        pre.style.whiteSpace = 'pre-wrap';
+        pre.style.fontFamily = 'inherit';
         pre.textContent = raw;
         container.textContent = '';
         container.appendChild(pre);
@@ -103,12 +105,16 @@
 
             try {
                 const resp = await fetch('/api/docs/' + path.split('/').map(encodeURIComponent).join('/'));
-                if (resp.ok) {
-                    const data = await resp.json();
-                    renderMarkdown(content, data.content || '');
+                let data;
+                try {
+                    data = await resp.json();
+                } catch (_e) {
+                    data = { error: 'Server error: non-JSON response (HTTP ' + resp.status + ')' };
+                }
+                if (resp.ok && typeof data.content === 'string') {
+                    renderMarkdown(content, data.content);
                     highlightCode(content);
                 } else {
-                    const data = await resp.json();
                     content.innerHTML = '<p style="color: var(--error-color);">Error: ' + escapeHtml(data.error || resp.status) + '</p>';
                 }
             } catch (err) {
