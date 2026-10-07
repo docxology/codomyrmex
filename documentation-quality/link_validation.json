@@ -68686,21 +68686,21 @@
   {
     "file": "src/codomyrmex/llm/providers/AGENTS.md",
     "link": "../README.md",
-    "line": 56,
+    "line": 61,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/llm/providers/README.md",
     "link": "../README.md",
-    "line": 26,
+    "line": 27,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/llm/providers/README.md",
     "link": "AGENTS.md",
-    "line": 31,
+    "line": 32,
     "status": "ok",
     "message": "File exists"
   },
