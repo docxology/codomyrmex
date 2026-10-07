@@ -713,7 +713,11 @@ class TestPrivacyClass:
         p.add_rule(PrivacyRule("email", "email"))
         p.add_rule(PrivacyRule("ssn", "redact"))
         p.add_rule(PrivacyRule("secret", "hash"))
-        data = {"email": "a@b.com", "ssn": "111-22-3333", "secret": "pwd"}
+        data = {
+            "email": "a@b.com",
+            "ssn": "111-22-3333",
+            "secret": "pwd",  # pragma: allowlist secret
+        }
         result = p.process(data)
         assert "@b.com" in result["email"]
         assert result["ssn"] == "***"

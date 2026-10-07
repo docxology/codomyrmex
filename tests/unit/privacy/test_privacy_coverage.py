@@ -318,7 +318,7 @@ class TestPrivacyClass:
         p = Privacy()
         p.add_rule(PrivacyRule("secret", "redact", params={"replacement": "REDACTED"}))
         result = p.process({"secret": "my_secret_value"})
-        assert result["secret"] == "REDACTED"
+        assert result["secret"] == "REDACTED"  # pragma: allowlist secret
 
     def test_process_partial_strategy(self):
         p = Privacy()
