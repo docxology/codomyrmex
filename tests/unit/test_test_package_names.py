@@ -15,6 +15,7 @@ importlib mode gives their modules unique names).
 
 from __future__ import annotations
 
+import site
 import sys
 from importlib.machinery import PathFinder
 
@@ -39,11 +40,10 @@ def _real_module_exists(name: str) -> bool:
     if name in sys.stdlib_module_names:
         return True
     # PathFinder ignores sys.modules, so an already-imported test package
-    # cannot mask the real module. The repository root is always searched
-    # (scripts and tools put it on sys.path); tests directories never are.
-    search = [str(REPO_ROOT)] + [
-        p for p in sys.path if p and not p.startswith(str(TESTS))
-    ]
+    # cannot mask the real module. The search path is fixed rather than taken
+    # from sys.path, which other tests may have extended: the repository root
+    # (scripts and tools put it on sys.path), src/, and installed packages.
+    search = [str(REPO_ROOT), str(REPO_ROOT / "src"), *site.getsitepackages()]
     return PathFinder.find_spec(name, search) is not None
 
 
