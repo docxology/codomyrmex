@@ -10,6 +10,7 @@ Usage:
     python basic_usage.py --verbose                # Verbose output
 """
 
+import importlib
 import sys
 import time
 from pathlib import Path
@@ -18,15 +19,7 @@ from typing import Any
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-# Direct import to avoid triggering full codomyrmex package init
-import importlib.util
-
-script_base_path = project_root / "src" / "codomyrmex" / "utils" / "script_base.py"
-spec = importlib.util.spec_from_file_location("script_base", script_base_path)
-script_base = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(script_base)
-ScriptBase = script_base.ScriptBase
-ScriptConfig = script_base.ScriptConfig
+from codomyrmex.utils.process.script_base import ScriptBase, ScriptConfig
 
 
 class TreeSitterScript(ScriptBase):
@@ -97,43 +90,36 @@ class TreeSitterScript(ScriptBase):
         # Sample code for different languages
         sample_code = self._get_sample_code(args.language)
 
-        # Test 1: LanguageManager initialization
-        self.log_info(f"\n1. Testing LanguageManager for '{args.language}'")
+        # Test 1: Register the grammar (shipped as the tree_sitter_<lang> package)
+        self.log_info(f"\n1. Registering the '{args.language}' grammar")
+        grammar_module = f"tree_sitter_{args.language}"
         try:
-            lang_manager = LanguageManager()
-            available_languages = lang_manager.list_available()
-
-            results["language_manager"] = {
-                "available_languages": available_languages,
-                "target_language": args.language,
-                "initialized": True,
-            }
-            results["tests_passed"] += 1
-            self.log_success(
-                f"LanguageManager initialized, {len(available_languages)} languages available"
+            grammar = importlib.import_module(grammar_module)
+        except ImportError:
+            self.log_error(
+                f"Grammar package '{grammar_module.replace('_', '-')}' is not installed "
+                "(python ships with: uv sync --extra parsing)"
             )
-        except Exception as e:
-            self.log_error(f"LanguageManager initialization failed: {e}")
-            results["language_manager"] = {"error": str(e)}
+            raise
+        language = LanguageManager.register_language(args.language, grammar.language())
+        results["language_manager"] = {
+            "registered_languages": sorted(LanguageManager._languages),
+            "target_language": args.language,
+        }
+        results["tests_passed"] += 1
         results["tests_run"] += 1
+        self.log_success(f"Registered tree-sitter grammar for {args.language}")
 
         # Test 2: Parser creation
         self.log_info("\n2. Testing TreeSitterParser creation")
-        try:
-            parser = TreeSitterParser(language=args.language)
-            results["parser_tests"]["creation"] = {
-                "language": args.language,
-                "success": True,
-            }
-            results["tests_passed"] += 1
-            self.log_success(f"TreeSitterParser created for {args.language}")
-        except Exception as e:
-            self.log_error(f"Parser creation failed: {e}")
-            results["parser_tests"]["creation"] = {"error": str(e)}
-            # Cannot continue without parser
-            results["tests_run"] += 1
-            return results
+        parser = TreeSitterParser(language)
+        results["parser_tests"]["creation"] = {
+            "language": args.language,
+            "success": True,
+        }
+        results["tests_passed"] += 1
         results["tests_run"] += 1
+        self.log_success(f"TreeSitterParser created for {args.language}")
 
         # Test 3: Source code parsing
         self.log_info("\n3. Testing source code parsing")
@@ -187,7 +173,8 @@ class TreeSitterScript(ScriptBase):
 
             for query_name, query_pattern in queries.items():
                 try:
-                    matches = parser.query(tree, query_pattern)
+                    captures = parser.query(tree, query_pattern)
+                    matches = [node for nodes in captures.values() for node in nodes]
                     query_results.append(
                         {
                             "name": query_name,

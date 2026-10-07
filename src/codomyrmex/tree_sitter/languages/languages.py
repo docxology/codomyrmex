@@ -1,5 +1,6 @@
 """Language management for tree-sitter."""
 
+import ctypes
 import importlib
 import os
 from typing import Any
@@ -19,12 +20,35 @@ class LanguageManager:
     _languages: dict[str, Any] = {}
 
     @classmethod
+    def register_language(cls, lang_name: str, language: Any) -> Any:
+        """Register a grammar shipped as a Python package.
+
+        Args:
+            lang_name: Name to register the language under (e.g. ``"python"``).
+            language: A ``tree_sitter.Language`` or the object returned by a
+                grammar package's ``language()`` function, e.g.
+                ``tree_sitter_python.language()``.
+
+        Returns:
+            The registered ``tree_sitter.Language``.
+        """
+        if not isinstance(language, _tree_sitter.Language):
+            language = _tree_sitter.Language(language)
+        cls._languages[lang_name] = language
+        return language
+
+    @classmethod
     def load_language(cls, library_path: str, lang_name: str) -> bool:
-        """Load a language from a shared library (.so, .dll, .dylib)."""
+        """Load a language from a compiled grammar (.so, .dll, .dylib).
+
+        The library must export ``tree_sitter_<lang_name>()``, the entry point
+        every tree-sitter grammar provides.
+        """
         try:
-            # Note: tree-sitter 0.20+ uses Language(library_path, lang_name)
-            # This is a common wrapper pattern.
-            lang = _tree_sitter.Language(library_path, lang_name)  # type: ignore
+            library = ctypes.cdll.LoadLibrary(library_path)
+            entry_point = getattr(library, f"tree_sitter_{lang_name}")
+            entry_point.restype = ctypes.c_void_p
+            lang = _tree_sitter.Language(entry_point())
             cls._languages[lang_name] = lang
             return True
         except Exception as e:

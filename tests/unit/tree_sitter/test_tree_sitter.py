@@ -293,3 +293,56 @@ def test_parse_complex_expressions():
     tree = parser.parse(code)
     assert tree is not None
     assert tree.root_node.child_count >= 1
+
+
+# ---------------------------------------------------------------------------
+# Registration, queries and shared-library loading (py-tree-sitter >= 0.25)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.unit
+def test_register_language_from_grammar_package():
+    """register_language accepts the object a grammar package's language() returns."""
+    if not _HAS_TS_PYTHON:
+        pytest.skip("tree-sitter-python not installed")
+    from codomyrmex.tree_sitter import LanguageManager
+
+    LanguageManager._languages = {}
+    try:
+        lang = LanguageManager.register_language("python", tspython.language())
+        assert isinstance(lang, _ts_lib.Language)
+        assert LanguageManager.get_language("python") is lang
+        # An existing Language instance is stored as-is.
+        assert LanguageManager.register_language("py", lang) is lang
+    finally:
+        LanguageManager._languages = {}
+
+
+@pytest.mark.unit
+def test_query_returns_captures_by_name():
+    """query() maps each capture name to the captured nodes."""
+    parser = _get_parser()
+    tree = parser.parse("def f(x):\n    return x\n\nclass A:\n    pass\n")
+
+    captures = parser.query(
+        tree,
+        "(function_definition name: (identifier) @fn)"
+        " (class_definition name: (identifier) @cls)",
+    )
+
+    assert {
+        name: [n.text.decode() for n in nodes] for name, nodes in captures.items()
+    } == {
+        "fn": ["f"],
+        "cls": ["A"],
+    }
+
+
+@pytest.mark.unit
+def test_load_language_missing_library_returns_false(tmp_path):
+    """A library that cannot be opened is reported, not raised."""
+    from codomyrmex.tree_sitter import LanguageManager
+
+    LanguageManager._languages = {}
+    assert LanguageManager.load_language(str(tmp_path / "missing.so"), "x") is False
+    assert LanguageManager.get_language("x") is None
