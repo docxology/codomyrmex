@@ -685,17 +685,33 @@ class TestMainArgparse:
         assert "Assessment Checklist" in out
 
     def test_main_aggregate_docs_action(self, tmp_path):
-        """main() with 'aggregate_docs' runs without error."""
+        """main() with 'aggregate_docs' copies module docs into --dest-root.
+
+        Both roots point under tmp_path: the defaults would rewrite tracked
+        files in src/codomyrmex/documentation/docs/modules.
+        """
         from codomyrmex.documentation.documentation_website import main
+
+        src = tmp_path / "src"
+        (src / "alpha").mkdir(parents=True)
+        (src / "alpha" / "README.md").write_text("# Alpha\n")
+        dest = tmp_path / "dest"
 
         original_argv = sys.argv
         try:
-            sys.argv = ["documentation_website.py", "aggregate_docs"]
+            sys.argv = [
+                "documentation_website.py",
+                "aggregate_docs",
+                "--source-root",
+                str(src),
+                "--dest-root",
+                str(dest),
+            ]
             main()
-        except SystemExit:
-            pass
         finally:
             sys.argv = original_argv
+
+        assert (dest / "alpha" / "readme.md").read_text() == "# Alpha\n"
 
     def test_main_validate_docs_action(self):
         """main() with 'validate_docs' runs."""

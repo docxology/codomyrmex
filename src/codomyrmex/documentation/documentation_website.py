@@ -659,6 +659,16 @@ def main():
         default="npm",
         help="Package manager to use (npm or yarn). Default: npm.",
     )
+    parser.add_argument(
+        "--source-root",
+        default=None,
+        help="aggregate_docs: module source root (default: src/codomyrmex).",
+    )
+    parser.add_argument(
+        "--dest-root",
+        default=None,
+        help="aggregate_docs: destination for aggregated docs (default: the site's docs/modules).",
+    )
 
     args = parser.parse_args()
 
@@ -683,7 +693,7 @@ def main():
     elif action_to_perform == "assess":
         assess_site()
     elif action_to_perform == "aggregate_docs":
-        aggregate_docs()
+        aggregate_docs(source_root=args.source_root, dest_root=args.dest_root)
     elif action_to_perform == "validate_docs":
         is_valid, _errors, _warnings = validate_doc_versions()
         if not is_valid:
