@@ -52,7 +52,10 @@ def test_tool_catalog_is_explicitly_opt_in():
 def test_tool_trust_metadata_matches_shared_destructive_policy():
     assert is_destructive_tool("codomyrmex.deserialize_data") is True
     assert is_destructive_tool("codomyrmex.cache.clear_cache") is True
-    assert is_destructive_tool("codomyrmex.cache.get_stats") is False
+    # Fail-closed policy: only tools in EXPLICIT_SAFE_TOOLS are safe; an
+    # unlisted read-only tool is still treated as restricted.
+    assert is_destructive_tool("codomyrmex.list_modules") is False
+    assert is_destructive_tool("codomyrmex.cache.get_stats") is True
 
     catalog = build_capability_catalog(include_tools=True)
     record = catalog.get("tool:codomyrmex.deserialize_data")

@@ -677,8 +677,12 @@ class TestStatsDClient:
         """Test StatsDClient creation with real client."""
         from codomyrmex.telemetry.metrics import StatsDClient
 
-        client = StatsDClient(host="localhost", port=8125, prefix="test")
-        assert isinstance(client, StatsDClient)
+        with StatsDClient(host="localhost", port=8125, prefix="test") as client:
+            assert isinstance(client, StatsDClient)
+        # Regression: the wrapper had no close(), so every instance leaked
+        # its UDP socket (a ResourceWarning error under filterwarnings=error).
+        assert client.client._sock is None
+        client.close()  # idempotent
 
     @pytest.mark.skipif(metrics.StatsDClient is None, reason="statsd not installed")
     @requires_statsd
@@ -686,8 +690,8 @@ class TestStatsDClient:
         """Test StatsDClient incr — sends real UDP packet."""
         from codomyrmex.telemetry.metrics import StatsDClient
 
-        client = StatsDClient()
-        client.incr("requests", count=5, rate=0.5)
+        with StatsDClient() as client:
+            client.incr("requests", count=5, rate=0.5)
 
     @pytest.mark.skipif(metrics.StatsDClient is None, reason="statsd not installed")
     @requires_statsd
@@ -695,8 +699,8 @@ class TestStatsDClient:
         """Test StatsDClient gauge — sends real UDP packet."""
         from codomyrmex.telemetry.metrics import StatsDClient
 
-        client = StatsDClient()
-        client.gauge("memory", 1024.0, rate=1.0)
+        with StatsDClient() as client:
+            client.gauge("memory", 1024.0, rate=1.0)
 
     @pytest.mark.skipif(metrics.StatsDClient is None, reason="statsd not installed")
     @requires_statsd
@@ -704,8 +708,8 @@ class TestStatsDClient:
         """Test StatsDClient timing — sends real UDP packet."""
         from codomyrmex.telemetry.metrics import StatsDClient
 
-        client = StatsDClient()
-        client.timing("request_time", 150.0)
+        with StatsDClient() as client:
+            client.timing("request_time", 150.0)
 
 
 # ==============================================================================

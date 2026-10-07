@@ -37,6 +37,9 @@ not_in_nav: |
 
 theme:
   name: material
+  # System font stack: no render-blocking request to Google Fonts (faster
+  # first paint, and the docs make no third-party requests).
+  font: false
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default

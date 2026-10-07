@@ -78,10 +78,6 @@ class SimulatedAgent(AgentInterface):
     def test_connection(self) -> bool:
         return True
 
-    def get_capabilities(self):
-        """Return a dictionary of supported capabilities."""
-        return self.capabilities
-
     def supports_capability(self, capability):
         return capability in self.capabilities
 

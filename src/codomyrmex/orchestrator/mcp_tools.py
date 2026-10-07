@@ -5,7 +5,9 @@ callables below.  Import paths are deliberately not treated as capabilities.
 """
 
 import ast
+import math
 import operator
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
@@ -24,6 +26,161 @@ _SAFE_CALLABLES = {
 }
 _MAX_DAG_TASKS = 256
 _MAX_WORKERS = 32
+
+# ── Bounded expression evaluation for ``fn_expr`` tasks ─────────────────
+# SECURITY: AST-whitelisted evaluation of agent-supplied expressions.
+# ``eval()`` is forbidden here even with empty ``__builtins__``, since
+# reflection/attribute tricks enable RCE. Resource bounds below prevent
+# CPU/memory exhaustion from short expressions such as ``9**9**9**9`` or
+# ``'a' * 10**10``.
+_MAX_EXPR_CHARS = 256
+_MAX_INT_BITS = 4096
+_MAX_SEQUENCE_LEN = 100_000
+
+_EXPR_FUNCS: dict[str, Callable[..., object]] = {
+    "len": len,
+    "sum": sum,
+    "min": min,
+    "max": max,
+    "abs": abs,
+    "round": round,
+}
+_BIN_OPS = {
+    ast.Add: operator.add,
+    ast.Sub: operator.sub,
+    ast.Mult: operator.mul,
+    ast.Div: operator.truediv,
+    ast.FloorDiv: operator.floordiv,
+    ast.Mod: operator.mod,
+    ast.Pow: operator.pow,
+}
+_UNARY_OPS = {
+    ast.USub: operator.neg,
+    ast.UAdd: operator.pos,
+    ast.Not: operator.not_,
+}
+_CMP_OPS = {
+    ast.Eq: operator.eq,
+    ast.NotEq: operator.ne,
+    ast.Lt: operator.lt,
+    ast.LtE: operator.le,
+    ast.Gt: operator.gt,
+    ast.GtE: operator.ge,
+    ast.In: lambda a, b: a in b,
+    ast.NotIn: lambda a, b: a not in b,
+}
+
+
+def _compile_safe_expression(expr: object) -> ast.Expression:
+    """Validate and parse an ``fn_expr`` string into an AST."""
+    if not isinstance(expr, str) or len(expr) > _MAX_EXPR_CHARS:
+        raise ValueError(
+            f"fn_expr must be a string of at most {_MAX_EXPR_CHARS} characters"
+        )
+    if "__" in expr:
+        raise ValueError(
+            "Double underscores are not allowed in fn_expr for security reasons."
+        )
+    try:
+        return ast.parse(expr, mode="eval")
+    except SyntaxError as e:
+        raise ValueError(f"Invalid expression syntax: {e}") from e
+
+
+def _check_binop_bounds(op: ast.operator, left: object, right: object) -> None:
+    """Reject arithmetic whose result would exhaust CPU or memory."""
+    if isinstance(op, ast.Pow):
+        if isinstance(left, int) and isinstance(right, int):
+            if right < 0:
+                return  # produces a float; magnitude bounded by float range
+            if right and left not in (0, 1, -1):
+                estimated_bits = right * math.log2(abs(left))
+                if estimated_bits > _MAX_INT_BITS:
+                    raise ValueError(
+                        f"exponentiation result exceeds {_MAX_INT_BITS} bits"
+                    )
+    elif isinstance(op, ast.Mult):
+        for seq, count in ((left, right), (right, left)):
+            if isinstance(seq, (str, list, tuple)) and isinstance(count, int):
+                if len(seq) * max(count, 0) > _MAX_SEQUENCE_LEN:
+                    raise ValueError(
+                        f"sequence repetition exceeds {_MAX_SEQUENCE_LEN} items"
+                    )
+        if isinstance(left, int) and isinstance(right, int):
+            if left.bit_length() + right.bit_length() > _MAX_INT_BITS:
+                raise ValueError(f"multiplication result exceeds {_MAX_INT_BITS} bits")
+
+
+def _safe_eval(node: ast.AST) -> object:
+    """Recursively evaluate only whitelisted AST nodes."""
+    if isinstance(node, ast.Expression):
+        return _safe_eval(node.body)
+    if isinstance(node, ast.Constant):
+        return node.value
+    if isinstance(node, ast.Name):
+        if node.id in _EXPR_FUNCS:
+            return _EXPR_FUNCS[node.id]
+        raise ValueError(f"Unknown variable or function: {node.id}")
+    if isinstance(node, ast.Call):
+        if not (isinstance(node.func, ast.Name) and node.func.id in _EXPR_FUNCS):
+            raise ValueError(f"Unsupported function call: {ast.dump(node.func)}")
+        if node.keywords or any(isinstance(a, ast.Starred) for a in node.args):
+            raise ValueError("Keyword and starred arguments are not supported")
+        args = [_safe_eval(arg) for arg in node.args]
+        return _EXPR_FUNCS[node.func.id](*args)
+    if isinstance(node, ast.List):
+        return [_safe_eval(elt) for elt in node.elts]
+    if isinstance(node, ast.Tuple):
+        return tuple(_safe_eval(elt) for elt in node.elts)
+    if isinstance(node, ast.Dict):
+        if any(k is None for k in node.keys):
+            raise ValueError("Dictionary unpacking is not supported")
+        return {
+            _safe_eval(k): _safe_eval(v)
+            for k, v in zip(node.keys, node.values, strict=True)
+            if k is not None
+        }
+    if isinstance(node, ast.Subscript):
+        if isinstance(node.slice, ast.Slice):
+            raise ValueError("Slicing is not supported")
+        obj = _safe_eval(node.value)
+        key = _safe_eval(node.slice)
+        return obj[key]
+    if isinstance(node, ast.Compare):
+        left = _safe_eval(node.left)
+        for op, cmp_node in zip(node.ops, node.comparators, strict=True):
+            cmp = _CMP_OPS.get(type(op))
+            if cmp is None:
+                raise ValueError(
+                    f"Unsupported comparison operator: {type(op).__name__}"
+                )
+            right = _safe_eval(cmp_node)
+            if not cmp(left, right):
+                return False
+            left = right
+        return True
+    if isinstance(node, ast.BoolOp):
+        is_and = isinstance(node.op, ast.And)
+        result: object = is_and
+        for value_node in node.values:
+            result = _safe_eval(value_node)
+            if bool(result) is not is_and:
+                break
+        return result
+    if isinstance(node, ast.BinOp):
+        bin_op = _BIN_OPS.get(type(node.op))
+        if bin_op is None:
+            raise ValueError(f"Unsupported operator: {type(node.op).__name__}")
+        left = _safe_eval(node.left)
+        right = _safe_eval(node.right)
+        _check_binop_bounds(node.op, left, right)
+        return bin_op(left, right)
+    if isinstance(node, ast.UnaryOp):
+        unary_op = _UNARY_OPS.get(type(node.op))
+        if unary_op is None:
+            raise ValueError(f"Unsupported operator: {type(node.op).__name__}")
+        return unary_op(_safe_eval(node.operand))
+    raise ValueError(f"Unsupported expression component: {type(node).__name__}")
 
 
 @mcp_tool(category="orchestrator")
@@ -159,124 +316,7 @@ def orchestrator_run_dag(
                     )
                 return _SAFE_CALLABLES[fn_name]
             if "fn_expr" in task_dict:
-                expr = task_dict["fn_expr"]
-                if not isinstance(expr, str) or len(expr) > 256:
-                    raise ValueError(
-                        "fn_expr must be a string of at most 256 characters"
-                    )
-                if "__" in expr:
-                    raise ValueError(
-                        "Double underscores are not allowed in fn_expr for security reasons."
-                    )
-
-                # SECURITY: AST-whitelisted evaluation of agent-supplied
-                # expressions. eval() is forbidden here even with empty
-                # __builtins__, since reflection/attribute tricks enable RCE.
-                safe_funcs = {
-                    "len": len,
-                    "sum": sum,
-                    "min": min,
-                    "max": max,
-                    "abs": abs,
-                    "round": round,
-                }
-
-                _BIN_OPS = {
-                    ast.Add: operator.add,
-                    ast.Sub: operator.sub,
-                    ast.Mult: operator.mul,
-                    ast.Div: operator.truediv,
-                    ast.FloorDiv: operator.floordiv,
-                    ast.Mod: operator.mod,
-                    ast.Pow: operator.pow,
-                    ast.USub: operator.neg,
-                    ast.UAdd: operator.pos,
-                }
-                _CMP_OPS = {
-                    ast.Eq: operator.eq,
-                    ast.NotEq: operator.ne,
-                    ast.Lt: operator.lt,
-                    ast.LtE: operator.le,
-                    ast.Gt: operator.gt,
-                    ast.GtE: operator.ge,
-                }
-
-                def _safe_eval(node: ast.AST):
-                    """Recursively evaluate only whitelisted AST nodes."""
-                    if isinstance(node, ast.Expression):
-                        return _safe_eval(node.body)
-                    if isinstance(node, ast.Constant):
-                        return node.value
-                    if isinstance(node, ast.Name):
-                        if node.id in safe_funcs:
-                            return safe_funcs[node.id]
-                        raise ValueError(f"Unknown variable or function: {node.id}")
-                    if isinstance(node, ast.Call):
-                        if (
-                            isinstance(node.func, ast.Name)
-                            and node.func.id in safe_funcs
-                        ):
-                            args = [_safe_eval(arg) for arg in node.args]
-                            return safe_funcs[node.func.id](*args)
-                        raise ValueError(f"Unsupported function call: {ast.dump(node)}")
-                    if isinstance(node, ast.List):
-                        return [_safe_eval(elt) for elt in node.elts]
-                    if isinstance(node, ast.Tuple):
-                        return tuple(_safe_eval(elt) for elt in node.elts)
-                    if isinstance(node, ast.Dict):
-                        return {
-                            _safe_eval(k): _safe_eval(v)
-                            for k, v in zip(node.keys, node.values, strict=False)
-                            if k is not None
-                        }
-                    if isinstance(node, ast.Subscript):
-                        obj = _safe_eval(node.value)
-                        key = _safe_eval(node.slice)
-                        return obj[key]
-                    if isinstance(node, ast.Compare):
-                        left = _safe_eval(node.left)
-                        for op, cmp_node in zip(
-                            node.ops, node.comparators, strict=False
-                        ):
-                            if type(op) not in _CMP_OPS:
-                                raise ValueError(
-                                    f"Unsupported comparison operator: {type(op).__name__}"
-                                )
-                            right = _safe_eval(cmp_node)
-                            if not _CMP_OPS[type(op)](left, right):
-                                return False
-                            left = right
-                        return True
-                    if isinstance(node, ast.BoolOp):
-                        values = (_safe_eval(v) for v in node.values)
-                        if isinstance(node.op, ast.And):
-                            result = True
-                            for value in values:
-                                result = value
-                                if not value:
-                                    break
-                            return result
-                        result = False
-                        for value in values:
-                            result = value
-                            if value:
-                                break
-                        return result
-                    if isinstance(node, ast.BinOp) and type(node.op) in _BIN_OPS:
-                        return _BIN_OPS[type(node.op)](
-                            _safe_eval(node.left), _safe_eval(node.right)
-                        )
-                    if isinstance(node, ast.UnaryOp) and type(node.op) in _BIN_OPS:
-                        return _BIN_OPS[type(node.op)](_safe_eval(node.operand))
-                    raise ValueError(
-                        f"Unsupported expression component: {type(node).__name__}"
-                    )
-
-                try:
-                    tree = ast.parse(expr, mode="eval")
-                except SyntaxError as e:
-                    raise ValueError(f"Invalid expression syntax: {e}") from e
-
+                tree = _compile_safe_expression(task_dict["fn_expr"])
                 return lambda *_a, **_kw: _safe_eval(tree)
             # Default: identity (return args as-is)
             return lambda *a, **kw: {"args": a, "kwargs": kw}

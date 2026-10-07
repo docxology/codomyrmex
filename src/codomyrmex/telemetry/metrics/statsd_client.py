@@ -1,6 +1,9 @@
 """StatsD metrics client."""
 
+from __future__ import annotations
+
 import os
+from typing import Self
 
 import statsd
 
@@ -50,3 +53,15 @@ class StatsDClient:
     def timer(self, name: str, rate: float = 1):
         """Context manager for timing a block of code."""
         return self.client.timer(name, rate)
+
+    def close(self) -> None:
+        """Close the UDP socket. Safe to call more than once."""
+        self.client.close()
+
+    def __enter__(self) -> Self:
+        """Use the client as a context manager that closes its socket."""
+        return self
+
+    def __exit__(self, *_: object) -> None:
+        """Close the socket on context exit."""
+        self.close()

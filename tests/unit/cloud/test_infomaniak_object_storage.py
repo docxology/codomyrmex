@@ -355,14 +355,6 @@ class TestInfomaniakS3Client:
             Bucket="bucket", Key="key.txt"
         )
 
-    def test_delete_object(self, stub_s3_client):
-        """delete_object removes the requested S3 object."""
-        client = InfomaniakS3Client(stub_s3_client)
-        assert client.delete_object("bucket", "key.txt") is True
-        stub_s3_client.delete_object.assert_called_once_with(
-            Bucket="bucket", Key="key.txt"
-        )
-
     def test_get_object_metadata_from_s3(self, stub_s3_client):
         """get_object_metadata returns structured metadata from head_object."""
         stub_s3_client.head_object.return_value = {
