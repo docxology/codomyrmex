@@ -14,6 +14,7 @@ import importlib.util
 import sys
 
 import pytest
+from tests.support.repo_paths import PACKAGE_ROOT
 
 # ---------------------------------------------------------------------------
 # Direct-import helper
@@ -27,7 +28,7 @@ def _load_pagination():
 
     spec = importlib.util.spec_from_file_location(
         name,
-        "src/codomyrmex/api/pagination/__init__.py",
+        PACKAGE_ROOT / "api/pagination/__init__.py",
     )
     mod = importlib.util.module_from_spec(spec)
     sys.modules[name] = mod
@@ -35,27 +36,17 @@ def _load_pagination():
     return mod
 
 
-try:
-    _pg = _load_pagination()
-    PaginationStrategy = _pg.PaginationStrategy
-    SortDirection = _pg.SortDirection
-    PageInfo = _pg.PageInfo
-    PaginatedResponse = _pg.PaginatedResponse
-    PaginationRequest = _pg.PaginationRequest
-    Paginator = _pg.Paginator
-    OffsetPaginator = _pg.OffsetPaginator
-    CursorPaginator = _pg.CursorPaginator
-    KeysetPaginator = _pg.KeysetPaginator
-    create_paginator = _pg.create_paginator
-    _AVAILABLE = True
-except Exception as _exc:
-    _AVAILABLE = False
-    _SKIP_REASON = str(_exc)
-
-pytestmark = pytest.mark.skipif(
-    not _AVAILABLE,
-    reason=f"pagination unavailable: {'' if _AVAILABLE else _SKIP_REASON}",
-)
+_pg = _load_pagination()
+PaginationStrategy = _pg.PaginationStrategy
+SortDirection = _pg.SortDirection
+PageInfo = _pg.PageInfo
+PaginatedResponse = _pg.PaginatedResponse
+PaginationRequest = _pg.PaginationRequest
+Paginator = _pg.Paginator
+OffsetPaginator = _pg.OffsetPaginator
+CursorPaginator = _pg.CursorPaginator
+KeysetPaginator = _pg.KeysetPaginator
+create_paginator = _pg.create_paginator
 
 
 # ---------------------------------------------------------------------------

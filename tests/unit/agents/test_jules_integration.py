@@ -6,29 +6,20 @@ conversion logic is tested with real data structures.
 """
 
 import pytest
+from tests.unit.agents.helpers import JULES_AVAILABLE
 
-try:
-    from tests.unit.agents.helpers import JULES_AVAILABLE
-
-    from codomyrmex.agents.core import (
-        AgentCapabilities,
-        AgentRequest,
-        AgentResponse,
-        BaseAgent,
-    )
-    from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
-    from codomyrmex.agents.jules import (
-        JulesClient,
-        JulesIntegrationAdapter,
-        JulesSwarmDispatcher,
-    )
-
-    _HAS_AGENTS = True
-except ImportError:
-    _HAS_AGENTS = False
-
-if not _HAS_AGENTS:
-    pytest.skip("agents deps not available", allow_module_level=True)
+from codomyrmex.agents.core import (
+    AgentCapabilities,
+    AgentRequest,
+    AgentResponse,
+    BaseAgent,
+)
+from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
+from codomyrmex.agents.jules import (
+    JulesClient,
+    JulesIntegrationAdapter,
+    JulesSwarmDispatcher,
+)
 
 
 class TestJulesClient:

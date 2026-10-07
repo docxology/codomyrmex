@@ -118,20 +118,11 @@ class TestConfigInvariants:
 
 # ── F3: Property-Based Tests (Hypothesis) ────────────────────────
 
-try:
-    from hypothesis import given, settings
-    from hypothesis import strategies as st
-
-    HAS_HYPOTHESIS = True
-except ImportError:
-    HAS_HYPOTHESIS = False
-
-skipif_no_hypothesis = pytest.mark.skipif(
-    not HAS_HYPOTHESIS, reason="hypothesis not installed"
-)
+# hypothesis is a declared dependency of the `test` dependency group.
+from hypothesis import given, settings
+from hypothesis import strategies as st
 
 
-@skipif_no_hypothesis
 class TestPropertyBased:
     """Property-based tests using Hypothesis."""
 

@@ -226,6 +226,8 @@ class PerformanceTestSuite:
 
         process = psutil.Process(os.getpid()) if HAS_PSUTIL else None
 
+        # Reported status is that of the last measured iteration.
+        status = "failed"
         for _ in range(iterations):
             # Measure memory before
             memory_before = (

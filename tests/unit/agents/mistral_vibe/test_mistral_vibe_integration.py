@@ -7,21 +7,12 @@ or API key is not configured, tests are skipped.
 import os
 
 import pytest
+from tests.unit.agents.helpers import VIBE_AVAILABLE
 
-try:
-    from tests.unit.agents.helpers import VIBE_AVAILABLE
-
-    from codomyrmex.agents.mistral_vibe import (
-        MistralVibeClient,
-        MistralVibeIntegrationAdapter,
-    )
-
-    _HAS_AGENTS = True
-except ImportError:
-    _HAS_AGENTS = False
-
-if not _HAS_AGENTS:
-    pytest.skip("agents deps not available", allow_module_level=True)
+from codomyrmex.agents.mistral_vibe import (
+    MistralVibeClient,
+    MistralVibeIntegrationAdapter,
+)
 
 # Skip entire module if vibe CLI is not properly configured
 pytestmark = pytest.mark.skipif(

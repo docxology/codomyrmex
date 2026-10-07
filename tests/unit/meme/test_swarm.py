@@ -365,6 +365,5 @@ class TestSwarmEngine:
     def test_multiple_steps_do_not_crash(self) -> None:
         """Running multiple simulation steps does not raise errors."""
         engine = SwarmEngine(num_agents=10)
-        for _ in range(5):
-            state = engine.step()
-        assert isinstance(state, SwarmState)
+        states = [engine.step() for _ in range(5)]
+        assert isinstance(states[-1], SwarmState)

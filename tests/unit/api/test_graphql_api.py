@@ -9,6 +9,7 @@ import importlib.util
 import sys
 
 import pytest
+from tests.support.repo_paths import PACKAGE_ROOT
 
 # ---------------------------------------------------------------------------
 # Direct-import helper
@@ -22,7 +23,7 @@ def _load_graphql_api():
 
     spec = importlib.util.spec_from_file_location(
         name,
-        "src/codomyrmex/api/standardization/graphql_api.py",
+        PACKAGE_ROOT / "api/standardization/graphql_api.py",
     )
     mod = importlib.util.module_from_spec(spec)
     sys.modules[name] = mod
@@ -30,30 +31,20 @@ def _load_graphql_api():
     return mod
 
 
-try:
-    _gql = _load_graphql_api()
-    GraphQLType = _gql.GraphQLType
-    GraphQLField = _gql.GraphQLField
-    GraphQLObjectType = _gql.GraphQLObjectType
-    GraphQLSchema = _gql.GraphQLSchema
-    GraphQLResolver = _gql.GraphQLResolver
-    GraphQLMutation = _gql.GraphQLMutation
-    GraphQLQuery = _gql.GraphQLQuery
-    GraphQLAPI = _gql.GraphQLAPI
-    resolver = _gql.resolver
-    mutation = _gql.mutation
-    create_schema = _gql.create_schema
-    create_object_type = _gql.create_object_type
-    create_field = _gql.create_field
-    _AVAILABLE = True
-except Exception as _exc:
-    _AVAILABLE = False
-    _SKIP_REASON = str(_exc)
-
-pytestmark = pytest.mark.skipif(
-    not _AVAILABLE,
-    reason=f"graphql_api unavailable: {'' if _AVAILABLE else _SKIP_REASON}",
-)
+_gql = _load_graphql_api()
+GraphQLType = _gql.GraphQLType
+GraphQLField = _gql.GraphQLField
+GraphQLObjectType = _gql.GraphQLObjectType
+GraphQLSchema = _gql.GraphQLSchema
+GraphQLResolver = _gql.GraphQLResolver
+GraphQLMutation = _gql.GraphQLMutation
+GraphQLQuery = _gql.GraphQLQuery
+GraphQLAPI = _gql.GraphQLAPI
+resolver = _gql.resolver
+mutation = _gql.mutation
+create_schema = _gql.create_schema
+create_object_type = _gql.create_object_type
+create_field = _gql.create_field
 
 
 # ---------------------------------------------------------------------------

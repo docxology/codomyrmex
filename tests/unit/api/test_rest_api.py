@@ -13,6 +13,7 @@ import json
 import sys
 
 import pytest
+from tests.support.repo_paths import PACKAGE_ROOT
 
 # ---------------------------------------------------------------------------
 # Direct-import helper — load rest_api.py without triggering parent __init__
@@ -27,7 +28,7 @@ def _load_rest_api():
 
     spec = importlib.util.spec_from_file_location(
         name,
-        "src/codomyrmex/api/standardization/rest_api.py",
+        PACKAGE_ROOT / "api/standardization/rest_api.py",
     )
     mod = importlib.util.module_from_spec(spec)
     sys.modules[name] = mod
@@ -35,26 +36,16 @@ def _load_rest_api():
     return mod
 
 
-try:
-    _rest_api_mod = _load_rest_api()
-    HTTPMethod = _rest_api_mod.HTTPMethod
-    HTTPStatus = _rest_api_mod.HTTPStatus
-    APIRequest = _rest_api_mod.APIRequest
-    APIResponse = _rest_api_mod.APIResponse
-    APIEndpoint = _rest_api_mod.APIEndpoint
-    APIRouter = _rest_api_mod.APIRouter
-    RESTAPI = _rest_api_mod.RESTAPI
-    create_api = _rest_api_mod.create_api
-    create_router = _rest_api_mod.create_router
-    _AVAILABLE = True
-except Exception as _exc:
-    _AVAILABLE = False
-    _SKIP_REASON = str(_exc)
-
-pytestmark = pytest.mark.skipif(
-    not _AVAILABLE,
-    reason=f"rest_api unavailable: {'' if _AVAILABLE else _SKIP_REASON}",
-)
+_rest_api_mod = _load_rest_api()
+HTTPMethod = _rest_api_mod.HTTPMethod
+HTTPStatus = _rest_api_mod.HTTPStatus
+APIRequest = _rest_api_mod.APIRequest
+APIResponse = _rest_api_mod.APIResponse
+APIEndpoint = _rest_api_mod.APIEndpoint
+APIRouter = _rest_api_mod.APIRouter
+RESTAPI = _rest_api_mod.RESTAPI
+create_api = _rest_api_mod.create_api
+create_router = _rest_api_mod.create_router
 
 
 # ---------------------------------------------------------------------------

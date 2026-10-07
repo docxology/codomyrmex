@@ -15,11 +15,10 @@ if not hasattr(signal, "SIGALRM") or not hasattr(signal, "alarm"):
 
 # Guard against hanging imports (google.genai init blocks in sandbox)
 _AI_CODE_HELPERS_AVAILABLE = False
+_old_handler = signal.getsignal(signal.SIGALRM)
 try:
     # set a 5-second alarm to abort if import hangs
-    _old_handler = signal.signal(
-        signal.SIGALRM, lambda *_: (_ for _ in ()).throw(TimeoutError())
-    )
+    signal.signal(signal.SIGALRM, lambda *_: (_ for _ in ()).throw(TimeoutError()))
     signal.alarm(5)
     from codomyrmex.agents.ai_code_editing import ai_code_helpers
 

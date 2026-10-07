@@ -26,6 +26,7 @@ def docker_client():
     docker_path = shutil.which("docker")
     if docker_path is None:
         pytest.skip("Docker CLI is not available")
+    client = None
     try:
         probe = subprocess.run(
             [docker_path, "info", "--format", "{{.ServerVersion}}"],
@@ -38,7 +39,7 @@ def docker_client():
         client = docker.from_env(version=os.environ.get("DOCKER_API_VERSION", "1.41"))
         client.ping()
     except (OSError, subprocess.TimeoutExpired, docker_errors.DockerException) as exc:
-        if "client" in locals():
+        if client is not None:
             client.close()
         pytest.skip(f"Docker daemon unavailable: {exc}")
     try:

@@ -6,26 +6,16 @@ conversion logic is tested with real data structures.
 """
 
 import pytest
+from tests.unit.agents.helpers import PAPERCLIPAI_AVAILABLE
 
-try:
-    from tests.unit.agents.helpers import PAPERCLIPAI_AVAILABLE
-
-    from codomyrmex.agents.core import AgentCapabilities, AgentRequest, AgentResponse
-    from codomyrmex.agents.core.exceptions import PaperclipError
-    from codomyrmex.agents.generic import AgentOrchestrator
-    from codomyrmex.agents.paperclip import (
-        PaperclipAPIClient,
-        PaperclipClient,
-        PaperclipIntegrationAdapter,
-    )
-
-    _HAS_AGENTS = True
-except ImportError:
-    _HAS_AGENTS = False
-
-if not _HAS_AGENTS:
-    pytest.skip("agents deps not available", allow_module_level=True)
-
+from codomyrmex.agents.core import AgentCapabilities, AgentRequest, AgentResponse
+from codomyrmex.agents.core.exceptions import PaperclipError
+from codomyrmex.agents.generic import AgentOrchestrator
+from codomyrmex.agents.paperclip import (
+    PaperclipAPIClient,
+    PaperclipClient,
+    PaperclipIntegrationAdapter,
+)
 
 # ------------------------------------------------------------------ #
 # PaperclipClient (CLI)

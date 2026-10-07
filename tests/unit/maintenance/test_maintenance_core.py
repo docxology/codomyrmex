@@ -15,46 +15,27 @@ import time
 
 import pytest
 
-# ---------------------------------------------------------------------------
-# Module-level import guards
-# ---------------------------------------------------------------------------
-
-try:
-    from codomyrmex.maintenance.health.health_check import (
-        AggregateHealthReport,
-        HealthCheck,
-        HealthChecker,
-        HealthCheckResult,
-        HealthStatus,
-    )
-
-    HEALTH_CHECK_AVAILABLE = True
-except ImportError:
-    HEALTH_CHECK_AVAILABLE = False
-
-try:
-    from codomyrmex.maintenance.health.scheduler import (
-        MaintenanceScheduler,
-        MaintenanceTask,
-        ScheduleConfig,
-        TaskPriority,
-        TaskResult,
-        TaskStatus,
-    )
-
-    SCHEDULER_AVAILABLE = True
-except ImportError:
-    SCHEDULER_AVAILABLE = False
-
+from codomyrmex.maintenance.health.health_check import (
+    AggregateHealthReport,
+    HealthCheck,
+    HealthChecker,
+    HealthCheckResult,
+    HealthStatus,
+)
+from codomyrmex.maintenance.health.scheduler import (
+    MaintenanceScheduler,
+    MaintenanceTask,
+    ScheduleConfig,
+    TaskPriority,
+    TaskResult,
+    TaskStatus,
+)
 
 # ---------------------------------------------------------------------------
 # HealthStatus enum tests
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(
-    not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable"
-)
 class TestHealthStatus:
     """Tests for HealthStatus enum values."""
 
@@ -83,9 +64,6 @@ class TestHealthStatus:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(
-    not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable"
-)
 class TestHealthCheckResult:
     """Tests for HealthCheckResult dataclass."""
 
@@ -132,9 +110,6 @@ class TestHealthCheckResult:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(
-    not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable"
-)
 class TestHealthCheckDataclass:
     """Tests for HealthCheck dataclass (the registration container)."""
 
@@ -185,9 +160,6 @@ class TestHealthCheckDataclass:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(
-    not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable"
-)
 class TestAggregateHealthReport:
     """Tests for AggregateHealthReport dataclass."""
 
@@ -215,9 +187,6 @@ class TestAggregateHealthReport:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(
-    not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable"
-)
 class TestHealthCheckerRegistration:
     """Tests for HealthChecker.register, unregister, check_count."""
 
@@ -291,9 +260,6 @@ class TestHealthCheckerRegistration:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(
-    not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable"
-)
 class TestHealthCheckerRun:
     """Tests for HealthChecker.run() with various check functions."""
 
@@ -426,9 +392,6 @@ class TestHealthCheckerRun:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(
-    not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable"
-)
 class TestHealthCheckerRunAll:
     """Tests for HealthChecker.run_all() aggregation logic."""
 
@@ -594,9 +557,6 @@ class TestHealthCheckerRunAll:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(
-    not HEALTH_CHECK_AVAILABLE, reason="health_check module not importable"
-)
 class TestHealthCheckerSummaryText:
     """Tests for HealthChecker.summary_text()."""
 
@@ -672,7 +632,6 @@ class TestHealthCheckerSummaryText:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not SCHEDULER_AVAILABLE, reason="scheduler module not importable")
 class TestTaskEnums:
     """Tests for TaskPriority and TaskStatus enum values."""
 
@@ -715,7 +674,6 @@ class TestTaskEnums:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not SCHEDULER_AVAILABLE, reason="scheduler module not importable")
 class TestScheduleConfig:
     """Tests for ScheduleConfig dataclass defaults and construction."""
 
@@ -757,7 +715,6 @@ class TestScheduleConfig:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not SCHEDULER_AVAILABLE, reason="scheduler module not importable")
 class TestTaskResult:
     """Tests for TaskResult dataclass."""
 
@@ -814,7 +771,6 @@ class TestTaskResult:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not SCHEDULER_AVAILABLE, reason="scheduler module not importable")
 class TestMaintenanceTask:
     """Tests for MaintenanceTask dataclass."""
 
@@ -881,7 +837,6 @@ class TestMaintenanceTask:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not SCHEDULER_AVAILABLE, reason="scheduler module not importable")
 class TestMaintenanceSchedulerRegistration:
     """Tests for MaintenanceScheduler.register, unregister, get_task."""
 
@@ -939,7 +894,6 @@ class TestMaintenanceSchedulerRegistration:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not SCHEDULER_AVAILABLE, reason="scheduler module not importable")
 class TestMaintenanceSchedulerListTasks:
     """Tests for MaintenanceScheduler.list_tasks() priority ordering."""
 
@@ -1004,7 +958,6 @@ class TestMaintenanceSchedulerListTasks:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not SCHEDULER_AVAILABLE, reason="scheduler module not importable")
 class TestMaintenanceSchedulerGetDueTasks:
     """Tests for MaintenanceScheduler.get_due_tasks()."""
 
@@ -1102,7 +1055,6 @@ class TestMaintenanceSchedulerGetDueTasks:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not SCHEDULER_AVAILABLE, reason="scheduler module not importable")
 class TestMaintenanceSchedulerExecuteSuccess:
     """Tests for MaintenanceScheduler.execute() with successful tasks."""
 
@@ -1195,7 +1147,6 @@ class TestMaintenanceSchedulerExecuteSuccess:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not SCHEDULER_AVAILABLE, reason="scheduler module not importable")
 class TestMaintenanceSchedulerExecuteFailure:
     """Tests for MaintenanceScheduler.execute() with failing tasks."""
 
@@ -1278,7 +1229,6 @@ class TestMaintenanceSchedulerExecuteFailure:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not SCHEDULER_AVAILABLE, reason="scheduler module not importable")
 class TestMaintenanceSchedulerHistory:
     """Tests for MaintenanceScheduler.history() and clear_history()."""
 

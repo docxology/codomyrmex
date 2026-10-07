@@ -46,22 +46,16 @@ try:
 except ImportError:
     PERFORMANCE_LOGGING_AVAILABLE = False
 
-try:
-    from codomyrmex.logging_monitoring import (
-        get_logger,
-        setup_logging,
-    )
-
-    LOGGING_AVAILABLE = True
-except ImportError:
-    LOGGING_AVAILABLE = False
+from codomyrmex.logging_monitoring import (
+    get_logger,
+    setup_logging,
+)
 
 # set up logging for tests
-if LOGGING_AVAILABLE and callable(setup_logging):
-    with contextlib.suppress(Exception):
-        setup_logging()
+with contextlib.suppress(Exception):
+    setup_logging()
 
-logger = get_logger(__name__) if LOGGING_AVAILABLE else None
+logger = get_logger(__name__)
 
 
 class TestVisualizationPerformanceWorkflow:

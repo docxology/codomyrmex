@@ -8,20 +8,11 @@ conversion logic is tested with real data structures.
 from pathlib import Path
 
 import pytest
+from tests.unit.agents.helpers import OPENCODE_AVAILABLE
 
-try:
-    from tests.unit.agents.helpers import OPENCODE_AVAILABLE
-
-    from codomyrmex.agents.core import AgentCapabilities, AgentRequest, AgentResponse
-    from codomyrmex.agents.generic import AgentOrchestrator
-    from codomyrmex.agents.opencode import OpenCodeClient, OpenCodeIntegrationAdapter
-
-    _HAS_AGENTS = True
-except ImportError:
-    _HAS_AGENTS = False
-
-if not _HAS_AGENTS:
-    pytest.skip("agents deps not available", allow_module_level=True)
+from codomyrmex.agents.core import AgentCapabilities, AgentRequest, AgentResponse
+from codomyrmex.agents.generic import AgentOrchestrator
+from codomyrmex.agents.opencode import OpenCodeClient, OpenCodeIntegrationAdapter
 
 
 class TestOpenCodeClient:
