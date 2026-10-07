@@ -250,11 +250,15 @@ The `workflows` array specifies which workflows are available for projects creat
 }
 ```
 
-These workflows can be executed via:
+Templates are not loaded, so this list is informational. A workflow registered with the engine's `WorkflowManager` runs for a project with:
 
 ```python
-project_manager.execute_project_workflow(project_name, "ai-analysis")
+from codomyrmex.logistics.orchestration.project import get_orchestration_engine
+
+result = get_orchestration_engine().execute_project_workflow(project_name, "ai-analysis")
 ```
+
+The run is recorded in the project's `metrics` (`workflow_executions`, `last_workflow`, `last_workflow_success`, ...).
 
 ## Module Dependencies
 

@@ -30,8 +30,10 @@ from codomyrmex.logistics.orchestration.project import ProjectType, get_orchestr
 
 engine = get_orchestration_engine()
 
-# Create a project and run a task for it
+# Create a project and run a task for it. Tasks call codomyrmex.<module>.<action>
+# unless an implementation is registered for the module/action pair.
 project = engine.project_manager.create_project("demo", ProjectType.CUSTOM)
+engine.task_orchestrator.register_action("demo", "echo", lambda message: message)
 result = engine.execute_task(
     {"name": "greet", "module": "demo", "action": "echo", "parameters": {"message": "hi"}}
 )

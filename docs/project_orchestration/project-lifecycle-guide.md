@@ -6,7 +6,7 @@ Complete guide for managing projects from creation through execution, status tra
 
 Projects in Codomyrmex represent organized work units with defined structure and status. The API lives in `codomyrmex.logistics.orchestration.project` (formerly `codomyrmex.project_orchestration`). `ProjectManager` currently provides `create_project`, `get_project`, `list_projects`, and `update_project_status`; projects are tracked in memory for the lifetime of the manager.
 
-> **Not yet implemented**: template-driven creation (`template_name`), project-bound workflows, milestones and metrics, archiving, and deletion. The JSON files described in the [Project Template Schema](./project-template-schema.md) are reference definitions only. `OrchestrationEngine.execute_project_workflow()` and `create_project_from_workflow()` call `ProjectManager` methods that do not exist yet and return `{"success": False, ...}`.
+> **Not yet implemented**: template-driven creation (`template_name`), archiving, and deletion. The JSON files described in the [Project Template Schema](./project-template-schema.md) are reference definitions only. Project-bound workflows run through `OrchestrationEngine.execute_project_workflow()`, which records each run in `Project.metrics`, and `create_project_from_workflow()`, which creates the project, runs the workflow and records a milestone on success; `ProjectManager` also provides `update_project_metrics()`, `add_project_milestone()` and `get_projects_summary()`.
 
 ## Step 1: Choose a Project Type
 

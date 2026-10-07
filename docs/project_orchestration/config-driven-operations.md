@@ -38,7 +38,7 @@ Create a JSON file in `config/workflows/production/` (relative to the working di
   "steps": [
     {
       "name": "step1",
-      "module": "static_analysis",
+      "module": "coding.static_analysis",
       "action": "analyze_code_quality",
       "parameters": {
         "path": "."
@@ -63,7 +63,7 @@ Create a JSON file in `config/workflows/production/` (relative to the working di
 }
 ```
 
-`{{step1.output}}` placeholders are passed through unchanged for now; see [Parameter Substitution](./workflow-configuration-schema.md#parameter-substitution).
+Each step calls `codomyrmex.<module>.<action>(**parameters)` (here `codomyrmex.coding.static_analysis.analyze_code_quality(path=".")`), unless an implementation is registered with `TaskOrchestrator.register_action`. `{{step1.output}}` placeholders are passed through unchanged for now, and `step2` above fails because `create_bar_chart` takes `categories` and `values`, not `data`; see [Parameter Substitution](./workflow-configuration-schema.md#parameter-substitution).
 
 ### Loading Workflows
 
@@ -82,8 +82,10 @@ print(f"Loaded workflows: {workflows}")
 
 ### Executing Configured Workflows
 
+`execute_workflow` runs the steps in dependency order on the shared task orchestrator and returns once every step has finished. The returned execution is `completed` when every required step completed and `failed` otherwise; a step whose dependency failed is not run. Missing dependencies or cycles raise `ValueError` before any step runs.
+
 ```python
-from codomyrmex.logistics.orchestration.project import get_task_orchestrator, get_workflow_manager
+from codomyrmex.logistics.orchestration.project import get_workflow_manager
 
 manager = get_workflow_manager()
 
@@ -91,11 +93,10 @@ manager = get_workflow_manager()
 execution = manager.execute_workflow("my_custom_workflow", custom_param="value")
 print(f"{execution.workflow_name}: {execution.status.value} ({execution.execution_id})")
 
-# Steps run as tasks on the shared task orchestrator
-orchestrator = get_task_orchestrator()
-orchestrator.wait_for_completion(timeout=600)
-for task in orchestrator.list_tasks():
-    print(f"{task.name}: {task.status.value}")
+for step_name, step in execution.step_results.items():
+    print(f"{step_name}: {step['status']} {step['error'] or ''}")
+if execution.error:
+    print(f"Failed steps: {execution.error}")
 ```
 
 ## Project Template Configuration
@@ -388,6 +389,8 @@ Workflow JSON files that fail to load are skipped with a warning in the log; the
 }
 ```
 
+The `data_visualization` actions named here (`load_dataset`, `analyze_dataset`, `create_chart`) are placeholders: register implementations with `TaskOrchestrator.register_action("data_visualization", ...)` or replace them with existing functions, otherwise the first step fails and the workflow reports `failed`.
+
 ### 2. Create Project Template (reference only)
 
 `src/codomyrmex/logistics/orchestration/project/templates/data_project.json`:
@@ -409,7 +412,6 @@ Workflow JSON files that fail to load are skipped with a warning in the log; the
 from codomyrmex.logistics.orchestration.project import (
     ProjectType,
     get_project_manager,
-    get_task_orchestrator,
     get_workflow_manager,
 )
 
@@ -420,7 +422,7 @@ project = pm.create_project(
     type=ProjectType.DATA_PIPELINE
 )
 
-# Execute workflow (automatically loaded from config)
+# Execute workflow (automatically loaded from config); blocks until every step finished
 manager = get_workflow_manager()
 execution = manager.execute_workflow(
     "data_analysis",
@@ -428,8 +430,10 @@ execution = manager.execute_workflow(
     output_path="./output/result.png"
 )
 
-if get_task_orchestrator().wait_for_completion(timeout=600):
+if execution.success:
     print(f"Analysis completed ({execution.execution_id})")
+else:
+    print(f"Analysis failed: {execution.error}")
 ```
 
 ## Best Practices
