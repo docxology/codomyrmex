@@ -137,6 +137,7 @@ class TestSQLValidator:
         """Regression: keywords glued to ';' or '(' evaded a whitespace split()."""
         valid, error = SQLValidator.validate(sql)
         assert valid is False
+        assert error is not None
         assert "Dangerous SQL keyword" in error
 
     @pytest.mark.unit
