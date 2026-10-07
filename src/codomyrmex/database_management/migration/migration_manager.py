@@ -12,7 +12,7 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring import get_logger
@@ -429,6 +429,14 @@ class MigrationManager:
         if self._connector:
             self._connector.disconnect()
             self._connector = None
+
+    def __enter__(self) -> Self:
+        """Use the manager as a context manager that closes its connection."""
+        return self
+
+    def __exit__(self, *_: object) -> None:
+        """Close the database connection."""
+        self.close()
 
 
 def run_migrations(

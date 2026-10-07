@@ -36,7 +36,7 @@ class TestConnectionManagement:
             port=5432,
             database="test_db",
             username="user",
-            password="pass",
+            password="pass",  # pragma: allowlist secret
         )
 
         assert connection.name == "test_db"
@@ -45,7 +45,7 @@ class TestConnectionManagement:
         assert connection.port == 5432
         assert connection.database == "test_db"
         assert connection.username == "user"
-        assert connection.password == "pass"
+        assert connection.password == "pass"  # pragma: allowlist secret
 
     def test_database_connection_defaults(self):
         """Test DatabaseConnection default values."""
@@ -98,10 +98,12 @@ class TestConnectionManagement:
             port=5432,
             database="test_db",
             username="user",
-            password="pass",
+            password="pass",  # pragma: allowlist secret
         )
 
-        expected = "postgresql://user:pass@localhost:5432/test_db"
+        expected = (
+            "postgresql://user:pass@localhost:5432/test_db"  # pragma: allowlist secret
+        )
         assert connection.get_connection_string() == expected
 
     def test_connection_string_mysql(self):
@@ -113,10 +115,12 @@ class TestConnectionManagement:
             port=3306,
             database="test_db",
             username="user",
-            password="pass",
+            password="pass",  # pragma: allowlist secret
         )
 
-        expected = "mysql://user:pass@localhost:3306/test_db"
+        expected = (
+            "mysql://user:pass@localhost:3306/test_db"  # pragma: allowlist secret
+        )
         assert connection.get_connection_string() == expected
 
     def test_custom_connection_string(self):
@@ -177,79 +181,75 @@ class TestConnectionPooling:
 
     def test_database_manager_multiple_connections(self, tmp_path):
         """Test managing multiple database connections."""
-        manager = DatabaseManager()
+        with DatabaseManager() as manager:
+            db1_path = str(tmp_path / "db1.db")
+            db2_path = str(tmp_path / "db2.db")
 
-        db1_path = str(tmp_path / "db1.db")
-        db2_path = str(tmp_path / "db2.db")
+            conn1 = DatabaseConnection(
+                name="db1", db_type=DatabaseType.SQLITE, database=db1_path
+            )
+            conn2 = DatabaseConnection(
+                name="db2", db_type=DatabaseType.SQLITE, database=db2_path
+            )
 
-        conn1 = DatabaseConnection(
-            name="db1", db_type=DatabaseType.SQLITE, database=db1_path
-        )
-        conn2 = DatabaseConnection(
-            name="db2", db_type=DatabaseType.SQLITE, database=db2_path
-        )
+            manager.add_connection(conn1)
+            manager.add_connection(conn2)
 
-        manager.add_connection(conn1)
-        manager.add_connection(conn2)
-
-        assert len(manager.list_connections()) == 2
+            assert len(manager.list_connections()) == 2
 
     def test_connect_all_and_disconnect_all(self, tmp_path):
         """Test connect_all and disconnect_all methods."""
-        manager = DatabaseManager()
+        with DatabaseManager() as manager:
+            db1_path = str(tmp_path / "db1.db")
+            db2_path = str(tmp_path / "db2.db")
 
-        db1_path = str(tmp_path / "db1.db")
-        db2_path = str(tmp_path / "db2.db")
+            conn1 = DatabaseConnection(
+                name="db1", db_type=DatabaseType.SQLITE, database=db1_path
+            )
+            conn2 = DatabaseConnection(
+                name="db2", db_type=DatabaseType.SQLITE, database=db2_path
+            )
 
-        conn1 = DatabaseConnection(
-            name="db1", db_type=DatabaseType.SQLITE, database=db1_path
-        )
-        conn2 = DatabaseConnection(
-            name="db2", db_type=DatabaseType.SQLITE, database=db2_path
-        )
+            manager.add_connection(conn1)
+            manager.add_connection(conn2)
 
-        manager.add_connection(conn1)
-        manager.add_connection(conn2)
+            manager.connect_all()
+            assert conn1._connection is not None
+            assert conn2._connection is not None
 
-        manager.connect_all()
-        assert conn1._connection is not None
-        assert conn2._connection is not None
-
-        manager.disconnect_all()
-        assert conn1._connection is None
-        assert conn2._connection is None
+            manager.disconnect_all()
+            assert conn1._connection is None
+            assert conn2._connection is None
 
     def test_health_check_all_connections(self, tmp_path):
         """Test health check across all connections."""
-        manager = DatabaseManager()
+        with DatabaseManager() as manager:
+            db_path = str(tmp_path / "test.db")
+            conn = DatabaseConnection(
+                name="test", db_type=DatabaseType.SQLITE, database=db_path
+            )
+            conn.connect()
+            manager.add_connection(conn)
 
-        db_path = str(tmp_path / "test.db")
-        conn = DatabaseConnection(
-            name="test", db_type=DatabaseType.SQLITE, database=db_path
-        )
-        conn.connect()
-        manager.add_connection(conn)
+            health = manager.health_check_all()
 
-        health = manager.health_check_all()
-
-        assert "test" in health
-        assert health["test"]["status"] == "healthy"
+            assert "test" in health
+            assert health["test"]["status"] == "healthy"
 
     def test_database_stats(self, tmp_path):
         """Test getting database statistics."""
-        manager = DatabaseManager()
+        with DatabaseManager() as manager:
+            db_path = str(tmp_path / "test.db")
+            conn = DatabaseConnection(
+                name="test", db_type=DatabaseType.SQLITE, database=db_path
+            )
+            conn.connect()
+            manager.add_connection(conn)
 
-        db_path = str(tmp_path / "test.db")
-        conn = DatabaseConnection(
-            name="test", db_type=DatabaseType.SQLITE, database=db_path
-        )
-        conn.connect()
-        manager.add_connection(conn)
+            stats = manager.get_database_stats()
 
-        stats = manager.get_database_stats()
-
-        assert stats["total_connections"] == 1
-        assert stats["active_connections"] == 1
+            assert stats["total_connections"] == 1
+            assert stats["active_connections"] == 1
 
     def test_connection_pool_size_config(self):
         """Test connection pool size configuration."""
@@ -360,5 +360,5 @@ class TestDatabaseManager:
     def test_db_manager_init(self, tmp_path):
         from codomyrmex.database_management.db_manager import DatabaseManager
 
-        mgr = DatabaseManager()
-        assert mgr is not None
+        with DatabaseManager() as mgr:
+            assert mgr is not None

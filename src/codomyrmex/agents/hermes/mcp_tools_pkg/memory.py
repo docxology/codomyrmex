@@ -2,10 +2,15 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from codomyrmex.agents.hermes.mcp_tools_pkg._client import _get_client
 from codomyrmex.model_context_protocol.decorators import mcp_tool
+
+# ``[[Concept]]``, ``[[Concept|alias]]`` and ``[[Concept#heading]]`` all link
+# to ``Concept``. Compiled once at import rather than on every graph build.
+WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
 
 
 @mcp_tool(
@@ -94,15 +99,12 @@ def hermes_build_memory_graph(
         and session_count.
     """
     try:
-        import re
         from collections import Counter, defaultdict
 
         from codomyrmex.agents.hermes.hermes_paths import resolve_hermes_session_db
         from codomyrmex.agents.hermes.session import SQLiteSessionStore
 
         db_path = resolve_hermes_session_db()
-
-        WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
 
         concept_sessions: dict[str, set[str]] = defaultdict(set)
         edge_weights: Counter[tuple[str, str]] = Counter()

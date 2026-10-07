@@ -11,26 +11,39 @@ from codomyrmex.languages.base import BaseLanguageManager
 
 logger = logging.getLogger(__name__)
 _TIMEOUT_FAST = 10  # seconds for version checks
+# The first g++/clang++ call on a fresh macOS runner goes through xcrun and
+# can take well over 10 s; a generous ceiling costs nothing when it is fast.
+_TIMEOUT_PROBE = 60
 _TIMEOUT_SLOW = 300  # seconds for script/build execution
 
 
 class CppManager(BaseLanguageManager):
     """Manager for the C++ language toolchain."""
 
-    def is_installed(self) -> bool:
-        """Check if g++ or clang++ is installed."""
-        for cmd in ["g++", "clang++"]:
+    def _compiler(self) -> str | None:
+        """Return the first working compiler (``g++`` then ``clang++``).
+
+        A compiler counts only if ``--version`` exits 0 within the probe
+        timeout. Missing binaries, non-zero exits (macOS ships ``g++`` shims
+        that fail without the Command Line Tools) and timeouts all mean "not
+        this one" instead of escaping as exceptions.
+        """
+        for cmd in ("g++", "clang++"):
             try:
                 subprocess.run(
                     [cmd, "--version"],
                     check=True,
                     capture_output=True,
-                    timeout=10,
+                    timeout=_TIMEOUT_PROBE,
                 )
-                return True
-            except FileNotFoundError:
+            except (FileNotFoundError, subprocess.SubprocessError):
                 continue
-        return False
+            return cmd
+        return None
+
+    def is_installed(self) -> bool:
+        """Check if g++ or clang++ is installed and runs."""
+        return self._compiler() is not None
 
     def install_instructions(self) -> str:
         """Return markdown instructions for installing C++ compiler."""
@@ -57,25 +70,9 @@ class CppManager(BaseLanguageManager):
 
     def use_script(self, script_content: str, dir_path: str | None = None) -> str:
         """Write, compile and execute a C++ file."""
-        cmd = "g++"
-        try:
-            subprocess.run(
-                ["g++", "--version"],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-                timeout=10,
-            )
-        except FileNotFoundError:
-            try:
-                subprocess.run(
-                    ["clang++", "--version"],
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                    timeout=10,
-                )
-                cmd = "clang++"
-            except FileNotFoundError:
-                return "Error: Neither g++ nor clang++ found."
+        cmd = self._compiler()
+        if cmd is None:
+            return "Error: Neither g++ nor clang++ found."
 
         if dir_path is not None:
             os.makedirs(dir_path, exist_ok=True)

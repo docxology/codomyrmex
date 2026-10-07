@@ -7,7 +7,7 @@ description: Use when needing to run GitNexus CLI commands to analyze/index a re
 Crossover workflow from the `gitnexus` Claude Code skill ecosystem. GitNexus builds and queries an intelligent codebase knowledge graph.
 
 Read the full CLI skill:
-`view_file /Users/mini/Documents/GitHub/codomyrmex/.claude/skills/gitnexus/gitnexus-cli/SKILL.md`
+`.claude/skills/gitnexus/gitnexus-cli/SKILL.md` (repository-relative)
 
 ## 1. Local CLI Commands
 
