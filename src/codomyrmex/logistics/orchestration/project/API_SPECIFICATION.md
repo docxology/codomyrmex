@@ -795,7 +795,7 @@ Raised when project operations fail.
 {
   "max_workers": 4,
   "workflows_dir": "./workflows",
-  "projects_dir": "./projects", 
+  "projects_dir": "./projects",
   "templates_dir": "./templates",
   "resource_config": "./resources.json",
   "performance_monitoring": true,
