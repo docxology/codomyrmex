@@ -36,7 +36,7 @@ class TestConnectionManagement:
             port=5432,
             database="test_db",
             username="user",
-            password="pass",
+            password="pass",  # pragma: allowlist secret
         )
 
         assert connection.name == "test_db"
@@ -45,7 +45,7 @@ class TestConnectionManagement:
         assert connection.port == 5432
         assert connection.database == "test_db"
         assert connection.username == "user"
-        assert connection.password == "pass"
+        assert connection.password == "pass"  # pragma: allowlist secret
 
     def test_database_connection_defaults(self):
         """Test DatabaseConnection default values."""
@@ -98,10 +98,12 @@ class TestConnectionManagement:
             port=5432,
             database="test_db",
             username="user",
-            password="pass",
+            password="pass",  # pragma: allowlist secret
         )
 
-        expected = "postgresql://user:pass@localhost:5432/test_db"
+        expected = (
+            "postgresql://user:pass@localhost:5432/test_db"  # pragma: allowlist secret
+        )
         assert connection.get_connection_string() == expected
 
     def test_connection_string_mysql(self):
@@ -113,10 +115,12 @@ class TestConnectionManagement:
             port=3306,
             database="test_db",
             username="user",
-            password="pass",
+            password="pass",  # pragma: allowlist secret
         )
 
-        expected = "mysql://user:pass@localhost:3306/test_db"
+        expected = (
+            "mysql://user:pass@localhost:3306/test_db"  # pragma: allowlist secret
+        )
         assert connection.get_connection_string() == expected
 
     def test_custom_connection_string(self):

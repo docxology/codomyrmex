@@ -10,7 +10,7 @@ This API specification documents the programmatic interfaces for the Database Ma
 
 - **Description**: Create and return a `DatabaseManager` instance for database administration. If a `database_url` is provided, automatically connects to the database.
 - **Parameters**:
-  - `database_url` (str | None, optional): Database connection URL. If provided, connects automatically. Supported formats: `sqlite:///path/to/db.sqlite`, `postgresql://user:pass@host:port/database`, `mysql://user:pass@host:port/database`.
+  - `database_url` (str | None, optional): Database connection URL. If provided, connects automatically. Supported formats: `sqlite:///path/to/db.sqlite`, `postgresql://user:pass@host:port/database`, `mysql://user:pass@host:port/database`. <!-- pragma: allowlist secret -->
 - **Return Value**: `DatabaseManager` instance ready for use.
 - **Errors**: Raises `CodomyrmexError` for unsupported database URLs or connection failures.
 
