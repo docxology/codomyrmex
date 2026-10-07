@@ -57,7 +57,7 @@ class SQLValidator:
 
         # Check for dangerous operations
         for kw in cls.DANGEROUS_KEYWORDS:
-            if kw in sql_upper.split():
+            if re.search(rf"\b{kw}\b", sql_upper):
                 return False, f"Dangerous SQL keyword '{kw}' not allowed"
 
         # Check required keywords

@@ -81,12 +81,12 @@
                     card.dataset.name = tool.name;
                     card.innerHTML =
                         '<div style="display: flex; justify-content: space-between; align-items: center;">'
-                        + '<span class="tool-name">' + tool.name + '</span>'
+                        + '<span class="tool-name">' + escapeHtml(tool.name) + '</span>'
                         + '<span class="trust-badge ' + (isDestructive ? 'destructive' : 'safe') + '">'
                         + (isDestructive ? 'Destructive' : 'Safe') + '</span>'
                         + '</div>'
-                        + '<p class="tool-desc">' + (tool.description || '') + '</p>'
-                        + '<p class="tool-category">Category: ' + (tool.category || 'general') + '</p>';
+                        + '<p class="tool-desc">' + escapeHtml(tool.description || '') + '</p>'
+                        + '<p class="tool-category">Category: ' + escapeHtml(tool.category || 'general') + '</p>';
                     toolsGrid.appendChild(card);
                 });
             }
@@ -101,8 +101,8 @@
                     const card = document.createElement('div');
                     card.className = 'card';
                     card.innerHTML =
-                        '<span class="tool-name">' + r.uri + '</span>'
-                        + '<p class="tool-desc">' + (r.description || r.name || '') + '</p>';
+                        '<span class="tool-name">' + escapeHtml(r.uri) + '</span>'
+                        + '<p class="tool-desc">' + escapeHtml(r.description || r.name || '') + '</p>';
                     resourcesGrid.appendChild(card);
                 });
             }
@@ -114,15 +114,15 @@
                     const card = document.createElement('div');
                     card.className = 'card';
                     card.innerHTML =
-                        '<span class="tool-name">' + p.name + '</span>'
-                        + '<p class="tool-desc">' + (p.description || '') + '</p>';
+                        '<span class="tool-name">' + escapeHtml(p.name) + '</span>'
+                        + '<p class="tool-desc">' + escapeHtml(p.description || '') + '</p>';
                     promptsGrid.appendChild(card);
                 });
             }
 
         } catch (err) {
             document.getElementById('toolsGrid').innerHTML =
-                '<div class="card"><p style="color: #ef4444;">Error loading tools: ' + err.message + '</p></div>';
+                '<div class="card"><p style="color: #ef4444;">Error loading tools: ' + escapeHtml(err.message) + '</p></div>';
         }
     }
 

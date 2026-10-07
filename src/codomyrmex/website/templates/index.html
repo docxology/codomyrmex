@@ -513,9 +513,9 @@
                     badge.className = 'status-badge active';
                     content.innerHTML =
                         '<div class="mcp-stats">' +
-                        '<div class="mcp-stat"><span class="mcp-stat-value">' + data.tool_count + '</span><span class="mcp-stat-label">Tools</span></div>' +
-                        '<div class="mcp-stat"><span class="mcp-stat-value">' + data.resource_count + '</span><span class="mcp-stat-label">Resources</span></div>' +
-                        '<div class="mcp-stat"><span class="mcp-stat-value">' + data.prompt_count + '</span><span class="mcp-stat-label">Prompts</span></div>' +
+                        '<div class="mcp-stat"><span class="mcp-stat-value">' + escapeHtml(data.tool_count) + '</span><span class="mcp-stat-label">Tools</span></div>' +
+                        '<div class="mcp-stat"><span class="mcp-stat-value">' + escapeHtml(data.resource_count) + '</span><span class="mcp-stat-label">Resources</span></div>' +
+                        '<div class="mcp-stat"><span class="mcp-stat-value">' + escapeHtml(data.prompt_count) + '</span><span class="mcp-stat-label">Prompts</span></div>' +
                         '</div>' +
                         '<a href="http://localhost:8080/" target="_blank" class="mcp-link">Open MCP Dashboard &rarr;</a>';
                 } else {

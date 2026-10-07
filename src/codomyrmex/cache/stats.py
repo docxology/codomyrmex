@@ -9,6 +9,7 @@ Provides:
 
 from __future__ import annotations
 
+import bisect
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -77,7 +78,7 @@ class CacheStats:
         """Record a cache hit."""
         self.hits += 1
         self.total_requests += 1
-        self._timestamps.append((time.time(), True))
+        self._timestamps.append((time.monotonic(), True))
         if key:
             self._key_hits[key] += 1
 
@@ -85,7 +86,7 @@ class CacheStats:
         """Record a cache miss."""
         self.misses += 1
         self.total_requests += 1
-        self._timestamps.append((time.time(), False))
+        self._timestamps.append((time.monotonic(), False))
 
     def record_write(self) -> None:
         self.writes += 1
@@ -100,12 +101,20 @@ class CacheStats:
 
     def hit_rate_window(self, seconds: float = 60.0) -> float:
         """Hit rate within the last N seconds."""
-        cutoff = time.time() - seconds
-        recent = [(ts, hit) for ts, hit in self._timestamps if ts >= cutoff]
-        if not recent:
+        cutoff = time.monotonic() - seconds
+
+        # Timestamps come from time.monotonic() and are appended in order, so
+        # the list is sorted and the window start can be found by bisection.
+        # (cutoff, False) sorts before any real entry at the same instant.
+        current_len = len(self._timestamps)
+        idx = bisect.bisect_left(self._timestamps, (cutoff, False), hi=current_len)
+
+        recent_count = current_len - idx
+        if recent_count <= 0:
             return 0.0
-        hits = sum(1 for _, hit in recent if hit)
-        return hits / len(recent)
+
+        hits = sum(1 for i in range(idx, current_len) if self._timestamps[i][1])
+        return hits / recent_count
 
     # ── Key frequency ───────────────────────────────────────────────
 

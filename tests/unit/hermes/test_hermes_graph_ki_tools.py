@@ -10,79 +10,87 @@ from typing import TYPE_CHECKING
 
 from codomyrmex.agentic_memory.core.memory import KnowledgeMemory
 from codomyrmex.agentic_memory.stores import InMemoryStore
-from codomyrmex.agents.hermes.session import HermesSession, InMemorySessionStore
+from codomyrmex.agents.hermes.session import (
+    HermesSession,
+    InMemorySessionStore,
+    SQLiteSessionStore,
+)
 
 if TYPE_CHECKING:
+    from pathlib import Path
+
     import pytest
 
 # ── hermes_build_memory_graph ─────────────────────────────────────────────────
 
 
-def test_build_memory_graph_with_wiki_links(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Graph builder extracts [[WikiLink]] references from session messages."""
-    import re
-    from collections import Counter, defaultdict
-
-    # Replicate the graph-building logic against an InMemorySessionStore
-    store = InMemorySessionStore()
-    s1 = HermesSession(session_id="s1")
-    s1.add_message("user", "Explain [[BM25]] and [[FTS5]] interaction.")
-    s1.add_message("assistant", "[[BM25]] ranks [[FTS5]] results using term frequency.")
-    store.save(s1)
-
-    s2 = HermesSession(session_id="s2")
-    s2.add_message("user", "How does [[BM25]] compare to [[TF-IDF]]?")
-    store.save(s2)
-
-    WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
-    concept_sessions: dict[str, set[str]] = defaultdict(set)
-    edge_weights: Counter[tuple[str, str]] = Counter()
-
-    for sid in store.list_sessions():
-        session = store.load(sid)
-        assert session is not None
-        full_text = " ".join(m.get("content", "") for m in session.messages)
-        concepts = set(WIKI_LINK_RE.findall(full_text))
-        for c in concepts:
-            concept_sessions[c].add(sid)
-        for c1 in concepts:
-            for c2 in concepts:
-                if c1 != c2:
-                    edge_weights[(c1, c2)] += 1
-
-    nodes = list(concept_sessions.keys())
-    assert "BM25" in nodes
-    assert "FTS5" in nodes
-    assert "TF-IDF" in nodes
-
-    # BM25 appears in both sessions → should have edges to both FTS5 and TF-IDF
-    bm25_targets = {tgt for (src, tgt) in edge_weights if src == "BM25"}
-    assert "FTS5" in bm25_targets or "TF-IDF" in bm25_targets
+def _seed_sqlite_sessions(db_path: Path, sessions: dict[str, list[str]]) -> None:
+    with SQLiteSessionStore(db_path) as store:
+        for session_id, messages in sessions.items():
+            session = HermesSession(session_id=session_id)
+            for text in messages:
+                session.add_message("user", text)
+            store.save(session)
 
 
-def test_build_memory_graph_no_links_returns_empty() -> None:
+def test_build_memory_graph_with_wiki_links(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """The real MCP tool extracts [[WikiLink]] concepts from a real SQLite store."""
+    from codomyrmex.agents.hermes.mcp_tools_pkg.memory import hermes_build_memory_graph
+
+    db_path = tmp_path / "sessions.db"
+    _seed_sqlite_sessions(
+        db_path,
+        {
+            "s1": [
+                "Explain [[BM25]] and [[FTS5]] interaction.",
+                "[[BM25]] ranks [[FTS5|full-text]] results using term frequency.",
+            ],
+            "s2": ["How does [[BM25]] compare to [[TF-IDF#weights]]?"],
+        },
+    )
+    monkeypatch.setenv("CODOMYRMEX_HERMES_SESSION_DB", str(db_path))
+
+    graph = hermes_build_memory_graph()
+
+    assert graph["status"] == "success"
+    assert graph["session_count"] == 2
+    assert graph["nodes"] == ["BM25", "FTS5", "TF-IDF"]
+    edges = {(e["source"], e["target"]): e["weight"] for e in graph["edges"]}
+    assert edges[("BM25", "FTS5")] == 1
+    assert edges[("BM25", "TF-IDF")] == 1
+    assert ("FTS5", "TF-IDF") not in edges
+
+    # min_link_count filters concepts seen in fewer sessions.
+    filtered = hermes_build_memory_graph(min_link_count=2)
+    assert filtered["nodes"] == ["BM25"]
+    assert filtered["edges"] == []
+
+
+def test_build_memory_graph_no_links_returns_empty(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
     """Sessions with no [[WikiLink]] produce an empty graph."""
-    import re
-    from collections import Counter, defaultdict
+    from codomyrmex.agents.hermes.mcp_tools_pkg.memory import hermes_build_memory_graph
 
-    store = InMemorySessionStore()
-    s = HermesSession(session_id="plain")
-    s.add_message("user", "Hello world, no special links here.")
-    store.save(s)
+    db_path = tmp_path / "sessions.db"
+    _seed_sqlite_sessions(db_path, {"plain": ["Hello world, no special links here."]})
+    monkeypatch.setenv("CODOMYRMEX_HERMES_SESSION_DB", str(db_path))
 
-    WIKI_LINK_RE = re.compile(r"\[\[([^\[\]|#]+?)(?:[|#][^\]]+)?\]\]")
-    concept_sessions: dict[str, set[str]] = defaultdict(set)
-    edge_weights: Counter[tuple[str, str]] = Counter()
+    graph = hermes_build_memory_graph()
 
-    for sid in store.list_sessions():
-        session = store.load(sid)
-        assert session is not None
-        full_text = " ".join(m.get("content", "") for m in session.messages)
-        for c in set(WIKI_LINK_RE.findall(full_text)):
-            concept_sessions[c].add(sid)
+    assert graph["status"] == "success"
+    assert graph["session_count"] == 1
+    assert graph["nodes"] == []
+    assert graph["edges"] == []
 
-    assert len(concept_sessions) == 0
-    assert len(edge_weights) == 0
+
+def test_wiki_link_pattern_strips_alias_and_heading() -> None:
+    from codomyrmex.agents.hermes.mcp_tools_pkg.memory import WIKI_LINK_RE
+
+    text = "[[A]] [[B|alias]] [[C#Section]] [[ [nested] ]] [[D|x#y]]"
+    assert WIKI_LINK_RE.findall(text) == ["A", "B", "C", "D"]
 
 
 # ── hermes_extract_ki ─────────────────────────────────────────────────────────

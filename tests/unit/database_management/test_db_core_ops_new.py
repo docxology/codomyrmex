@@ -14,8 +14,8 @@ from codomyrmex.database_management import (
 @pytest.fixture
 def db_manager():
     """Provides a DatabaseManager with an in-memory SQLite connection."""
-    manager = manage_databases("sqlite:///:memory:")
-    return manager
+    with manage_databases("sqlite:///:memory:") as manager:
+        yield manager
 
 
 @pytest.fixture
@@ -30,9 +30,9 @@ def temp_db_file():
 
 def test_database_manager_init():
     """Test DatabaseManager initialization."""
-    manager = DatabaseManager()
-    assert len(manager.list_connections()) == 0
-    assert manager.default_connection_name is None
+    with DatabaseManager() as manager:
+        assert len(manager.list_connections()) == 0
+        assert manager.default_connection_name is None
 
 
 def test_sqlite_in_memory_connection(db_manager):
@@ -59,17 +59,16 @@ def test_sqlite_in_memory_connection(db_manager):
 def test_sqlite_file_connection(temp_db_file):
     """Test connecting to a file-based SQLite database."""
     url = f"sqlite:///{temp_db_file}"
-    manager = manage_databases(url)
+    with manage_databases(url) as manager:
+        manager.execute("CREATE TABLE items (id INTEGER PRIMARY KEY, val REAL)")
+        manager.execute("INSERT INTO items (val) VALUES (?)", (42.0,))
 
-    manager.execute("CREATE TABLE items (id INTEGER PRIMARY KEY, val REAL)")
-    manager.execute("INSERT INTO items (val) VALUES (?)", (42.0,))
+        manager.disconnect_all()
 
-    manager.disconnect_all()
-
-    # Reconnect and verify data persists
-    manager2 = manage_databases(url)
-    res = manager2.execute("SELECT val FROM items")
-    assert res.rows[0][0] == 42.0
+        # Reconnect and verify data persists
+        with manage_databases(url) as manager2:
+            res = manager2.execute("SELECT val FROM items")
+        assert res.rows[0][0] == 42.0
 
 
 def test_query_result_to_dict_list(db_manager):
@@ -147,25 +146,24 @@ def test_health_check(db_manager):
 
 def test_multiple_connections():
     """Test managing multiple connections simultaneously."""
-    manager = DatabaseManager()
+    with DatabaseManager() as manager:
+        conn1 = DatabaseConnection(
+            name="db1", db_type=DatabaseType.SQLITE, database=":memory:"
+        )
+        conn2 = DatabaseConnection(
+            name="db2", db_type=DatabaseType.SQLITE, database=":memory:"
+        )
 
-    conn1 = DatabaseConnection(
-        name="db1", db_type=DatabaseType.SQLITE, database=":memory:"
-    )
-    conn2 = DatabaseConnection(
-        name="db2", db_type=DatabaseType.SQLITE, database=":memory:"
-    )
+        manager.add_connection(conn1)
+        manager.add_connection(conn2)
 
-    manager.add_connection(conn1)
-    manager.add_connection(conn2)
+        manager.execute("CREATE TABLE t1 (v TEXT)", connection_name="db1")
+        manager.execute("CREATE TABLE t2 (v TEXT)", connection_name="db2")
 
-    manager.execute("CREATE TABLE t1 (v TEXT)", connection_name="db1")
-    manager.execute("CREATE TABLE t2 (v TEXT)", connection_name="db2")
-
-    assert "t1" in manager.get_tables("db1")
-    assert "t1" not in manager.get_tables("db2")
-    assert "t2" in manager.get_tables("db2")
-    assert "t2" not in manager.get_tables("db1")
+        assert "t1" in manager.get_tables("db1")
+        assert "t1" not in manager.get_tables("db2")
+        assert "t2" in manager.get_tables("db2")
+        assert "t2" not in manager.get_tables("db1")
 
 
 def test_error_handling(db_manager):
@@ -174,3 +172,18 @@ def test_error_handling(db_manager):
     assert res.success is False
     assert res.error_message is not None
     assert "no such table" in res.error_message.lower()
+
+
+def test_context_managers_close_their_connections(tmp_path):
+    """Leaving a ``with`` block closes the SQLite connections it opened."""
+    with manage_databases(f"sqlite:///{tmp_path / 'cm.db'}") as manager:
+        conn = manager.get_connection()
+        assert conn.is_connected()
+    assert not conn.is_connected()
+
+    with DatabaseConnection(
+        name="standalone", db_type=DatabaseType.SQLITE, database=":memory:"
+    ) as standalone:
+        standalone.connect()
+        assert standalone.is_connected()
+    assert not standalone.is_connected()

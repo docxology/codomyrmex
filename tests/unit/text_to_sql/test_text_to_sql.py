@@ -117,10 +117,42 @@ class TestSQLValidator:
             valid, _error = SQLValidator.validate(f"{kw} something FROM table;")
             assert valid is False, f"Expected {kw} to be blocked"
 
+    # ---------------------------------------------------------------------------
+    # SQL Generation
+    # ---------------------------------------------------------------------------
 
-# ---------------------------------------------------------------------------
-# SQL Generation
-# ---------------------------------------------------------------------------
+    @pytest.mark.unit
+    @pytest.mark.parametrize(
+        "sql",
+        [
+            "SELECT * FROM users;DROP TABLE users",
+            "SELECT * FROM users WHERE id=1;DELETE FROM users",
+            "SELECT * FROM t;UPDATE t SET a=1",
+            "SELECT * FROM t\n;insert into t values (1)",
+            "SELECT * FROM t;(DROP TABLE t)",
+            "SELECT * FROM t/**/;TRUNCATE t",
+        ],
+    )
+    def test_dangerous_keyword_adjacent_to_punctuation_blocked(self, sql):
+        """Regression: keywords glued to ';' or '(' evaded a whitespace split()."""
+        valid, error = SQLValidator.validate(sql)
+        assert valid is False
+        assert error is not None
+        assert "Dangerous SQL keyword" in error
+
+    @pytest.mark.unit
+    @pytest.mark.parametrize(
+        "sql",
+        [
+            "SELECT created_at FROM users",
+            "SELECT updated_by, inserted FROM audit_log",
+            "SELECT dropped_count FROM stats",
+        ],
+    )
+    def test_identifiers_containing_keywords_allowed(self, sql):
+        """Word boundaries keep identifiers like created_at/updated_by valid."""
+        valid, error = SQLValidator.validate(sql)
+        assert valid is True, error
 
 
 class TestSQLGeneration:
