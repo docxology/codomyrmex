@@ -37,15 +37,17 @@ def get_available_models(provider: str) -> list[str]:
     return models.get(provider.lower(), [])
 
 
+# Providers that run without an API key (Ollama serves local models).
+_KEYLESS_PROVIDERS = frozenset({"ollama"})
+
+
 def validate_api_keys() -> dict[str, bool]:
-    """Validate API keys for all supported providers."""
-    validation_results = {}
-
-    for provider in get_supported_providers():
-        key_name = f"{provider.upper()}_API_KEY"
-        validation_results[provider] = bool(os.environ.get(key_name))
-
-    return validation_results
+    """Report whether ``<PROVIDER>_API_KEY`` is set for each key-based provider."""
+    return {
+        provider: bool(os.environ.get(f"{provider.upper()}_API_KEY"))
+        for provider in get_supported_providers()
+        if provider not in _KEYLESS_PROVIDERS
+    }
 
 
 def setup_environment() -> bool:
