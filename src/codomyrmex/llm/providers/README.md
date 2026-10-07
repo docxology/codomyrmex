@@ -7,6 +7,7 @@
 Module implementation, resources, and local coordination for Providers.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -22,6 +23,7 @@ Module implementation, resources, and local coordination for Providers.
 - `py.typed` – File
 
 ## Navigation
+
 - **Parent Directory**: [llm](../README.md)
 - **Project Root**: ../../../../README.md
 
