@@ -45,7 +45,8 @@
         "chromeFlags": "--no-sandbox --headless"
       },
       "staticDistDir": "./site",
-      "url": ["/index.html"]
+      "url": ["/index.html"],
+      "numberOfRuns": 3
     }
   }
 }
