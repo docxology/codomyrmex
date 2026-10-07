@@ -10,7 +10,7 @@ This API specification documents the programmatic interfaces for the Database Ma
 
 - **Description**: Create and return a `DatabaseManager` instance for database administration. If a `database_url` is provided, automatically connects to the database.
 - **Parameters**:
-    - `database_url` (str | None, optional): Database connection URL. If provided, connects automatically. Supported formats: `sqlite:///path/to/db.sqlite`, `postgresql://user:pass@host:port/database`, `mysql://user:pass@host:port/database`.
+  - `database_url` (str | None, optional): Database connection URL. If provided, connects automatically. Supported formats: `sqlite:///path/to/db.sqlite`, `postgresql://user:pass@host:port/database`, `mysql://user:pass@host:port/database`.
 - **Return Value**: `DatabaseManager` instance ready for use.
 - **Errors**: Raises `CodomyrmexError` for unsupported database URLs or connection failures.
 
@@ -18,10 +18,11 @@ This API specification documents the programmatic interfaces for the Database Ma
 
 - **Description**: Run database migrations. Loads migration files from the specified directory and applies or rolls back migrations.
 - **Parameters**:
-    - `migration_dir` (str): Directory containing migration JSON files.
-    - `database_url` (str): Database connection URL.
-    - `direction` (str, optional): Migration direction (`"up"` to apply pending, `"down"` to rollback latest). Default: `"up"`.
+  - `migration_dir` (str): Directory containing migration JSON files.
+  - `database_url` (str): Database connection URL.
+  - `direction` (str, optional): Migration direction (`"up"` to apply pending, `"down"` to rollback latest). Default: `"up"`.
 - **Return Value**:
+
     ```python
     # For direction="up":
     {
@@ -53,16 +54,17 @@ This API specification documents the programmatic interfaces for the Database Ma
         }
     }
     ```
+
 - **Errors**: Raises `CodomyrmexError` for invalid migration direction, database connection failures, or migration execution failures.
 
 ### Function: `backup_database(database_name: str, database_url: str | None = None, backup_type: str = "full", compression: str = "gzip") -> BackupResult`
 
 - **Description**: Convenience function to create a database backup. Creates a `BackupManager` and performs the backup.
 - **Parameters**:
-    - `database_name` (str): Name identifying the database being backed up.
-    - `database_url` (str | None, optional): Database connection URL.
-    - `backup_type` (str, optional): Backup type (`"full"`, `"incremental"`, `"differential"`). Default: `"full"`.
-    - `compression` (str, optional): Compression method (`"gzip"`, `"none"`). Default: `"gzip"`.
+  - `database_name` (str): Name identifying the database being backed up.
+  - `database_url` (str | None, optional): Database connection URL.
+  - `backup_type` (str, optional): Backup type (`"full"`, `"incremental"`, `"differential"`). Default: `"full"`.
+  - `compression` (str, optional): Compression method (`"gzip"`, `"none"`). Default: `"gzip"`.
 - **Return Value**: `BackupResult` dataclass with fields: `backup_id`, `success`, `duration`, `file_size_mb`, `error_message`, `warnings`, `checksum`.
 - **Errors**: Raises `CodomyrmexError` for missing database URL, unsupported database types, or backup failures.
 
@@ -70,8 +72,8 @@ This API specification documents the programmatic interfaces for the Database Ma
 
 - **Description**: Monitor database performance by analyzing recorded metrics.
 - **Parameters**:
-    - `database_name` (str): Name of the database to monitor.
-    - `workspace_dir` (str | None, optional): Workspace directory for performance data storage.
+  - `database_name` (str): Name of the database to monitor.
+  - `workspace_dir` (str | None, optional): Workspace directory for performance data storage.
 - **Return Value**: Database performance analysis dictionary from `DatabasePerformanceMonitor.analyze_database_performance()`.
 - **Errors**: Returns empty analysis if no metrics are found.
 
@@ -79,8 +81,8 @@ This API specification documents the programmatic interfaces for the Database Ma
 
 - **Description**: Generate a comprehensive performance report with optimization recommendations.
 - **Parameters**:
-    - `database_name` (str): Name of the database to optimize.
-    - `workspace_dir` (str | None, optional): Workspace directory for performance data storage.
+  - `database_name` (str): Name of the database to optimize.
+  - `workspace_dir` (str | None, optional): Workspace directory for performance data storage.
 - **Return Value**: Performance report dictionary from `DatabasePerformanceMonitor.get_performance_report()` including query performance, database performance, alerts, and recommendations.
 - **Errors**: Returns report with empty sections if no metrics are found.
 
@@ -88,9 +90,10 @@ This API specification documents the programmatic interfaces for the Database Ma
 
 - **Description**: Generate database schema from model definitions (dictionary-based or SQLAlchemy models).
 - **Parameters**:
-    - `models` (list[Any]): List of model definitions. Supports dictionaries with `"name"`, `"columns"`, `"indexes"` keys, or SQLAlchemy model classes with `__table__` and `__tablename__` attributes.
-    - `output_dir` (str): Output directory for generated schema files.
+  - `models` (list[Any]): List of model definitions. Supports dictionaries with `"name"`, `"columns"`, `"indexes"` keys, or SQLAlchemy model classes with `__table__` and `__tablename__` attributes.
+  - `output_dir` (str): Output directory for generated schema files.
 - **Return Value**:
+
     ```python
     {
         "tables_generated": int,
@@ -98,12 +101,15 @@ This API specification documents the programmatic interfaces for the Database Ma
         "message": str
     }
     ```
+
 - **Errors**: Raises `CodomyrmexError` for unsupported model formats or schema generation failures.
 
 ## Data Structures
 
 ### DatabaseConnection (dataclass)
+
 Database connection information:
+
 ```python
 @dataclass
 class DatabaseConnection:
@@ -125,7 +131,9 @@ class DatabaseConnection:
 Key methods: `get_connection_string()`, `connect()`, `disconnect()`, `execute_query(query, params)`, `get_database_info()`, `health_check()`.
 
 ### Migration (dataclass)
+
 Database migration definition:
+
 ```python
 @dataclass
 class Migration:
@@ -142,7 +150,9 @@ class Migration:
 ```
 
 ### MigrationResult (dataclass)
+
 Result of a migration execution:
+
 ```python
 @dataclass
 class MigrationResult:
@@ -155,7 +165,9 @@ class MigrationResult:
 ```
 
 ### Backup (dataclass)
+
 Database backup information:
+
 ```python
 @dataclass
 class Backup:
@@ -173,7 +185,9 @@ class Backup:
 ```
 
 ### BackupResult (dataclass)
+
 Result of a backup operation:
+
 ```python
 @dataclass
 class BackupResult:
@@ -187,7 +201,9 @@ class BackupResult:
 ```
 
 ### DatabaseMetrics (dataclass)
+
 Database performance metrics:
+
 ```python
 @dataclass
 class DatabaseMetrics:
@@ -202,7 +218,9 @@ class DatabaseMetrics:
 ```
 
 ### SchemaDefinition (dataclass)
+
 Complete database schema definition:
+
 ```python
 @dataclass
 class SchemaDefinition:
@@ -217,7 +235,9 @@ Key methods: `to_sql(dialect)`, `to_dict()`.
 ## Manager Classes
 
 ### DatabaseManager
+
 Database connection and query management:
+
 ```python
 class DatabaseManager:
     def __init__(self, database_url: str | None = None): ...
@@ -237,10 +257,18 @@ class DatabaseManager:
     def transaction(self) -> Generator[None, None, None]: ...  # context manager
     def get_tables(self) -> list[str]: ...
     def get_table_info(self, table_name: str) -> list[dict[str, Any]]: ...
+    def __enter__(self) -> Self: ...  # `with DatabaseManager(url) as db:`
+    def __exit__(self, *exc) -> None: ...  # calls disconnect_all()
 ```
 
+`DatabaseConnection` is also a context manager whose exit calls `disconnect()`.
+Close what you open: on Python 3.13+ an SQLite connection garbage-collected
+while open emits `ResourceWarning`.
+
 ### MigrationManager
+
 Database migration management system:
+
 ```python
 class MigrationManager:
     def __init__(self, workspace_dir: str | None = None, database_url: str | None = None): ...
@@ -254,10 +282,14 @@ class MigrationManager:
     def get_pending_migrations(self) -> list[Migration]: ...
     def apply_pending_migrations(self) -> list[MigrationResult]: ...
     def close(self): ...
+    def __enter__(self) -> Self: ...
+    def __exit__(self, *exc) -> None: ...  # calls close()
 ```
 
 ### BackupManager
+
 Database backup and restore management:
+
 ```python
 class BackupManager:
     def __init__(self, workspace_dir: str | None = None, database_url: str | None = None): ...
@@ -267,7 +299,9 @@ class BackupManager:
 ```
 
 ### SchemaGenerator
+
 Database schema generation and management:
+
 ```python
 class SchemaGenerator:
     def __init__(self, workspace_dir: str | None = None, dialect: str = "sqlite"): ...
@@ -288,6 +322,7 @@ All functions use `CodomyrmexError` (from `codomyrmex.exceptions`) as the base e
 ## Integration Patterns
 
 ### With Project Orchestration
+
 ```python
 from codomyrmex.database_management import run_migrations
 
@@ -300,6 +335,7 @@ result = run_migrations(
 ```
 
 ### With Performance Monitoring
+
 ```python
 from codomyrmex.database_management import monitor_database, optimize_database
 
@@ -311,6 +347,7 @@ report = optimize_database("my_database", workspace_dir="./perf_data")
 ```
 
 ### Database Management
+
 ```python
 from codomyrmex.database_management import manage_databases
 
@@ -340,7 +377,6 @@ manager.disconnect()
 - **Backup Efficiency**: Supports gzip compression for backups
 - **Migration Performance**: Batch migration execution with progress tracking
 - **Monitoring Overhead**: In-memory metrics with configurable retention limits
-
 
 ## Navigation Links
 
