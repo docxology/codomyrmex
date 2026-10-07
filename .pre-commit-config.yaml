@@ -81,6 +81,13 @@ repos:
       - id: check-json
       - id: check-toml
       - id: check-yaml
+        exclude: ^mkdocs\.yml$
+      # mkdocs.yml uses !!python/name tags (pymdownx custom fences), which
+      # safe loading rejects; check its syntax without constructing objects.
+      - id: check-yaml
+        name: check yaml (mkdocs, syntax only)
+        args: [--unsafe]
+        files: ^mkdocs\.yml$
       - id: check-added-large-files
 
   # Dependency validation
