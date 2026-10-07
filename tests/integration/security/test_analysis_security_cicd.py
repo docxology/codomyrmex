@@ -13,38 +13,8 @@ import tempfile
 
 import pytest
 
-# Import modules for integration testing
-try:
-    from codomyrmex.coding.static_analysis import (
-        analyze_file,
-        analyze_project,
-    )
-
-    STATIC_ANALYSIS_AVAILABLE = True
-except ImportError:
-    STATIC_ANALYSIS_AVAILABLE = False
-
-try:
-    from codomyrmex.security.digital import (
-        analyze_file_security,
-        check_compliance,
-        scan_vulnerabilities,
-    )
-
-    SECURITY_AVAILABLE = True
-except ImportError:
-    SECURITY_AVAILABLE = False
-
-try:
-    from codomyrmex.ci_cd_automation import (
-        create_pipeline,
-        validate_pipeline_config,
-    )
-
-    CI_CD_AVAILABLE = True
-except ImportError:
-    CI_CD_AVAILABLE = False
-
+from codomyrmex.ci_cd_automation import create_pipeline, validate_pipeline_config
+from codomyrmex.coding.static_analysis import analyze_file, analyze_project
 from codomyrmex.logging_monitoring import (
     get_logger,
     setup_logging,
@@ -126,12 +96,8 @@ django==3.2.0
         files["requirements_file"] = req_file
         return files
 
-    @pytest.mark.skipif(
-        not STATIC_ANALYSIS_AVAILABLE, reason="Static analysis module not available"
-    )
     def test_static_analysis_integration(self):
         """Test that static analysis can analyze the test codebase."""
-        from codomyrmex.coding.static_analysis import analyze_file
 
         python_file = self.test_files["python_file"]
 
@@ -147,9 +113,6 @@ django==3.2.0
             assert hasattr(result, "severity")
             assert hasattr(result, "message")
 
-    @pytest.mark.skipif(
-        not SECURITY_AVAILABLE, reason="Security audit module not available"
-    )
     def test_security_audit_integration(self):
         """Test that security audit can scan the test codebase."""
         from codomyrmex.security import scan_vulnerabilities
@@ -166,9 +129,6 @@ django==3.2.0
         # Vulnerabilities list should exist (may be empty if scanner has no rules for test code)
         assert isinstance(report.vulnerabilities, list)
 
-    @pytest.mark.skipif(
-        not SECURITY_AVAILABLE, reason="Security audit module not available"
-    )
     def test_compliance_checking_integration(self):
         """Test compliance checking against security standards."""
         from codomyrmex.security import check_compliance
@@ -185,9 +145,6 @@ django==3.2.0
             else:
                 assert hasattr(result, "requirement") or hasattr(result, "standard")
 
-    @pytest.mark.skipif(
-        not SECURITY_AVAILABLE, reason="Security audit module not available"
-    )
     def test_advanced_security_analysis_integration(self):
         """Test advanced security analysis with AST and patterns."""
         from codomyrmex.security import analyze_file_security
@@ -205,12 +162,8 @@ django==3.2.0
             else:
                 assert hasattr(finding, "severity")
 
-    @pytest.mark.skipif(
-        not CI_CD_AVAILABLE, reason="CI/CD automation module not available"
-    )
     def test_cicd_pipeline_creation(self):
         """Test creating CI/CD pipelines based on analysis results."""
-        from codomyrmex.ci_cd_automation import create_pipeline
 
         # Create a pipeline configuration
         pipeline_config = {
@@ -221,12 +174,16 @@ django==3.2.0
                     "jobs": [
                         {
                             "name": "static_analysis",
-                            "script": "python -m codomyrmex.coding.static_analysis analyze_project .",
+                            "commands": [
+                                "python -m codomyrmex.coding.static_analysis analyze_project ."
+                            ],
                             "artifacts": ["analysis_report.json"],
                         },
                         {
                             "name": "security_scan",
-                            "script": "python -m codomyrmex.security_audit scan_vulnerabilities .",
+                            "commands": [
+                                "python -m codomyrmex.security_audit scan_vulnerabilities ."
+                            ],
                             "artifacts": ["security_report.json"],
                         },
                     ],
@@ -236,7 +193,7 @@ django==3.2.0
                     "jobs": [
                         {
                             "name": "quality_check",
-                            "script": "python scripts/check_quality.py",
+                            "commands": ["python scripts/check_quality.py"],
                             "dependencies": ["analysis"],
                         }
                     ],
@@ -253,12 +210,8 @@ django==3.2.0
         assert pipeline.name == "security_pipeline"
         assert len(pipeline.stages) == 2
 
-    @pytest.mark.skipif(
-        not CI_CD_AVAILABLE, reason="CI/CD automation module not available"
-    )
     def test_pipeline_validation_integration(self):
         """Test pipeline configuration validation."""
-        from codomyrmex.ci_cd_automation import validate_pipeline_config
 
         # Valid pipeline config
         valid_config = {
@@ -266,7 +219,7 @@ django==3.2.0
             "stages": [
                 {
                     "name": "build",
-                    "jobs": [{"name": "compile", "script": "echo 'Building...'"}],
+                    "jobs": [{"name": "compile", "commands": ["echo 'Building...'"]}],
                 }
             ],
         }
@@ -285,19 +238,13 @@ django==3.2.0
         assert not is_valid
         assert len(errors) > 0
 
-    @pytest.mark.skipif(
-        not all([STATIC_ANALYSIS_AVAILABLE, SECURITY_AVAILABLE, CI_CD_AVAILABLE]),
-        reason="Required modules not available",
-    )
     def test_complete_workflow_integration(self):
         """Test the complete analysis → security → CI/CD workflow."""
         # Step 1: Static analysis
-        from codomyrmex.coding.static_analysis import analyze_project
 
         analysis_results = analyze_project(self.test_dir)
 
-        assert isinstance(analysis_results, dict)
-        assert "files_analyzed" in analysis_results
+        assert analysis_results.files_analyzed >= 1
 
         # Step 2: Security audit
         from codomyrmex.security import scan_vulnerabilities
@@ -320,12 +267,12 @@ django==3.2.0
                     "jobs": [
                         {
                             "name": "dependency_scan",
-                            "script": "pip-audit --format json > dependencies.json",
+                            "commands": ["pip-audit --format json > dependencies.json"],
                             "artifacts": ["dependencies.json"],
                         },
                         {
                             "name": "code_security_scan",
-                            "script": "bandit -r . -f json -o security_scan.json",
+                            "commands": ["bandit -r . -f json -o security_scan.json"],
                             "artifacts": ["security_scan.json"],
                         },
                     ],
@@ -335,7 +282,7 @@ django==3.2.0
                     "jobs": [
                         {
                             "name": "integration_tests",
-                            "script": "pytest testing/integration/ -v",
+                            "commands": ["pytest testing/integration/ -v"],
                             "dependencies": ["security_analysis"],
                         }
                     ],
@@ -362,27 +309,24 @@ django==3.2.0
         nonexistent_dir = "/tmp/nonexistent_analysis_dir_12345"
 
         # Static analysis should handle gracefully
-        if STATIC_ANALYSIS_AVAILABLE:
-            from codomyrmex.coding.static_analysis import analyze_project
 
-            try:
-                result = analyze_project(nonexistent_dir)
-                # Should return some result structure even for errors
-                assert isinstance(result, (dict, list))
-            except Exception as e:
-                # Should not crash catastrophically
-                assert isinstance(e, Exception)
+        try:
+            result = analyze_project(nonexistent_dir)
+            # Should return some result structure even for errors
+            assert isinstance(result, (dict, list))
+        except Exception as e:
+            # Should not crash catastrophically
+            assert isinstance(e, Exception)
 
         # Security audit should handle gracefully
-        if SECURITY_AVAILABLE:
-            from codomyrmex.security import scan_vulnerabilities
+        from codomyrmex.security import scan_vulnerabilities
 
-            try:
-                report = scan_vulnerabilities(nonexistent_dir)
-                assert hasattr(report, "scan_status")
-                # Status might be 'failed' but should not crash
-            except Exception as e:
-                assert isinstance(e, Exception)
+        try:
+            report = scan_vulnerabilities(nonexistent_dir)
+            assert hasattr(report, "scan_status")
+            # Status might be 'failed' but should not crash
+        except Exception as e:
+            assert isinstance(e, Exception)
 
     @pytest.mark.bench
     def test_workflow_performance(self):
@@ -394,17 +338,13 @@ django==3.2.0
         # Run a subset of the workflow
         workflow_steps = 0
 
-        if STATIC_ANALYSIS_AVAILABLE:
-            from codomyrmex.coding.static_analysis import analyze_file
+        analyze_file(self.test_files["python_file"])
+        workflow_steps += 1
 
-            analyze_file(self.test_files["python_file"])
-            workflow_steps += 1
+        from codomyrmex.security import analyze_file_security
 
-        if SECURITY_AVAILABLE:
-            from codomyrmex.security import analyze_file_security
-
-            analyze_file_security(self.test_files["python_file"])
-            workflow_steps += 1
+        analyze_file_security(self.test_files["python_file"])
+        workflow_steps += 1
 
         end_time = time.time()
         total_time = end_time - start_time
@@ -424,18 +364,15 @@ django==3.2.0
         security_data = {}
 
         # Collect analysis data
-        if STATIC_ANALYSIS_AVAILABLE:
-            from codomyrmex.coding.static_analysis import analyze_file
 
-            analysis_results = analyze_file(python_file)
-            analysis_data["static_analysis"] = analysis_results
+        analysis_results = analyze_file(python_file)
+        analysis_data["static_analysis"] = analysis_results
 
         # Collect security data
-        if SECURITY_AVAILABLE:
-            from codomyrmex.security import analyze_file_security
+        from codomyrmex.security import analyze_file_security
 
-            security_findings = analyze_file_security(python_file)
-            security_data["security_analysis"] = security_findings
+        security_findings = analyze_file_security(python_file)
+        security_data["security_analysis"] = security_findings
 
         # Verify data structures are compatible
         assert isinstance(analysis_data, dict)

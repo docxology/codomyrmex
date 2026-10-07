@@ -4,6 +4,7 @@ import asyncio
 import concurrent.futures
 import json
 import os
+from collections.abc import Mapping
 from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
 from typing import Any
@@ -58,31 +59,38 @@ class PipelineManager(
         os.makedirs(self.workspace_dir, exist_ok=True)
         os.makedirs(os.path.join(self.workspace_dir, "artifacts"), exist_ok=True)
 
-    def create_pipeline(self, config_path: str) -> Pipeline:
+    def create_pipeline(
+        self, config: str | os.PathLike[str] | Mapping[str, Any]
+    ) -> Pipeline:
         """
-        Create a pipeline from configuration file.
+        Create a pipeline from a configuration file or mapping.
 
         Args:
-            config_path: Path to pipeline configuration file (YAML or JSON)
+            config: Path to a pipeline configuration file (YAML or JSON), or the
+                configuration itself as a mapping.
 
         Returns:
             Pipeline: Created pipeline object
         """
+        source = "mapping" if isinstance(config, Mapping) else os.fspath(config)
         try:
-            with open(config_path) as f:
-                if config_path.endswith((".yaml", ".yml")):
-                    config = yaml.safe_load(f)
-                else:
-                    config = json.load(f)
+            if isinstance(config, Mapping):
+                config_data = dict(config)
+            else:
+                with open(config) as f:
+                    if source.endswith((".yaml", ".yml")):
+                        config_data = yaml.safe_load(f)
+                    else:
+                        config_data = json.load(f)
 
-            pipeline = self._parse_pipeline_config(config)
+            pipeline = self._parse_pipeline_config(config_data)
             self.pipelines[pipeline.name] = pipeline
 
             logger.info("Created pipeline: %s", pipeline.name)
             return pipeline
 
         except Exception as e:
-            logger.error("Failed to create pipeline from %s: %s", config_path, e)
+            logger.error("Failed to create pipeline from %s: %s", source, e)
             raise
 
     def _parse_pipeline_config(self, config: dict[str, Any]) -> Pipeline:

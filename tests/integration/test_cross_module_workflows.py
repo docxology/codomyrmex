@@ -268,7 +268,7 @@ for email in emails:
         not all(
             [
                 MODULE_AVAILABILITY.get("static_analysis", False),
-                MODULE_AVAILABILITY.get("security_audit", False),
+                MODULE_AVAILABILITY.get("security", False),
                 MODULE_AVAILABILITY.get("ci_cd", False),
             ]
         ),
@@ -322,7 +322,9 @@ for email in emails:
                         "jobs": [
                             {
                                 "name": "static_analysis",
-                                "script": "python -m codomyrmex.coding.static_analysis analyze_file main.py",
+                                "commands": [
+                                    "python -m codomyrmex.coding.static_analysis analyze_file main.py"
+                                ],
                             }
                         ],
                     },
@@ -331,7 +333,9 @@ for email in emails:
                         "jobs": [
                             {
                                 "name": "security_scan",
-                                "script": "python -m codomyrmex.security analyze_file_security main.py",
+                                "commands": [
+                                    "python -m codomyrmex.security analyze_file_security main.py"
+                                ],
                             }
                         ],
                     },
@@ -340,7 +344,7 @@ for email in emails:
                         "jobs": [
                             {
                                 "name": "deploy_app",
-                                "script": "echo 'Deploying application...'",
+                                "commands": ["echo 'Deploying application...'"],
                                 "dependencies": ["analysis", "security"],
                             }
                         ]
@@ -493,7 +497,7 @@ print("Result:", algorithm_b({10000}))
         if all(
             [
                 MODULE_AVAILABILITY.get("static_analysis", False),
-                MODULE_AVAILABILITY.get("security_audit", False),
+                MODULE_AVAILABILITY.get("security", False),
                 MODULE_AVAILABILITY.get("ci_cd", False),
             ]
         ):
@@ -572,7 +576,7 @@ print("Result:", algorithm_b({10000}))
                 assert isinstance(e, Exception)
 
         # Test 3: Security analysis of problematic code
-        if MODULE_AVAILABILITY.get("security_audit", False):
+        if MODULE_AVAILABILITY.get("security", False):
             from codomyrmex.security import analyze_file_security
 
             dangerous_code = """
@@ -722,7 +726,7 @@ print(f"Fibonacci(10) = {result}")
                 results["static_analysis"] = len(analysis_results)
 
             # Module 2: Security Analysis
-            if MODULE_AVAILABILITY.get("security_audit", False):
+            if MODULE_AVAILABILITY.get("security", False):
                 from codomyrmex.security import analyze_file_security
 
                 security_findings = analyze_file_security(temp_file)
