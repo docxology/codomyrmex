@@ -113,7 +113,9 @@ class ModelOpsScript(ScriptBase):
                 f"Dataset created: {len(dataset.data)} examples, valid={is_valid}"
             )
         except Exception as e:
+            # Every later test uses this dataset, so stop here.
             self.log_error(f"Dataset creation failed: {e}")
+            raise
         results["tests_run"] += 1
 
         # Test 2: Dataset sanitization

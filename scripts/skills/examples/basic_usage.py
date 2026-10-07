@@ -66,6 +66,7 @@ def main():
         print_success("  SkillsManager directories initialized.")
     except Exception as e:
         print_error(f"  SkillsManager failed: {e}")
+        return 1
 
     # 2. Add Custom Skill
     print_info("Testing add_custom_skill...")

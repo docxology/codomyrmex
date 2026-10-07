@@ -17,40 +17,21 @@ except ImportError as exc:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
+# The agents package's dependencies (e.g. aiohttp) are core project
+# dependencies, so an ImportError here means a broken environment and must surface.
+from codomyrmex.agents import (
+    AgentCapabilities,
+    AgentOrchestrator,
+    AgentRequest,
+    AgentResponse,
+    BaseAgent,
+)
 from codomyrmex.utils.cli_helpers import (
     print_error,
     print_info,
     print_success,
     setup_logging,
 )
-
-try:
-    from codomyrmex.agents import (
-        AgentCapabilities,
-        AgentOrchestrator,
-        AgentRequest,
-        AgentResponse,
-        BaseAgent,
-    )
-except ImportError as exc:
-    # Handle missing optional dependencies (e.g., aiohttp). ``exc`` is unbound
-    # once the except block ends, so keep a reference for the fallback main().
-    _IMPORT_ERROR = exc
-
-    def main():
-        setup_logging()
-        print_info(f"Agents module dependencies not available: {_IMPORT_ERROR}")
-        print_info("Install with: pip install aiohttp")
-        print_info("Skipping agents examples - success.")
-        return 0
-
-    if __name__ == "__main__":
-        import sys
-
-        sys.exit(main())
-    else:
-        # Let the import error propagate if not running as main
-        raise
 
 
 # 1. Define a Mock Agent for demonstration (to avoid requiring real API keys in example)

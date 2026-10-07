@@ -63,6 +63,7 @@ def main():
         print_success("  REST API and Router functional.")
     except Exception as e:
         print_error(f"  API definition failed: {e}")
+        return 1
 
     # 2. OpenAPI
     print_info("Testing OpenAPI generation...")

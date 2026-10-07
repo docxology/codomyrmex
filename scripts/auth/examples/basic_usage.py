@@ -71,6 +71,7 @@ def main():
                 print_error("  Authorization check failed unexpectedly.")
     except Exception as e:
         print_error(f"  Auth flow failed: {e}")
+        return 1
 
     # 3. Token Management directly
     print_info("Testing TokenManager directly...")
