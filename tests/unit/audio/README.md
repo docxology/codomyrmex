@@ -7,6 +7,7 @@
 Validation coverage, fixtures, and regression checks for Audio.
 
 ## Directory Contents
+
 - `AGENTS.md` – File
 - `PAI.md` – File
 - `README.md` – File
@@ -18,7 +19,6 @@ Validation coverage, fixtures, and regression checks for Audio.
 - `test_audio_streaming.py` – File
 - `test_codec.py` – File
 - `test_edge_tts_lifecycle.py` – File
-- `test_mcp_audio.py` – File
 - `test_mcp_tools.py` – File
 - `test_stt_models.py` – File
 - `test_synthesizer.py` – File
@@ -27,6 +27,7 @@ Validation coverage, fixtures, and regression checks for Audio.
 - `test_vad.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: ../../../../../README.md
 
