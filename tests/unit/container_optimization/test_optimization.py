@@ -60,20 +60,45 @@ def existing_image(docker_client):
     return images[0].id
 
 
+# Images known to ship a ``sleep`` binary; CI pulls python:3.9-slim and bash:5.1.
+_SLEEP_CAPABLE = ("python:", "bash:", "alpine", "busybox", "ubuntu", "debian")
+
+
 @pytest.fixture(scope="module")
 def running_container(docker_client, existing_image):
-    """Runs a container for testing resource tuning."""
-    # We try to run the existing image if possible.
-    # This might fail if the entrypoint is not suitable.
+    """Runs a long-lived container for testing resource tuning.
+
+    Regression: the first tagged image was used blindly. When its entrypoint
+    could not run ``sleep`` the container exited at once and was auto-removed,
+    so ``stats()`` returned an empty body (JSONDecodeError) instead of the test
+    skipping. Prefer images that have ``sleep`` and require a running state.
+    """
+    tags = [tag for image in docker_client.images.list() for tag in image.tags]
+    image = next(
+        (tag for tag in tags if tag.startswith(_SLEEP_CAPABLE)), existing_image
+    )
     try:
         container = docker_client.containers.run(
-            existing_image, command="sleep 100", detach=True, remove=True
+            image, command=["sleep", "100"], entrypoint="", detach=True, remove=True
         )
+    except docker_errors.DockerException as exc:
+        pytest.skip(f"Could not run container {image!r}: {exc}")
+    try:
+        deadline = time.monotonic() + 10
+        while time.monotonic() < deadline:
+            try:
+                container.reload()
+            except docker_errors.NotFound:
+                pytest.skip(f"Container from {image!r} exited immediately")
+            if container.status == "running":
+                break
+            time.sleep(0.2)
+        else:
+            pytest.skip(f"Container from {image!r} did not stay running")
         yield container
-        with contextlib.suppress(Exception):
+    finally:
+        with contextlib.suppress(docker_errors.DockerException):
             container.stop(timeout=1)
-    except Exception as e:
-        pytest.skip(f"Could not run container for test: {e}")
 
 
 class TestContainerOptimizer:

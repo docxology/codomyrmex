@@ -78,7 +78,7 @@ class ResourceTuner:
             if candidate is not None:
                 with contextlib.suppress(Exception):
                     candidate.close()
-            logger.debug("Could not connect to Docker: %s", e)
+            logger.debug("Could not connect to Docker: {}", e)
             self.client = None
 
     def close(self) -> None:
@@ -142,7 +142,7 @@ class ResourceTuner:
         except docker_errors.NotFound as exc:
             raise ValueError(f"Container '{container_id}' not found") from exc
         except Exception as e:
-            logger.error("Failed to analyze container %s: %s", container_id, e)
+            logger.error("Failed to analyze container {}: {}", container_id, e)
             raise
 
     def suggest_limits(self, usage: ResourceUsage) -> dict[str, str]:
