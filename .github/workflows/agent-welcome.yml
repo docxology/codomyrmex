@@ -57,7 +57,8 @@ jobs:
           - [ ] Changes follow zero-mock testing policy
           - [ ] Documentation updated if needed
 
-          This PR will be auto-labeled and auto-merged if all checks pass.
+          A maintainer reviews agent PRs. Once reviewed, the `auto-merge` label
+          merges it automatically after every check passes.
           GREETING_EOF
               ;;
             "dependabot")

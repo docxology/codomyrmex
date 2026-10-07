@@ -6,9 +6,16 @@ Backend-dependent behavior is exercised with deterministic local command paths.
 
 from __future__ import annotations
 
-import pytest
+from typing import TYPE_CHECKING
+
+from tests.support.isolated_git import branches, isolated_git_repo
 
 from codomyrmex.agents.hermes.client_pkg import HermesClient
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    import pytest
 
 # ── Client instantiation ─────────────────────────────────────────────
 
@@ -189,25 +196,23 @@ class TestHermesClientSessionManagement:
 class TestHermesClientAdvancedOperations:
     """Verify worktrees, loops, and external operations with graceful error handling."""
 
-    def test_create_and_cleanup_worktree(self, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_create_and_cleanup_worktree(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        # A real throwaway repository instead of replacing subprocess.run with
+        # a stub (which the zero-mock policy forbids and which made the test
+        # assert nothing about git).
+        repo = isolated_git_repo(tmp_path, monkeypatch)
         client = HermesClient()
-        # Might gracefully fail and return None if session is missing or git worktree fails
-        # so we monkeypatch subprocess.run to simulate success
-        monkeypatch.setattr(
-            "subprocess.run",
-            lambda *args, **kwargs: type(
-                "Mock", (), {"returncode": 0, "stdout": b"ok", "stderr": b""}
-            ),
-        )
-        res = client.create_worktree("test-non-existent")
-        assert (
-            res is None
-            or isinstance(res, type(pytest.MonkeyPatch))
-            or type(res).__name__ in ("PosixPath", "WindowsPath", "NoneType")
-        )
+        worktree = client.create_worktree("test-worktree")
+        assert worktree is not None
+        assert worktree.is_dir()
+        assert "hermes/test-worktree" in branches(repo)
 
-        cleanup = client.cleanup_worktree("test-non-existent")
-        assert isinstance(cleanup, bool)
+        assert client.cleanup_worktree("test-worktree") is True
+        assert not worktree.exists()
+        assert "hermes/test-worktree" not in branches(repo)
+        assert client.cleanup_worktree("test-worktree") is False
 
     def test_batch_execute(self, monkeypatch: pytest.MonkeyPatch) -> None:
         from codomyrmex.agents.hermes.client_pkg import HermesClient

@@ -57,12 +57,13 @@ jobs:
           # --- Agent detection from branch name ---
           # Jules branches
           if echo "$PR_BRANCH" | grep -qE '^(fix|feat|improve|refactor|add|cleanup|code-health|defense|bolt|feature|ai-gateway|simulation|bio-simulation|calendar)-'; then
-            labels+=("jules" "agent-pr" "auto-merge")
+            # Never add the auto-merge label here: merging is a reviewer decision.
+            labels+=("jules" "agent-pr")
           fi
 
           # Dependabot
           if [[ "$PR_AUTHOR" == "dependabot"* ]]; then
-            labels+=("dependencies" "automated" "auto-merge")
+            labels+=("dependencies" "automated")
           fi
 
           # --- Size detection ---

@@ -4,9 +4,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from tests.support.isolated_git import isolated_git_repo
+
 from codomyrmex.agents.hermes import mcp_tools
 
 if TYPE_CHECKING:
+    from pathlib import Path
+
     import pytest
 
 
@@ -68,11 +72,16 @@ class TestHermesSessionTools:
 class TestHermesWorktreeTools:
     """Test worktree MCP tools."""
 
-    def test_worktree_lifecycle_failure_fake(self) -> None:
+    def test_worktree_lifecycle(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        # Runs in a throwaway repository: these tools create real worktrees
+        # and branches in the current directory's repository.
+        isolated_git_repo(tmp_path, monkeypatch)
         result = mcp_tools.hermes_worktree_create("fake_session_-1")
-        assert isinstance(result, dict)
+        assert result["status"] == "success"
         cleanup = mcp_tools.hermes_worktree_cleanup("fake_session_-1")
-        assert isinstance(cleanup, dict)
+        assert cleanup["cleaned"] is True
 
 
 class TestHermesMiscTools:

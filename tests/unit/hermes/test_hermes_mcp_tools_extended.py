@@ -8,8 +8,10 @@ from __future__ import annotations
 
 import os
 import shutil
+from pathlib import Path
 
 import pytest
+from tests.support.isolated_git import branches, isolated_git_repo
 
 from codomyrmex.agents.hermes.mcp_tools import (
     hermes_check_dependencies,
@@ -78,17 +80,33 @@ class TestHermesVersion:
 class TestHermesWorktreeTools:
     """Verify worktree MCP tools return proper structures."""
 
-    def test_create_returns_dict(self) -> None:
-        # Even without git repo context, should not crash
+    def test_create_and_cleanup_round_trip(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        # Regression: this ran in the project checkout and left a real
+        # hermes/test-wt-001 worktree and branch behind on every test run.
+        repo = isolated_git_repo(tmp_path, monkeypatch)
         result = hermes_worktree_create(session_id="test-wt-001")
-        assert isinstance(result, dict)
-        assert "status" in result
+        assert result["status"] == "success"
+        worktree = Path(result["worktree_path"])
+        assert worktree.is_dir()
+        assert worktree.is_relative_to(tmp_path)
+        assert "hermes/test-wt-001" in branches(repo)
 
-    def test_cleanup_returns_dict(self) -> None:
+        cleanup = hermes_worktree_cleanup(session_id="test-wt-001")
+        assert cleanup["status"] == "success"
+        assert cleanup["cleaned"] is True
+        assert not worktree.exists()
+        assert "hermes/test-wt-001" not in branches(repo)
+
+    def test_cleanup_of_unknown_session_is_not_reported_as_cleaned(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        isolated_git_repo(tmp_path, monkeypatch)
         result = hermes_worktree_cleanup(session_id="test-wt-nonexistent")
-        assert isinstance(result, dict)
-        assert "status" in result
-        assert "cleaned" in result
+        # Previously reported success for a worktree that never existed.
+        assert result["status"] == "error"
+        assert result["cleaned"] is False
 
 
 # ── hermes_session_search ─────────────────────────────────────────────

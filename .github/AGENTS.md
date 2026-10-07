@@ -25,7 +25,7 @@ This document tells AI agents what they need to know to operate safely within th
 | `workflows/workflow-coordinator.yml` | Smart path-based selective workflow triggering |
 | `workflows/workflow-status.yml` | Aggregated status dashboard after workflow completions |
 | `workflows/code-health.yml` | Weekly code health dashboard with coverage trends |
-| `workflows/auto-merge.yml` | Auto squash-merge for `jules`/`automated`/`auto-merge` labeled PRs |
+| `workflows/auto-merge.yml` | Squash-merge for PRs a reviewer labelled `auto-merge` (eligibility: `scripts/maintenance/auto_merge_eligible.py`) |
 | `workflows/cleanup-branches.yml` | Weekly cleanup of merged + stale branches |
 | `workflows/pr-labeler.yml` | Auto-labels PRs by paths, branch name, size, and module |
 | `workflows/pr-conflict-check.yml` | Scans open PRs for merge conflicts every 6 hours |
@@ -69,7 +69,7 @@ This document tells AI agents what they need to know to operate safely within th
 
 | Feature | Details |
 | --- | --- |
-| Auto-labeling | `pr-labeler.yml` adds `dependencies` + `automated` + `auto-merge` |
+| Auto-labeling | `pr-labeler.yml` adds `dependencies` + `automated` (never `auto-merge`) |
 | Auto-merge | `auto-merge.yml` merges when checks pass |
 
 ## Safe Operations
