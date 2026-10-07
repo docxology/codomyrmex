@@ -25,7 +25,7 @@ is a full working copy sharing the same `.git` directory. This means:
 git worktree list
 
 # Typical output:
-# /Users/mini/Documents/GitHub/codomyrmex                           041ea3f9 [main]
+# /path/to/codomyrmex                                               041ea3f9 [main]
 # .claude/worktrees/agent-a04c4e4b   dea00ccd [worktree-agent-a04c4e4b]
 # .claude/worktrees/agent-a4372589   dea00ccd [worktree-agent-a4372589]
 # ...

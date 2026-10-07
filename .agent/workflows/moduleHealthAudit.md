@@ -1,5 +1,5 @@
 ---
-description: Audit Codomyrmex module health: RASP compliance, MCP tool correctness, PAI.md accuracy, test coverage. Use at sprint boundaries or before a release.
+description: "Audit Codomyrmex module health: RASP compliance, MCP tool correctness, PAI.md accuracy, test coverage. Use at sprint boundaries or before a release."
 ---
 
 # Module Health Audit
@@ -57,7 +57,7 @@ uv run pytest --cov=src/codomyrmex --cov-report=term-missing -q 2>&1 \
 
 ## 5. Report Format
 
-```
+```text
 MODULE HEALTH AUDIT -- <date>
 RASP: <N> complete, <M> missing files
 MCP Tools: <N> modules with mcp_tools.py, <M> phantom refs

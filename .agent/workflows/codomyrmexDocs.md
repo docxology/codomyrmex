@@ -13,7 +13,7 @@ Retrieves the official documentation (README.md or SPEC.md) for a specific Codom
 1. Fetch documentation:
 
 ```bash
-cd /Users/mini/Documents/GitHub/codomyrmex && uv run python -c "
+cd "$(git rev-parse --show-toplevel)" && uv run python -c "
 from codomyrmex.agents.pai.mcp_bridge import tool_get_module_readme
 import sys
 import json
