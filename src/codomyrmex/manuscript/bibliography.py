@@ -319,7 +319,7 @@ def _resolve_isbn_record(
         primary_error = f"{type(exc).__name__}: {exc}"
         if isinstance(exc, urllib.error.HTTPError):
             result["http_status"] = exc.code
-            result["resolved_url"] = exc.geturl()
+            result["resolved_url"] = exc.url
 
     query = urllib.parse.urlencode(
         {"isbn": locator, "limit": 5, "fields": "key,title,isbn"}
@@ -354,7 +354,7 @@ def _resolve_isbn_record(
             fallback_error = f"search fallback failed ({type(exc).__name__}: {exc})"
             if isinstance(exc, urllib.error.HTTPError):
                 result["http_status"] = exc.code
-                result["resolved_url"] = exc.geturl()
+                result["resolved_url"] = exc.url
     google_query = urllib.parse.urlencode({"q": f"isbn:{locator}"})
     google_url = f"https://books.google.com/books/feeds/volumes?{google_query}"
     google_error = ""
@@ -386,7 +386,7 @@ def _resolve_isbn_record(
         google_error = f"Google Books feed failed ({type(exc).__name__}: {exc})"
         if isinstance(exc, urllib.error.HTTPError):
             result["http_status"] = exc.code
-            result["resolved_url"] = exc.geturl()
+            result["resolved_url"] = exc.url
     result["error"] = (
         f"exact ISBN lookup failed ({primary_error}); {fallback_error}; {google_error}"
     )
@@ -481,7 +481,7 @@ def _resolve_record(
         result["error"] = f"{type(exc).__name__}: {exc}"
         if isinstance(exc, urllib.error.HTTPError):
             result["http_status"] = exc.code
-            result["resolved_url"] = exc.geturl()
+            result["resolved_url"] = exc.url
             if kind == "official-url" and exc.code in {401, 403}:
                 # A repository may reject automated retrieval while still resolving
                 # its persistent locator. Preserve that limitation in the receipt.

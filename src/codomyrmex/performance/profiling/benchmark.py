@@ -144,9 +144,9 @@ def profile_function(func: Callable, *args: Any, **kwargs: Any) -> dict[str, Any
     Returns:
         dict with 'execution_time' (seconds) and 'memory_usage' (MB).
     """
+    process = psutil.Process() if HAS_PSUTIL else None
     memory_before = 0.0
-    if HAS_PSUTIL:
-        process = psutil.Process()
+    if process is not None:
         memory_before = process.memory_info().rss / (1024 * 1024)
 
     start = time.perf_counter()
@@ -157,7 +157,7 @@ def profile_function(func: Callable, *args: Any, **kwargs: Any) -> dict[str, Any
     execution_time = time.perf_counter() - start
 
     memory_after = 0.0
-    if HAS_PSUTIL:
+    if process is not None:
         memory_after = process.memory_info().rss / (1024 * 1024)
 
     return {

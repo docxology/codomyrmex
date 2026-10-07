@@ -9,11 +9,15 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any
 
-import OpenSSL
+from cryptography import x509
+from cryptography.x509.oid import NameOID
 
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
+
+# ASN.1 GeneralizedTime layout used by OpenSSL when printing validity dates.
+_ASN1_TIME_FORMAT = "%Y%m%d%H%M%SZ"
 
 
 @dataclass
@@ -55,64 +59,8 @@ class CertificateValidator:
             Validation result
         """
         try:
-            # Get certificate from server
             cert_pem = self._get_certificate(hostname, port)
-
-            # Parse with OpenSSL
-            x509 = OpenSSL.crypto.load_certificate(
-                OpenSSL.crypto.FILETYPE_PEM, cert_pem
-            )
-
-            # Extract info
-            subject = dict(x509.get_subject().get_components())
-            issuer = dict(x509.get_issuer().get_components())
-            serial = x509.get_serial_number()
-
-            # Check expiration
-            not_after_bytes = x509.get_notAfter()
-            if not_after_bytes:
-                not_after_str = not_after_bytes.decode("utf-8")
-                # OpenSSL format: YYYYMMDDhhmmssZ
-                expires_at = datetime.strptime(not_after_str, "%Y%m%d%H%M%SZ").replace(
-                    tzinfo=UTC
-                )
-                now = datetime.now(UTC)
-                days_left = (expires_at - now).days
-                is_expired = days_left < 0
-            else:
-                days_left = None
-                is_expired = False
-
-            # Basic validation status
-            is_valid = not x509.has_expired() and not is_expired
-            errors = []
-            if x509.has_expired():
-                errors.append("Certificate has expired (OpenSSL check)")
-            if is_expired:
-                errors.append(f"Certificate expired {abs(days_left)} days ago")
-
-            # Simplify subject/issuer for display
-            subject_str = self._format_x509_name(subject)
-            issuer_str = self._format_x509_name(issuer)
-
-            return SSLValidationResult(
-                hostname=hostname,
-                port=port,
-                valid=is_valid,
-                certificate_info={
-                    "version": x509.get_version(),
-                    "signature_algorithm": x509.get_signature_algorithm().decode(
-                        "utf-8"
-                    ),
-                    "not_before": x509.get_notBefore().decode("utf-8"),
-                    "not_after": not_after_str,
-                },
-                validation_errors=errors or None,
-                expiration_days=days_left,
-                issuer=issuer_str,
-                subject=subject_str,
-                serial_number=str(serial),
-            )
+            return self.inspect_pem(hostname, port, cert_pem)
 
         except Exception as e:
             logger.error(
@@ -125,6 +73,46 @@ class CertificateValidator:
                 certificate_info={},
                 validation_errors=[str(e)],
             )
+
+    def inspect_pem(
+        self, hostname: str, port: int, cert_pem: str, now: datetime | None = None
+    ) -> SSLValidationResult:
+        """Assess a PEM-encoded certificate (expiry, subject, issuer, serial).
+
+        Args:
+            hostname: Hostname the certificate was retrieved for.
+            port: Port the certificate was retrieved from.
+            cert_pem: PEM-encoded certificate.
+            now: Reference time (defaults to the current UTC time).
+
+        Returns:
+            Validation result.
+        """
+        cert = x509.load_pem_x509_certificate(cert_pem.encode("ascii"))
+        now = now or datetime.now(UTC)
+
+        expires_at = cert.not_valid_after_utc
+        days_left = (expires_at - now).days
+        is_valid = now <= expires_at
+        errors = [] if is_valid else [f"Certificate expired {abs(days_left)} days ago"]
+
+        return SSLValidationResult(
+            hostname=hostname,
+            port=port,
+            valid=is_valid,
+            certificate_info={
+                # 0-based like the X.509 version field (2 == v3).
+                "version": cert.version.value,
+                "signature_algorithm": cert.signature_algorithm_oid._name,
+                "not_before": cert.not_valid_before_utc.strftime(_ASN1_TIME_FORMAT),
+                "not_after": expires_at.strftime(_ASN1_TIME_FORMAT),
+            },
+            validation_errors=errors or None,
+            expiration_days=days_left,
+            issuer=self._format_x509_name(cert.issuer),
+            subject=self._format_x509_name(cert.subject),
+            serial_number=str(cert.serial_number),
+        )
 
     def _get_certificate(self, hostname: str, port: int) -> str:
         """Retrieve certificate from server."""
@@ -141,16 +129,17 @@ class CertificateValidator:
                     raise ValueError("No certificate retrieved")
                 return ssl.DER_cert_to_PEM_cert(cert_bin)
 
-    def _format_x509_name(self, components: dict[bytes, bytes]) -> str:
-        """Format OpenSSL X509 Name components to string."""
-        parts = []
-        # Common Name
-        if b"CN" in components:
-            parts.append(f"CN={components[b'CN'].decode('utf-8', errors='ignore')}")
-        # Organization
-        if b"O" in components:
-            parts.append(f"O={components[b'O'].decode('utf-8', errors='ignore')}")
-
+    @staticmethod
+    def _format_x509_name(name: x509.Name) -> str:
+        """Format the CN and O attributes of an X.509 name for display."""
+        parts = [
+            f"{label}={attr.value}"
+            for label, oid in (
+                ("CN", NameOID.COMMON_NAME),
+                ("O", NameOID.ORGANIZATION_NAME),
+            )
+            for attr in name.get_attributes_for_oid(oid)[:1]
+        ]
         return ", ".join(parts) or "Unknown"
 
 

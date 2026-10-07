@@ -114,6 +114,7 @@ class ConcordanceVisualizer:
 
         # Create correlation matrix
         methods = ["CBR", "Bayesian"]
+        ai_norm: dict[str, float] = {}
         if active_inference_results:
             ai_norm = normalize(
                 {pid: active_inference_results.get(pid, 0.0) for pid in pattern_ids}

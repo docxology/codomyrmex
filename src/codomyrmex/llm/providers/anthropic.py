@@ -1,7 +1,30 @@
 from collections.abc import Iterator
+from typing import Any
 
 from .base import LLMProvider
 from .models import CompletionResponse, Message, ProviderConfig, ProviderType
+
+
+def _split_messages(
+    messages: list[Message],
+) -> tuple[dict[str, Any], list[Any]]:
+    """Separate system messages, which Anthropic takes as the ``system`` argument.
+
+    Returns the ``system`` keyword arguments (empty when there is no system
+    message, so the argument is omitted instead of being sent as null; several
+    system messages are joined) and the remaining chat messages.
+    """
+    system_parts: list[str] = []
+    # Typed loosely: the SDK's MessageParam is only importable with the optional
+    # anthropic extra installed, and Message.role is a plain str.
+    chat_messages: list[Any] = []
+    for m in messages:
+        if m.role == "system":
+            system_parts.append(m.content)
+        else:
+            chat_messages.append({"role": m.role, "content": m.content})
+    system_kwargs = {"system": "\n\n".join(system_parts)} if system_parts else {}
+    return system_kwargs, chat_messages
 
 
 class AnthropicProvider(LLMProvider):
@@ -33,18 +56,12 @@ class AnthropicProvider(LLMProvider):
         if not self._client:
             raise RuntimeError("Anthropic client not initialized.")
 
-        # Extract system message
-        chat_messages = []
-        for m in messages:
-            if m.role == "system":
-                system = m.content
-            else:
-                chat_messages.append({"role": m.role, "content": m.content})
+        system_kwargs, chat_messages = _split_messages(messages)
 
         response = self._client.messages.create(
             model=self.get_model(model),
             messages=chat_messages,
-            system=system,
+            **system_kwargs,
             temperature=temperature,
             max_tokens=max_tokens or 4096,
             **kwargs,
@@ -75,17 +92,12 @@ class AnthropicProvider(LLMProvider):
         if not self._client:
             raise RuntimeError("Anthropic client not initialized.")
 
-        chat_messages = []
-        for m in messages:
-            if m.role == "system":
-                system = m.content
-            else:
-                chat_messages.append({"role": m.role, "content": m.content})
+        system_kwargs, chat_messages = _split_messages(messages)
 
         with self._client.messages.stream(
             model=self.get_model(model),
             messages=chat_messages,
-            system=system,
+            **system_kwargs,
             temperature=temperature,
             max_tokens=max_tokens or 4096,
             **kwargs,
@@ -105,17 +117,12 @@ class AnthropicProvider(LLMProvider):
 
             async_client = AsyncAnthropic(api_key=self.config.api_key)
 
-            chat_messages = []
-            for m in messages:
-                if m.role == "system":
-                    system = m.content
-                else:
-                    chat_messages.append({"role": m.role, "content": m.content})
+            system_kwargs, chat_messages = _split_messages(messages)
 
             response = await async_client.messages.create(
                 model=self.get_model(model),
                 messages=chat_messages,
-                system=system,
+                **system_kwargs,
                 temperature=temperature,
                 max_tokens=max_tokens or 4096,
                 **kwargs,

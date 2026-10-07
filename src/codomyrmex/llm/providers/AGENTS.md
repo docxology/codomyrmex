@@ -11,7 +11,6 @@ Module implementation, resources, and local coordination for Providers.
 - `SPEC.md` – Project file
 - `__init__.py` – Project file
 - `anthropic.py` – Project file
-- `anthropic_provider.py` – Project file
 - `base.py` – Project file
 - `factory.py` – Project file
 - `gemini.py` – Project file
@@ -34,7 +33,6 @@ Module implementation, resources, and local coordination for Providers.
 - `SPEC.md`
 - `__init__.py`
 - `anthropic.py`
-- `anthropic_provider.py`
 - `base.py`
 - `factory.py`
 - `gemini.py`

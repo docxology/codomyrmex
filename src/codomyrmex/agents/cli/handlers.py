@@ -314,34 +314,38 @@ _API_KEY_AGENTS = [
     ("codex", CodexClient, "Codex", "codex", "OPENAI_API_KEY"),
 ]
 
+
 # Generate execute/stream/check handlers from the registry tables.
 # The resulting names (handle_<agent>_execute, etc.) are identical to what
 # was previously written out by hand, so all importers see the same interface.
-for _name, _cls, _display in _CLI_AGENTS:
-    globals()[f"handle_{_name}_execute"] = lambda args, c=_cls, d=_display: (
-        _handle_agent_execute(c, d, args)
-    )
-    globals()[f"handle_{_name}_stream"] = lambda args, c=_cls, d=_display: (
-        _handle_agent_stream(c, d, args)
-    )
-    globals()[f"handle_{_name}_check"] = lambda args, c=_cls, d=_display: (
-        _handle_cli_agent_check(c, d, args)
-    )
-
-for _name, _cls, _display, _prefix, _env in _API_KEY_AGENTS:
-    globals()[f"handle_{_name}_execute"] = lambda args, c=_cls, d=_display: (
-        _handle_agent_execute(c, d, args)
-    )
-    globals()[f"handle_{_name}_stream"] = lambda args, c=_cls, d=_display: (
-        _handle_agent_stream(c, d, args)
-    )
-    globals()[f"handle_{_name}_check"] = (
-        lambda args, c=_cls, d=_display, p=_prefix, e=_env: _handle_api_key_check(
-            c, d, p, e, args
+def _register_agent_handlers(namespace: dict[str, Any]) -> None:
+    """Define handle_<agent>_{execute,stream,check} for every table entry."""
+    for name, cls, display in _CLI_AGENTS:
+        namespace[f"handle_{name}_execute"] = lambda args, c=cls, d=display: (
+            _handle_agent_execute(c, d, args)
         )
-    )
+        namespace[f"handle_{name}_stream"] = lambda args, c=cls, d=display: (
+            _handle_agent_stream(c, d, args)
+        )
+        namespace[f"handle_{name}_check"] = lambda args, c=cls, d=display: (
+            _handle_cli_agent_check(c, d, args)
+        )
 
-del _name, _cls, _display  # clean up loop variables from module namespace
+    for name, cls, display, prefix, env in _API_KEY_AGENTS:
+        namespace[f"handle_{name}_execute"] = lambda args, c=cls, d=display: (
+            _handle_agent_execute(c, d, args)
+        )
+        namespace[f"handle_{name}_stream"] = lambda args, c=cls, d=display: (
+            _handle_agent_stream(c, d, args)
+        )
+        namespace[f"handle_{name}_check"] = (
+            lambda args, c=cls, d=display, p=prefix, e=env: _handle_api_key_check(
+                c, d, p, e, args
+            )
+        )
+
+
+_register_agent_handlers(globals())
 
 
 def handle_jules_help(args):

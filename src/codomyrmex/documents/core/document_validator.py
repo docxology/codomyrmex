@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import json
 from typing import TYPE_CHECKING
+
+import jsonschema
+import yaml
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -80,8 +84,6 @@ class DocumentValidator:
         errors = []
         try:
             if isinstance(document.content, str):
-                import json
-
                 json.loads(document.content)
             elif isinstance(document.content, dict):
                 # Already parsed, validate structure
@@ -97,8 +99,6 @@ class DocumentValidator:
         errors = []
         try:
             if isinstance(document.content, str):
-                import yaml
-
                 yaml.safe_load(document.content)
             elif isinstance(document.content, dict):
                 # Already parsed
@@ -113,19 +113,13 @@ class DocumentValidator:
         """Validate document against JSON schema."""
         errors = []
         try:
-            import jsonschema
-
             # Get content as dict
             if isinstance(document.content, dict):
                 content_dict = document.content
             elif isinstance(document.content, str):
                 if document.format.value == "json":
-                    import json
-
                     content_dict = json.loads(document.content)
                 elif document.format.value == "yaml":
-                    import yaml
-
                     content_dict = yaml.safe_load(document.content)
                 else:
                     return errors  # Schema validation only for structured formats

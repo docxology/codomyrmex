@@ -89,11 +89,8 @@ class DarkPDFFilter:
             New PIL Image with filters applied.
         """
         # Convert to RGB if needed, preserving alpha
-        has_alpha = image.mode == "RGBA"
-        if has_alpha:
-            alpha = image.split()[3]
-            rgb = image.convert("RGB")
-        elif image.mode != "RGB":
+        alpha = image.split()[3] if image.mode == "RGBA" else None
+        if alpha is not None or image.mode != "RGB":
             rgb = image.convert("RGB")
         else:
             rgb = image.copy()
@@ -133,7 +130,7 @@ class DarkPDFFilter:
 
         result = Image.fromarray(pixels.astype(np.uint8))
 
-        if has_alpha:
+        if alpha is not None:
             result.putalpha(alpha)
 
         return result

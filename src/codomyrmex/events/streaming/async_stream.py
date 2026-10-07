@@ -198,23 +198,22 @@ class BatchingStream:
         """Add event to batch."""
         async with self._lock:
             self._batch.append(event)
+            if len(self._batch) < self._batch_size:
+                return
 
-            if len(self._batch) >= self._batch_size:
-                batch = self._batch
-                self._batch = []
-
-            if len(self._batch) == 0 and "batch" in locals():
-                for handler in self._handlers:
-                    try:
-                        handler(batch)
-                    except (
-                        ValueError,
-                        RuntimeError,
-                        AttributeError,
-                        OSError,
-                        TypeError,
-                    ) as e:
-                        logger.debug("Batch handler error during add: %s", e)
+            batch = self._batch
+            self._batch = []
+            for handler in self._handlers:
+                try:
+                    handler(batch)
+                except (
+                    ValueError,
+                    RuntimeError,
+                    AttributeError,
+                    OSError,
+                    TypeError,
+                ) as e:
+                    logger.debug("Batch handler error during add: %s", e)
 
     def on_batch(self, handler: Callable[[list[Event]], None]) -> None:
         """Register batch handler."""

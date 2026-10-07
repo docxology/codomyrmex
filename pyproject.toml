@@ -187,7 +187,6 @@ security_audit = [
     "cryptography>=50.0.0",
     "jinja2>=3.1.0",
     "pip-audit>=2.10.1",
-    "pyopenssl>=23.0.0",
     "safety>=3.8.1",
 ]
 
@@ -764,10 +763,12 @@ exclude = [
 
 [tool.ty.rules]
 # v1.1.1: Tightened from initial lenient config
-possibly-unresolved-reference = "ignore"
+# Ratchet: these are clean and must stay clean.
+possibly-unresolved-reference = "error"
+unsupported-base = "error"
+deprecated = "error"
+# Still lenient (too many existing diagnostics to enforce yet).
 unresolved-import = "ignore"
-unsupported-base = "ignore"
-deprecated = "ignore"
 invalid-argument-type = "ignore"
 not-subscriptable = "ignore"
 unresolved-attribute = "ignore"

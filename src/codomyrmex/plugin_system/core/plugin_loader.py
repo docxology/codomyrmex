@@ -6,11 +6,15 @@ of plugins in the Codomyrmex system.
 """
 
 import importlib.util
+import json
 import re
 import sys
+import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+
+import yaml
 
 # Import logging
 try:
@@ -280,9 +284,8 @@ class PluginLoader:
 
         # Handle different entry point formats
         if entry_point.endswith(".py"):
-            # Direct file path
-
-            # Search in plugin directories
+            # Direct file path: search the plugin directories
+            plugin_path: Path | None = None
             for directory in self.plugin_directories:
                 candidate = Path(directory) / entry_point
                 if candidate.exists():
@@ -375,18 +378,12 @@ class PluginLoader:
             if metadata_file.exists():
                 try:
                     if metadata_file.suffix == ".json":
-                        import json
-
                         with open(metadata_file) as f:
                             data = json.load(f)
                     elif metadata_file.suffix in [".yaml", ".yml"]:
-                        import yaml
-
                         with open(metadata_file) as f:
                             data = yaml.safe_load(f)
-                    elif metadata_file.name == "pyproject.toml":
-                        import tomllib
-
+                    else:  # pyproject.toml
                         with open(metadata_file, "rb") as f:
                             toml_data = tomllib.load(f)
                         data = (
@@ -396,7 +393,9 @@ class PluginLoader:
                         )
 
                     # Extract plugin info
-                    if all(key in data for key in ["name", "version", "entry_point"]):
+                    if isinstance(data, dict) and all(
+                        key in data for key in ["name", "version", "entry_point"]
+                    ):
                         from .plugin_registry import PluginType
 
                         plugin_type = PluginType(data.get("plugin_type", "utility"))
@@ -442,8 +441,6 @@ class PluginLoader:
             # Look for plugin metadata in comments or docstring
             metadata_match = re.search(r"#\s*plugin:\s*(\{.*\})", content, re.DOTALL)
             if metadata_match:
-                import json
-
                 metadata = json.loads(metadata_match.group(1))
 
                 from .plugin_registry import PluginType

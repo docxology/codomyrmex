@@ -7,22 +7,15 @@ Available providers:
 
 from .base import TTSProvider
 
-# Conditionally import providers based on availability
-try:
-    from .pyttsx3_provider import PYTTSX3_AVAILABLE, Pyttsx3Provider
-except ImportError:
-    PYTTSX3_AVAILABLE = False
-
-try:
-    from .edge_tts_provider import (
-        EDGE_TTS_AVAILABLE,
-        POPULAR_VOICES,
-        EdgeTTSProvider,
-    )
-except ImportError:
-    EDGE_TTS_AVAILABLE = False
-    POPULAR_VOICES = {}
-
+# The provider modules guard their optional dependencies themselves, so these
+# imports never fail; each provider raises ProviderNotAvailableError on
+# construction when its dependency is missing.
+from .edge_tts_provider import (
+    EDGE_TTS_AVAILABLE,
+    POPULAR_VOICES,
+    EdgeTTSProvider,
+)
+from .pyttsx3_provider import PYTTSX3_AVAILABLE, Pyttsx3Provider
 
 # Hoisted static mapping to prevent per-call allocation overhead
 _PROVIDERS = {
