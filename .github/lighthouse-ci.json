@@ -26,13 +26,13 @@
             "minScore": 0.8
           }
         ],
-        "audits:largest-contentful-paint": [
+        "largest-contentful-paint": [
           "error",
           {
             "maxNumericValue": 2500
           }
         ],
-        "audits:cumulative-layout-shift": [
+        "cumulative-layout-shift": [
           "error",
           {
             "maxNumericValue": 0.1
