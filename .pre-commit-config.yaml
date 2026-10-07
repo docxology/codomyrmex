@@ -40,6 +40,8 @@ repos:
     hooks:
       - id: detect-secrets
         exclude: \.lock$|\.min\.js$
+        # Subresource Integrity values are public digests of CDN files.
+        args: [--exclude-lines, 'integrity="sha(256|384|512)-']
 
   # Python syntax checking
   - repo: local
