@@ -17,13 +17,38 @@ from __future__ import annotations
 import ast
 import logging
 import time
+from collections import deque
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 logger = logging.getLogger(__name__)
 
 _SRC_ROOT = Path(__file__).resolve().parents[1]
+
+# Fields that hold statement lists (or handler/case nodes whose bodies do).
+_STATEMENT_FIELDS = frozenset({"body", "orelse", "finalbody", "handlers", "cases"})
+
+
+def iter_statements(tree: ast.Module) -> Iterator[ast.AST]:
+    """Yield statement-level nodes in the order ``ast.walk`` visits them.
+
+    Class, function and assignment nodes only occur in statement lists, so
+    skipping expression subtrees (most of a parse tree) finds exactly the
+    definitions ``ast.walk`` finds, nested ones included, in the same
+    breadth-first order. Except-handler and match-case nodes are yielded as
+    the containers of their bodies.
+    """
+    todo: deque[ast.AST] = deque(tree.body)
+    while todo:
+        node = todo.popleft()
+        for name in node._fields:
+            if name in _STATEMENT_FIELDS:
+                todo.extend(getattr(node, name))
+        yield node
 
 
 @dataclass
@@ -114,6 +139,7 @@ class ModuleIntrospector:
         total_classes = 0
         total_functions = 0
         mcp_count = 0
+        exports_line = -1
 
         for f in py_files:
             try:
@@ -124,15 +150,22 @@ class ModuleIntrospector:
                 tree = ast.parse(content, filename=str(f))
                 is_main_init = f == mod_dir / "__init__.py"
 
-                for node in ast.walk(tree):
+                for node in iter_statements(tree):
                     if isinstance(node, ast.ClassDef):
                         total_classes += 1
                     elif isinstance(node, ast.FunctionDef) and node.col_offset == 0:
                         total_functions += 1
-                    elif is_main_init and isinstance(node, ast.Assign):
+                    elif (
+                        is_main_init
+                        and isinstance(node, ast.Assign)
+                        # The source-last assignment is the one in effect;
+                        # walk order would let a nested one override it.
+                        and node.lineno > exports_line
+                    ):
                         for target in node.targets:
                             if isinstance(target, ast.Name) and target.id == "__all__":
                                 if isinstance(node.value, ast.List):
+                                    exports_line = node.lineno
                                     info.exports = [
                                         elt.value
                                         for elt in node.value.elts
