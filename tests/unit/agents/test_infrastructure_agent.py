@@ -154,6 +154,31 @@ class TestInfrastructureAgentInit:
         agent = InfrastructureAgent()
         assert agent.name == "InfrastructureAgent"
 
+    def test_from_env_without_credentials_skips_every_client(self, monkeypatch):
+        """Missing credentials leave clients out and record why, not raise."""
+        for name in (
+            "INFOMANIAK_APP_CREDENTIAL_ID",
+            "INFOMANIAK_APP_CREDENTIAL_SECRET",
+            "INFOMANIAK_S3_ACCESS_KEY",
+            "INFOMANIAK_S3_SECRET_KEY",
+            "OS_APPLICATION_CREDENTIAL_ID",
+            "OS_APPLICATION_CREDENTIAL_SECRET",
+        ):
+            monkeypatch.delenv(name, raising=False)
+
+        agent = InfrastructureAgent.from_env()
+
+        assert agent.available_services() == []
+        assert set(agent.skipped_clients) == {
+            "compute",
+            "volume",
+            "network",
+            "s3",
+            "dns",
+            "orchestration",
+        }
+        assert all(reason for reason in agent.skipped_clients.values())
+
 
 # ---------------------------------------------------------------------------
 # Test InfrastructureAgent Execution

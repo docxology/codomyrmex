@@ -49,6 +49,8 @@ class InfrastructureAgent(BaseAgent):
             capabilities=capabilities,
             config=config,
         )
+        #: Services left out by :meth:`from_env`, mapped to the reason.
+        self.skipped_clients: dict[str, str] = {}
 
         self._clients: dict[str, Any] = clients or {}
         self._pipeline = security_pipeline
@@ -64,59 +66,40 @@ class InfrastructureAgent(BaseAgent):
     def from_env(cls) -> "InfrastructureAgent":
         """Create an InfrastructureAgent from environment variables.
 
-        Attempts to create each client type, silently skipping unavailable ones.
+        Each Infomaniak client is created from its own environment variables.
+        A client whose credentials are missing or invalid, or whose SDK is not
+        installed, is left out; which ones were skipped, and why, is logged at
+        INFO level and listed in ``skipped_clients``.
         """
+        from codomyrmex.cloud import infomaniak
+        from codomyrmex.cloud.infomaniak.exceptions import InfomaniakCloudError
+
+        factories = {
+            "compute": "InfomaniakComputeClient",
+            "volume": "InfomaniakVolumeClient",
+            "network": "InfomaniakNetworkClient",
+            "s3": "InfomaniakS3Client",
+            "dns": "InfomaniakDNSClient",
+            "orchestration": "InfomaniakHeatClient",
+        }
         clients: dict[str, Any] = {}
+        skipped: dict[str, str] = {}
+        for service, class_name in factories.items():
+            try:
+                clients[service] = getattr(infomaniak, class_name).from_env()
+            except (
+                ImportError,
+                OSError,
+                ValueError,
+                AttributeError,
+                InfomaniakCloudError,
+            ) as exc:
+                skipped[service] = f"{type(exc).__name__}: {exc}"
+                logger.info("Infomaniak %s client unavailable: %s", service, exc)
 
-        # Compute
-        try:
-            from codomyrmex.cloud.infomaniak import InfomaniakComputeClient
-
-            clients["compute"] = InfomaniakComputeClient.from_env()
-        except (ImportError, OSError, ValueError, AttributeError):
-            logger.debug("Compute client unavailable")
-
-        # Volume
-        try:
-            from codomyrmex.cloud.infomaniak import InfomaniakVolumeClient
-
-            clients["volume"] = InfomaniakVolumeClient.from_env()
-        except (ImportError, OSError, ValueError, AttributeError):
-            logger.debug("Volume client unavailable")
-
-        # Network
-        try:
-            from codomyrmex.cloud.infomaniak import InfomaniakNetworkClient
-
-            clients["network"] = InfomaniakNetworkClient.from_env()
-        except (ImportError, OSError, ValueError, AttributeError):
-            logger.debug("Network client unavailable")
-
-        # S3
-        try:
-            from codomyrmex.cloud.infomaniak import InfomaniakS3Client
-
-            clients["s3"] = InfomaniakS3Client.from_env()
-        except (ImportError, OSError, ValueError, AttributeError):
-            logger.debug("S3 client unavailable")
-
-        # DNS
-        try:
-            from codomyrmex.cloud.infomaniak import InfomaniakDNSClient
-
-            clients["dns"] = InfomaniakDNSClient.from_env()
-        except (ImportError, OSError, ValueError, AttributeError):
-            logger.debug("DNS client unavailable")
-
-        # Heat
-        try:
-            from codomyrmex.cloud.infomaniak import InfomaniakHeatClient
-
-            clients["orchestration"] = InfomaniakHeatClient.from_env()
-        except (ImportError, OSError, ValueError, AttributeError):
-            logger.debug("Heat client unavailable")
-
-        return cls(clients=clients)
+        agent = cls(clients=clients)
+        agent.skipped_clients = skipped
+        return agent
 
     # ------------------------------------------------------------------
     # Agent interface
