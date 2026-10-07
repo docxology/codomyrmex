@@ -41,8 +41,9 @@ Factory functions: `create_counter()`, `create_gauge()`, `create_histogram()` re
 | `gauge` | `(name, value, rate=1)` | Set gauge |
 | `timing` | `(name, dt, rate=1)` | Log timing in milliseconds |
 | `timer` | `(name, rate=1)` | Context manager for timing a block |
+| `close` | `()` | Close the UDP socket (idempotent) |
 
-Constructor: `StatsDClient(host?, port?, prefix="codomyrmex")`. Defaults from `STATSD_HOST`/`STATSD_PORT` env vars or `localhost:8125`.
+Constructor: `StatsDClient(host?, port?, prefix="codomyrmex")`. Defaults from `STATSD_HOST`/`STATSD_PORT` env vars or `localhost:8125`. The client is a context manager (`with StatsDClient() as client:`) that closes its socket on exit; call `close()` when not using `with`.
 
 ## Dependencies
 
