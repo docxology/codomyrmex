@@ -9,6 +9,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+import git
 import pytest
 from tests.support.repo_paths import PACKAGE_ROOT, REPO_ROOT
 
@@ -125,8 +126,13 @@ def test_branch_topology_has_active_branch(analyzer: GitHistoryAnalyzer) -> None
     """get_branch_topology returns dict with 'active_branch' key."""
     topology = analyzer.get_branch_topology()
     assert "active_branch" in topology
-    assert isinstance(topology["active_branch"], str)
-    assert len(topology["active_branch"]) > 0
+    # CI checks out pull requests with a detached HEAD.
+    if topology["detached"]:
+        assert topology["active_branch"] is None
+    else:
+        assert isinstance(topology["active_branch"], str)
+        assert len(topology["active_branch"]) > 0
+    assert re.fullmatch(r"[0-9a-f]{12}", topology["head_sha"])
 
 
 @pytest.mark.unit
@@ -304,3 +310,50 @@ def test_get_hotspot_analysis_sorted_descending(analyzer: GitHistoryAnalyzer) ->
     if len(hotspots) >= 2:
         for i in range(len(hotspots) - 1):
             assert hotspots[i]["hotspot_score"] >= hotspots[i + 1]["hotspot_score"]
+
+
+def _make_repo(path: Path) -> git.Repo:
+    repo = git.Repo.init(path, initial_branch="trunk")
+    author = git.Actor("Ada", "ada@example.invalid")
+    for number in range(3):
+        (path / "notes.txt").write_text(f"revision {number}\n", encoding="utf-8")
+        repo.index.add(["notes.txt"])
+        repo.index.commit(f"revision {number}", author=author, committer=author)
+    return repo
+
+
+@pytest.mark.unit
+def test_history_and_topology_on_attached_head(tmp_path: Path) -> None:
+    _make_repo(tmp_path)
+    analyzer = GitHistoryAnalyzer(str(tmp_path))
+    history = analyzer.get_commit_history(max_count=10)
+    assert [c["message"] for c in history] == [
+        "revision 2",
+        "revision 1",
+        "revision 0",
+    ]
+    topology = analyzer.get_branch_topology()
+    assert topology["active_branch"] == "trunk"
+    assert topology["detached"] is False
+
+
+@pytest.mark.unit
+def test_history_and_topology_on_detached_head(tmp_path: Path) -> None:
+    # Regression: Repo.active_branch raises TypeError on a detached HEAD, so
+    # every default-branch call failed in CI's pull-request checkouts.
+    repo = _make_repo(tmp_path)
+    middle = repo.head.commit.parents[0]
+    repo.git.checkout(middle.hexsha)
+    assert repo.head.is_detached
+
+    analyzer = GitHistoryAnalyzer(str(tmp_path))
+    history = analyzer.get_commit_history(max_count=10)
+    assert [c["message"] for c in history] == ["revision 1", "revision 0"]
+    filtered = analyzer.get_commit_history_filtered(max_count=10, author="ada")
+    assert [c["message"] for c in filtered] == ["revision 1", "revision 0"]
+
+    topology = analyzer.get_branch_topology()
+    assert topology["active_branch"] is None
+    assert topology["detached"] is True
+    assert topology["head_sha"] == middle.hexsha[:12]
+    assert [b["name"] for b in topology["branches"]] == ["trunk"]
