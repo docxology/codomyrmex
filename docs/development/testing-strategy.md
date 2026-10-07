@@ -277,7 +277,7 @@ The Zero-Mock Policy distinguishes **two kinds of test interventions**. The haza
 - `FakeLLMClient`, `FakeSwarm`, or similar named test doubles when the real service is unavailable and the test exercises higher-layer logic. These MUST be explicitly named `Fake*` (not `Mock*`), live in a `tests/_fakes/` or `tests/_doubles/` location, and document what production behavior they preserve.
 - `@pytest.mark.skipif(...)` guards for tests that require optional dependencies (e.g., `z3`, Ollama, network access)
 
-**Verification:** `import-linter` enforces the layering boundary so test doubles cannot smuggle through layer violations. CI also greps test files for forbidden imports (`unittest.mock`, `pytest_mock`) via the `lint` job.
+**Verification:** `import-linter` enforces the layering boundary so test doubles cannot smuggle through layer violations. `tests/unit/test_zero_mock_policy.py` runs in every test job: it rejects `unittest.mock`, `pytest_mock` and the `mocker` fixture outright, and holds `monkeypatch.setattr` calls and `Mock*` classes to the per-file counts recorded when the guard was added, so existing uses can only shrink. Lower a file's baseline in that test when you remove a use.
 
 **Why this distinction matters:** Environment isolation (`monkeypatch.setenv`) doesn't change the behavior of the code under test — it just controls test-time inputs. Behavior mocking does, and is the actual hazard. See [issue #175](https://github.com/docxology/codomyrmex/issues/175) for the resolution thread.
 
