@@ -185,11 +185,11 @@ class TestPaperclipAPIClient:
         """Test PaperclipAPIClient with custom configuration."""
         client = PaperclipAPIClient(
             base_url="http://example.com:4100",
-            api_key="test-key-123",
+            api_key="test-key-123",  # pragma: allowlist secret
             timeout=60,
         )
         assert client.base_url == "http://example.com:4100"
-        assert client.api_key == "test-key-123"
+        assert client.api_key == "test-key-123"  # pragma: allowlist secret
         assert client.timeout == 60
 
     def test_api_client_base_url_strip_trailing_slash(self):

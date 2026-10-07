@@ -98,7 +98,7 @@ def unused_function():
     return x
 
 # Compliance issue - hard-coded secret
-API_KEY = "sk-1234567890abcdef1234567890abcdef12345678"
+API_KEY = "sk-1234567890abcdef1234567890abcdef12345678"  # pragma: allowlist secret
 
 class TestClass:
     """Test suite for Class."""

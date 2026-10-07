@@ -551,7 +551,7 @@ class TestRESTAPI:
 
         @router.get("/protected")
         def protected(req):
-            return APIResponse.success({"secret": "data"})
+            return APIResponse.success({"secret": "data"})  # pragma: allowlist secret
 
         api.add_router(router)
 
@@ -622,7 +622,7 @@ class TestRESTAPI:
 
         @router.get("/secret")
         def secret(req):
-            return APIResponse.success({"secret": "data"})
+            return APIResponse.success({"secret": "data"})  # pragma: allowlist secret
 
         api.add_router(router)
 

@@ -58,7 +58,7 @@ create_webhook_dispatcher = _wh.create_webhook_dispatcher
 
 def _make_config(
     url="https://hooks.example.com/recv",
-    secret="test-secret",
+    secret="test-secret",  # pragma: allowlist secret
     events=None,
     active=True,
     max_retries=3,
@@ -282,7 +282,7 @@ class TestWebhookSignature:
 
     def test_verify_correct_signature(self):
         payload = '{"event":"test"}'
-        secret = "my-secret"
+        secret = "my-secret"  # pragma: allowlist secret
         sig = WebhookSignature.sign(payload, secret)
         assert WebhookSignature.verify(payload, secret, sig) is True
 
@@ -482,7 +482,7 @@ class TestWebhookDispatcher:
             received_headers.update(headers)
             return (200, "OK")
 
-        secret = "super-secret"
+        secret = "super-secret"  # pragma: allowlist secret
         r = WebhookRegistry()
         r.register(
             "signed",

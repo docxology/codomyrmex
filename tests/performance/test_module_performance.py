@@ -412,7 +412,7 @@ def insecure_function(user_input):
     os.system(user_input)
 
 # Hard-coded password
-PASSWORD = "admin123"
+PASSWORD = "admin123"  # pragma: allowlist secret
 """)
 
         def security_test():
