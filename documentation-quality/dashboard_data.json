@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-07T16:11:27.641250",
+  "generated": "2026-10-07T17:17:36.030870",
   "links": {
     "total": 16365,
     "broken": 0,
@@ -13,9 +13,5 @@
     "max_score": 100,
     "placeholder_total": 0
   },
-  "agents": {
-    "total": 1371,
-    "valid": 1371,
-    "avg_score": 100.0
-  }
+  "agents": {}
 }
