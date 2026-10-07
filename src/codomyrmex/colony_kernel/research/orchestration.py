@@ -75,9 +75,7 @@ class ResearchProgramOrchestrator:
             if dependency not in self._tracks
         }
         if unknown:
-            raise ValueError(
-                f"Unknown research dependencies: {', '.join(sorted(unknown))}"
-            )
+            raise ValueError(f"Unknown research dependencies: {', '.join(sorted(unknown))}")
 
         remaining = set(self._tracks)
         ordered: list[str] = []
