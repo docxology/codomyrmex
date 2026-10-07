@@ -46,5 +46,6 @@ associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
 
 ## 2026-10-07 - Interactive Expand/Collapse Patterns
+
 **Learning:** When using custom `<button>` elements to expand or collapse details (like system health details or runtime job outputs), screen readers need proper ARIA attributes (`aria-expanded` and `aria-controls`) linking the button to the content block, otherwise the toggle interaction is invisible to them.
 **Action:** Always add `aria-expanded={expandedState}` and `aria-controls="id-of-content"` to custom accordion/expand buttons, and ensure the corresponding content block has the matching `id`.
