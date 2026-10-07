@@ -9,9 +9,10 @@ Validation coverage, fixtures, and regression checks for Git Analysis.
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `__init__.py` – Project file
+- `conftest.py` – Fixture repository with a fully known git history
 - `test_gitnexus_bridge.py` – Project file
 - `test_history_analyzer.py` – Project file
-- `test_mcp_tools.py` – Project file
+- `test_mcp_git_analysis.py` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -24,9 +25,10 @@ Validation coverage, fixtures, and regression checks for Git Analysis.
 - `README.md`
 - `SPEC.md`
 - `__init__.py`
+- `conftest.py`
 - `test_gitnexus_bridge.py`
 - `test_history_analyzer.py`
-- `test_mcp_tools.py`
+- `test_mcp_git_analysis.py`
 
 ## Dependencies
 - Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.

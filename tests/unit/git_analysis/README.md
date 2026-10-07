@@ -10,9 +10,10 @@ Validation coverage, fixtures, and regression checks for Git Analysis.
 - `README.md` – File
 - `SPEC.md` – File
 - `__init__.py` – File
+- `conftest.py` – Fixture repository with a fully known git history
 - `test_gitnexus_bridge.py` – File
 - `test_history_analyzer.py` – File
-- `test_mcp_tools.py` – File
+- `test_mcp_git_analysis.py` – File
 
 ## Navigation
 - **Parent Directory**: [unit](../README.md)
