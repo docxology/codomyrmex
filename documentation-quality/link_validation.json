@@ -39139,28 +39139,28 @@
   {
     "file": "src/codomyrmex/finance/SPEC.md",
     "link": "README.md",
-    "line": 167,
+    "line": 170,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/finance/SPEC.md",
     "link": "AGENTS.md",
-    "line": 167,
+    "line": 170,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/finance/SPEC.md",
     "link": "PAI.md",
-    "line": 167,
+    "line": 170,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/finance/SPEC.md",
     "link": "../SPEC.md",
-    "line": 167,
+    "line": 170,
     "status": "ok",
     "message": "File exists"
   },
@@ -47672,21 +47672,21 @@
   {
     "file": "src/codomyrmex/security/governance/SPEC.md",
     "link": "README.md",
-    "line": 74,
+    "line": 77,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/security/governance/SPEC.md",
     "link": "AGENTS.md",
-    "line": 75,
+    "line": 78,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/security/governance/SPEC.md",
     "link": "../SPEC.md",
-    "line": 76,
+    "line": 79,
     "status": "ok",
     "message": "File exists"
   },
@@ -65739,14 +65739,14 @@
   {
     "file": "src/codomyrmex/documents/API_SPECIFICATION.md",
     "link": "README.md",
-    "line": 489,
+    "line": 505,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/documents/API_SPECIFICATION.md",
     "link": "USAGE_EXAMPLES.md",
-    "line": 490,
+    "line": 506,
     "status": "ok",
     "message": "File exists"
   },
@@ -70464,28 +70464,28 @@
   {
     "file": "src/codomyrmex/model_ops/fine_tuning/SPEC.md",
     "link": "../README.md",
-    "line": 52,
+    "line": 59,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/model_ops/fine_tuning/SPEC.md",
     "link": "README.md",
-    "line": 53,
+    "line": 60,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/model_ops/fine_tuning/SPEC.md",
     "link": "AGENTS.md",
-    "line": 54,
+    "line": 61,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/model_ops/fine_tuning/SPEC.md",
     "link": "../../../../README.md",
-    "line": 55,
+    "line": 62,
     "status": "ok",
     "message": "File exists"
   },
