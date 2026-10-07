@@ -23,7 +23,7 @@ for all 36 GitHub Actions workflows.
     documentation.yml               # Doc build and deploy
     documentation-validation.yml    # Doc quality gate (links, structure)
     # ─── Agent Infrastructure ───
-    auto-merge.yml                  # Auto squash-merge agent PRs
+    auto-merge.yml                  # Squash-merge PRs a reviewer labelled `auto-merge`
     pr-labeler.yml                  # Auto-label PRs by paths/branch/size
     pr-conflict-check.yml           # Conflict detection every 6h
     agent-welcome.yml               # Agent-specific PR welcome

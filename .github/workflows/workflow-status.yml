@@ -84,7 +84,7 @@ jobs:
               'Documentation Build and Deploy': 'documentation.yml',
               'Performance Benchmarks': 'benchmarks.yml',
               'Repository Maintenance': 'maintenance.yml',
-              'Auto-Merge Agent PRs': 'auto-merge.yml',
+              'Auto-Merge Labelled PRs': 'auto-merge.yml',
               'PR Auto-Labeler': 'pr-labeler.yml',
               'Agent PR Welcome': 'agent-welcome.yml',
               'Agent Metrics Dashboard': 'agent-metrics.yml',
