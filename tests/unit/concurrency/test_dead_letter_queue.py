@@ -12,15 +12,14 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pytest
+from tests.support.temp_files import temp_file_path
 
 from codomyrmex.concurrency.dead_letter import DeadLetterQueue
 
 
 def _tmp_dlq() -> tuple[DeadLetterQueue, Path]:
     """Return (dlq, path) with an isolated temp JSONL file."""
-    f = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
-    f.close()
-    path = Path(f.name)
+    path = temp_file_path(".jsonl")
     return DeadLetterQueue(path=path), path
 
 
@@ -127,9 +126,7 @@ class TestDeadLetterQueueListEntries:
             path.unlink(missing_ok=True)
 
     def test_nonexistent_file_returns_empty(self):
-        f = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
-        path = Path(f.name)
-        f.close()
+        path = temp_file_path(".jsonl")
         path.unlink()  # Remove to simulate nonexistent file
         dlq = DeadLetterQueue(path=path)
         # File never created
@@ -351,9 +348,7 @@ class TestDeadLetterQueuePurge:
             path.unlink(missing_ok=True)
 
     def test_purge_nonexistent_file_returns_zero(self):
-        f = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
-        path = Path(f.name)
-        f.close()
+        path = temp_file_path(".jsonl")
         path.unlink()  # Remove to simulate nonexistent file
         dlq = DeadLetterQueue(path=path)
         assert dlq.purge() == 0

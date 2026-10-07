@@ -14,6 +14,7 @@ import ast
 import logging
 import os
 import sys
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +34,7 @@ def get_module_info(mod_path):
     if not os.path.exists(init):
         return info
     try:
-        content = open(init).read()
+        content = Path(init).read_text(encoding="utf-8")
         tree = ast.parse(content)
     except Exception:
         return info
@@ -65,7 +66,9 @@ def get_module_info(mod_path):
             if not f.endswith(".py") or f == "__init__.py":
                 continue
             try:
-                sub_tree = ast.parse(open(os.path.join(mod_path, f)).read())
+                sub_tree = ast.parse(
+                    Path(os.path.join(mod_path, f)).read_text(encoding="utf-8")
+                )
                 for node in sub_tree.body:
                     if isinstance(node, ast.ClassDef) and node.name not in seen_c:
                         doc = ast.get_docstring(node) or ""

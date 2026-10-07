@@ -612,7 +612,6 @@ ignore = [
     "ASYNC109", # async function with timeout (46 — intentional async patterns)
     "RUF001",   # ambiguous unicode (42 — intentional unicode in docs/strings)
     "PLW2901",  # redefined loop name (41 — common pattern in mutation)
-    "SIM115",   # open file with context handler (35 — many are in with blocks already)
     "PLW1510",  # subprocess.run without check (213 — return code handled manually)
     "N803",     # invalid argument name (32 — mathematical/domain naming)
     "RUF002",   # ambiguous unicode in docstring (32 — intentional unicode)

@@ -19,6 +19,7 @@ import ast
 import logging
 import os
 import sys
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +56,7 @@ def get_exports(mod_name):
     if not os.path.exists(init):
         return classes, functions
     try:
-        tree = ast.parse(open(init).read())
+        tree = ast.parse(Path(init).read_text(encoding="utf-8"))
         seen_c, seen_f = set(), set()
         for node in tree.body:
             if isinstance(node, ast.ClassDef) and node.name not in seen_c:
@@ -80,7 +81,9 @@ def get_exports(mod_name):
             if not f.endswith(".py") or f == "__init__.py":
                 continue
             try:
-                sub = ast.parse(open(os.path.join(SRC, mod_name, f)).read())
+                sub = ast.parse(
+                    Path(os.path.join(SRC, mod_name, f)).read_text(encoding="utf-8")
+                )
                 for node in sub.body:
                     if isinstance(node, ast.ClassDef) and node.name not in seen_c:
                         doc = ast.get_docstring(node) or ""
