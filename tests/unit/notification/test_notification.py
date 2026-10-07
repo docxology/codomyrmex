@@ -245,6 +245,46 @@ class TestFileProvider:
             os.unlink(temp_path)
 
 
+@pytest.fixture
+def webhook_server(monkeypatch):
+    """Start local HTTP servers that record POSTs and answer with a status code."""
+    import http.server
+    import json
+    import threading
+
+    # Keep local test traffic off any configured HTTP proxy.
+    monkeypatch.setenv("NO_PROXY", "127.0.0.1,localhost")
+    monkeypatch.setenv("no_proxy", "127.0.0.1,localhost")
+    servers = []
+
+    def start(status_code):
+        received = []
+
+        class Handler(http.server.BaseHTTPRequestHandler):
+            def do_POST(self):
+                length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(length)
+                received.append(
+                    {"headers": dict(self.headers), "json": json.loads(body)}
+                )
+                self.send_response(status_code)
+                self.end_headers()
+                self.wfile.write(b"ok")
+
+            def log_message(self, format: str, *args: object) -> None:
+                pass
+
+        server = http.server.HTTPServer(("127.0.0.1", 0), Handler)
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        servers.append(server)
+        return f"http://127.0.0.1:{server.server_address[1]}/hook", received
+
+    yield start
+    for server in servers:
+        server.shutdown()
+        server.server_close()
+
+
 @pytest.mark.unit
 class TestWebhookProvider:
     """Test suite for WebhookProvider."""
@@ -256,22 +296,71 @@ class TestWebhookProvider:
         provider = WebhookProvider(url="https://example.com/webhook")
         assert provider.channel == NotificationChannel.WEBHOOK
 
-    def test_provider_send_mock(self):
-        """Verify mock webhook sending."""
+    def test_send_posts_json_to_the_url(self, webhook_server):
+        """send() POSTs the notification as JSON and reports SENT on 2xx."""
         from codomyrmex.events.notification import (
             Notification,
             NotificationStatus,
             WebhookProvider,
         )
 
-        provider = WebhookProvider(url="https://example.com/hook")
-        notif = Notification(id="test", subject="Test", body="Webhook test")
+        url, received = webhook_server(200)
+        provider = WebhookProvider(url=url, headers={"X-Token": "t"})
+        notif = Notification(id="n1", subject="Test", body="Webhook test")
 
         result = provider.send(notif)
 
         assert result.status == NotificationStatus.SENT
-        assert result.response["simulated"] is True
-        assert len(provider._sent) == 1
+        assert result.response["status_code"] == 200
+        assert len(received) == 1
+        assert received[0]["headers"]["Content-Type"] == "application/json"
+        assert received[0]["headers"]["X-Token"] == "t"
+        assert received[0]["json"]["id"] == "n1"
+        assert received[0]["json"]["subject"] == "Test"
+
+    def test_http_error_is_reported_as_failed(self, webhook_server):
+        """A non-2xx response is FAILED with the status code recorded."""
+        from codomyrmex.events.notification import (
+            Notification,
+            NotificationStatus,
+            WebhookProvider,
+        )
+
+        url, _ = webhook_server(503)
+        result = WebhookProvider(url=url).send(
+            Notification(id="n2", subject="S", body="B")
+        )
+
+        assert result.status == NotificationStatus.FAILED
+        assert result.response["status_code"] == 503
+        assert result.error is not None
+        assert "503" in result.error
+
+    def test_unreachable_url_is_reported_as_failed(self):
+        """Connection errors are FAILED, not SENT."""
+        import socket
+
+        from codomyrmex.events.notification import (
+            Notification,
+            NotificationStatus,
+            WebhookProvider,
+        )
+
+        with socket.socket() as s:  # find a free port, then close it
+            s.bind(("127.0.0.1", 0))
+            port = s.getsockname()[1]
+        result = WebhookProvider(url=f"http://127.0.0.1:{port}/hook", timeout=2).send(
+            Notification(id="n3", subject="S", body="B")
+        )
+
+        assert result.status == NotificationStatus.FAILED
+        assert result.error
+
+    def test_rejects_non_http_urls(self):
+        from codomyrmex.events.notification import WebhookProvider
+
+        with pytest.raises(ValueError, match="http or https"):
+            WebhookProvider(url="file:///etc/passwd")
 
 
 @pytest.mark.unit
@@ -456,7 +545,7 @@ class TestNotificationService:
         assert result.status == NotificationStatus.FAILED
         assert "not found" in (result.error or "")
 
-    def test_service_broadcast(self):
+    def test_service_broadcast(self, webhook_server):
         """Verify broadcast to multiple channels."""
         from codomyrmex.events.notification import (
             ConsoleProvider,
@@ -468,7 +557,8 @@ class TestNotificationService:
 
         service = NotificationService()
         service.register_provider(ConsoleProvider())
-        service.register_provider(WebhookProvider(url="https://example.com"))
+        url, received = webhook_server(200)
+        service.register_provider(WebhookProvider(url=url))
 
         notif = Notification(id="broadcast", subject="Test", body="Broadcast test")
 
@@ -479,6 +569,7 @@ class TestNotificationService:
 
         assert len(results) == 2
         assert all(r.is_success for r in results)
+        assert [r["json"]["id"] for r in received] == ["broadcast_webhook"]
 
     def test_service_history(self):
         """Verify notification history tracking."""

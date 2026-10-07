@@ -5,6 +5,9 @@ Channel-specific notification delivery implementations.
 """
 
 import json
+import urllib.error
+import urllib.parse
+import urllib.request
 from abc import ABC, abstractmethod
 from datetime import datetime
 
@@ -95,12 +98,20 @@ class FileProvider(NotificationProvider):
 
 
 class WebhookProvider(NotificationProvider):
-    """Send notifications via webhook."""
+    """Deliver notifications by POSTing them as JSON to a webhook URL."""
 
-    def __init__(self, url: str, headers: dict[str, str] | None = None):
+    def __init__(
+        self,
+        url: str,
+        headers: dict[str, str] | None = None,
+        timeout: float = 10.0,
+    ):
+        scheme = urllib.parse.urlsplit(url).scheme
+        if scheme not in ("http", "https"):
+            raise ValueError(f"Webhook URL must use http or https, got {url!r}")
         self.url = url
         self.headers = headers or {}
-        self._sent: list[Notification] = []  # Store for testing
+        self.timeout = timeout
 
     @property
     def channel(self) -> NotificationChannel:
@@ -108,14 +119,43 @@ class WebhookProvider(NotificationProvider):
         return NotificationChannel.WEBHOOK
 
     def send(self, notification: Notification) -> NotificationResult:
-        """Send notification via webhook."""
-        self._sent.append(notification)
+        """POST ``notification.to_dict()`` as JSON; any 2xx response counts as sent."""
+        body = json.dumps(notification.to_dict()).encode("utf-8")
+        request = urllib.request.Request(
+            self.url,
+            data=body,
+            method="POST",
+            headers={"Content-Type": "application/json", **self.headers},
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=self.timeout) as response:
+                status_code = response.status
+                response_body = response.read(65536).decode("utf-8", errors="replace")
+        except urllib.error.HTTPError as e:
+            return NotificationResult(
+                notification_id=notification.id,
+                status=NotificationStatus.FAILED,
+                channel=self.channel,
+                error=f"HTTP {e.code}: {e.reason}",
+                response={"url": self.url, "status_code": e.code},
+            )
+        except (urllib.error.URLError, OSError, ValueError) as e:
+            return NotificationResult(
+                notification_id=notification.id,
+                status=NotificationStatus.FAILED,
+                channel=self.channel,
+                error=str(e),
+                response={"url": self.url},
+            )
 
-        # In real implementation, would use requests.post(self.url, ...)
         return NotificationResult(
             notification_id=notification.id,
             status=NotificationStatus.SENT,
             channel=self.channel,
             sent_at=datetime.now(),
-            response={"url": self.url, "simulated": True},
+            response={
+                "url": self.url,
+                "status_code": status_code,
+                "body": response_body,
+            },
         )
