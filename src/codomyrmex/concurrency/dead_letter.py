@@ -209,6 +209,11 @@ class DeadLetterQueue:
             self._mark_replayed(entry_id)
             return {"success": True, "result": result}
         except Exception as exc:
+            # A callback that raises is a clean, observed failure (not a
+            # crash): clear the in-progress marker so the entry stays pending
+            # and can be retried, instead of being reconciled as a stale
+            # crashed replay and hidden as replay_failed.
+            self._set_replay_in_progress(entry_id, in_progress=False)
             return {"success": False, "error": str(exc)}
         finally:
             with self._replay_lock:
@@ -223,6 +228,10 @@ class DeadLetterQueue:
         Args:
             entry_id: ID of the entry to mark.
         """
+        self._set_replay_in_progress(entry_id, in_progress=True)
+
+    def _set_replay_in_progress(self, entry_id: str, *, in_progress: bool) -> None:
+        """Set or clear the replay-in-progress marker for one entry."""
         with self._lock:
             if not self._path.exists():
                 return
@@ -234,7 +243,7 @@ class DeadLetterQueue:
                 try:
                     entry = json.loads(line)
                     if entry.get("id") == entry_id:
-                        entry["replay_in_progress"] = True
+                        entry["replay_in_progress"] = in_progress
                     new_lines.append(json.dumps(entry))
                 except json.JSONDecodeError:
                     new_lines.append(line)
