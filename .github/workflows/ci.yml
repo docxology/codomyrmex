@@ -234,11 +234,19 @@ jobs:
           mkdir -p output
 
       - name: Install native integration prerequisites
+        # A stalled mirror or registry used to hang the job until its 60 min limit.
+        timeout-minutes: 10
         run: |
-          sudo apt-get update
-          sudo apt-get install --yes --no-install-recommends espeak-ng
-          docker pull python:3.9-slim
-          docker pull bash:5.1
+          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 update
+          sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 \
+            install --yes --no-install-recommends espeak-ng
+          for image in python:3.9-slim bash:5.1; do
+            for attempt in 1 2 3; do
+              timeout 180 docker pull "$image" && break
+              [ "$attempt" -eq 3 ] && exit 1
+              sleep $((attempt * 10))
+            done
+          done
 
       - name: Cache Hugging Face models
         uses: actions/cache@v6
