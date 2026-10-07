@@ -272,7 +272,7 @@ def sample_code_with_vulnerability(tmp_path):
     """Fixture providing sample code with potential security issues."""
     code_file = tmp_path / "vulnerable.py"
     code_content = """import os
-password = "secret123"
+password = "secret123"  # pragma: allowlist secret
 def login(username, pwd):
     if pwd == password:
         return True
