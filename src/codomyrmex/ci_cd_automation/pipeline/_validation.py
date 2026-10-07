@@ -19,12 +19,17 @@ class PipelineValidationMixin:
             if field not in config:
                 errors.append(f"Missing required field: {field}")
 
-        if "name" in config and not isinstance(config["name"], str):
-            errors.append("Pipeline name must be a string")
+        if "name" in config:
+            if not isinstance(config["name"], str):
+                errors.append("Pipeline name must be a string")
+            elif not config["name"].strip():
+                errors.append("Pipeline name cannot be empty")
 
         if "stages" in config:
             if not isinstance(config["stages"], list):
                 errors.append("Stages must be a list")
+            elif not config["stages"]:
+                errors.append("Pipeline must define at least one stage")
             else:
                 # Validate each stage
                 for i, stage in enumerate(config["stages"]):

@@ -17,6 +17,7 @@ Integration:
 Available functions:
 - create_pipeline: Create and configure CI/CD pipelines
 - run_pipeline: Execute pipeline with full orchestration
+- validate_pipeline_config: Check a pipeline configuration and list its errors
 - manage_deployments: Handle deployment orchestration
 - monitor_pipeline_health: Real-time pipeline monitoring
 - generate_pipeline_reports: Comprehensive pipeline analytics
@@ -72,6 +73,7 @@ from .pipeline import (
     WorkflowGenerator,
     create_pipeline,
     run_pipeline,
+    validate_pipeline_config,
 )
 from .pipeline.pipeline_monitor import (
     PipelineMonitor,
@@ -154,4 +156,5 @@ __all__ = [
     "optimize_pipeline_performance",
     "pipeline",
     "run_pipeline",
+    "validate_pipeline_config",
 ]
