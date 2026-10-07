@@ -367,6 +367,13 @@ def test_non_json_replies_are_shown_as_errors(browser_report):
     assert broken["chat"] == "Error: non-JSON response (HTTP 502)"
     assert broken["chatLogBusy"] is None
     assert broken["tests"] == "Server error: non-JSON response (HTTP 502)"
+    # Regression: failed status polls were retried silently forever, leaving
+    # "Run Tests" disabled. Five consecutive failures now end the wait.
+    assert broken["lostRunner"].startswith("Lost contact with the test runner")
+    assert "HTTP 502" in broken["lostRunner"]
+    assert broken["lostRunnerButtonDisabled"] is False
+    assert broken["lostRunnerPolls"] == 5
+    assert broken["lostRunnerPollsLater"] == 5
     assert broken["connectionAfterOneFailure"] == "Connected"
     assert broken["connectionAfterTwoFailures"] == "Disconnected"
     assert broken["docs"] == "Error: Server error: non-JSON response (HTTP 502)"

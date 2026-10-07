@@ -458,58 +458,85 @@
                 return;
             }
 
-            // Poll for results
+            // Poll for results. Each poll is scheduled after the previous one
+            // finishes (no overlapping requests), and repeated failures end the
+            // wait instead of leaving the button disabled forever.
             resultsDiv.innerHTML = '<p style="color: var(--accent-color);">⏳ Tests running in background — polling for results…</p>';
-            const pollInterval = setInterval(async () => {
+            const POLL_MS = 2000;
+            const MAX_POLL_FAILURES = 5;
+            let pollFailures = 0;
+            const finish = () => {
+                btn.disabled = false;
+                btn.textContent = 'Run Tests';
+            };
+            const poll = async () => {
+                let pollData;
                 try {
                     const pollResp = await fetch('/api/tests/status');
-                    const pollData = await pollResp.json();
-                    if (pollData.status === 'done') {
-                        clearInterval(pollInterval);
-                        const data = pollData.results || {};
-                        if (data.error) {
-                            resultsDiv.innerHTML = `<p class="status-err">${escapeHtml(data.error)}</p>`;
-                        } else {
-                            const statusClass = data.success ? 'status-ok' : 'status-err';
-                            resultsDiv.innerHTML = `
-                                <div class="test-summary">
-                                    <div class="test-stat">
-                                        <span class="test-stat-value status-ok">${escapeHtml(data.passed)}</span>
-                                        <span class="test-stat-label">Passed</span>
-                                    </div>
-                                    <div class="test-stat">
-                                        <span class="test-stat-value status-err">${escapeHtml(data.failed)}</span>
-                                        <span class="test-stat-label">Failed</span>
-                                    </div>
-                                    <div class="test-stat">
-                                        <span class="test-stat-value ${data.errors > 0 ? 'status-err' : 'status-ok'}">${escapeHtml(data.errors)}</span>
-                                        <span class="test-stat-label">Errors</span>
-                                    </div>
-                                    <div class="test-stat">
-                                        <span class="test-stat-value" style="color: var(--text-secondary);">${escapeHtml(data.skipped)}</span>
-                                        <span class="test-stat-label">Skipped</span>
-                                    </div>
-                                    <div class="test-stat">
-                                        <span class="test-stat-value">${escapeHtml(data.total)}</span>
-                                        <span class="test-stat-label">Total</span>
-                                    </div>
-                                    <div class="test-stat">
-                                        <span class="test-stat-value ${escapeHtml(statusClass)}">${data.success ? 'PASS' : 'FAIL'}</span>
-                                        <span class="test-stat-label">Result</span>
-                                    </div>
-                                </div>`;
-                            if (data.output) {
-                                outputDiv.textContent = data.output;
-                                outputDiv.classList.remove('hidden');
-                            }
-                        }
-                        btn.disabled = false;
-                        btn.textContent = 'Run Tests';
-                    }
+                    if (!pollResp.ok) throw new Error('HTTP ' + pollResp.status);
+                    pollData = await pollResp.json();
+                    pollFailures = 0;
                 } catch (pollErr) {
-                    // Silently retry on poll failure
+                    pollFailures += 1;
+                    if (pollFailures >= MAX_POLL_FAILURES) {
+                        resultsDiv.innerHTML = `<p class="status-err">Lost contact with the test runner (${escapeHtml(pollErr.message)}). The run may still finish; reload the page to check.</p>`;
+                        finish();
+                        return;
+                    }
+                    setTimeout(poll, POLL_MS);
+                    return;
                 }
-            }, 2000);
+                if (pollData.status === 'idle') {
+                    // The POST marked a run as started, so "idle" means the
+                    // server lost it (e.g. restarted); waiting would never end.
+                    resultsDiv.innerHTML = '<p class="status-err">The server has no test run in progress (it may have restarted). Start the run again.</p>';
+                    finish();
+                    return;
+                }
+                if (pollData.status !== 'done') {
+                    setTimeout(poll, POLL_MS);
+                    return;
+                }
+                const data = pollData.results || {};
+                if (data.error) {
+                    resultsDiv.innerHTML = `<p class="status-err">${escapeHtml(data.error)}</p>`;
+                } else {
+                    const statusClass = data.success ? 'status-ok' : 'status-err';
+                    resultsDiv.innerHTML = `
+                        <div class="test-summary">
+                            <div class="test-stat">
+                                <span class="test-stat-value status-ok">${escapeHtml(data.passed)}</span>
+                                <span class="test-stat-label">Passed</span>
+                            </div>
+                            <div class="test-stat">
+                                <span class="test-stat-value status-err">${escapeHtml(data.failed)}</span>
+                                <span class="test-stat-label">Failed</span>
+                            </div>
+                            <div class="test-stat">
+                                <span class="test-stat-value ${data.errors > 0 ? 'status-err' : 'status-ok'}">${escapeHtml(data.errors)}</span>
+                                <span class="test-stat-label">Errors</span>
+                            </div>
+                            <div class="test-stat">
+                                <span class="test-stat-value" style="color: var(--text-secondary);">${escapeHtml(data.skipped)}</span>
+                                <span class="test-stat-label">Skipped</span>
+                            </div>
+                            <div class="test-stat">
+                                <span class="test-stat-value">${escapeHtml(data.total)}</span>
+                                <span class="test-stat-label">Total</span>
+                            </div>
+                            <div class="test-stat">
+                                <span class="test-stat-value ${escapeHtml(statusClass)}">${data.success ? 'PASS' : 'FAIL'}</span>
+                                <span class="test-stat-label">Result</span>
+                            </div>
+                        </div>`;
+                    if (data.output) {
+                        outputDiv.textContent = data.output;
+                        outputDiv.classList.remove('hidden');
+                    }
+                }
+                finish();
+            };
+            setTimeout(poll, POLL_MS);
         } catch (err) {
             resultsDiv.innerHTML = `<p class="status-err">Network error: ${escapeHtml(err.message)}</p>`;
             btn.disabled = false;
@@ -539,6 +566,7 @@
         setInterval(async () => {
             try {
                 const resp = await fetch('/api/health');
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
                 const data = await resp.json();
                 healthFailCount = 0;
                 uptimeEl.textContent = data.uptime;

@@ -307,6 +307,23 @@ async function nonJson(browser) {
     out.connectionAfterTwoFailures = await text(s.page, '#connection-text');
     await s.context.close();
 
+    // The run starts, but every status poll fails: the page must give up
+    // after a bounded number of polls and re-enable the button.
+    s = await open(browser, 'health.html', { clock: true, broken: ['/api/tests/status'] });
+    await s.page.click('#run-tests-btn');
+    await s.page.waitForFunction(() => document.getElementById('test-results').textContent.includes('polling'));
+    for (let i = 0; i < 8 && (await s.page.$eval('#run-tests-btn', (b) => b.disabled)); i += 1) {
+        await s.page.clock.runFor(2000);
+        await sleep(200);
+    }
+    out.lostRunner = await text(s.page, '#test-results');
+    out.lostRunnerButtonDisabled = await s.page.$eval('#run-tests-btn', (b) => b.disabled);
+    out.lostRunnerPolls = s.requests.filter((r) => r.path === '/api/tests/status').length;
+    await s.page.clock.runFor(10000);
+    await sleep(200);
+    out.lostRunnerPollsLater = s.requests.filter((r) => r.path === '/api/tests/status').length;
+    await s.context.close();
+
     s = await open(browser, 'docs.html', { broken: ['/api/docs/'] });
     await s.page.waitForFunction(() => document.getElementById('doc-content').textContent.includes('Error'));
     out.docs = await text(s.page, '#doc-content');
