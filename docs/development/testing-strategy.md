@@ -295,6 +295,36 @@ The Zero-Mock Policy distinguishes **two kinds of test interventions**. The haza
 
 **Why this distinction matters:** Environment isolation (`monkeypatch.setenv`) doesn't change the behavior of the code under test — it just controls test-time inputs. Behavior mocking does, and is the actual hazard. See [issue #175](https://github.com/docxology/codomyrmex/issues/175) for the resolution thread.
 
+### Repository guards
+
+These tests run in every test job and fail on regressions rather than relying
+on review:
+
+- `tests/unit/test_zero_mock_policy.py` — the zero-mock ratchet above. Its
+  baselines must equal the current counts (`test_baselines_have_no_slack`), so
+  lower or delete an entry in the same change that removes a use.
+- `tests/unit/test_test_package_names.py` — pytest runs with
+  `--import-mode=importlib`, so a `tests/unit/<name>/__init__.py` package is
+  imported as the top-level module `<name>`. If `<name>` is also a real module
+  (stdlib, installed, or in the repository) the test package replaces it in
+  `sys.modules` and tests silently exercise the wrong code — this hid
+  py-tree-sitter and the `soul` SDK. Directories that collide must not have an
+  `__init__.py`.
+- Tests write only under `tmp_path`. Calling an API with its default output
+  path (for example `./git_analysis/`) from a test pollutes the working tree;
+  pass an explicit path under `tmp_path`.
+
+Type checking is a ratchet too: `[tool.ty.rules]` in `pyproject.toml` makes
+`possibly-unresolved-reference`, `unsupported-base`, `deprecated` and
+`unresolved-import` errors (only optional integrations listed in
+`[tool.ty.analysis] allowed-unresolved-imports` may be missing), and
+`import-linter` enforces the layer contract. Run the same checks locally with:
+
+```bash
+uv run ty check --output-format concise --exclude src/codomyrmex/physical_management/object_manager.py src/ scripts/ tests/
+uv run lint-imports --config pyproject.toml
+```
+
 ## ⚡ Running Tests
 
 ### **Local Development**

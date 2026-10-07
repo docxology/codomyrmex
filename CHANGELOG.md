@@ -8,6 +8,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### 2026-10-07 hardening pass (#496–#564)
+
+All open issues and PRs were triaged (Dependabot action bumps #496–#502
+merged), then the following landed on `main` with green CI.
+
+#### Bugs that were hidden behind `try/except ImportError` or stubs
+
+- Enabling ty's `possibly-unresolved-reference` and `unresolved-import` rules
+  (#557, #563) surfaced and fixed: `AnthropicProvider` raising
+  `UnboundLocalError` for any conversation without a system message; plugin
+  loading raising `NameError` for a missing plugin file; `codomyrmex shell`
+  refusing to start and all CLI output using a fallback formatter; the
+  `fpf visualize --format png`, `export-section`, `analyze` and `report`
+  commands always failing; every git visualization function returning
+  "module not available"; Ollama never offered by the AI code helpers; the
+  qwen MCP tools never being discovered; `get_deprecated_tools()` always
+  returning `[]`.
+- Production stubs replaced with real behaviour (#561): OpenAI fine-tuning
+  jobs (previously a fixed `ft-mock-12345`), wasmtime execution of WASM
+  modules, an FFT oscillation spectrum, policy-compliance charts from real
+  evaluations (previously a fixed 85/15), computed `max_drawdown`, PDF
+  splitting by pages, image downscaling, HTTP webhook delivery (previously
+  reported `SENT` without sending), and SBOM signature verification with
+  public keys (previously a bare hash comparison). The digital
+  `ComplianceChecker`, which reported every control "compliant" with mock
+  evidence, now raises `NotImplementedError` (#563).
+- `codomyrmex.tree_sitter` ported to py-tree-sitter 0.25; its 14 parser tests
+  now run (#559). The documented `validation.validate` / `is_valid` /
+  `get_errors` API exists (#559). `ci_cd_automation.create_pipeline` accepts
+  mappings and `validate_pipeline_config` is exported (#558).
+
+#### Tests and CI
+
+- Guards: zero-mock ratchet with exact baselines (#551), test packages may not
+  shadow real modules (#559), 24 duplicate test files removed (#550), files
+  opened with context managers and `SIM115` enforced (#554), ~70 s of sleeps
+  removed (#553), timing budgets moved to the performance suite (#555), tests
+  no longer write into the source tree (#560).
+- ty ratchet: `possibly-unresolved-reference`, `unsupported-base`,
+  `deprecated` and `unresolved-import` are errors, with an explicit allowlist
+  of optional integrations (#557, #563).
+- CI: the PR labeler creates missing labels and no longer hides failures
+  (#556); the status dashboard runs after main CI instead of after every
+  workflow (#552); apt/docker prerequisite installs are bounded so a stalled
+  mirror cannot hang a job for an hour (#562).
+
+#### Documentation
+
+- `make docs-check` imports every `codomyrmex` name shown in Markdown code
+  blocks (`scripts/documentation/validate_code_references.py`); 228 broken
+  references at 365 places were corrected, including the
+  `project_orchestration` guides, which now document
+  `codomyrmex.logistics.orchestration.project` (#564).
+- Inventory counts in `CLAUDE.md` refreshed; testing guide documents the
+  repository guards and type-checking ratchet.
 
 ### 2026-09-11 open-PR triage (352 open → 0)
 
@@ -18,7 +73,7 @@ cherry-picks/cumulative patches preserving substantive hunks only), 251 were clo
 duplicates/superseded/broken with per-PR rationale, and stale-path test
 content was relocated to the `tests/` layout. Notable merged content:
 
-**Security**
+#### Security
 
 - `orchestrator/mcp_tools.py`: eval of agent-supplied `fn_expr` replaced with
   an AST-whitelisted evaluator (no attribute/getattr access, whitelisted
@@ -37,7 +92,7 @@ content was relocated to the `tests/` layout. Notable merged content:
 - `agents/pai/pm/routes/dispatch.ts`: js-yaml v4 `safeLoad` with explicit
   JSON schema — #323.
 
-**Performance**
+#### Performance
 
 - Cache: `InMemoryCache` O(1) OrderedDict eviction with monotonic clocks
   (#488, #470, #483, #449), `InferenceCache` LRU (#485),
@@ -60,7 +115,7 @@ content was relocated to the `tests/` layout. Notable merged content:
   `remove_node` (#146), EventBus pre-compiled patterns (#151), O(1)
   preferential-attachment graph growth (#160), spatial-hash flocking (#165).
 
-**Modules and tests**
+#### Modules and tests
 
 - New `preprocessing` module (MCP tool + zero-mock tests) — #105.
 - New `language_detection` module (langdetect-backed, MCP tools + tests) —
@@ -75,7 +130,7 @@ content was relocated to the `tests/` layout. Notable merged content:
 - Accessibility: PAI PM SPA icon-button labels (#217), `role="alert"` Ollama
   warning banners (#149).
 
-**Guardrails against the flood (new)**
+#### Guardrails against the flood (new)
 
 - `scripts/maintenance/close_duplicate_prs.py`: groups open PRs into
   duplicate families (title signature + file overlap), keeps the member with
@@ -87,7 +142,7 @@ content was relocated to the `tests/` layout. Notable merged content:
   dedupe-before-proposing rules; `.jules/bolt.md` and `.jules/sentinel.md`
   gained mandatory session-hygiene sections and retired-topic lists.
 
-**Dependency floors (lockstep-regenerated)**
+#### Dependency floors (lockstep-regenerated)
 
 `numpy>=2.4.4`, `opencv-python>=4.13.0.92`, `bandit>=1.9.4`,
 `dynaconf>=3.2.13`, `vulture>=2.16` (#168–#172), docusaurus `^3.10.1`
@@ -95,7 +150,7 @@ content was relocated to the `tests/` layout. Notable merged content:
 `documentation/package-lock.json`, `documentation/yarn.lock`, and a new
 `documentation/bun.lock`.
 
-**Docs parity**
+#### Docs parity
 
 - `preprocessing` and `language_detection`: `docs/modules/<name>/`
   counterparts, `py.typed`, PAI/API/MCP-tool specs; module-count snapshots
@@ -104,6 +159,7 @@ content was relocated to the `tests/` layout. Notable merged content:
   1,216 docs).
 
 ### Fixed
+
 - **`agents` package lazy loading (TODO M3)**: `src/codomyrmex/agents/__init__.py`
   converted to PEP 562 `__getattr__` lazy imports — importing `codomyrmex.agents`
   no longer loads any framework subpackage. Cold import of
