@@ -24,8 +24,8 @@ HAS_API_KEY = os.getenv("RUN_LIVE_QWEN") == "1" and bool(
     os.getenv("DASHSCOPE_API_KEY") or os.getenv("QWEN_API_KEY")
 )
 DUMMY_CONFIG = {
-    "qwen_api_key": "test-dummy-key-for-construction"
-}  # pragma: allowlist secret
+    "qwen_api_key": "test-dummy-key-for-construction",  # pragma: allowlist secret
+}
 
 try:
     from qwen_agent.agents import Assistant as _QwenAssistant
