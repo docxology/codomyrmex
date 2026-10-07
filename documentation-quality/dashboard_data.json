@@ -1,7 +1,18 @@
 {
-  "generated": "2026-10-07T17:36:16.729563",
-  "links": {},
-  "quality": {},
+  "generated": "2026-10-07T17:39:42.474756",
+  "links": {
+    "total": 16365,
+    "broken": 0,
+    "valid": 15940,
+    "external": 425
+  },
+  "quality": {
+    "files": 5462,
+    "avg_score": 99.17246429879165,
+    "min_score": 75,
+    "max_score": 100,
+    "placeholder_total": 0
+  },
   "agents": {
     "total": 1371,
     "valid": 1371,
