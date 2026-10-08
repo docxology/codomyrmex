@@ -4,16 +4,20 @@ Provides system status dashboard output, core dependency verification,
 git repository status inspection, and demo workflow execution.
 """
 
-import importlib
+import importlib.metadata
 import json
+import re
 import subprocess
 import sys
+import tempfile
+from collections.abc import Iterable
 from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 
+import codomyrmex
 from codomyrmex.coding import execute_code
 from codomyrmex.data_visualization import create_line_plot
 from codomyrmex.logging_monitoring import get_logger as _get_logger
@@ -21,18 +25,41 @@ from codomyrmex.logging_monitoring import get_logger as _get_logger
 # Importing this module must not configure logging; entry points do that.
 logger = _get_logger(__name__)
 
-# Pre-allocated mapping for core dependencies to avoid re-creating the dictionary
-# on each check, providing a minor performance improvement in repetitive calls.
-_DEP_MAPPING = {
-    "python-dotenv": "dotenv",
-    "pydantic": "pydantic",
-    "openai": "openai",
-    "anthropic": "anthropic",
-    "matplotlib": "matplotlib",
-    "numpy": "numpy",
-    "pytest": "pytest",
-    "fastapi": "fastapi",
-}
+# Leading distribution name of a PEP 508 requirement string.
+_REQUIREMENT_NAME = re.compile(r"\s*([A-Za-z0-9][A-Za-z0-9._-]*)")
+
+
+def core_requirements(distribution: str = "codomyrmex") -> list[str]:
+    """Return the distribution names of an installed distribution's core dependencies.
+
+    Core dependencies are the ``[project.dependencies]`` that the installed
+    distribution declares; requirements that belong to an optional extra
+    (their environment marker mentions ``extra``) are left out.
+
+    Raises:
+        importlib.metadata.PackageNotFoundError: If *distribution* is not
+            installed, so its declared dependencies cannot be read.
+    """
+    names = []
+    for requirement in importlib.metadata.requires(distribution) or []:
+        _, _, marker = requirement.partition(";")
+        if "extra" in marker:
+            continue
+        match = _REQUIREMENT_NAME.match(requirement)
+        if match:
+            names.append(match.group(1))
+    return names
+
+
+def installed_versions(distributions: Iterable[str]) -> dict[str, str | None]:
+    """Map each distribution name to its installed version, or ``None`` if missing."""
+    versions: dict[str, str | None] = {}
+    for name in distributions:
+        try:
+            versions[name] = importlib.metadata.version(name)
+        except importlib.metadata.PackageNotFoundError:
+            versions[name] = None
+    return versions
 
 
 class SystemHealthChecker:
@@ -87,19 +114,32 @@ class SystemHealthChecker:
         # Git status
         self.check_git_status()
 
-    def check_core_dependencies(self) -> None:
-        """Attempt to import each core dependency and print pass/fail status."""
+    def check_core_dependencies(
+        self, requirements: Iterable[str] | None = None
+    ) -> None:
+        """Print whether each core dependency is installed.
+
+        Args:
+            requirements: Distribution names to check. Defaults to the core
+                dependencies that the installed ``codomyrmex`` distribution
+                declares (see :func:`core_requirements`).
+        """
         print("\nCore Dependencies:")
 
-        core_deps = list(_DEP_MAPPING.keys())
-
-        for dep in core_deps:
+        if requirements is None:
             try:
-                import_name = _DEP_MAPPING[dep]
-                importlib.import_module(import_name)
-                print(f"   OK {dep}")
-            except ImportError:
+                requirements = core_requirements()
+            except importlib.metadata.PackageNotFoundError:
+                print(
+                    "   UNKNOWN codomyrmex is not installed; cannot read its dependencies"
+                )
+                return
+
+        for dep, version in installed_versions(requirements).items():
+            if version is None:
                 print(f"   MISSING {dep}")
+            else:
+                print(f"   OK {dep} {version}")
 
     def check_git_status(self) -> None:
         """Run git commands to report repo initialization, current branch, and uncommitted changes."""
@@ -144,7 +184,15 @@ class SystemHealthChecker:
             print(f"   Git error: {e}")
 
     def get_system_status_dict(self) -> dict[str, Any]:
-        """Get system status as a dictionary."""
+        """Get system status as a dictionary.
+
+        ``dependencies`` maps each core dependency that the installed
+        ``codomyrmex`` distribution declares to whether it is installed.
+
+        Raises:
+            importlib.metadata.PackageNotFoundError: If the ``codomyrmex``
+                distribution is not installed.
+        """
         status = {
             "python": {
                 "version": sys.version.split()[0],
@@ -162,14 +210,10 @@ class SystemHealthChecker:
             "git": {},
         }
 
-        for dep, import_name in _DEP_MAPPING.items():
-            if dep == "fastapi":
-                continue
-            try:
-                importlib.import_module(import_name)
-                status["dependencies"][dep] = True
-            except ImportError:
-                status["dependencies"][dep] = False
+        status["dependencies"] = {
+            dep: version is not None
+            for dep, version in installed_versions(core_requirements()).items()
+        }
 
         try:
             result = subprocess.run(
@@ -201,11 +245,17 @@ class SystemHealthChecker:
 
         return status
 
-    def run_demo_workflows(self, modules: dict) -> None:
+    def run_demo_workflows(self, modules: dict, output_dir: Path | None = None) -> int:
         """Execute demonstration workflows for available modules to validate system functionality.
 
         Args:
             modules: Dictionary of module name to ModuleInfo instances.
+            output_dir: Directory for files the demos write (the demo plot).
+                Defaults to a new temporary directory, so a demo never
+                writes into the current working directory.
+
+        Returns:
+            The number of demos that completed successfully.
         """
         print("\n" + "=" * 60)
         print("   CODOMYRMEX DEMO WORKFLOWS")
@@ -223,16 +273,19 @@ class SystemHealthChecker:
                 x = np.linspace(0, 4 * np.pi, 100)
                 y = np.sin(x)
 
+                if output_dir is None:
+                    output_dir = Path(tempfile.mkdtemp(prefix="codomyrmex-demo-"))
+                plot_path = output_dir / "demo_plot.png"
                 create_line_plot(
                     x_data=x,
                     y_data=y,
                     title="Demo: Sine Wave",
                     x_label="X",
                     y_label="sin(x)",
-                    output_path="demo_plot.png",
+                    output_path=str(plot_path),
                     show_plot=False,
                 )
-                print("   Created demo plot: demo_plot.png")
+                print(f"   Created demo plot: {plot_path}")
                 successful_demos += 1
             except Exception as e:
                 print(f"   Data visualization demo failed: {e}")
@@ -251,8 +304,8 @@ class SystemHealthChecker:
             except Exception as e:
                 print(f"   Logging demo failed: {e}")
 
-        # Code execution demo
-        if "code" in modules and modules["code"].is_importable:
+        # Code execution demo (the sandbox lives in the ``coding`` module)
+        if "coding" in modules and modules["coding"].is_importable:
             print("\nTesting Code Execution...")
             try:
                 result = execute_code(
@@ -264,11 +317,15 @@ class SystemHealthChecker:
                     )
                     successful_demos += 1
                 else:
-                    print("   Code execution returned non-zero exit code")
+                    print(
+                        f"   Code execution failed ({result.get('status')}): "
+                        f"{result.get('error_message') or result.get('stderr', '').strip()}"
+                    )
             except Exception as e:
                 print(f"   Code execution demo failed: {e}")
 
         print(f"\nDemo Summary: {successful_demos} workflows completed successfully")
+        return successful_demos
 
     def check_git_repositories(self) -> None:
         """Check git repository status and related repos."""
@@ -314,7 +371,7 @@ class SystemHealthChecker:
             print(f"\n   Could not check remotes: {e}")
 
     def export_full_inventory(self, modules: dict) -> None:
-        """Export complete system inventory to JSON file.
+        """Export the complete system inventory to ``<project_root>/codomyrmex_inventory.json``.
 
         Args:
             modules: Dictionary of module name to ModuleInfo instances.
@@ -324,7 +381,7 @@ class SystemHealthChecker:
         inventory = {
             "project_info": {
                 "name": "Codomyrmex",
-                "version": "0.1.0",
+                "version": codomyrmex.__version__,
                 "root_path": str(self.project_root),
                 "python_version": sys.version,
                 "timestamp": __import__("datetime").datetime.now().isoformat(),

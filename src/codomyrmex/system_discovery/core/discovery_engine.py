@@ -74,7 +74,7 @@ class SystemDiscovery:
         self.project_root = project_root or Path.cwd()
         self.src_path = self.project_root / "src"
         self.codomyrmex_path = self.src_path / "codomyrmex"
-        self.testing_path = self.project_root / "testing"
+        self.testing_path = self.project_root / "tests"
 
         self.modules: dict[str, ModuleInfo] = {}
         self.system_status: dict[str, Any] = {}
@@ -84,10 +84,6 @@ class SystemDiscovery:
         self._health = SystemHealthChecker(
             self.project_root, self.src_path, self.testing_path
         )
-
-        # Ensure src is in Python path
-        if str(self.src_path) not in sys.path:
-            pass
 
     def run_full_discovery(self) -> None:
         """Run complete system discovery, scanning all modules and printing results."""
@@ -164,9 +160,19 @@ class SystemDiscovery:
         """Display a comprehensive system status dashboard to stdout."""
         self._health.show_status_dashboard()
 
-    def run_demo_workflows(self) -> None:
-        """Execute demonstration workflows for available modules."""
-        self._health.run_demo_workflows(self.modules)
+    def run_demo_workflows(self, output_dir: Path | None = None) -> int:
+        """Execute demonstration workflows for available modules.
+
+        Args:
+            output_dir: Directory for files the demos write; defaults to a
+                new temporary directory.
+
+        Returns:
+            The number of demos that completed successfully.
+        """
+        if not self.modules:
+            self._discover_modules()
+        return self._health.run_demo_workflows(self.modules, output_dir)
 
     def _discover_modules(self) -> None:
         """Find all Python modules under the codomyrmex package directory and analyze each one."""

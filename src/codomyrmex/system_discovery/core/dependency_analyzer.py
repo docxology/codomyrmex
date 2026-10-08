@@ -108,9 +108,17 @@ class DependencyAnalyzer:
         return dependencies
 
     def has_tests(self, module_name: str) -> bool:
-        """Check whether a corresponding unit test file exists in the testing directory."""
-        test_file = self.testing_path / "unit" / f"test_{module_name}.py"
-        return test_file.exists()
+        """Check whether the module has unit tests under ``<testing_path>/unit``.
+
+        Both layouts in use count: a ``<module_name>/`` directory that holds
+        ``test_*.py`` files (the repository's layout), or a single
+        ``test_<module_name>.py`` file.
+        """
+        unit_dir = self.testing_path / "unit"
+        if (unit_dir / f"test_{module_name}.py").is_file():
+            return True
+        module_tests = unit_dir / module_name
+        return module_tests.is_dir() and any(module_tests.rglob("test_*.py"))
 
     def has_docs(self, module_path: Path) -> bool:
         """Check whether the module has documentation (README, docs dir, or API spec)."""

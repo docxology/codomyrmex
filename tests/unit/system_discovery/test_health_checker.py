@@ -170,17 +170,12 @@ def test_get_system_status_dict(health_checker: SystemHealthChecker) -> None:
     assert "venv_exists" in status["project"]
     assert status["project"]["venv_exists"] is True
 
-    # Check dependencies dictionary structure against the source of truth.
-    # get_system_status_dict deliberately skips fastapi (optional extra),
-    # so only the remaining mapped dependencies must appear as booleans.
-    from codomyrmex.system_discovery.core.health_checker import _DEP_MAPPING
+    # Dependencies are the core requirements the installed distribution
+    # declares; the environment the suite runs in has all of them.
+    from codomyrmex.system_discovery.core.health_checker import core_requirements
 
-    assert "fastapi" not in status["dependencies"]
-    for dep in _DEP_MAPPING:
-        if dep == "fastapi":
-            continue
-        assert dep in status["dependencies"]
-        assert isinstance(status["dependencies"][dep], bool)
+    assert set(status["dependencies"]) == set(core_requirements())
+    assert all(status["dependencies"].values())
 
     # Check git dictionary
     assert "is_repo" in status["git"]
