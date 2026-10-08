@@ -8,8 +8,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- `make docs-check` checks every `API_SPECIFICATION.md` signature against the code
-  (`scripts/documentation/validate_api_signatures.py`); 163 drifted signatures were corrected.
+### Specifications that match the code (#568)
+
+- `make docs-check` now fails when an `MCP_TOOL_SPECIFICATION.md` documents a
+  tool its package does not define
+  (`scripts/documentation/validate_mcp_tool_specs.py`, static parsing of
+  `@mcp_tool`, FastMCP and bridge registrations). 39 specifications described
+  166 tools that do not exist, among them `system_discovery`,
+  `terminal_interface`, `cli`, `llm` and `coding`; they now describe the real
+  tools with the parameter names from their signatures.
+- `make docs-check` also compares the call signatures in every
+  `API_SPECIFICATION.md` with `inspect.signature`
+  (`scripts/documentation/validate_api_signatures.py`). 163 drifted
+  signatures were corrected, including rewrites of the `ci_cd_automation` and
+  `containerization` specifications; functions that do not exist were removed
+  or replaced by their real equivalents.
 
 ### 2026-10-07 hardening pass (#496–#564)
 
@@ -64,8 +77,6 @@ merged), then the following landed on `main` with green CI.
   references at 365 places were corrected, including the
   `project_orchestration` guides, which now document
   `codomyrmex.logistics.orchestration.project` (#564).
-- `make docs-check` checks `MCP_TOOL_SPECIFICATION.md` files against the tools the code defines
-  (`scripts/documentation/validate_mcp_tool_specs.py`); 166 documented tools their modules do not define (39 specs) were corrected.
 - Inventory counts in `CLAUDE.md` refreshed; testing guide documents the
   repository guards and type-checking ratchet.
 
