@@ -52,8 +52,9 @@ executors.
 - Transcription/STT command injection was fixed by merged #423 at the live
   call site; the `transcription_tools.py` file does not exist on `main`.
 
-## 2024-10-08 - Arbitrary Code Execution via module traversal in ast.parse sandbox
+## 2026-10-08 - Arbitrary Code Execution via module traversal in ast.parse sandbox
 
 **Vulnerability:** The Z3 backend uses `_safe_exec` to restrict arbitrary python execution using `ast.parse`. However, the restricted evaluation context injected the `z3` package module directly into the evaluated namespace (`namespace["z3"] = z3`). This allowed constraints to bypass `ast.parse` protections by accessing submodules via attributes, such as `z3.os.system('...')`, leading to arbitrary remote code execution.
 **Learning:** Exposing module objects into restricted evaluation environments (like `ast.parse` evaluators) is highly dangerous. Python modules often have access to their loaded submodules (like `os` or `sys`), which allows attackers to pivot and gain full code execution even if standard execution functions (`exec`, `eval`) are blocked and attributes like `__class__` are sanitized.
 **Prevention:** Always block access to `types.ModuleType` dynamically during attribute resolution in custom evaluators, or exclusively populate restricted namespaces with specific functions and classes rather than entire modules.
+Packages built on ctypes also re-export raw-memory helpers (`z3.string_at`, `z3.cast`, `z3.CFUNCTYPE`): refuse callables whose `__module__` is `ctypes`, `builtins`, `os` or `sys` as well (`_check_reachable` in `z3_backend.py`).
