@@ -2,83 +2,30 @@
 
 ## Overview
 
-This document defines Model Context Protocol (MCP) tools for the dark module, enabling AI models to apply dark mode filters to PDF documents.
+This document defines the Model Context Protocol (MCP) tools of the dark module. They are defined with `@mcp_tool` in `mcp_tools.py` and surfaced by the PAI MCP bridge as `codomyrmex.<name>`. Both tools are read-only: they report whether the PDF dependencies are installed and which filter presets exist.
+
+Converting a PDF is not exposed as an MCP tool. Use the Python API instead:
+
+```python
+from codomyrmex.dark.pdf import apply_dark_mode
+
+apply_dark_mode("input.pdf", "output.pdf", preset="dark")
+```
+
+PDF support needs the optional dependencies (`uv sync --extra dark`).
 
 ## Tools
 
-### apply_dark_mode_pdf
+### dark_status
 
-Apply dark mode filters to a PDF document.
+Check whether the PDF dependencies are installed and list the preset names.
 
 #### Schema
 
 ```json
 {
-  "name": "apply_dark_mode_pdf",
-  "description": "Apply dark mode filters to a PDF document. Inverts colors and adjusts brightness, contrast, and sepia for comfortable reading in dark environments.",
-  "inputSchema": {
-    "type": "object",
-    "properties": {
-      "input_path": {
-        "type": "string",
-        "description": "Path to the input PDF file"
-      },
-      "output_path": {
-        "type": "string",
-        "description": "Path for the output PDF file"
-      },
-      "preset": {
-        "type": "string",
-        "enum": ["dark", "sepia", "high_contrast", "low_light"],
-        "default": "dark",
-        "description": "Named filter preset. 'dark' for standard dark mode, 'sepia' for warm tones, 'high_contrast' for maximum contrast, 'low_light' for dim environments"
-      },
-      "inversion": {
-        "type": "number",
-        "minimum": 0.0,
-        "maximum": 1.0,
-        "description": "Inversion amount (0.0-1.0). Overrides preset value if provided"
-      },
-      "brightness": {
-        "type": "number",
-        "minimum": 0.1,
-        "maximum": 3.0,
-        "description": "Brightness multiplier (0.1-3.0). Overrides preset value if provided"
-      },
-      "contrast": {
-        "type": "number",
-        "minimum": 0.1,
-        "maximum": 3.0,
-        "description": "Contrast multiplier (0.1-3.0). Overrides preset value if provided"
-      },
-      "sepia": {
-        "type": "number",
-        "minimum": 0.0,
-        "maximum": 1.0,
-        "description": "Sepia amount (0.0-1.0). Overrides preset value if provided"
-      },
-      "dpi": {
-        "type": "integer",
-        "minimum": 36,
-        "default": 150,
-        "description": "Resolution for rendering PDF pages (default 150)"
-      }
-    },
-    "required": ["input_path", "output_path"]
-  }
-}
-```
-
-#### Example
-
-```json
-{
-  "name": "apply_dark_mode_pdf",
-  "arguments": {
-    "input_path": "/path/to/document.pdf",
-    "output_path": "/path/to/document_dark.pdf",
-    "preset": "dark"
-  }
+  "name": "dark_status",
+  "inputSchema": {"type": "object", "properties": {}, "required": []}
 }
 ```
 
@@ -86,25 +33,45 @@ Apply dark mode filters to a PDF document.
 
 ```json
 {
-  "success": true,
-  "output_path": "/path/to/document_dark.pdf",
-  "pages_processed": 10,
-  "preset": "dark",
-  "filters_applied": {
-    "inversion": 0.90,
-    "brightness": 0.90,
-    "contrast": 0.90,
-    "sepia": 0.10
+  "status": "success",
+  "pdf_available": true,
+  "version": "0.1.0",
+  "presets": ["dark", "sepia", "high_contrast", "low_light"]
+}
+```
+
+### dark_list_presets
+
+List the filter presets with their parameter values.
+
+#### Schema
+
+```json
+{
+  "name": "dark_list_presets",
+  "inputSchema": {"type": "object", "properties": {}, "required": []}
+}
+```
+
+#### Response
+
+```json
+{
+  "status": "success",
+  "pdf_available": true,
+  "presets": {
+    "dark": {"inversion": 0.9, "brightness": 0.9, "contrast": 0.9, "sepia": 0.1},
+    "sepia": {"inversion": 0.85, "brightness": 0.95, "contrast": 0.9, "sepia": 0.4},
+    "high_contrast": {"inversion": 1.0, "brightness": 1.0, "contrast": 1.3, "sepia": 0.0},
+    "low_light": {"inversion": 0.8, "brightness": 0.7, "contrast": 0.85, "sepia": 0.05}
   }
 }
 ```
 
+When the PDF dependencies are missing, `pdf_available` is `false`, `presets` is `{}` and `install_hint` is `"uv sync --extra dark"`.
+
 #### Error Response
 
-```json
-{
-  "success": false,
-  "error": "FileNotFoundError",
-  "message": "Input PDF not found: /path/to/document.pdf"
-}
-```
+Both tools return `{"status": "error", "message": "<description>"}` if the module cannot be imported.
+
+<!-- markdownlint-configure-file { "MD024": { "siblings_only": true } } -->

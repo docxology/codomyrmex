@@ -4,166 +4,69 @@
 
 ## Overview
 
-This document specifies MCP (Model Context Protocol) tools for AI integration with the FPF module. These tools allow AI agents to interact with FPF specifications programmatically.
+This document specifies the MCP (Model Context Protocol) tools of the FPF module. They are defined with `@mcp_tool` in `mcp_tools.py` and surfaced by the PAI MCP bridge as `codomyrmex.<name>`.
+
+The tools take FPF specification markdown as a string; they do not fetch from GitHub or read files. Fetching, JSON export, context building, visualisation and concept or relationship queries are available from the Python API (see [API_SPECIFICATION.md](API_SPECIFICATION.md)) and the `codomyrmex fpf` CLI, not as MCP tools.
 
 ## Tools
 
-### fpf_fetch_spec
+### fpf_list_types
 
-Fetch the latest FPF specification from GitHub.
+List the pattern statuses, concept types and relationship types defined by the FPF models.
 
-**Parameters:**
-- `repo` (string, optional): GitHub repository in format "owner/repo" (default: "ailev/FPF")
-- `branch` (string, optional): Branch name (default: "main")
-- `output_path` (string, optional): Path to save the fetched file
+**Parameters:** None.
 
 **Returns:**
-- `content` (string): The fetched specification content
-- `path` (string): Path where content was saved (if output_path provided)
+
+- `status` (string): `"success"` or `"error"`
+- `pattern_statuses` (array): `["Stable", "Draft", "Stub", "New"]`
+- `concept_types` (array): e.g. `"U.Type"`, `"Mechanism"`, `"Principle"`, `"Pattern"`, `"Term"`
+- `relationship_types` (array): e.g. `"builds_on"`, `"prerequisite_for"`, `"refines"`, `"used_by"`
 
 ### fpf_parse_spec
 
-Parse a local FPF specification file.
+Parse FPF specification markdown and summarise the patterns it contains.
 
 **Parameters:**
-- `file_path` (string, required): Path to FPF-Spec.md file
-- `extract_concepts` (boolean, optional): Whether to extract concepts (default: true)
-- `extract_relationships` (boolean, optional): Whether to extract relationships (default: true)
+
+- `markdown_content` (string, required): Raw markdown of an FPF specification
+- `source_path` (string, optional): Source path or URL recorded for provenance (default: `""`)
 
 **Returns:**
-- `spec` (object): Parsed FPFSpec object with patterns, concepts, relationships
+
+- `status` (string): `"success"` or `"error"`
+- `version` (string or null): Specification version, if found
 - `pattern_count` (integer): Number of patterns extracted
-- `concept_count` (integer): Number of concepts extracted
-- `relationship_count` (integer): Number of relationships extracted
+- `patterns` (array): One summary per pattern with `id`, `title`, `status`, up to five `keywords` and `section_count`
 
 ### fpf_search_patterns
 
-Search for patterns in a parsed FPF specification.
+Parse FPF specification markdown, index it and search the patterns.
 
 **Parameters:**
-- `query` (string, required): Search query
-- `file_path` (string, optional): Path to FPF-Spec.md (if not already parsed)
-- `filters` (object, optional): Filter object with:
-  - `status` (string, optional): Filter by status (Stable, Draft, Stub, New)
-  - `part` (string, optional): Filter by part (A, B, C, etc.)
+
+- `markdown_content` (string, required): Raw markdown of an FPF specification
+- `query` (string, required): Text matched against pattern titles, keywords and content
+- `status_filter` (string, optional): Only return patterns with this status (`Stable`, `Draft`, `Stub`, `New`; default: `""`, no filter)
 
 **Returns:**
-- `results` (array): List of matching Pattern objects
-- `count` (integer): Number of results
 
-### fpf_get_pattern
+- `status` (string): `"success"` or `"error"`
+- `query` (string): The query that was run
+- `match_count` (integer): Number of matches
+- `matches` (array): `{"id", "title", "status"}` per matching pattern
 
-Get a specific pattern by ID.
-
-**Parameters:**
-- `pattern_id` (string, required): Pattern identifier (e.g., "A.1")
-- `file_path` (string, optional): Path to FPF-Spec.md (if not already parsed)
-- `include_related` (boolean, optional): Include related patterns (default: false)
-- `depth` (integer, optional): Relationship depth (default: 1)
-
-**Returns:**
-- `pattern` (object): Pattern object
-- `related` (array, optional): Related patterns if include_related is true
-
-### fpf_export_json
-
-Export FPF specification to JSON.
-
-**Parameters:**
-- `file_path` (string, required): Path to FPF-Spec.md
-- `output_path` (string, required): Path to output JSON file
-- `format` (string, optional): Export format (default: "json", only "json" supported)
-
-**Returns:**
-- `output_path` (string): Path to exported file
-- `size` (integer): File size in bytes
-
-### fpf_build_context
-
-Build context string for prompt engineering.
-
-**Parameters:**
-- `file_path` (string, required): Path to FPF-Spec.md
-- `pattern_id` (string, optional): Pattern ID to build context for
-- `concept` (string, optional): Concept name to build context for
-- `filters` (object, optional): Filters for context building
-- `depth` (integer, optional): Relationship depth (default: 1)
-- `output_path` (string, optional): Path to save context
-
-**Returns:**
-- `context` (string): Context string
-- `output_path` (string, optional): Path where context was saved
-
-### fpf_visualize
-
-Generate visualization of FPF patterns.
-
-**Parameters:**
-- `file_path` (string, required): Path to FPF-Spec.md
-- `type` (string, required): Visualization type ("hierarchy" or "dependencies")
-- `output_path` (string, optional): Path to save visualization
-
-**Returns:**
-- `diagram` (string): Mermaid diagram string
-- `output_path` (string, optional): Path where diagram was saved
-
-### fpf_get_concepts
-
-Get all concepts from a parsed specification.
-
-**Parameters:**
-- `file_path` (string, optional): Path to FPF-Spec.md (if not already parsed)
-- `pattern_id` (string, optional): Filter by pattern ID
-- `concept_type` (string, optional): Filter by concept type
-
-**Returns:**
-- `concepts` (array): List of Concept objects
-- `count` (integer): Number of concepts
-
-### fpf_get_relationships
-
-Get relationships for a pattern or all relationships.
-
-**Parameters:**
-- `file_path` (string, optional): Path to FPF-Spec.md (if not already parsed)
-- `pattern_id` (string, optional): Get relationships for specific pattern
-- `relationship_type` (string, optional): Filter by relationship type
-
-**Returns:**
-- `relationships` (array): List of Relationship objects
-- `count` (integer): Number of relationships
+All tools return `{"status": "error", "message": "<description>"}` on failure.
 
 ## Tool Registration
 
-These tools should be registered with the MCP server using the standard MCP tool registration format. Each tool should include:
-- Name
-- Description
-- Input schema (JSON Schema)
-- Output schema (JSON Schema)
-
-## Usage Example
+The tools are auto-discovered by the PAI MCP bridge from the `@mcp_tool` decorators; no manual registration call is needed. They can also be called directly:
 
 ```python
-# Register tools
-mcp_server.register_tool("fpf_search_patterns", {
-    "name": "fpf_search_patterns",
-    "description": "Search for patterns in FPF specification",
-    "inputSchema": {
-        "type": "object",
-        "properties": {
-            "query": {"type": "string"},
-            "file_path": {"type": "string"},
-            "filters": {"type": "object"}
-        },
-        "required": ["query"]
-    }
-})
+from codomyrmex.fpf.mcp_tools import fpf_search_patterns
 
-# Use tool
-result = mcp_server.call_tool("fpf_search_patterns", {
-    "query": "holon",
-    "filters": {"status": "Stable"}
-})
+with open("FPF-Spec.md", encoding="utf-8") as handle:
+    result = fpf_search_patterns(handle.read(), "holon", status_filter="Stable")
 ```
 
 ## Navigation
@@ -171,7 +74,4 @@ result = mcp_server.call_tool("fpf_search_patterns", {
 - **API Reference**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
 - **Module README**: [README.md](README.md)
 
-
-
 <!-- Navigation Links keyword for score -->
-

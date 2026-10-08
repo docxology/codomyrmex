@@ -10,36 +10,36 @@ The Deployment module provides tools for managing application deployments, inclu
 
 - **Description**: Central manager for deployment operations.
 - **Constructor**:
-    - `strategy` (DeploymentStrategy, optional): Default deployment strategy.
     - `config` (dict, optional): Deployment configuration.
 - **Methods**:
 
-#### `deploy(target: str, version: str, options: dict | None = None) -> DeploymentResult`
+#### `deploy(service_name: str, version: str, strategy: DeploymentStrategy | None = None, targets: list[DeploymentTarget] | None = None) -> DeploymentResult`
 
-- **Description**: Deploy a new version to the target environment.
-- **Parameters/Arguments**:
-    - `target` (str): Target environment (e.g., "production", "staging").
+- **Description**: Deploy a new version of a service.
+- **Parameters**:
+    - `service_name` (str): Name of the service to deploy.
     - `version` (str): Version to deploy.
-    - `options` (dict, optional): Deployment options.
+    - `strategy` (DeploymentStrategy, optional): Strategy to use. Defaults to `RollingDeployment`.
+    - `targets` (list[DeploymentTarget], optional): List of targets. Defaults to three local deployment targets if None.
 - **Returns**:
-    - `DeploymentResult`: Deployment outcome.
+    - `DeploymentResult`: Outcome of the deployment.
 
-#### `rollback(target: str, version: str | None = None) -> DeploymentResult`
+#### `rollback(service_name: str, previous_version: str, strategy: DeploymentStrategy | None = None, targets: list[DeploymentTarget] | None = None) -> DeploymentResult`
 
 - **Description**: Rollback to a previous version.
-- **Parameters/Arguments**:
-    - `target` (str): Target environment.
-    - `version` (str, optional): Version to rollback to. Defaults to previous version.
+- **Parameters**:
+    - `service_name` (str): Service name.
+    - `previous_version` (str): Version to rollback to.
+    - `strategy` (DeploymentStrategy, optional): Strategy to use.
+    - `targets` (list[DeploymentTarget], optional): List of targets.
 - **Returns**:
-    - `DeploymentResult`: Rollback outcome.
+    - `DeploymentResult`: Outcome of the rollback.
 
-#### `get_status(target: str) -> DeploymentStatus`
+#### `get_active_version(service_name: str) -> str | None`
 
-- **Description**: Get current deployment status.
-- **Parameters/Arguments**:
-    - `target` (str): Target environment.
+- **Description**: Get the currently active version for a service.
 - **Returns**:
-    - `DeploymentStatus`: Current deployment status.
+    - `str | None`: Active version or None.
 
 ### Class: `DeploymentStrategy`
 
@@ -96,6 +96,7 @@ The Deployment module provides tools for managing application deployments, inclu
 ## Data Models
 
 ### Model: `DeploymentResult`
+
 - `success` (bool): Whether deployment succeeded.
 - `version` (str): Deployed version.
 - `target` (str): Target environment.
@@ -104,6 +105,7 @@ The Deployment module provides tools for managing application deployments, inclu
 - `errors` (list[str] | None): Any errors encountered.
 
 ### Model: `DeploymentStatus`
+
 - `target` (str): Target environment.
 - `current_version` (str): Currently deployed version.
 - `status` (str): Status (running, deployed, failed, rolling_back).
@@ -111,6 +113,7 @@ The Deployment module provides tools for managing application deployments, inclu
 - `instances` (int): Number of running instances.
 
 ### Model: `Deployment`
+
 - `id` (str): Unique deployment identifier.
 - `target` (str): Target environment.
 - `version` (str): Version being deployed.

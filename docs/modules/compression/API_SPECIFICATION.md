@@ -23,7 +23,7 @@ Compressor(format: str = "gzip")
 ```
 
 | Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
+| --- | --- | --- | --- |
 | `format` | `str` | `"gzip"` | Compression format: `"gzip"`, `"zlib"`, or `"zip"` |
 
 #### Methods
@@ -37,7 +37,7 @@ def compress(data: bytes, level: int = 6) -> bytes
 Compress data using the configured format.
 
 | Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
+| --- | --- | --- | --- |
 | `data` | `bytes` | - | Data to compress |
 | `level` | `int` | `6` | Compression level (0-9, higher = more compression) |
 
@@ -54,7 +54,7 @@ def decompress(data: bytes) -> bytes
 Decompress data using the configured format.
 
 | Parameter | Type | Description |
-|-----------|------|-------------|
+| --- | --- | --- |
 | `data` | `bytes` | Compressed data |
 
 **Returns**: `bytes` - Decompressed data
@@ -70,7 +70,7 @@ def compress_stream(input_stream: IO[bytes], output_stream: IO[bytes], level: in
 Compress data from input stream to output stream.
 
 | Parameter | Type | Description |
-|-----------|------|-------------|
+| --- | --- | --- |
 | `input_stream` | `IO[bytes]` | Input stream |
 | `output_stream` | `IO[bytes]` | Output stream |
 | `level` | `int` | Compression level |
@@ -108,18 +108,18 @@ from codomyrmex.compression import ArchiveManager
 ##### create_archive
 
 ```python
-def create_archive(files: list[Path], output_path: Path, format: str = "zip") -> bool
+def create_archive(files: list[Path], output: Path, format: str = "zip") -> bool
 ```
 
-Create an archive from files.
+Create an archive at `output` containing `files`. `format` is `"zip"`, `"tar"` or `"tar.gz"`. Returns True on success; raises `CompressionError` on failure.
 
 ##### extract_archive
 
 ```python
-def extract_archive(archive_path: Path, output_dir: Path) -> bool
+def extract_archive(archive: Path, output: Path) -> bool
 ```
 
-Extract archive to directory.
+Extract `archive` into the `output` directory. Returns True on success; raises `CompressionError` on failure.
 
 ---
 
@@ -184,11 +184,13 @@ compressed = output_buffer.getvalue()
 ## Integration
 
 ### Dependencies
+
 - Python standard library (`gzip`, `zlib`, `zipfile`)
 - `codomyrmex.logging_monitoring` for logging
 - `codomyrmex.exceptions` for error handling
 
 ### Related Modules
+
 - [`documents`](../documents/API_SPECIFICATION.md) - Document compression
 - [`deployment`](../deployment/API_SPECIFICATION.md) - Build artifact compression
 - [`cache`](../cache/API_SPECIFICATION.md) - Cache compression
