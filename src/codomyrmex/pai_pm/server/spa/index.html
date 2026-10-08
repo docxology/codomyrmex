@@ -6424,9 +6424,9 @@
         }
         html += '</select>';
       } else if (type === 'textarea') {
-        html += '<textarea name="' + name + '" id="f-' + name + '" placeholder="' + esc(placeholder || '') + '" aria-label="' + esc(placeholder || '') + '">' + esc(value || '') + '</textarea>';
+        html += '<textarea name="' + name + '" id="f-' + name + '" placeholder="' + esc(placeholder || '') + '">' + esc(value || '') + '</textarea>';
       } else {
-        html += '<input type="' + type + '" name="' + name + '" id="f-' + name + '" value="' + esc(value || '') + '" placeholder="' + esc(placeholder || '') + '" aria-label="' + esc(placeholder || '') + '">';
+        html += '<input type="' + type + '" name="' + name + '" id="f-' + name + '" value="' + esc(value || '') + '" placeholder="' + esc(placeholder || '') + '">';
       }
       html += '</div>';
       return html;
@@ -7797,7 +7797,7 @@
             (isRecording ? '⬛' : '🎙️') +
             '</button>' +
             '</div>' +
-            '<textarea id="bikeride-draft-' + t.id + '" class="bikeride-draft-textarea" placeholder="Click the microphone to start dictating your reply, or type here..." aria-label="Click the microphone to start dictating your reply, or type here" oninput="bikeRideUpdateVoiceDraft(\'' + t.id + '\', this.value)">' + esc(voiceDraftText) + '</textarea>' +
+            '<textarea id="bikeride-draft-' + t.id + '" class="bikeride-draft-textarea" placeholder="Click the microphone to start dictating your reply, or type here..." aria-label="Voice reply draft" oninput="bikeRideUpdateVoiceDraft(\'' + t.id + '\', this.value)">' + esc(voiceDraftText) + '</textarea>' +
             '<div class="bikeride-voice-actions">' +
             '<button class="bikeride-improve-btn' + (isImproving ? ' improving' : '') + '" onclick="bikeRideImprove(' + idx + ')">' +
             (isImproving ? '<div class="spinner" style="width:12px;height:12px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 1s linear infinite;"></div> Polishing...' : '<span class="sparkle">✨</span> Improve w/ Context') +
