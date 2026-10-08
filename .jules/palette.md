@@ -44,3 +44,6 @@ icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
+## 2024-10-08 - Inputs and Textareas Missing Labels Need Aria-Labels
+**Learning:** Using `placeholder` attributes alone on `input` and `textarea` elements is an accessibility anti-pattern in the SPA, as screen readers might not reliably announce them and placeholders can disappear on input.
+**Action:** Always ensure that inputs/textareas without explicit `<label>` tags receive an `aria-label` attribute (usually mirroring the placeholder's intent) when contributing new forms or inputs to `index.html`.
