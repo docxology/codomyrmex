@@ -7,16 +7,8 @@
       "module": "data_visualization",
       "action": "create_bar_chart",
       "parameters": {
-        "categories": [
-          "A",
-          "B",
-          "C"
-        ],
-        "values": [
-          10,
-          20,
-          15
-        ],
+        "categories": ["A", "B", "C"],
+        "values": [10, 20, 15],
         "title": "Sample Data"
       },
       "dependencies": [],
@@ -30,9 +22,7 @@
       "parameters": {
         "path": "."
       },
-      "dependencies": [
-        "data_analysis"
-      ],
+      "dependencies": ["data_analysis"],
       "timeout": null,
       "max_retries": 0
     },
@@ -52,10 +42,7 @@
       "module": "environment_setup",
       "action": "generate_environment_report",
       "parameters": {},
-      "dependencies": [
-        "report_generation",
-        "security_scan"
-      ],
+      "dependencies": ["report_generation", "security_scan"],
       "timeout": null,
       "max_retries": 0
     }

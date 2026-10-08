@@ -18,9 +18,7 @@
       "parameters": {
         "project_root": "."
       },
-      "dependencies": [
-        "check_env"
-      ],
+      "dependencies": ["check_env"],
       "timeout": 300,
       "max_retries": 0
     }

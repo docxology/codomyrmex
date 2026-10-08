@@ -18,9 +18,7 @@
       "parameters": {
         "project_root": "."
       },
-      "dependencies": [
-        "setup"
-      ],
+      "dependencies": ["setup"],
       "timeout": 300,
       "max_retries": 0
     },
@@ -31,9 +29,7 @@
       "parameters": {
         "target_path": "."
       },
-      "dependencies": [
-        "setup"
-      ],
+      "dependencies": ["setup"],
       "timeout": 120,
       "max_retries": 0
     },
@@ -44,9 +40,7 @@
       "parameters": {
         "path": "."
       },
-      "dependencies": [
-        "setup"
-      ],
+      "dependencies": ["setup"],
       "timeout": 60,
       "max_retries": 0
     },
@@ -55,11 +49,7 @@
       "module": "environment_setup",
       "action": "generate_environment_report",
       "parameters": {},
-      "dependencies": [
-        "analyze_code",
-        "scan_secrets",
-        "check_docs"
-      ],
+      "dependencies": ["analyze_code", "scan_secrets", "check_docs"],
       "timeout": 60,
       "max_retries": 0
     }

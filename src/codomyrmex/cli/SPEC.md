@@ -18,12 +18,16 @@ The CLI uses a "Thin Dispatcher" pattern:
 ## Core Components
 
 ### `Cli` Class
+
 The central hub for all commands. Methods are automatically exposed as subcommands.
+
 - Uses `fire.Fire(Cli)` for automatic CLI generation.
 - Handles global flags like `--verbose` and `--performance`.
 
 ### Command Handlers
+
 Located in `src/codomyrmex/cli/handlers/`:
+
 - `system.py`: Environment checks, info, and status.
 - `ai.py`: LLM-powered code editing.
 - `analysis.py`: Static analysis and module testing.
