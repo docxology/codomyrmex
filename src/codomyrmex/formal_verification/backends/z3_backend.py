@@ -12,7 +12,31 @@ from __future__ import annotations
 
 import ast
 import contextlib
+import types
 from typing import Any
+
+# Modules whose callables give raw memory or native-code access. The z3
+# package re-exports ctypes helpers (``z3.cast``, ``z3.string_at``,
+# ``z3.CFUNCTYPE``) because its bindings are built on ctypes.
+_FORBIDDEN_ORIGINS = ("ctypes", "_ctypes", "builtins", "importlib", "os", "sys")
+
+
+def _check_reachable(attr: str, value: Any) -> None:
+    """Reject attribute values that would let a model item escape the sandbox.
+
+    ``z3`` is in the namespace, and the package object exposes the modules it
+    imported (``z3.os``, ``z3.sys``, ``z3.builtins``, ``z3.ctypes``) and the
+    ctypes functions above. Reaching any module, or a function or class
+    defined outside z3, through attribute access is refused.
+    """
+    if isinstance(value, types.ModuleType):
+        raise AttributeError(f"Access to module {attr!r} is forbidden")
+    if callable(value):
+        origin = getattr(value, "__module__", None) or ""
+        if origin.split(".")[0] in _FORBIDDEN_ORIGINS:
+            raise AttributeError(
+                f"Access to {attr!r} from module {origin!r} is forbidden"
+            )
 
 
 def _safe_exec(code: str, namespace: dict[str, Any]) -> None:
@@ -39,7 +63,9 @@ def _safe_exec(code: str, namespace: dict[str, Any]) -> None:
             obj = _eval(node.value)
             if node.attr.startswith("_"):
                 raise AttributeError("Access to private attributes is forbidden")
-            return getattr(obj, node.attr)
+            value = getattr(obj, node.attr)
+            _check_reachable(node.attr, value)
+            return value
         if isinstance(node, ast.Call):
             func = _eval(node.func)
             args = [_eval(arg) for arg in node.args]

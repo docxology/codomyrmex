@@ -11,7 +11,9 @@ Duplicate definitions across modules (e.g., repeating the `SecretType` definitio
 
 **Prevention:**
 Use descriptive suffixes or alternatives (e.g., changing `"password"` to `"password_type"`) for model or type definitions. Implement robust CI checks to enforce single-source-of-truth patterns rather than duplicating classes.
+
 ## 2026-08-04 - Prevent Command Injection via shell=True
+
 **Vulnerability:** Command Injection risk from using shell=True in subprocess.run for transcription_tools.py.
 **Learning:** Even when interpolating quoted strings, shell=True exposes the system to injection if templates are misconfigured or arguments leak.
 **Prevention:** Use shell=False combined with shlex.split() to safely tokenize commands while maintaining argument grouping.
@@ -26,6 +28,7 @@ already list-args without a shell), and "fixing" intentionally shell-based
 executors.
 
 **Action (mandatory, in order):**
+
 1. `gh pr list --state open --search "<callsite>"` and
    `git log --oneline -50 -- <target-file>`; read the callsite on `main`. If
    the injection is already fixed (list args, no shell, parameterized SQL,
@@ -35,6 +38,7 @@ executors.
    `.jules/` journal-only diffs, no test-suite deletions.
 
 **Dispositions (do not re-propose):**
+
 - Interactive shell sessions and agent shell executors (`do_shell`,
   `_shell_session`, `SystemOpsMixin`, OS provider diagnostic commands marked
   `# nosec B602`) are intentional design. Converting them to
@@ -47,3 +51,10 @@ executors.
   (proposals #482/#484 rejected).
 - Transcription/STT command injection was fixed by merged #423 at the live
   call site; the `transcription_tools.py` file does not exist on `main`.
+
+## 2026-10-08 - Arbitrary Code Execution via module traversal in ast.parse sandbox
+
+**Vulnerability:** The Z3 backend uses `_safe_exec` to restrict arbitrary python execution using `ast.parse`. However, the restricted evaluation context injected the `z3` package module directly into the evaluated namespace (`namespace["z3"] = z3`). This allowed constraints to bypass `ast.parse` protections by accessing submodules via attributes, such as `z3.os.system('...')`, leading to arbitrary remote code execution.
+**Learning:** Exposing module objects into restricted evaluation environments (like `ast.parse` evaluators) is highly dangerous. Python modules often have access to their loaded submodules (like `os` or `sys`), which allows attackers to pivot and gain full code execution even if standard execution functions (`exec`, `eval`) are blocked and attributes like `__class__` are sanitized.
+**Prevention:** Always block access to `types.ModuleType` dynamically during attribute resolution in custom evaluators, or exclusively populate restricted namespaces with specific functions and classes rather than entire modules.
+Packages built on ctypes also re-export raw-memory helpers (`z3.string_at`, `z3.cast`, `z3.CFUNCTYPE`): refuse callables whose `__module__` is `ctypes`, `builtins`, `os` or `sys` as well (`_check_reachable` in `z3_backend.py`).
