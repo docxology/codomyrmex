@@ -45,8 +45,9 @@ def _real_module_exists(name: str) -> bool:
     # (scripts and tools put it on sys.path), src/, and installed packages.
     search = [str(REPO_ROOT), str(REPO_ROOT / "src"), *site.getsitepackages()]
     spec = PathFinder.find_spec(name, search)
-    # Plain directories (namespace packages) do not count: tests create output
-    # directories such as git_analysis/ in the working directory.
+    # Plain directories (namespace packages) do not count: the CLI's git
+    # analysis command writes git_analysis/ into the working directory, and
+    # such output directories are not modules anything imports.
     return spec is not None and spec.origin is not None
 
 

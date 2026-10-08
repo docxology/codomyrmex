@@ -23,7 +23,7 @@ sys.path.insert(0, str(project_root / "src"))
 
 import contextlib
 
-from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.logging_monitoring import get_logger, setup_logging
 from codomyrmex.orchestrator import RetryPolicy, TaskResult, Workflow
 
 logger = get_logger(__name__)
@@ -229,6 +229,7 @@ async def main() -> int:
     parser.add_argument("--output", type=Path, help="Output report path")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
     args = parser.parse_args()
+    setup_logging()
 
     # Progress callback
     def on_progress(task: str, status: str, details: dict):

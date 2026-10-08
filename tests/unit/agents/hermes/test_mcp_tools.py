@@ -184,7 +184,11 @@ class TestHermesRegistryTools:
         result = mcp_tools.hermes_skills_validate_registry()
         assert result["status"] in ("success", "error", "ok", "skipped", "mismatch")
 
-    def test_hermes_search_knowledge_items(self) -> None:
+    def test_hermes_search_knowledge_items(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        # KnowledgeMemory's default SQLite store is ./memory.db in the CWD.
+        monkeypatch.chdir(tmp_path)
         result = mcp_tools.hermes_search_knowledge_items("test layout")
         assert result["status"] in ("success", "error")
 

@@ -244,9 +244,9 @@ class Cli:
             """Analyze code quality at path"""
             return handle_code_analysis(path, output or None)
 
-        def git(self, repo: str = "."):
-            """Analyze git history for a repository"""
-            return handle_git_analysis(repo)
+        def git(self, repo: str = ".", output: str = "./git_analysis"):
+            """Analyze git history for a repository, writing reports to output"""
+            return handle_git_analysis(repo, output)
 
     class build:
         """Build and synthesis operations"""

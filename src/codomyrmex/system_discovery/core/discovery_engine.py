@@ -8,25 +8,15 @@ Codomyrmex ecosystem capabilities.
 import importlib
 import inspect
 import json
-import logging
 import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.logging_monitoring import get_logger, setup_logging
 
-try:
-    from codomyrmex.logging_monitoring import (
-        get_logger,
-        setup_logging,
-    )
-
-    setup_logging()
-    logger = get_logger(__name__)
-except ImportError:
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
+# Importing this module must not configure logging; entry points do that.
+logger = get_logger(__name__)
 
 from .dependency_analyzer import DependencyAnalyzer
 from .health_checker import SystemHealthChecker
@@ -84,7 +74,7 @@ class SystemDiscovery:
         self.project_root = project_root or Path.cwd()
         self.src_path = self.project_root / "src"
         self.codomyrmex_path = self.src_path / "codomyrmex"
-        self.testing_path = self.project_root / "testing"
+        self.testing_path = self.project_root / "tests"
 
         self.modules: dict[str, ModuleInfo] = {}
         self.system_status: dict[str, Any] = {}
@@ -94,10 +84,6 @@ class SystemDiscovery:
         self._health = SystemHealthChecker(
             self.project_root, self.src_path, self.testing_path
         )
-
-        # Ensure src is in Python path
-        if str(self.src_path) not in sys.path:
-            pass
 
     def run_full_discovery(self) -> None:
         """Run complete system discovery, scanning all modules and printing results."""
@@ -174,9 +160,19 @@ class SystemDiscovery:
         """Display a comprehensive system status dashboard to stdout."""
         self._health.show_status_dashboard()
 
-    def run_demo_workflows(self) -> None:
-        """Execute demonstration workflows for available modules."""
-        self._health.run_demo_workflows(self.modules)
+    def run_demo_workflows(self, output_dir: Path | None = None) -> int:
+        """Execute demonstration workflows for available modules.
+
+        Args:
+            output_dir: Directory for files the demos write; defaults to a
+                new temporary directory.
+
+        Returns:
+            The number of demos that completed successfully.
+        """
+        if not self.modules:
+            self._discover_modules()
+        return self._health.run_demo_workflows(self.modules, output_dir)
 
     def _discover_modules(self) -> None:
         """Find all Python modules under the codomyrmex package directory and analyze each one."""
@@ -326,5 +322,6 @@ class SystemDiscovery:
 
 
 if __name__ == "__main__":
+    setup_logging()
     discovery = SystemDiscovery()
     discovery.run_full_discovery()

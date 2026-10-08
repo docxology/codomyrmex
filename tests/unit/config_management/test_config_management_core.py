@@ -481,6 +481,12 @@ class TestConfigSchemaValidation:
 class TestMcpTools:
     """Tests for config_management/mcp_tools.py MCP tool functions."""
 
+    @pytest.fixture(autouse=True)
+    def _run_in_tmp_path(self, tmp_path, monkeypatch):
+        # The tools use ConfigurationManager(), which reads and writes
+        # ./config/<namespace>.yaml in the CWD.
+        monkeypatch.chdir(tmp_path)
+
     def test_get_config_returns_success_status(self):
         from codomyrmex.config_management.mcp_tools import get_config
 
@@ -605,7 +611,7 @@ class TestSecretManager:
             mgr = self._make_manager(tmp)
             mgr.store_secret("rotate_me", "old_value")
             event = mgr.rotate_secret("rotate_me", "new_value")
-            assert event["secret_name"] == "rotate_me"
+            assert event["secret_name"] == "rotate_me"  # pragma: allowlist secret
             new_val = mgr.get_secret_by_name("rotate_me")
             assert new_val == "new_value"
 
@@ -623,7 +629,7 @@ class TestSecretManager:
             mgr.rotate_secret("hist_tok", "v2")
             history = mgr.get_rotation_history("hist_tok")
             assert len(history) == 1
-            assert history[0]["secret_name"] == "hist_tok"
+            assert history[0]["secret_name"] == "hist_tok"  # pragma: allowlist secret
 
     def test_get_rotation_history_all_returns_all(self):
         with tempfile.TemporaryDirectory() as tmp:

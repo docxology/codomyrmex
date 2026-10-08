@@ -72,16 +72,13 @@ class DatabasePerformanceMonitor:
 
         """
         self.workspace_dir = Path(workspace_dir) if workspace_dir else Path.cwd()
+        # Created when the first report is written, not on construction: a
+        # monitor that only analyzes must not create it in the CWD.
         self.performance_data_dir = self.workspace_dir / "db_performance"
-        self._ensure_directories()
 
         self._query_metrics: list[QueryMetrics] = []
         self._database_metrics: list[DatabaseMetrics] = []
         self._alerts: list[PerformanceAlert] = []
-
-    def _ensure_directories(self):
-        """Ensure required directories exist."""
-        self.performance_data_dir.mkdir(parents=True, exist_ok=True)
 
     def record_query_metrics(self, query_hash: str, metrics: dict[str, Any]):
         """Record query performance metrics.
@@ -433,6 +430,7 @@ class DatabasePerformanceMonitor:
             self.performance_data_dir
             / f"performance_report_{database_name}_{int(time.time())}.json"
         )
+        report_file.parent.mkdir(parents=True, exist_ok=True)
         with open(report_file, "w") as f:
             json.dump(report, f, indent=2, default=str)
 

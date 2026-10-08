@@ -89,7 +89,7 @@ class StatusReporter:
     def check_project_structure(self) -> dict[str, Any]:
         """Verify expected project directory structure exists.
 
-        Checks for the presence of key directories (src, testing, docs,
+        Checks for the presence of key directories (src, tests, docs,
         virtual env) and configuration files (pyproject.toml, pytest.ini, etc.).
 
         Returns:
@@ -99,7 +99,7 @@ class StatusReporter:
             "project_root_exists": self.project_root.exists(),
             "src_exists": self.src_path.exists(),
             "codomyrmex_package": (self.src_path / "codomyrmex").exists(),
-            "testing_dir": (self.project_root / "testing").exists(),
+            "testing_dir": (self.project_root / "tests").exists(),
             "docs_dir": (
                 self.project_root / "src" / "codomyrmex" / "documentation"
             ).exists(),
