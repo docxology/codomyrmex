@@ -8,6 +8,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Orchestration and CLI that actually run (#566, #567)
+
+- Project orchestration dispatches real work (#566): `ActionRegistry` /
+  `resolve_module_action` map `module.action` names to
+  `codomyrmex.<module>.<action>` callables, `WorkflowManager.execute_steps`
+  runs steps in dependency order and reports a final status, the parallel
+  executor dispatches through the registry, and resources are allocated and
+  released around each task. `ProjectManager.get_projects_summary`,
+  `update_project_metrics`, `add_project_milestone` and
+  `ResourceManager.get_resource_usage` exist as documented.
+- `codomyrmex workflow` and `codomyrmex project` keep state between
+  invocations (#567): workflows are saved as JSON and projects as
+  `project.json`, so `create`, `list` and `run` in separate processes see
+  each other's results. Built-in workflow templates (`basic`, `ai-analysis`,
+  `build-and-test`) call real module actions, and every shipped
+  `config/workflows/*.json` is validated by a test.
+- The CLI exit status reflects the result (#567). Every command used to exit
+  0, so scripts and CI could not detect a failed `workflow run` or `check`.
+  A handler returning `False` now exits 1, usage errors exit 2 and Ctrl-C
+  exits 130; `main(argv)` returns the status for programmatic callers, and
+  status values are no longer printed as a stray `True`/`0` line.
+
 ### 2026-10-07 hardening pass (#496–#564)
 
 All open issues and PRs were triaged (Dependabot action bumps #496–#502

@@ -116,10 +116,17 @@ graph TD
 
 ### Workflow Format
 
-- Standardized JSON format
-- Consistent structure
-- Clear schema definitions
-- Validation rules
+- One JSON object per file: `name` (defaults to the file stem) and `steps`
+  (required). See [README.md](README.md#workflow-file-format) for the step
+  fields.
+- Every step must name a real `codomyrmex.<module>.<action>`; the only
+  exception is `tests/error_test_workflow.json`, which fails on purpose and
+  says so in its `description`.
+- Parameters are static: `{{step.output}}` substitution is not supported.
+- `WorkflowManager.save_workflow` writes the same format, so files created by
+  `codomyrmex workflow create` round-trip.
+- `tests/unit/logistics/test_shipped_workflow_configs.py` loads every file
+  here, resolves every action and runs every workflow.
 
 ### Template Interface
 

@@ -240,15 +240,38 @@ Manages workflow definitions and execution.
 
 ##### `WorkflowManager(persistence_dir: Optional[Path] = None, config_dir: Optional[Path] = None, task_orchestrator: Optional[TaskOrchestrator] = None)`
 
-- **Description**: Loads JSON workflow definitions from `config_dir` (default `config/workflows/production`). Steps run on `task_orchestrator` (default: the global one).
+- **Description**: Loads every `*.json` workflow file in `config_dir` (default `config/workflows/production` under the current directory; created if missing, as is `persistence_dir`, default `.workflows`). Files that do not follow the workflow file format are logged and skipped; `workflow_files` maps each loaded workflow to its file. Steps run on `task_orchestrator` (default: the global one).
+- **Workflow file format**:
 
-##### `create_workflow(name: str, steps: List[WorkflowStep]) -> bool`
+  ```json
+  {
+    "name": "custom-analysis",
+    "steps": [
+      {
+        "name": "analyze",
+        "module": "coding.static_analysis",
+        "action": "analyze_project",
+        "parameters": {"project_root": "."},
+        "dependencies": ["setup"],
+        "timeout": null,
+        "max_retries": 0,
+        "required": true
+      }
+    ]
+  }
+  ```
 
-- **Description**: Registers a workflow with the specified steps, replacing any workflow of the same name.
+  `name` defaults to the file stem and `steps` is required. Each step needs non-empty `name`, `module` and `action`; the other keys are optional (`max_retries` becomes `WorkflowStep.retry_count`). Other keys, such as a top-level `description`, are ignored. A step with `run_if` makes the file invalid. Parameters are passed verbatim; `{{step.output}}` substitution is not supported. If two files define the same name, the later file wins and a warning is logged.
+
+##### `create_workflow(name: str, steps: List[WorkflowStep], *, persist: bool = False) -> bool`
+
+- **Description**: Registers a workflow with the specified steps, replacing any workflow of the same name. With `persist=True` the workflow is also written with `save_workflow`, so managers created later (for example by another `codomyrmex` process) load it; if saving raises, the previous registration (or its absence) is restored and the error propagates.
 - **Parameters**:
   - `name` (string): Workflow name.
   - `steps` (List[WorkflowStep]): Workflow steps. Their order does not matter; `dependencies` (step names) determine execution order.
+  - `persist` (bool, keyword-only): Also save the workflow file. Default False (in memory only).
 - **Returns**: bool - True.
+- **Raises**: with `persist=True`, as `save_workflow`.
 - **Example**:
 
   ```python
@@ -259,14 +282,26 @@ Manages workflow definitions and execution.
       WorkflowStep(
           name="analyze",
           module="coding.static_analysis",
-          action="analyze_code_quality",
-          parameters={"path": "."},
+          action="analyze_project",
+          parameters={"project_root": "."},
           dependencies=["setup"]
       ),
       WorkflowStep(name="setup", module="environment_setup", action="validate_environment"),
   ]
-  manager.create_workflow("custom-analysis", steps)
+  manager.create_workflow("custom-analysis", steps, persist=True)
+  # config/workflows/production/custom-analysis.json now exists
   ```
+
+##### `save_workflow(name: str) -> Path`
+
+- **Description**: Validates a registered workflow and writes it atomically in the workflow file format: back to the file it was loaded from, otherwise to `config_dir / f"{name}.json"`. Records the path in `workflow_files`.
+- **Returns**: The path written.
+- **Raises**:
+  - `KeyError`: No workflow named `name` is registered.
+  - `ValueError`: `name` cannot be a file name (it must start with a letter or digit and contain only letters, digits, `.`, `_`, `-`); a step is malformed; the dependencies are invalid (missing step, cycle, duplicate step name); or the target file exists and holds a different or unreadable workflow (it is not overwritten).
+  - `NotImplementedError`: A step sets `run_if`.
+  - `TypeError`: A step's parameters are not JSON-serialisable (`ValueError` for NaN/infinity).
+  - `OSError`: The file cannot be written.
 
 ##### `execute_workflow(name: str, **params) -> WorkflowExecution`
 
@@ -299,7 +334,7 @@ Manages workflow definitions and execution.
 
 ##### `list_workflows() -> List[str]`
 
-- **Description**: List the names of registered workflows.
+- **Description**: List the names of registered workflows. Use `get_workflow(name)` for a workflow's steps and `workflow_files[name]` for its definition file.
 
 ##### `get_performance_summary() -> Dict[str, Any]`
 
@@ -334,8 +369,8 @@ Coordinates individual task execution with dependency management. See [Task Disp
   task = Task(
       name="analyze_code",
       module="coding.static_analysis",
-      action="analyze_code_quality",
-      parameters={"path": "./src"}
+      action="analyze_project",
+      parameters={"project_root": "./src"}
   )
   task_id = orchestrator.submit_task(task)
   ```
@@ -430,8 +465,8 @@ from codomyrmex.logistics.orchestration.project import Task, TaskResource
 task = Task(
     name="heavy_analysis",
     module="coding.static_analysis",
-    action="analyze_code_quality",
-    parameters={"path": "./src"},
+    action="analyze_project",
+    parameters={"project_root": "./src"},
     resources=[TaskResource(resource_type="memory", amount=512)],
 )
 ```
@@ -444,15 +479,19 @@ High-level project lifecycle management.
 
 #### ProjectManager Methods
 
+##### `ProjectManager(projects_root: Optional[Union[Path, str]] = None)`
+
+- **Description**: `projects_root` (default: the current directory) is where new projects are created. Projects saved as `<projects_root>/*/project.json` are registered on construction. A file that cannot be read or is not a valid project is logged and skipped, as is a second file with an already loaded name. The directory containing `project.json` is the project's `path` (a different recorded path, e.g. after a move, is replaced with a warning).
+
 ##### `create_project(name: str, type: ProjectType, description: str = "", path: Optional[Path] = None) -> Optional[Project]`
 
-- **Description**: Creates and scaffolds a project (`src/`, `tests/`, `config/`, `docs/` plus generated README/AGENTS docs) and registers it.
+- **Description**: Creates and scaffolds a project (`src/`, `tests/`, `config/`, `docs/` plus generated README/AGENTS docs), saves `<path>/project.json` and registers it. A project whose `path` is outside `projects_root` is saved, but only a manager rooted at that path's parent finds it again.
 - **Parameters**:
   - `name` (string): Project name, unique within the manager
   - `type` (ProjectType): Project type
   - `description` (string, optional): Project description
   - `path` (Path, optional): Project directory; defaults to `projects_root / name`
-- **Returns**: The `Project`, or None if the name is already registered, the directory already exists, or scaffolding failed (the reason is logged)
+- **Returns**: The `Project`, or None if the name is already registered, the directory already exists, or scaffolding (directory creation, documentation generation, saving `project.json`) failed; the reason is logged and a partially created directory is removed
 - **Example**:
 
   ```python
@@ -470,15 +509,22 @@ High-level project lifecycle management.
 
 ##### `update_project_status(name: str, status: ProjectStatus) -> bool`
 
-- **Description**: Transition the project's lifecycle status. Returns False for an unknown project.
+- **Description**: Transition the project's lifecycle status and save `project.json`. Returns False for an unknown project.
 
 ##### `update_project_metrics(name: str, metrics: Dict[str, Any]) -> bool`
 
-- **Description**: Merge `metrics` into `Project.metrics`. Returns False for an unknown project.
+- **Description**: Merge `metrics` into `Project.metrics` and save `project.json`. Returns False for an unknown project.
 
 ##### `add_project_milestone(name: str, milestone_name: str, milestone_data: Optional[Dict[str, Any]] = None) -> bool`
 
-- **Description**: Record a milestone (its data plus a `recorded_at` timestamp) in `Project.milestones`. Returns False for an unknown project.
+- **Description**: Record a milestone (its data plus a `recorded_at` timestamp) in `Project.milestones` and save `project.json`. Returns False for an unknown project.
+
+The three update methods also set `updated_at`. They save a changed copy first and change the registered project only after the save succeeded: `TypeError` (value not JSON-serialisable), `ValueError` (NaN or infinity) and `OSError` (write failed) propagate and leave the project unchanged.
+
+##### `save_project(name: str) -> Path`
+
+- **Description**: Write a registered project's `project.json` (atomically) after changing the `Project` object directly. Returns the path.
+- **Raises**: `KeyError` for an unknown project; `TypeError`, `ValueError` or `OSError` as above.
 
 ##### `get_projects_summary() -> Dict[str, Any]`
 
@@ -643,7 +689,14 @@ class Project:
     version: str = "0.1.0"
     metrics: Dict[str, Any] = field(default_factory=dict)
     milestones: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+
+    metadata_file: Path  # property: path / "project.json" (PROJECT_FILE_NAME)
+    def to_dict(self) -> Dict[str, Any]: ...  # JSON-ready: str path, enum values, ISO 8601 datetimes
+    @classmethod
+    def from_dict(cls, data: Mapping[str, Any]) -> "Project": ...
 ```
+
+`Project.from_dict` restores `to_dict` output: `name`, `path`, `type`, `status`, `created_at` and `updated_at` are required, the rest default. It raises `ValueError` for a missing field, a wrong type, an unknown enum value or a timestamp without a UTC offset.
 
 ### Resource Class
 
@@ -815,7 +868,7 @@ engine = get_orchestration_engine()
 engine.workflow_manager.create_workflow(
     "quality",
     [WorkflowStep(name="analyze", module="coding.static_analysis",
-                  action="analyze_code_quality", parameters={"path": "./src"})],
+                  action="analyze_project", parameters={"project_root": "./src"})],
 )
 result = engine.execute_workflow("quality")
 
@@ -867,8 +920,8 @@ orchestrator.register_action("reports", "render", lambda findings: f"{len(findin
 analysis_task = Task(
     name="analyze_code",
     module="coding.static_analysis",
-    action="analyze_code_quality",
-    parameters={"path": "./src"},
+    action="analyze_project",
+    parameters={"project_root": "./src"},
     priority=TaskPriority.HIGH,
     resources=[TaskResource(resource_type="compute", amount=2)],
 )

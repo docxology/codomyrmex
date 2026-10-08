@@ -20,7 +20,7 @@ Codomyrmex supports configuration-driven operations: workflow definitions in JSO
 - **Auto-loaded**: No; reference definitions (see [Project Template Schema](./project-template-schema.md))
 - **Format**: JSON template definitions
 
-### Resource Configuration
+### Resource Configurations
 
 - **Location**: none by default; `ResourceManager` starts with built-in resources
 - **Auto-loaded**: No; load your own definitions with `Resource.from_dict()` (see [Resource Configuration](./resource-configuration.md))
@@ -28,9 +28,11 @@ Codomyrmex supports configuration-driven operations: workflow definitions in JSO
 
 ## Workflow Configuration
 
+The file format is specified in [Workflow Configuration Schema](./workflow-configuration-schema.md).
+
 ### Creating Workflow Configurations
 
-Create a JSON file in `config/workflows/production/` (relative to the working directory):
+Create a JSON file in `config/workflows/production/`, or let the CLI write one from a template (`codomyrmex workflow create my_custom_workflow --template build-and-test`):
 
 ```json
 {
@@ -39,65 +41,67 @@ Create a JSON file in `config/workflows/production/` (relative to the working di
     {
       "name": "step1",
       "module": "coding.static_analysis",
-      "action": "analyze_code_quality",
+      "action": "analyze_project",
       "parameters": {
-        "path": "."
+        "project_root": "."
       },
       "dependencies": [],
       "timeout": 300,
-      "max_retries": 3
+      "max_retries": 0
     },
     {
       "name": "step2",
-      "module": "data_visualization",
-      "action": "create_bar_chart",
+      "module": "security",
+      "action": "scan_secrets",
       "parameters": {
-        "data": "{{step1.output}}",
-        "title": "Analysis Results"
+        "target_path": "."
       },
       "dependencies": ["step1"],
       "timeout": 60,
-      "max_retries": 1
+      "max_retries": 0
     }
   ]
 }
 ```
 
-Each step calls `codomyrmex.<module>.<action>(**parameters)` (here `codomyrmex.coding.static_analysis.analyze_code_quality(path=".")`), unless an implementation is registered with `TaskOrchestrator.register_action`. `{{step1.output}}` placeholders are passed through unchanged for now, and `step2` above fails because `create_bar_chart` takes `categories` and `values`, not `data`; see [Parameter Substitution](./workflow-configuration-schema.md#parameter-substitution).
+Parameters are passed to each action verbatim (`{{step.output}}` substitution is not supported), and `timeout`/`max_retries` are recorded but not enforced.
 
 ### Loading Workflows
 
-Workflows are automatically loaded:
+Workflows are loaded when a `WorkflowManager` is constructed; invalid files are logged and skipped:
 
 ```python
-from codomyrmex.logistics.orchestration.project import get_workflow_manager
+from codomyrmex.logistics.orchestration.project import WorkflowManager
 
-# Workflows are loaded automatically
-manager = get_workflow_manager()
+manager = WorkflowManager()  # loads config/workflows/production/*.json under cwd
 
-# List loaded workflows (names)
-workflows = manager.list_workflows()
-print(f"Loaded workflows: {workflows}")
+print(f"Loaded workflows: {manager.list_workflows()}")
+print(f"Definition files: {manager.workflow_files}")
 ```
+
+Workflows registered in code are kept in memory unless saved: `manager.create_workflow(name, steps, persist=True)` (or `manager.save_workflow(name)`) writes them to the same directory in the same format.
 
 ### Executing Configured Workflows
 
 `execute_workflow` runs the steps in dependency order on the shared task orchestrator and returns once every step has finished. The returned execution is `completed` when every required step completed and `failed` otherwise; a step whose dependency failed is not run. Missing dependencies or cycles raise `ValueError` before any step runs.
 
 ```python
-from codomyrmex.logistics.orchestration.project import get_workflow_manager
+from codomyrmex.logistics.orchestration.project import WorkflowManager, WorkflowStatus
 
-manager = get_workflow_manager()
+manager = WorkflowManager()
 
-# Execute workflow from configuration; keyword arguments are merged into every step's parameters
-execution = manager.execute_workflow("my_custom_workflow", custom_param="value")
-print(f"{execution.workflow_name}: {execution.status.value} ({execution.execution_id})")
+# Blocks until every step has finished
+execution = manager.execute_workflow("my_custom_workflow")
 
-for step_name, step in execution.step_results.items():
-    print(f"{step_name}: {step['status']} {step['error'] or ''}")
-if execution.error:
-    print(f"Failed steps: {execution.error}")
+if execution.status == WorkflowStatus.COMPLETED:
+    print("Workflow completed")
+    for step_name, result in execution.step_results.items():
+        print(f"{step_name}: {result['result']}")
+else:
+    print(f"Workflow failed: {execution.error}")
 ```
+
+From the command line: `codomyrmex workflow run my_custom_workflow`.
 
 ## Project Template Configuration
 
@@ -365,25 +369,23 @@ Workflow JSON files that fail to load are skipped with a warning in the log; the
   "name": "data_analysis",
   "steps": [
     {
-      "name": "load_data",
+      "name": "chart",
       "module": "data_visualization",
-      "action": "load_dataset",
-      "parameters": {"file_path": "{{input_file}}"},
+      "action": "create_bar_chart",
+      "parameters": {
+        "categories": ["A", "B", "C"],
+        "values": [10, 20, 15],
+        "title": "Sample Data",
+        "output_path": "output/sample.png"
+      },
       "dependencies": []
     },
     {
-      "name": "analyze_data",
-      "module": "data_visualization",
-      "action": "analyze_dataset",
-      "parameters": {"data": "{{load_data.output}}"},
-      "dependencies": ["load_data"]
-    },
-    {
-      "name": "visualize",
-      "module": "data_visualization",
-      "action": "create_chart",
-      "parameters": {"data": "{{analyze_data.output}}", "output": "{{output_path}}"},
-      "dependencies": ["analyze_data"]
+      "name": "report",
+      "module": "environment_setup",
+      "action": "generate_environment_report",
+      "parameters": {},
+      "dependencies": ["chart"]
     }
   ]
 }

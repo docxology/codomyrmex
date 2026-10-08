@@ -24,16 +24,34 @@ steps = [
     WorkflowStep(
         name="code_analysis",
         module="coding.static_analysis",
-        action="analyze_code_quality",
-        parameters={"path": "."},
+        action="analyze_project",
+        parameters={"project_root": "."},
         dependencies=["environment_check"]
     )
 ]
 
-# Create workflow
+# Create workflow (in memory only)
 success = wf_manager.create_workflow("code_analysis_workflow", steps)
 print(f"Workflow created: {success}")
 ```
+
+### Saving a Workflow for Later Processes
+
+```python
+from codomyrmex.logistics.orchestration.project import WorkflowManager
+
+# persist=True writes config/workflows/production/code_analysis_workflow.json
+# (under the current directory); invalid steps raise before anything is written.
+wf_manager.create_workflow("code_analysis_workflow", steps, persist=True)
+print(wf_manager.workflow_files["code_analysis_workflow"])
+
+# A manager created later (e.g. by `codomyrmex workflow run`) loads the file.
+later = WorkflowManager()
+assert later.get_workflow("code_analysis_workflow") == steps
+```
+
+Step parameters are passed to the action verbatim; `{{step.output}}`
+substitution is not supported, so steps cannot consume each other's results.
 
 ### Executing a Workflow
 
@@ -73,6 +91,20 @@ print(f"Created project: {project.name}")
 print(f"Project type: {project.type.value}")
 ```
 
+### Project Persistence
+
+```python
+from codomyrmex.logistics.orchestration.project import ProjectManager, ProjectStatus
+
+# create_project saved my_ai_project/project.json; updates save it again.
+project_manager.update_project_status("my_ai_project", ProjectStatus.PAUSED)
+project_manager.update_project_metrics("my_ai_project", {"runs": 1})
+
+# A new manager rooted at the same directory registers the saved projects.
+reloaded = ProjectManager(projects_root=project_manager.projects_root)
+assert reloaded.get_project("my_ai_project").status is ProjectStatus.PAUSED
+```
+
 ## ⚙️ Task Orchestration
 
 ### Creating Tasks with Dependencies
@@ -94,8 +126,8 @@ setup_task = Task(
 analysis_task = Task(
     name="analyze_code",
     module="coding.static_analysis",
-    action="analyze_code_quality",
-    parameters={"path": "."},
+    action="analyze_project",
+    parameters={"project_root": "."},
     dependencies=[setup_task.id],
     priority=TaskPriority.NORMAL
 )
@@ -116,10 +148,10 @@ from codomyrmex.logistics.orchestration.project import get_mcp_tools
 # Get MCP tools
 tools = get_mcp_tools()
 
-# Execute workflow via AI
+# Execute workflow via AI ("parameters" would be merged into every step's
+# parameters, so the steps must all accept them)
 result = tools.execute_tool("execute_workflow", {
     "workflow_name": "code_analysis_workflow",
-    "parameters": {"path": "."}
 })
 
 print(f"Workflow execution result: {result.success}")
@@ -206,13 +238,10 @@ for project_name in projects:
     )
     print(f"Created project: {project.name}")
 
-# Execute a registered workflow for each project; "path" is passed to its steps
+# Execute a registered workflow for each project. Keyword arguments would be
+# merged into every step's parameters, so pass only ones all steps accept.
 for project_name in projects:
-    result = engine.execute_project_workflow(
-        project_name,
-        "code_analysis_workflow",
-        path=f"./projects/{project_name}"
-    )
+    result = engine.execute_project_workflow(project_name, "code_analysis_workflow")
     print(f"Project {project_name} workflow: {result['success']}")
 ```
 

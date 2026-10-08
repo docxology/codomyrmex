@@ -1,67 +1,50 @@
 {
   "name": "sample_analysis_workflow",
+  "description": "Chart a small static data set in memory (no file is written), check the documentation and scan for secrets in the current directory, then produce an environment report.",
   "steps": [
     {
       "name": "data_analysis",
       "module": "data_visualization",
       "action": "create_bar_chart",
       "parameters": {
-        "data": {
-          "A": 10,
-          "B": 20,
-          "C": 15
-        },
+        "categories": ["A", "B", "C"],
+        "values": [10, 20, 15],
         "title": "Sample Data"
       },
       "dependencies": [],
       "timeout": null,
-      "retry_count": 0,
-      "max_retries": 3
+      "max_retries": 0
     },
     {
       "name": "report_generation",
       "module": "documentation",
-      "action": "generate_docs",
-      "parameters": {
-        "source_path": ".",
-        "output_path": "./output"
-      },
-      "dependencies": [
-        "data_analysis"
-      ],
-      "timeout": null,
-      "retry_count": 0,
-      "max_retries": 3
-    },
-    {
-      "name": "security_scan",
-      "module": "security_audit",
-      "action": "scan_codebase",
+      "action": "check_documentation_consistency",
       "parameters": {
         "path": "."
       },
+      "dependencies": ["data_analysis"],
+      "timeout": null,
+      "max_retries": 0
+    },
+    {
+      "name": "security_scan",
+      "module": "security",
+      "action": "scan_secrets",
+      "parameters": {
+        "target_path": "."
+      },
       "dependencies": [],
       "timeout": null,
-      "retry_count": 0,
-      "max_retries": 3
+      "max_retries": 0
     },
     {
       "name": "final_report",
-      "module": "documentation",
-      "action": "generate_docs",
-      "parameters": {
-        "source_path": "./output",
-        "output_path": "./final"
-      },
-      "dependencies": [
-        "report_generation",
-        "security_scan"
-      ],
+      "module": "environment_setup",
+      "action": "generate_environment_report",
+      "parameters": {},
+      "dependencies": ["report_generation", "security_scan"],
       "timeout": null,
-      "retry_count": 0,
-      "max_retries": 3
+      "max_retries": 0
     }
   ]
 }
-
-
