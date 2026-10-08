@@ -16,38 +16,37 @@ These functions are primarily sourced from the `env_checker.py` script.
 - **Path**: N/A (Importable function)
 - **Parameters/Arguments**: None.
 - **Request Body**: N/A
-- **Returns/Response**: None. 
+- **Returns/Response**: None.
   - **Side Effects**: Prints messages to `stderr` and may terminate the calling script via `sys.exit(1)` if essential dependencies are missing.
 - **Events Emitted**: N/A
 
-### Function 2: `check_and_setup_env_vars(repo_root_path: str)`
+### Function 2: `check_and_setup_env_vars(repo_root: str | None = None, required: list[str] | None = None, optional: list[str] | None = None) -> list[str]`
 
 - **Source**: `environment_setup.env_checker.check_and_setup_env_vars`
-- **Description**: Checks for the existence of a `.env` file at the specified `repo_root_path`.
-    - If it exists, it informs the user.
-    - If it does not exist, it prints detailed instructions for creating a `.env` file with API key configuration examples for OpenAI, Anthropic, and Google AI providers, then exits with status code 1 to indicate the environment is not fully configured.
-    - It attempts to load the `.env` file using `dotenv.load_dotenv()` if the file exists.
+- **Description**: Loads environment variables from a `.env` file, then reports which required variables are missing. With `repo_root` it loads `<repo_root>/.env` when that file exists (a missing file is only logged at debug level); without it, `dotenv.load_dotenv()` searches for a `.env` file from the current directory upwards. Missing required variables are logged as a warning; the function does not print setup instructions or exit.
 - **Method**: N/A (Python function)
 - **Path**: N/A (Importable function)
 - **Parameters/Arguments**:
-    - `repo_root_path` (str): The absolute path to the root of the Codomyrmex repository where the `.env` file is expected.
+    - `repo_root` (str, optional): Directory containing the `.env` file.
+    - `required` (list[str], optional): Environment variables that must be present.
+    - `optional` (list[str], optional): Environment variables that may be absent; accepted for documentation and not checked.
 - **Request Body**: N/A
-- **Returns/Response**: None.
-  - **Side Effects**: Prints messages to `stdout` or `stderr`. May call `sys.exit(1)` if the `.env` file is missing after guidance. Attempts to load environment variables from the `.env` file into the current process's environment.
+- **Returns/Response**: `list[str]` of required variable names that are not set (empty when all are present).
+  - **Side Effects**: Loads variables from the `.env` file into the current process's environment.
 - **Events Emitted**: N/A
 
-### Function 3: `validate_python_version(required: str = ">=3.10") -> bool`
+### Function 3: `validate_python_version(min_version: str = "3.10") -> bool`
 
 - **Source**: `environment_setup.env_checker.validate_python_version`
-- **Description**: Validates that the current Python version meets the specified version requirements using semantic versioning comparison.
+- **Description**: Checks that the running Python version is at least `min_version`, comparing dotted numeric components (for example `"3.11"`).
 - **Method**: N/A (Python function)
 - **Path**: N/A (Importable function)
 - **Parameters/Arguments**:
-    - `required` (str, optional): Version requirement string using PEP 440 specifiers (default: ">=3.10")
+    - `min_version` (str, optional): Minimum version as dotted numbers, without specifiers such as `>=` (default: `"3.10"`).
 - **Request Body**: N/A
 - **Returns/Response**: `bool`
-    - `True` if current Python version meets requirements
-    - `False` if version requirements are not met or validation fails
+    - `True` if the current Python version is at least `min_version`
+    - `False` otherwise. If `min_version` is not in dotted-number form, the error is logged and the result is whether Python is at least 3.10.
 - **Events Emitted**: N/A
 
 ### Function 4: `validate_environment(min_python: str = "3.10") -> ValidationReport`
@@ -89,7 +88,7 @@ N/A.
 
 ## Versioning
 
-These functions will be versioned as part of the `environment_setup` module, following the overall project's semantic versioning. Changes to function signatures or core behavior will be noted in the module's `CHANGELOG.md`. 
+These functions will be versioned as part of the `environment_setup` module, following the overall project's semantic versioning. Changes to function signatures or core behavior will be noted in the module's `CHANGELOG.md`.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

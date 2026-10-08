@@ -8,110 +8,62 @@ The Tree-sitter module provides code parsing capabilities using Tree-sitter, ena
 
 ### Class: `TreeSitterParser`
 
-- **Description**: Parser for generating syntax trees from source code.
+- **Description**: Parser for generating syntax trees from source code with py-tree-sitter.
 - **Constructor**:
-    - `language` (str): Programming language to parse.
-    - `language_manager` (LanguageManager, optional): Language manager instance.
+    - `language` (tree_sitter.Language): Grammar to parse with, for example from `LanguageManager.get_language("python")`.
 - **Methods**:
 
-#### `parse(source: str | bytes) -> SyntaxTree`
+#### `parse(source_code: str | bytes) -> tree_sitter.Tree`
 
-- **Description**: Parse source code into a syntax tree.
+- **Description**: Parse source code into a syntax tree. A `str` is encoded as UTF-8.
 - **Parameters/Arguments**:
-    - `source` (str | bytes): Source code to parse.
+    - `source_code` (str | bytes): Source code to parse.
 - **Returns**:
-    - `SyntaxTree`: Parsed syntax tree.
+    - `tree_sitter.Tree`: Parsed syntax tree; walk it from `tree.root_node`.
 
-#### `parse_file(path: str) -> SyntaxTree`
+#### `query(tree: tree_sitter.Tree, query_str: str) -> dict[str, list[tree_sitter.Node]]`
 
-- **Description**: Parse source code from a file.
+- **Description**: Run an S-expression query against a syntax tree.
 - **Parameters/Arguments**:
-    - `path` (str): Path to source file.
+    - `tree` (tree_sitter.Tree): Syntax tree to query.
+    - `query_str` (str): Tree-sitter query pattern with `@capture` names.
 - **Returns**:
-    - `SyntaxTree`: Parsed syntax tree.
-
-#### `query(tree: SyntaxTree, query_string: str) -> list[QueryMatch]`
-
-- **Description**: Execute a Tree-sitter query on a syntax tree.
-- **Parameters/Arguments**:
-    - `tree` (SyntaxTree): Syntax tree to query.
-    - `query_string` (str): Tree-sitter query pattern.
-- **Returns**:
-    - `list[QueryMatch]`: List of query matches.
-
-#### `get_node_text(node: Node, source: str | bytes) -> str`
-
-- **Description**: Get the text content of a syntax tree node.
-- **Parameters/Arguments**:
-    - `node` (Node): Syntax tree node.
-    - `source` (str | bytes): Original source code.
-- **Returns**:
-    - `str`: Node text content.
-
-#### `find_nodes(tree: SyntaxTree, node_type: str) -> list[Node]`
-
-- **Description**: Find all nodes of a specific type.
-- **Parameters/Arguments**:
-    - `tree` (SyntaxTree): Syntax tree to search.
-    - `node_type` (str): Type of nodes to find.
-- **Returns**:
-    - `list[Node]`: Matching nodes.
-
-#### `get_function_definitions(tree: SyntaxTree, source: str) -> list[FunctionDef]`
-
-- **Description**: Extract function definitions from syntax tree.
-- **Parameters/Arguments**:
-    - `tree` (SyntaxTree): Syntax tree.
-    - `source` (str): Source code.
-- **Returns**:
-    - `list[FunctionDef]`: List of function definitions.
-
-#### `get_class_definitions(tree: SyntaxTree, source: str) -> list[ClassDef]`
-
-- **Description**: Extract class definitions from syntax tree.
-- **Parameters/Arguments**:
-    - `tree` (SyntaxTree): Syntax tree.
-    - `source` (str): Source code.
-- **Returns**:
-    - `list[ClassDef]`: List of class definitions.
+    - `dict[str, list[tree_sitter.Node]]`: Capture name (without `@`) to the captured nodes.
 
 ### Class: `LanguageManager`
 
-- **Description**: Manages Tree-sitter language grammars.
-- **Constructor**:
-    - `languages_dir` (str, optional): Directory for language grammars.
+- **Description**: Class-level registry of tree-sitter grammars. All methods are classmethods; no instance is needed.
 - **Methods**:
 
-#### `get_language(name: str) -> Language`
+#### `register_language(lang_name: str, language: Any) -> Any` (classmethod)
 
-- **Description**: Get a language grammar.
+- **Description**: Register a grammar shipped as a Python package.
 - **Parameters/Arguments**:
-    - `name` (str): Language name (e.g., "python", "javascript").
+    - `lang_name` (str): Name to register the grammar under (e.g., `"python"`).
+    - `language`: A `tree_sitter.Language`, or the object returned by a grammar package's `language()` function such as `tree_sitter_python.language()`.
 - **Returns**:
-    - `Language`: Tree-sitter language grammar.
+    - The registered `tree_sitter.Language`.
 
-#### `load_language(name: str, path: str) -> Language`
+#### `load_language(library_path: str, lang_name: str) -> bool` (classmethod)
 
-- **Description**: Load a language grammar from a shared library.
+- **Description**: Load a grammar from a compiled shared library (.so, .dll, .dylib) that exports `tree_sitter_<lang_name>()`.
 - **Parameters/Arguments**:
-    - `name` (str): Language name.
-    - `path` (str): Path to shared library.
+    - `library_path` (str): Path to the shared library.
+    - `lang_name` (str): Language name.
 - **Returns**:
-    - `Language`: Loaded language grammar.
+    - `bool`: True on success; False (with the error logged) on failure.
 
-#### `get_available_languages() -> list[str]`
+#### `get_language(lang_name: str) -> Any | None` (classmethod)
 
-- **Description**: Get list of available languages.
-- **Returns**:
-    - `list[str]`: Available language names.
-
-#### `is_language_available(name: str) -> bool`
-
-- **Description**: Check if a language is available.
+- **Description**: Get a registered or loaded grammar.
 - **Parameters/Arguments**:
-    - `name` (str): Language name.
+    - `lang_name` (str): Language name.
 - **Returns**:
-    - `bool`: True if language is available.
+    - The `tree_sitter.Language`, or None when it has not been registered or loaded.
+
+#### `discover_languages(search_path: str) -> None` (classmethod)
+
+- **Description**: Walk a directory and load every `.so`, `.dylib` or `.dll` grammar, inferring the language name from the file name (`tree-sitter-python.so` becomes `python`). A missing directory is ignored.
 
 ## Data Models
 

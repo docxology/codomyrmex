@@ -82,10 +82,10 @@ verify_hash(data: bytes, expected_hash: str, algorithm: str = "sha256") -> bool
 ### graphy.signatures
 
 ```python
-sign_ecdsa(data: bytes, private_key: EllipticCurvePrivateKey, hash_algo: str = "sha256") -> bytes
-    """ECDSA digital signature."""
+sign_ecdsa(message: bytes, private_key: EllipticCurvePrivateKey) -> bytes
+    """ECDSA (SHA-256) signature, DER-encoded."""
 
-verify_ecdsa(data: bytes, signature: bytes, public_key: EllipticCurvePublicKey, hash_algo: str = "sha256") -> bool
+verify_ecdsa(message: bytes, signature: bytes, public_key: EllipticCurvePublicKey) -> bool
     """Verify ECDSA signature."""
 
 sign_eddsa(data: bytes, private_key: Ed25519PrivateKey) -> bytes
@@ -94,10 +94,10 @@ sign_eddsa(data: bytes, private_key: Ed25519PrivateKey) -> bytes
 verify_eddsa(data: bytes, signature: bytes, public_key: Ed25519PublicKey) -> bool
     """Verify EdDSA signature."""
 
-sign_rsa_pss(data: bytes, private_key: RSAPrivateKey, hash_algo: str = "sha256") -> bytes
-    """RSA-PSS digital signature."""
+sign_rsa_pss(message: bytes, private_key: RSAPrivateKey) -> bytes
+    """RSA-PSS (SHA-256) signature."""
 
-verify_rsa_pss(data: bytes, signature: bytes, public_key: RSAPublicKey, hash_algo: str = "sha256") -> bool
+verify_rsa_pss(message: bytes, signature: bytes, public_key: RSAPublicKey) -> bool
     """Verify RSA-PSS signature."""
 ```
 
@@ -136,17 +136,11 @@ compute_cmac(data: bytes, key: bytes) -> bytes
 ### graphy.certificates
 
 ```python
-generate_self_signed_cert(
-    common_name: str,
-    private_key: PrivateKey,
-    valid_days: int = 365,
-    san_dns: list[str] | None = None,
-    san_ips: list[str] | None = None,
-) -> Certificate
+generate_self_signed_cert(common_name: str, key_pair: KeyPair | PrivateKey, days: int = 365) -> Certificate
     """Generate self-signed X.509 certificate."""
 
-generate_csr(common_name: str, private_key: PrivateKey, san_dns: list[str] | None = None) -> CertificateSigningRequest
-    """Generate Certificate Signing Request."""
+generate_csr(common_name: str, key_pair: KeyPair | PrivateKey, **subject_attrs: str) -> CertificateSigningRequest
+    """Generate Certificate Signing Request (subject_attrs: organization, country, state, locality, email)."""
 
 verify_certificate_chain(cert: Certificate, ca_cert: Certificate) -> bool
     """Verify certificate was signed by CA."""
@@ -171,8 +165,8 @@ generate_mnemonic(strength: int = 256) -> str
 mnemonic_to_seed(mnemonic: str, passphrase: str = "") -> bytes
     """Convert mnemonic to 64-byte seed (BIP-39)."""
 
-create_hd_wallet(seed: bytes) -> HDWallet
-    """Create BIP-32 hierarchical deterministic wallet from seed."""
+create_hd_wallet(mnemonic: str | None = None) -> HDWallet
+    """Create a BIP-32 HD wallet from a BIP-39 mnemonic (a new 24-word one when None)."""
 
 derive_child_key(wallet: HDWallet, path: str = "m/44'/0'/0'/0/0") -> DerivedKey
     """Derive child key using BIP-44 path."""
@@ -184,7 +178,7 @@ derive_child_key(wallet: HDWallet, path: str = "m/44'/0'/0'/0/0") -> DerivedKey
 compute_merkle_root(transactions: list[bytes]) -> bytes
     """Compute Merkle tree root from transaction hashes."""
 
-verify_merkle_proof(tx_hash: bytes, proof: list[tuple[bytes, str]], root: bytes) -> bool
+verify_merkle_proof(leaf: bytes, proof: list[tuple[bytes, str]], root: bytes) -> bool
     """Verify a Merkle inclusion proof."""
 
 build_merkle_tree(leaves: list[bytes]) -> MerkleTree
@@ -194,14 +188,14 @@ build_merkle_tree(leaves: list[bytes]) -> MerkleTree
 ### currency.transactions
 
 ```python
-create_transaction(sender: str, recipient: str, amount: float, fee: float = 0.0) -> Transaction
+create_transaction(sender: str, recipient: str, amount: float) -> Transaction
     """Create unsigned transaction."""
 
-sign_transaction(tx: Transaction, private_key: bytes) -> SignedTransaction
-    """Sign transaction with private key."""
+sign_transaction(transaction: Transaction, private_key: EllipticCurvePrivateKey) -> SignedTransaction
+    """Sign transaction with a secp256k1 ECDSA private key."""
 
-verify_transaction(tx: SignedTransaction, public_key: bytes) -> bool
-    """Verify transaction signature."""
+verify_transaction(signed_tx: SignedTransaction, public_key: EllipticCurvePublicKey | None = None) -> bool
+    """Verify transaction signature (uses the embedded public key when None)."""
 ```
 
 ### currency.addresses
@@ -256,7 +250,7 @@ frequency_analysis(data: bytes) -> dict[int, float]
 chi_squared_test(data: bytes) -> tuple[float, float]
     """Chi-squared test for uniform distribution. Returns (statistic, p-value)."""
 
-index_of_coincidence(data: bytes) -> float
+index_of_coincidence(text: str) -> float
     """Index of coincidence for cipher classification."""
 ```
 
@@ -269,8 +263,8 @@ assess_password_strength(password: str) -> StrengthReport
 assess_key_strength(key: bytes, algorithm: str) -> StrengthReport
     """Assess cryptographic key strength for given algorithm."""
 
-estimate_crack_time(entropy_bits: float) -> dict[str, str]
-    """Estimate time to brute-force given entropy."""
+estimate_crack_time(password: str, guesses_per_second: float = 1e10) -> float
+    """Estimated seconds to brute-force the password (2^entropy / guesses_per_second)."""
 ```
 
 ### analysis.classical_breaking
@@ -293,20 +287,20 @@ detect_cipher_type(ciphertext: str) -> dict[str, float]
 ### steganography.image_lsb
 
 ```python
-embed_in_image(image_path: str, data: bytes, output_path: str, bits: int = 1) -> int
-    """Embed data in image using LSB steganography. Returns bytes embedded."""
+embed_in_image(image_path: str, message: str, output_path: str) -> bool
+    """Embed a UTF-8 message in a PNG using LSB steganography. Returns True on success."""
 
-extract_from_image(image_path: str, length: int, bits: int = 1) -> bytes
-    """Extract hidden data from image."""
+extract_from_image(image_path: str) -> str
+    """Extract the hidden message from a PNG (length is read from the embedded header)."""
 
-calculate_capacity(image_path: str, bits: int = 1) -> int
+calculate_capacity(image_path: str) -> int
     """Calculate maximum embedding capacity in bytes."""
 ```
 
 ### steganography.text_steg
 
 ```python
-embed_in_text(cover_text: str, data: bytes) -> str
+embed_in_text(cover_text: str, secret_message: str) -> str
     """Embed data using zero-width Unicode characters."""
 
 extract_from_text(stego_text: str) -> bytes
@@ -330,10 +324,10 @@ chi_squared_detection(image_path: str) -> float
 ### encoding.base_encodings
 
 ```python
-encode_base64(data: bytes, url_safe: bool = False) -> str
+encode_base64(data: bytes) -> str
     """Base64 encode."""
 
-decode_base64(encoded: str, url_safe: bool = False) -> bytes
+decode_base64(encoded: str) -> bytes
     """Base64 decode."""
 
 encode_base58(data: bytes) -> str
@@ -351,7 +345,7 @@ decode_base32(encoded: str) -> bytes
 encode_hex(data: bytes) -> str
     """Hexadecimal encode."""
 
-decode_hex(encoded: str) -> bytes
+decode_hex(hex_string: str) -> bytes
     """Hexadecimal decode."""
 ```
 
@@ -430,8 +424,8 @@ ecdh_shared_secret(private_key: X25519PrivateKey, peer_public_key: X25519PublicK
 ### protocols.secret_sharing
 
 ```python
-split_secret(secret: bytes, total_shares: int, threshold: int) -> list[tuple[int, bytes]]
-    """Shamir's Secret Sharing: split secret into shares."""
+split_secret(secret: bytes, n: int, k: int) -> list[Share]
+    """Shamir's Secret Sharing: split secret into n shares, any k of which reconstruct it."""
 
 reconstruct_secret(shares: list[tuple[int, bytes]]) -> bytes
     """Reconstruct secret from threshold number of shares."""
@@ -449,10 +443,10 @@ schnorr_prove(secret: int, generator: int, prime: int) -> SchnorrProof
 schnorr_verify(proof: SchnorrProof, public_value: int, generator: int, prime: int) -> bool
     """Verify Schnorr ZKP."""
 
-pedersen_commit(value: int, blinding: int, g: int, h: int, p: int) -> int
+pedersen_commit(value: int, randomness: int, g: int, h: int, p: int) -> int
     """Create Pedersen commitment."""
 
-pedersen_verify(commitment: int, value: int, blinding: int, g: int, h: int, p: int) -> bool
+pedersen_verify(commitment: int, value: int, randomness: int, g: int, h: int, p: int) -> bool
     """Verify Pedersen commitment opening."""
 ```
 

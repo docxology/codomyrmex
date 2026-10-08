@@ -6,94 +6,74 @@ This API specification documents the programmatic interfaces for the Configurati
 
 ## Functions
 
-### Function: `load_configuration(config_paths: List[str], environment: str = "development", overrides: Optional[Dict] = None, **kwargs) -> Configuration`
+### Function: `load_configuration(name: str, sources: list[str] | None = None, schema_path: str | None = None, defaults: dict[str, Any] | None = None) -> Configuration`
 
-- **Description**: Load and merge configuration from multiple sources with environment-specific overrides.
+- **Description**: Load a named configuration with a new `ConfigurationManager`, deep-merging `defaults`, each readable source in order, and `<NAME>_*` environment variables (highest precedence; `__` nests keys), then resolving `${VAR}` and `${VAR:-default}` substitutions.
 - **Parameters**:
-  - `config_paths`: List of file paths or URLs to configuration files.
-  - `environment`: Target environment (development, staging, production).
-  - `overrides`: Optional runtime configuration overrides.
-  - `**kwargs`: Additional loading options (format, validation, etc.).
-- **Return Value**: Merged and validated Configuration object.
-- **Errors**: Raises `ConfigurationError` for loading failures or validation errors.
+  - `name`: Configuration name. Also used for the default sources and the environment-variable prefix.
+  - `sources`: Files to load, in increasing precedence. Defaults to `<name>.yaml`, `<name>.yml`, `<name>.json` and the same names under `environments/<environment>/`.
+  - `schema_path`: Path to a JSON schema; when it exists the configuration is validated against it (errors are logged, not raised).
+  - `defaults`: Default values with the lowest precedence.
+- **Return Value**: The loaded `Configuration`.
+- **Errors**: Raises `FileNotFoundError` when a single explicit source was requested and nothing was found.
 
-### Function: `validate_configuration(config: Union[Dict, Configuration], schema: Optional[ConfigSchema] = None, **kwargs) -> Dict`
+### Function: `validate_configuration(config: Configuration) -> list[str]`
 
-- **Description**: Validate configuration against schemas and business rules.
+- **Description**: Validate a `Configuration` against its schema (`Configuration.validate()`).
 - **Parameters**:
-  - `config`: Configuration to validate (dict or Configuration object).
-  - `schema`: Optional JSON schema for validation.
-  - `**kwargs`: Validation options (strict_mode, custom_validators, etc.).
+  - `config`: Configuration to validate.
+- **Return Value**: List of validation error messages; empty when the configuration is valid.
+
+### Function: `manage_secrets(operation: str, **kwargs) -> Any`
+
+- **Description**: Run one secret operation with a new `SecretManager`. Available when `SECRET_MANAGEMENT_AVAILABLE` is true.
+- **Parameters**:
+  - `operation`: One of `"store"`, `"get"`, `"get_by_name"`, `"list"`, `"delete"` or `"rotate"`.
+  - `**kwargs`: Operation arguments: `name`, `value` and optional `metadata` for `store`; `secret_id` for `get` and `delete`; `name` for `get_by_name`.
+- **Return Value**: The result of the matching `SecretManager` method (`store_secret()`, `get_secret()`, `get_secret_by_name()`, `list_secrets()`, `delete_secret()` or `rotate_key()`).
+- **Errors**: Raises `CodomyrmexError` for an unknown operation.
+
+### Function: `deploy_configuration(environment_name: str, config_files: list[str], deployed_by: str = "system") -> ConfigDeployment`
+
+- **Description**: Deploy configuration files to a registered environment with a new `ConfigurationDeployer`.
+- **Parameters**:
+  - `environment_name`: Name of the target environment registered with the deployer.
+  - `config_files`: Configuration files to deploy.
+  - `deployed_by`: Who is deploying, recorded on the deployment.
+- **Return Value**: The `ConfigDeployment` record.
+- **Errors**: Raises `CodomyrmexError` when the environment is not registered.
+
+### Function: `monitor_config_changes(config_paths: list[str | Path], workspace_dir: str | Path | None = None) -> dict[str, Any]`
+
+- **Description**: Check configuration files once for changes with a `ConfigurationMonitor` and summarize the result.
+- **Parameters**:
+  - `config_paths`: Configuration files to check.
+  - `workspace_dir`: Directory under which the monitor keeps `config_monitoring/` state (default: current directory).
 - **Return Value**:
 
     ```python
     {
-        "valid": <bool>,
-        "errors": [<list_of_validation_errors>],
-        "warnings": [<list_of_warnings>],
-        "schema_compliant": <bool>,
-        "business_rules_passed": <bool>
-    }
-    ```
-
-- **Errors**: Raises `ValidationError` for schema violations or business rule failures.
-
-### Function: `manage_secrets(operation: str, secret_path: str, value: Optional[str] = None, **kwargs) -> Dict`
-
-- **Description**: Secure secret management including storage, retrieval, and rotation.
-- **Parameters**:
-  - `operation`: Operation type (get, set, rotate, delete).
-  - `secret_path`: Path/key for the secret.
-  - `value`: Value for set operations.
-  - `**kwargs`: Operation-specific options (encryption, ttl, etc.).
-- **Return Value**:
-
-    ```python
-    {
-        "operation": <str>,
-        "secret_path": <str>,
-        "success": <bool>,
-        "value": <str>,  # Only for get operations
-        "metadata": {
-            "created_at": <timestamp>,
-            "last_rotated": <timestamp>,
-            "encryption": <str>
+        "paths_monitored": <int>,
+        "changes_detected": <int>,
+        "summary": {
+            "total_snapshots": <int>,
+            "total_changes": <int>,
+            "recent_changes": <int>,
+            "total_audits": <int>,
+            "last_audit_at": <ISO-8601 timestamp or None>,
+            "status": "active"
         }
     }
     ```
 
-- **Errors**: Raises `SecretManagementError` for security or access failures.
+### Method: `ConfigurationMonitor.audit_configuration(environment: str, config_dir: str | Path, compliance_rules: dict[str, Any] | None = None) -> ConfigAudit`
 
-### Function: `deploy_configuration(config: Configuration, target: str, strategy: str = "rolling", **kwargs) -> ConfigDeployment`
-
-- **Description**: Deploy configuration to target environments with rollback capabilities.
+- **Description**: Audit the configuration files in a directory for an environment. There is no module-level `audit_configuration()` function; create a `ConfigurationMonitor` and call this method.
 - **Parameters**:
-  - `config`: Configuration to deploy.
-  - `target`: Deployment target (environment, service, file path).
-  - `strategy`: Deployment strategy (rolling, blue_green, canary).
-  - `**kwargs`: Deployment options (timeout, validation, backup, etc.).
-- **Return Value**: ConfigDeployment object with tracking and rollback capabilities.
-- **Errors**: Raises `DeploymentError` for deployment failures.
-
-### Function: `monitor_config_changes(config_path: str, callback: Optional[Callable] = None, **kwargs) -> ConfigurationMonitor`
-
-- **Description**: Monitor configuration files for changes and drift detection.
-- **Parameters**:
-  - `config_path`: Path to configuration file or directory to monitor.
-  - `callback`: Optional callback function for change notifications.
-  - `**kwargs`: Monitoring options (interval, patterns, recursive, etc.).
-- **Return Value**: ConfigurationMonitor object providing real-time change tracking.
-- **Errors**: Raises `MonitoringError` for filesystem or permission issues.
-
-### Function: `audit_configuration(config: Configuration, audit_rules: Optional[List] = None, **kwargs) -> ConfigAudit`
-
-- **Description**: Audit configuration for compliance, security, and best practices.
-- **Parameters**:
-  - `config`: Configuration to audit.
-  - `audit_rules`: Optional custom audit rules to apply.
-  - `**kwargs`: Audit options (severity_levels, categories, etc.).
-- **Return Value**: ConfigAudit object with findings, recommendations, and compliance status.
-- **Errors**: Raises `AuditError` for audit execution failures.
+  - `environment`: Environment name recorded on the audit.
+  - `config_dir`: Directory whose configuration files are audited.
+  - `compliance_rules`: Optional compliance rules.
+- **Return Value**: The `ConfigAudit` record, also kept in `ConfigurationMonitor.get_audit_history()`.
 
 ## Data Structures
 
@@ -199,14 +179,8 @@ Manages encrypted secrets and credentials:
 
 ## Error Handling
 
-All functions follow consistent error handling patterns:
-
-- **Configuration Errors**: `ConfigurationError` for loading, parsing, or merging failures
-- **Validation Errors**: `ValidationError` for schema violations or business rule failures
-- **Security Errors**: `SecretManagementError` for encryption, access, or key management issues
-- **Deployment Errors**: `DeploymentError` for configuration deployment failures
-- **Monitoring Errors**: `MonitoringError` for filesystem monitoring issues
-- **Audit Errors**: `AuditError` for compliance checking failures
+- **Loading**: `load_configuration()` raises `FileNotFoundError` when a single explicit source is missing. Schema violations are logged and returned by `validate_configuration()`; they are not raised.
+- **Secrets and deployment**: `manage_secrets()` and `deploy_configuration()` raise `codomyrmex.exceptions.CodomyrmexError` for an unknown operation or environment.
 
 ## Integration Patterns
 

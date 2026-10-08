@@ -456,6 +456,8 @@ High-level project lifecycle management.
 - **Example**:
 
   ```python
+  from codomyrmex.logistics.orchestration.project import ProjectManager, ProjectType
+
   manager = ProjectManager()
   project = manager.create_project(
       "web-app-analysis",

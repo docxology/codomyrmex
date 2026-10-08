@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- `make docs-check` checks every `API_SPECIFICATION.md` signature against the code
+  (`scripts/documentation/validate_api_signatures.py`); 163 drifted signatures were corrected.
+
 ### 2026-10-07 hardening pass (#496–#564)
 
 All open issues and PRs were triaged (Dependabot action bumps #496–#502
