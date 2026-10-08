@@ -1,21 +1,13 @@
-# Identity - MCP Tool Specification Template
+# Identity - MCP Tool Specification
 
-This document serves as a template for defining tools within the `Identity` module that are intended to be integrated with the Model Context Protocol (MCP).
-
-**Instructions for Use:**
-1.  Replace `Identity` in the title above and throughout this document with the actual name of your module.
-2.  For each tool you define, copy the "Tool: `identity_list_levels`" section.
-3.  Replace all bracketed placeholders (e.g., `identity_list_levels`, `[Brief description...]`, `[ParameterName]`, `[DataType]`, etc.) with specific details for your tool.
-4.  Provide concrete examples for Input/Output schemas and MCP usage.
-5.  If a section (like Idempotency or specific Security Considerations beyond general file path validation) is not applicable, clearly state "N/A" or provide a relevant explanation.
-6.  Refer to the `model_context_protocol` module's documentation for overarching MCP guidelines and schema definitions.
+This document specifies the Model Context Protocol (MCP) tools of the `identity` module. They are defined with `@mcp_tool` in `mcp_tools.py` and surfaced by the PAI MCP bridge as `codomyrmex.<name>`.
 
 ## General Considerations for Identity Tools
 
-- **Dependencies**: Clearly list any other Codomyrmex modules or significant external libraries required by the tools in this module. (e.g., "All tools require the `logging_monitoring` module. Ensure `setup_logging()` is called.")
-- **Initialization**: Specify any module-level initialization required before tools can be invoked.
-- **Error Handling**: Describe the general error handling strategy for tools in this module (e.g., "Errors are logged using `logging_monitoring`. Tools return an `{'error': 'description'}` object on failure.").
-- **Security**: Outline any module-wide security considerations. Specific tool security notes can be added to each tool's section.
+- **No shared state**: Every call creates a new `IdentityManager`. A persona created by `identity_create_persona` is not available to a later `identity_rotate_persona` call; pass `register_personas` to rotate within one call.
+- **Verification levels**: `unverified`, `anonymous_verified`, `verified_anon`, `kyc_verified`.
+- **Error Handling**: Tools catch exceptions and return `{"status": "error", "message": "<description>"}`.
+- **Security**: Bio-cognitive samples are processed in memory and not persisted by the MCP layer.
 
 ---
 
@@ -23,79 +15,176 @@ This document serves as a template for defining tools within the `Identity` modu
 
 ### 1. Tool Purpose and Description
 
-Persona management and identity verification via MCP tools
+Lists the supported verification levels.
 
 ### 2. Invocation Name
 
 `identity_list_levels`
-(This should be a unique, descriptive name, typically in snake_case, used to call the tool via MCP.)
 
 ### 3. Input Schema (Parameters)
 
-Describe the expected input parameters for the tool. Use a table format.
-
-| Parameter Name   | Type        | Required | Description                                      | Example Value      |
-| :-------------- | :---------- | :------- | :----------------------------------------------- | :----------------- |
-| `[Parameter1Name]` | `[DataType]` | Yes/No   | `[Description of parameter1]`                  | `[ExampleValue1]`  |
-| `[Parameter2Name]` | `[DataType]` | Yes/No   | `[Description of parameter2 (e.g., optional, with default value X)]` | `[ExampleValue2]`  |
-| `output_path`   | `string`    | No       | `[Commonly, if the tool generates a file: File path to save the output. If None/not provided, behavior should be defined (e.g., not saved, returned directly).]` | `"./output/[module_name]/[tool_name]/result.txt"`  |
-| `...`           | `...`       | ...      | `...`                                            | `...`              |
-
-**Notes on Input Schema:**
-- Specify data types clearly (e.g., `string`, `integer`, `float`, `boolean`, `array[string]`, `object`, `enum["val1", "val2"]`).
-- For complex objects, you might reference a JSON schema definition or detail the object structure.
+None.
 
 ### 4. Output Schema (Return Value)
 
-Describe the structure of the data returned by the tool upon successful execution.
+```json
+{
+  "status": "success",
+  "levels": [
+    {"name": "UNVERIFIED", "value": "unverified"},
+    {"name": "ANON", "value": "anonymous_verified"},
+    {"name": "VERIFIED_ANON", "value": "verified_anon"},
+    {"name": "KYC", "value": "kyc_verified"}
+  ]
+}
+```
 
-| Field Name      | Type        | Description                                                                   | Example Value      |
-| :-------------- | :---------- | :---------------------------------------------------------------------------- | :----------------- |
-| `[ResultField1]`| `[DataType]`| `[Description of the result field]`                                           | `[ExampleResult1]` |
-| `[ResultField2]`| `[DataType]`| `[Description of another result field]`                                       | `[ExampleResult2]` |
-| `output_path`   | `string`    | `[If applicable: The path where the output file was saved. Null if not saved.]` | `"./output/[module_name]/[tool_name]/result.txt"` |
-| `status`        | `string`    | `[e.g., "success", "completed_with_warnings"]`                                | `"success"`        |
+---
 
-**Notes on Output Schema:**
-- Clearly define what constitutes a successful output.
-- If the tool primarily has side effects (e.g., saving a file, modifying system state) and doesn't return substantial data, reflect that (e.g., `{"status": "success", "message": "Operation completed."}`).
+## Tool: `identity_create_persona`
 
-### 5. Error Handling
+### 1. Tool Purpose and Description
 
-- **Specific Errors**: Detail any specific error conditions or codes the tool might return, beyond general module errors.
-    - `[ErrorCode1]`: `[Description of error and when it occurs]`
-    - `[ErrorCode2]`: `[Description of error and when it occurs]`
-- **Return Format on Error**: Reiterate or specify the error object format (e.g., `{"error": "Specific error message related to identity_operation", "details": {...}}`).
+Creates a persona and returns its metadata.
 
-### 6. Idempotency
+### 2. Invocation Name
 
-- **Idempotent**: Yes/No/Partially
-- **Explanation**: `[Explain why the tool is or isn't idempotent. If not fully idempotent, describe the conditions under which repeated calls might have different effects (e.g., if it modifies state or relies on external non-idempotent services).]`
-    - Example (Idempotent): "Yes. Calling the tool multiple times with the same input parameters will produce the same output file (if `output_path` is specified) or return the same result without further side effects."
-    - Example (Not Idempotent): "No. Each call creates a new unique resource."
+`identity_create_persona`
 
-### 7. Usage Examples (for MCP context)
+### 3. Input Schema (Parameters)
 
-Provide one or more examples of how this tool would be invoked within an MCP message. Use JSON format.
+| Parameter Name | Type | Required | Description | Example Value |
+| :--- | :--- | :--- | :--- | :--- |
+| `persona_id` | `string` | Yes | Unique persona identifier | `"p1"` |
+| `name` | `string` | Yes | Display name | `"Alice"` |
+| `level` | `string` | No | Verification level value (default `"unverified"`) | `"kyc_verified"` |
+| `capabilities` | `array[string]` | No | Capability strings | `["read"]` |
+
+### 4. Output Schema (Return Value)
 
 ```json
 {
-  "tool_name": "identity_list_levels",
-  "arguments": {
-    "[Parameter1Name]": "[ExampleValue1]",
-    "[Parameter2Name]": "[ExampleValue2]"
-    // Add other necessary arguments for a comprehensive example
+  "status": "success",
+  "persona": {
+    "id": "p1",
+    "name": "Alice",
+    "level": "unverified",
+    "created_at": "2026-10-07T23:35:46.502908+00:00",
+    "attributes": {},
+    "crumbs_count": 0,
+    "capabilities": ["read"],
+    "is_active": true
   }
 }
 ```
 
-### 8. Security Considerations
-
-- **Input Validation**: `[Describe any specific input validation performed by the tool beyond basic type checking, especially for strings that might be used in file paths, commands, or queries.]`
-- **Permissions**: `[If the tool interacts with the file system, network, or other system resources, specify any required permissions for the environment executing the tool.]`
-- **Data Handling**: `[Note any sensitive data types handled by the tool and how they are protected (e.g., "User IDs are processed but not logged").]`
-- **Output Sanitization**: `[If the tool's output could be displayed in a sensitive context, mention any sanitization performed.]`
-- **File Paths**: (If `output_path` or similar is used) "Ensure that any user-supplied file paths are rigorously validated and restricted to designated writable directories to prevent unauthorized file access, overwrites, or path traversal vulnerabilities. The application running the MCP tool server must operate with appropriate, least-privilege file system permissions."
+An unknown `level` returns the error shape.
 
 ---
-<!-- Add more tool specifications below by copying the "Tool: `identity_list_levels`" section. --> 
+
+## Tool: `identity_check_capability`
+
+### 1. Tool Purpose and Description
+
+Checks whether a list of capabilities grants a required capability, using a temporary persona.
+
+### 2. Invocation Name
+
+`identity_check_capability`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name | Type | Required | Description | Example Value |
+| :--- | :--- | :--- | :--- | :--- |
+| `capabilities` | `array[string]` | Yes | Capabilities the persona holds | `["read"]` |
+| `required_capability` | `string` | Yes | Capability to check for | `"write"` |
+
+### 4. Output Schema (Return Value)
+
+```json
+{
+  "status": "success",
+  "has_capability": false,
+  "required": "write",
+  "provided": ["read"]
+}
+```
+
+---
+
+## Tool: `identity_verify_biocognitive`
+
+### 1. Tool Purpose and Description
+
+Verifies a user with bio-cognitive signals: keystroke dynamics, heartbeat RR intervals and/or EEG band powers. Every modality that is supplied must pass.
+
+### 2. Invocation Name
+
+`identity_verify_biocognitive`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name | Type | Required | Description | Example Value |
+| :--- | :--- | :--- | :--- | :--- |
+| `user_id` | `string` | Yes | User being verified | `"u1"` |
+| `keystroke_values` | `array[number]` | No | Baseline keystroke flight times for enrolment | `[0.12, 0.15, 0.11]` |
+| `current_keystroke` | `number` | No | Current keystroke flight time to verify | `0.13` |
+| `heartbeat_intervals` | `array[number]` | No | Current RR intervals (ms) to verify | `[810, 790, 805]` |
+| `heartbeat_baseline` | `array[number]` | No | Baseline RR intervals (ms) for enrolment | `[800, 795, 810]` |
+| `eeg_samples` | `array[number]` | No | Current EEG amplitude samples | `[0.1, -0.2, 0.05]` |
+| `eeg_baseline` | `array[number]` | No | Baseline EEG samples for enrolment | `[0.1, -0.1, 0.02]` |
+| `eeg_sampling_rate` | `number` | No | EEG sampling rate in Hz (default `256.0`) | `256.0` |
+
+### 4. Output Schema (Return Value)
+
+| Field Name | Type | Description |
+| :--- | :--- | :--- |
+| `status` | `string` | `"success"` or `"error"` |
+| `verified` | `boolean` | `true` when every supplied modality passed |
+| `modalities` | `object` | Per-modality result (`keystroke`, `heartbeat`, `eeg`) with `verified` and details |
+| `confidence` | `number` | Verifier confidence for `user_id` |
+
+With no signal data the tool returns `{"status": "error", "message": "No bio-cognitive data provided for verification"}`.
+
+---
+
+## Tool: `identity_rotate_persona`
+
+### 1. Tool Purpose and Description
+
+Rotates the active persona: directly to a persona ID, round-robin to the next persona, or to the preferred persona. Personas can be registered inline first.
+
+### 2. Invocation Name
+
+`identity_rotate_persona`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name | Type | Required | Description | Example Value |
+| :--- | :--- | :--- | :--- | :--- |
+| `persona_id` | `string` | For `direct` | Target persona ID | `"p2"` |
+| `mode` | `string` | No | `direct`, `next` or `preferred` (default `direct`) | `"direct"` |
+| `reason` | `string` | No | Reason recorded in the rotation history (default `""`) | `"session start"` |
+| `set_preferred` | `boolean` | No | Make `persona_id` the preferred persona before rotating (default `false`) | `true` |
+| `clear_preferred` | `boolean` | No | Clear the preferred persona after rotating (default `false`) | `false` |
+| `register_personas` | `array[object]` | No | Personas to register first: `{"id", "name", "level"?, "capabilities"?}` | `[{"id": "p2", "name": "Bob"}]` |
+
+### 4. Output Schema (Return Value)
+
+```json
+{
+  "status": "success",
+  "active_persona": {"id": "p2", "name": "Bob", "level": "unverified"},
+  "rotation_history": [{"from": "none", "to": "p2", "timestamp": "...", "reason": ""}],
+  "rotation_count": 1,
+  "registered_count": 1
+}
+```
+
+Errors: `"persona_id required for mode='direct'"`, `"No preferred persona set"`, `"Unknown rotation mode: <mode>. Use direct, next, or preferred."`, or `"Persona ID <id> not found"` when the persona was not registered in the same call.
+
+### 5. Idempotency
+
+- **Idempotent**: Yes, because nothing persists between calls.
+
+<!-- markdownlint-configure-file { "MD024": { "siblings_only": true } } -->

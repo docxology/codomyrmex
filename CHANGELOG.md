@@ -61,6 +61,8 @@ merged), then the following landed on `main` with green CI.
   references at 365 places were corrected, including the
   `project_orchestration` guides, which now document
   `codomyrmex.logistics.orchestration.project` (#564).
+- `make docs-check` checks `MCP_TOOL_SPECIFICATION.md` files against the tools the code defines
+  (`scripts/documentation/validate_mcp_tool_specs.py`); 166 documented tools their modules do not define (39 specs) were corrected.
 - Inventory counts in `CLAUDE.md` refreshed; testing guide documents the
   repository guards and type-checking ratchet.
 

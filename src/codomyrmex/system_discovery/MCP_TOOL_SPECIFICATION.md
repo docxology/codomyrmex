@@ -2,45 +2,13 @@
 
 ## Overview
 
-This document specifies the Model Context Protocol (MCP) tools provided by the `system_discovery` module.
+This document specifies the Model Context Protocol (MCP) tools provided by the `system_discovery` module. The tools are defined with the `@mcp_tool` decorator in `mcp_tools.py` and are surfaced by the PAI MCP bridge as `codomyrmex.<name>`.
 
-## Available Tools
-
-### `tool_name`
-
-**Description**: [Tool description]
-
-**Parameters**:
-
-```json
-{
-  "param1": {
-    "type": "string",
-    "description": "Parameter description",
-    "required": true
-  },
-  "param2": {
-    "type": "integer",
-    "description": "Parameter description",
-    "required": false,
-    "default": 0
-  }
-}
-```
-
-**Returns**: Return value description
-
-**Example**:
-
-```json
-{
-  "tool": "tool_name",
-  "parameters": {
-    "param1": "value",
-    "param2": 42
-  }
-}
-```
+| Tool | Purpose |
+| :--- | :--- |
+| `health_check` | Run a health check on the system or on one module |
+| `list_modules` | List the importable Codomyrmex modules |
+| `dependency_tree` | Report the public exports of one module |
 
 ## Tool Registration
 
@@ -61,120 +29,96 @@ status = health_check()
 
 ---
 
-## Tool: `discover_system_capabilities`
+## Tool: `health_check`
 
 ### 1. Tool Purpose and Description
 
-Discovers and catalogs system capabilities, installed modules, and available resources within the Codomyrmex ecosystem.
+Runs a health check on one module when `module` is given, otherwise on all modules, using `HealthChecker`.
+
+**Known issue**: the implementation calls `HealthChecker.check_module()` and `HealthChecker.check_all()`, which `HealthChecker` does not define, so the tool currently returns the error shape below (for example `"'HealthChecker' object has no attribute 'check_all'"`).
 
 ### 2. Invocation Name
 
-`discover_system_capabilities`
+`health_check`
 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
 | :--- | :--- | :--- | :--- | :--- |
-| `scan_depth` | `string` | No | Depth of discovery scan (basic, detailed, full) | `"detailed"` |
-| `include_modules` | `boolean` | No | Whether to scan individual modules for capabilities | `true` |
-| `include_resources` | `boolean` | No | Whether to scan system resources | `true` |
-| `output_format` | `string` | No | Output format (json, text, summary) | `"json"` |
+| `module` | `string` or `null` | No | Module to check; all modules are checked when omitted | `"cache"` |
+
+### 4. Output Schema (Return Value)
+
+On success:
+
+```json
+{
+  "status": "success",
+  "healthy": true,
+  "module": "all",
+  "details": {}
+}
+```
+
+`details` is the checker result's `to_dict()` output when available, otherwise its string form. On failure the tool returns `{"status": "error", "message": "<error>"}`.
+
+## Tool: `list_modules`
+
+### 1. Tool Purpose and Description
+
+Lists the importable Codomyrmex packages reported by `codomyrmex.list_modules()`.
+
+### 2. Invocation Name
+
+`list_modules`
+
+### 3. Input Schema (Parameters)
+
+None.
 
 ### 4. Output Schema (Return Value)
 
 ```json
 {
-  "capabilities": {
-    "modules": ["ai_code_editing", "static_analysis", "data_visualization"],
-    "resources": {
-      "cpu_cores": 8,
-      "memory_gb": 16,
-      "storage_gb": 256
-    },
-    "integrations": ["ollama", "docker", "kubernetes"]
-  },
-  "system_info": {
-    "platform": "macOS",
-    "python_version": "3.10.5",
-    "codomyrmex_version": "0.1.0"
-  },
-  "scan_timestamp": "2025-01-18T13:46:57.230Z"
+  "status": "success",
+  "modules": [
+    {"name": "agentic_memory", "available": true},
+    {"name": "agents", "available": true}
+  ],
+  "count": 2
 }
 ```
 
-## Tool: `get_system_status`
+On failure the tool returns `{"status": "error", "message": "<error>"}`.
+
+## Tool: `dependency_tree`
 
 ### 1. Tool Purpose and Description
 
-Retrieves system status including health metrics, active processes, and system utilization.
+Imports `codomyrmex.<module>` and reports its public exports (`__all__`). Despite the name, it does not resolve dependencies between modules.
 
 ### 2. Invocation Name
 
-`get_system_status`
+`dependency_tree`
 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
 | :--- | :--- | :--- | :--- | :--- |
-| `include_health` | `boolean` | No | Include system health metrics | `true` |
-| `include_processes` | `boolean` | No | Include running process information | `false` |
-| `include_modules` | `boolean` | No | Include module status information | `true` |
+| `module` | `string` | Yes | Module name to inspect (without the `codomyrmex.` prefix) | `"cache"` |
 
 ### 4. Output Schema (Return Value)
 
 ```json
 {
-  "health_status": "healthy",
-  "system_metrics": {
-    "cpu_usage": 45.2,
-    "memory_usage": 68.1,
-    "disk_usage": 23.4
-  },
-  "module_status": {
-    "active_modules": 27,
-    "healthy_modules": 26,
-    "warnings": 1
-  },
-  "timestamp": "2025-01-18T13:46:57.230Z"
+  "status": "success",
+  "module": "cache",
+  "exports": ["Cache", "CacheConnectionError", "CacheError"],
+  "export_count": 3
 }
 ```
 
-## Tool: `scan_module_capabilities`
-
-### 1. Tool Purpose and Description
-
-Scans specific modules for their capabilities, exported functions, and integration points.
-
-### 2. Invocation Name
-
-`scan_module_capabilities`
-
-### 3. Input Schema (Parameters)
-
-| Parameter Name | Type | Required | Description | Example Value |
-| :--- | :--- | :--- | :--- | :--- |
-| `module_name` | `string` | Yes | Name of the module to scan | `"ai_code_editing"` |
-| `include_functions` | `boolean` | No | Include exported function signatures | `true` |
-| `include_dependencies` | `boolean` | No | Include module dependencies | `true` |
-
-### 4. Output Schema (Return Value)
-
-```json
-{
-  "module_name": "ai_code_editing",
-  "capabilities": {
-    "functions": [
-      "generate_code_snippet",
-      "refactor_code_snippet",
-      "analyze_code_quality"
-    ],
-    "languages": ["python", "javascript", "java", "cpp"],
-    "providers": ["openai", "anthropic", "google"]
-  },
-  "dependencies": ["llm", "pattern_matching"],
-  "mcp_tools": ["generate_code_snippet", "refactor_code_snippet"]
-}
-```
+When the module cannot be imported the tool returns `{"status": "error", "message": "Module not found: <module>", "detail": "<import error>"}`.
 
 ## Navigation Links
 
