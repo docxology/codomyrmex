@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import ast
 import contextlib
+import types
 from typing import Any
 
 
@@ -39,7 +40,10 @@ def _safe_exec(code: str, namespace: dict[str, Any]) -> None:
             obj = _eval(node.value)
             if node.attr.startswith("_"):
                 raise AttributeError("Access to private attributes is forbidden")
-            return getattr(obj, node.attr)
+            attr_val = getattr(obj, node.attr)
+            if isinstance(attr_val, types.ModuleType):
+                raise AttributeError(f"Access to module '{node.attr}' is forbidden")
+            return attr_val
         if isinstance(node, ast.Call):
             func = _eval(node.func)
             args = [_eval(arg) for arg in node.args]
