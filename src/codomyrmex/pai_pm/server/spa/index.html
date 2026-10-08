@@ -2879,7 +2879,7 @@
         '<button class="data-sub-tab' + (dataSubTab === 'projects' ? ' active' : '') + '" onclick="setDataSubTab(\'projects\')">Projects</button>' +
         '<button class="data-sub-tab' + (dataSubTab === 'tasks' ? ' active' : '') + '" onclick="setDataSubTab(\'tasks\')">Tasks</button>' +
         '</div>' +
-        '<input class="search-bar" type="text" placeholder="Search..." value="' + esc(searchFilter) + '" oninput="searchFilter=this.value;renderDataView()" id="data-search-input">' +
+        '<input class="search-bar" type="text" placeholder="Search..." aria-label="Search" value="' + esc(searchFilter) + '" oninput="searchFilter=this.value;renderDataView()" id="data-search-input">' +
         '</div>' +
         '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;align-items:center;">' +
         '<span style="font-size:11px;color:var(--text-dim);">Filter:</span>' +
@@ -3953,11 +3953,11 @@
       html += '<div style="margin-top:16px;padding:12px 16px;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-lg);">' +
         '<div style="font-weight:600;margin-bottom:8px;font-size:13px;">Add Task</div>' +
         '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;">' +
-        '<input id="add-task-text" type="text" placeholder="Task description" style="flex:1;min-width:200px;padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;">' +
+        '<input id="add-task-text" type="text" placeholder="Task description" aria-label="Task description" style="flex:1;min-width:200px;padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;">' +
         '<select id="add-task-priority" style="padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;">' +
         '<option value="">Priority</option><option value="HIGH">HIGH</option><option value="MEDIUM">MEDIUM</option><option value="LOW">LOW</option></select>' +
-        '<input id="add-task-spec" type="text" placeholder="Acceptance criteria (optional)" style="flex:1;min-width:200px;padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;">' +
-        '<input id="add-task-depends" type="text" placeholder="Depends on (optional)" style="min-width:150px;padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;">' +
+        '<input id="add-task-spec" type="text" placeholder="Acceptance criteria (optional)" aria-label="Acceptance criteria (optional)" style="flex:1;min-width:200px;padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;">' +
+        '<input id="add-task-depends" type="text" placeholder="Depends on (optional)" aria-label="Depends on (optional)" style="min-width:150px;padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;">' +
         '<button class="btn btn-primary btn-sm" onclick="addTaskInline(&quot;' + esc(project.id) + '&quot;)">Add</button>' +
         '</div></div>';
 
@@ -4775,7 +4775,7 @@
                 '<td>' + badge(projData.priority || '-', (projData.priority || '').toLowerCase()) + '</td>' +
                 '<td>' + ((projData.tasks || []).length) + ' tasks</td>' +
                 '<td><div style="display:flex;gap:4px;align-items:center;">' +
-                '<input id="git-link-' + esc(up.project) + '" type="text" placeholder="owner/repo" style="width:180px;padding:4px 8px;font-size:12px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);">' +
+                '<input id="git-link-' + esc(up.project) + '" type="text" placeholder="owner/repo" aria-label="GitHub owner/repo" style="width:180px;padding:4px 8px;font-size:12px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);">' +
                 '<button class="btn btn-ghost btn-xs" onclick="gitLinkProject(\'' + esc(up.project) + '\')">Link</button>' +
                 '<button class="btn btn-xs" style="background:var(--cyan);color:white;" onclick="gitCreateAndLink(\'' + esc(up.project) + '\')">Create &amp; Link</button>' +
                 '</div></td>' +
@@ -5154,7 +5154,7 @@
         '<select id="gh-link-project" style="width:100%;margin-bottom:8px;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;">' +
         '<option value="">Select PAI Project...</option>' +
         '</select>' +
-        '<input id="gh-link-repo" type="text" placeholder="owner/repo (e.g. docxology/MetaInformAnt)" style="width:100%;margin-bottom:8px;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;">' +
+        '<input id="gh-link-repo" type="text" placeholder="owner/repo (e.g. docxology/MetaInformAnt)" aria-label="GitHub owner/repo" style="width:100%;margin-bottom:8px;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;">' +
         '<button class="btn btn-primary" onclick="ghLinkProject()">Link</button>' +
         '<button class="btn btn-ghost" onclick="ghUnlinkProject()" style="margin-left:6px;">Unlink</button>' +
         '<button class="btn" style="background:var(--cyan);color:white;margin-left:6px;" onclick="ghCreateAndLink()">Create &amp; Link</button>' +
@@ -5180,7 +5180,7 @@
         '</div>' +
         '<hr style="border-color:var(--border);margin:4px 0;">' +
         '<div style="display:flex;gap:6px;">' +
-        '<input id="gh-new-issue-title" type="text" placeholder="New issue title..." style="flex:1;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;">' +
+        '<input id="gh-new-issue-title" type="text" placeholder="New issue title..." aria-label="New issue title" style="flex:1;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;">' +
         '<button class="btn btn-primary" onclick="ghCreateIssue()">Create Issue</button>' +
         '</div>' +
         '</div>' +
@@ -5202,7 +5202,7 @@
         '<h3>Cleanup Test Issues</h3>' +
         '<p>Close test-generated issues (PAI Test, API Test, etc.) from a repository.</p>' +
         '<div style="margin-top:8px;display:flex;gap:6px;">' +
-        '<input id="gh-cleanup-repo" type="text" placeholder="owner/repo" style="flex:1;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;">' +
+        '<input id="gh-cleanup-repo" type="text" placeholder="owner/repo" aria-label="GitHub owner/repo" style="flex:1;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;">' +
         '<button class="btn btn-ghost" onclick="ghCleanupDry()">Dry Run</button>' +
         '<button class="btn" style="background:var(--warning);color:white;" onclick="ghCleanupExecute()">Cleanup</button>' +
         '</div>' +
@@ -5355,7 +5355,7 @@
           '</div>' +
           '<div style="margin-bottom:16px;">' +
           '<div style="font-size:14px;font-weight:500;margin-bottom:12px;line-height:1.5;">' + q.q + '</div>' +
-          '<textarea id="interview-answer" rows="6" style="width:100%;padding:12px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;resize:vertical;" placeholder="Your response...">' + (q.a || '') + '</textarea>' +
+          '<textarea id="interview-answer" rows="6" style="width:100%;padding:12px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;resize:vertical;" placeholder="Your response..." aria-label="Your response">' + (q.a || '') + '</textarea>' +
           '</div>' +
           '<div style="display:flex;gap:8px;justify-content:space-between;">' +
           '<button class="btn btn-ghost" onclick="interviewSkip()">Skip</button>' +
@@ -6802,12 +6802,12 @@
         createForm = '<div style="background:var(--panel);border:1px solid var(--primary);border-radius:8px;padding:16px;margin-bottom:12px;">' +
           '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-weight:700;font-size:0.95rem;">New Calendar Event</span><button class="btn btn-ghost btn-sm" aria-label="Close" onclick="calState.showCreateForm=false;renderCalendarView()">&#x2715;</button></div>' +
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
-          '<div style="grid-column:1/-1;"><input id="cal-new-summary" placeholder="Event title..." style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:8px;font-size:0.85rem;"></div>' +
+          '<div style="grid-column:1/-1;"><input id="cal-new-summary" placeholder="Event title..." aria-label="Event title" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:8px;font-size:0.85rem;"></div>' +
           '<div><label style="font-size:0.75rem;color:var(--text-muted);">Date</label><input id="cal-new-date" type="date" value="' + calState.createDate + '" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.85rem;"></div>' +
           '<div><label style="font-size:0.75rem;color:var(--text-muted);">Time (optional)</label><input id="cal-new-time" type="time" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.85rem;"></div>' +
           '<div><label style="font-size:0.75rem;color:var(--text-muted);">Duration (min)</label><input id="cal-new-duration" type="number" value="60" min="15" step="15" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.85rem;"></div>' +
           '<div><label style="font-size:0.75rem;color:var(--text-muted);">Link to Project</label><select id="cal-new-project" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.85rem;">' + prjOpts + '</select></div>' +
-          '<div style="grid-column:1/-1;"><label style="font-size:0.75rem;color:var(--text-muted);">Description</label><textarea id="cal-new-desc" rows="2" placeholder="Notes..." style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.85rem;resize:vertical;"></textarea></div>' +
+          '<div style="grid-column:1/-1;"><label style="font-size:0.75rem;color:var(--text-muted);">Description</label><textarea id="cal-new-desc" rows="2" placeholder="Notes..." aria-label="Notes" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.85rem;resize:vertical;"></textarea></div>' +
           '</div>' +
           '<div style="margin-top:10px;display:flex;gap:8px;"><button class="btn btn-primary btn-sm" onclick="calSubmitCreate()">Create & Invite DAF</button><button class="btn btn-ghost btn-sm" onclick="calState.showCreateForm=false;renderCalendarView()">Cancel</button></div>' +
           '<div style="margin-top:6px;font-size:0.7rem;color:var(--text-dim);">danielarifriedman@gmail.com will be automatically invited.</div>' +
@@ -7254,9 +7254,9 @@
         composePanel = '<div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:16px;">' +
           '<div style="font-weight:600;margin-bottom:12px;color:var(--text);">New Email</div>' +
           '<div style="display:grid;gap:8px;">' +
-          '<input id="email-to" type="email" placeholder="To" value="' + esc(emailState.composeTo) + '" oninput="emailState.composeTo=this.value" style="width:100%;">' +
-          '<input id="email-subject" type="text" placeholder="Subject" value="' + esc(emailState.composeSubject) + '" oninput="emailState.composeSubject=this.value" style="width:100%;">' +
-          '<textarea id="email-body" placeholder="Message..." rows="8" oninput="emailState.composeBody=this.value" style="width:100%;resize:vertical;font-family:inherit;line-height:1.5;">' + esc(emailState.composeBody) + '</textarea>' +
+          '<input id="email-to" type="email" placeholder="To" aria-label="To" value="' + esc(emailState.composeTo) + '" oninput="emailState.composeTo=this.value" style="width:100%;">' +
+          '<input id="email-subject" type="text" placeholder="Subject" aria-label="Subject" value="' + esc(emailState.composeSubject) + '" oninput="emailState.composeSubject=this.value" style="width:100%;">' +
+          '<textarea id="email-body" placeholder="Message..." aria-label="Message" rows="8" oninput="emailState.composeBody=this.value" style="width:100%;resize:vertical;font-family:inherit;line-height:1.5;">' + esc(emailState.composeBody) + '</textarea>' +
           '<div style="display:flex;align-items:center;gap:8px;">' +
           '<select onchange="emailState.composeProvider=this.value" style="flex:0 0 auto;"><option value="agentmail"' + (emailState.composeProvider === 'agentmail' ? ' selected' : '') + '>AgentMail</option><option value="gmail"' + (emailState.composeProvider === 'gmail' ? ' selected' : '') + '>Gmail</option></select>' +
           '<button class="btn btn-primary btn-sm" onclick="emailSend()" ' + (emailState.sending ? 'disabled' : '') + '>' + (emailState.sending ? 'Sending...' : 'Send') + '</button>' +
@@ -7797,7 +7797,7 @@
             (isRecording ? '⬛' : '🎙️') +
             '</button>' +
             '</div>' +
-            '<textarea id="bikeride-draft-' + t.id + '" class="bikeride-draft-textarea" placeholder="Click the microphone to start dictating your reply, or type here..." oninput="bikeRideUpdateVoiceDraft(\'' + t.id + '\', this.value)">' + esc(voiceDraftText) + '</textarea>' +
+            '<textarea id="bikeride-draft-' + t.id + '" class="bikeride-draft-textarea" placeholder="Click the microphone to start dictating your reply, or type here..." aria-label="Voice reply draft" oninput="bikeRideUpdateVoiceDraft(\'' + t.id + '\', this.value)">' + esc(voiceDraftText) + '</textarea>' +
             '<div class="bikeride-voice-actions">' +
             '<button class="bikeride-improve-btn' + (isImproving ? ' improving' : '') + '" onclick="bikeRideImprove(' + idx + ')">' +
             (isImproving ? '<div class="spinner" style="width:12px;height:12px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 1s linear infinite;"></div> Polishing...' : '<span class="sparkle">✨</span> Improve w/ Context') +
