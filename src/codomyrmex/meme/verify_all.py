@@ -4,9 +4,6 @@
 import sys
 from pathlib import Path
 
-# Support direct execution from a checkout or an installed wheel.
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-
 
 def info(msg):
     """Info."""
@@ -23,7 +20,8 @@ def fail(msg):
     print(f"\033[91m[FAIL]\033[0m {msg}")
 
 
-try:
+def _run_checks() -> None:
+    """Exercise each meme submodule once, printing a line per check."""
     info("Attempting to import codomyrmex.meme package...")
     success("Imported codomyrmex.meme")
 
@@ -135,9 +133,21 @@ try:
 
     print("\n\033[92mALL SYSTEMS FUNCTIONAL\033[0m")
 
-except Exception as e:
-    fail(f"Verification failed: {e}")
-    import traceback
 
-    traceback.print_exc()
-    sys.exit(1)
+def main() -> int:
+    """Run the verification and return a process exit status."""
+    try:
+        _run_checks()
+    except Exception as e:
+        fail(f"Verification failed: {e}")
+        import traceback
+
+        traceback.print_exc()
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    # Support direct execution from a checkout or an installed wheel.
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    sys.exit(main())

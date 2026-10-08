@@ -6,11 +6,11 @@ including TODO list management, task execution, statistics tracking, and system 
 
 from __future__ import annotations
 
-import sys
 import time
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+from codomyrmex.agents.droid.todo import TodoManager
 from codomyrmex.logging_monitoring import get_logger
 
 if TYPE_CHECKING:
@@ -19,20 +19,6 @@ if TYPE_CHECKING:
     )
 
 logger = get_logger(__name__)
-
-
-# Import core droid components
-try:
-    # Try relative imports first (when used as module)
-    from codomyrmex.agents.droid.todo import TodoManager
-except ImportError:
-    try:
-        # Try absolute imports (when run directly)
-        from codomyrmex.agents.droid.todo import TodoManager
-    except ImportError as e:
-        print(f"❌ Failed to import droid components: {e}")
-        print("💡 Make sure you're running from the correct directory")
-        sys.exit(1)
 
 
 class DroidSystemManager:

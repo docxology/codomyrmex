@@ -8,25 +8,15 @@ Codomyrmex ecosystem capabilities.
 import importlib
 import inspect
 import json
-import logging
 import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.logging_monitoring import get_logger, setup_logging
 
-try:
-    from codomyrmex.logging_monitoring import (
-        get_logger,
-        setup_logging,
-    )
-
-    setup_logging()
-    logger = get_logger(__name__)
-except ImportError:
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
+# Importing this module must not configure logging; entry points do that.
+logger = get_logger(__name__)
 
 from .dependency_analyzer import DependencyAnalyzer
 from .health_checker import SystemHealthChecker
@@ -326,5 +316,6 @@ class SystemDiscovery:
 
 
 if __name__ == "__main__":
+    setup_logging()
     discovery = SystemDiscovery()
     discovery.run_full_discovery()

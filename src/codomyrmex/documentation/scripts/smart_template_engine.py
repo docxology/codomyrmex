@@ -9,24 +9,15 @@ infer relationships, and populate documentation templates with real content.
 import argparse
 import ast
 import json
-import logging
 import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-# Try to import Codomyrmex logger, fall back to standard logging
-try:
-    from codomyrmex.logging_monitoring import (
-        get_logger,
-        setup_logging,
-    )
+from codomyrmex.logging_monitoring import get_logger, setup_logging
 
-    setup_logging()
-    logger = get_logger(__name__)
-except ImportError:
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
+# Importing this module must not configure logging; main() does that.
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -470,6 +461,7 @@ class SmartTemplateEngine:
 
 def main():
     """Main entry point."""
+    setup_logging()
 
     parser = argparse.ArgumentParser(description="Smart documentation template engine")
     parser.add_argument(

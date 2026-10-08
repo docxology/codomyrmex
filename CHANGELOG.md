@@ -8,6 +8,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Silent imports and tests that stay out of the repository
+
+- Importing a codomyrmex module no longer configures logging or prints.
+  `documentation_website` (imported by `codomyrmex.documentation`), the
+  documentation scripts, `system_discovery`, `maintenance` and
+  `agents.droid.run_todo_droid` called `setup_logging()` or
+  `logging.basicConfig()` at import time, and `meme.verify_all` ran and
+  printed its checks, so tools that import them, such as
+  `validate_code_references.py --format json`, got log lines on stdout. Their
+  `main()` entry points configure logging instead.
+  `tests/unit/test_import_side_effects.py` imports each top-level package in a
+  fresh interpreter and fails on stdout output, root-logger changes or files
+  created in the CWD.
+- A stray-path guard (`tests/support/stray_paths.py`) fails the test run when
+  tests leave new entries in the repository root and names the test after
+  which each appeared (`CODOMYRMEX_STRAY_PATH_GUARD=fail|warn|off`, default
+  `fail`). Tests that wrote `config_audits/`, `git_analysis/`, `memory.db`,
+  `@output/`, `plugins/`, `db_performance/` and the CI/CD `pipeline_*`,
+  `rollback_*` and `optimization_data/` directories, or wrote
+  `config/default.yaml` and `.pipelines/artifacts/` inside tracked
+  directories, now use `tmp_path`.
+  `ConfigurationMonitor` and `DatabasePerformanceMonitor` create their
+  directories on first write instead of on construction, and
+  `codomyrmex analyze git` takes `--output`.
+
 ### Orchestration and CLI that actually run (#566, #567)
 
 - Project orchestration dispatches real work (#566): `ActionRegistry` /

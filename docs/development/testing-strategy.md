@@ -312,7 +312,42 @@ on review:
   `__init__.py`.
 - Tests write only under `tmp_path`. Calling an API with its default output
   path (for example `./git_analysis/`) from a test pollutes the working tree;
-  pass an explicit path under `tmp_path`.
+  pass an explicit path under `tmp_path`, or `monkeypatch.chdir(tmp_path)` when
+  the code under test writes relative to the CWD.
+- Stray-path guard (`tests/support/stray_paths.py`, registered by
+  `tests/conftest.py`) — records the top-level entries of the repository root,
+  and of the directory pytest was started from when that is inside the
+  repository, at session start. After each test it notes which test had just
+  run when a new entry appeared, and at the end of the session it reports the
+  entries that are still there, with those hints. Under pytest-xdist each
+  worker sends its hints to the controller, which makes the single report; a
+  path can carry one hint per worker, and the test that created it is among
+  them. Entries that existed when the session started, and the outputs of
+  pytest, its plugins and coverage (`.pytest_cache`, `.hypothesis`,
+  `.benchmarks`, `.coverage*`, `coverage.{xml,json,lcov,md}`, `htmlcov`,
+  `junit*.xml`, and the `--basetemp`, `--junitxml` and `--cov-report=TYPE:DEST`
+  destinations), are not reported. `CODOMYRMEX_STRAY_PATH_GUARD` selects
+  `fail` (default: print the report and exit non-zero), `warn` (print the
+  report only) or `off`. The default is `fail` because the unit suite and the
+  other test trees run clean, and in CI, a fresh checkout that nothing else
+  writes into during the run, every reported path is a test leak. Use `warn`
+  in a shared checkout where an editor or a concurrent agent may create
+  top-level files during the run: the guard cannot tell those apart from test
+  output. Only the top level is watched, so a file written into an existing
+  directory (for example `config/default.yaml` or `.pipelines/artifacts/`) is
+  not caught. When the code under test defaults to the CWD in many tests of
+  one directory, an autouse `monkeypatch.chdir(tmp_path)` fixture in that
+  directory's `conftest.py` (as in `tests/unit/ci_cd_automation/` and
+  `tests/unit/plugin_system/`) keeps them all out of the repository.
+- `tests/unit/test_import_side_effects.py` — imports each top-level
+  `codomyrmex.<package>` in a fresh interpreter started in an empty directory
+  and fails if the import writes to stdout, leaves handlers on or changes the
+  level of the root logger, or creates files in the CWD. Library code must not
+  call `setup_logging()` or `logging.basicConfig()` or `print()` at import
+  time; entry points (`main()`, `if __name__ == "__main__":`) configure
+  logging. The sweep over every package is marked `slow`; modules that were
+  fixed run in the fast unit lane. A package whose optional third-party
+  dependency is missing is skipped with the import error as the reason.
 
 Type checking is a ratchet too: `[tool.ty.rules]` in `pyproject.toml` makes
 `possibly-unresolved-reference`, `unsupported-base`, `deprecated` and

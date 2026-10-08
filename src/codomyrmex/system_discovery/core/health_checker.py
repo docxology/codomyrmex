@@ -6,7 +6,6 @@ git repository status inspection, and demo workflow execution.
 
 import importlib
 import json
-import logging
 import subprocess
 import sys
 from dataclasses import asdict
@@ -19,17 +18,8 @@ from codomyrmex.coding import execute_code
 from codomyrmex.data_visualization import create_line_plot
 from codomyrmex.logging_monitoring import get_logger as _get_logger
 
-try:
-    from codomyrmex.logging_monitoring import (
-        get_logger,
-        setup_logging,
-    )
-
-    setup_logging()
-    logger = get_logger(__name__)
-except ImportError:
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
+# Importing this module must not configure logging; entry points do that.
+logger = _get_logger(__name__)
 
 # Pre-allocated mapping for core dependencies to avoid re-creating the dictionary
 # on each check, providing a minor performance improvement in repetitive calls.

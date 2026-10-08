@@ -101,6 +101,7 @@ import pytest
 import yaml
 
 from codomyrmex.logging_monitoring import get_logger, setup_logging
+from tests.support.stray_paths import StrayPathPlugin, guard_mode
 
 
 def pytest_configure(config):
@@ -118,6 +119,20 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "bench: Opt-in benchmark and timing tests")
     config.addinivalue_line("markers", "benchmark: Opt-in pytest-benchmark tests")
     config.addinivalue_line("markers", "performance: Performance test suite")
+    _register_stray_path_guard(config)
+
+
+def _register_stray_path_guard(config: pytest.Config) -> None:
+    """Report paths that tests leave in the repository (tests/support/stray_paths.py)."""
+    try:
+        mode = guard_mode()
+    except ValueError as exc:
+        raise pytest.UsageError(str(exc)) from exc
+    if mode == "off":
+        return
+    config.pluginmanager.register(
+        StrayPathPlugin(config, _TESTS_ROOT.parent, mode), "codomyrmex-stray-paths"
+    )
 
 
 def _close_event_loop(candidate: asyncio.AbstractEventLoop) -> None:

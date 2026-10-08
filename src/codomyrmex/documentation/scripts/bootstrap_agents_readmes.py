@@ -8,17 +8,12 @@ and proper navigation signposting.
 """
 
 import argparse
-import logging
 from datetime import datetime
 from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger, setup_logging
 
-try:
-    setup_logging()
-except Exception as _exc:
-    logging.basicConfig(level=logging.INFO)
-
+# Importing this module must not configure logging; main() does that.
 logger = get_logger(__name__)
 
 # HTML comments used by ``apply_curated_markers`` and documentation guidelines
@@ -327,6 +322,7 @@ class DocumentationBootstrapper:
 
 def main():
     """Main entry point."""
+    setup_logging()
     parser = argparse.ArgumentParser(
         description="Bootstrap AGENTS.md and README.md files across the repository"
     )
