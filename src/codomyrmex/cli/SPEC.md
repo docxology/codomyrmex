@@ -18,12 +18,16 @@ The CLI uses a "Thin Dispatcher" pattern:
 ## Core Components
 
 ### `Cli` Class
+
 The central hub for all commands. Methods are automatically exposed as subcommands.
+
 - Uses `fire.Fire(Cli)` for automatic CLI generation.
 - Handles global flags like `--verbose` and `--performance`.
 
 ### Command Handlers
+
 Located in `src/codomyrmex/cli/handlers/`:
+
 - `system.py`: Environment checks, info, and status.
 - `ai.py`: LLM-powered code editing.
 - `analysis.py`: Static analysis and module testing.
@@ -36,10 +40,12 @@ Located in `src/codomyrmex/cli/handlers/`:
 
 - **Module Independence**: The CLI must start even if optional dependencies are missing.
 - **Clear Feedback**: Errors must be descriptive and actionable.
-- **Exit Codes**:
+- **Exit Codes** (enforced by `main()`; see `tests/unit/cli/test_cli.py::TestCLIMain`):
   - `0`: Success.
-  - `1`: Functional error or invalid arguments.
-  - `2`: System-level failure.
+  - `1`: The command failed (its handler returned `False`) or raised an unexpected error.
+  - `2`: Usage error (unknown command or invalid arguments, reported by Fire).
+  - `130`: Interrupted with Ctrl-C.
+  - Handlers that return an `int` exit with that code.
 - **Interactivity**: Support for interactive shells and dashboards.
 
 ## Testing Strategy

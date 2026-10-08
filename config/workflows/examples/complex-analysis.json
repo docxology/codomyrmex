@@ -1,50 +1,57 @@
 {
   "name": "complex_analysis",
+  "description": "Fan-out/fan-in example: validate the environment, then analyse code, scan for secrets and check Markdown documentation in parallel, then produce an environment report once all three have finished. Steps pass static parameters; outputs are not chained between steps.",
   "steps": [
     {
       "name": "setup",
       "module": "environment_setup",
-      "action": "check_environment",
+      "action": "validate_environment",
       "parameters": {},
       "dependencies": [],
       "timeout": 60,
-      "max_retries": 3
+      "max_retries": 0
     },
     {
       "name": "analyze_code",
-      "module": "static_analysis",
-      "action": "analyze_code_quality",
+      "module": "coding.static_analysis",
+      "action": "analyze_project",
+      "parameters": {
+        "project_root": "."
+      },
+      "dependencies": ["setup"],
+      "timeout": 300,
+      "max_retries": 0
+    },
+    {
+      "name": "scan_secrets",
+      "module": "security",
+      "action": "scan_secrets",
+      "parameters": {
+        "target_path": "."
+      },
+      "dependencies": ["setup"],
+      "timeout": 120,
+      "max_retries": 0
+    },
+    {
+      "name": "check_docs",
+      "module": "documentation",
+      "action": "check_documentation_consistency",
       "parameters": {
         "path": "."
       },
       "dependencies": ["setup"],
-      "timeout": 300,
-      "max_retries": 2
-    },
-    {
-      "name": "ai_insights",
-      "module": "ai_code_editing",
-      "action": "generate_code_insights",
-      "parameters": {
-        "analysis_data": "{{analyze_code.output}}"
-      },
-      "dependencies": ["analyze_code"],
-      "timeout": 120,
-      "max_retries": 3
-    },
-    {
-      "name": "visualize",
-      "module": "data_visualization",
-      "action": "create_bar_chart",
-      "parameters": {
-        "data": "{{ai_insights.output}}",
-        "title": "Analysis Results"
-      },
-      "dependencies": ["ai_insights"],
       "timeout": 60,
-      "max_retries": 1
+      "max_retries": 0
+    },
+    {
+      "name": "environment_report",
+      "module": "environment_setup",
+      "action": "generate_environment_report",
+      "parameters": {},
+      "dependencies": ["analyze_code", "scan_secrets", "check_docs"],
+      "timeout": 60,
+      "max_retries": 0
     }
   ]
 }
-
-
