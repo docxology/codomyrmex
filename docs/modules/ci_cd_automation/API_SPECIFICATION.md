@@ -6,242 +6,152 @@ This API specification documents the programmatic interfaces for the CI/CD Autom
 
 ## Functions
 
-### Function: `create_pipeline(name: str, stages: List[Dict], config: Optional[Dict] = None, **kwargs) -> Pipeline`
+All functions below are importable from `codomyrmex.ci_cd_automation`.
 
-- **Description**: Create and configure a CI/CD pipeline with specified stages and configuration.
+### Function: `create_pipeline(config: str | os.PathLike[str] | Mapping[str, Any]) -> Pipeline`
+
+- **Description**: Create a pipeline from a configuration file (YAML or JSON) or from the configuration itself as a mapping. A new `PipelineManager` parses the configuration into `Pipeline`, `PipelineStage` and `PipelineJob` objects.
 - **Parameters**:
-  - `name`: Unique pipeline name identifier.
-  - `stages`: List of pipeline stage configurations with jobs and tasks.
-  - `config`: Optional pipeline-level configuration (triggers, environments, etc.).
-  - `**kwargs`: Additional pipeline configuration options.
-- **Return Value**: Configured Pipeline object ready for execution.
-- **Errors**: Raises `ValueError` for invalid configurations and `RuntimeError` for system errors.
+  - `config`: Path to a `.yaml`/`.yml` or JSON pipeline file, or a mapping with `name`, optional `description`, `variables`, `triggers`, `timeout` and a `stages` list (each stage has `name` and `jobs`; each job has `name` and `commands`).
+- **Return Value**: The created `Pipeline`.
+- **Errors**: Re-raises file, YAML and JSON errors (for example `FileNotFoundError`) after logging them. Use `validate_pipeline_config()` to check a mapping first.
 
-### Function: `run_pipeline(pipeline: Pipeline, environment: str = "development", **kwargs) -> Dict`
+### Function: `validate_pipeline_config(config: Mapping[str, Any]) -> tuple[bool, list[str]]`
 
-- **Description**: Execute a configured pipeline with full orchestration and monitoring.
+- **Description**: Validate a pipeline configuration mapping without creating the pipeline.
 - **Parameters**:
-  - `pipeline`: Pipeline object to execute.
-  - `environment`: Target deployment environment.
-  - `**kwargs`: Execution-specific parameters (dry_run, timeout, etc.).
+  - `config`: Pipeline configuration (`name`, `stages` with `jobs` that each define a non-empty `commands` list, optional `triggers` and `timeout`).
+- **Return Value**: `(is_valid, errors)`; `errors` lists one message per problem.
+
+### Function: `run_pipeline(pipeline_name: str, config_path: str | None = None, variables: dict[str, str] | None = None) -> Pipeline`
+
+- **Description**: Run a pipeline synchronously and return it with execution results. Each call uses a fresh `PipelineManager`, so pass `config_path` to load the pipeline definition; use `PipelineManager` directly to run pipelines created earlier.
+- **Parameters**:
+  - `pipeline_name`: Name of the pipeline to run (the `name` in its configuration).
+  - `config_path`: Path to the pipeline configuration file to load before running.
+  - `variables`: Runtime variables that override the pipeline's `variables`.
+- **Return Value**: The `Pipeline`, with `status`, `started_at`, `finished_at`, `duration` and per-stage/per-job status filled in.
+- **Errors**: Raises `ValueError` when no pipeline named `pipeline_name` is loaded.
+
+### Function: `manage_deployments(config_path: str | None = None) -> DeploymentOrchestrator`
+
+- **Description**: Create a `DeploymentOrchestrator` and load environments from a YAML or JSON deployment configuration file when it exists. Use the orchestrator's `create_deployment()`, `deploy()`, `get_deployment_status()`, `list_deployments()` and `cancel_deployment()` methods to manage deployments.
+- **Parameters**:
+  - `config_path`: Path to the deployment configuration file (default: `deployment_config.yaml` in the current directory).
+- **Return Value**: A configured `DeploymentOrchestrator`.
+
+### Function: `monitor_pipeline_health(pipeline_name: str, workspace_dir: str | None = None) -> dict[str, Any]`
+
+- **Description**: Return a health summary for a pipeline via `PipelineMonitor.get_pipeline_health()`.
+- **Parameters**:
+  - `pipeline_name`: Name of the pipeline to check.
+  - `workspace_dir`: Workspace directory for monitor reports (default: current directory).
 - **Return Value**:
 
     ```python
     {
-        "status": "success|failed|cancelled",
-        "pipeline_id": <str>,
-        "execution_time": <float>,
-        "stages_completed": <int>,
-        "stages_total": <int>,
-        "artifacts": [<list_of_artifacts>],
-        "reports": {<execution_reports>}
+        "pipeline_name": <str>,
+        "status": <str>,
+        "last_execution": <ISO-8601 timestamp>,
+        "success_rate": <float>,
+        "average_duration": <float>,
+        "active_executions": <int>,
+        "recent_failures": [<list>]
     }
     ```
 
-- **Errors**: Raises `PipelineExecutionError` for execution failures.
+- **Note**: The current implementation returns a fixed snapshot (`status` `"healthy"`); the values are not yet derived from recorded executions.
 
-### Function: `manage_deployments(deployment_config: Dict, environment: str, **kwargs) -> Deployment`
+### Function: `generate_pipeline_reports(execution_id: str, report_types: list[ReportType], workspace_dir: str | None = None) -> dict[str, PipelineReport]`
 
-- **Description**: Handle deployment orchestration with rollback capabilities.
+- **Description**: Generate one `PipelineReport` per requested report type for an execution.
 - **Parameters**:
-  - `deployment_config`: Deployment configuration including artifacts and targets.
-  - `environment`: Target environment for deployment.
-  - `**kwargs`: Deployment-specific options (strategy, timeout, etc.).
-- **Return Value**: Deployment object with status tracking and management capabilities.
-- **Errors**: Raises `DeploymentError` for deployment failures.
+  - `execution_id`: Execution ID to report on.
+  - `report_types`: `ReportType` members (`EXECUTION`, `PERFORMANCE`, `QUALITY`, `COMPLIANCE`, `SUMMARY`) from `codomyrmex.ci_cd_automation.pipeline.pipeline_monitor`.
+  - `workspace_dir`: Workspace directory for reports (default: current directory).
+- **Return Value**: Mapping of `ReportType.value` to the generated `PipelineReport`.
+- **Note**: `PipelineMonitor.generate_report()` currently fills reports with sample values rather than stored execution data.
 
-### Function: `monitor_pipeline_health(pipeline_id: str, **kwargs) -> Dict`
+### Function: `handle_rollback(deployment_id: str, strategy: RollbackStrategy = RollbackStrategy.IMMEDIATE, reason: str = "Deployment failure", workspace_dir: str | None = None) -> RollbackExecution`
 
-- **Description**: Real-time monitoring of pipeline execution health and metrics.
+- **Description**: Create a rollback plan for a deployment and execute it synchronously with a `RollbackManager`.
 - **Parameters**:
-  - `pipeline_id`: ID of pipeline to monitor.
-  - `**kwargs`: Monitoring configuration options.
-- **Return Value**:
+  - `deployment_id`: ID of the deployment to roll back.
+  - `strategy`: `RollbackStrategy` member (`IMMEDIATE`, `ROLLING`, `BLUE_GREEN`, `CANARY`, `MANUAL`).
+  - `reason`: Reason recorded in the rollback plan.
+  - `workspace_dir`: Workspace directory for `rollback_plans/` and `rollback_history/` (default: current directory).
+- **Return Value**: The `RollbackExecution` record. If execution raises, the error is logged and a record with `status="failed"` and the message in `errors` is returned instead of raising.
+
+### Function: `optimize_pipeline_performance(pipeline_name: str, target_improvement: float = 0.2, workspace_dir: str | None = None) -> dict[str, Any]`
+
+- **Description**: Build a performance optimization plan from metrics recorded with `PipelineOptimizer.record_metric()`, and save it as JSON under the workspace.
+- **Parameters**:
+  - `pipeline_name`: Name of the pipeline to optimize.
+  - `target_improvement`: Target duration reduction as a fraction (`0.2` = 20%).
+  - `workspace_dir`: Workspace directory (default: current directory).
+- **Return Value**: When duration metrics exist:
 
     ```python
     {
-        "pipeline_id": <str>,
-        "status": "running|completed|failed",
-        "health_score": <float>,
-        "current_stage": <str>,
-        "progress_percentage": <float>,
-        "metrics": {<performance_metrics>},
-        "alerts": [<list_of_alerts>]
+        "pipeline_name": <str>,
+        "current_performance": {"average_duration": <float>, "target_duration": <float>, "target_improvement": <str>},
+        "analysis_summary": {"bottlenecks_identified": <int>, "suggestions_available": <int>, "relevant_suggestions": <int>},
+        "optimization_suggestions": [<OptimizationSuggestion>],
+        "implementation_timeline": [{"suggestion": <str>, "effort": <str>, "duration_weeks": <int>, "start_week": <int>, "end_week": <int>, "priority": <int>}],
+        "expected_outcome": {"estimated_duration_improvement": <float>, "new_estimated_duration": <float>}
     }
     ```
 
-- **Errors**: Raises `MonitoringError` for monitoring system failures.
-
-### Function: `generate_pipeline_reports(pipeline_id: str, report_types: List[str] = None, **kwargs) -> Dict`
-
-- **Description**: Generate comprehensive pipeline execution reports and analytics.
-- **Parameters**:
-  - `pipeline_id`: ID of pipeline to report on.
-  - `report_types`: Types of reports to generate (performance, quality, deployment).
-  - `**kwargs`: Report generation options.
-- **Return Value**:
-
-    ```python
-    {
-        "pipeline_id": <str>,
-        "reports": {
-            "performance": {<performance_data>},
-            "quality": {<quality_metrics>},
-            "deployment": {<deployment_data>}
-        },
-        "generated_at": <timestamp>,
-        "format": "json|html|pdf"
-    }
-    ```
-
-- **Errors**: Raises `ReportGenerationError` for report creation failures.
-
-### Function: `handle_rollback(deployment_id: str, strategy: str = "immediate", **kwargs) -> Dict`
-
-- **Description**: Execute automated rollback for failed deployments.
-- **Parameters**:
-  - `deployment_id`: ID of deployment to rollback.
-  - `strategy`: Rollback strategy (immediate, gradual, blue-green).
-  - `**kwargs`: Rollback-specific configuration.
-- **Return Value**:
-
-    ```python
-    {
-        "rollback_id": <str>,
-        "status": "initiated|completed|failed",
-        "strategy": <str>,
-        "execution_time": <float>,
-        "rollback_steps": [<list_of_steps>],
-        "verification_results": {<rollback_verification>}
-    }
-    ```
-
-- **Errors**: Raises `RollbackError` for rollback execution failures.
-
-### Function: `optimize_pipeline_performance(pipeline: Pipeline, metrics: Dict, **kwargs) -> Dict`
-
-- **Description**: Analyze and optimize pipeline performance based on execution metrics.
-- **Parameters**:
-  - `pipeline`: Pipeline to optimize.
-  - `metrics`: Performance metrics from previous executions.
-  - `**kwargs`: Optimization configuration options.
-- **Return Value**:
-
-    ```python
-    {
-        "optimized_pipeline": <Pipeline>,
-        "performance_improvements": {<improvement_metrics>},
-        "recommendations": [<list_of_recommendations>],
-        "estimated_gain": <float>
-    }
-    ```
-
-- **Errors**: Raises `OptimizationError` for optimization analysis failures.
+    Without recorded metrics it returns `{"pipeline_name": ..., "message": "Insufficient data for optimization analysis", "suggestions": []}`.
 
 ## Data Structures
 
+All of these are dataclasses or enums exported from `codomyrmex.ci_cd_automation` (`ReportType` lives in `codomyrmex.ci_cd_automation.pipeline.pipeline_monitor`).
+
 ### Pipeline
 
-Represents a CI/CD pipeline configuration:
-
-```python
-{
-    "id": <str>,
-    "name": <str>,
-    "stages": [<list_of_PipelineStage>],
-    "config": {<pipeline_configuration>},
-    "created_at": <timestamp>,
-    "status": "draft|active|archived"
-}
-```
+`Pipeline(name, description="", stages=[], variables={}, triggers={}, timeout=7200, ...)` with execution fields `status` (`PipelineStatus`), `created_at`, `started_at`, `finished_at` and `duration`. `to_dict()` returns the JSON-ready form.
 
 ### PipelineStage
 
-Represents an individual pipeline stage:
+`PipelineStage(name, jobs=[], dependencies=[], environment={}, allow_failure=False, parallel=True, ...)` plus `status`, `start_time` and `end_time`.
 
-```python
-{
-    "name": <str>,
-    "jobs": [<list_of_job_definitions>],
-    "dependencies": [<list_of_upstream_stages>],
-    "environment": <str>,
-    "timeout": <int>,
-    "retry_policy": {<retry_configuration>}
-}
-```
+### PipelineJob
+
+`PipelineJob(name, commands, environment={}, artifacts=[], dependencies=[], timeout=3600, retry_count=0, allow_failure=False, ...)` plus `status`, `start_time`, `end_time`, `output` and `error`.
 
 ### Deployment
 
-Represents a deployment configuration and status:
-
-```python
-{
-    "id": <str>,
-    "pipeline_id": <str>,
-    "environment": <str>,
-    "artifacts": [<list_of_artifacts>],
-    "status": "pending|in_progress|completed|failed|rolled_back",
-    "start_time": <timestamp>,
-    "end_time": <timestamp>,
-    "rollback_available": <bool>
-}
-```
+`Deployment(name, version, environment, artifacts, strategy="rolling", timeout=1800, rollback_on_failure=True, ...)` plus `status` (`DeploymentStatus`), timestamps, `duration`, `logs`, `metrics` and `previous_version`.
 
 ### Environment
 
-Represents a deployment environment:
-
-```python
-{
-    "name": <str>,
-    "type": "development|staging|production",
-    "config": {<environment_specific_config>},
-    "endpoints": [<list_of_service_endpoints>],
-    "credentials": {<secure_credential_references>}
-}
-```
+`Environment(name, type, host, port=22, user="deploy", key_path=None, docker_registry=None, kubernetes_context=None, variables={}, pre_deploy_hooks=[], post_deploy_hooks=[], health_checks=[])`, where `type` is an `EnvironmentType` (`DEVELOPMENT`, `STAGING`, `PRODUCTION`, `TESTING`).
 
 ### PipelineReport
 
-Represents comprehensive pipeline execution analytics:
-
-```python
-{
-    "pipeline_id": <str>,
-    "execution_id": <str>,
-    "duration": <float>,
-    "success_rate": <float>,
-    "stage_metrics": {<per_stage_metrics>},
-    "quality_metrics": {<code_quality_data>},
-    "performance_metrics": {<execution_performance>},
-    "generated_at": <timestamp>
-}
-```
+`PipelineReport(pipeline_name, execution_id, status, start_time, end_time, duration, stages_executed, jobs_executed, jobs_passed, jobs_failed, jobs_skipped, artifacts_created, metrics, errors, warnings)`.
 
 ### RollbackStrategy
 
-Defines rollback execution strategy:
+Enum of rollback strategies: `IMMEDIATE`, `ROLLING`, `BLUE_GREEN`, `CANARY`, `MANUAL`.
 
-```python
-{
-    "type": "immediate|gradual|blue_green",
-    "backup_retention": <int>,
-    "verification_steps": [<list_of_verification_steps>],
-    "timeout": <int>,
-    "notification_channels": [<list_of_channels>]
-}
-```
+### RollbackExecution
+
+`RollbackExecution(execution_id, deployment_id, strategy, status, start_time, end_time=None, current_step=0, completed_steps=0, failed_steps=0, errors=[], warnings=[])`, defined in `codomyrmex.ci_cd_automation.rollback_manager`.
 
 ## Error Handling
 
-All functions follow consistent error handling patterns:
+The module's exceptions are exported from `codomyrmex.ci_cd_automation` and inherit from `codomyrmex.exceptions.CICDError`:
 
-- **Configuration Errors**: `ValueError` for invalid parameters or configurations
-- **Execution Errors**: `PipelineExecutionError`, `DeploymentError`, `RollbackError`
-- **System Errors**: `RuntimeError` for underlying system failures
-- **Monitoring Errors**: `MonitoringError` for health monitoring failures
-- **Reporting Errors**: `ReportGenerationError` for report creation issues
-- **Optimization Errors**: `OptimizationError` for performance analysis failures
+- `PipelineError(message, pipeline_name=None, stage=None)`: pipeline creation, configuration or execution failures
+- `StageError`: a pipeline stage failed
+- `BuildError(message, build_id=None, build_target=None, exit_code=None)`: build failures
+- `DeploymentError`: deployment failures
+- `ArtifactError`: artifact handling failures
+- `RollbackError`: rollback failures
+
+The convenience functions above also raise `ValueError` for unknown pipelines or environments and let file and parse errors propagate.
 
 ## Integration Patterns
 

@@ -212,21 +212,17 @@ Manages workflow definitions and execution.
 
 #### Methods
 
-##### `create_workflow(name: str, steps: List[WorkflowStep], save: bool = True) -> bool`
+##### `create_workflow(name: str, steps: List[WorkflowStep]) -> bool`
 
-- **Description**: Creates a new workflow with the specified steps.
+- **Description**: Registers a workflow in memory with the specified steps. An existing workflow with the same name is overwritten (a warning is logged).
 - **Parameters**:
-  - `name` (string): Unique workflow name. Must be a valid identifier.
-  - `steps` (List[WorkflowStep]): List of workflow steps to execute in order. Dependencies between steps are resolved automatically.
-  - `save` (bool, optional): Whether to persist the workflow to disk. Defaults to True.
-- **Returns**: bool - True if workflow was created successfully, False otherwise.
-- **Raises**:
-  - `ValueError`: If workflow name is empty or invalid, or if workflow has no steps.
-  - `OSError`: If workflow cannot be saved to disk (when save=True).
+  - `name` (string): Workflow name.
+  - `steps` (List[WorkflowStep]): Workflow steps. Dependencies between steps are resolved at execution time.
+- **Returns**: bool - Always True.
 - **Example**:
   ```python
   from codomyrmex.logistics.orchestration.project import WorkflowManager, WorkflowStep
-  
+
   manager = WorkflowManager()
   steps = [
       WorkflowStep(
@@ -260,21 +256,21 @@ Manages workflow definitions and execution.
   ```python
   import asyncio
   from codomyrmex.logistics.orchestration.project import get_workflow_manager
-  
+
   async def main():
       manager = get_workflow_manager()
       execution = await manager.execute_workflow(
           "ai-analysis",
           parameters={"project_path": "/path/to/project", "output_format": "json"}
       )
-      
+
       if execution.status == WorkflowStatus.COMPLETED:
           print("Workflow completed successfully")
           for step_name, result in execution.results.items():
               print(f"Step {step_name}: {result}")
       else:
           print(f"Workflow failed: {execution.errors}")
-  
+
   asyncio.run(main())
   ```
 
@@ -297,19 +293,12 @@ Manages workflow definitions and execution.
       print(f"  Estimated Duration: {info['estimated_duration']}s")
   ```
 
-##### `get_performance_summary(workflow_name: Optional[str] = None) -> Dict[str, Any]`
+##### `get_performance_summary() -> Dict[str, Any]`
 
-- **Description**: Get comprehensive performance summary for workflows.
-- **Parameters**:
-  - `workflow_name` (Optional[str]): Specific workflow name to analyze. If None, returns summary for all workflows.
-- **Returns**: Performance summary containing:
-  - `performance_stats` (Dict): Detailed performance metrics from monitor
-  - `total_workflows_executed` (int): Total number of workflow executions
-  - `successful_executions` (int): Number of successful executions
-  - `failed_executions` (int): Number of failed executions
-  - `average_execution_time` (float): Average execution time in seconds
-  - `module_usage_stats` (Dict): Usage statistics by module
-- **Note**: Requires performance monitoring to be enabled. Returns error message if monitoring is not available.
+- **Description**: Get aggregate execution metrics for all workflows run by this manager.
+- **Returns**: Dictionary with:
+  - `total_executions` (int): Number of workflow executions
+  - `average_duration` (float): Average execution duration in seconds
 
 ---
 
@@ -421,11 +410,9 @@ Coordinates individual task execution with dependency management.
   - `task_id` (string): Task ID
 - **Returns**: TaskResult object or None if task not found or not completed
 
-##### `list_tasks(status: Optional[TaskStatus] = None) -> List[Task]`
+##### `list_tasks() -> List[Task]`
 
-- **Description**: List tasks, optionally filtered by status.
-- **Parameters**:
-  - `status` (Optional[TaskStatus]): Filter by task status
+- **Description**: List all tasks. Filter on each task's `status` to select by state.
 - **Returns**: List of Task objects
 
 ##### `get_execution_stats() -> Dict[str, Any]`
@@ -454,25 +441,23 @@ High-level project lifecycle management.
 
 #### Methods
 
-##### `create_project(name: str, template_name: str = None, path: str = None, **kwargs) -> Project`
+##### `create_project(name: str, type: ProjectType, description: str = "") -> Optional[Project]`
 
-- **Description**: Creates a new project from a template.
+- **Description**: Creates a project directory under the manager's projects root with `src/`, `tests/`, `config/` and `docs/` folders, and generates its documentation.
 - **Parameters**:
-  - `name` (string): Project name
-  - `template_name` (string, optional): Template to use
-  - `path` (string, optional): Project directory path
+  - `name` (string): Project name, also the directory name
+  - `type` (ProjectType): One of `AI_ANALYSIS`, `WEB_APPLICATION`, `DATA_PIPELINE`, `ML_MODEL`, `DOCUMENTATION`, `RESEARCH`, `CUSTOM`
   - `description` (string, optional): Project description
-  - `author` (string, optional): Project author
-  - `tags` (list, optional): Project tags
-- **Returns**: Project object
+- **Returns**: Project object, or None if the directory already exists or creation fails (a partly created directory is removed)
 - **Example**:
   ```python
+  from codomyrmex.logistics.orchestration.project import ProjectManager, ProjectType
+
   manager = ProjectManager()
   project = manager.create_project(
       "web-app-analysis",
-      template_name="web_application",
+      ProjectType.WEB_APPLICATION,
       description="Analysis of web application code",
-      author="Development Team"
   )
   ```
 
@@ -521,17 +506,15 @@ System resource allocation and management.
 
 #### Methods
 
-##### `allocate_resources(user_id: str, requirements: Dict[str, Dict[str, Any]], timeout: Optional[int] = None) -> Optional[Dict[str, str]]`
+##### `allocate_resources(requester_id: str, requirements: Dict[str, Any], timeout: Optional[float] = None) -> Optional[List[ResourceAllocation]]`
 
-- **Description**: Allocates resources to a user based on requirements.
+- **Description**: Allocates one resource per requirement to a requester.
 - **Parameters**:
-  - `user_id` (string): User/task identifier
-  - `requirements` (dict): Resource requirements mapping resource types to required amounts. Example: `{"cpu": {"cores": 2}, "memory": {"gb": 4}}`
-  - `timeout` (Optional[int]): Allocation timeout in seconds. If specified, creates expiration time for allocations.
-- **Returns**: Dictionary mapping requirement keys to allocated resource IDs, or None if allocation failed
-- **Raises**:
-  - No exceptions raised, but returns None on failure
-- **Note**: Automatically selects best-fit resources based on utilization. Rolls back all allocations if any resource cannot be allocated.
+  - `requester_id` (string): User or task identifier
+  - `requirements` (dict): Maps resource keys to amounts. `"cpu"` and `"memory"` map to the `sys-compute` and `sys-memory` resources; other keys are used as resource IDs. The amount is read from `cores`, `gb` or `amount` (default 1.0). Example: `{"cpu": {"cores": 2}, "memory": {"gb": 4}}`
+  - `timeout` (Optional[float]): Allocation timeout in seconds, passed to each allocation.
+- **Returns**: List of `ResourceAllocation` objects, or None if any allocation failed
+- **Note**: Rolls back all allocations made by the call if any resource cannot be allocated. No exceptions are raised for failed allocations.
 - **Example**:
   ```python
   manager = ResourceManager()
@@ -546,13 +529,12 @@ System resource allocation and management.
   )
   ```
 
-##### `deallocate_resources(user_id: str, allocation_ids: List[str] = None) -> bool`
+##### `deallocate_resources(requester_id: str) -> bool`
 
-- **Description**: Deallocates resources for a user.
+- **Description**: Releases every allocation held by a requester.
 - **Parameters**:
-  - `user_id` (string): User identifier
-  - `allocation_ids` (list, optional): Specific allocations to release
-- **Returns**: True if successful
+  - `requester_id` (string): User or task identifier
+- **Returns**: True if at least one allocation was released
 
 ##### `get_resource_usage(resource_id: Optional[str] = None) -> Dict[str, Any]`
 
@@ -583,12 +565,11 @@ System resource allocation and management.
   }
   ```
 
-##### `list_resources(resource_type: Optional[ResourceType] = None, status: Optional[ResourceStatus] = None) -> List[Resource]`
+##### `list_resources(type_filter: Optional[ResourceType] = None) -> List[Resource]`
 
-- **Description**: List resources, optionally filtered by type and status.
+- **Description**: List resources, optionally filtered by type.
 - **Parameters**:
-  - `resource_type` (Optional[ResourceType]): Filter by resource type
-  - `status` (Optional[ResourceStatus]): Filter by resource status
+  - `type_filter` (Optional[ResourceType]): Only return resources of this type
 - **Returns**: List of Resource objects
 
 ##### `add_resource(resource: Resource) -> bool`
@@ -656,17 +637,17 @@ class Task:
     module: str = ""  # Codomyrmex module name
     action: str = ""  # Module action/function name
     parameters: Dict[str, Any] = field(default_factory=dict)  # Action parameters
-    
+
     # Dependencies and scheduling
     dependencies: List[str] = field(default_factory=list)  # Task IDs this depends on
     priority: TaskPriority = TaskPriority.NORMAL
     resources: List[TaskResource] = field(default_factory=list)  # Required resources
-    
+
     # Execution control
     timeout: Optional[int] = None  # Timeout in seconds
     max_retries: int = 3  # Maximum retry attempts
     retry_delay: float = 1.0  # Seconds between retries
-    
+
     # Status tracking
     status: TaskStatus = TaskStatus.PENDING
     retry_count: int = 0
@@ -674,7 +655,7 @@ class Task:
     started_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
     result: Optional[TaskResult] = None
-    
+
     # Metadata
     tags: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -851,7 +832,7 @@ Raised when project operations fail.
 {
   "max_workers": 4,
   "workflows_dir": "./workflows",
-  "projects_dir": "./projects", 
+  "projects_dir": "./projects",
   "templates_dir": "./templates",
   "resource_config": "./resources.json",
   "performance_monitoring": true,
@@ -930,7 +911,7 @@ analysis_task = orchestrator.create_task(
 )
 
 visualization_task = orchestrator.create_task(
-    "create_chart", 
+    "create_chart",
     "data_visualization",
     "create_bar_chart",
     parameters={
@@ -949,7 +930,7 @@ if completed:
     analysis_result = orchestrator.get_task_result(analysis_task.id)
     if analysis_result and analysis_result.success:
         print(f"Analysis completed: {analysis_result.data}")
-    
+
     stats = orchestrator.get_execution_stats()
     print(f"Completed {stats['completed']} tasks")
 else:

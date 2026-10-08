@@ -19,26 +19,27 @@ from codomyrmex.serialization import Serializer
 #### Constructor
 
 ```python
-Serializer(format: str = "json")
+Serializer(default_format: SerializationFormat = SerializationFormat.JSON)
 ```
 
 | Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `format` | `str` | `"json"` | Serialization format: `"json"`, `"yaml"`, `"toml"`, `"pickle"`, `"msgpack"` |
+| --- | --- | --- | --- |
+| `default_format` | `SerializationFormat` | `SerializationFormat.JSON` | Format used when a call does not pass one: `JSON`, `PICKLE` or `YAML` (`from codomyrmex.serialization import SerializationFormat`) |
 
 #### Methods
 
 ##### serialize
 
 ```python
-def serialize(data: Any) -> bytes
+def serialize(obj: Any, format: SerializationFormat | None = None) -> bytes
 ```
 
-Serialize data to bytes.
+Serialize an object to bytes.
 
 | Parameter | Type | Description |
-|-----------|------|-------------|
-| `data` | `Any` | Data to serialize |
+| --- | --- | --- |
+| `obj` | `Any` | Object to serialize |
+| `format` | `SerializationFormat \| None` | Format for this call (default: `default_format`) |
 
 **Returns**: `bytes` - Serialized data
 
@@ -47,14 +48,16 @@ Serialize data to bytes.
 ##### deserialize
 
 ```python
-def deserialize(data: bytes) -> Any
+def deserialize(data: bytes, format: SerializationFormat | None = None, target_type: type[T] | None = None) -> Any
 ```
 
-Deserialize bytes to data.
+Deserialize bytes to an object.
 
 | Parameter | Type | Description |
-|-----------|------|-------------|
+| --- | --- | --- |
 | `data` | `bytes` | Serialized data |
+| `format` | `SerializationFormat \| None` | Format of `data` (default: `default_format`) |
+| `target_type` | `type \| None` | Optional type to convert the result to |
 
 **Returns**: `Any` - Deserialized data
 
@@ -133,7 +136,7 @@ Raised when serialization operations fail. Inherits from `CodomyrmexError`.
 ```python
 from codomyrmex.serialization import Serializer
 
-serializer = Serializer("json")
+serializer = Serializer()  # JSON by default
 
 data = {"name": "example", "values": [1, 2, 3]}
 serialized = serializer.serialize(data)
@@ -145,17 +148,17 @@ assert restored == data
 ### YAML Serialization
 
 ```python
-from codomyrmex.serialization import Serializer
+from codomyrmex.serialization import SerializationFormat, Serializer
 
-serializer = Serializer("yaml")
+serializer = Serializer(SerializationFormat.YAML)
 
 config = {
     "database": {"host": "localhost", "port": 5432},
     "debug": True
 }
 
-serializer.serialize_to_file(config, "config.yaml")
-loaded = serializer.deserialize_from_file("config.yaml")
+serializer.to_file(config, "config.yaml")
+loaded = serializer.from_file("config.yaml")
 ```
 
 ### Auto-Detection

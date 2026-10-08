@@ -37,9 +37,12 @@ It performs, in order:
 4. code-reference validation: every `import codomyrmex…` / `from codomyrmex…
    import …` in a fenced Python block is imported for real
    (`scripts/documentation/validate_code_references.py`);
-5. content-quality and agent-structure validation;
-6. the documentation quality gate and triple-check;
-7. a strict MkDocs build.
+5. API signature validation: call signatures shown in each module's
+   `API_SPECIFICATION.md` (and its `docs/modules/` mirror) are compared with
+   the real functions (`scripts/documentation/validate_api_signatures.py`);
+6. content-quality and agent-structure validation;
+7. the documentation quality gate and triple-check;
+8. a strict MkDocs build.
 
 The equivalent `just docs-check` recipe is kept in parity. Validation may write
 receipts beneath `output/` and the MkDocs build beneath `site/`; it does not
@@ -229,6 +232,40 @@ A block that deliberately shows code which does not exist yet — for example a
 tutorial step that creates a new module — is skipped when the line directly
 above its opening fence is `<!-- docs-check: skip-imports -->`. Use the marker
 only for that; documentation of shipped APIs must import cleanly.
+
+### API specification signatures
+
+`make docs-check` also checks the signatures in every `API_SPECIFICATION.md`
+under `src/codomyrmex/` and `docs/modules/`. A signature is a heading code span
+such as ``### Function: `run_pipeline(pipeline_name: str, config_path: str | None = None) -> Pipeline` ``,
+a declaration-style `def name(...): ...` (or a bodiless `def` line) in a Python
+block, or a block that only lists `Name(param: type, ...)` signatures. Each is
+resolved inside the specification's own package (`codomyrmex.<module>`); a
+bare method name under a heading that names a class (``### Class: `Pipeline` ``,
+`### Pipeline`) or a submodule is resolved on that class or module. Parameter
+names, not annotations or defaults, are compared with `inspect.signature`, and
+two kinds of drift fail the gate:
+
+- a documented parameter the callable does not accept (unless it takes
+  `**kwargs`), including a documented `*args`/`**kwargs` it does not have;
+- a required parameter of the callable that the documentation leaves out.
+
+Anything the checker cannot parse or resolve with confidence is skipped and
+listed under `unresolved` in `output/documentation/api_signatures.json`:
+`name()` used as a plain reference, a name defined in several submodules, a
+method of a class that does not exist, example `def`s with a real body, and
+modules whose optional dependency is not installed. Check one file while
+editing:
+
+```bash
+uv run python scripts/documentation/validate_api_signatures.py --repo-root . src/codomyrmex/<module>/API_SPECIFICATION.md
+```
+
+Put `<!-- docs-check: skip-signatures -->` on the line directly above a heading
+(which also skips everything nested under it) or a fence to exclude a planned
+or intentionally abbreviated signature. Fix shipped APIs instead of skipping
+them, and update the `docs/modules/<module>/` mirror together with the
+`src/` copy.
 
 ## Mermaid diagrams
 

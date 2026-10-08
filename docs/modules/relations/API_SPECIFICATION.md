@@ -51,13 +51,13 @@ This document specifies the Application Programming Interface (API) for the Rela
     - `search(query: str) -> List[Contact]`: Search contacts by name or email (case-insensitive substring match). Returns a list of matching contacts.
     - `get_contact(contact_id: UUID) -> Optional[Contact]`: Retrieve a contact by UUID. Returns `None` if not found.
 
-### Function: `render_social_graph(crm: CRM) -> MermaidDiagram`
+### Function: `render_social_graph(cm: ContactManager) -> dict[str, Any]`
 
-- **Description**: Generates a Mermaid diagram showing all contacts in the CRM as nodes in a social graph.
+- **Description**: Builds a graph definition with one node per CRM contact. It does not render a diagram, so `relations` stays independent of `data_visualization`.
 - **Module**: `codomyrmex.relations.visualization`
 - **Parameters/Arguments**:
-    - `crm` (CRM): The CRM instance to visualize
-- **Returns/Response**: `MermaidDiagram` - A top-down Mermaid graph with one node per contact, titled "Social Graph".
+    - `cm` (ContactManager): The contact manager to read contacts from
+- **Returns/Response**: `dict` with `title` (`"Social Graph"`), `node_count` and `nodes`; each node has `id`, `label`, `email`, `tags` and `interactions` (count).
 
 ## Data Models
 

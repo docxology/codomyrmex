@@ -102,28 +102,19 @@ The Model Operations module provides tools for managing machine learning model l
 
 ### Class: `Evaluator`
 
-- **Description**: Evaluates model performance.
+- **Description**: Scores model outputs with caller-supplied metric functions.
 - **Constructor**:
-  - `metrics` (list[str], optional): Metrics to compute. Default: ["accuracy"].
+  - `metrics` (dict[str, Callable], optional): Metric name to function `fn(predictions, references) -> float`. Default: no metrics.
 - **Methods**:
 
-#### `evaluate(model: str, dataset: Dataset) -> EvaluationResult`
+#### `evaluate(predictions: list[str], references: list[str]) -> dict[str, float]`
 
-- **Description**: Evaluate a model on a dataset.
+- **Description**: Apply every metric to the predictions and references.
 - **Parameters/Arguments**:
-  - `model` (str): Model identifier.
-  - `dataset` (Dataset): Evaluation dataset.
+  - `predictions` (list[str]): Model outputs.
+  - `references` (list[str]): Ground-truth references.
 - **Returns**:
-  - `EvaluationResult`: Evaluation results.
-
-#### `compare(models: list[str], dataset: Dataset) -> ComparisonResult`
-
-- **Description**: Compare multiple models on a dataset.
-- **Parameters/Arguments**:
-  - `models` (list[str]): Model identifiers.
-  - `dataset` (Dataset): Evaluation dataset.
-- **Returns**:
-  - `ComparisonResult`: Comparison results.
+  - `dict[str, float]`: Score per metric name. A metric that raises is recorded as `0.0`.
 
 ## Data Models
 

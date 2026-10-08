@@ -6,292 +6,148 @@ This API specification documents the programmatic interfaces for the Containeriz
 
 ## Functions
 
-### Function: `build_containers(image_name: str, dockerfile_path: str = "Dockerfile", context_path: str = ".", build_args: Optional[Dict] = None, **kwargs) -> Dict`
+All functions below are importable from `codomyrmex.containerization`. Each one is exported only when its backing dependency imports (`HAS_DOCKER_MANAGER`, `HAS_REGISTRY`, `HAS_K8S`, `HAS_SCANNER` and `HAS_OPTIMIZER` report which ones are available); `orchestrate_kubernetes` needs the `kubernetes` Python client.
 
-- **Description**: Build Docker containers from source code with optimization and security scanning.
+### Function: `build_containers(config: ContainerConfig, push: bool = False, registry_auth: dict[str, str] | None = None) -> dict[str, Any]`
+
+- **Description**: Build a Docker image from a `ContainerConfig` with a new `DockerManager` (`DockerManager.build_image()`), optionally pushing it afterwards.
 - **Parameters**:
-  - `image_name`: Name/tag for the resulting container image.
-  - `dockerfile_path`: Path to Dockerfile (default: "Dockerfile").
-  - `context_path`: Build context directory (default: ".").
-  - `build_args`: Optional build arguments for Dockerfile.
-  - `**kwargs`: Additional build options (cache, target, labels, etc.).
+  - `config`: Container configuration; `image_name`, `tag`, `dockerfile_path`, `build_context` and `build_args` drive the build.
+  - `push`: Push the image after building. The push only happens when `registry_auth` is also given.
+  - `registry_auth`: Registry credentials passed to `DockerManager.push_image()`.
 - **Return Value**:
 
     ```python
     {
-        "image_name": <str>,
+        "success": True,
         "image_id": <str>,
-        "build_time": <float>,
-        "size_mb": <float>,
-        "layers": <int>,
-        "security_scan_passed": <bool>,
-        "vulnerabilities_found": <int>,
-        "optimization_applied": <bool>
+        "image_tags": [<str>],
+        "build_logs": [<str>],
+        "build_time": <ISO-8601 timestamp>,
+        "push_result": {<push details>}  # only when pushed
     }
     ```
 
-- **Errors**: Raises `ContainerBuildError` for build failures or security issues.
+- **Errors**: Does not raise for build failures: returns `{"success": False, "error": <message>}`, including when the Docker daemon is unreachable.
 
-### Function: `manage_containers(operation: str, container_name: str, config: Optional[Dict] = None, **kwargs) -> Dict`
+### Function: `manage_containers() -> DockerManager`
 
-- **Description**: Manage container lifecycle including creation, starting, stopping, and removal.
+- **Description**: Create a `DockerManager` connected to the default Docker daemon. Use its methods for lifecycle operations: `run_container()`, `list_containers()`, `stop_container()`, `remove_container()`, `get_container_logs()`, `get_container_stats()`, `create_network()`, `list_images()`, `remove_image()`, `push_image()` and `get_docker_info()`. Call `close()` when done.
+- **Parameters**: None. Construct `DockerManager(docker_host=...)` directly to target another daemon.
+- **Return Value**: A `DockerManager`; its `client` is `None` when the daemon is not reachable.
+
+### Function: `orchestrate_kubernetes(deployment_config: dict[str, Any], kubeconfig_path: str | None = None) -> dict[str, Any]`
+
+- **Description**: Create a Kubernetes deployment (and optionally a service) from a configuration mapping with a `KubernetesOrchestrator`.
 - **Parameters**:
-  - `operation`: Operation type (create, start, stop, remove, restart, logs).
-  - `container_name`: Name of the container to manage.
-  - `config`: Container configuration for create operations.
-  - `**kwargs`: Operation-specific parameters.
+  - `deployment_config`: Mapping with `name`, `namespace` (default `"default"`), `image`, `replicas`, `port`, `container_port`, `environment_variables`, `labels` and `resources`. Set `create_service` to also create a service (`service_name`, `service_type`, default `"ClusterIP"`).
+  - `kubeconfig_path`: Path to a kubeconfig file (default: `~/.kube/config` when it exists).
 - **Return Value**:
 
     ```python
     {
-        "operation": <str>,
-        "container_name": <str>,
-        "success": <bool>,
-        "container_id": <str>,
-        "status": <str>,
-        "execution_time": <float>,
-        "logs": <str>,  # For logs operation
-        "error_message": <str>
+        "deployment_name": <str>,
+        "status": "created",
+        "namespace": <str>,
+        "available": <bool>,
+        "message": <str>
     }
     ```
 
-- **Errors**: Raises `ContainerManagementError` for operation failures.
+### Function: `scan_container_security(image: str, scanner: ContainerSecurityScanner | None = None, **kwargs) -> SecurityScanResult`
 
-### Function: `orchestrate_kubernetes(deployment_name: str, manifest_path: str, namespace: str = "default", **kwargs) -> KubernetesDeployment`
-
-- **Description**: Orchestrate Kubernetes deployments, services, and configmaps.
+- **Description**: Scan a container image for vulnerabilities with the Trivy CLI.
 - **Parameters**:
-  - `deployment_name`: Name of the Kubernetes deployment.
-  - `manifest_path`: Path to Kubernetes manifest files.
-  - `namespace`: Kubernetes namespace (default: "default").
-  - `**kwargs`: Deployment options (replicas, resources, labels, etc.).
-- **Return Value**: KubernetesDeployment object with status tracking and management.
-- **Errors**: Raises `KubernetesError` for orchestration failures.
+  - `image`: Image name and tag to scan.
+  - `scanner`: Pre-configured `ContainerSecurityScanner` (default: a new one).
+  - `**kwargs`: Passed to `ContainerSecurityScanner.scan_image()`; `severity_filter` (list of severities such as `["critical", "high"]`) limits what Trivy reports.
+- **Return Value**: A `SecurityScanResult`. `passed` is False when any critical or high vulnerability is found, or with `error` set when Trivy fails.
+- **Errors**: Raises `NotImplementedError` when the Trivy CLI is not installed.
 
-### Function: `scan_container_security(image_name: str, scan_type: str = "full", **kwargs) -> SecurityScanResult`
+### Function: `manage_container_registry(operation: str, registry_url: str, credentials: dict[str, str] | None = None, **kwargs: Any) -> Any`
 
-- **Description**: Scan container images for security vulnerabilities and compliance issues.
+- **Description**: Run one registry operation through a `ContainerRegistry`.
 - **Parameters**:
-  - `image_name`: Name of container image to scan.
-  - `scan_type`: Scan scope (full, quick, compliance).
-  - `**kwargs`: Scanning options (severity_threshold, ignore_rules, etc.).
-- **Return Value**: SecurityScanResult with vulnerabilities, compliance status, and recommendations.
-- **Errors**: Raises `SecurityScanError` for scanning failures.
+  - `operation`: One of `"push"`, `"pull"`, `"build_and_push"`, `"list"`, `"list_registry"`, `"delete"`, `"info"`, `"tag"` or `"manifest"`.
+  - `registry_url`: Registry URL, for example `docker.io` or `ghcr.io`.
+  - `credentials`: Optional mapping with `username`, `password` and `token`.
+  - `**kwargs`: Operation arguments, forwarded to the matching `ContainerRegistry` method: `image_name`, `image_tag`, `local_image` (push); `dockerfile_path`, `build_args`, `no_cache` (build_and_push); `repository`, `limit` (list, list_registry); `local_only` (delete); `source_image`, `target_name`, `target_tag` (tag).
+- **Return Value**: The result of the underlying `ContainerRegistry` method (for example `push_image()`, `pull_image()` or `list_images()`).
+- **Errors**: Raises `CodomyrmexError` for an unknown operation.
 
-### Function: `manage_container_registry(operation: str, image_name: str, registry_url: Optional[str] = None, **kwargs) -> Dict`
+### Function: `optimize_containers(container_ids: list[str], optimizer: ContainerOptimizer | None = None) -> dict[str, dict[str, Any]]`
 
-- **Description**: Manage container registry operations including push, pull, and tagging.
+- **Description**: Produce resource recommendations for running containers by inspecting them with `docker inspect` (`ContainerOptimizer.optimize_resources()`).
 - **Parameters**:
-  - `operation`: Registry operation (push, pull, tag, list, delete).
-  - `image_name`: Container image name.
-  - `registry_url`: Registry URL (optional, uses default if not specified).
-  - `**kwargs`: Operation-specific parameters (credentials, tags, etc.).
-- **Return Value**:
-
-    ```python
-    {
-        "operation": <str>,
-        "image_name": <str>,
-        "registry_url": <str>,
-        "success": <bool>,
-        "image_digest": <str>,
-        "tags": [<list_of_tags>],
-        "size_mb": <float>,
-        "error_message": <str>
-    }
-    ```
-
-- **Errors**: Raises `RegistryError` for registry operation failures.
-
-### Function: `optimize_containers(image_name: str, optimization_type: str = "size", **kwargs) -> Dict`
-
-- **Description**: Optimize container images for performance, size, or security.
-- **Parameters**:
-  - `image_name`: Base image to optimize.
-  - `optimization_type`: Optimization focus (size, performance, security, multi).
-  - `**kwargs`: Optimization parameters (target_size, layers_to_remove, etc.).
-- **Return Value**:
-
-    ```python
-    {
-        "original_image": <str>,
-        "optimized_image": <str>,
-        "optimization_type": <str>,
-        "size_reduction_mb": <float>,
-        "performance_improvement": <float>,
-        "security_improvements": [<list_of_fixes>],
-        "layers_reduced": <int>,
-        "build_time": <float>
-    }
-    ```
-
-- **Errors**: Raises `OptimizationError` for optimization failures.
+  - `container_ids`: Container IDs or names to analyze.
+  - `optimizer`: Pre-configured `ContainerOptimizer` (default: a new one).
+- **Return Value**: Mapping of each container ID to its recommendations (`container_id`, `status`, `cpu_shares`, `memory_limit`, plus `cpu_note`/`memory_note` when no limit is set).
+- **Errors**: Raises `NotImplementedError` when the Docker CLI is not installed or `docker inspect` fails for a container.
 
 ## Data Structures
 
 ### ContainerConfig
 
-Configuration for container creation and management:
+Dataclass used by `build_containers()` and `DockerManager`:
 
-```python
-{
-    "image": <str>,
-    "name": <str>,
-    "command": [<list_of_command_args>],
-    "environment": {<env_variables>},
-    "ports": {<port_mappings>},
-    "volumes": {<volume_mappings>},
-    "networks": [<list_of_networks>],
-    "resources": {
-        "cpu_limit": <str>,
-        "memory_limit": <str>,
-        "cpu_reservation": <str>,
-        "memory_reservation": <str>
-    },
-    "restart_policy": <str>,
-    "labels": {<label_key_value_pairs>}
-}
-```
+`ContainerConfig(image_name, tag="latest", dockerfile_path=None, build_context=".", build_args={}, environment={}, ports={}, volumes={}, networks=[], restart_policy="no", labels={})`. `get_full_image_name()` returns `"<image_name>:<tag>"`.
 
 ### KubernetesDeployment
 
-Kubernetes deployment configuration and status:
+Dataclass in `codomyrmex.containerization.kubernetes.kubernetes_orchestrator`:
 
-```python
-{
-    "name": <str>,
-    "namespace": <str>,
-    "replicas": <int>,
-    "image": <str>,
-    "ports": [<list_of_ports>],
-    "environment": {<env_variables>},
-    "resources": {
-        "requests": {"cpu": <str>, "memory": <str>},
-        "limits": {"cpu": <str>, "memory": <str>}
-    },
-    "status": "pending|running|failed|succeeded",
-    "pods": [<list_of_pod_statuses>],
-    "services": [<list_of_service_names>],
-    "created_at": <timestamp>,
-    "last_updated": <timestamp>
-}
-```
+`KubernetesDeployment(name, image, namespace="default", replicas=1, port=80, container_port=80, environment_variables={}, volumes=[], volume_mounts=[], config_maps=[], secrets=[], labels={}, annotations={}, resources={}, created_at=<now>)`.
 
 ### ContainerRegistry
 
-Container registry connection and management:
-
-```python
-{
-    "url": <str>,
-    "type": "dockerhub|ecr|acr|gcr|harbor",
-    "credentials": {
-        "username": <str>,
-        "password": <str>,  # Encrypted
-        "token": <str>      # For token-based auth
-    },
-    "repositories": [<list_of_repositories>],
-    "security_scan_enabled": <bool>,
-    "retention_policy": {<retention_rules>}
-}
-```
+`ContainerRegistry(registry_url, credentials=None)`, where `credentials` is a `RegistryCredentials(username, password, registry_url, token=None)`. Methods include `push_image()`, `pull_image()`, `build_and_push()`, `list_images()`, `list_registry_images()`, `delete_image()`, `get_image_info()`, `tag_image()` and `inspect_manifest()`.
 
 ### SecurityScanResult
 
-Results of container security scanning:
-
-```python
-{
-    "image_name": <str>,
-    "scan_timestamp": <timestamp>,
-    "scan_duration": <float>,
-    "vulnerabilities": [
-        {
-            "cve_id": <str>,
-            "severity": "critical|high|medium|low",
-            "package": <str>,
-            "version": <str>,
-            "fixed_version": <str>,
-            "description": <str>
-        }
-    ],
-    "compliance_score": <float>,
-    "critical_count": <int>,
-    "high_count": <int>,
-    "medium_count": <int>,
-    "low_count": <int>,
-    "recommendations": [<list_of_fixes>],
-    "scan_tool": <str>
-}
-```
+`SecurityScanResult(image, scan_time, vulnerabilities=[], passed=True, error=None, metadata={})`. Each `Vulnerability` has `id`, `severity` (`VulnerabilitySeverity`), `title`, `description`, `package`, `version`, `fixed_version` and `cve_ids`. The `critical_count` and `high_count` properties and `summary()` (counts by severity) summarize the findings.
 
 ### ContainerMetrics
 
-Container performance and resource metrics:
-
-```python
-{
-    "container_name": <str>,
-    "timestamp": <timestamp>,
-    "cpu_usage_percent": <float>,
-    "memory_usage_mb": <float>,
-    "memory_limit_mb": <float>,
-    "network_rx_mb": <float>,
-    "network_tx_mb": <float>,
-    "disk_read_mb": <float>,
-    "disk_write_mb": <float>,
-    "uptime_seconds": <float>,
-    "restart_count": <int>,
-    "health_status": "healthy|unhealthy|unknown",
-    "performance_score": <float>
-}
-```
+`ContainerMetrics(container_id, cpu_percent=0.0, memory_usage_mb=0.0, memory_limit_mb=0.0, network_io_mb=0.0, disk_io_mb=0.0, timestamp=<now>)`, with a `memory_percent` property and `to_dict()`.
 
 ## Error Handling
 
-All functions follow consistent error handling patterns:
+The module's exceptions are exported from `codomyrmex.containerization` and inherit from `codomyrmex.exceptions.ContainerError`:
 
-- **Build Errors**: `ContainerBuildError` for Dockerfile or build context issues
-- **Management Errors**: `ContainerManagementError` for lifecycle operation failures
-- **Orchestration Errors**: `KubernetesError` for Kubernetes API or manifest issues
-- **Security Errors**: `SecurityScanError` for scanning failures or vulnerabilities
-- **Registry Errors**: `RegistryError` for authentication or network issues
-- **Optimization Errors**: `OptimizationError` for image optimization failures
+- `ContainerError(message, container_id=None, container_name=None)`: container lifecycle failures
+- `ImageBuildError(message, image_name=None, image_tag=None, dockerfile_path=None, build_step=None)`: image build failures
+- `RegistryError(message, registry_url=None, image_reference=None)`: registry authentication or transfer failures
+- `KubernetesError(message, resource_type=None, resource_name=None, namespace=None)`: Kubernetes API or manifest failures
+- `NetworkError(message, network_name=None, network_id=None, driver=None)` and `VolumeError(message, volume_name=None, mount_point=None, driver=None)`: Docker network and volume failures
+
+`build_containers()` reports build failures in its result instead of raising; the scanner and optimizer raise `NotImplementedError` when their CLI tools are missing.
 
 ## Integration Patterns
 
 ### With CI/CD Automation
 
 ```python
-from codomyrmex.containerization import build_containers
 from codomyrmex.ci_cd_automation import create_pipeline
 
-# Build container as part of CI/CD pipeline
-pipeline = create_pipeline("container_pipeline", [
-    {
-        "name": "build",
-        "jobs": [{
-            "type": "container_build",
-            "image_name": "myapp:latest",
-            "dockerfile_path": "Dockerfile.prod"
-        }]
-    },
-    {"name": "test", "jobs": [...]},
-    {"name": "deploy", "jobs": [...]}
-])
+# A pipeline whose build stage builds the container image
+pipeline = create_pipeline({
+    "name": "container_pipeline",
+    "stages": [
+        {"name": "build", "jobs": [{"name": "image", "commands": ["docker build -t myapp:latest ."]}]},
+        {"name": "test", "jobs": [{"name": "test", "commands": ["uv run pytest"]}]},
+    ],
+})
 ```
 
 ### With Security Audit
 
 ```python
 from codomyrmex.containerization import scan_container_security
-from codomyrmex.security.digital import generate_security_report
 
-# Scan container security as part of audit
-scan_result = scan_container_security("myapp:latest", scan_type="full")
-
-# Generate comprehensive security report
-report = generate_security_report(scan_result, format="pdf")
+# Requires the Trivy CLI
+scan_result = scan_container_security("myapp:latest", severity_filter=["critical", "high"])
+if not scan_result.passed:
+    print(scan_result.summary())
 ```
 
 ### With Build Synthesis
@@ -311,8 +167,8 @@ manifest = create_build_manifest({
     "image": container_config.get_full_image_name(),
 })
 
-# Build and push container
-build_result = build_containers(container_config, push=True)
+# Build the image; pass push=True together with registry_auth to push it
+build_result = build_containers(container_config)
 ```
 
 ## Security Considerations

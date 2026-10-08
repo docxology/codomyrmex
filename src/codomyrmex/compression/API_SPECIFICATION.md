@@ -108,18 +108,18 @@ from codomyrmex.compression import ArchiveManager
 ##### create_archive
 
 ```python
-def create_archive(files: list[Path], output_path: Path, format: str = "zip") -> bool
+def create_archive(files: list[Path], output: Path, format: str = "zip") -> bool
 ```
 
-Create an archive from files.
+Create an archive at `output` containing `files`. `format` is `"zip"`, `"tar"` or `"tar.gz"`. Returns True on success; raises `CompressionError` on failure.
 
 ##### extract_archive
 
 ```python
-def extract_archive(archive_path: Path, output_dir: Path) -> bool
+def extract_archive(archive: Path, output: Path) -> bool
 ```
 
-Extract archive to directory.
+Extract `archive` into the `output` directory. Returns True on success; raises `CompressionError` on failure.
 
 ---
 

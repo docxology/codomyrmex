@@ -6,74 +6,55 @@ This API specification documents the programmatic interfaces for the Security Au
 
 ## Functions
 
-### Function: `scan_vulnerabilities(target_path: str, scan_types: List[str] = None, **kwargs) -> VulnerabilityReport`
+All functions below are importable from `codomyrmex.security.digital`.
 
-- **Description**: Scan for security vulnerabilities in code, dependencies, and configurations.
+### Function: `scan_vulnerabilities(target_path: str, scan_types: list[str] | None = None) -> VulnerabilityReport`
+
+- **Description**: Scan a path for vulnerabilities with a new `VulnerabilityScanner`.
 - **Parameters**:
-    - `target_path`: Path to scan (file, directory, or package manifest).
-    - `scan_types`: Types of scans (dependency, code, config, container).
-    - `**kwargs`: Scan configuration (severity_threshold, include_dev_deps, etc.).
-- **Return Value**: Comprehensive vulnerability report with findings and recommendations.
-- **Errors**: Raises `SecurityScanError` for scanning failures.
+    - `target_path`: File or directory to scan.
+    - `scan_types`: Any of `"dependencies"`, `"code"` and `"compliance"` (default: the scanner's configured `scan_types`, `["dependencies", "code"]`).
+- **Return Value**: A `VulnerabilityReport` with `vulnerabilities`, `compliance_checks` and scan metadata.
 
-### Function: `audit_code_security(code_path: str, audit_rules: List[str] = None, **kwargs) -> SecurityScanResult`
+### Function: `audit_code_security(target_path: str) -> list[dict[str, Any]]`
 
-- **Description**: Perform comprehensive security audit of source code.
+- **Description**: Run only the `"code"` scan of `scan_vulnerabilities()`.
 - **Parameters**:
-    - `code_path`: Path to source code directory or files.
-    - `audit_rules`: Specific security rules to check.
-    - `**kwargs`: Audit configuration (languages, exclude_patterns, etc.).
-- **Return Value**: Detailed security scan results with identified issues.
-- **Errors**: Raises `SecurityAuditError` for audit execution failures.
+    - `target_path`: File or directory of source code to audit.
+- **Return Value**: The report's `vulnerabilities` list.
 
-### Function: `check_compliance(target: str, standards: List[str], **kwargs) -> ComplianceCheck`
+### Function: `check_compliance(target_path: str, standards: list[str] | None = None) -> list[dict[str, Any]]`
 
-- **Description**: Verify compliance with security standards and policies.
+- **Description**: Run only the `"compliance"` scan of `scan_vulnerabilities()`.
 - **Parameters**:
-    - `target`: Target to check (code, config, infrastructure).
-    - `standards`: Compliance standards (OWASP, NIST, CIS, etc.).
-    - `**kwargs`: Compliance check options.
-- **Return Value**: Compliance assessment with pass/fail status and recommendations.
-- **Errors**: Raises `ComplianceError` for compliance checking failures.
+    - `target_path`: Path to the codebase or configuration to check.
+    - `standards`: Compliance standards to check against (default: the scanner's configured `compliance_standards`).
+- **Return Value**: The report's `compliance_checks` list.
 
-### Function: `monitor_security_events(event_types: List[str] = None, **kwargs) -> SecurityMonitor`
+### Function: `monitor_security_events(config_path: str | None = None) -> SecurityMonitor`
 
-- **Description**: Monitor security events and alerts in real-time.
+- **Description**: Create a `SecurityMonitor` and start its background monitoring thread. Call `stop_monitoring()` on the result to stop it.
 - **Parameters**:
-    - `event_types`: Types of events to monitor (access, auth, data, etc.).
-    - `**kwargs`: Monitoring configuration (alert_thresholds, log_level, etc.).
-- **Return Value**: Security monitor instance with event streaming capabilities.
-- **Errors**: Raises `MonitoringError` for monitoring setup failures.
+    - `config_path`: Path to a monitor configuration file (log files, interval, alert settings).
+- **Return Value**: The running `SecurityMonitor`.
 
-### Function: `generate_security_report(scan_results: List, report_format: str = "html", **kwargs) -> Dict`
+### Function: `generate_security_report(vulnerability_data: dict[str, Any], compliance_data: dict[str, Any], monitoring_data: dict[str, Any], output_path: str | None = None) -> SecurityReport`
 
-- **Description**: Generate comprehensive security assessment reports.
-
-### Function: `audit_secrets_exposure(content: str, filepath: Optional[str] = None) -> List[Dict[str, Any]]`
-
-- **Description**: Analyze text content for potential secrets exposure using pattern matching and entropy analysis.
+- **Description**: Combine vulnerability, compliance and monitoring data into one report with `SecurityReportGenerator.generate_comprehensive_report()`.
 - **Parameters**:
-    - `content`: Text content to analyze
-    - `filepath`: Optional file path for context
-- **Return Value**: List of potential secret exposures with confidence scores and recommendations
-- **Errors**: None (returns empty list on failure)
+    - `vulnerability_data`: Vulnerability scan data.
+    - `compliance_data`: Compliance check data.
+    - `monitoring_data`: Security monitoring data.
+    - `output_path`: When given, the report is also exported there as JSON.
+- **Return Value**: A `SecurityReport` (`report_id`, `title`, `generated_at`, `target_system`, `executive_summary`, `risk_assessment`, `findings`, `recommendations`, `compliance_status`, `metrics`, `appendices`); `to_dict()` gives the JSON form.
 
-### Function: `scan_file_for_secrets(filepath: str) -> List[Dict[str, Any]]`
+### Function: `scan_secrets(target_path: str, recursive: bool = True) -> list[dict[str, Any]]`
 
-- **Description**: Scan a single file for potential secrets exposure.
+- **Description**: Scan a file or directory for hard-coded secrets with a `SecretsDetector` (pattern matching plus entropy analysis). This replaces the former `audit_secrets_exposure()`, `scan_file_for_secrets()` and `scan_directory_for_secrets()`, which do not exist.
 - **Parameters**:
-    - `filepath`: Path to file to scan
-- **Return Value**: List of potential secret exposures found in the file
-- **Errors**: Returns empty list if file cannot be read
-
-### Function: `scan_directory_for_secrets(directory: str, recursive: bool = True) -> List[Dict[str, Any]]`
-
-- **Description**: Scan a directory for potential secrets exposure.
-- **Parameters**:
-    - `directory`: Directory path to scan
-    - `recursive`: Whether to scan subdirectories (default: True)
-- **Return Value**: List of all potential secret exposures found
-- **Errors**: Returns empty list if directory cannot be accessed
+    - `target_path`: File or directory to scan.
+    - `recursive`: Scan subdirectories when `target_path` is a directory.
+- **Return Value**: One dictionary per finding: `file_path`, `line_number`, `secret_type`, `confidence` (`HIGH`, `MEDIUM` or `LOW`), `description` and `snippet` (the line, truncated to 100 characters). Use `SecretsDetector().scan_file()` or `scan_directory()` for `SecretFinding` objects.
 
 ### Function: `analyze_file_security(filepath: str) -> List[SecurityFinding]`
 
@@ -92,25 +73,46 @@ This API specification documents the programmatic interfaces for the Security Au
 - **Return Value**: List of all security findings across all analyzed files
 - **Errors**: Returns empty list if directory cannot be accessed
 
-### Function: `check_compliance(target_path: str, standards: Optional[List[str]] = None) -> List[ComplianceCheckResult]`
+### Function: `encrypt_sensitive_data(data: str | bytes) -> dict[str, bytes]`
 
-- **Description**: Perform comprehensive compliance checking against multiple security standards.
+- **Description**: Encrypt data with a freshly generated Fernet (symmetric) key.
 - **Parameters**:
-    - `target_path`: Path to codebase or configuration to check
-    - `standards`: List of compliance standards to check against
-- **Return Value**: List of compliance check results with status, evidence, and remediation
-- **Errors**: Returns results with error status for failed checks
+    - `data`: Plaintext string or bytes.
+- **Return Value**: `{"encrypted_data": <bytes>, "key": <bytes>}`; keep `key` to decrypt.
+
+### Function: `decrypt_sensitive_data(encrypted_data: bytes, key: bytes) -> str`
+
+- **Description**: Decrypt data produced by `encrypt_sensitive_data()`.
+- **Parameters**:
+    - `encrypted_data`: Ciphertext bytes from `encrypt_sensitive_data()`.
+    - `key`: The Fernet key returned alongside the ciphertext.
+- **Return Value**: The decrypted plaintext string.
+
+### Function: `validate_ssl_certificates(hostname: str, port: int = 443, timeout: int = 10) -> dict[str, Any]`
+
+- **Description**: Connect to a host and validate its TLS certificate with a `CertificateValidator`.
+- **Parameters**:
+    - `hostname`: Hostname or IP address to connect to.
+    - `port`: TCP port (default: 443).
+    - `timeout`: Connection timeout in seconds (default: 10).
+- **Return Value**: The `SSLValidationResult` as a dictionary: `hostname`, `port`, `valid`, `certificate_info`, `validation_errors`, `expiration_days`, `issuer`, `subject`, `serial_number`.
+
+### Function: `audit_access_logs(log_files: list[str] | None = None) -> list[SecurityEvent]`
+
+- **Description**: Read the last 100 lines of each log file and extract security events (authentication failures, suspicious activity and similar) with a `SecurityMonitor`.
+- **Parameters**:
+    - `log_files`: Log files to read (default: the monitor's configured files, `/var/log/auth.log` and `/var/log/security.log`). Missing files are skipped.
+- **Return Value**: The `SecurityEvent` objects found.
 
 ## Classes
 
 ### Class: `SecretsDetector`
 
-- **Description**: Advanced secrets detection and analysis system.
+- **Description**: Pattern- and entropy-based detection of hard-coded secrets.
 - **Methods**:
-    - `__init__(config_path: Optional[str] = None)`: Initialize detector with configuration
-    - `audit_secrets_exposure(content: str, filepath: Optional[str] = None) -> List[Dict[str, Any]]`: Analyze content for secrets
-    - `scan_file(filepath: str) -> List[Dict[str, Any]]`: Scan single file
-    - `scan_directory(directory: str, recursive: bool = True) -> List[Dict[str, Any]]`: Scan directory
+    - `__init__(patterns: dict[str, str] | None = None)`: Use custom regex patterns instead of the built-in `PATTERNS`
+    - `scan_file(file_path: str) -> list[SecretFinding]`: Scan a single file
+    - `scan_directory(directory_path: str, recursive: bool = True) -> list[SecretFinding]`: Scan a directory
 
 ### Class: `SecurityAnalyzer`
 
@@ -143,90 +145,6 @@ This API specification documents the programmatic interfaces for the Security Au
     - `start_monitoring()`: Begin monitoring
     - `update_monitoring()`: Update usage metrics
     - `get_resource_usage()`: Get comprehensive usage statistics
-
-## Data Models
-- **Parameters**:
-    - `scan_results`: Results from security scans and audits.
-    - `report_format`: Output format (html, pdf, json, xml).
-    - `**kwargs`: Report generation options (template, branding, etc.).
-- **Return Value**:
-    ```python
-    {
-        "report_path": <str>,
-        "report_format": <str>,
-        "generated_at": <timestamp>,
-        "summary": {
-            "total_findings": <int>,
-            "critical_issues": <int>,
-            "high_issues": <int>,
-            "medium_issues": <int>,
-            "low_issues": <int>
-        },
-        "recommendations": [<list_of_security_recommendations>]
-    }
-    ```
-- **Errors**: Raises `ReportGenerationError` for report creation failures.
-
-### Function: `encrypt_sensitive_data(data: str, encryption_type: str = "aes256", **kwargs) -> Dict`
-
-- **Description**: Encrypt sensitive data using approved cryptographic algorithms.
-- **Parameters**:
-    - `data`: Data to encrypt.
-    - `encryption_type`: Encryption algorithm (aes256, rsa, etc.).
-    - `**kwargs`: Encryption options (key_rotation, salt, etc.).
-- **Return Value**:
-    ```python
-    {
-        "encrypted_data": <str>,
-        "encryption_method": <str>,
-        "key_fingerprint": <str>,
-        "created_at": <timestamp>,
-        "integrity_hash": <str>
-    }
-    ```
-- **Errors**: Raises `EncryptionError` for encryption failures.
-
-### Function: `decrypt_sensitive_data(encrypted_data: str, decryption_key: str, **kwargs) -> str`
-
-- **Description**: Decrypt previously encrypted sensitive data.
-- **Parameters**:
-    - `encrypted_data`: Data to decrypt.
-    - `decryption_key`: Decryption key or key identifier.
-    - `**kwargs`: Decryption options.
-- **Return Value**: Decrypted plaintext data.
-- **Errors**: Raises `DecryptionError` for decryption failures.
-
-### Function: `validate_ssl_certificates(hostname: str, port: int = 443, **kwargs) -> SSLValidationResult`
-
-- **Description**: Validate SSL/TLS certificates for security and compliance.
-- **Parameters**:
-    - `hostname`: Hostname to validate certificate for.
-    - `port`: Port number (default: 443 for HTTPS).
-    - `**kwargs`: Validation options (check_revocation, verify_chain, etc.).
-- **Return Value**: SSL certificate validation results with security assessment.
-- **Errors**: Raises `CertificateError` for validation failures.
-
-### Function: `audit_access_logs(log_path: str, audit_rules: Dict = None, **kwargs) -> Dict`
-
-- **Description**: Audit access logs for security incidents and compliance.
-- **Parameters**:
-    - `log_path`: Path to access log files.
-    - `audit_rules`: Custom audit rules for log analysis.
-    - `**kwargs`: Audit options (time_range, filters, etc.).
-- **Return Value**:
-    ```python
-    {
-        "audit_summary": {
-            "total_events": <int>,
-            "suspicious_events": <int>,
-            "policy_violations": <int>,
-            "compliance_score": <float>
-        },
-        "findings": [<list_of_audit_findings>],
-        "recommendations": [<list_of_security_recommendations>]
-    }
-    ```
-- **Errors**: Raises `AuditError` for log analysis failures.
 
 ## Data Structures
 
@@ -375,63 +293,60 @@ All functions follow consistent error handling patterns:
 ### Comprehensive Security Assessment
 ```python
 from codomyrmex.security.digital import (
-    scan_vulnerabilities, audit_code_security, check_compliance
+    audit_code_security,
+    check_compliance,
+    generate_security_report,
+    scan_vulnerabilities,
 )
 
-# Scan dependencies for vulnerabilities
-vuln_report = scan_vulnerabilities("./", scan_types=["dependency", "code"])
+# Scan dependencies and code for vulnerabilities
+vuln_report = scan_vulnerabilities("./", scan_types=["dependencies", "code"])
 
-# Audit source code security
-code_audit = audit_code_security("./src", audit_rules=[
-    "sql_injection", "xss_prevention", "auth_bypass"
-])
+# Audit source code only
+code_findings = audit_code_security("./src")
 
 # Check compliance
-compliance = check_compliance("./", standards=["OWASP", "NIST"])
+compliance_checks = check_compliance("./", standards=["OWASP", "NIST"])
 
-# Generate comprehensive report
-from codomyrmex.security.digital import generate_security_report
-report = generate_security_report([vuln_report, code_audit, compliance])
+# Combine the results into one report (also written to JSON)
+report = generate_security_report(
+    vulnerability_data=vuln_report.to_dict(),
+    compliance_data={"checks": compliance_checks},
+    monitoring_data={},
+    output_path="output/security_report.json",
+)
 ```
 
 ### Real-time Security Monitoring
 ```python
 from codomyrmex.security.digital import monitor_security_events
 
-# Start security monitoring
-monitor = monitor_security_events(event_types=[
-    "authentication", "authorization", "data_access"
-])
+# Start the background monitoring thread
+monitor = monitor_security_events()
 
-# Process security events
-for event in monitor.events():
-    if event['severity'] in ['critical', 'high']:
-        # Trigger alert
-        alert_security_team(event)
-        # Log incident
-        log_security_incident(event)
+# Inspect collected events
+for event in monitor.events:
+    if event.severity.value in ("CRITICAL", "HIGH"):
+        print(event.to_dict())
+
+monitor.stop_monitoring()
 ```
 
 ### Data Encryption Pipeline
 ```python
-from codomyrmex.security.digital import encrypt_sensitive_data, decrypt_sensitive_data
+import json
 
-# Encrypt sensitive configuration
-config_data = load_sensitive_config()
-encrypted = encrypt_sensitive_data(
-    data=json.dumps(config_data),
-    encryption_type="aes256"
-)
+from codomyrmex.security.digital import decrypt_sensitive_data, encrypt_sensitive_data
 
-# Store encrypted data
-save_encrypted_config(encrypted['encrypted_data'])
+# Encrypt sensitive configuration with a fresh key
+encrypted = encrypt_sensitive_data(json.dumps({"service_url": "https://example.com"}))
+
+# Store encrypted["encrypted_data"]; keep encrypted["key"] in a secret store
 
 # Later, decrypt when needed
-decrypted_data = decrypt_sensitive_data(
-    encrypted_data=stored_data,
-    decryption_key=encrypted['key_fingerprint']
+config = json.loads(
+    decrypt_sensitive_data(encrypted["encrypted_data"], encrypted["key"])
 )
-config = json.loads(decrypted_data)
 ```
 
 ## Security Considerations

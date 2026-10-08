@@ -441,12 +441,14 @@ Closed-loop free-energy minimization runner for active inference agents.
 
 #### Methods
 
-##### `run(observation: dict[str, Any]) -> LoopResult`
+##### `run(initial_observation: dict[str, Any]) -> LoopResult`
 
 Run the free-energy minimization loop.
 
 **Parameters:**
-- `observation` (dict[str, Any]): Initial observation
+- `initial_observation` (dict[str, Any]): Starting observation
+
+**Raises:** `ActiveInferenceError` if the agent raises during stepping.
 
 **Returns:** `LoopResult` - Result of the loop execution
 
@@ -478,4 +480,3 @@ Result of the full free-energy loop execution.
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
-

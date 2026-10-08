@@ -18,23 +18,23 @@ The `performance` module provides utilities for optimizing application execution
 
 ## Functions
 
-### Function: `lazy_import(module_name: str, **kwargs) -> LazyLoader`
+### Function: `lazy_import(module_name: str, package: str | None = None) -> LazyLoader`
 
 - **Description**: Creates a lazy loader for importing modules on-demand to improve startup performance.
 - **Parameters**:
   - `module_name`: Name of the module to lazy load.
-  - `**kwargs`: Additional configuration options.
+  - `package`: Anchor package when `module_name` is relative.
 - **Return Value**: LazyLoader object that imports the module when first accessed.
 - **Errors**: Raises `ImportError` if the module cannot be found when accessed.
 
-### Function: `cached_function(ttl_seconds: int = 300, max_size: int = 128, **kwargs) -> Callable`
+### Function: `cached_function(ttl: int | None = None, cache_key_prefix: str | None = None, cache_manager: CacheManager | None = None) -> Callable`
 
-- **Description**: Decorator that adds caching to functions to improve performance for expensive operations.
+- **Description**: Decorator factory that caches a function's results, keyed by its arguments, in a `CacheManager`.
 - **Parameters**:
-  - `ttl_seconds`: Time-to-live for cached results (default: 300 seconds).
-  - `max_size`: Maximum number of cached results (default: 128).
-  - `**kwargs`: Additional cache configuration options.
-- **Return Value**: Decorated function with caching capability.
+  - `ttl`: Time-to-live for cache entries in seconds (default: the cache manager's default).
+  - `cache_key_prefix`: Prefix for cache keys (default: the function name).
+  - `cache_manager`: Cache manager to use (default: the module-wide instance).
+- **Return Value**: Decorator; use as `@cached_function(ttl=3600)`.
 - **Errors**: Raises `CacheError` for cache configuration issues.
 
 ## Classes

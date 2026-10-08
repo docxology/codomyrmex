@@ -10,7 +10,7 @@ The templating module provides template rendering utilities with support for Jin
 
 ### TemplateEngine
 
-Jinja2-based template rendering engine.
+Template rendering with a Jinja2 (default) or Mako backend.
 
 ```python
 from codomyrmex.templating import TemplateEngine
@@ -19,76 +19,50 @@ from codomyrmex.templating import TemplateEngine
 #### Constructor
 
 ```python
-TemplateEngine(
-    template_dir: Optional[str] = None,
-    auto_escape: bool = True,
-    undefined_strict: bool = False
-)
+TemplateEngine(engine: str = "jinja2", autoescape: bool = True)
 ```
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `template_dir` | `str` | `None` | Directory containing templates |
-| `auto_escape` | `bool` | `True` | Enable HTML auto-escaping |
-| `undefined_strict` | `bool` | `False` | Raise error on undefined variables |
+| `engine` | `str` | `"jinja2"` | Backend: `"jinja2"` or `"mako"` |
+| `autoescape` | `bool` | `True` | HTML-escape output to prevent XSS |
 
 #### Methods
 
 ##### render
 
 ```python
-def render(template: str, context: Dict[str, Any]) -> str
+def render(template: str, context: dict) -> str
 ```
 
-Render template string with context.
+Render a template string with context.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `template` | `str` | Template string with Jinja2 syntax |
-| `context` | `Dict[str, Any]` | Variables for template |
+| `template` | `str` | Template source in the engine's syntax |
+| `context` | `dict` | Variables for the template |
 
 **Returns**: `str` - Rendered output
 
 **Raises**: `TemplatingError` if rendering fails
 
-##### render_file
+##### load_template
 
 ```python
-def render_file(template_name: str, context: Dict[str, Any]) -> str
+def load_template(path: str) -> Template
 ```
 
-Load and render template from file.
+Load (and cache) a template file. Render it with `Template.render(context)`.
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `template_name` | `str` | Name of template file in template_dir |
-| `context` | `Dict[str, Any]` | Variables for template |
+**Raises**: `TemplatingError` if loading fails
 
-**Returns**: `str` - Rendered output
-
-##### render_to_file
+##### register_filter
 
 ```python
-def render_to_file(template: str, context: Dict[str, Any], output_path: str) -> bool
+def register_filter(name: str, func: Callable) -> None
 ```
 
-Render template and write to file.
-
-##### add_filter
-
-```python
-def add_filter(name: str, func: Callable) -> None
-```
-
-Add custom filter function.
-
-##### add_global
-
-```python
-def add_global(name: str, value: Any) -> None
-```
-
-Add global variable accessible in all templates.
+Register a custom filter, available to templates rendered or loaded afterwards. `get_filter(name)` returns a registered filter or `None`.
 
 ---
 
@@ -171,10 +145,11 @@ result = engine.render(template, {"name": "World", "count": 5})
 ```python
 from codomyrmex.templating import TemplateEngine
 
-engine = TemplateEngine(template_dir="./templates")
+engine = TemplateEngine()
 
-# Render templates/email.html with context
-html = engine.render_file("email.html", {
+# Load templates/email.html and render it with context
+template = engine.load_template("./templates/email.html")
+html = template.render({
     "user": "John",
     "items": ["Item 1", "Item 2", "Item 3"]
 })
@@ -209,8 +184,8 @@ from codomyrmex.templating import TemplateEngine
 
 engine = TemplateEngine()
 
-# Add custom filter
-engine.add_filter("uppercase", lambda s: s.upper())
+# Register a custom filter
+engine.register_filter("uppercase", lambda s: s.upper())
 
 template = "{{ message | uppercase }}"
 result = engine.render(template, {"message": "hello"})
@@ -227,7 +202,7 @@ engine = TemplateEngine()
 python_template = '''
 class {{ class_name }}:
     """{{ docstring }}"""
-    
+
     def __init__(self{% for attr in attributes %}, {{ attr.name }}: {{ attr.type }}{% endfor %}):
 {% for attr in attributes %}
         self.{{ attr.name }} = {{ attr.name }}
