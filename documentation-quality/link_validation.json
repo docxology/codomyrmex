@@ -42975,49 +42975,49 @@
   {
     "file": "src/codomyrmex/logistics/orchestration/project/USAGE_EXAMPLES.md",
     "link": "../README.md",
-    "line": 255,
+    "line": 266,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/USAGE_EXAMPLES.md",
     "link": "../../AGENTS.md",
-    "line": 256,
+    "line": 267,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/USAGE_EXAMPLES.md",
     "link": "../../../../../docs/README.md",
-    "line": 257,
+    "line": 268,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/USAGE_EXAMPLES.md",
     "link": "../../../README.md",
-    "line": 258,
+    "line": 269,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/SPEC.md",
     "link": "AGENTS.md",
-    "line": 124,
+    "line": 156,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/SPEC.md",
     "link": "../SPEC.md",
-    "line": 125,
+    "line": 157,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/SPEC.md",
     "link": "README.md",
-    "line": 129,
+    "line": 161,
     "status": "ok",
     "message": "File exists"
   },
@@ -43282,29 +43282,36 @@
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
+    "link": "#task-dispatch",
+    "line": 313,
+    "status": "ok",
+    "message": "Anchor link"
+  },
+  {
+    "file": "src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 982,
+    "line": 916,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 983,
+    "line": 917,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
     "link": "../../../../../docs/README.md",
-    "line": 984,
+    "line": 918,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 985,
+    "line": 919,
     "status": "ok",
     "message": "File exists"
   },
@@ -76680,56 +76687,56 @@
   {
     "file": "docs/examples/orchestration-examples.md",
     "link": "../project_orchestration/task-orchestration-guide.md",
-    "line": 425,
+    "line": 424,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/examples/orchestration-examples.md",
     "link": "../project_orchestration/project-lifecycle-guide.md",
-    "line": 426,
+    "line": 425,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/examples/orchestration-examples.md",
     "link": "../project_orchestration/config-driven-operations.md",
-    "line": 427,
+    "line": 426,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/examples/orchestration-examples.md",
     "link": "../project_orchestration/dispatch-coordination.md",
-    "line": 428,
+    "line": 427,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/examples/orchestration-examples.md",
     "link": "../README.md",
-    "line": 432,
+    "line": 431,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/examples/orchestration-examples.md",
     "link": "../../AGENTS.md",
-    "line": 433,
+    "line": 432,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/examples/orchestration-examples.md",
     "link": "../../docs/README.md",
-    "line": 434,
+    "line": 433,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/examples/orchestration-examples.md",
     "link": "../../README.md",
-    "line": 435,
+    "line": 434,
     "status": "ok",
     "message": "File exists"
   },
@@ -110245,56 +110252,56 @@
   {
     "file": "docs/project_orchestration/dispatch-coordination.md",
     "link": "./task-orchestration-guide.md",
-    "line": 374,
+    "line": 318,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/dispatch-coordination.md",
     "link": "./workflow-configuration-schema.md",
-    "line": 375,
+    "line": 319,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/dispatch-coordination.md",
     "link": "./resource-configuration.md",
-    "line": 376,
+    "line": 320,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/dispatch-coordination.md",
     "link": "../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
-    "line": 377,
+    "line": 321,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/dispatch-coordination.md",
     "link": "../README.md",
-    "line": 382,
+    "line": 325,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/dispatch-coordination.md",
     "link": "../../AGENTS.md",
-    "line": 383,
+    "line": 326,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/dispatch-coordination.md",
     "link": "../../docs/README.md",
-    "line": 384,
+    "line": 327,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/dispatch-coordination.md",
     "link": "../../README.md",
-    "line": 385,
+    "line": 328,
     "status": "ok",
     "message": "File exists"
   },
@@ -110392,28 +110399,28 @@
   {
     "file": "docs/project_orchestration/project-template-schema.md",
     "link": "#overview",
-    "line": 427,
+    "line": 431,
     "status": "ok",
     "message": "Anchor link"
   },
   {
     "file": "docs/project_orchestration/project-template-schema.md",
     "link": "./project-lifecycle-guide.md",
-    "line": 462,
+    "line": 466,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/project-template-schema.md",
     "link": "./config-driven-operations.md",
-    "line": 463,
+    "line": 467,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/project-template-schema.md",
     "link": "../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
-    "line": 464,
+    "line": 468,
     "status": "ok",
     "message": "File exists"
   },
@@ -110497,49 +110504,49 @@
   {
     "file": "docs/project_orchestration/task-orchestration-guide.md",
     "link": "./dispatch-coordination.md",
-    "line": 412,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/project_orchestration/task-orchestration-guide.md",
-    "link": "./resource-configuration.md",
-    "line": 413,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/project_orchestration/task-orchestration-guide.md",
-    "link": "../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
-    "line": 414,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/project_orchestration/task-orchestration-guide.md",
-    "link": "../README.md",
-    "line": 418,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/project_orchestration/task-orchestration-guide.md",
-    "link": "../../AGENTS.md",
-    "line": 419,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/project_orchestration/task-orchestration-guide.md",
-    "link": "../../docs/README.md",
     "line": 420,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/task-orchestration-guide.md",
-    "link": "../../README.md",
+    "link": "./resource-configuration.md",
     "line": 421,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project_orchestration/task-orchestration-guide.md",
+    "link": "../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
+    "line": 422,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project_orchestration/task-orchestration-guide.md",
+    "link": "../README.md",
+    "line": 426,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project_orchestration/task-orchestration-guide.md",
+    "link": "../../AGENTS.md",
+    "line": 427,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project_orchestration/task-orchestration-guide.md",
+    "link": "../../docs/README.md",
+    "line": 428,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project_orchestration/task-orchestration-guide.md",
+    "link": "../../README.md",
+    "line": 429,
     "status": "ok",
     "message": "File exists"
   },
@@ -110651,98 +110658,98 @@
   {
     "file": "docs/project_orchestration/config-driven-operations.md",
     "link": "./resource-configuration.md#resource-object",
-    "line": 168,
+    "line": 169,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/config-driven-operations.md",
     "link": "#environment-based-configuration",
-    "line": 255,
+    "line": 256,
     "status": "ok",
     "message": "Anchor link"
   },
   {
     "file": "docs/project_orchestration/config-driven-operations.md",
     "link": "./workflow-configuration-schema.md",
-    "line": 447,
+    "line": 451,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/config-driven-operations.md",
     "link": "./project-template-schema.md",
-    "line": 448,
+    "line": 452,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/config-driven-operations.md",
     "link": "./resource-configuration.md",
-    "line": 449,
+    "line": 453,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/config-driven-operations.md",
     "link": "../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
-    "line": 450,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/project_orchestration/config-driven-operations.md",
-    "link": "../README.md",
     "line": 454,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/config-driven-operations.md",
+    "link": "../README.md",
+    "line": 458,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project_orchestration/config-driven-operations.md",
     "link": "../../AGENTS.md",
-    "line": 455,
+    "line": 459,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/config-driven-operations.md",
     "link": "../../docs/README.md",
-    "line": 456,
+    "line": 460,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/config-driven-operations.md",
     "link": "../../README.md",
-    "line": 457,
+    "line": 461,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/PAI.md",
     "link": "README.md",
-    "line": 45,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/project_orchestration/PAI.md",
-    "link": "AGENTS.md",
-    "line": 46,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/project_orchestration/PAI.md",
-    "link": "SPEC.md",
     "line": 47,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/PAI.md",
-    "link": "../",
+    "link": "AGENTS.md",
     "line": 48,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project_orchestration/PAI.md",
+    "link": "SPEC.md",
+    "line": 49,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project_orchestration/PAI.md",
+    "link": "../",
+    "line": 50,
     "status": "ok",
     "message": "File exists"
   },

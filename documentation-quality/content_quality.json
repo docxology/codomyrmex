@@ -26977,8 +26977,8 @@
     "metrics": {
       "heading_count": 22,
       "placeholder_count": 0,
-      "code_block_count": 12,
-      "word_count": 555,
+      "code_block_count": 13,
+      "word_count": 643,
       "link_count": 4
     }
   },
@@ -26987,10 +26987,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 15,
+      "heading_count": 16,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 687,
+      "word_count": 1425,
       "link_count": 3
     }
   },
@@ -27071,11 +27071,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 87,
+      "heading_count": 97,
       "placeholder_count": 0,
-      "code_block_count": 32,
-      "word_count": 3792,
-      "link_count": 4
+      "code_block_count": 31,
+      "word_count": 3964,
+      "link_count": 5
     }
   },
   {
@@ -51670,7 +51670,7 @@
       "heading_count": 30,
       "placeholder_count": 0,
       "code_block_count": 11,
-      "word_count": 1016,
+      "word_count": 1120,
       "link_count": 9
     }
   },
@@ -65165,10 +65165,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 41,
+      "heading_count": 36,
       "placeholder_count": 0,
-      "code_block_count": 18,
-      "word_count": 1282,
+      "code_block_count": 15,
+      "word_count": 1329,
       "link_count": 8
     }
   },
@@ -65204,7 +65204,7 @@
       "heading_count": 37,
       "placeholder_count": 0,
       "code_block_count": 17,
-      "word_count": 1356,
+      "word_count": 1389,
       "link_count": 4
     }
   },
@@ -65216,7 +65216,7 @@
       "heading_count": 15,
       "placeholder_count": 0,
       "code_block_count": 9,
-      "word_count": 574,
+      "word_count": 586,
       "link_count": 10
     }
   },
@@ -65240,7 +65240,7 @@
       "heading_count": 32,
       "placeholder_count": 0,
       "code_block_count": 18,
-      "word_count": 1137,
+      "word_count": 1338,
       "link_count": 7
     }
   },
@@ -65264,7 +65264,7 @@
       "heading_count": 34,
       "placeholder_count": 0,
       "code_block_count": 15,
-      "word_count": 1166,
+      "word_count": 1274,
       "link_count": 13
     }
   },
@@ -65276,7 +65276,7 @@
       "heading_count": 6,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 174,
+      "word_count": 192,
       "link_count": 4
     }
   },
