@@ -28,10 +28,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 159,
+      "heading_count": 160,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 10286,
+      "word_count": 10459,
       "link_count": 3
     }
   },
@@ -4450,8 +4450,8 @@
       "heading_count": 23,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 392,
-      "link_count": 6
+      "word_count": 458,
+      "link_count": 7
     }
   },
   {
@@ -4471,10 +4471,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 5,
+      "heading_count": 7,
       "placeholder_count": 0,
-      "code_block_count": 0,
-      "word_count": 61,
+      "code_block_count": 1,
+      "word_count": 365,
       "link_count": 2
     }
   },
@@ -4522,8 +4522,8 @@
       "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 65,
-      "link_count": 2
+      "word_count": 134,
+      "link_count": 3
     }
   },
   {
@@ -4572,8 +4572,8 @@
       "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 77,
-      "link_count": 2
+      "word_count": 96,
+      "link_count": 3
     }
   },
   {
@@ -4622,8 +4622,8 @@
       "heading_count": 6,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 103,
-      "link_count": 2
+      "word_count": 141,
+      "link_count": 3
     }
   },
   {
@@ -26975,10 +26975,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 22,
+      "heading_count": 24,
       "placeholder_count": 0,
-      "code_block_count": 13,
-      "word_count": 643,
+      "code_block_count": 15,
+      "word_count": 783,
       "link_count": 4
     }
   },
@@ -26989,8 +26989,8 @@
     "metrics": {
       "heading_count": 16,
       "placeholder_count": 0,
-      "code_block_count": 1,
-      "word_count": 1425,
+      "code_block_count": 2,
+      "word_count": 1832,
       "link_count": 3
     }
   },
@@ -27038,7 +27038,7 @@
       "heading_count": 8,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 308,
+      "word_count": 315,
       "link_count": 1
     }
   },
@@ -27071,10 +27071,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 97,
+      "heading_count": 100,
       "placeholder_count": 0,
-      "code_block_count": 31,
-      "word_count": 3964,
+      "code_block_count": 32,
+      "word_count": 4571,
       "link_count": 5
     }
   },
@@ -41110,7 +41110,7 @@
       "heading_count": 10,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 303,
+      "word_count": 338,
       "link_count": 3
     }
   },
@@ -41158,7 +41158,7 @@
       "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 130,
+      "word_count": 204,
       "link_count": 0
     }
   },
@@ -60032,7 +60032,7 @@
       "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 130,
+      "word_count": 204,
       "link_count": 0
     }
   },
@@ -62872,8 +62872,8 @@
       "heading_count": 18,
       "placeholder_count": 0,
       "code_block_count": 14,
-      "word_count": 478,
-      "link_count": 6
+      "word_count": 649,
+      "link_count": 7
     }
   },
   {
@@ -65213,11 +65213,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 15,
+      "heading_count": 16,
       "placeholder_count": 0,
       "code_block_count": 9,
-      "word_count": 586,
-      "link_count": 10
+      "word_count": 757,
+      "link_count": 8
     }
   },
   {
@@ -65264,7 +65264,7 @@
       "heading_count": 34,
       "placeholder_count": 0,
       "code_block_count": 15,
-      "word_count": 1274,
+      "word_count": 1301,
       "link_count": 13
     }
   },
@@ -65285,11 +65285,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 28,
+      "heading_count": 14,
       "placeholder_count": 0,
-      "code_block_count": 7,
-      "word_count": 1292,
-      "link_count": 8
+      "code_block_count": 5,
+      "word_count": 1016,
+      "link_count": 9
     }
   },
   {

@@ -86,35 +86,35 @@
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:11434/api/embed`",
-    "line": 418,
+    "line": 440,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:11434\"",
-    "line": 418,
+    "line": 440,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:3100`",
-    "line": 424,
+    "line": 446,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "mailto:FristonBlanket@gmail.com",
-    "line": 512,
+    "line": 534,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:8080/`",
-    "line": 1353,
+    "line": 1375,
     "status": "external",
     "message": "External link (not validated)"
   },
@@ -14407,43 +14407,50 @@
   },
   {
     "file": "config/workflows/SPEC.md",
+    "link": "README.md#workflow-file-format",
+    "line": 120,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "config/workflows/SPEC.md",
     "link": "README.md",
-    "line": 150,
+    "line": 157,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "config/workflows/SPEC.md",
     "link": "AGENTS.md",
-    "line": 151,
+    "line": 158,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "config/workflows/SPEC.md",
     "link": "../README.md",
-    "line": 152,
+    "line": 159,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "config/workflows/SPEC.md",
     "link": "../SPEC.md",
-    "line": 153,
+    "line": 160,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "config/workflows/SPEC.md",
     "link": "../../README.md",
-    "line": 154,
+    "line": 161,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "config/workflows/SPEC.md",
     "link": "../../SPEC.md",
-    "line": 155,
+    "line": 162,
     "status": "ok",
     "message": "File exists"
   },
@@ -14457,14 +14464,14 @@
   {
     "file": "config/workflows/README.md",
     "link": "../README.md",
-    "line": 18,
+    "line": 75,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "config/workflows/README.md",
     "link": "AGENTS.md",
-    "line": 23,
+    "line": 80,
     "status": "ok",
     "message": "File exists"
   },
@@ -14541,14 +14548,21 @@
   {
     "file": "config/workflows/examples/README.md",
     "link": "../README.md",
-    "line": 19,
+    "line": 7,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "config/workflows/examples/README.md",
+    "link": "../README.md",
+    "line": 25,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "config/workflows/examples/README.md",
     "link": "AGENTS.md",
-    "line": 24,
+    "line": 30,
     "status": "ok",
     "message": "File exists"
   },
@@ -14604,14 +14618,21 @@
   {
     "file": "config/workflows/tests/README.md",
     "link": "../README.md",
-    "line": 21,
+    "line": 7,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "config/workflows/tests/README.md",
+    "link": "../README.md",
+    "line": 23,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "config/workflows/tests/README.md",
     "link": "AGENTS.md",
-    "line": 26,
+    "line": 28,
     "status": "ok",
     "message": "File exists"
   },
@@ -14667,14 +14688,21 @@
   {
     "file": "config/workflows/production/README.md",
     "link": "../README.md",
-    "line": 16,
+    "line": 11,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "config/workflows/production/README.md",
+    "link": "../README.md",
+    "line": 22,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "config/workflows/production/README.md",
     "link": "AGENTS.md",
-    "line": 21,
+    "line": 27,
     "status": "ok",
     "message": "File exists"
   },
@@ -42975,49 +43003,49 @@
   {
     "file": "src/codomyrmex/logistics/orchestration/project/USAGE_EXAMPLES.md",
     "link": "../README.md",
-    "line": 266,
+    "line": 295,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/USAGE_EXAMPLES.md",
     "link": "../../AGENTS.md",
-    "line": 267,
+    "line": 296,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/USAGE_EXAMPLES.md",
     "link": "../../../../../docs/README.md",
-    "line": 268,
+    "line": 297,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/USAGE_EXAMPLES.md",
     "link": "../../../README.md",
-    "line": 269,
+    "line": 298,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/SPEC.md",
     "link": "AGENTS.md",
-    "line": 156,
+    "line": 180,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/SPEC.md",
     "link": "../SPEC.md",
-    "line": 157,
+    "line": 181,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/SPEC.md",
     "link": "README.md",
-    "line": 161,
+    "line": 185,
     "status": "ok",
     "message": "File exists"
   },
@@ -43206,7 +43234,7 @@
   {
     "file": "src/codomyrmex/logistics/orchestration/project/AGENTS.md",
     "link": "../README.md",
-    "line": 71,
+    "line": 80,
     "status": "ok",
     "message": "File exists"
   },
@@ -43283,35 +43311,35 @@
   {
     "file": "src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
     "link": "#task-dispatch",
-    "line": 313,
+    "line": 348,
     "status": "ok",
     "message": "Anchor link"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 916,
+    "line": 969,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 917,
+    "line": 970,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
     "link": "../../../../../docs/README.md",
-    "line": 918,
+    "line": 971,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 919,
+    "line": 972,
     "status": "ok",
     "message": "File exists"
   },
@@ -62197,21 +62225,21 @@
   {
     "file": "src/codomyrmex/cli/SPEC.md",
     "link": "README.md",
-    "line": 57,
+    "line": 63,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/cli/SPEC.md",
     "link": "AGENTS.md",
-    "line": 58,
+    "line": 64,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/cli/SPEC.md",
     "link": "../../../README.md",
-    "line": 59,
+    "line": 65,
     "status": "ok",
     "message": "File exists"
   },
@@ -101165,43 +101193,50 @@
   },
   {
     "file": "docs/reference/cli.md",
+    "link": "../../config/workflows/README.md",
+    "line": 82,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/reference/cli.md",
     "link": "troubleshooting.md",
-    "line": 145,
+    "line": 179,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/reference/cli.md",
     "link": "https://github.com/docxology/codomyrmex/issues",
-    "line": 145,
+    "line": 179,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "docs/reference/cli.md",
     "link": "../README.md",
-    "line": 149,
+    "line": 183,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/reference/cli.md",
     "link": "../../AGENTS.md",
-    "line": 150,
+    "line": 184,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/reference/cli.md",
     "link": "../../docs/README.md",
-    "line": 151,
+    "line": 185,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/reference/cli.md",
     "link": "../../README.md",
-    "line": 152,
+    "line": 186,
     "status": "ok",
     "message": "File exists"
   },
@@ -110426,71 +110461,57 @@
   },
   {
     "file": "docs/project_orchestration/project-lifecycle-guide.md",
-    "link": "./project-template-schema.md",
-    "line": 9,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/project_orchestration/project-lifecycle-guide.md",
-    "link": "./task-orchestration-guide.md",
-    "line": 63,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/project_orchestration/project-lifecycle-guide.md",
     "link": "./workflow-configuration-schema.md",
-    "line": 63,
+    "line": 61,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/project-lifecycle-guide.md",
     "link": "./project-template-schema.md",
-    "line": 157,
+    "line": 177,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/project-lifecycle-guide.md",
     "link": "./config-driven-operations.md",
-    "line": 158,
+    "line": 178,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/project-lifecycle-guide.md",
     "link": "../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
-    "line": 159,
+    "line": 179,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/project-lifecycle-guide.md",
     "link": "../README.md",
-    "line": 163,
+    "line": 183,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/project-lifecycle-guide.md",
     "link": "../../AGENTS.md",
-    "line": 164,
+    "line": 184,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/project-lifecycle-guide.md",
     "link": "../../docs/README.md",
-    "line": 165,
+    "line": 185,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/project-lifecycle-guide.md",
     "link": "../../README.md",
-    "line": 166,
+    "line": 186,
     "status": "ok",
     "message": "File exists"
   },
@@ -110650,78 +110671,78 @@
   },
   {
     "file": "docs/project_orchestration/config-driven-operations.md",
-    "link": "./workflow-configuration-schema.md#parameter-substitution",
-    "line": 66,
+    "link": "./workflow-configuration-schema.md",
+    "line": 31,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/config-driven-operations.md",
     "link": "./resource-configuration.md#resource-object",
-    "line": 169,
+    "line": 173,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/config-driven-operations.md",
     "link": "#environment-based-configuration",
-    "line": 256,
+    "line": 260,
     "status": "ok",
     "message": "Anchor link"
   },
   {
     "file": "docs/project_orchestration/config-driven-operations.md",
     "link": "./workflow-configuration-schema.md",
-    "line": 451,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/project_orchestration/config-driven-operations.md",
-    "link": "./project-template-schema.md",
-    "line": 452,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/project_orchestration/config-driven-operations.md",
-    "link": "./resource-configuration.md",
     "line": 453,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/config-driven-operations.md",
-    "link": "../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
+    "link": "./project-template-schema.md",
     "line": 454,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/config-driven-operations.md",
+    "link": "./resource-configuration.md",
+    "line": 455,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project_orchestration/config-driven-operations.md",
+    "link": "../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
+    "line": 456,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project_orchestration/config-driven-operations.md",
     "link": "../README.md",
-    "line": 458,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/project_orchestration/config-driven-operations.md",
-    "link": "../../AGENTS.md",
-    "line": 459,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/project_orchestration/config-driven-operations.md",
-    "link": "../../docs/README.md",
     "line": 460,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/config-driven-operations.md",
-    "link": "../../README.md",
+    "link": "../../AGENTS.md",
     "line": 461,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project_orchestration/config-driven-operations.md",
+    "link": "../../docs/README.md",
+    "line": 462,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project_orchestration/config-driven-operations.md",
+    "link": "../../README.md",
+    "line": 463,
     "status": "ok",
     "message": "File exists"
   },
@@ -110755,57 +110776,64 @@
   },
   {
     "file": "docs/project_orchestration/workflow-configuration-schema.md",
+    "link": "../../config/workflows/examples/README.md",
+    "line": 87,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/project_orchestration/workflow-configuration-schema.md",
     "link": "../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
-    "line": 309,
+    "line": 178,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/workflow-configuration-schema.md",
     "link": "./task-orchestration-guide.md",
-    "line": 310,
+    "line": 179,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/workflow-configuration-schema.md",
     "link": "./dispatch-coordination.md",
-    "line": 311,
+    "line": 180,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/workflow-configuration-schema.md",
     "link": "./config-driven-operations.md",
-    "line": 312,
+    "line": 181,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/workflow-configuration-schema.md",
     "link": "../README.md",
-    "line": 316,
+    "line": 185,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/workflow-configuration-schema.md",
     "link": "../../AGENTS.md",
-    "line": 317,
+    "line": 186,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/workflow-configuration-schema.md",
     "link": "../../docs/README.md",
-    "line": 318,
+    "line": 187,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/project_orchestration/workflow-configuration-schema.md",
     "link": "../../README.md",
-    "line": 319,
+    "line": 188,
     "status": "ok",
     "message": "File exists"
   },
