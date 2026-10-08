@@ -7,18 +7,17 @@ of workflows that coordinate multiple Codomyrmex modules.
 
 import json
 import uuid
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from .workflow_dag import WorkflowDAG
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
-from .task_orchestrator import Task, get_task_orchestrator
+from .task_orchestrator import Task, TaskOrchestrator, TaskStatus, get_task_orchestrator
+from .workflow_dag import WorkflowDAG
 
 logger = get_logger(__name__)
 
@@ -67,12 +66,20 @@ class WorkflowExecution:
             return (self.end_time - self.start_time).total_seconds()
         return None
 
+    @property
+    def success(self) -> bool:
+        """Return True if the workflow completed successfully."""
+        return self.status == WorkflowStatus.COMPLETED
+
 
 class WorkflowManager:
     """Manages workflow definitions and execution."""
 
     def __init__(
-        self, persistence_dir: Path | None = None, config_dir: Path | None = None
+        self,
+        persistence_dir: Path | None = None,
+        config_dir: Path | None = None,
+        task_orchestrator: TaskOrchestrator | None = None,
     ):
         """Initialize the workflow manager.
 
@@ -80,10 +87,16 @@ class WorkflowManager:
             persistence_dir: Directory for workflow execution persistence data.
             config_dir: Directory containing workflow definition JSON files.
                         Defaults to ``config/workflows/production`` relative to cwd.
+            task_orchestrator: Orchestrator that runs workflow steps. Defaults to
+                the global task orchestrator.
         """
         self.workflows: dict[str, list[WorkflowStep]] = {}
         self.executions: dict[str, WorkflowExecution] = {}
-        self.task_orchestrator = get_task_orchestrator()
+        self.task_orchestrator = (
+            task_orchestrator
+            if task_orchestrator is not None
+            else get_task_orchestrator()
+        )
         self.persistence_dir = persistence_dir or Path(".workflows")
         self.persistence_dir.mkdir(parents=True, exist_ok=True)
 
@@ -113,67 +126,170 @@ class WorkflowManager:
         return list(self.workflows.keys())
 
     def execute_workflow(self, name: str, **params) -> WorkflowExecution:
-        """Execute a workflow."""
+        """Execute a registered workflow and block until it finishes.
+
+        See :meth:`execute_steps` for the execution semantics. ``params`` are
+        merged over every step's own parameters.
+
+        Raises:
+            ValueError: If the workflow is not registered or its dependencies
+                are invalid (missing step, cycle, duplicate step name).
+            NotImplementedError: If a step uses a ``run_if`` condition.
+        """
         steps = self.workflows.get(name)
-        if not steps:
+        if steps is None:
             raise ValueError(f"Workflow not found: {name}")
+        return self.execute_steps(name, steps, params)
 
-        execution_id = str(uuid.uuid4())
-        execution = WorkflowExecution(workflow_name=name, execution_id=execution_id)
-        self.executions[execution_id] = execution
+    def execute_steps(
+        self,
+        workflow_name: str,
+        steps: Sequence[WorkflowStep],
+        params: dict[str, Any] | None = None,
+        timeout: float | None = None,
+    ) -> WorkflowExecution:
+        """Run ``steps`` through the task orchestrator and wait for the outcome.
+
+        Steps are submitted in topological order of their ``dependencies``
+        (step names), whatever order they are listed in, so every dependency is
+        enforced. Independent steps run concurrently. A step whose dependency
+        failed is failed without running; other independent steps still run.
+
+        Args:
+            workflow_name: Name recorded on the execution.
+            steps: Step definitions.
+            params: Workflow-level parameters merged over each step's
+                ``parameters`` and passed to the step's action as keyword
+                arguments.
+            timeout: Maximum seconds to wait for all steps. Unfinished steps
+                are cancelled and the execution fails when it expires.
+                ``None`` waits until every step has finished.
+
+        Returns:
+            The finished :class:`WorkflowExecution`: ``COMPLETED`` when every
+            required step completed, otherwise ``FAILED`` with ``error``
+            summarising the failed steps. ``step_results`` maps each step name
+            to its task result dictionary and ``end_time`` is set.
+
+        Raises:
+            ValueError: If the step dependencies are invalid.
+            NotImplementedError: If a step uses a ``run_if`` condition.
+        """
+        ordered_steps = self._order_steps(workflow_name, steps)
+        workflow_params = dict(params or {})
+
+        execution = WorkflowExecution(
+            workflow_name=workflow_name, execution_id=str(uuid.uuid4())
+        )
+        self.executions[execution.execution_id] = execution
         execution.status = WorkflowStatus.RUNNING
+        logger.info(
+            "Starting workflow execution: %s (%s)",
+            workflow_name,
+            execution.execution_id,
+        )
 
-        logger.info("Starting workflow execution: %s (%s)", name, execution_id)
-
+        step_tasks: dict[str, Task] = {}
         try:
-            # Map step names to task IDs
-            step_tasks = {}
-
-            # Submit all steps as tasks, handling dependencies
-            for step in steps:
-                # Resolve parameters with workflow params
-                step_params = step.parameters.copy()
-                step_params.update(params)
-
-                # Resolve dependencies to task IDs
-                task_deps = [
-                    step_tasks[dep] for dep in step.dependencies if dep in step_tasks
-                ]
-
+            for step in ordered_steps:
                 task = Task(
                     name=step.name,
                     module=step.module,
                     action=step.action,
-                    parameters=step_params,
-                    dependencies=task_deps,
+                    parameters={**step.parameters, **workflow_params},
+                    dependencies=[step_tasks[dep].id for dep in step.dependencies],
                     timeout=step.timeout,
                     retry_count=step.retry_count,
                 )
+                self.task_orchestrator.submit_task(task)
+                step_tasks[step.name] = task
 
-                task_id = self.task_orchestrator.submit_task(task)
-                step_tasks[step.name] = task_id
-
-            # Wait for all submitted tasks?
-            # In a synchronous execution model, yes.
-            # But here we probably want to return the execution object and let it run async.
-            # However, for simplicity and immediate feedback, we'll implement a blocking wait
-            # (or assume the orchestrator handles it)
-
-            # For this implementation, we will perform a non-blocking execution via orchestrator
-            # but we can't easily update the WorkflowExecution object without a callback or polling.
-            # So lets launch a background monitor for this workflow
-
-            # ... Thread/Async launch omitted for brevity in this repair ...
-            # We'll just assume they run.
-
-            return execution
-
-        except Exception as e:
+            finished = self.task_orchestrator.wait_for_tasks(
+                [task.id for task in step_tasks.values()], timeout=timeout
+            )
+        except BaseException as exc:
+            for task in step_tasks.values():
+                self.task_orchestrator.cancel_task(task.id)
             execution.status = WorkflowStatus.FAILED
-            execution.error = str(e)
+            execution.error = f"{type(exc).__name__}: {exc}"
             execution.end_time = datetime.now(UTC)
-            logger.error("Workflow execution failed: %s", e)
-            return execution
+            logger.error("Workflow execution failed: %s", execution.error)
+            raise
+
+        failures: list[str] = []
+        if not finished:
+            unfinished = [
+                step.name
+                for step in ordered_steps
+                if self.task_orchestrator.cancel_task(step_tasks[step.name].id)
+            ]
+            failures.append(
+                f"timed out after {timeout}s; cancelled unfinished steps {unfinished}"
+            )
+
+        for step in steps:
+            task = step_tasks[step.name]
+            task_result = task.result
+            execution.step_results[step.name] = (
+                task_result.to_dict()
+                if task_result is not None
+                else {"status": task.status.value, "success": False}
+            )
+            if step.required and task.status != TaskStatus.COMPLETED:
+                reason = task_result.error if task_result is not None else None
+                failures.append(f"{step.name}: {reason or task.status.value}")
+
+        execution.status = (
+            WorkflowStatus.FAILED if failures else WorkflowStatus.COMPLETED
+        )
+        execution.error = "; ".join(failures) or None
+        execution.end_time = datetime.now(UTC)
+        logger.info(
+            "Workflow execution %s (%s) finished: %s",
+            workflow_name,
+            execution.execution_id,
+            execution.status.value,
+        )
+        return execution
+
+    def _order_steps(
+        self, workflow_name: str, steps: Sequence[WorkflowStep]
+    ) -> list[WorkflowStep]:
+        """Validate step dependencies and return the steps in execution order."""
+        names = [step.name for step in steps]
+        duplicates = sorted({name for name in names if names.count(name) > 1})
+        if duplicates:
+            raise ValueError(
+                f"Workflow '{workflow_name}' has duplicate step names: {duplicates}"
+            )
+
+        conditional = [step.name for step in steps if step.run_if]
+        if conditional:
+            raise NotImplementedError(
+                f"Workflow '{workflow_name}': run_if conditions are not supported "
+                f"(steps {conditional})"
+            )
+
+        dag = WorkflowDAG(
+            [
+                {
+                    "name": step.name,
+                    "module": step.module,
+                    "action": step.action,
+                    "dependencies": list(step.dependencies),
+                }
+                for step in steps
+            ]
+        )
+        is_valid, errors = dag.validate_dag()
+        if not is_valid:
+            raise ValueError(
+                f"Workflow '{workflow_name}' has invalid dependencies: "
+                + "; ".join(errors)
+            )
+
+        by_name = {step.name: step for step in steps}
+        return [by_name[name] for level in dag.get_execution_order() for name in level]
 
     # ------------------------------------------------------------------
     # Config-directory workflow loading
@@ -219,7 +335,7 @@ class WorkflowManager:
     # DAG & dependency helpers
     # ------------------------------------------------------------------
 
-    def create_workflow_dag(self, tasks: list[dict[str, Any]]) -> "WorkflowDAG":
+    def create_workflow_dag(self, tasks: list[dict[str, Any]]) -> WorkflowDAG:
         """Create a :class:`WorkflowDAG` from a list of task dictionaries.
 
         Args:
@@ -229,8 +345,6 @@ class WorkflowManager:
         Returns:
             A populated :class:`WorkflowDAG` instance.
         """
-        from .workflow_dag import WorkflowDAG
-
         return WorkflowDAG(tasks)
 
     def validate_workflow_dependencies(self, tasks: list[dict[str, Any]]) -> list[str]:
@@ -280,7 +394,9 @@ class WorkflowManager:
         dependencies = workflow.get("dependencies", {})
         max_parallel = workflow.get("max_parallel", 4)
 
-        with ParallelExecutor(max_workers=max_parallel) as executor:
+        with ParallelExecutor(
+            max_workers=max_parallel, actions=self.task_orchestrator.actions
+        ) as executor:
             results = executor.execute_tasks(tasks, dependencies)
 
         completed_count = sum(
@@ -315,10 +431,20 @@ class WorkflowManager:
 
     def get_performance_summary(self) -> dict[str, Any]:
         """Return aggregate execution counts and duration metrics."""
+        executions = list(self.executions.values())
         return {
-            "total_executions": len(self.executions),
-            "average_duration": sum(e.duration or 0 for e in self.executions.values())
-            / max(1, len(self.executions)),
+            "total_executions": len(executions),
+            "successful_executions": sum(
+                1 for e in executions if e.status == WorkflowStatus.COMPLETED
+            ),
+            "failed_executions": sum(
+                1 for e in executions if e.status == WorkflowStatus.FAILED
+            ),
+            "running_executions": sum(
+                1 for e in executions if e.status == WorkflowStatus.RUNNING
+            ),
+            "average_duration": sum(e.duration or 0 for e in executions)
+            / max(1, len(executions)),
         }
 
 

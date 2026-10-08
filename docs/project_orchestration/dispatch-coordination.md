@@ -13,66 +13,68 @@ The Codomyrmex orchestration system uses a multi-layered dispatch and coordinati
 
 ## Task Dispatch
 
-### Priority Queue Algorithm
+### Action Resolution
 
-Tasks are scheduled using a priority queue that orders tasks by:
-1. **Priority**: Higher priority tasks execute first (CRITICAL > HIGH > NORMAL > LOW)
-2. **Creation Time**: Earlier tasks execute first when priorities are equal
-3. **Dependencies**: Tasks with satisfied dependencies are eligible for execution
+A task names the code it runs with `module` and `action`, and the orchestrator calls it with the task's parameters as keyword arguments:
 
-#### Queue Implementation
+1. A callable registered with `TaskOrchestrator.register_action(module, action, func)` is used first.
+2. Otherwise `codomyrmex.<module>` is imported (`module` may be dotted, e.g. `coding.static_analysis`) and its public attribute `<action>` is called.
+3. If the callable returns an awaitable, it is run to completion in the worker thread.
 
 ```python
-class TaskQueue:
-    def add_task(self, task: Task):
-        # Priority queue uses negative priority for max-heap behavior
-        priority_value = -task.priority.value
-        self.queue.put((priority_value, task.created_at.timestamp(), task.id))
-    
-    def get_next_ready_task(self, completed_tasks: set[str]) -> Optional[Task]:
-        # Returns the highest priority task whose dependencies are satisfied
-        ...
+from codomyrmex.logistics.orchestration.project import Task, get_task_orchestrator
+
+orchestrator = get_task_orchestrator()
+result = orchestrator.execute_task(
+    Task(
+        name="analyze",
+        module="coding.static_analysis",
+        action="analyze_code_quality",
+        parameters={"path": "./src"},
+    )
+)
+print(result.status, result.error)
 ```
 
-#### Priority Levels
+An unknown or malformed module or action, or an exception raised by the callable, marks the task `FAILED` with the reason in `TaskResult.error`. A task is only `COMPLETED` when its callable ran and returned.
 
-- **CRITICAL** (4): System-critical tasks that must execute immediately
-- **HIGH** (3): Important tasks that should execute soon
-- **NORMAL** (2): Standard tasks (default)
-- **LOW** (1): Low-priority tasks that can wait
+### Priority Queues
+
+Ready tasks wait in one FIFO queue per priority; the worker always takes the oldest task of the most urgent non-empty priority:
+
+- **CRITICAL** (0)
+- **HIGH** (1)
+- **NORMAL** (2, default)
+- **LOW** (3)
+- **BACKGROUND** (4)
+
+At most `max_workers` tasks run concurrently.
 
 ### Dependency Resolution
 
 Tasks declare dependencies on other tasks by ID:
 
 ```python
-task1 = Task(name="setup", module="environment_setup", action="check")
+task1 = Task(name="setup", module="environment_setup", action="validate_environment")
 task2 = Task(
     name="analyze",
-    module="static_analysis",
-    action="analyze_code",
-    dependencies=[task1.id]  # task2 depends on task1
+    module="coding.static_analysis",
+    action="analyze_code_quality",
+    dependencies=[task1.id],  # task2 depends on task1
 )
 ```
 
 #### Dependency Checking
 
-A task is ready to execute when:
-1. All dependency task IDs are in the `completed_tasks` set
-2. Task status is `PENDING`
-3. Required resources are available
+When a task is submitted, and whenever the worker is idle:
 
-```python
-def is_ready(self, completed_tasks: set[str]) -> bool:
-    return (
-        self.status == TaskStatus.PENDING and
-        all(dep_id in completed_tasks for dep_id in self.dependencies)
-    )
-```
+1. If every dependency is `COMPLETED`, the task becomes `READY` and is queued.
+2. If any dependency is `FAILED` or `CANCELLED`, the task is failed without running (its error names the dependency).
+3. Otherwise (a dependency is still pending or its ID is unknown) the task stays `BLOCKED`.
 
 #### Dependency Graph Example
 
-```
+```text
 Task A (no dependencies)
   ├─> Task B (depends on A)
   │    └─> Task D (depends on B)
@@ -84,94 +86,51 @@ Execution order: A → (B, C) → (D, E)
 
 ### Resource Acquisition
 
-Before executing a task, the system attempts to acquire all required resources:
+`Task.resources` lists `TaskResource(resource_type, amount=1.0, resource_id=None)` requirements. Immediately before a queued task runs, the orchestrator allocates all of them from its `ResourceManager` (all or nothing) and releases them when the task finishes, fails or is cancelled:
 
 ```python
-# 1. Check resource availability
-if not resource_manager.acquire_resources(task):
-    # Resources not available, try again later
-    continue
+from codomyrmex.logistics.orchestration.project import Task, TaskResource
 
-# 2. Execute task
-execute_task(task)
-
-# 3. Release resources when done
-resource_manager.release_resources(task)
+task = Task(
+    name="heavy_analysis",
+    module="coding.static_analysis",
+    action="analyze_code_quality",
+    resources=[TaskResource(resource_type="memory", amount=512)],
+)
 ```
 
-#### Resource Acquisition Process
-
-1. **Lock Resources**: Acquire locks for all required resources
-2. **Check Availability**: Verify resources are available for the requested mode
-3. **Allocate**: Mark resources as allocated to the task
-4. **Execute**: Run the task with acquired resources
-5. **Release**: Free resources when task completes or fails
-
-#### Resource Modes
-
-- **read**: Multiple tasks can read simultaneously
-- **write**: Exclusive access required (no other users)
-- **exclusive**: Only one task can use the resource
+- With `resource_id`, that resource is used and its type must match `resource_type`; otherwise the resource of that `ResourceType` with the most free capacity is chosen.
+- If capacity is only temporarily short, the task goes back to its queue and is retried once running tasks release capacity.
+- If the requirement can never be met (unknown type or ID, type mismatch, non-positive amount, amount above capacity, resource offline, in maintenance or depleted), the task fails explicitly.
 
 ### Execution Scheduling
 
-Tasks are executed asynchronously in worker threads:
-
-```python
-def _execution_loop(self):
-    while not self.shutdown_requested:
-        # Get next ready task
-        task = self.task_queue.get_next_ready_task(self.completed_tasks)
-        
-        if task is None:
-            time.sleep(0.1)  # No ready tasks, wait
-            continue
-        
-        # Try to acquire resources
-        if not self.resource_manager.acquire_resources(task):
-            time.sleep(0.1)  # Resources not available, retry
-            continue
-        
-        # Execute task asynchronously
-        self._execute_task_async(task)
+```text
+# Simplified view of TaskOrchestrator._process_queue (pseudo-code)
+while not stopped:
+    task_id = next_ready_task()          # highest priority, capacity permitting
+    if task_id is None:
+        promote_or_fail_blocked_tasks()  # dependency checking (above)
+        sleep(0.1)
+    elif not start(task_id):             # allocates resources, then runs the action
+        sleep(0.05)                      # resources busy: task re-queued
 ```
 
 ## Workflow Dispatch
 
 ### Step Execution Order
 
-Workflow steps are executed in dependency order, not definition order:
+`WorkflowManager.execute_workflow(name, **params)` is synchronous. It validates the step graph, submits the steps to the task orchestrator in topological order of their `dependencies` (step names), waits for all of them, and returns the finished `WorkflowExecution`. Listing order does not matter: a step listed before its dependency still waits for it.
 
-```python
-async def execute_workflow(self, name: str, ...):
-    steps = self.workflows[name]
-    completed_steps = set()
-    remaining_steps = list(steps)
-    
-    while remaining_steps:
-        # Find steps that can be executed (dependencies satisfied)
-        ready_steps = [
-            step for step in remaining_steps
-            if all(dep in completed_steps for dep in step.dependencies)
-        ]
-        
-        # Execute ready steps
-        for step in ready_steps:
-            result = await self._execute_step(step, parameters, execution)
-            completed_steps.add(step.name)
-            remaining_steps.remove(step)
-```
+- Missing dependencies, cycles and duplicate step names raise `ValueError` before any step runs.
+- Steps with a `run_if` condition raise `NotImplementedError`; conditions are not supported.
+- `params` are merged over every step's `parameters`.
 
 ### Parallel Execution
 
-Independent workflow steps can execute in parallel when:
-1. Steps have no dependencies on each other
-2. Resources are available for all steps
-3. OrchestrationEngine is configured with `mode="parallel"` or `mode="resource_aware"`
+Independent workflow steps execute in parallel (up to the orchestrator's `max_workers`) once their dependencies have completed:
 
-#### Example Parallel Execution
-
-```
+```text
 Step A (no dependencies)
   ├─> Step B (depends on A)
   └─> Step C (depends on A)
@@ -183,35 +142,16 @@ Step B and Step C can execute in parallel after Step A completes.
 
 #### Step-Level Errors
 
-- Failed steps are retried up to `max_retries` times
-- After retries exhausted, step is marked as failed
-- Error is recorded in `execution.errors`
+- A step fails when its action cannot be resolved or raises; the error is recorded in `execution.step_results[step]["error"]`.
+- A step whose dependency failed is failed without running.
+- Steps are not retried: `retry_count`/`max_retries` are recorded but not acted on.
 
 #### Workflow-Level Errors
 
-- Workflow continues executing independent steps even if some fail
-- Workflow status is `FAILED` if any step fails
-- All errors are collected in `execution.errors`
-- Partial results available in `execution.results`
-
-### Retry Logic
-
-Workflow steps support retry logic:
-
-```python
-@dataclass
-class WorkflowStep:
-    max_retries: int = 3  # Maximum retry attempts
-    
-    # Retry happens automatically during execution
-    # Current retry_count is tracked internally
-```
-
-Retry behavior:
-- Retries happen automatically on failure
-- No exponential backoff currently (future enhancement)
-- Each retry uses the same parameters
-- After max retries, step is marked as failed
+- Independent steps keep running even if some steps fail.
+- The workflow is `FAILED` if any `required` step did not complete; `execution.error` lists each such step and its error.
+- `execution.step_results` holds every step's result; `execution.end_time` is always set.
+- `WorkflowManager.execute_steps(..., timeout=...)` cancels unfinished steps and fails the workflow when the timeout expires.
 
 ## Session Coordination
 
@@ -245,6 +185,7 @@ engine.close_session(session_id)
 ### Context Management
 
 Sessions provide:
+
 - **Resource Allocation**: Resources allocated to session are tracked
 - **Execution Context**: All operations in session share context
 - **Cleanup**: Resources automatically deallocated when session closes
@@ -294,7 +235,7 @@ engine.register_event_handler('operation_complete', handle_operation_complete)
 
 The OrchestrationEngine coordinates multiple components:
 
-```
+```text
 OrchestrationEngine
 ├── WorkflowManager (workflow definitions and execution)
 ├── TaskOrchestrator (task scheduling and execution)
@@ -311,14 +252,17 @@ OrchestrationEngine
 
 ### Example: Workflow Execution Flow
 
-```
+```text
 1. OrchestrationEngine.execute_workflow()
-   └─> 2. WorkflowManager.execute_workflow()
-        └─> 3. For each step:
-             ├─> 4. ResourceManager.allocate_resources()
-             ├─> 5. Execute step (module.action)
-             └─> 6. ResourceManager.deallocate_resources()
-   
+   ├─> 2. ResourceManager.allocate_resources()   (session resource_requirements)
+   └─> 3. WorkflowManager.execute_workflow()
+        └─> 4. For each step, in topological order:
+             └─> TaskOrchestrator.submit_task()
+                  ├─> allocate Task.resources
+                  ├─> call codomyrmex.<module>.<action>(**parameters)
+                  └─> release Task.resources
+        └─> 5. Wait for every step; set status, error, end_time
+   └─> 6. ResourceManager.deallocate_resources()  (session)
 7. OrchestrationEngine.emit_event('workflow_completed')
 ```
 
@@ -375,7 +319,6 @@ session_id = engine.create_session(mode="resource_aware")
 - [Workflow Configuration Schema](./workflow-configuration-schema.md)
 - [Resource Configuration](./resource-configuration.md)
 - [API Specification](../../src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md)
-
 
 ## Navigation Links
 

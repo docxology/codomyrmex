@@ -8,14 +8,17 @@ Covers:
 - ParallelExecutor.execute_task_group (independent parallel tasks, timeout)
 - ParallelExecutor.wait_for_dependencies (dependency check logic)
 - ParallelExecutor._get_ready_tasks (ready-task filtering)
-- ParallelExecutor._execute_task (single task execution, error handling)
-- ParallelExecutor._simulate_task_execution (simulation branches)
+- ParallelExecutor._execute_task (real module/action dispatch, error handling)
 - ParallelExecutor.shutdown (graceful shutdown)
 - validate_workflow_dependencies (self-dep, missing dep, valid)
 - get_workflow_execution_order (delegates to WorkflowDAG -- tested if import available)
 
-Zero-mock policy: all tests use real objects only.
+Zero-mock policy: all tests use real objects only. Tasks dispatch to real
+functions, either registered in an ActionRegistry under the ``test`` module
+name or resolved from ``codomyrmex.<module>.<action>``.
 """
+
+import time
 
 import pytest
 
@@ -25,6 +28,36 @@ from codomyrmex.logistics.orchestration.project.parallel_executor import (
     ParallelExecutor,
     validate_workflow_dependencies,
 )
+from codomyrmex.logistics.orchestration.project.task_orchestrator import (
+    ActionRegistry,
+)
+
+
+def _echo(message: str = "") -> str:
+    return message
+
+
+def _sleep(duration: float = 0.05) -> float:
+    time.sleep(duration)
+    return duration
+
+
+def _fail(reason: str = "boom") -> None:
+    raise RuntimeError(reason)
+
+
+@pytest.fixture
+def actions() -> ActionRegistry:
+    registry = ActionRegistry()
+    registry.register("test", "echo", _echo)
+    registry.register("test", "sleep", _sleep)
+    registry.register("test", "fail", _fail)
+    return registry
+
+
+def _task(name: str, action: str = "echo", **parameters) -> dict:
+    return {"name": name, "module": "test", "action": action, "parameters": parameters}
+
 
 # ---------------------------------------------------------------------------
 # ExecutionStatus enum
@@ -271,78 +304,48 @@ class TestGetReadyTasks:
 class TestExecuteTask:
     """Tests for ParallelExecutor._execute_task (single task execution)."""
 
-    def test_generic_task_completes(self):
-        with ParallelExecutor() as pe:
-            task = {"name": "generic_op", "module": "m", "action": "a"}
-            result = pe._execute_task(task)
+    def test_registered_action_completes_with_its_return_value(self, actions):
+        with ParallelExecutor(actions=actions) as pe:
+            result = pe._execute_task(_task("generic_op", message="hi"))
             assert result.status is ExecutionStatus.COMPLETED
             assert result.task_name == "generic_op"
+            assert result.result == "hi"
             assert result.start_time is not None
             assert result.end_time is not None
             assert result.duration >= 0
             assert result.error is None
 
-    def test_analysis_task_simulation(self):
+    def test_imported_codomyrmex_action_is_called(self):
         with ParallelExecutor() as pe:
-            task = {"name": "run_analysis", "module": "m", "action": "a"}
-            result = pe._execute_task(task)
+            result = pe._execute_task(
+                {
+                    "name": "validate",
+                    "module": "logistics.orchestration.project.parallel_executor",
+                    "action": "validate_workflow_dependencies",
+                    "parameters": {"tasks": [{"name": "a", "dependencies": ["a"]}]},
+                }
+            )
             assert result.status is ExecutionStatus.COMPLETED
-            assert "analysis_result" in result.result
+            assert result.result == ["Task 'a' cannot depend on itself"]
 
-    def test_build_task_simulation(self):
+    def test_unknown_module_fails(self):
+        """Regression: any task used to 'complete' with a canned simulated result."""
         with ParallelExecutor() as pe:
-            task = {"name": "run_build", "module": "m", "action": "a"}
-            result = pe._execute_task(task)
-            assert result.status is ExecutionStatus.COMPLETED
-            assert "build_status" in result.result
+            result = pe._execute_task(
+                {"name": "run_build", "module": "no_such", "action": "nope"}
+            )
+            assert result.status is ExecutionStatus.FAILED
+            assert result.result is None
+            assert "codomyrmex.no_such" in result.error
 
-    def test_test_task_simulation(self):
-        with ParallelExecutor() as pe:
-            task = {"name": "run_test", "module": "m", "action": "a"}
-            result = pe._execute_task(task)
-            assert result.status is ExecutionStatus.COMPLETED
-            assert "tests_passed" in result.result
+    def test_action_exception_fails(self, actions):
+        with ParallelExecutor(actions=actions) as pe:
+            result = pe._execute_task(_task("bad", "fail", reason="nope"))
+            assert result.status is ExecutionStatus.FAILED
+            assert result.error == "RuntimeError: nope"
 
-    def test_default_task_simulation(self):
-        with ParallelExecutor() as pe:
-            task = {"name": "deploy_app", "module": "m", "action": "a"}
-            result = pe._execute_task(task)
-            assert result.status is ExecutionStatus.COMPLETED
-            assert result.result["status"] == "completed"
-
-
-# ---------------------------------------------------------------------------
-# ParallelExecutor._simulate_task_execution
-# ---------------------------------------------------------------------------
-
-
-@pytest.mark.unit
-class TestSimulateTaskExecution:
-    """Tests for the simulation branch dispatch."""
-
-    def test_analysis_branch(self):
-        with ParallelExecutor() as pe:
-            result = pe._simulate_task_execution({"name": "code_analysis"})
-            assert result["analysis_result"] == "completed"
-            assert result["findings"] == 5
-
-    def test_build_branch(self):
-        with ParallelExecutor() as pe:
-            result = pe._simulate_task_execution({"name": "build_app"})
-            assert result["build_status"] == "success"
-            assert "app.jar" in result["artifacts"]
-
-    def test_test_branch(self):
-        with ParallelExecutor() as pe:
-            result = pe._simulate_task_execution({"name": "unit_test"})
-            assert result["tests_passed"] == 95
-            assert result["total_tests"] == 100
-
-    def test_default_branch(self):
-        with ParallelExecutor() as pe:
-            result = pe._simulate_task_execution({"name": "cleanup"})
-            assert result["status"] == "completed"
-            assert "cleanup" in result["message"]
+    def test_simulation_hook_removed(self):
+        assert not hasattr(ParallelExecutor, "_simulate_task_execution")
 
 
 # ---------------------------------------------------------------------------
@@ -354,35 +357,44 @@ class TestSimulateTaskExecution:
 class TestExecuteTaskGroup:
     """Tests for ParallelExecutor.execute_task_group (independent parallel tasks)."""
 
-    def test_single_task(self):
-        with ParallelExecutor(max_workers=2) as pe:
-            tasks = [{"name": "solo", "module": "m", "action": "a"}]
-            results = pe.execute_task_group(tasks)
+    def test_single_task(self, actions):
+        with ParallelExecutor(max_workers=2, actions=actions) as pe:
+            results = pe.execute_task_group([_task("solo")])
             assert len(results) == 1
             assert results[0].status is ExecutionStatus.COMPLETED
 
-    def test_multiple_tasks_all_complete(self):
-        with ParallelExecutor(max_workers=4) as pe:
-            tasks = [
-                {"name": f"task_{i}", "module": "m", "action": "a"} for i in range(3)
-            ]
+    def test_multiple_tasks_all_complete(self, actions):
+        with ParallelExecutor(max_workers=4, actions=actions) as pe:
+            tasks = [_task(f"task_{i}", message=str(i)) for i in range(3)]
             results = pe.execute_task_group(tasks)
             assert len(results) == 3
-            names = {r.task_name for r in results}
-            assert names == {"task_0", "task_1", "task_2"}
+            assert {r.task_name: r.result for r in results} == {
+                "task_0": "0",
+                "task_1": "1",
+                "task_2": "2",
+            }
             assert all(r.status is ExecutionStatus.COMPLETED for r in results)
 
-    def test_uses_custom_timeout(self):
-        with ParallelExecutor(max_workers=2, timeout=120.0) as pe:
-            tasks = [{"name": "fast_op", "module": "m", "action": "a"}]
-            results = pe.execute_task_group(tasks, timeout=60.0)
+    def test_failures_are_reported_per_task(self, actions):
+        with ParallelExecutor(max_workers=2, actions=actions) as pe:
+            results = pe.execute_task_group([_task("ok"), _task("bad", "fail")])
+            statuses = {r.task_name: r.status for r in results}
+            assert statuses == {
+                "ok": ExecutionStatus.COMPLETED,
+                "bad": ExecutionStatus.FAILED,
+            }
+
+    def test_uses_custom_timeout(self, actions):
+        with ParallelExecutor(max_workers=2, timeout=120.0, actions=actions) as pe:
+            results = pe.execute_task_group([_task("fast_op")], timeout=60.0)
             assert len(results) == 1
 
-    def test_uses_default_timeout(self):
-        with ParallelExecutor(max_workers=2, timeout=120.0) as pe:
-            tasks = [{"name": "fast_op", "module": "m", "action": "a"}]
-            results = pe.execute_task_group(tasks)
-            assert len(results) == 1
+    def test_group_timeout_marks_task(self, actions):
+        with ParallelExecutor(max_workers=1, actions=actions) as pe:
+            results = pe.execute_task_group(
+                [_task("slow", "sleep", duration=0.5)], timeout=0.1
+            )
+            assert results[0].status is ExecutionStatus.TIMEOUT
 
 
 # ---------------------------------------------------------------------------
@@ -394,71 +406,79 @@ class TestExecuteTaskGroup:
 class TestExecuteTasks:
     """Tests for ParallelExecutor.execute_tasks (dependency-aware execution)."""
 
-    def test_single_task_no_deps(self):
-        with ParallelExecutor(max_workers=2) as pe:
-            tasks = [{"name": "alpha", "module": "m", "action": "a"}]
-            deps = {}
-            results = pe.execute_tasks(tasks, deps)
+    def test_single_task_no_deps(self, actions):
+        with ParallelExecutor(max_workers=2, actions=actions) as pe:
+            results = pe.execute_tasks([_task("alpha")], {})
             assert "alpha" in results
             assert results["alpha"].status is ExecutionStatus.COMPLETED
 
-    def test_two_independent_tasks(self):
-        with ParallelExecutor(max_workers=4) as pe:
-            tasks = [
-                {"name": "a", "module": "m", "action": "a"},
-                {"name": "b", "module": "m", "action": "a"},
-            ]
-            deps = {}
-            results = pe.execute_tasks(tasks, deps)
+    def test_two_independent_tasks(self, actions):
+        with ParallelExecutor(max_workers=4, actions=actions) as pe:
+            results = pe.execute_tasks([_task("a"), _task("b")], {})
             assert len(results) == 2
             assert results["a"].status is ExecutionStatus.COMPLETED
             assert results["b"].status is ExecutionStatus.COMPLETED
 
-    def test_sequential_dependency_chain(self):
-        with ParallelExecutor(max_workers=2) as pe:
-            tasks = [
-                {"name": "step1", "module": "m", "action": "a"},
-                {"name": "step2", "module": "m", "action": "a"},
-            ]
-            deps = {"step2": ["step1"]}
-            results = pe.execute_tasks(tasks, deps, timeout=30.0)
+    def test_sequential_dependency_chain(self, actions):
+        with ParallelExecutor(max_workers=2, actions=actions) as pe:
+            tasks = [_task("step2"), _task("step1", "sleep", duration=0.1)]
+            results = pe.execute_tasks(tasks, {"step2": ["step1"]}, timeout=30.0)
             assert results["step1"].status is ExecutionStatus.COMPLETED
             assert results["step2"].status is ExecutionStatus.COMPLETED
+            assert results["step2"].start_time >= results["step1"].end_time
 
-    def test_results_have_timing(self):
-        with ParallelExecutor(max_workers=2) as pe:
-            tasks = [{"name": "timed", "module": "m", "action": "a"}]
-            deps = {}
-            results = pe.execute_tasks(tasks, deps)
+    def test_task_level_dependencies_are_honoured(self, actions):
+        with ParallelExecutor(max_workers=2, actions=actions) as pe:
+            tasks = [
+                {**_task("second"), "dependencies": ["first"]},
+                _task("first", "sleep", duration=0.1),
+            ]
+            results = pe.execute_tasks(tasks, {})
+            assert results["second"].start_time >= results["first"].end_time
+
+    def test_dependent_of_failed_task_does_not_run(self, actions):
+        """Dependents used to run even when their dependency failed."""
+        with ParallelExecutor(max_workers=2, actions=actions) as pe:
+            tasks = [_task("broken", "fail"), _task("after")]
+            results = pe.execute_tasks(tasks, {"after": ["broken"]})
+            assert results["broken"].status is ExecutionStatus.FAILED
+            assert results["after"].status is ExecutionStatus.FAILED
+            assert results["after"].start_time is None
+            assert "broken" in results["after"].error
+
+    @pytest.mark.parametrize(
+        ("dependencies", "message"),
+        [
+            ({"a": ["ghost"]}, "missing task 'ghost'"),
+            ({"a": ["b"], "b": ["a"]}, "Cycle detected"),
+            ({"zzz": ["a"]}, "unknown tasks"),
+        ],
+    )
+    def test_invalid_dependencies_raise(self, actions, dependencies, message):
+        """Invalid graphs used to spin until the (300 s) timeout."""
+        with ParallelExecutor(actions=actions) as pe:
+            with pytest.raises(ValueError, match=message):
+                pe.execute_tasks([_task("a"), _task("b")], dependencies)
+
+    def test_results_have_timing(self, actions):
+        with ParallelExecutor(max_workers=2, actions=actions) as pe:
+            results = pe.execute_tasks([_task("timed")], {})
             r = results["timed"]
             assert r.start_time is not None
             assert r.end_time is not None
             assert r.duration is not None
             assert r.duration >= 0
 
-    def test_timeout_marks_incomplete_tasks(self):
+    def test_timeout_marks_incomplete_tasks(self, actions):
         """Tasks that cannot finish within the timeout are marked TIMEOUT."""
-        with ParallelExecutor(max_workers=1) as pe:
-            # Create tasks where second depends on first, but first simulates
-            # analysis (0.5s sleep). With a very short timeout, the second
-            # task should timeout.
-            tasks = [
-                {"name": "slow_analysis", "module": "m", "action": "a"},
-                {"name": "needs_slow", "module": "m", "action": "a"},
-            ]
-            deps = {"needs_slow": ["slow_analysis"]}
-            results = pe.execute_tasks(tasks, deps, timeout=0.05)
-            # At least one task should be TIMEOUT (the dependent one almost certainly)
-            statuses = {r.status for r in results.values()}
-            assert (
-                ExecutionStatus.TIMEOUT in statuses
-                or ExecutionStatus.COMPLETED in statuses
-            )
+        with ParallelExecutor(max_workers=1, actions=actions) as pe:
+            tasks = [_task("slow", "sleep", duration=0.5), _task("needs_slow")]
+            results = pe.execute_tasks(tasks, {"needs_slow": ["slow"]}, timeout=0.1)
+            assert results["needs_slow"].status is ExecutionStatus.TIMEOUT
 
-    def test_uses_default_timeout_when_none(self):
-        with ParallelExecutor(max_workers=2, timeout=120.0) as pe:
-            tasks = [{"name": "t", "module": "m", "action": "a"}]
-            results = pe.execute_tasks(tasks, {}, timeout=None)
+    def test_uses_default_timeout_when_none(self, actions):
+        with ParallelExecutor(max_workers=2, timeout=120.0, actions=actions) as pe:
+            results = pe.execute_tasks([_task("t")], {}, timeout=None)
             assert results["t"].status is ExecutionStatus.COMPLETED
 
 

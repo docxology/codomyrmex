@@ -68,8 +68,11 @@ class Project:
     updated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     owner: str | None = None
     version: str = "0.1.0"
+    metrics: dict[str, Any] = field(default_factory=dict)
+    milestones: dict[str, dict[str, Any]] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        """Convert the project to a serializable dictionary."""
         return {
             "name": self.name,
             "path": str(self.path),
@@ -81,23 +84,45 @@ class Project:
             "updated_at": self.updated_at.isoformat(),
             "owner": self.owner,
             "version": self.version,
+            "metrics": self.metrics,
+            "milestones": self.milestones,
         }
 
 
 class ProjectManager:
     """Manages project lifecycles."""
 
-    def __init__(self, projects_root: Path | None = None):
+    def __init__(self, projects_root: Path | str | None = None):
         """Initialize the project manager."""
-        self.projects_root = projects_root or Path.cwd()
+        self.projects_root = Path(projects_root) if projects_root else Path.cwd()
         self.doc_generator = DocumentationGenerator()
         self.active_projects: dict[str, Project] = {}
 
     def create_project(
-        self, name: str, type: ProjectType, description: str = ""
+        self,
+        name: str,
+        type: ProjectType,
+        description: str = "",
+        path: Path | str | None = None,
     ) -> Project | None:
-        """Create a new project."""
-        project_path = self.projects_root / name
+        """Create and scaffold a new project.
+
+        Args:
+            name: Project name (unique within this manager).
+            type: Project type.
+            description: Free-text description.
+            path: Project directory. Defaults to ``projects_root / name``.
+
+        Returns:
+            The created project, or None if the name is already registered,
+            the directory already exists, or scaffolding failed (the reason is
+            logged).
+        """
+        if name in self.active_projects:
+            logger.error("Project already registered: %s", name)
+            return None
+
+        project_path = Path(path) if path is not None else self.projects_root / name
 
         if project_path.exists():
             logger.error("Project directory already exists: %s", project_path)
@@ -158,6 +183,71 @@ class ProjectManager:
             logger.info("Updated status for project %s: %s", name, status.value)
             return True
         return False
+
+    def update_project_metrics(self, name: str, metrics: dict[str, Any]) -> bool:
+        """Merge ``metrics`` into the project's metrics.
+
+        Returns:
+            True if the project exists and was updated, False otherwise.
+        """
+        project = self.get_project(name)
+        if project is None:
+            return False
+        project.metrics.update(metrics)
+        project.updated_at = datetime.now(UTC)
+        return True
+
+    def add_project_milestone(
+        self,
+        name: str,
+        milestone_name: str,
+        milestone_data: dict[str, Any] | None = None,
+    ) -> bool:
+        """Record a milestone (with a ``recorded_at`` timestamp) on a project.
+
+        Returns:
+            True if the project exists and the milestone was recorded.
+        """
+        project = self.get_project(name)
+        if project is None:
+            return False
+        now = datetime.now(UTC)
+        project.milestones[milestone_name] = {
+            **(milestone_data or {}),
+            "recorded_at": now.isoformat(),
+        }
+        project.updated_at = now
+        return True
+
+    def get_projects_summary(self) -> dict[str, Any]:
+        """Summarise the managed projects.
+
+        Returns:
+            Dictionary with ``total_projects``, ``by_status`` and ``by_type``
+            (counts keyed by enum value) and ``recent_activity`` (projects
+            ordered by most recent update).
+        """
+        projects = self.list_projects()
+        by_status: dict[str, int] = {}
+        by_type: dict[str, int] = {}
+        for project in projects:
+            by_status[project.status.value] = by_status.get(project.status.value, 0) + 1
+            by_type[project.type.value] = by_type.get(project.type.value, 0) + 1
+
+        recent = sorted(projects, key=lambda p: p.updated_at, reverse=True)
+        return {
+            "total_projects": len(projects),
+            "by_status": by_status,
+            "by_type": by_type,
+            "recent_activity": [
+                {
+                    "name": project.name,
+                    "status": project.status.value,
+                    "updated_at": project.updated_at.isoformat(),
+                }
+                for project in recent
+            ],
+        }
 
 
 # Global project manager instance

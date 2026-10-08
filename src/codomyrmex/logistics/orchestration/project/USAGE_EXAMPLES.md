@@ -12,17 +12,18 @@ from codomyrmex.logistics.orchestration.project import get_workflow_manager, Wor
 # Get workflow manager
 wf_manager = get_workflow_manager()
 
-# Define workflow steps
+# Define workflow steps. Each step calls codomyrmex.<module>.<action>(**parameters);
+# list order does not matter, dependencies (step names) decide execution order.
 steps = [
     WorkflowStep(
         name="environment_check",
         module="environment_setup",
-        action="check_environment",
+        action="validate_environment",
         parameters={}
     ),
     WorkflowStep(
         name="code_analysis",
-        module="static_analysis",
+        module="coding.static_analysis",
         action="analyze_code_quality",
         parameters={"path": "."},
         dependencies=["environment_check"]
@@ -37,9 +38,18 @@ print(f"Workflow created: {success}")
 ### Executing a Workflow
 
 ```python
-# Execute workflow
+# Execute workflow: blocks until every step has finished
 result = wf_manager.execute_workflow("code_analysis_workflow")
-print(f"Workflow status: {result.status}")
+print(f"Workflow status: {result.status}")  # COMPLETED or FAILED
+print(f"Step results: {result.step_results}")
+print(f"Errors: {result.error}")
+```
+
+Functions that are not part of a `codomyrmex` module can be registered on the
+task orchestrator the workflow manager uses:
+
+```python
+wf_manager.task_orchestrator.register_action("reports", "summarise", my_function)
 ```
 
 ## 🏗️ Project Lifecycle Management
@@ -47,15 +57,15 @@ print(f"Workflow status: {result.status}")
 ### Creating a Project from Template
 
 ```python
-from codomyrmex.logistics.orchestration.project import get_project_manager
+from codomyrmex.logistics.orchestration.project import ProjectType, get_project_manager
 
 # Get project manager
 project_manager = get_project_manager()
 
-# Create project from template
+# Create project of a given type
 project = project_manager.create_project(
     name="my_ai_project",
-    template_name="ai_analysis",
+    type=ProjectType.AI_ANALYSIS,
     description="AI-powered code analysis project"
 )
 
@@ -77,13 +87,13 @@ task_orchestrator = get_task_orchestrator()
 setup_task = Task(
     name="setup_environment",
     module="environment_setup",
-    action="check_environment",
+    action="validate_environment",
     priority=TaskPriority.HIGH
 )
 
 analysis_task = Task(
     name="analyze_code",
-    module="static_analysis",
+    module="coding.static_analysis",
     action="analyze_code_quality",
     parameters={"path": "."},
     dependencies=[setup_task.id],
@@ -157,7 +167,7 @@ error_steps = [
     WorkflowStep(
         name="valid_step",
         module="environment_setup",
-        action="check_environment",
+        action="validate_environment",
         parameters={}
     ),
     WorkflowStep(
@@ -171,10 +181,10 @@ error_steps = [
 
 wf_manager.create_workflow("error_test_workflow", error_steps)
 
-# Execute workflow (handles errors gracefully)
+# Execute workflow: the unknown module fails "error_step" and the workflow
 result = wf_manager.execute_workflow("error_test_workflow")
-print(f"Workflow status: {result.status}")
-print(f"Errors: {result.errors}")
+print(f"Workflow status: {result.status}")  # WorkflowStatus.FAILED
+print(f"Errors: {result.error}")  # "error_step: ... codomyrmex.nonexistent_module ..."
 ```
 
 ## 🚀 Advanced Scenarios
@@ -182,25 +192,25 @@ print(f"Errors: {result.errors}")
 ### Multi-Project Workflow
 
 ```python
-from codomyrmex.logistics.orchestration.project import get_orchestration_engine
+from codomyrmex.logistics.orchestration.project import ProjectType, get_orchestration_engine
 
 # Get orchestration engine
 engine = get_orchestration_engine()
 
-# Create multiple projects
+# Create multiple projects (the global engine shares the global project manager)
 projects = ["project1", "project2", "project3"]
 for project_name in projects:
-    project = project_manager.create_project(
+    project = engine.project_manager.create_project(
         name=project_name,
-        template_name="ai_analysis"
+        type=ProjectType.AI_ANALYSIS
     )
     print(f"Created project: {project.name}")
 
-# Execute workflow for each project
+# Execute a registered workflow for each project; "path" is passed to its steps
 for project_name in projects:
     result = engine.execute_project_workflow(
         project_name,
-        "ai-analysis",
+        "code_analysis_workflow",
         path=f"./projects/{project_name}"
     )
     print(f"Project {project_name} workflow: {result['success']}")
@@ -250,6 +260,7 @@ for component, status in health['components'].items():
 ```
 
 This guide covers the main usage patterns for the Codomyrmex Project Orchestration module. For more details, see the API documentation and integration tests.
+
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

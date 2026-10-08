@@ -1,16 +1,21 @@
 """Unit tests for codomyrmex.logistics.orchestration.project.orchestration_engine.
 
 Covers:
-- OrchestrationEngine constructor (documents known integration bug)
-- OrchestrationEngine methods (session management, events, health, metrics, shutdown)
+- OrchestrationEngine constructor and component wiring
+- OrchestrationEngine methods (sessions, events, workflow/task/project execution,
+  status, health, metrics, shutdown)
 - create_orchestration_mcp_tools (if MCP available)
 - get_orchestration_engine module-level function
 
 Dataclass tests (OrchestrationMode, SessionStatus, OrchestrationSession) live in
 test_orchestration_session.py.
 
-Zero-mock policy: all tests use real objects only.
+Zero-mock policy: all tests use real objects only. Workflow steps and tasks run
+real functions registered on the engine's task orchestrator under the ``test``
+module name.
 """
+
+import time
 
 import pytest
 
@@ -21,6 +26,39 @@ from codomyrmex.logistics.orchestration.project.orchestration_engine import (
     SessionStatus,
     get_orchestration_engine,
 )
+from codomyrmex.logistics.orchestration.project.project_manager import ProjectType
+from codomyrmex.logistics.orchestration.project.workflow_manager import WorkflowStep
+
+
+def _echo(message: str = "") -> str:
+    return message
+
+
+def _sleep(duration: float = 0.1) -> float:
+    time.sleep(duration)
+    return duration
+
+
+def _fail(reason: str = "boom") -> None:
+    raise RuntimeError(reason)
+
+
+@pytest.fixture
+def engine(tmp_path):
+    """A real OrchestrationEngine on temporary directories with test actions."""
+    eng = OrchestrationEngine(
+        config={
+            "workflows_dir": tmp_path / "wf",
+            "projects_dir": tmp_path / "proj",
+            "max_workers": 2,
+        }
+    )
+    eng.task_orchestrator.register_action("test", "echo", _echo)
+    eng.task_orchestrator.register_action("test", "sleep", _sleep)
+    eng.task_orchestrator.register_action("test", "fail", _fail)
+    yield eng
+    eng.shutdown()
+
 
 # ---------------------------------------------------------------------------
 # OrchestrationEngine constructor
@@ -50,63 +88,42 @@ class TestOrchestrationEngineInit:
         assert engine.config.get("max_workers") == 8
         engine.task_orchestrator.stop_execution()
 
+    def test_components_share_orchestrator_and_resources(self, engine, tmp_path):
+        """Workflows run on the engine's orchestrator, which allocates from the
+        engine's resource manager; config paths are honoured."""
+        assert engine.workflow_manager.task_orchestrator is engine.task_orchestrator
+        assert engine.task_orchestrator.resource_manager is engine.resource_manager
+        assert engine.workflow_manager.config_dir == tmp_path / "wf"
+        assert engine.project_manager.projects_root == tmp_path / "proj"
+        assert engine.task_orchestrator.max_workers == 2
+
+    def test_shutdown_leaves_injected_orchestrator_running(self, tmp_path):
+        """An engine built on shared components must not stop them."""
+        from codomyrmex.logistics.orchestration.project.task_orchestrator import (
+            TaskOrchestrator,
+        )
+
+        shared = TaskOrchestrator(max_workers=1)
+        shared.start_processing()
+        try:
+            engine = OrchestrationEngine(
+                config={"workflows_dir": tmp_path / "wf"}, task_orchestrator=shared
+            )
+            assert engine.workflow_manager.task_orchestrator is shared
+            engine.shutdown()
+            assert not shared._stop_event.is_set()
+        finally:
+            shared.stop_execution()
+
 
 # ---------------------------------------------------------------------------
-# OrchestrationEngine with patched ProjectManager (integration-style)
-#
-# Since zero-mock policy forbids mocking, and the constructor is broken,
-# we test engine methods by manually constructing the engine's internal
-# state. This tests the ENGINE's logic, not the broken wiring to
-# ProjectManager.
+# Session management
 # ---------------------------------------------------------------------------
 
 
 @pytest.mark.unit
 class TestOrchestrationEngineSessionManagement:
-    """Tests for session create/get/close on a manually-wired engine."""
-
-    @pytest.fixture
-    def engine(self, tmp_path):
-        """Create an OrchestrationEngine with working subcomponents.
-
-        We bypass the broken constructor by calling object.__new__ and
-        setting up the internals manually with real objects.
-        """
-        import threading
-
-        from codomyrmex.logistics.orchestration.project.project_manager import (
-            ProjectManager,
-        )
-        from codomyrmex.logistics.orchestration.project.resource_manager import (
-            ResourceManager,
-        )
-        from codomyrmex.logistics.orchestration.project.task_orchestrator import (
-            TaskOrchestrator,
-        )
-        from codomyrmex.logistics.orchestration.project.workflow_manager import (
-            WorkflowManager,
-        )
-
-        eng = object.__new__(OrchestrationEngine)
-        eng.config = {}
-        eng.workflow_manager = WorkflowManager(
-            config_dir=tmp_path / "workflows",
-            persistence_dir=tmp_path / "persistence",
-        )
-        eng.task_orchestrator = TaskOrchestrator(max_workers=2)
-        eng.project_manager = ProjectManager(projects_root=tmp_path / "projects")
-        eng.resource_manager = ResourceManager()
-        eng.performance_monitor = None
-        eng.active_sessions = {}
-        eng.session_lock = threading.RLock()
-        eng.event_handlers = {}
-        eng.task_orchestrator.start_processing()
-
-        yield eng
-
-        eng.task_orchestrator.stop_execution()
-
-    # --- create_session ---
+    """Tests for session create/get/close."""
 
     def test_create_session_returns_string_id(self, engine):
         sid = engine.create_session()
@@ -212,42 +229,6 @@ class TestOrchestrationEngineSessionManagement:
 class TestOrchestrationEngineEvents:
     """Tests for the event handler system."""
 
-    @pytest.fixture
-    def engine(self, tmp_path):
-        import threading
-
-        from codomyrmex.logistics.orchestration.project.project_manager import (
-            ProjectManager,
-        )
-        from codomyrmex.logistics.orchestration.project.resource_manager import (
-            ResourceManager,
-        )
-        from codomyrmex.logistics.orchestration.project.task_orchestrator import (
-            TaskOrchestrator,
-        )
-        from codomyrmex.logistics.orchestration.project.workflow_manager import (
-            WorkflowManager,
-        )
-
-        eng = object.__new__(OrchestrationEngine)
-        eng.config = {}
-        eng.workflow_manager = WorkflowManager(
-            config_dir=tmp_path / "wf",
-            persistence_dir=tmp_path / "persist",
-        )
-        eng.task_orchestrator = TaskOrchestrator(max_workers=1)
-        eng.project_manager = ProjectManager(projects_root=tmp_path / "proj")
-        eng.resource_manager = ResourceManager()
-        eng.performance_monitor = None
-        eng.active_sessions = {}
-        eng.session_lock = threading.RLock()
-        eng.event_handlers = {}
-        eng.task_orchestrator.start_processing()
-
-        yield eng
-
-        eng.task_orchestrator.stop_execution()
-
     def test_register_event_handler(self, engine):
         def handler(event, data):
             return None
@@ -333,48 +314,28 @@ class TestOrchestrationEngineEvents:
 class TestOrchestrationEngineStatus:
     """Tests for status, health, and metrics methods."""
 
-    @pytest.fixture
-    def engine(self, tmp_path):
-        import threading
-
-        from codomyrmex.logistics.orchestration.project.project_manager import (
-            ProjectManager,
+    def test_get_system_status_reports_real_component_state(self, engine):
+        """Regression: get_system_status raised AttributeError because
+        ProjectManager.get_projects_summary and
+        ResourceManager.get_resource_usage did not exist."""
+        engine.project_manager.create_project("p1", ProjectType.RESEARCH)
+        engine.workflow_manager.create_workflow(
+            "wf", [WorkflowStep(name="s", module="test", action="echo")]
         )
-        from codomyrmex.logistics.orchestration.project.resource_manager import (
-            ResourceManager,
-        )
-        from codomyrmex.logistics.orchestration.project.task_orchestrator import (
-            TaskOrchestrator,
-        )
-        from codomyrmex.logistics.orchestration.project.workflow_manager import (
-            WorkflowManager,
-        )
+        engine.execute_workflow("wf")
 
-        eng = object.__new__(OrchestrationEngine)
-        eng.config = {}
-        eng.workflow_manager = WorkflowManager(
-            config_dir=tmp_path / "wf",
-            persistence_dir=tmp_path / "persist",
-        )
-        eng.task_orchestrator = TaskOrchestrator(max_workers=1)
-        eng.project_manager = ProjectManager(projects_root=tmp_path / "proj")
-        eng.resource_manager = ResourceManager()
-        eng.performance_monitor = None
-        eng.active_sessions = {}
-        eng.session_lock = threading.RLock()
-        eng.event_handlers = {}
-        eng.task_orchestrator.start_processing()
+        status = engine.get_system_status()
 
-        yield eng
-
-        eng.task_orchestrator.stop_execution()
-
-    def test_get_system_status_returns_dict(self, engine):
-        """get_system_status calls several methods that don't exist on
-        real subcomponents (get_execution_stats, get_projects_summary,
-        get_resource_usage). Expect AttributeError."""
-        with pytest.raises(AttributeError):
-            engine.get_system_status()
+        assert status["workflow_manager"] == {
+            "total_workflows": 1,
+            "running_workflows": 0,
+        }
+        assert status["task_orchestrator"]["completed"] == 1
+        assert status["project_manager"]["total_projects"] == 1
+        assert status["project_manager"]["by_type"] == {"research": 1}
+        assert status["resource_manager"]["total_resources"] == 3
+        assert status["resource_manager"]["total_allocations"] == 0
+        assert "sys-compute" in status["resource_manager"]["resources"]
 
     def test_health_check_returns_dict(self, engine):
         result = engine.health_check()
@@ -399,11 +360,23 @@ class TestOrchestrationEngineStatus:
         for comp_data in result["components"].values():
             assert "status" in comp_data
 
-    def test_get_metrics_fails_on_missing_methods(self, engine):
-        """get_metrics calls get_execution_stats, get_projects_summary,
-        get_resource_usage which don't exist."""
-        with pytest.raises(AttributeError):
-            engine.get_metrics()
+    def test_get_metrics_reports_real_component_state(self, engine):
+        """Regression: get_metrics raised AttributeError (missing
+        get_projects_summary / get_resource_usage)."""
+        engine.create_session()
+        engine.workflow_manager.create_workflow(
+            "wf", [WorkflowStep(name="s", module="test", action="fail")]
+        )
+        engine.execute_workflow("wf")
+
+        metrics = engine.get_metrics()
+
+        assert metrics["sessions"]["by_status"] == {"pending": 1, "failed": 1}
+        assert metrics["workflows"]["total_executions"] == 1
+        assert metrics["workflows"]["failed_executions"] == 1
+        assert metrics["tasks"]["failed"] == 1
+        assert metrics["projects"]["total_projects"] == 0
+        assert metrics["resources"]["total_resources"] == 3
 
 
 # ---------------------------------------------------------------------------
@@ -414,39 +387,6 @@ class TestOrchestrationEngineStatus:
 @pytest.mark.unit
 class TestOrchestrationEngineShutdown:
     """Tests for the shutdown method."""
-
-    @pytest.fixture
-    def engine(self, tmp_path):
-        import threading
-
-        from codomyrmex.logistics.orchestration.project.project_manager import (
-            ProjectManager,
-        )
-        from codomyrmex.logistics.orchestration.project.resource_manager import (
-            ResourceManager,
-        )
-        from codomyrmex.logistics.orchestration.project.task_orchestrator import (
-            TaskOrchestrator,
-        )
-        from codomyrmex.logistics.orchestration.project.workflow_manager import (
-            WorkflowManager,
-        )
-
-        eng = object.__new__(OrchestrationEngine)
-        eng.config = {}
-        eng.workflow_manager = WorkflowManager(
-            config_dir=tmp_path / "wf",
-            persistence_dir=tmp_path / "persist",
-        )
-        eng.task_orchestrator = TaskOrchestrator(max_workers=1)
-        eng.project_manager = ProjectManager(projects_root=tmp_path / "proj")
-        eng.resource_manager = ResourceManager()
-        eng.performance_monitor = None
-        eng.active_sessions = {}
-        eng.session_lock = threading.RLock()
-        eng.event_handlers = {}
-        eng.task_orchestrator.start_processing()
-        return eng
 
     def test_shutdown_with_sessions_closes_all_sessions(self, engine):
         """shutdown closes active sessions and stops the task orchestrator."""
@@ -473,49 +413,13 @@ class TestOrchestrationEngineShutdown:
 
 
 # ---------------------------------------------------------------------------
-# execute_workflow (session not found branch)
+# execute_workflow
 # ---------------------------------------------------------------------------
 
 
 @pytest.mark.unit
 class TestOrchestrationEngineExecuteWorkflow:
-    """Tests for execute_workflow error paths."""
-
-    @pytest.fixture
-    def engine(self, tmp_path):
-        import threading
-
-        from codomyrmex.logistics.orchestration.project.project_manager import (
-            ProjectManager,
-        )
-        from codomyrmex.logistics.orchestration.project.resource_manager import (
-            ResourceManager,
-        )
-        from codomyrmex.logistics.orchestration.project.task_orchestrator import (
-            TaskOrchestrator,
-        )
-        from codomyrmex.logistics.orchestration.project.workflow_manager import (
-            WorkflowManager,
-        )
-
-        eng = object.__new__(OrchestrationEngine)
-        eng.config = {}
-        eng.workflow_manager = WorkflowManager(
-            config_dir=tmp_path / "wf",
-            persistence_dir=tmp_path / "persist",
-        )
-        eng.task_orchestrator = TaskOrchestrator(max_workers=1)
-        eng.project_manager = ProjectManager(projects_root=tmp_path / "proj")
-        eng.resource_manager = ResourceManager()
-        eng.performance_monitor = None
-        eng.active_sessions = {}
-        eng.session_lock = threading.RLock()
-        eng.event_handlers = {}
-        eng.task_orchestrator.start_processing()
-
-        yield eng
-
-        eng.task_orchestrator.stop_execution()
+    """Tests for execute_workflow."""
 
     def test_execute_workflow_invalid_session(self, engine):
         result = engine.execute_workflow("some_workflow", session_id="bad-id")
@@ -529,9 +433,80 @@ class TestOrchestrationEngineExecuteWorkflow:
         assert result["success"] is False
         assert "Workflow execution failed" in result["error"]
 
+    def test_execute_workflow_runs_steps_and_reports_success(self, engine):
+        """Regression: execute_workflow passed the synchronous
+        WorkflowManager.execute_workflow to run_until_complete and therefore
+        always returned success=False."""
+        events = []
+        engine.register_event_handler(
+            "workflow_completed", lambda e, d: events.append(d)
+        )
+        engine.workflow_manager.create_workflow(
+            "greet",
+            [
+                WorkflowStep(
+                    name="second",
+                    module="test",
+                    action="echo",
+                    parameters={"message": "two"},
+                    dependencies=["first"],
+                ),
+                WorkflowStep(
+                    name="first",
+                    module="test",
+                    action="sleep",
+                    parameters={"duration": 0.1},
+                ),
+            ],
+        )
+        session_id = engine.create_session()
+
+        result = engine.execute_workflow("greet", session_id=session_id)
+
+        assert result["success"] is True
+        assert result["status"] == "completed"
+        assert result["error"] is None
+        assert result["steps_executed"] == 2
+        assert result["execution_time"] >= 0.1
+        assert result["result"]["first"]["result"] == 0.1
+        assert result["result"]["second"]["result"] == "two"
+        assert engine.get_session(session_id).status is SessionStatus.COMPLETED
+        assert events[0]["success"] is True
+
+    def test_execute_workflow_reports_step_failure(self, engine):
+        engine.workflow_manager.create_workflow(
+            "broken",
+            [
+                WorkflowStep(
+                    name="bad", module="test", action="fail", parameters={"reason": "x"}
+                ),
+                WorkflowStep(
+                    name="after", module="test", action="echo", dependencies=["bad"]
+                ),
+            ],
+        )
+        session_id = engine.create_session()
+
+        result = engine.execute_workflow("broken", session_id=session_id)
+
+        assert result["success"] is False
+        assert result["status"] == "failed"
+        assert "bad: RuntimeError: x" in result["error"]
+        assert result["steps_executed"] == 1  # "after" never ran
+        assert engine.get_session(session_id).status is SessionStatus.FAILED
+
+    def test_execute_workflow_rejects_invalid_dependencies(self, engine):
+        engine.workflow_manager.create_workflow(
+            "dangling",
+            [WorkflowStep(name="a", module="test", action="echo", dependencies=["x"])],
+        )
+        result = engine.execute_workflow("dangling")
+        assert result["success"] is False
+        assert "missing task 'x'" in result["error"]
+
 
 # ---------------------------------------------------------------------------
-# execute_task error paths
+# execute_task
 # ---------------------------------------------------------------------------
 
 
@@ -539,47 +514,11 @@ class TestOrchestrationEngineExecuteWorkflow:
 class TestOrchestrationEngineExecuteTask:
     """Tests for execute_task method."""
 
-    @pytest.fixture
-    def engine(self, tmp_path):
-        import threading
-
-        from codomyrmex.logistics.orchestration.project.project_manager import (
-            ProjectManager,
-        )
-        from codomyrmex.logistics.orchestration.project.resource_manager import (
-            ResourceManager,
-        )
-        from codomyrmex.logistics.orchestration.project.task_orchestrator import (
-            TaskOrchestrator,
-        )
-        from codomyrmex.logistics.orchestration.project.workflow_manager import (
-            WorkflowManager,
-        )
-
-        eng = object.__new__(OrchestrationEngine)
-        eng.config = {}
-        eng.workflow_manager = WorkflowManager(
-            config_dir=tmp_path / "wf",
-            persistence_dir=tmp_path / "persist",
-        )
-        eng.task_orchestrator = TaskOrchestrator(max_workers=1)
-        eng.project_manager = ProjectManager(projects_root=tmp_path / "proj")
-        eng.resource_manager = ResourceManager()
-        eng.performance_monitor = None
-        eng.active_sessions = {}
-        eng.session_lock = threading.RLock()
-        eng.event_handlers = {}
-        eng.task_orchestrator.start_processing()
-
-        yield eng
-
-        eng.task_orchestrator.stop_execution()
-
     def test_execute_task_invalid_session(self, engine):
         from codomyrmex.logistics.orchestration.project.task_orchestrator import Task
 
         task = Task(
-            name="test", module="mod", action="echo", parameters={"message": "hi"}
+            name="test", module="test", action="echo", parameters={"message": "hi"}
         )
         result = engine.execute_task(task, session_id="bad-session")
         assert result["success"] is False
@@ -589,7 +528,7 @@ class TestOrchestrationEngineExecuteTask:
         """execute_task accepts dictionary task definitions."""
         task_dict = {
             "name": "t1",
-            "module": "m",
+            "module": "test",
             "action": "echo",
             "parameters": {"message": "hello"},
         }
@@ -597,9 +536,39 @@ class TestOrchestrationEngineExecuteTask:
         assert result["success"] is True
         assert result["result"]["result"] == "hello"
 
+    def test_execute_task_unknown_action_fails(self, engine):
+        result = engine.execute_task(
+            {"name": "t1", "module": "m", "action": "echo", "parameters": {}}
+        )
+        assert result["success"] is False
+        assert "codomyrmex.m" in result["error"]
+
+    def test_execute_task_unknown_dependency_fails_fast(self, engine):
+        result = engine.execute_task(
+            {"name": "t1", "module": "test", "action": "echo", "dependencies": ["x"]}
+        )
+        assert result["success"] is False
+        assert "unknown task ids ['x']" in result["error"]
+
+    def test_execute_task_session_timeout_cancels(self, engine):
+        session_id = engine.create_session(timeout_seconds=0.2)
+        result = engine.execute_task(
+            {
+                "name": "slow",
+                "module": "test",
+                "action": "sleep",
+                "parameters": {"duration": 1.0},
+            },
+            session_id=session_id,
+        )
+        assert result["success"] is False
+        assert "did not finish within 0.2s" in result["error"]
+        task = engine.task_orchestrator.get_task(result["task_id"])
+        assert task.status.value == "cancelled"
+
 
 # ---------------------------------------------------------------------------
-# execute_project_workflow error paths
+# execute_project_workflow
 # ---------------------------------------------------------------------------
 
 
@@ -607,52 +576,39 @@ class TestOrchestrationEngineExecuteTask:
 class TestOrchestrationEngineProjectWorkflow:
     """Tests for execute_project_workflow."""
 
-    @pytest.fixture
-    def engine(self, tmp_path):
-        import threading
-
-        from codomyrmex.logistics.orchestration.project.project_manager import (
-            ProjectManager,
-        )
-        from codomyrmex.logistics.orchestration.project.resource_manager import (
-            ResourceManager,
-        )
-        from codomyrmex.logistics.orchestration.project.task_orchestrator import (
-            TaskOrchestrator,
-        )
-        from codomyrmex.logistics.orchestration.project.workflow_manager import (
-            WorkflowManager,
-        )
-
-        eng = object.__new__(OrchestrationEngine)
-        eng.config = {}
-        eng.workflow_manager = WorkflowManager(
-            config_dir=tmp_path / "wf",
-            persistence_dir=tmp_path / "persist",
-        )
-        eng.task_orchestrator = TaskOrchestrator(max_workers=1)
-        eng.project_manager = ProjectManager(projects_root=tmp_path / "proj")
-        eng.resource_manager = ResourceManager()
-        eng.performance_monitor = None
-        eng.active_sessions = {}
-        eng.session_lock = threading.RLock()
-        eng.event_handlers = {}
-        eng.task_orchestrator.start_processing()
-
-        yield eng
-
-        eng.task_orchestrator.stop_execution()
-
     def test_execute_project_workflow_invalid_session(self, engine):
         result = engine.execute_project_workflow("proj", "wf", session_id="bad-id")
         assert result["success"] is False
         assert "not found" in result["error"]
 
-    def test_execute_project_workflow_missing_method(self, engine):
-        """ProjectManager does not have execute_project_workflow method."""
+    def test_execute_project_workflow_unknown_project(self, engine):
+        """Regression: it called the nonexistent
+        ProjectManager.execute_project_workflow; now an unknown project is
+        reported explicitly."""
         result = engine.execute_project_workflow("proj", "wf")
-        assert result["success"] is False
-        assert "error" in result
+        assert result == {"success": False, "error": "Project proj not found"}
+
+    def test_execute_project_workflow_runs_and_records_metrics(self, engine):
+        engine.project_manager.create_project("proj", ProjectType.CUSTOM)
+        engine.workflow_manager.create_workflow(
+            "wf", [WorkflowStep(name="s", module="test", action="echo")]
+        )
+        engine.workflow_manager.create_workflow(
+            "bad", [WorkflowStep(name="s", module="test", action="fail")]
+        )
+
+        ok = engine.execute_project_workflow("proj", "wf", message="hi")
+        failed = engine.execute_project_workflow("proj", "bad")
+
+        assert ok["success"] is True
+        assert ok["project_name"] == "proj"
+        assert ok["result"]["s"]["result"] == "hi"
+        assert failed["success"] is False
+        metrics = engine.project_manager.get_project("proj").metrics
+        assert metrics["workflow_executions"] == 2
+        assert metrics["successful_workflow_executions"] == 1
+        assert metrics["last_workflow"] == "bad"
+        assert metrics["last_workflow_success"] is False
 
 
 # ---------------------------------------------------------------------------
@@ -663,42 +619,6 @@ class TestOrchestrationEngineProjectWorkflow:
 @pytest.mark.unit
 class TestOrchestrationEngineComplexWorkflow:
     """Tests for execute_complex_workflow."""
-
-    @pytest.fixture
-    def engine(self, tmp_path):
-        import threading
-
-        from codomyrmex.logistics.orchestration.project.project_manager import (
-            ProjectManager,
-        )
-        from codomyrmex.logistics.orchestration.project.resource_manager import (
-            ResourceManager,
-        )
-        from codomyrmex.logistics.orchestration.project.task_orchestrator import (
-            TaskOrchestrator,
-        )
-        from codomyrmex.logistics.orchestration.project.workflow_manager import (
-            WorkflowManager,
-        )
-
-        eng = object.__new__(OrchestrationEngine)
-        eng.config = {}
-        eng.workflow_manager = WorkflowManager(
-            config_dir=tmp_path / "wf",
-            persistence_dir=tmp_path / "persist",
-        )
-        eng.task_orchestrator = TaskOrchestrator(max_workers=1)
-        eng.project_manager = ProjectManager(projects_root=tmp_path / "proj")
-        eng.resource_manager = ResourceManager()
-        eng.performance_monitor = None
-        eng.active_sessions = {}
-        eng.session_lock = threading.RLock()
-        eng.event_handlers = {}
-        eng.task_orchestrator.start_processing()
-
-        yield eng
-
-        eng.task_orchestrator.stop_execution()
 
     def test_execute_complex_workflow_invalid_session(self, engine):
         result = engine.execute_complex_workflow({}, session_id="bad")
@@ -715,13 +635,46 @@ class TestOrchestrationEngineComplexWorkflow:
         """Steps are parsed into Tasks and executed through the task orchestrator."""
         definition = {
             "steps": [
-                {"name": "s1", "module": "m1", "action": "a1"},
+                {
+                    "name": "s1",
+                    "module": "test",
+                    "action": "echo",
+                    "parameters": {"message": "one"},
+                },
             ],
             "dependencies": {},
         }
         result = engine.execute_complex_workflow(definition)
         assert result["success"] is True
         assert result["results"]["s1"]["success"] is True
+        assert result["results"]["s1"]["result"] == "one"
+
+    def test_execute_complex_workflow_failed_step_is_not_success(self, engine):
+        """Regression: success was True whenever all tasks finished, even if
+        some failed, and dependencies on later-listed steps were dropped."""
+        definition = {
+            "steps": [
+                {"name": "b", "module": "test", "action": "echo"},
+                {"name": "a", "module": "test", "action": "fail"},
+            ],
+            "dependencies": {"b": ["a"]},
+        }
+        result = engine.execute_complex_workflow(definition)
+        assert result["success"] is False
+        assert result["results"]["a"]["status"] == "failed"
+        assert result["results"]["b"]["status"] == "failed"
+        assert result["results"]["b"]["start_time"] is None  # never ran
+        assert "a: RuntimeError: boom" in result["error"]
+
+    def test_execute_complex_workflow_invalid_definition(self, engine):
+        result = engine.execute_complex_workflow(
+            {
+                "steps": [{"name": "a", "module": "test", "action": "echo"}],
+                "dependencies": {"a": ["ghost"]},
+            }
+        )
+        assert result["success"] is False
+        assert "Invalid workflow definition" in result["error"]
 
 
 # ---------------------------------------------------------------------------
@@ -733,48 +686,43 @@ class TestOrchestrationEngineComplexWorkflow:
 class TestOrchestrationEngineCreateProjectFromWorkflow:
     """Tests for create_project_from_workflow."""
 
-    @pytest.fixture
-    def engine(self, tmp_path):
-        import threading
-
-        from codomyrmex.logistics.orchestration.project.project_manager import (
-            ProjectManager,
+    def test_create_project_from_workflow_succeeds(self, engine, tmp_path):
+        """Regression: it imported a nonexistent ``models`` module."""
+        engine.workflow_manager.create_workflow(
+            "wf1", [WorkflowStep(name="s", module="test", action="echo")]
         )
-        from codomyrmex.logistics.orchestration.project.resource_manager import (
-            ResourceManager,
+        result = engine.create_project_from_workflow(
+            "proj1", "wf1", template_name="data_pipeline", description="d"
         )
-        from codomyrmex.logistics.orchestration.project.task_orchestrator import (
-            TaskOrchestrator,
-        )
-        from codomyrmex.logistics.orchestration.project.workflow_manager import (
-            WorkflowManager,
-        )
+        assert result["success"] is True
+        assert result["project_created"] is True
+        assert result["project"]["type"] == "data_pipeline"
+        assert (tmp_path / "proj" / "proj1" / "src").is_dir()
+        project = engine.project_manager.get_project("proj1")
+        assert "workflow_wf1_completed" in project.milestones
+        assert project.metrics["workflow_executions"] == 1
 
-        eng = object.__new__(OrchestrationEngine)
-        eng.config = {}
-        eng.workflow_manager = WorkflowManager(
-            config_dir=tmp_path / "wf",
-            persistence_dir=tmp_path / "persist",
-        )
-        eng.task_orchestrator = TaskOrchestrator(max_workers=1)
-        eng.project_manager = ProjectManager(projects_root=tmp_path / "proj")
-        eng.resource_manager = ResourceManager()
-        eng.performance_monitor = None
-        eng.active_sessions = {}
-        eng.session_lock = threading.RLock()
-        eng.event_handlers = {}
-        eng.task_orchestrator.start_processing()
-
-        yield eng
-
-        eng.task_orchestrator.stop_execution()
-
-    def test_create_project_from_workflow_missing_method(self, engine):
-        """create_project expects (name, type, description) not (name, template_name).
-        The mismatch causes an error."""
-        result = engine.create_project_from_workflow("proj1", "wf1")
+    def test_create_project_from_workflow_reports_workflow_failure(self, engine):
+        """The project is created but a failed workflow is not reported as
+        success (it used to return success=True regardless)."""
+        result = engine.create_project_from_workflow("proj1", "missing_wf")
         assert result["success"] is False
-        assert "error" in result
+        assert result["project_created"] is True
+        assert "Workflow not found" in result["error"]
+        assert engine.project_manager.get_project("proj1").milestones == {}
+
+    def test_create_project_from_workflow_unknown_template(self, engine):
+        result = engine.create_project_from_workflow("p", "wf", template_name="nope")
+        assert result["success"] is False
+        assert result["project_created"] is False
+        assert "Unknown project template 'nope'" in result["error"]
+
+    def test_create_project_from_workflow_existing_project(self, engine):
+        engine.project_manager.create_project("dup", ProjectType.CUSTOM)
+        result = engine.create_project_from_workflow("dup", "wf")
+        assert result["success"] is False
+        assert result["project_created"] is False
+        assert "could not be created" in result["error"]
 
 
 # ---------------------------------------------------------------------------

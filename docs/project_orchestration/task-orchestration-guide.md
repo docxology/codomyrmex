@@ -8,7 +8,7 @@ Task orchestration in Codomyrmex allows you to coordinate individual tasks with 
 
 The API lives in `codomyrmex.logistics.orchestration.project` (formerly `codomyrmex.project_orchestration`).
 
-> **Current behaviour**: `TaskOrchestrator` does not yet import `module` and call `action`. It runs the built-in actions `echo` (returns `parameters["message"]`), `sleep` (waits `parameters["duration"]` seconds), and `fail` (raises), and records every other action as executed with the result `{"status": "executed", "action": ...}`. Resource requirements are recorded on the task but not allocated.
+> **How tasks run**: the orchestrator calls `codomyrmex.<module>.<action>(**parameters)`, for example `module="coding.static_analysis", action="analyze_code_quality"`. A function registered with `orchestrator.register_action(module, action, func)` takes precedence, which is how you run code that is not in a `codomyrmex` module. An unknown module or action, or an exception raised by the action, marks the task `FAILED` with the reason in `TaskResult.error`. Resource requirements (`Task.resources`) are allocated from the orchestrator's `ResourceManager` just before the task runs and released when it finishes.
 
 ## Quick Start
 
@@ -38,10 +38,10 @@ orchestrator.start_processing()
 ```python
 from codomyrmex.logistics.orchestration.project import Task, TaskPriority
 
-# Create a simple task
+# Create a simple task: runs codomyrmex.coding.static_analysis.analyze_code_quality(path="./src")
 task = Task(
     name="analyze_code",
-    module="static_analysis",
+    module="coding.static_analysis",
     action="analyze_code_quality",
     parameters={"path": "./src"}
 )
@@ -49,28 +49,29 @@ task = Task(
 # Add task to orchestrator (returns task.id)
 task_id = orchestrator.submit_task(task)
 
-# Or submit and block until the task finishes
+# Or register your own function as an action and block until the task finishes
+orchestrator.register_action("demo", "echo", lambda message="": message)
 result = orchestrator.execute_task(Task(name="greet", module="demo", action="echo", parameters={"message": "hi"}))
 print(result.result)  # "hi"
 ```
 
 ### Task with Dependencies
 
-Dependencies are task IDs. A task whose dependencies have not completed is held in the `BLOCKED` state and queued once they finish.
+Dependencies are task IDs. A task whose dependencies have not completed is held in the `BLOCKED` state and queued once they finish. If a dependency fails or is cancelled, the dependent task fails without running.
 
 ```python
 # Create first task
 setup_task = Task(
     name="setup_environment",
     module="environment_setup",
-    action="check_environment",
+    action="validate_environment",
     priority=TaskPriority.HIGH
 )
 
 # Create dependent task
 analysis_task = Task(
     name="analyze_code",
-    module="static_analysis",
+    module="coding.static_analysis",
     action="analyze_code_quality",
     parameters={"path": "./src"},
     dependencies=[setup_task.id],  # Depends on setup_task
@@ -88,15 +89,15 @@ from codomyrmex.logistics.orchestration.project import TaskResource, ResourceTyp
 
 task = Task(
     name="heavy_analysis",
-    module="static_analysis",
-    action="comprehensive_analysis",
+    module="coding.static_analysis",
+    action="analyze_code_quality",
     parameters={"path": "./src"},
     priority=TaskPriority.HIGH,
     resources=[
         TaskResource(resource_type=ResourceType.COMPUTE.value, amount=2.0, resource_id="sys-compute"),
         TaskResource(resource_type=ResourceType.MEMORY.value, amount=512.0, resource_id="sys-memory"),
     ],
-    timeout=600  # 10 minute timeout
+    timeout=600  # recorded on the task; not enforced
 )
 orchestrator.submit_task(task)
 ```
@@ -110,6 +111,7 @@ Ready tasks are dequeued in priority order: `CRITICAL`, `HIGH`, `NORMAL`, `LOW`,
 ```python
 from codomyrmex.logistics.orchestration.project import TaskPriority
 
+# These use the "demo"/"echo" action registered in Step 1
 # Critical priority (executes first)
 critical_task = Task(name="hotfix", module="demo", action="echo", priority=TaskPriority.CRITICAL)
 
@@ -127,6 +129,8 @@ low_task = Task(name="report", module="demo", action="echo", priority=TaskPriori
 
 `TaskResource` takes a resource type string, an amount, and an optional specific resource ID. The default `ResourceManager` registers `sys-compute`, `sys-memory`, and `api-global`.
 
+All of a task's requirements are allocated, all or nothing, immediately before it runs and released when it finishes, fails or is cancelled. Without `resource_id`, the resource of that type with the most free capacity is used. If capacity is only temporarily short, the task stays queued until other tasks release it; a requirement that can never be met (unknown type or resource ID, type mismatch, amount above capacity, resource offline, in maintenance or depleted) fails the task.
+
 ```python
 # Compute resource
 cpu_resource = TaskResource(resource_type=ResourceType.COMPUTE.value, amount=1.0, resource_id="sys-compute")
@@ -138,9 +142,10 @@ memory_resource = TaskResource(resource_type=ResourceType.MEMORY.value, amount=2
 api_resource = TaskResource(resource_type=ResourceType.API_QUOTA.value, amount=10.0, resource_id="api-global")
 
 task = Task(
-    name="llm_review",
-    module="agents",
-    action="review",
+    name="quality_review",
+    module="coding.static_analysis",
+    action="analyze_code_quality",
+    parameters={"path": "./src"},
     resources=[cpu_resource, memory_resource, api_resource]
 )
 ```
@@ -150,10 +155,10 @@ task = Task(
 ```python
 task = Task(
     name="long_running_task",
-    module="data_visualization",
-    action="process_large_dataset",
-    parameters={"file": "large_data.csv"},
-    timeout=3600,  # 1 hour timeout
+    module="coding.static_analysis",
+    action="analyze_code_quality",
+    parameters={"path": "./src"},
+    timeout=3600,  # recorded on the task; not enforced
     max_retries=3,  # Retry budget recorded on the task
     metadata={"description": "Process large dataset", "tags": ["data-processing", "visualization"]}
 )
@@ -330,13 +335,13 @@ orchestrator.start_processing()
 setup_task = Task(
     name="setup",
     module="environment_setup",
-    action="check_environment",
+    action="validate_environment",
     priority=TaskPriority.HIGH
 )
 
 analysis_task = Task(
     name="analyze",
-    module="static_analysis",
+    module="coding.static_analysis",
     action="analyze_code_quality",
     parameters={"path": "./src"},
     dependencies=[setup_task.id],
@@ -351,7 +356,7 @@ visualization_task = Task(
     name="visualize",
     module="data_visualization",
     action="create_bar_chart",
-    parameters={"title": "Code Quality"},
+    parameters={"categories": ["errors", "warnings"], "values": [0, 0], "title": "Code Quality"},
     dependencies=[analysis_task.id],
     priority=TaskPriority.NORMAL
 )
@@ -381,7 +386,7 @@ orchestrator.stop_execution()
 ## Best Practices
 
 1. **Dependency Management**: Keep dependency chains as short as possible
-2. **Resource Requirements**: Record resource requirements on tasks so they can be scheduled once allocation is wired in
+2. **Resource Requirements**: Declare resource requirements on tasks; they are allocated before the task runs and released afterwards
 3. **Priority Setting**: Use appropriate priorities for task importance
 4. **Timeout Configuration**: Set realistic timeouts based on expected execution time
 5. **Error Handling**: Check task results and handle failures appropriately
@@ -394,12 +399,15 @@ orchestrator.stop_execution()
 
 - Ensure `start_processing()` has been called (or that tasks were added with `submit_task`)
 - Check that dependencies are satisfied (blocked tasks have `TaskStatus.BLOCKED`)
+- A task whose resource requirement is temporarily short of capacity stays queued; check `orchestrator.resource_manager.get_resource_usage()`
 - Check task status with `orchestrator.get_task(task_id)`
 
 ### Tasks Failing
 
 - Check `orchestrator.get_task_result(task_id).error` for details
-- Check parameter types and values
+- Verify that `codomyrmex.<module>` exists and has a public callable named `action`, or register one with `register_action`
+- Check parameter names and types: parameters are passed as keyword arguments
+- A task whose dependency failed or was cancelled fails without running
 
 ### Slow Execution
 

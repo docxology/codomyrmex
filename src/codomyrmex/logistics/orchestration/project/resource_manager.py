@@ -355,6 +355,47 @@ class ResourceManager:
             else 0,
         )
 
+    def get_resource_usage(self) -> dict[str, Any]:
+        """Summarise current allocations across all managed resources.
+
+        Returns:
+            Dictionary with ``total_resources``, ``total_allocations`` (currently
+            active allocations), ``lifetime_allocations`` (allocations ever
+            granted), ``resources_by_type`` (count per type),
+            ``utilization_summary`` (mean utilisation percentage per type) and
+            ``resources`` (per-resource capacity, allocation and status).
+        """
+        with self._lock:
+            resources = list(self.resources.values())
+            per_resource: dict[str, dict[str, Any]] = {}
+            by_type: dict[str, list[float]] = {}
+            for resource in resources:
+                utilization = (
+                    resource.allocated / resource.capacity * 100
+                    if resource.capacity > 0
+                    else 0.0
+                )
+                per_resource[resource.id] = {
+                    "name": resource.name,
+                    "type": resource.type.value,
+                    "status": resource.status.value,
+                    "capacity": resource.capacity,
+                    "allocated": resource.allocated,
+                    "available": resource.capacity - resource.allocated,
+                    "allocation_count": len(resource.allocations),
+                    "utilization_percentage": utilization,
+                }
+                by_type.setdefault(resource.type.value, []).append(utilization)
+
+            return {
+                "total_resources": len(resources),
+                "total_allocations": sum(len(r.allocations) for r in resources),
+                "lifetime_allocations": self.total_allocations,
+                "resources_by_type": {t: len(u) for t, u in by_type.items()},
+                "utilization_summary": {t: sum(u) / len(u) for t, u in by_type.items()},
+                "resources": per_resource,
+            }
+
     def list_resources(self, type_filter: ResourceType | None = None) -> list[Resource]:
         """list all resources, optionally filtered by type."""
         if type_filter:

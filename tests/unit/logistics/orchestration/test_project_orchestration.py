@@ -32,6 +32,9 @@ from codomyrmex.logistics.orchestration.project.parallel_executor import (
     get_workflow_execution_order,
     validate_workflow_dependencies,
 )
+from codomyrmex.logistics.orchestration.project.task_orchestrator import (
+    ActionRegistry,
+)
 from codomyrmex.logistics.orchestration.project.workflow_dag import WorkflowDAG
 from codomyrmex.logistics.orchestration.project.workflow_manager import (
     WorkflowManager as _WorkflowManagerDirect,
@@ -434,13 +437,25 @@ class TestParallelExecutor:
         executor.shutdown()
 
     def test_execute_task_group(self):
-        """Test executing a group of independent tasks."""
+        """Test executing a group of independent tasks with real actions."""
+        actions = ActionRegistry()
+        actions.register("test", "run", lambda value: value * 2)
         tasks = [
-            {"name": "task1", "module": "test", "action": "run"},
-            {"name": "task2", "module": "test", "action": "run"},
+            {
+                "name": "task1",
+                "module": "test",
+                "action": "run",
+                "parameters": {"value": 1},
+            },
+            {
+                "name": "task2",
+                "module": "test",
+                "action": "run",
+                "parameters": {"value": 2},
+            },
         ]
 
-        with ParallelExecutor(max_workers=2) as executor:
+        with ParallelExecutor(max_workers=2, actions=actions) as executor:
             results = executor.execute_task_group(tasks, timeout=10)
 
         assert len(results) == 2
@@ -448,6 +463,17 @@ class TestParallelExecutor:
             assert result.status.name == "COMPLETED"
             assert result.task_name in ["task1", "task2"]
             assert result.duration > 0
+        assert {r.task_name: r.result for r in results} == {"task1": 2, "task2": 4}
+
+    def test_execute_task_group_unknown_action_fails(self):
+        """Tasks naming code that does not exist fail instead of 'completing'."""
+        tasks = [{"name": "task1", "module": "test", "action": "run"}]
+
+        with ParallelExecutor(max_workers=1) as executor:
+            results = executor.execute_task_group(tasks, timeout=10)
+
+        assert results[0].status.name == "FAILED"
+        assert "codomyrmex.test" in results[0].error
 
     def test_dependency_management(self):
         """Test dependency checking in executor."""
@@ -574,15 +600,16 @@ class TestWorkflowManagerEnhancements:
             "max_parallel": 2,
         }
 
-        # Use real ParallelExecutor
+        # Use real ParallelExecutor; "codomyrmex.test" does not exist, so the
+        # task fails explicitly rather than reporting a simulated success.
         result = manager.execute_parallel_workflow(workflow)
 
-        # Should return a result dict
         assert isinstance(result, dict)
-        assert result["status"] in ["completed", "partial_failure", "failed"]
-        assert "total_tasks" in result
-        assert "completed_tasks" in result
-        assert "task_results" in result
+        assert result["status"] == "failed"
+        assert result["total_tasks"] == 1
+        assert result["completed_tasks"] == 0
+        assert result["failed_tasks"] == 1
+        assert "codomyrmex.test" in result["task_results"]["task1"]["error"]
 
     def test_workflow_dag_integration(self):
         """Test integration between WorkflowManager and WorkflowDAG."""

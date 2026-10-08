@@ -27,6 +27,8 @@ Integration:
 - Provides MCP tools for AI-driven orchestration
 """
 
+from pathlib import Path
+
 from codomyrmex.exceptions import CodomyrmexError
 
 from .documentation_generator import DocumentationGenerator
@@ -55,6 +57,7 @@ from .resource_manager import (
     get_resource_manager,
 )
 from .task_orchestrator import (
+    ActionRegistry,
     Task,
     TaskOrchestrator,
     TaskPriority,
@@ -74,6 +77,7 @@ from .workflow_manager import (
 __version__ = "0.1.0"
 
 __all__ = [
+    "ActionRegistry",
     "DocumentationGenerator",
     "OrchestrationEngine",
     # Sessions & engine
@@ -132,11 +136,17 @@ def create_task(name: str, module: str, action: str, **kwargs) -> Task:
 def create_project(
     name: str, description: str = "", template: str | None = None
 ) -> Project:
-    """Create a new project instance."""
+    """Create a new (unregistered, not scaffolded) project instance.
+
+    ``template`` is a :class:`ProjectType` value (default ``custom``); the
+    project path is ``<cwd>/<name>``. Use ``ProjectManager.create_project`` to
+    scaffold and register a project.
+    """
     return Project(
         name=name,
+        path=Path.cwd() / name,
+        type=ProjectType(template) if template else ProjectType.CUSTOM,
         description=description,
-        **({"template": template} if template else {}),
     )
 
 
