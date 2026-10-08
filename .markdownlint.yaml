@@ -1,0 +1,15 @@
+# markdownlint configuration shared by pre-commit, `make docs-check` and editors.
+default: true
+# Long lines are allowed (tables, links, generated listings).
+MD013: false
+# Inline HTML (details/summary, anchors, badges) and front matter without an H1.
+MD033: false
+MD041: false
+# MkDocs (Python-Markdown) needs 4-space indentation for nested lists.
+MD007:
+  indent: 4
+# Repeated sub-headings (e.g. "Parameters" under each function) are fine.
+MD024:
+  siblings_only: true
+# Bare URLs render in GitHub/Docusaurus; wrapping them in <> breaks MDX.
+MD034: false

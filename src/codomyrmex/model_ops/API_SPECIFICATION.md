@@ -10,40 +10,40 @@ The Model Operations module provides tools for managing machine learning model l
 
 - **Description**: Represents a dataset for training or evaluation.
 - **Constructor**:
-  - `name` (str): Dataset name.
-  - `data` (list | pd.DataFrame, optional): Initial data.
-  - `path` (str, optional): Path to data file.
+    - `name` (str): Dataset name.
+    - `data` (list | pd.DataFrame, optional): Initial data.
+    - `path` (str, optional): Path to data file.
 - **Methods**:
 
 #### `load(path: str) -> Dataset`
 
 - **Description**: Load dataset from a file.
 - **Parameters/Arguments**:
-  - `path` (str): Path to data file (JSON, CSV, JSONL).
+    - `path` (str): Path to data file (JSON, CSV, JSONL).
 - **Returns**:
-  - `Dataset`: Loaded dataset.
+    - `Dataset`: Loaded dataset.
 
 #### `save(path: str) -> None`
 
 - **Description**: Save dataset to a file.
 - **Parameters/Arguments**:
-  - `path` (str): Output file path.
+    - `path` (str): Output file path.
 
 #### `split(train_ratio: float = 0.8) -> tuple[Dataset, Dataset]`
 
 - **Description**: Split dataset into train and validation sets.
 - **Parameters/Arguments**:
-  - `train_ratio` (float): Ratio for training set. Default: 0.8.
+    - `train_ratio` (float): Ratio for training set. Default: 0.8.
 - **Returns**:
-  - `tuple[Dataset, Dataset]`: Train and validation datasets.
+    - `tuple[Dataset, Dataset]`: Train and validation datasets.
 
 #### `sample(n: int) -> Dataset`
 
 - **Description**: Sample n rows from the dataset.
 - **Parameters/Arguments**:
-  - `n` (int): Number of samples.
+    - `n` (int): Number of samples.
 - **Returns**:
-  - `Dataset`: Sampled dataset.
+    - `Dataset`: Sampled dataset.
 
 ### Class: `DatasetSanitizer`
 
@@ -54,47 +54,47 @@ The Model Operations module provides tools for managing machine learning model l
 
 - **Description**: Remove problematic entries from dataset.
 - **Parameters/Arguments**:
-  - `dataset` (Dataset): Dataset to sanitize.
+    - `dataset` (Dataset): Dataset to sanitize.
 - **Returns**:
-  - `Dataset`: Sanitized dataset.
+    - `Dataset`: Sanitized dataset.
 
 #### `validate(dataset: Dataset) -> ValidationResult`
 
 - **Description**: Validate dataset format and content.
 - **Parameters/Arguments**:
-  - `dataset` (Dataset): Dataset to validate.
+    - `dataset` (Dataset): Dataset to validate.
 - **Returns**:
-  - `ValidationResult`: Validation results.
+    - `ValidationResult`: Validation results.
 
 ### Class: `FineTuningJob`
 
 - **Description**: A supervised fine-tuning job on a remote provider (`codomyrmex.model_ops.fine_tuning.fine_tuning.FineTuningJob`, re-exported as `codomyrmex.model_ops.FineTuningJob`). Only the OpenAI provider is implemented (official `openai` SDK, `uv sync --extra llm_providers`); other providers raise `NotImplementedError`.
 - **Constructor**:
-  - `base_model` (str): Provider model to fine-tune.
-  - `dataset` (`fine_tuning.Dataset` | in-memory `Dataset`): Training data as a JSONL file or an object with `data` and `to_jsonl()`.
-  - `provider` (str, default `"openai"`): Provider name.
-  - `hyperparameters` (dict, optional): Provider hyperparameters, e.g. `{"n_epochs": 3}`.
-  - `suffix` (str, optional): Suffix for the fine-tuned model name.
-  - `api_key` (str, optional): Defaults to the `OPENAI_API_KEY` environment variable.
+    - `base_model` (str): Provider model to fine-tune.
+    - `dataset` (`fine_tuning.Dataset` | in-memory `Dataset`): Training data as a JSONL file or an object with `data` and `to_jsonl()`.
+    - `provider` (str, default `"openai"`): Provider name.
+    - `hyperparameters` (dict, optional): Provider hyperparameters, e.g. `{"n_epochs": 3}`.
+    - `suffix` (str, optional): Suffix for the fine-tuned model name.
+    - `api_key` (str, optional): Defaults to the `OPENAI_API_KEY` environment variable.
 - **Methods**:
 
 #### `run() -> str`
 
 - **Description**: Upload the training data and create the provider job. Raises `codomyrmex.exceptions.EnvironmentError` without an API key and `DependencyError` without the `openai` SDK.
 - **Returns**:
-  - `str`: Provider job ID.
+    - `str`: Provider job ID.
 
 #### `refresh_status() -> str`
 
 - **Description**: Retrieve the job from the provider. Before `run()` the status is `"pending"` and no call is made; afterwards it is the provider status (`validating_files`, `queued`, `running`, `succeeded`, `failed`, `cancelled`).
 - **Returns**:
-  - `str`: Current status.
+    - `str`: Current status.
 
 #### `cancel() -> str`
 
 - **Description**: Cancel the submitted job on the provider.
 - **Returns**:
-  - `str`: Status reported after the cancel request.
+    - `str`: Status reported after the cancel request.
 
 #### Attributes
 
@@ -104,17 +104,17 @@ The Model Operations module provides tools for managing machine learning model l
 
 - **Description**: Scores model outputs with caller-supplied metric functions.
 - **Constructor**:
-  - `metrics` (dict[str, Callable], optional): Metric name to function `fn(predictions, references) -> float`. Default: no metrics.
+    - `metrics` (dict[str, Callable], optional): Metric name to function `fn(predictions, references) -> float`. Default: no metrics.
 - **Methods**:
 
 #### `evaluate(predictions: list[str], references: list[str]) -> dict[str, float]`
 
 - **Description**: Apply every metric to the predictions and references.
 - **Parameters/Arguments**:
-  - `predictions` (list[str]): Model outputs.
-  - `references` (list[str]): Ground-truth references.
+    - `predictions` (list[str]): Model outputs.
+    - `references` (list[str]): Ground-truth references.
 - **Returns**:
-  - `dict[str, float]`: Score per metric name. A metric that raises is recorded as `0.0`.
+    - `dict[str, float]`: Score per metric name. A metric that raises is recorded as `0.0`.
 
 ## Data Models
 

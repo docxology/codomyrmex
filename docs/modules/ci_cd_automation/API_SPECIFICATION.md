@@ -12,7 +12,7 @@ All functions below are importable from `codomyrmex.ci_cd_automation`.
 
 - **Description**: Create a pipeline from a configuration file (YAML or JSON) or from the configuration itself as a mapping. A new `PipelineManager` parses the configuration into `Pipeline`, `PipelineStage` and `PipelineJob` objects.
 - **Parameters**:
-  - `config`: Path to a `.yaml`/`.yml` or JSON pipeline file, or a mapping with `name`, optional `description`, `variables`, `triggers`, `timeout` and a `stages` list (each stage has `name` and `jobs`; each job has `name` and `commands`).
+    - `config`: Path to a `.yaml`/`.yml` or JSON pipeline file, or a mapping with `name`, optional `description`, `variables`, `triggers`, `timeout` and a `stages` list (each stage has `name` and `jobs`; each job has `name` and `commands`).
 - **Return Value**: The created `Pipeline`.
 - **Errors**: Re-raises file, YAML and JSON errors (for example `FileNotFoundError`) after logging them. Use `validate_pipeline_config()` to check a mapping first.
 
@@ -20,16 +20,16 @@ All functions below are importable from `codomyrmex.ci_cd_automation`.
 
 - **Description**: Validate a pipeline configuration mapping without creating the pipeline.
 - **Parameters**:
-  - `config`: Pipeline configuration (`name`, `stages` with `jobs` that each define a non-empty `commands` list, optional `triggers` and `timeout`).
+    - `config`: Pipeline configuration (`name`, `stages` with `jobs` that each define a non-empty `commands` list, optional `triggers` and `timeout`).
 - **Return Value**: `(is_valid, errors)`; `errors` lists one message per problem.
 
 ### Function: `run_pipeline(pipeline_name: str, config_path: str | None = None, variables: dict[str, str] | None = None) -> Pipeline`
 
 - **Description**: Run a pipeline synchronously and return it with execution results. Each call uses a fresh `PipelineManager`, so pass `config_path` to load the pipeline definition; use `PipelineManager` directly to run pipelines created earlier.
 - **Parameters**:
-  - `pipeline_name`: Name of the pipeline to run (the `name` in its configuration).
-  - `config_path`: Path to the pipeline configuration file to load before running.
-  - `variables`: Runtime variables that override the pipeline's `variables`.
+    - `pipeline_name`: Name of the pipeline to run (the `name` in its configuration).
+    - `config_path`: Path to the pipeline configuration file to load before running.
+    - `variables`: Runtime variables that override the pipeline's `variables`.
 - **Return Value**: The `Pipeline`, with `status`, `started_at`, `finished_at`, `duration` and per-stage/per-job status filled in.
 - **Errors**: Raises `ValueError` when no pipeline named `pipeline_name` is loaded.
 
@@ -37,15 +37,15 @@ All functions below are importable from `codomyrmex.ci_cd_automation`.
 
 - **Description**: Create a `DeploymentOrchestrator` and load environments from a YAML or JSON deployment configuration file when it exists. Use the orchestrator's `create_deployment()`, `deploy()`, `get_deployment_status()`, `list_deployments()` and `cancel_deployment()` methods to manage deployments.
 - **Parameters**:
-  - `config_path`: Path to the deployment configuration file (default: `deployment_config.yaml` in the current directory).
+    - `config_path`: Path to the deployment configuration file (default: `deployment_config.yaml` in the current directory).
 - **Return Value**: A configured `DeploymentOrchestrator`.
 
 ### Function: `monitor_pipeline_health(pipeline_name: str, workspace_dir: str | None = None) -> dict[str, Any]`
 
 - **Description**: Return a health summary for a pipeline via `PipelineMonitor.get_pipeline_health()`.
 - **Parameters**:
-  - `pipeline_name`: Name of the pipeline to check.
-  - `workspace_dir`: Workspace directory for monitor reports (default: current directory).
+    - `pipeline_name`: Name of the pipeline to check.
+    - `workspace_dir`: Workspace directory for monitor reports (default: current directory).
 - **Return Value**:
 
     ```python
@@ -66,9 +66,9 @@ All functions below are importable from `codomyrmex.ci_cd_automation`.
 
 - **Description**: Generate one `PipelineReport` per requested report type for an execution.
 - **Parameters**:
-  - `execution_id`: Execution ID to report on.
-  - `report_types`: `ReportType` members (`EXECUTION`, `PERFORMANCE`, `QUALITY`, `COMPLIANCE`, `SUMMARY`) from `codomyrmex.ci_cd_automation.pipeline.pipeline_monitor`.
-  - `workspace_dir`: Workspace directory for reports (default: current directory).
+    - `execution_id`: Execution ID to report on.
+    - `report_types`: `ReportType` members (`EXECUTION`, `PERFORMANCE`, `QUALITY`, `COMPLIANCE`, `SUMMARY`) from `codomyrmex.ci_cd_automation.pipeline.pipeline_monitor`.
+    - `workspace_dir`: Workspace directory for reports (default: current directory).
 - **Return Value**: Mapping of `ReportType.value` to the generated `PipelineReport`.
 - **Note**: `PipelineMonitor.generate_report()` currently fills reports with sample values rather than stored execution data.
 
@@ -76,19 +76,19 @@ All functions below are importable from `codomyrmex.ci_cd_automation`.
 
 - **Description**: Create a rollback plan for a deployment and execute it synchronously with a `RollbackManager`.
 - **Parameters**:
-  - `deployment_id`: ID of the deployment to roll back.
-  - `strategy`: `RollbackStrategy` member (`IMMEDIATE`, `ROLLING`, `BLUE_GREEN`, `CANARY`, `MANUAL`).
-  - `reason`: Reason recorded in the rollback plan.
-  - `workspace_dir`: Workspace directory for `rollback_plans/` and `rollback_history/` (default: current directory).
+    - `deployment_id`: ID of the deployment to roll back.
+    - `strategy`: `RollbackStrategy` member (`IMMEDIATE`, `ROLLING`, `BLUE_GREEN`, `CANARY`, `MANUAL`).
+    - `reason`: Reason recorded in the rollback plan.
+    - `workspace_dir`: Workspace directory for `rollback_plans/` and `rollback_history/` (default: current directory).
 - **Return Value**: The `RollbackExecution` record. If execution raises, the error is logged and a record with `status="failed"` and the message in `errors` is returned instead of raising.
 
 ### Function: `optimize_pipeline_performance(pipeline_name: str, target_improvement: float = 0.2, workspace_dir: str | None = None) -> dict[str, Any]`
 
 - **Description**: Build a performance optimization plan from metrics recorded with `PipelineOptimizer.record_metric()`, and save it as JSON under the workspace.
 - **Parameters**:
-  - `pipeline_name`: Name of the pipeline to optimize.
-  - `target_improvement`: Target duration reduction as a fraction (`0.2` = 20%).
-  - `workspace_dir`: Workspace directory (default: current directory).
+    - `pipeline_name`: Name of the pipeline to optimize.
+    - `target_improvement`: Target duration reduction as a fraction (`0.2` = 20%).
+    - `workspace_dir`: Workspace directory (default: current directory).
 - **Return Value**: When duration metrics exist:
 
     ```python

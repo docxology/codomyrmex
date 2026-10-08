@@ -22,8 +22,8 @@ The `performance` module provides utilities for optimizing application execution
 
 - **Description**: Creates a lazy loader for importing modules on-demand to improve startup performance.
 - **Parameters**:
-  - `module_name`: Name of the module to lazy load.
-  - `package`: Anchor package when `module_name` is relative.
+    - `module_name`: Name of the module to lazy load.
+    - `package`: Anchor package when `module_name` is relative.
 - **Return Value**: LazyLoader object that imports the module when first accessed.
 - **Errors**: Raises `ImportError` if the module cannot be found when accessed.
 
@@ -31,9 +31,9 @@ The `performance` module provides utilities for optimizing application execution
 
 - **Description**: Decorator factory that caches a function's results, keyed by its arguments, in a `CacheManager`.
 - **Parameters**:
-  - `ttl`: Time-to-live for cache entries in seconds (default: the cache manager's default).
-  - `cache_key_prefix`: Prefix for cache keys (default: the function name).
-  - `cache_manager`: Cache manager to use (default: the module-wide instance).
+    - `ttl`: Time-to-live for cache entries in seconds (default: the cache manager's default).
+    - `cache_key_prefix`: Prefix for cache keys (default: the function name).
+    - `cache_manager`: Cache manager to use (default: the module-wide instance).
 - **Return Value**: Decorator; use as `@cached_function(ttl=3600)`.
 - **Errors**: Raises `CacheError` for cache configuration issues.
 

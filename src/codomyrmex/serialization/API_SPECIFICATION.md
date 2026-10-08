@@ -180,7 +180,7 @@ data = manager.auto_deserialize("config.toml")
 ## Supported Formats
 
 | Format | Extension | Description |
-|--------|-----------|-------------|
+| --- | --- | --- |
 | JSON | `.json` | JavaScript Object Notation |
 | YAML | `.yaml`, `.yml` | YAML Ain't Markup Language |
 | TOML | `.toml` | Tom's Obvious Minimal Language |
@@ -192,6 +192,7 @@ data = manager.auto_deserialize("config.toml")
 ## Integration
 
 ### Dependencies
+
 - Python standard library (`json`, `pickle`)
 - `pyyaml` - YAML support
 - `toml` - TOML support (optional)
@@ -200,6 +201,7 @@ data = manager.auto_deserialize("config.toml")
 - `codomyrmex.exceptions` for error handling
 
 ### Related Modules
+
 - [`config_management`](../config_management/API_SPECIFICATION.md) - Configuration files
 - [`documents`](../documents/API_SPECIFICATION.md) - Document handling
 - [`cache`](../cache/API_SPECIFICATION.md) - Cache serialization

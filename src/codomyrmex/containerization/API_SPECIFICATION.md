@@ -12,9 +12,9 @@ All functions below are importable from `codomyrmex.containerization`. Each one 
 
 - **Description**: Build a Docker image from a `ContainerConfig` with a new `DockerManager` (`DockerManager.build_image()`), optionally pushing it afterwards.
 - **Parameters**:
-  - `config`: Container configuration; `image_name`, `tag`, `dockerfile_path`, `build_context` and `build_args` drive the build.
-  - `push`: Push the image after building. The push only happens when `registry_auth` is also given.
-  - `registry_auth`: Registry credentials passed to `DockerManager.push_image()`.
+    - `config`: Container configuration; `image_name`, `tag`, `dockerfile_path`, `build_context` and `build_args` drive the build.
+    - `push`: Push the image after building. The push only happens when `registry_auth` is also given.
+    - `registry_auth`: Registry credentials passed to `DockerManager.push_image()`.
 - **Return Value**:
 
     ```python
@@ -40,8 +40,8 @@ All functions below are importable from `codomyrmex.containerization`. Each one 
 
 - **Description**: Create a Kubernetes deployment (and optionally a service) from a configuration mapping with a `KubernetesOrchestrator`.
 - **Parameters**:
-  - `deployment_config`: Mapping with `name`, `namespace` (default `"default"`), `image`, `replicas`, `port`, `container_port`, `environment_variables`, `labels` and `resources`. Set `create_service` to also create a service (`service_name`, `service_type`, default `"ClusterIP"`).
-  - `kubeconfig_path`: Path to a kubeconfig file (default: `~/.kube/config` when it exists).
+    - `deployment_config`: Mapping with `name`, `namespace` (default `"default"`), `image`, `replicas`, `port`, `container_port`, `environment_variables`, `labels` and `resources`. Set `create_service` to also create a service (`service_name`, `service_type`, default `"ClusterIP"`).
+    - `kubeconfig_path`: Path to a kubeconfig file (default: `~/.kube/config` when it exists).
 - **Return Value**:
 
     ```python
@@ -58,9 +58,9 @@ All functions below are importable from `codomyrmex.containerization`. Each one 
 
 - **Description**: Scan a container image for vulnerabilities with the Trivy CLI.
 - **Parameters**:
-  - `image`: Image name and tag to scan.
-  - `scanner`: Pre-configured `ContainerSecurityScanner` (default: a new one).
-  - `**kwargs`: Passed to `ContainerSecurityScanner.scan_image()`; `severity_filter` (list of severities such as `["critical", "high"]`) limits what Trivy reports.
+    - `image`: Image name and tag to scan.
+    - `scanner`: Pre-configured `ContainerSecurityScanner` (default: a new one).
+    - `**kwargs`: Passed to `ContainerSecurityScanner.scan_image()`; `severity_filter` (list of severities such as `["critical", "high"]`) limits what Trivy reports.
 - **Return Value**: A `SecurityScanResult`. `passed` is False when any critical or high vulnerability is found, or with `error` set when Trivy fails.
 - **Errors**: Raises `NotImplementedError` when the Trivy CLI is not installed.
 
@@ -68,10 +68,10 @@ All functions below are importable from `codomyrmex.containerization`. Each one 
 
 - **Description**: Run one registry operation through a `ContainerRegistry`.
 - **Parameters**:
-  - `operation`: One of `"push"`, `"pull"`, `"build_and_push"`, `"list"`, `"list_registry"`, `"delete"`, `"info"`, `"tag"` or `"manifest"`.
-  - `registry_url`: Registry URL, for example `docker.io` or `ghcr.io`.
-  - `credentials`: Optional mapping with `username`, `password` and `token`.
-  - `**kwargs`: Operation arguments, forwarded to the matching `ContainerRegistry` method: `image_name`, `image_tag`, `local_image` (push); `dockerfile_path`, `build_args`, `no_cache` (build_and_push); `repository`, `limit` (list, list_registry); `local_only` (delete); `source_image`, `target_name`, `target_tag` (tag).
+    - `operation`: One of `"push"`, `"pull"`, `"build_and_push"`, `"list"`, `"list_registry"`, `"delete"`, `"info"`, `"tag"` or `"manifest"`.
+    - `registry_url`: Registry URL, for example `docker.io` or `ghcr.io`.
+    - `credentials`: Optional mapping with `username`, `password` and `token`.
+    - `**kwargs`: Operation arguments, forwarded to the matching `ContainerRegistry` method: `image_name`, `image_tag`, `local_image` (push); `dockerfile_path`, `build_args`, `no_cache` (build_and_push); `repository`, `limit` (list, list_registry); `local_only` (delete); `source_image`, `target_name`, `target_tag` (tag).
 - **Return Value**: The result of the underlying `ContainerRegistry` method (for example `push_image()`, `pull_image()` or `list_images()`).
 - **Errors**: Raises `CodomyrmexError` for an unknown operation.
 
@@ -79,8 +79,8 @@ All functions below are importable from `codomyrmex.containerization`. Each one 
 
 - **Description**: Produce resource recommendations for running containers by inspecting them with `docker inspect` (`ContainerOptimizer.optimize_resources()`).
 - **Parameters**:
-  - `container_ids`: Container IDs or names to analyze.
-  - `optimizer`: Pre-configured `ContainerOptimizer` (default: a new one).
+    - `container_ids`: Container IDs or names to analyze.
+    - `optimizer`: Pre-configured `ContainerOptimizer` (default: a new one).
 - **Return Value**: Mapping of each container ID to its recommendations (`container_id`, `status`, `cpu_shares`, `memory_limit`, plus `cpu_note`/`memory_note` when no limit is set).
 - **Errors**: Raises `NotImplementedError` when the Docker CLI is not installed or `docker inspect` fails for a container.
 

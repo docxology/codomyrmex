@@ -55,6 +55,7 @@ The Feature Flags module provides a flexible system for managing feature toggles
 ## Data Models
 
 ### Model: `FeatureFlag`
+
 - `name` (str): Unique feature identifier.
 - `enabled` (bool): Global enabled state.
 - `description` (str | None): Feature description.
@@ -65,23 +66,27 @@ The Feature Flags module provides a flexible system for managing feature toggles
 - `metadata` (dict | None): Additional metadata.
 
 ### Model: `EvaluationStrategy`
+
 - `BOOLEAN`: Simple on/off flag.
 - `PERCENTAGE`: Enable for a percentage of users.
 - `USER_TARGETING`: Enable based on user attributes.
 - `MULTIVARIATE`: Return different variants.
 
 ### Model: `Variant`
+
 - `name` (str): Variant name.
 - `value` (Any): Variant value.
 - `weight` (int): Relative weight for selection.
 
 ### Model: `TargetingRule`
+
 - `attribute` (str): Context attribute to check.
 - `operator` (str): Comparison operator (eq, neq, in, contains, etc.).
 - `value` (Any): Value to compare against.
 - `enabled` (bool): Result if rule matches.
 
 ### Model: `EvaluationResult`
+
 - `feature_name` (str): Feature flag name.
 - `enabled` (bool): Whether feature is enabled.
 - `value` (Any | None): Feature value.

@@ -64,7 +64,7 @@ This document specifies the Application Programming Interface (API) for the Rela
 ### Contact (dataclass)
 
 | Field | Type | Default | Description |
-|-------|------|---------|-------------|
+| --- | --- | --- | --- |
 | `name` | `str` | required | Contact name |
 | `email` | `Optional[str]` | `None` | Email address |
 | `phone` | `Optional[str]` | `None` | Phone number |
@@ -75,7 +75,7 @@ This document specifies the Application Programming Interface (API) for the Rela
 ### Interaction (dataclass)
 
 | Field | Type | Default | Description |
-|-------|------|---------|-------------|
+| --- | --- | --- | --- |
 | `type` | `InteractionType` | required | Type of communication |
 | `summary` | `str` | required | Brief description |
 | `timestamp` | `datetime` | `datetime.now()` | When the interaction occurred |

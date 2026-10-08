@@ -23,7 +23,7 @@ TemplateEngine(engine: str = "jinja2", autoescape: bool = True)
 ```
 
 | Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
+| --- | --- | --- | --- |
 | `engine` | `str` | `"jinja2"` | Backend: `"jinja2"` or `"mako"` |
 | `autoescape` | `bool` | `True` | HTML-escape output to prevent XSS |
 
@@ -38,7 +38,7 @@ def render(template: str, context: dict) -> str
 Render a template string with context.
 
 | Parameter | Type | Description |
-|-----------|------|-------------|
+| --- | --- | --- |
 | `template` | `str` | Template source in the engine's syntax |
 | `context` | `dict` | Variables for the template |
 
@@ -224,11 +224,13 @@ code = engine.render(python_template, {
 ## Template Syntax
 
 ### Variables
+
 - `{{ variable }}` - Output variable
 - `{{ obj.attribute }}` - Access attribute
 - `{{ list[0] }}` - Access list element
 
 ### Filters
+
 - `{{ name | upper }}` - Uppercase
 - `{{ name | lower }}` - Lowercase
 - `{{ name | title }}` - Title case
@@ -236,6 +238,7 @@ code = engine.render(python_template, {
 - `{{ value | default("N/A") }}` - Default value
 
 ### Control
+
 - `{% if condition %}...{% endif %}` - Conditional
 - `{% for item in list %}...{% endfor %}` - Loop
 - `{% include "partial.html" %}` - Include template
@@ -246,11 +249,13 @@ code = engine.render(python_template, {
 ## Integration
 
 ### Dependencies
+
 - `jinja2` - Template engine
 - `codomyrmex.logging_monitoring` for logging
 - `codomyrmex.exceptions` for error handling
 
 ### Related Modules
+
 - [`documentation`](../documentation/API_SPECIFICATION.md) - Documentation generation
 - [`deployment`](../deployment/API_SPECIFICATION.md) - Code generation
 - [`module_template`](../module_template/API_SPECIFICATION.md) - Module scaffolding

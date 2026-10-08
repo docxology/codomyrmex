@@ -457,7 +457,7 @@ pedersen_verify(commitment: int, value: int, randomness: int, g: int, h: int, p:
 All exceptions are defined in `crypto.exceptions`:
 
 | Exception | Description |
-|---|---|
+| --- | --- |
 | `CryptoError` | Base exception for all crypto errors |
 | `SymmetricCipherError` | Symmetric encryption/decryption failure |
 | `AsymmetricCipherError` | Asymmetric encryption/decryption failure |

@@ -96,6 +96,7 @@ The Deployment module provides tools for managing application deployments, inclu
 ## Data Models
 
 ### Model: `DeploymentResult`
+
 - `success` (bool): Whether deployment succeeded.
 - `version` (str): Deployed version.
 - `target` (str): Target environment.
@@ -104,6 +105,7 @@ The Deployment module provides tools for managing application deployments, inclu
 - `errors` (list[str] | None): Any errors encountered.
 
 ### Model: `DeploymentStatus`
+
 - `target` (str): Target environment.
 - `current_version` (str): Currently deployed version.
 - `status` (str): Status (running, deployed, failed, rolling_back).
@@ -111,6 +113,7 @@ The Deployment module provides tools for managing application deployments, inclu
 - `instances` (int): Number of running instances.
 
 ### Model: `Deployment`
+
 - `id` (str): Unique deployment identifier.
 - `target` (str): Target environment.
 - `version` (str): Version being deployed.

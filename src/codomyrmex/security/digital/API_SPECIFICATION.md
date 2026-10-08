@@ -149,7 +149,9 @@ All functions below are importable from `codomyrmex.security.digital`.
 ## Data Structures
 
 ### VulnerabilityReport
+
 Comprehensive vulnerability assessment results:
+
 ```python
 {
     "scan_id": <str>,
@@ -181,7 +183,9 @@ Comprehensive vulnerability assessment results:
 ```
 
 ### SecurityScanResult
+
 Results from security code scanning:
+
 ```python
 {
     "scan_id": <str>,
@@ -209,7 +213,9 @@ Results from security code scanning:
 ```
 
 ### ComplianceCheck
+
 Compliance verification results:
+
 ```python
 {
     "check_id": <str>,
@@ -233,7 +239,9 @@ Compliance verification results:
 ```
 
 ### SecurityEvent
+
 Security monitoring event data:
+
 ```python
 {
     "event_id": <str>,
@@ -252,7 +260,9 @@ Security monitoring event data:
 ```
 
 ### SSLValidationResult
+
 SSL certificate validation results:
+
 ```python
 {
     "hostname": <str>,
@@ -291,6 +301,7 @@ All functions follow consistent error handling patterns:
 ## Integration Patterns
 
 ### Comprehensive Security Assessment
+
 ```python
 from codomyrmex.security.digital import (
     audit_code_security,
@@ -318,6 +329,7 @@ report = generate_security_report(
 ```
 
 ### Real-time Security Monitoring
+
 ```python
 from codomyrmex.security.digital import monitor_security_events
 
@@ -333,6 +345,7 @@ monitor.stop_monitoring()
 ```
 
 ### Data Encryption Pipeline
+
 ```python
 import json
 
@@ -369,7 +382,6 @@ config = json.loads(
 - **Parallel Processing**: Concurrent security analysis for large codebases
 - **Caching**: Security scan results caching for improved performance
 - **Streaming Analysis**: Real-time security event processing and alerting
-
 
 ## Navigation Links
 

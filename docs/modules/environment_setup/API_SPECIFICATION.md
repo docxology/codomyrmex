@@ -17,7 +17,7 @@ These functions are primarily sourced from the `env_checker.py` script.
 - **Parameters/Arguments**: None.
 - **Request Body**: N/A
 - **Returns/Response**: None.
-  - **Side Effects**: Prints messages to `stderr` and may terminate the calling script via `sys.exit(1)` if essential dependencies are missing.
+    - **Side Effects**: Prints messages to `stderr` and may terminate the calling script via `sys.exit(1)` if essential dependencies are missing.
 - **Events Emitted**: N/A
 
 ### Function 2: `check_and_setup_env_vars(repo_root: str | None = None, required: list[str] | None = None, optional: list[str] | None = None) -> list[str]`
@@ -32,7 +32,7 @@ These functions are primarily sourced from the `env_checker.py` script.
     - `optional` (list[str], optional): Environment variables that may be absent; accepted for documentation and not checked.
 - **Request Body**: N/A
 - **Returns/Response**: `list[str]` of required variable names that are not set (empty when all are present).
-  - **Side Effects**: Loads variables from the `.env` file into the current process's environment.
+    - **Side Effects**: Loads variables from the `.env` file into the current process's environment.
 - **Events Emitted**: N/A
 
 ### Function 3: `validate_python_version(min_version: str = "3.10") -> bool`
@@ -89,6 +89,7 @@ N/A.
 ## Versioning
 
 These functions will be versioned as part of the `environment_setup` module, following the overall project's semantic versioning. Changes to function signatures or core behavior will be noted in the module's `CHANGELOG.md`.
+
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

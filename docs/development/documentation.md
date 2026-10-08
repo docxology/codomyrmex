@@ -297,6 +297,30 @@ or intentionally abbreviated signature. Fix shipped APIs instead of skipping
 them, and update the `docs/modules/<module>/` mirror together with the
 `src/` copy.
 
+## Markdown style
+
+`.markdownlint.yaml` holds the Markdown rules used by the pre-commit
+`markdownlint` hook (which lints the Markdown files a change touches) and by
+editors. It enables every default rule except line length (MD013), inline HTML
+(MD033), a leading H1 (MD041) and bare URLs (MD034, because `<url>` autolinks
+break the Docusaurus MDX build), and sets two project conventions:
+
+- nested lists are indented by four spaces (MD007), which Python-Markdown and
+  therefore MkDocs require for nesting;
+- repeated headings are allowed when they have different parents (MD024
+  `siblings_only`), so every class can have its own `Methods` section.
+
+`.markdownlintignore` excludes third-party checkouts and documents that must
+stay byte-for-byte identical to upstream (for example `FPF-Spec.md`, which
+`codomyrmex.fpf` parses). Fix what you touch with:
+
+```bash
+npx markdownlint-cli --config .markdownlint.yaml --fix path/to/file.md
+```
+
+In tables, escape a literal pipe inside a code span as `\|` (for example
+`` `str \| None` ``); otherwise it starts a new cell.
+
 ## Mermaid diagrams
 
 Use fenced `mermaid` blocks with theme-neutral syntax:

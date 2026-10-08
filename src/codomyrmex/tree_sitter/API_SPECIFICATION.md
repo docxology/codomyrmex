@@ -68,11 +68,13 @@ The Tree-sitter module provides code parsing capabilities using Tree-sitter, ena
 ## Data Models
 
 ### Model: `SyntaxTree`
+
 - `root_node` (Node): Root node of the tree.
 - `language` (str): Language of the parsed source.
 - `source_bytes` (bytes): Original source as bytes.
 
 ### Model: `Node`
+
 - `type` (str): Node type (e.g., "function_definition").
 - `start_point` (tuple[int, int]): Start position (row, column).
 - `end_point` (tuple[int, int]): End position (row, column).
@@ -83,10 +85,12 @@ The Tree-sitter module provides code parsing capabilities using Tree-sitter, ena
 - `is_named` (bool): Whether node is a named node.
 
 ### Model: `QueryMatch`
+
 - `pattern_index` (int): Index of matched pattern.
 - `captures` (dict[str, list[Node]]): Named captures.
 
 ### Model: `FunctionDef`
+
 - `name` (str): Function name.
 - `parameters` (list[str]): Parameter names.
 - `start_line` (int): Start line number.
@@ -95,6 +99,7 @@ The Tree-sitter module provides code parsing capabilities using Tree-sitter, ena
 - `decorators` (list[str]): Decorator names.
 
 ### Model: `ClassDef`
+
 - `name` (str): Class name.
 - `bases` (list[str]): Base class names.
 - `methods` (list[FunctionDef]): Class methods.

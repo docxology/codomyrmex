@@ -43,13 +43,13 @@ The main coordination engine that manages all orchestration operations.
 
 - **Description**: Creates a new orchestration session for context management.
 - **Parameters**:
-  - `user_id` (string): User identifier for the session. Default: "system"
-  - `mode` (string, optional): Execution mode. One of: "sequential", "parallel", "priority", "resource_aware". Default: "resource_aware"
-  - `max_parallel_tasks` (int, optional): Maximum concurrent tasks. Default: 4
-  - `max_parallel_workflows` (int, optional): Maximum concurrent workflows. Default: 2
-  - `timeout_seconds` (int, optional): Session timeout in seconds; bounds `execute_task` and `execute_complex_workflow`
-  - `resource_requirements` (dict, optional): Resources allocated for the duration of each `execute_workflow` call
-  - `metadata` (dict, optional): Additional session metadata
+    - `user_id` (string): User identifier for the session. Default: "system"
+    - `mode` (string, optional): Execution mode. One of: "sequential", "parallel", "priority", "resource_aware". Default: "resource_aware"
+    - `max_parallel_tasks` (int, optional): Maximum concurrent tasks. Default: 4
+    - `max_parallel_workflows` (int, optional): Maximum concurrent workflows. Default: 2
+    - `timeout_seconds` (int, optional): Session timeout in seconds; bounds `execute_task` and `execute_complex_workflow`
+    - `resource_requirements` (dict, optional): Resources allocated for the duration of each `execute_workflow` call
+    - `metadata` (dict, optional): Additional session metadata
 - **Returns**: Session ID (string)
 - **Example**:
 
@@ -67,9 +67,9 @@ The main coordination engine that manages all orchestration operations.
 
 - **Description**: Runs a registered workflow through `WorkflowManager.execute_workflow` and returns once every step has finished. The session status becomes `COMPLETED` or `FAILED` and a `workflow_completed` event is emitted.
 - **Parameters**:
-  - `workflow_name` (string): Name of the workflow to execute
-  - `session_id` (Optional[str]): Session ID for context (creates new if not provided)
-  - `**params`: Workflow-level parameters merged over every step's parameters
+    - `workflow_name` (string): Name of the workflow to execute
+    - `session_id` (Optional[str]): Session ID for context (creates new if not provided)
+    - `**params`: Workflow-level parameters merged over every step's parameters
 - **Returns**: Dictionary with execution results:
 
   ```python
@@ -99,8 +99,8 @@ The main coordination engine that manages all orchestration operations.
 
 - **Description**: Execute a single task and wait for it to finish. Dependencies on task IDs the orchestrator does not know fail immediately. If the session has `timeout_seconds` and the task does not finish in time, it is cancelled and a failure is returned.
 - **Parameters**:
-  - `task` (Union[Task, Dict[str, Any]]): Task object or task dictionary
-  - `session_id` (Optional[str]): Session ID (creates new if not provided)
+    - `task` (Union[Task, Dict[str, Any]]): Task object or task dictionary
+    - `session_id` (Optional[str]): Session ID (creates new if not provided)
 - **Returns**: Dictionary with execution results:
 
   ```python
@@ -116,10 +116,10 @@ The main coordination engine that manages all orchestration operations.
 
 - **Description**: Execute a workflow for a project registered with the engine's `ProjectManager`. The run goes through `execute_workflow` (`params` are passed to the steps unchanged) and is recorded in the project's metrics: `workflow_executions`, `successful_workflow_executions`, `last_workflow`, `last_workflow_success`, `last_workflow_execution`.
 - **Parameters**:
-  - `project_name` (string): Project name
-  - `workflow_name` (string): Workflow to execute
-  - `session_id` (Optional[str]): Session ID (creates new if not provided)
-  - `**params`: Workflow parameters
+    - `project_name` (string): Project name
+    - `workflow_name` (string): Workflow to execute
+    - `session_id` (Optional[str]): Session ID (creates new if not provided)
+    - `**params`: Workflow parameters
 - **Returns**: The `execute_workflow` result plus `project_name`; `{"success": False, "error": "Project <name> not found"}` for an unknown project.
 
 ##### `create_project_from_workflow(project_name: str, workflow_name: str, template_name: str = "ai_analysis", description: str = "", session_id: Optional[str] = None, **params) -> Dict[str, Any]`
@@ -141,8 +141,8 @@ The main coordination engine that manages all orchestration operations.
 
 - **Description**: Execute an ad-hoc workflow definition with interdependent steps. Steps are built from `steps` (each with `name`, `module`, `action`, optional `parameters` and `dependencies`) plus the top-level `dependencies` mapping, then run with `WorkflowManager.execute_steps` bounded by the session's `timeout_seconds`.
 - **Parameters**:
-  - `workflow_definition` (Dict[str, Any]): Definition with `steps` and optional `dependencies` and `name`
-  - `session_id` (Optional[str]): Session ID (creates new if not provided)
+    - `workflow_definition` (Dict[str, Any]): Definition with `steps` and optional `dependencies` and `name`
+    - `session_id` (Optional[str]): Session ID (creates new if not provided)
 - **Returns**: Dictionary with execution results:
 
   ```python
@@ -158,22 +158,22 @@ The main coordination engine that manages all orchestration operations.
 
 - **Description**: Get a session by ID.
 - **Parameters**:
-  - `session_id` (string): Session ID
+    - `session_id` (string): Session ID
 - **Returns**: OrchestrationSession object or None if not found
 
 ##### `close_session(session_id: str) -> bool`
 
 - **Description**: Close an orchestration session and cleanup resources.
 - **Parameters**:
-  - `session_id` (string): Session ID to close
+    - `session_id` (string): Session ID to close
 - **Returns**: bool - True if session was closed, False if not found
 
 ##### `register_event_handler(event: str, handler: Callable)`
 
 - **Description**: Register an event handler for orchestration events.
 - **Parameters**:
-  - `event` (string): Event name (e.g., "workflow_completed", "session_closed")
-  - `handler` (Callable): Handler function that accepts (event: str, data: dict) arguments
+    - `event` (string): Event name (e.g., "workflow_completed", "session_closed")
+    - `handler` (Callable): Handler function that accepts (event: str, data: dict) arguments
 
 ##### `get_metrics() -> Dict[str, Any]`
 
@@ -246,8 +246,8 @@ Manages workflow definitions and execution.
 
 - **Description**: Registers a workflow with the specified steps, replacing any workflow of the same name.
 - **Parameters**:
-  - `name` (string): Workflow name.
-  - `steps` (List[WorkflowStep]): Workflow steps. Their order does not matter; `dependencies` (step names) determine execution order.
+    - `name` (string): Workflow name.
+    - `steps` (List[WorkflowStep]): Workflow steps. Their order does not matter; `dependencies` (step names) determine execution order.
 - **Returns**: bool - True.
 - **Example**:
 
@@ -272,8 +272,8 @@ Manages workflow definitions and execution.
 
 - **Description**: Executes a registered workflow synchronously and returns the finished execution. `params` are merged over each step's `parameters`. Equivalent to `execute_steps(name, steps, params)`.
 - **Raises**:
-  - `ValueError`: If the workflow is not registered, or its dependencies are invalid (missing step, cycle, duplicate step name). Nothing runs in that case.
-  - `NotImplementedError`: If a step sets `run_if` (conditions are not supported).
+    - `ValueError`: If the workflow is not registered, or its dependencies are invalid (missing step, cycle, duplicate step name). Nothing runs in that case.
+    - `NotImplementedError`: If a step sets `run_if` (conditions are not supported).
 - **Example**:
 
   ```python
@@ -291,10 +291,10 @@ Manages workflow definitions and execution.
 
 - **Description**: Validates the steps, submits them to the task orchestrator in topological order of their dependencies, waits for all of them and returns the finished execution.
 - **Semantics**:
-  - Independent steps run concurrently; every dependency is enforced regardless of listing order.
-  - A step whose dependency failed is failed without running; unrelated steps still run.
-  - `status` is `COMPLETED` when every `required` step completed, otherwise `FAILED` with `error` listing each failed required step. `end_time` and `step_results` (step name to `TaskResult.to_dict()`) are always set.
-  - If `timeout` expires, unfinished steps are cancelled and the execution fails.
+    - Independent steps run concurrently; every dependency is enforced regardless of listing order.
+    - A step whose dependency failed is failed without running; unrelated steps still run.
+    - `status` is `COMPLETED` when every `required` step completed, otherwise `FAILED` with `error` listing each failed required step. `end_time` and `step_results` (step name to `TaskResult.to_dict()`) are always set.
+    - If `timeout` expires, unfinished steps are cancelled and the execution fails.
 - **Raises**: as `execute_workflow`.
 
 ##### `list_workflows() -> List[str]`
@@ -326,7 +326,7 @@ Coordinates individual task execution with dependency management. See [Task Disp
 
 - **Description**: Add a task to the orchestrator. The task is queued when its dependencies (task IDs) have completed, blocked while they are pending or unknown, and failed immediately if one already failed or was cancelled.
 - **Parameters**:
-  - `task` (Task): Task object to add
+    - `task` (Task): Task object to add
 - **Returns**: Task ID (string)
 - **Example**:
 
@@ -344,7 +344,7 @@ Coordinates individual task execution with dependency management. See [Task Disp
 
 - **Description**: Submits a task and blocks until it reaches a final state.
 - **Parameters**:
-  - `task` (Task): Task object to execute
+    - `task` (Task): Task object to execute
 - **Returns**: The task's `TaskResult`:
 
   ```python
@@ -448,10 +448,10 @@ High-level project lifecycle management.
 
 - **Description**: Creates and scaffolds a project (`src/`, `tests/`, `config/`, `docs/` plus generated README/AGENTS docs) and registers it.
 - **Parameters**:
-  - `name` (string): Project name, unique within the manager
-  - `type` (ProjectType): Project type
-  - `description` (string, optional): Project description
-  - `path` (Path, optional): Project directory; defaults to `projects_root / name`
+    - `name` (string): Project name, unique within the manager
+    - `type` (ProjectType): Project type
+    - `description` (string, optional): Project description
+    - `path` (Path, optional): Project directory; defaults to `projects_root / name`
 - **Returns**: The `Project`, or None if the name is already registered, the directory already exists, or scaffolding failed (the reason is logged)
 - **Example**:
 

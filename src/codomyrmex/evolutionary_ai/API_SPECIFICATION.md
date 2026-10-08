@@ -119,6 +119,7 @@ The Evolutionary AI module provides genetic algorithm primitives for evolving AI
 ## Data Models
 
 ### Model: `EvolutionResult`
+
 - `generations` (int): Number of generations evolved.
 - `best_fitness` (float): Best fitness achieved.
 - `best_genome` (Genome): Best genome found.
@@ -126,6 +127,7 @@ The Evolutionary AI module provides genetic algorithm primitives for evolving AI
 - `diversity_history` (list[float]): Population diversity per generation.
 
 ### Model: `PopulationStats`
+
 - `size` (int): Population size.
 - `mean_fitness` (float): Mean fitness.
 - `std_fitness` (float): Standard deviation of fitness.

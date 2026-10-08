@@ -27,7 +27,7 @@ S3Client(region_name: Optional[str] = None)
 #### Methods
 
 | Method | Signature | Returns | Description |
-|--------|-----------|---------|-------------|
+| --- | --- | --- | --- |
 | `upload_file` | `(file_path: str, bucket: str, object_name: Optional[str] = None) -> bool` | Success flag | Upload local file to S3 |
 | `download_file` | `(bucket: str, object_name: str, file_path: str) -> bool` | Success flag | Download S3 object to local file |
 | `list_objects` | `(bucket: str) -> list[str]` | Object keys | List all objects in bucket |
@@ -53,10 +53,10 @@ GCSClient(project: Optional[str] = None)
 #### Methods
 
 | Method | Signature | Returns | Description |
-|--------|-----------|---------|-------------|
+| --- | --- | --- | --- |
 | `upload_file` | `(bucket: str, key: str, file_path: str) -> bool` | Success flag | Upload file to GCS |
 | `download_file` | `(bucket: str, key: str, file_path: str) -> bool` | Success flag | Download object to local file |
-| `list_objects` | `(bucket: str, prefix: str | None = None) -> list[str]` | Object keys | List objects in a bucket |
+| `list_objects` | `(bucket: str, prefix: str \| None = None) -> list[str]` | Object keys | List objects in a bucket |
 | `get_object_metadata` | `(bucket: str, key: str) -> dict[str, Any]` | Metadata dict | Get object metadata |
 | `create_bucket` | `(name: str, region: str = "US") -> bool` | Success flag | Create a bucket |
 
@@ -80,10 +80,10 @@ AzureBlobClient(account_url: Optional[str] = None)
 #### Methods
 
 | Method | Signature | Returns | Description |
-|--------|-----------|---------|-------------|
+| --- | --- | --- | --- |
 | `upload_file` | `(bucket: str, key: str, file_path: str) -> bool` | Success flag | Upload file to a container |
 | `download_file` | `(bucket: str, key: str, file_path: str) -> bool` | Success flag | Download object to local file |
-| `list_objects` | `(bucket: str, prefix: str | None = None) -> list[str]` | Object keys | List objects in a container |
+| `list_objects` | `(bucket: str, prefix: str \| None = None) -> list[str]` | Object keys | List objects in a container |
 | `get_object_metadata` | `(bucket: str, key: str) -> dict[str, Any]` | Metadata dict | Get object metadata |
 | `create_bucket` | `(name: str) -> bool` | Success flag | Create a container |
 
@@ -108,7 +108,7 @@ CodaClient(
 ### 3.2 Documents API
 
 | Method | Signature | Description |
-|--------|-----------|-------------|
+| --- | --- | --- |
 | `list_docs` | `(**filters) -> DocList` | List accessible documents |
 | `create_doc` | `(title, **kwargs) -> Doc` | Create new document |
 | `get_doc` | `(doc_id: str) -> Doc` | Get document metadata |
@@ -118,7 +118,7 @@ CodaClient(
 ### 3.3 Pages API
 
 | Method | Signature | Description |
-|--------|-----------|-------------|
+| --- | --- | --- |
 | `list_pages` | `(doc_id: str, **params) -> PageList` | List pages in doc |
 | `create_page` | `(doc_id: str, **kwargs) -> dict` | Create new page |
 | `get_page` | `(doc_id: str, page_id: str) -> Page` | Get page details |
@@ -128,7 +128,7 @@ CodaClient(
 ### 3.4 Tables & Rows API
 
 | Method | Signature | Description |
-|--------|-----------|-------------|
+| --- | --- | --- |
 | `list_tables` | `(doc_id: str, **params) -> TableList` | List tables in doc |
 | `get_table` | `(doc_id: str, table_id: str) -> Table` | Get table details |
 | `list_columns` | `(doc_id: str, table_id: str) -> ColumnList` | List table columns |
@@ -141,7 +141,7 @@ CodaClient(
 ### 3.5 Exceptions
 
 | Exception | HTTP Status | Description |
-|-----------|-------------|-------------|
+| --- | --- | --- |
 | `CodaAPIError` | Various | Base exception for API errors |
 | `CodaAuthenticationError` | 401 | Invalid or missing API token |
 | `CodaForbiddenError` | 403 | Permission denied |
@@ -176,7 +176,7 @@ All Infomaniak OpenStack clients support `from_env()` and `from_credentials()` f
 ### 4.2 Compute (`InfomaniakComputeClient`)
 
 | Method | Returns | Description |
-|--------|---------|-------------|
+| --- | --- | --- |
 | `list_instances()` | `List[Dict]` | List all compute instances |
 | `get_instance(server_id)` | `Optional[Dict]` | Get instance details |
 | `create_instance(name, flavor, image, network, ...)` | `Optional[Dict]` | Create a new instance |
@@ -191,7 +191,7 @@ All Infomaniak OpenStack clients support `from_env()` and `from_credentials()` f
 ### 4.3 Volume (`InfomaniakVolumeClient`)
 
 | Method | Returns | Description |
-|--------|---------|-------------|
+| --- | --- | --- |
 | `list_volumes()` | `List[Dict]` | List block storage volumes |
 | `create_volume(size, name, ...)` | `Optional[Dict]` | Create a volume |
 | `delete_volume(volume_id)` | `bool` | Delete a volume |
@@ -204,7 +204,7 @@ All Infomaniak OpenStack clients support `from_env()` and `from_credentials()` f
 ### 4.4 Network (`InfomaniakNetworkClient`)
 
 | Method | Returns | Description |
-|--------|---------|-------------|
+| --- | --- | --- |
 | `list_networks()` | `List[Dict]` | List networks |
 | `create_network(name, ...)` | `Optional[Dict]` | Create a network |
 | `delete_network(network_id)` | `bool` | Delete a network |
@@ -219,7 +219,7 @@ All Infomaniak OpenStack clients support `from_env()` and `from_credentials()` f
 **Swift API:**
 
 | Method | Returns | Description |
-|--------|---------|-------------|
+| --- | --- | --- |
 | `list_containers()` | `List[str]` | List Swift containers |
 | `create_container(name)` | `bool` | Create a container |
 | `upload_object(container, name, data)` | `bool` | Upload an object |
@@ -229,7 +229,7 @@ All Infomaniak OpenStack clients support `from_env()` and `from_credentials()` f
 **S3-compatible API:**
 
 | Method | Returns | Description |
-|--------|---------|-------------|
+| --- | --- | --- |
 | `list_buckets()` | `List[str]` | List S3 buckets |
 | `list_objects(bucket)` | `List[str]` | List objects in bucket |
 | `upload_data(bucket, key, data)` | `bool` | Upload data |
@@ -241,7 +241,7 @@ All Infomaniak OpenStack clients support `from_env()` and `from_credentials()` f
 ### 4.6 Identity (`InfomaniakIdentityClient`)
 
 | Method | Returns | Description |
-|--------|---------|-------------|
+| --- | --- | --- |
 | `get_current_user()` | `Optional[Dict]` | Get authenticated user info |
 | `list_projects()` | `List[Dict]` | List accessible projects |
 | `list_application_credentials()` | `List[Dict]` | List app credentials |
@@ -251,7 +251,7 @@ All Infomaniak OpenStack clients support `from_env()` and `from_credentials()` f
 ### 4.7 DNS (`InfomaniakDNSClient`)
 
 | Method | Returns | Description |
-|--------|---------|-------------|
+| --- | --- | --- |
 | `list_zones()` | `List[Dict]` | List DNS zones |
 | `create_zone(name, email, ...)` | `Optional[Dict]` | Create a zone |
 | `delete_zone(zone_id)` | `bool` | Delete a zone |
@@ -262,7 +262,7 @@ All Infomaniak OpenStack clients support `from_env()` and `from_credentials()` f
 ### 4.8 Orchestration (`InfomaniakHeatClient`)
 
 | Method | Returns | Description |
-|--------|---------|-------------|
+| --- | --- | --- |
 | `list_stacks()` | `List[Dict]` | List Heat stacks |
 | `get_stack(stack_id)` | `Optional[Dict]` | Get stack details |
 | `create_stack(name, template, ...)` | `Optional[Dict]` | Create a stack |
@@ -273,7 +273,7 @@ All Infomaniak OpenStack clients support `from_env()` and `from_credentials()` f
 ### 4.9 Metering (`InfomaniakMeteringClient`)
 
 | Method | Returns | Description |
-|--------|---------|-------------|
+| --- | --- | --- |
 | `get_all_usage()` | `Dict` | Comprehensive usage summary |
 | `get_compute_usage()` | `Dict` | Compute usage (vCPUs, RAM, disk) |
 | `get_storage_usage()` | `Dict` | Block storage usage |
@@ -290,7 +290,7 @@ client = InfomaniakNewsletterClient.from_env()  # uses INFOMANIAK_NEWSLETTER_TOK
 **Campaigns:**
 
 | Method | Returns | Description |
-|--------|---------|-------------|
+| --- | --- | --- |
 | `list_campaigns()` | `List[Dict]` | List all campaigns |
 | `get_campaign(campaign_id)` | `Optional[Dict]` | Get campaign details |
 | `create_campaign(subject, sender_email, sender_name, content_html, mailing_list_id)` | `Optional[Dict]` | Create a campaign |
@@ -305,7 +305,7 @@ client = InfomaniakNewsletterClient.from_env()  # uses INFOMANIAK_NEWSLETTER_TOK
 **Mailing Lists:**
 
 | Method | Returns | Description |
-|--------|---------|-------------|
+| --- | --- | --- |
 | `list_mailing_lists()` | `List[Dict]` | List mailing lists |
 | `get_mailing_list(list_id)` | `Optional[Dict]` | Get mailing list details |
 | `create_mailing_list(name)` | `Optional[Dict]` | Create a mailing list |
@@ -318,7 +318,7 @@ client = InfomaniakNewsletterClient.from_env()  # uses INFOMANIAK_NEWSLETTER_TOK
 **Contacts:**
 
 | Method | Returns | Description |
-|--------|---------|-------------|
+| --- | --- | --- |
 | `get_contact(contact_id)` | `Optional[Dict]` | Get contact details |
 | `update_contact(contact_id, **kwargs)` | `Optional[Dict]` | Update contact |
 | `delete_contact(contact_id)` | `bool` | Delete contact |
@@ -326,7 +326,7 @@ client = InfomaniakNewsletterClient.from_env()  # uses INFOMANIAK_NEWSLETTER_TOK
 **Utility:**
 
 | Method | Returns | Description |
-|--------|---------|-------------|
+| --- | --- | --- |
 | `get_task_status(task_id)` | `Optional[Dict]` | Check async task status |
 | `get_credits()` | `Optional[Dict]` | Get newsletter credits |
 

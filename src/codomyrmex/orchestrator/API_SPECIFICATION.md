@@ -535,7 +535,7 @@ print(result["success"], result["final_output"])
 ## 10. Error Handling
 
 | Exception | When raised |
-|-----------|------------|
+| --- | --- |
 | `CycleError` | Task DAG has a circular dependency |
 | `TaskFailedError` | Task exhausted all retry attempts |
 | `OrchestratorTimeoutError` | Workflow-wide deadline exceeded |
@@ -548,7 +548,7 @@ print(result["success"], result["final_output"])
 No required environment variables for core orchestration. Optional integrations:
 
 | Variable | Module | Purpose |
-|----------|--------|---------|
+| --- | --- | --- |
 | `CODOMYRMEX_MAX_WORKERS` | `parallel_runner` | Default thread pool size (default: 4) |
 | `CODOMYRMEX_SCRIPT_ROOT` | `discovery` | Root directory for script discovery |
 | `CODOMYRMEX_WORKFLOW_TIMEOUT` | `workflow` | Global workflow deadline in seconds |

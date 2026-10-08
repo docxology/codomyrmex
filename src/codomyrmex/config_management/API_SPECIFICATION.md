@@ -10,10 +10,10 @@ This API specification documents the programmatic interfaces for the Configurati
 
 - **Description**: Load a named configuration with a new `ConfigurationManager`, deep-merging `defaults`, each readable source in order, and `<NAME>_*` environment variables (highest precedence; `__` nests keys), then resolving `${VAR}` and `${VAR:-default}` substitutions.
 - **Parameters**:
-  - `name`: Configuration name. Also used for the default sources and the environment-variable prefix.
-  - `sources`: Files to load, in increasing precedence. Defaults to `<name>.yaml`, `<name>.yml`, `<name>.json` and the same names under `environments/<environment>/`.
-  - `schema_path`: Path to a JSON schema; when it exists the configuration is validated against it (errors are logged, not raised).
-  - `defaults`: Default values with the lowest precedence.
+    - `name`: Configuration name. Also used for the default sources and the environment-variable prefix.
+    - `sources`: Files to load, in increasing precedence. Defaults to `<name>.yaml`, `<name>.yml`, `<name>.json` and the same names under `environments/<environment>/`.
+    - `schema_path`: Path to a JSON schema; when it exists the configuration is validated against it (errors are logged, not raised).
+    - `defaults`: Default values with the lowest precedence.
 - **Return Value**: The loaded `Configuration`.
 - **Errors**: Raises `FileNotFoundError` when a single explicit source was requested and nothing was found.
 
@@ -21,15 +21,15 @@ This API specification documents the programmatic interfaces for the Configurati
 
 - **Description**: Validate a `Configuration` against its schema (`Configuration.validate()`).
 - **Parameters**:
-  - `config`: Configuration to validate.
+    - `config`: Configuration to validate.
 - **Return Value**: List of validation error messages; empty when the configuration is valid.
 
 ### Function: `manage_secrets(operation: str, **kwargs) -> Any`
 
 - **Description**: Run one secret operation with a new `SecretManager`. Available when `SECRET_MANAGEMENT_AVAILABLE` is true.
 - **Parameters**:
-  - `operation`: One of `"store"`, `"get"`, `"get_by_name"`, `"list"`, `"delete"` or `"rotate"`.
-  - `**kwargs`: Operation arguments: `name`, `value` and optional `metadata` for `store`; `secret_id` for `get` and `delete`; `name` for `get_by_name`.
+    - `operation`: One of `"store"`, `"get"`, `"get_by_name"`, `"list"`, `"delete"` or `"rotate"`.
+    - `**kwargs`: Operation arguments: `name`, `value` and optional `metadata` for `store`; `secret_id` for `get` and `delete`; `name` for `get_by_name`.
 - **Return Value**: The result of the matching `SecretManager` method (`store_secret()`, `get_secret()`, `get_secret_by_name()`, `list_secrets()`, `delete_secret()` or `rotate_key()`).
 - **Errors**: Raises `CodomyrmexError` for an unknown operation.
 
@@ -37,9 +37,9 @@ This API specification documents the programmatic interfaces for the Configurati
 
 - **Description**: Deploy configuration files to a registered environment with a new `ConfigurationDeployer`.
 - **Parameters**:
-  - `environment_name`: Name of the target environment registered with the deployer.
-  - `config_files`: Configuration files to deploy.
-  - `deployed_by`: Who is deploying, recorded on the deployment.
+    - `environment_name`: Name of the target environment registered with the deployer.
+    - `config_files`: Configuration files to deploy.
+    - `deployed_by`: Who is deploying, recorded on the deployment.
 - **Return Value**: The `ConfigDeployment` record.
 - **Errors**: Raises `CodomyrmexError` when the environment is not registered.
 
@@ -47,8 +47,8 @@ This API specification documents the programmatic interfaces for the Configurati
 
 - **Description**: Check configuration files once for changes with a `ConfigurationMonitor` and summarize the result.
 - **Parameters**:
-  - `config_paths`: Configuration files to check.
-  - `workspace_dir`: Directory under which the monitor keeps `config_monitoring/` state (default: current directory).
+    - `config_paths`: Configuration files to check.
+    - `workspace_dir`: Directory under which the monitor keeps `config_monitoring/` state (default: current directory).
 - **Return Value**:
 
     ```python
@@ -70,9 +70,9 @@ This API specification documents the programmatic interfaces for the Configurati
 
 - **Description**: Audit the configuration files in a directory for an environment. There is no module-level `audit_configuration()` function; create a `ConfigurationMonitor` and call this method.
 - **Parameters**:
-  - `environment`: Environment name recorded on the audit.
-  - `config_dir`: Directory whose configuration files are audited.
-  - `compliance_rules`: Optional compliance rules.
+    - `environment`: Environment name recorded on the audit.
+    - `config_dir`: Directory whose configuration files are audited.
+    - `compliance_rules`: Optional compliance rules.
 - **Return Value**: The `ConfigAudit` record, also kept in `ConfigurationMonitor.get_audit_history()`.
 
 ## Data Structures

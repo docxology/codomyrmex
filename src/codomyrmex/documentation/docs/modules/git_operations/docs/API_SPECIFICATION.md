@@ -203,6 +203,7 @@ This document specifies the Application Programming Interface (API) for the `git
 ## GitHub API Operations
 
 The module also provides GitHub API integration through the `github_api` submodule. See `github_api.py` for functions like:
+
 - `create_github_repository()`
 - `create_pull_request()`
 - `get_pull_requests()`
@@ -211,6 +212,7 @@ The module also provides GitHub API integration through the `github_api` submodu
 ## Visualization Integration
 
 When `data_visualization` module is available, the following functions are provided:
+
 - `create_git_analysis_report()`
 - `visualize_git_branches()`
 - `visualize_commit_activity()`
@@ -221,7 +223,9 @@ See `visualization_integration.py` for details.
 ## Data Models
 
 ### Repository Status Dictionary
+
 Returned by `get_status()`:
+
 ```python
 {
     "branch": str,           # Current branch name
@@ -235,7 +239,9 @@ Returned by `get_status()`:
 ```
 
 ### Commit History Dictionary
+
 Returned by `get_commit_history()`:
+
 ```python
 {
     "sha": str,              # Full commit SHA
@@ -270,6 +276,7 @@ This API follows the Codomyrmex project versioning strategy. API stability is ma
 ## Complete Documentation
 
 For comprehensive documentation with detailed examples, parameter descriptions, and usage patterns, see:
+
 - [USAGE_EXAMPLES.md](./USAGE_EXAMPLES.md) - Practical usage examples
 - [SECURITY.md](./SECURITY.md) - Security considerations and best practices
 
