@@ -20,9 +20,12 @@ Validation coverage, fixtures, and regression checks for Logistics.
 - `test_orchestration_engine.py` – File
 - `test_orchestration_session.py` – File
 - `test_parallel_executor.py` – File
+- `test_project_persistence.py` – File
 - `test_project_resource_reporting.py` – File
+- `test_shipped_workflow_configs.py` – File
 - `test_task_dispatch.py` – File
 - `test_workflow_execution.py` – File
+- `test_workflow_persistence.py` – File
 
 ## Navigation
 

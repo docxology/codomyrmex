@@ -20,9 +20,12 @@ Validation coverage, fixtures, and regression checks for Logistics.
 - `test_orchestration_engine.py` – Project file
 - `test_orchestration_session.py` – Project file
 - `test_parallel_executor.py` – Project file
+- `test_project_persistence.py` – Project file
 - `test_project_resource_reporting.py` – Project file
+- `test_shipped_workflow_configs.py` – Project file
 - `test_task_dispatch.py` – Project file
 - `test_workflow_execution.py` – Project file
+- `test_workflow_persistence.py` – Project file
 
 ## Operating Contracts
 
@@ -44,9 +47,12 @@ Validation coverage, fixtures, and regression checks for Logistics.
 - `test_orchestration_engine.py`
 - `test_orchestration_session.py`
 - `test_parallel_executor.py`
+- `test_project_persistence.py`
 - `test_project_resource_reporting.py`
+- `test_shipped_workflow_configs.py`
 - `test_task_dispatch.py`
 - `test_workflow_execution.py`
+- `test_workflow_persistence.py`
 
 ## Dependencies
 

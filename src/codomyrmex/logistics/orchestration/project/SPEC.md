@@ -18,7 +18,8 @@ project/
   resource_manager.py        # ResourceManager (capacity allocation, thread-safe)
   parallel_executor.py       # ParallelExecutor (ThreadPoolExecutor, dependency mgmt)
   workflow_dag.py            # WorkflowDAG (validation, cycle detection, topo sort)
-  project_manager.py         # ProjectManager (lifecycle, scaffolding, docs)
+  project_manager.py         # ProjectManager (lifecycle, scaffolding, docs, project.json)
+  _json_files.py             # Atomic JSON writes shared by the two managers
   documentation_generator.py # DocumentationGenerator (template-based RASP gen)
   mcp_tools.py               # OrchestrationMCPTools (class-based, 10 tools)
 ```
@@ -57,9 +58,11 @@ Modes: `OrchestrationMode.SEQUENTIAL | PARALLEL | PRIORITY | RESOURCE_AWARE`.
 | Field / Method | Description |
 | --- | --- |
 | `workflows: dict[str, list[WorkflowStep]]` | Registered workflow definitions |
-| `config_dir: Path` | Directory for JSON workflow files (default: `config/workflows/production`) |
+| `config_dir: Path` | Directory for JSON workflow files (default: `config/workflows/production` under cwd). Every `*.json` in it is loaded on construction; invalid files are logged and skipped |
+| `workflow_files: dict[str, Path]` | Definition file of each workflow loaded from or saved to `config_dir` |
 | `task_orchestrator` | Orchestrator that runs steps (constructor argument; defaults to the global one) |
-| `create_workflow(name, steps)` | Register workflow; overwrites if exists |
+| `create_workflow(name, steps, *, persist=False)` | Register workflow; overwrites if exists. `persist=True` also calls `save_workflow`; if that raises, the previous registration is restored |
+| `save_workflow(name)` | Validate and atomically write the workflow file (back to its source file, else `config_dir/<name>.json`); returns the path. Raises `KeyError` (unknown), `ValueError` (name unusable as a file name, malformed step, invalid dependencies, target file holds another or unreadable workflow), `NotImplementedError` (`run_if`), `TypeError` (parameters not JSON-serialisable) |
 | `execute_workflow(name, **params)` | Synchronous; `params` are merged over every step's `parameters`. See `execute_steps`. Raises `ValueError` for an unknown workflow |
 | `execute_steps(name, steps, params=None, timeout=None)` | Validate, submit steps in topological order (listing order is irrelevant), wait, and return a finished `WorkflowExecution` |
 | `create_workflow_dag(tasks)` | Build `WorkflowDAG` from task dicts |
@@ -67,6 +70,21 @@ Modes: `OrchestrationMode.SEQUENTIAL | PARALLEL | PRIORITY | RESOURCE_AWARE`.
 | `validate_workflow_dependencies(tasks)` | Return list of dependency validation errors |
 | `get_workflow_execution_order(tasks)` | Topological sort into parallelisable levels |
 | `get_performance_summary()` | Execution counts (total, successful, failed, running) and average duration |
+
+Workflow file format (read on construction, written by `save_workflow`):
+
+```json
+{
+  "name": "build-and-test",
+  "steps": [
+    {"name": "validate_environment", "module": "environment_setup",
+     "action": "validate_environment", "parameters": {}, "dependencies": [],
+     "timeout": null, "max_retries": 0, "required": true}
+  ]
+}
+```
+
+`name` defaults to the file stem; `steps` is required; each step needs non-empty `name`, `module`, `action`. `max_retries` is stored as `WorkflowStep.retry_count` (recorded, not enforced). Extra keys (such as a top-level `description`) are ignored; a step with `run_if` makes the file invalid. Parameters are passed verbatim: there is no `{{step.output}}` substitution. When two files define the same name, the later file (by file name) wins with a warning.
 
 `execute_steps` semantics:
 
@@ -123,13 +141,17 @@ Context manager wrapping `ThreadPoolExecutor`. `ParallelExecutor(max_workers=4, 
 
 | Field / Method | Description |
 | --- | --- |
-| `create_project(name, type, description="", path=None)` | Scaffold `src/`, `tests/`, `config/`, `docs/` dirs under `path` (default `projects_root / name`); generate RASP docs; None if the name is registered or the directory exists |
+| `ProjectManager(projects_root=None)` | `projects_root` defaults to cwd; projects saved as `<projects_root>/*/project.json` are registered on construction (unreadable or invalid files are logged and skipped; a duplicate name is skipped; a moved directory's own location replaces the recorded `path`) |
+| `create_project(name, type, description="", path=None)` | Scaffold `src/`, `tests/`, `config/`, `docs/` dirs under `path` (default `projects_root / name`); generate RASP docs; save `project.json`. None if the name is registered, the directory exists, or scaffolding (including documentation generation) failed; a partial directory is removed |
 | `get_project(name)` | Lookup by name |
-| `list_projects()` | Return all active `Project` instances |
-| `update_project_status(name, status)` | Transition lifecycle status |
-| `update_project_metrics(name, metrics)` | Merge into `Project.metrics` |
-| `add_project_milestone(name, milestone_name, milestone_data=None)` | Record a timestamped milestone in `Project.milestones` |
+| `list_projects()` | Return all registered `Project` instances |
+| `save_project(name)` | Write `project.json` after changing a `Project` directly; `KeyError` if unknown |
+| `update_project_status(name, status)` | Transition lifecycle status and save |
+| `update_project_metrics(name, metrics)` | Merge into `Project.metrics` and save |
+| `add_project_milestone(name, milestone_name, milestone_data=None)` | Record a timestamped milestone in `Project.milestones` and save |
 | `get_projects_summary()` | `total_projects`, `by_status`, `by_type`, `recent_activity` |
+
+Persistence: `<project.path>/project.json` (`PROJECT_FILE_NAME`, `Project.metadata_file`) holds `Project.to_dict()`; `Project.from_dict()` restores it (`Path`, enums, timezone-aware datetimes) and raises `ValueError` for missing required fields (`name`, `path`, `type`, `status`, `created_at`, `updated_at`), wrong types or unknown enum values. The update methods return False for an unknown project; otherwise they save a changed copy first and change the registered project only if the save succeeded, so `TypeError`/`ValueError` (value not JSON-serialisable, NaN) and `OSError` leave it unchanged. Writes are atomic (temporary file + `os.replace`). A project created with a `path` outside `projects_root` is saved but only found by a manager rooted at that path's parent.
 
 7 project types: `AI_ANALYSIS`, `WEB_APPLICATION`, `DATA_PIPELINE`, `ML_MODEL`, `DOCUMENTATION`, `RESEARCH`, `CUSTOM`.
 
@@ -145,7 +167,9 @@ Context manager wrapping `ThreadPoolExecutor`. `ParallelExecutor(max_workers=4, 
 ## Error Handling
 
 - `DAGValidationError` / `CycleDetectedError` -- DAG structural errors
-- `ValueError` -- workflow not found, invalid workflow dependencies, unknown task
+- `ValueError` -- workflow not found, invalid workflow dependencies, unknown task, workflow or project data that does not follow the file format
+- `KeyError` -- `save_workflow` / `save_project` for an unregistered name
+- `TypeError` -- saving parameters, metrics or milestones that are not JSON-serialisable
 - `NotImplementedError` -- `WorkflowStep.run_if` conditions
 - `TaskExecutionError` -- unresolvable `module`/`action`, unsatisfiable resource requirement (recorded as the task's error)
 - `RuntimeError` -- MCP unavailable (zero-mock enforcement)
