@@ -1,27 +1,26 @@
 {
   "name": "basic_analysis",
+  "description": "Validate the environment, then run static analysis on the current directory.",
   "steps": [
     {
       "name": "check_env",
       "module": "environment_setup",
-      "action": "check_environment",
+      "action": "validate_environment",
       "parameters": {},
       "dependencies": [],
       "timeout": 60,
-      "max_retries": 3
+      "max_retries": 0
     },
     {
       "name": "analyze",
-      "module": "static_analysis",
-      "action": "analyze_code_quality",
+      "module": "coding.static_analysis",
+      "action": "analyze_project",
       "parameters": {
-        "path": "."
+        "project_root": "."
       },
       "dependencies": ["check_env"],
       "timeout": 300,
-      "max_retries": 2
+      "max_retries": 0
     }
   ]
 }
-
-

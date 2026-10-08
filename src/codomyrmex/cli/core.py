@@ -447,31 +447,53 @@ class Cli:
 
 
 def _serialize_result(result: Any) -> Any:
-    """Hide bare boolean status returns instead of echoing ``True``/``False``.
+    """Hide status returns instead of echoing them as command output.
 
-    Handlers return a bool to signal success; printing it appended a stray
-    ``True``/``False`` line to command output (corrupting ``doctor --json``).
+    Handlers signal success with a bool or an exit-code ``int``; printing it
+    appended a stray ``True``/``False``/``0`` line to command output
+    (corrupting ``doctor --json``). :func:`exit_code` turns it into the
+    process exit status instead.
     """
-    if isinstance(result, bool):
+    if isinstance(result, (bool, int)):
         return None
     return result
 
 
-def main():
-    """Run the Codomyrmex CLI entry point."""
+def exit_code(result: Any) -> int:
+    """Map a command's return value to a process exit status.
+
+    ``False`` means the command failed (1) and an ``int`` is an explicit exit
+    code; anything else (``True``, ``None`` or data that was printed) is
+    success. Without this every command exited 0, so scripts and CI could not
+    detect a failed ``workflow run`` or ``check``.
+    """
+    if result is False:
+        return 1
+    if isinstance(result, int) and not isinstance(result, bool):
+        return result if 0 <= result <= 255 else 1
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Run the Codomyrmex CLI and return its exit status.
+
+    The console script (and ``python -m codomyrmex.cli``) pass the value to
+    :func:`sys.exit`. ``argv`` defaults to ``sys.argv[1:]``.
+    """
     try:
-        fire.Fire(Cli, serialize=_serialize_result)
+        result = fire.Fire(Cli, command=argv, serialize=_serialize_result)
     except KeyboardInterrupt:
         print("\n👋 Goodbye!")
-        sys.exit(0)
+        return 130
     except Exception as e:
         print(f"💥 An unexpected error occurred: {e}", file=sys.stderr)
-        if "--verbose" in sys.argv:
+        if "--verbose" in (sys.argv if argv is None else argv):
             import traceback
 
             traceback.print_exc()
-        sys.exit(1)
+        return 1
+    return exit_code(result)
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

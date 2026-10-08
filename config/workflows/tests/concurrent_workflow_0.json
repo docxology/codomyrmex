@@ -1,15 +1,15 @@
 {
   "name": "concurrent_workflow_0",
+  "description": "One of three identical single-step workflows for concurrent execution tests.",
   "steps": [
     {
       "name": "concurrent_step_0",
       "module": "environment_setup",
-      "action": "check_environment",
+      "action": "validate_environment",
       "parameters": {},
       "dependencies": [],
       "timeout": null,
-      "retry_count": 0,
-      "max_retries": 3
+      "max_retries": 0
     }
   ]
 }
