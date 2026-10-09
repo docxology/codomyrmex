@@ -6923,7 +6923,7 @@
           detailPanel += '<div style="margin-top:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
             '<label style="font-size:0.8rem;color:var(--text-muted);">Link to project:</label>' +
             '<select onchange="calLinkEvent(calState.selectedEvent.id,this.value)" style="background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:0.8rem;">' + projOptions + '</select>' +
-            '<button class="btn btn-ghost btn-sm" style="color:#ef4444;" onclick="calDeleteEvent(calState.selectedEvent.id)">🗑 Delete</button>' +
+            '<button class="btn btn-ghost btn-sm" style="color:#ef4444;" aria-label="Delete calendar event" onclick="calDeleteEvent(calState.selectedEvent.id)">🗑 Delete</button>' +
             (se.htmlLink ? '<a href="' + esc(se.htmlLink) + '" target="_blank" class="btn btn-ghost btn-sm">↗ Open in Google</a>' : '') +
             '</div>';
         } else if (se.colorId === 'proj') {
@@ -7204,7 +7204,7 @@
       var statusRow = '<div style="display:flex;align-items:center;gap:8px;padding:16px 0 8px;flex-wrap:wrap;">' +
         amBadge + gmBadge +
         '<span style="flex:1"></span>' +
-        '<button class="btn btn-ghost btn-sm" onclick="emailLoadStatus()" style="font-size:0.78rem;">&#x21bb; Refresh</button>' +
+        '<button class="btn btn-ghost btn-sm" aria-label="Refresh email status" onclick="emailLoadStatus()" style="font-size:0.78rem;">&#x21bb; Refresh</button>' +
         (emailState.gmailConnected ? '<button class="btn btn-ghost btn-sm" onclick="emailGmailDisconnect()" style="color:var(--text-muted);font-size:0.78rem;">Disconnect Gmail</button>' : '') +
         '</div>';
 
@@ -7289,7 +7289,7 @@
         inboxPanel = '<div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;">' +
           '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">' +
           '<span style="font-weight:600;color:var(--text);">AgentMail Inbox</span>' +
-          '<button class="btn btn-ghost btn-sm" onclick="emailLoadMessages()" style="font-size:0.78rem;">&#x21bb; Reload</button>' +
+          '<button class="btn btn-ghost btn-sm" aria-label="Reload AgentMail inbox" onclick="emailLoadMessages()" style="font-size:0.78rem;">&#x21bb; Reload</button>' +
           '</div>' + msgRows + '</div>';
       } else {
         inboxPanel = '<div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;text-align:center;color:var(--text-muted);">' +
@@ -7321,7 +7321,7 @@
         gmailPanel = '<div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-top:12px;">' +
           '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">' +
           '<span style="font-weight:600;color:var(--text);">Gmail Inbox</span>' +
-          '<button class="btn btn-ghost btn-sm" onclick="emailLoadGmailMessages()" style="font-size:0.78rem;">&#x21bb; Reload</button>' +
+          '<button class="btn btn-ghost btn-sm" aria-label="Reload Gmail inbox" onclick="emailLoadGmailMessages()" style="font-size:0.78rem;">&#x21bb; Reload</button>' +
           '</div>' + gmailRows + '</div>';
       }
 
