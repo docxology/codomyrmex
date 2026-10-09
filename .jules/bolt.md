@@ -42,3 +42,8 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2026-10-27 - Remove Dictionary Lookups in While Loops
+
+**Learning:** Repeatedly looking up keys in a dictionary inside a `while` loop (e.g. `while self._requests[key]`) executes the hashing and lookup logic on every iteration, leading to $O(K)$ dict lookup overhead for $K$ loop executions.
+**Action:** Extract the object (like a `deque`) from the dictionary before the loop using `queue = self._dict.get(key)` and interact directly with the local reference to achieve $O(1)$ lookup overhead during the loop.

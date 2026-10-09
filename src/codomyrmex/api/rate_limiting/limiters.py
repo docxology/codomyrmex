@@ -142,11 +142,12 @@ class SlidingWindowLimiter(RateLimiter):
 
     def _clean_old_requests(self, key: str, now: float) -> None:
         """Remove expired requests from window."""
-        if key not in self._requests:
+        queue = self._requests.get(key)
+        if not queue:
             return
         cutoff = now - self.window_seconds
-        while self._requests[key] and self._requests[key][0] < cutoff:
-            self._requests[key].popleft()
+        while queue and queue[0] < cutoff:
+            queue.popleft()
 
     def check(self, key: str, cost: int = 1) -> RateLimitResult:
         """Check without consuming."""
