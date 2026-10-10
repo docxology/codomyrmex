@@ -47,3 +47,8 @@ executors.
   (proposals #482/#484 rejected).
 - Transcription/STT command injection was fixed by merged #423 at the live
   call site; the `transcription_tools.py` file does not exist on `main`.
+
+## 2026-10-10 - Fix Command Injection Vulnerability in STT Tools
+**Vulnerability:** Command Injection risk from using shell=True in subprocess.run for transcription_tools.py.
+**Learning:** Even when interpolating quoted strings, shell=True exposes the system to injection if templates are misconfigured or arguments leak.
+**Prevention:** Use shell=False combined with shlex.split() to safely tokenize commands while maintaining argument grouping.
