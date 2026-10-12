@@ -44,6 +44,8 @@ icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
+
 ## 2024-10-12 - Added missing aria-labels to close buttons in modals
+
 **Learning:** Icon-only and character-only ('x') close buttons in modals frequently lack accessible names for screen readers in this application.
 **Action:** Always add explicit `aria-label="Close modal"` (or equivalent descriptive labels) to any icon-only or character-only buttons, especially those acting as dismissal controls in modals.
