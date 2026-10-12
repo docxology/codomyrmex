@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+
+{# Preserve Material's header and localize the search dialog's accessible name. #}
+{% block header %}
+  {{ super() | replace('data-md-component="search" role="dialog"', ('data-md-component="search" role="dialog" aria-label="' | safe) ~ (lang.t("search") | e) ~ ('"' | safe)) }}
+{% endblock %}

@@ -138,3 +138,22 @@ preserved. The two bot comments reported file-change scope and successful
 static documentation checks (zero broken links, zero placeholders, all 1,371
 AGENTS files valid); they request no separate source correction. Hosted full
 suite acceptance remains pending on the corrected revision.
+
+## Lighthouse accessibility correction
+
+The current candidate's Lighthouse job passed its declared thresholds, but its
+full report identified an unnamed Material search dialog and 4.47:1 contrast
+for syntax comments and footer attribution. A small server-rendered theme
+override adds Material's escaped localized search name while retaining the
+upstream header. Palette-scoped CSS raises comment contrast in both light and
+dark modes and raises the footer's lighter foreground value. No audit threshold
+is changed; static Lighthouse success is not screen-reader or live acceptance.
+
+Verification: complete `make docs-check` and applicable changed-file hooks pass.
+Independent review found named search dialogs on all 1,178 generated pages
+containing search, checked CSS ordering and byte equality, and exercised labels
+containing quotes, ampersands and markup under both Jinja autoescape modes.
+The local collaborative browser measured comment contrast at 4.89:1 light /
+5.34:1 dark and footer contrast at 6.32:1 light / 6.53:1 dark, after palette
+transitions completed. The owned browser tab and local server were closed.
+The refreshed hosted Lighthouse result remains pending.

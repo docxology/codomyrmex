@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Comprehensive repository hardening (2026-10-12)
 
+- Name the Material search dialog and improve light/dark syntax-comment and
+  footer contrast after inspecting the hosted Lighthouse findings.
+
 - Narrow reduction gradients before NumPy calls across Python 3.11/3.13
   dependency profiles; reject unseeded backward closures before mutation.
 
