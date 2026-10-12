@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Comprehensive repository hardening (2026-10-12)
 
+- Replace the unverified PR Pages preview claim with a current-run build
+  artifact link and remove PR branch-publishing privileges.
+
 - Remove the unused Mike version selector from the single-site MkDocs build
   so page initialization does not request a missing `versions.json`.
 

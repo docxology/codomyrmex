@@ -173,3 +173,30 @@ The local browser's generated client config has no version provider, resource
 entries record zero `versions.json` requests, the search index loads, and the
 search dialog retains its name. Server logs contain no 404 response. The owned
 browser tab and local server were closed. Hosted rerun remains required.
+
+## Documentation artifact notification correction
+
+The documentation-quality report remains clean (zero broken links/placeholders,
+all 1,372 AGENTS files valid). The advertised PR Pages preview URL returned HTTP
+404. The workflow pushed a branch and posted readiness without serving or
+verifying that URL. The PR notification now requires exactly one available
+`documentation-build` artifact in the current run and links to its run's
+Artifacts section. It accurately identifies the package-local Docusaurus build;
+canonical MkDocs checks remain separate. PR branch publishing and contents-write
+permission are removed. Fork PRs retain build checks and skip this write step.
+No Pages configuration or production deployment was performed.
+
+Actionlint including ShellCheck passes after quoting output paths and correcting
+build-directory/report shell operations. Workflow YAML and extracted JavaScript
+syntax pass. A real completed run contains one non-expired build artifact;
+the actual build-check shell rejects an empty build and accepts a real file
+under a path with spaces. Hosted notification execution remains pending.
+
+Fresh independent security review found no blocker in permissions, same-repo
+PR gating, current-run artifact binding or awaited comment failure handling.
+The write-token job neither downloads nor executes build content. The reviewer
+also confirmed the preview 404 and clean actionlint result. Its unpinned local
+uv command selected Python 3.15 and recreated the QA environment; the original
+Python 3.13.16 / complete locked extras/docs environment was restored, with no
+source changes. Earlier source checks are bound to the inspected diff rather
+than this incidental environment change.
