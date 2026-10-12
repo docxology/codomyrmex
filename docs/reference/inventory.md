@@ -26,7 +26,7 @@ Hermes exposes a **separate** MCP surface (CLI + integration tools). See [docs/a
 | `mcp_tools.py` files (non-test) | 154 |
 | Runtime MCP tools | 622 (PAI merged manifest in the complete locked dependency profile; other launcher profiles are enumerated at startup) |
 | Production `@mcp_tool` decorators | 632 |
-| Pytest tests collected | 36,952 (`uv run --locked --all-extras --group docs python scripts/doc_inventory.py --manifest --pytest`; collection completed without errors) |
+| Pytest tests collected | 36,970 (`uv run --locked --all-extras --group docs python scripts/doc_inventory.py --manifest --pytest`; collection completed without errors) |
 | GitHub Actions workflow files (`.github/workflows/*.yml`) | 38 |
 | Markdown files under `docs/` | 1,216 (`find docs -name '*.md' -type f \| wc -l`) |
 

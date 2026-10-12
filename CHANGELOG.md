@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Comprehensive repository hardening (2026-10-12)
 
+- Narrow reduction gradients before NumPy calls across Python 3.11/3.13
+  dependency profiles; reject unseeded backward closures before mutation.
+
 - Consolidate specification gates and import/test hygiene from #568/#571;
   retain real health checks, fail-closed stray-path observations and xdist
   evidence, and isolate Ruff caches without changing diagnostic rules.

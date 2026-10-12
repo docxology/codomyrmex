@@ -115,3 +115,26 @@ mtime differences only warn, while changelog content differences fail. The
 original full Python suite remains evidence for `cbe3721`; this follow-up changes
 documentation and the local documentation gate only. Hosted acceptance awaits
 the new revision's checks.
+
+## Hosted autograd type correction
+
+The original `cbe3721` Code Quality job reported three reduction overload errors
+under Python 3.11 / NumPy 2.4.6. These were reproduced with the locked ty 0.0.24
+in a separate local environment. The original Python 3.13 / NumPy 2.5.3 profile
+did not expose them. `sum` and `mean` now snapshot and validate the output
+gradient before mutating the parent gradient or passing it to NumPy. The existing
+mean suppression is removed. Missing upstream gradients fail explicitly.
+
+All 95 autograd tests passed, including 18 new real controls for non-unit
+upstream derivatives, scalar/positive/negative axes, keepdims and missing
+upstream gradients. Independent review executed the same math and negative
+controls with Python 3.11.15 / NumPy 2.4.6 and verified the corrected type check.
+The complete local inventory collected 36,970 tests without errors; current
+README/inventory counts reflect the added controls.
+
+The Test Results Summary failed because the code-quality prerequisite prevented
+suite execution and no JUnit evidence existed. Its fail-closed behavior is
+preserved. The two bot comments reported file-change scope and successful
+static documentation checks (zero broken links, zero placeholders, all 1,371
+AGENTS files valid); they request no separate source correction. Hosted full
+suite acceptance remains pending on the corrected revision.
