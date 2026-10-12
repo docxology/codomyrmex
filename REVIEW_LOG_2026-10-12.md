@@ -93,3 +93,25 @@ in the legacy generated Docusaurus mirror. `.markdownlintignore` already
 declared generated-content exclusions; the missing precise mirror path was
 added to that boundary. Its 130 verbatim snapshots remain unchanged. Edited
 canonical documents were formatted and linted without relaxing rule settings.
+
+## Hosted documentation correction
+
+The first hosted documentation run on `cbe3721` failed its exact changelog
+comparison for the documentation and formal-verification modules. The separate
+Documentation Status failure propagated that result; filesystem timestamp
+warnings were non-fatal. The documentation source changelog retains its factual
+history while dropping empty/example release scaffolding and generic architecture
+boilerplate. Both canonical module changelogs now match their source bytes,
+including the formal-verification security changes. `make docs-check` now runs
+the same existing version validator before its other checks, closing the gap
+between the local declared gate and the hosted validator. No validation rules
+or failure thresholds were relaxed.
+
+Correction verification: the complete `make docs-check` passed, including exact
+changelog parity, zero broken links, zero placeholders, structure checks and
+strict MkDocs. All applicable changed-file pre-commit hooks passed. Independent
+review confirmed both relocated changelog links and real validator controls:
+mtime differences only warn, while changelog content differences fail. The
+original full Python suite remains evidence for `cbe3721`; this follow-up changes
+documentation and the local documentation gate only. Hosted acceptance awaits
+the new revision's checks.

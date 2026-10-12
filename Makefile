@@ -148,6 +148,7 @@ docs: docs-check
 
 docs-check:
 	@echo "Checking documentation status..."
+	uv run --locked --group docs python src/codomyrmex/documentation/documentation_website.py validate_docs
 	uv run --locked --group docs python scripts/documentation/validate_mcp_tool_specs.py --repo-root . --output output/documentation/mcp_tool_specs.json --fail-on-broken
 	uv run --locked --group docs --all-extras python scripts/documentation/validate_api_signatures.py --repo-root . --output output/documentation/api_signatures.json --fail-on-broken
 	uv run --locked --group docs python scripts/rasp_gap_report.py --repo-root . --check
