@@ -86,35 +86,35 @@
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:11434/api/embed`",
-    "line": 440,
+    "line": 497,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:11434\"",
-    "line": 440,
+    "line": 497,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:3100`",
-    "line": 446,
+    "line": 503,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "mailto:FristonBlanket@gmail.com",
-    "line": 534,
+    "line": 591,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:8080/`",
-    "line": 1375,
+    "line": 1432,
     "status": "external",
     "message": "External link (not validated)"
   },
@@ -1191,14 +1191,14 @@
   },
   {
     "file": "README.md",
-    "link": "https://img.shields.io/badge/MCP_Runtime-617-orange?style=for-the-badge\"",
+    "link": "https://img.shields.io/badge/MCP_Runtime-622-orange?style=for-the-badge\"",
     "line": 9,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "README.md",
-    "link": "https://img.shields.io/badge/Workflows-37-purple?style=for-the-badge\"",
+    "link": "https://img.shields.io/badge/Workflows-38-purple?style=for-the-badge\"",
     "line": 10,
     "status": "external",
     "message": "External link (not validated)"
@@ -1303,7 +1303,7 @@
   },
   {
     "file": "README.md",
-    "link": "https://img.shields.io/badge/tests-36%2C049-brightgreen?style=flat-square\"",
+    "link": "https://img.shields.io/badge/tests-36%2C970-brightgreen?style=flat-square\"",
     "line": 22,
     "status": "external",
     "message": "External link (not validated)"
@@ -6280,21 +6280,21 @@
   },
   {
     "file": ".github/README.md",
-    "link": "https://img.shields.io/badge/Modules-130-green?style=for-the-badge\"",
+    "link": "https://img.shields.io/badge/Modules-132-green?style=for-the-badge\"",
     "line": 11,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": ".github/README.md",
-    "link": "https://img.shields.io/badge/MCP_Runtime-617-orange?style=for-the-badge\"",
+    "link": "https://img.shields.io/badge/MCP_Runtime-622-orange?style=for-the-badge\"",
     "line": 12,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": ".github/README.md",
-    "link": "https://img.shields.io/badge/Workflows-37-purple?style=for-the-badge\"",
+    "link": "https://img.shields.io/badge/Workflows-38-purple?style=for-the-badge\"",
     "line": 13,
     "status": "external",
     "message": "External link (not validated)"
@@ -6399,7 +6399,7 @@
   },
   {
     "file": ".github/README.md",
-    "link": "https://img.shields.io/badge/tests-36%2C049-brightgreen?style=flat-square\"",
+    "link": "https://img.shields.io/badge/tests-36%2C970-brightgreen?style=flat-square\"",
     "line": 25,
     "status": "external",
     "message": "External link (not validated)"
@@ -11567,6 +11567,34 @@
     "file": "config/documentation/README.md",
     "link": "AGENTS.md",
     "line": 20,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "config/documentation/theme/AGENTS.md",
+    "link": "README.md",
+    "line": 17,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "config/documentation/theme/AGENTS.md",
+    "link": "README.md",
+    "line": 21,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "config/documentation/theme/AGENTS.md",
+    "link": "../AGENTS.md",
+    "line": 22,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "config/documentation/theme/README.md",
+    "link": "../../../docs/theme-accessibility.css",
+    "line": 7,
     "status": "ok",
     "message": "File exists"
   },
@@ -18216,35 +18244,35 @@
   {
     "file": "scripts/audits/SPEC.md",
     "link": "README.md",
-    "line": 31,
+    "line": 33,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/audits/SPEC.md",
     "link": "AGENTS.md",
-    "line": 31,
+    "line": 33,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/audits/AGENTS.md",
     "link": "../README.md",
-    "line": 40,
+    "line": 48,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/audits/README.md",
     "link": "../README.md",
-    "line": 18,
+    "line": 21,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/audits/README.md",
     "link": "AGENTS.md",
-    "line": 23,
+    "line": 26,
     "status": "ok",
     "message": "File exists"
   },
@@ -19000,21 +19028,21 @@
   {
     "file": "scripts/documentation/SPEC.md",
     "link": "README.md",
-    "line": 65,
+    "line": 83,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/documentation/SPEC.md",
     "link": "AGENTS.md",
-    "line": 66,
+    "line": 84,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/documentation/SPEC.md",
     "link": "../../docs/development/documentation.md",
-    "line": 67,
+    "line": 85,
     "status": "ok",
     "message": "File exists"
   },
@@ -19077,35 +19105,35 @@
   {
     "file": "scripts/documentation/README.md",
     "link": "../../docs/plans/readme_agents_hand_pass.md",
-    "line": 77,
+    "line": 86,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/documentation/README.md",
     "link": "AGENTS.md",
-    "line": 95,
+    "line": 104,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/documentation/README.md",
     "link": "../../docs/development/documentation.md",
-    "line": 96,
+    "line": 105,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/documentation/README.md",
     "link": "../README.md",
-    "line": 97,
+    "line": 106,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/documentation/README.md",
     "link": "../../README.md",
-    "line": 98,
+    "line": 107,
     "status": "ok",
     "message": "File exists"
   },
@@ -21338,28 +21366,28 @@
   {
     "file": "scripts/security/SPEC.md",
     "link": "../README.md",
-    "line": 33,
+    "line": 40,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/security/SPEC.md",
     "link": "README.md",
-    "line": 34,
+    "line": 41,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/security/SPEC.md",
     "link": "AGENTS.md",
-    "line": 35,
+    "line": 42,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/security/SPEC.md",
     "link": "../../README.md",
-    "line": 36,
+    "line": 43,
     "status": "ok",
     "message": "File exists"
   },
@@ -21373,16 +21401,30 @@
   {
     "file": "scripts/security/README.md",
     "link": "../README.md",
-    "line": 24,
+    "line": 26,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/security/README.md",
     "link": "AGENTS.md",
-    "line": 29,
+    "line": 31,
     "status": "ok",
     "message": "File exists"
+  },
+  {
+    "file": "scripts/security/README.md",
+    "link": "https://github.com/bytecodealliance/wasmtime/security/advisories/GHSA-hfr4-7c6c-48w2",
+    "line": 51,
+    "status": "external",
+    "message": "External link (not validated)"
+  },
+  {
+    "file": "scripts/security/README.md",
+    "link": "https://github.com/nltk/nltk/security/advisories/GHSA-8mgp-746c-j5xp",
+    "line": 55,
+    "status": "external",
+    "message": "External link (not validated)"
   },
   {
     "file": "scripts/security/examples/SPEC.md",
@@ -32412,49 +32454,49 @@
   {
     "file": "src/codomyrmex/git_operations/docs/API_SPECIFICATION.md",
     "link": "./SECURITY.md",
-    "line": 255,
+    "line": 261,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/git_operations/docs/API_SPECIFICATION.md",
     "link": "./USAGE_EXAMPLES.md",
-    "line": 273,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/git_operations/docs/API_SPECIFICATION.md",
-    "link": "./SECURITY.md",
-    "line": 274,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/git_operations/docs/API_SPECIFICATION.md",
-    "link": "../README.md",
-    "line": 278,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/git_operations/docs/API_SPECIFICATION.md",
-    "link": "../../AGENTS.md",
-    "line": 279,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/git_operations/docs/API_SPECIFICATION.md",
-    "link": "../../README.md",
     "line": 280,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/git_operations/docs/API_SPECIFICATION.md",
-    "link": "../../../README.md",
+    "link": "./SECURITY.md",
     "line": 281,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/git_operations/docs/API_SPECIFICATION.md",
+    "link": "../README.md",
+    "line": 285,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/git_operations/docs/API_SPECIFICATION.md",
+    "link": "../../AGENTS.md",
+    "line": 286,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/git_operations/docs/API_SPECIFICATION.md",
+    "link": "../../README.md",
+    "line": 287,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/git_operations/docs/API_SPECIFICATION.md",
+    "link": "../../../README.md",
+    "line": 288,
     "status": "ok",
     "message": "File exists"
   },
@@ -34526,49 +34568,49 @@
   {
     "file": "src/codomyrmex/networking/API_SPECIFICATION.md",
     "link": "../api/API_SPECIFICATION.md",
-    "line": 257,
+    "line": 276,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/networking/API_SPECIFICATION.md",
     "link": "../scrape/API_SPECIFICATION.md",
-    "line": 258,
+    "line": 277,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/networking/API_SPECIFICATION.md",
     "link": "../cloud/API_SPECIFICATION.md",
-    "line": 259,
+    "line": 278,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/networking/API_SPECIFICATION.md",
     "link": "README.md",
-    "line": 265,
+    "line": 284,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/networking/API_SPECIFICATION.md",
     "link": "AGENTS.md",
-    "line": 266,
+    "line": 285,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/networking/API_SPECIFICATION.md",
     "link": "SPEC.md",
-    "line": 267,
+    "line": 286,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/networking/API_SPECIFICATION.md",
     "link": "../AGENTS.md",
-    "line": 268,
+    "line": 287,
     "status": "ok",
     "message": "File exists"
   },
@@ -38026,14 +38068,21 @@
   {
     "file": "src/codomyrmex/fpf/MCP_TOOL_SPECIFICATION.md",
     "link": "API_SPECIFICATION.md",
-    "line": 171,
+    "line": 9,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/fpf/MCP_TOOL_SPECIFICATION.md",
+    "link": "API_SPECIFICATION.md",
+    "line": 74,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/fpf/MCP_TOOL_SPECIFICATION.md",
     "link": "README.md",
-    "line": 172,
+    "line": 75,
     "status": "ok",
     "message": "File exists"
   },
@@ -39544,29 +39593,15 @@
   },
   {
     "file": "src/codomyrmex/documentation/CHANGELOG.md",
-    "link": "../README.md",
-    "line": 62,
+    "link": "README.md",
+    "line": 46,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/documentation/CHANGELOG.md",
-    "link": "../../AGENTS.md",
-    "line": 63,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/documentation/CHANGELOG.md",
-    "link": "../../../docs/README.md",
-    "line": 64,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/documentation/CHANGELOG.md",
-    "link": "../../../README.md",
-    "line": 65,
+    "link": "../../../CHANGELOG.md",
+    "line": 47,
     "status": "ok",
     "message": "File exists"
   },
@@ -40721,21 +40756,21 @@
   {
     "file": "src/codomyrmex/relations/uor/MCP_TOOL_SPECIFICATION.md",
     "link": "README.md",
-    "line": 94,
+    "line": 58,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/relations/uor/MCP_TOOL_SPECIFICATION.md",
     "link": "API_SPECIFICATION.md",
-    "line": 94,
+    "line": 58,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/relations/uor/MCP_TOOL_SPECIFICATION.md",
     "link": "../MCP_TOOL_SPECIFICATION.md",
-    "line": 94,
+    "line": 58,
     "status": "ok",
     "message": "File exists"
   },
@@ -42933,28 +42968,28 @@
   {
     "file": "src/codomyrmex/logistics/orchestration/project/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 482,
+    "line": 229,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/MCP_TOOL_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 483,
+    "line": 230,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../../../docs/README.md",
-    "line": 484,
+    "line": 231,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 485,
+    "line": 232,
     "status": "ok",
     "message": "File exists"
   },
@@ -43318,28 +43353,28 @@
   {
     "file": "src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 969,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
-    "link": "../../AGENTS.md",
-    "line": 970,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
-    "link": "../../../../../docs/README.md",
     "line": 971,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
-    "link": "../../../README.md",
+    "link": "../../AGENTS.md",
     "line": 972,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
+    "link": "../../../../../docs/README.md",
+    "line": 973,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/logistics/orchestration/project/API_SPECIFICATION.md",
+    "link": "../../../README.md",
+    "line": 974,
     "status": "ok",
     "message": "File exists"
   },
@@ -44053,28 +44088,28 @@
   {
     "file": "src/codomyrmex/cerebrum/API_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 477,
+    "line": 513,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/cerebrum/API_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 478,
+    "line": 514,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/cerebrum/API_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 479,
+    "line": 515,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/cerebrum/API_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 480,
+    "line": 516,
     "status": "ok",
     "message": "File exists"
   },
@@ -44417,49 +44452,49 @@
   {
     "file": "src/codomyrmex/system_discovery/MCP_TOOL_SPECIFICATION.md",
     "link": "./README.md",
-    "line": 58,
+    "line": 26,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/system_discovery/MCP_TOOL_SPECIFICATION.md",
     "link": "./API_SPECIFICATION.md",
-    "line": 59,
+    "line": 27,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/system_discovery/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 60,
+    "line": 28,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/system_discovery/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 181,
+    "line": 125,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/system_discovery/MCP_TOOL_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 182,
+    "line": 126,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/system_discovery/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 183,
+    "line": 127,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/system_discovery/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 184,
+    "line": 128,
     "status": "ok",
     "message": "File exists"
   },
@@ -44662,28 +44697,28 @@
   {
     "file": "src/codomyrmex/system_discovery/health/SPEC.md",
     "link": "README.md",
-    "line": 75,
+    "line": 72,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/system_discovery/health/SPEC.md",
     "link": "AGENTS.md",
-    "line": 75,
+    "line": 72,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/system_discovery/health/SPEC.md",
     "link": "PAI.md",
-    "line": 75,
+    "line": 72,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/system_discovery/health/SPEC.md",
     "link": "../README.md",
-    "line": 76,
+    "line": 73,
     "status": "ok",
     "message": "File exists"
   },
@@ -45376,49 +45411,49 @@
   {
     "file": "src/codomyrmex/compression/API_SPECIFICATION.md",
     "link": "../documents/API_SPECIFICATION.md",
-    "line": 192,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/compression/API_SPECIFICATION.md",
-    "link": "../deployment/API_SPECIFICATION.md",
-    "line": 193,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/compression/API_SPECIFICATION.md",
-    "link": "../cache/API_SPECIFICATION.md",
     "line": 194,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/compression/API_SPECIFICATION.md",
+    "link": "../deployment/API_SPECIFICATION.md",
+    "line": 195,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/compression/API_SPECIFICATION.md",
+    "link": "../cache/API_SPECIFICATION.md",
+    "line": 196,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/compression/API_SPECIFICATION.md",
     "link": "README.md",
-    "line": 200,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/compression/API_SPECIFICATION.md",
-    "link": "AGENTS.md",
-    "line": 201,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/compression/API_SPECIFICATION.md",
-    "link": "SPEC.md",
     "line": 202,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/compression/API_SPECIFICATION.md",
-    "link": "../AGENTS.md",
+    "link": "AGENTS.md",
     "line": 203,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/compression/API_SPECIFICATION.md",
+    "link": "SPEC.md",
+    "line": 204,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/compression/API_SPECIFICATION.md",
+    "link": "../AGENTS.md",
+    "line": 205,
     "status": "ok",
     "message": "File exists"
   },
@@ -45719,28 +45754,28 @@
   {
     "file": "src/codomyrmex/ci_cd_automation/API_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 303,
+    "line": 213,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/ci_cd_automation/API_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 304,
+    "line": 214,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/ci_cd_automation/API_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 305,
+    "line": 215,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/ci_cd_automation/API_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 306,
+    "line": 216,
     "status": "ok",
     "message": "File exists"
   },
@@ -46902,28 +46937,28 @@
   {
     "file": "src/codomyrmex/validation/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 53,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/validation/MCP_TOOL_SPECIFICATION.md",
-    "link": "../../AGENTS.md",
-    "line": 54,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/validation/MCP_TOOL_SPECIFICATION.md",
-    "link": "../../../docs/README.md",
     "line": 55,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/validation/MCP_TOOL_SPECIFICATION.md",
-    "link": "../../../README.md",
+    "link": "../../AGENTS.md",
     "line": 56,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/validation/MCP_TOOL_SPECIFICATION.md",
+    "link": "../../../docs/README.md",
+    "line": 57,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/validation/MCP_TOOL_SPECIFICATION.md",
+    "link": "../../../README.md",
+    "line": 58,
     "status": "ok",
     "message": "File exists"
   },
@@ -48015,28 +48050,28 @@
   {
     "file": "src/codomyrmex/security/digital/API_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 461,
+    "line": 388,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/security/digital/API_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 462,
+    "line": 389,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/security/digital/API_SPECIFICATION.md",
     "link": "../../../../docs/README.md",
-    "line": 463,
+    "line": 390,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/security/digital/API_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 464,
+    "line": 391,
     "status": "ok",
     "message": "File exists"
   },
@@ -50800,29 +50835,36 @@
   },
   {
     "file": "src/codomyrmex/agents/ai_code_editing/MCP_TOOL_SPECIFICATION.md",
+    "link": "API_SPECIFICATION.md",
+    "line": 23,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/agents/ai_code_editing/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 139,
+    "line": 29,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/agents/ai_code_editing/MCP_TOOL_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 140,
+    "line": 30,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/agents/ai_code_editing/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../../docs/README.md",
-    "line": 141,
+    "line": 31,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/agents/ai_code_editing/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 142,
+    "line": 32,
     "status": "ok",
     "message": "File exists"
   },
@@ -52977,29 +53019,36 @@
   },
   {
     "file": "src/codomyrmex/agents/claude/MCP_TOOL_SPECIFICATION.md",
+    "link": "API_SPECIFICATION.md",
+    "line": 9,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/agents/claude/MCP_TOOL_SPECIFICATION.md",
     "link": "README.md",
-    "line": 447,
+    "line": 70,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/agents/claude/MCP_TOOL_SPECIFICATION.md",
     "link": "AGENTS.md",
-    "line": 448,
+    "line": 71,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/agents/claude/MCP_TOOL_SPECIFICATION.md",
     "link": "API_SPECIFICATION.md",
-    "line": 449,
+    "line": 72,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/agents/claude/MCP_TOOL_SPECIFICATION.md",
     "link": "SPEC.md",
-    "line": 450,
+    "line": 73,
     "status": "ok",
     "message": "File exists"
   },
@@ -54572,6 +54621,20 @@
     "message": "File exists"
   },
   {
+    "file": "src/codomyrmex/colony_kernel/README.md",
+    "link": "SPEC.md#runtime-invariant-crosswalk",
+    "line": 253,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/colony_kernel/API_SPECIFICATION.md",
+    "link": "SPEC.md#runtime-invariant-crosswalk",
+    "line": 397,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
     "file": "src/codomyrmex/colony_kernel/falsification/checks/AGENTS.md",
     "link": "../AGENTS.md",
     "line": 5,
@@ -54693,21 +54756,21 @@
   {
     "file": "src/codomyrmex/audio/speech_to_text/AGENTS.md",
     "link": "../README.md",
-    "line": 45,
+    "line": 54,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/audio/speech_to_text/README.md",
     "link": "../README.md",
-    "line": 21,
+    "line": 24,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/audio/speech_to_text/README.md",
     "link": "AGENTS.md",
-    "line": 26,
+    "line": 29,
     "status": "ok",
     "message": "File exists"
   },
@@ -54868,14 +54931,14 @@
   {
     "file": "src/codomyrmex/audio/text_to_speech/providers/README.md",
     "link": "../README.md",
-    "line": 20,
+    "line": 22,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/audio/text_to_speech/providers/README.md",
     "link": "AGENTS.md",
-    "line": 25,
+    "line": 27,
     "status": "ok",
     "message": "File exists"
   },
@@ -55029,28 +55092,28 @@
   {
     "file": "src/codomyrmex/networks/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 187,
+    "line": 126,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/networks/MCP_TOOL_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 188,
+    "line": 127,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/networks/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 189,
+    "line": 128,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/networks/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 190,
+    "line": 129,
     "status": "ok",
     "message": "File exists"
   },
@@ -57183,6 +57246,13 @@
     "message": "File exists"
   },
   {
+    "file": "src/codomyrmex/data_visualization/MCP_TOOL_SPECIFICATION.md",
+    "link": "#chart-functions-without-mcp-tools",
+    "line": 5,
+    "status": "ok",
+    "message": "Anchor link"
+  },
+  {
     "file": "src/codomyrmex/data_visualization/CHANGELOG.md",
     "link": "https://keepachangelog.com/en/1.0.0/",
     "line": 5,
@@ -58697,28 +58767,28 @@
   {
     "file": "src/codomyrmex/config_management/API_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 279,
+    "line": 253,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/config_management/API_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 280,
+    "line": 254,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/config_management/API_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 281,
+    "line": 255,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/config_management/API_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 282,
+    "line": 256,
     "status": "ok",
     "message": "File exists"
   },
@@ -59509,49 +59579,49 @@
   {
     "file": "src/codomyrmex/terminal_interface/MCP_TOOL_SPECIFICATION.md",
     "link": "./README.md",
-    "line": 58,
+    "line": 29,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/terminal_interface/MCP_TOOL_SPECIFICATION.md",
     "link": "./API_SPECIFICATION.md",
-    "line": 59,
+    "line": 30,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/terminal_interface/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 60,
+    "line": 31,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/terminal_interface/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 164,
+    "line": 147,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/terminal_interface/MCP_TOOL_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 165,
+    "line": 148,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/terminal_interface/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 166,
+    "line": 149,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/terminal_interface/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 167,
+    "line": 150,
     "status": "ok",
     "message": "File exists"
   },
@@ -60056,6 +60126,13 @@
     "file": "src/codomyrmex/api/PAI.md",
     "link": "API_SPECIFICATION.md",
     "line": 47,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/api/API_SPECIFICATION.md",
+    "link": "rate_limiting/SPEC.md",
+    "line": 46,
     "status": "ok",
     "message": "File exists"
   },
@@ -60678,21 +60755,21 @@
   {
     "file": "src/codomyrmex/api/rate_limiting/SPEC.md",
     "link": "../SPEC.md",
-    "line": 95,
+    "line": 99,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/api/rate_limiting/SPEC.md",
     "link": "AGENTS.md",
-    "line": 96,
+    "line": 100,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/api/rate_limiting/SPEC.md",
     "link": "README.md",
-    "line": 96,
+    "line": 100,
     "status": "ok",
     "message": "File exists"
   },
@@ -60705,15 +60782,22 @@
   },
   {
     "file": "src/codomyrmex/api/rate_limiting/README.md",
+    "link": "SPEC.md",
+    "line": 13,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/api/rate_limiting/README.md",
     "link": "../README.md",
-    "line": 21,
+    "line": 35,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/api/rate_limiting/README.md",
     "link": "AGENTS.md",
-    "line": 26,
+    "line": 40,
     "status": "ok",
     "message": "File exists"
   },
@@ -61713,22 +61797,36 @@
   },
   {
     "file": "src/codomyrmex/quantum/MCP_TOOL_SPECIFICATION.md",
+    "link": "#circuit-format",
+    "line": 39,
+    "status": "ok",
+    "message": "Anchor link"
+  },
+  {
+    "file": "src/codomyrmex/quantum/MCP_TOOL_SPECIFICATION.md",
+    "link": "#circuit-format",
+    "line": 81,
+    "status": "ok",
+    "message": "Anchor link"
+  },
+  {
+    "file": "src/codomyrmex/quantum/MCP_TOOL_SPECIFICATION.md",
     "link": "API_SPECIFICATION.md",
-    "line": 216,
+    "line": 133,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/quantum/MCP_TOOL_SPECIFICATION.md",
     "link": "README.md",
-    "line": 217,
+    "line": 134,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/quantum/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 218,
+    "line": 135,
     "status": "ok",
     "message": "File exists"
   },
@@ -66971,28 +67069,28 @@
   {
     "file": "src/codomyrmex/containerization/API_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 337,
+    "line": 193,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/containerization/API_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 338,
+    "line": 194,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/containerization/API_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 339,
+    "line": 195,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/containerization/API_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 340,
+    "line": 196,
     "status": "ok",
     "message": "File exists"
   },
@@ -68000,49 +68098,49 @@
   {
     "file": "src/codomyrmex/serialization/API_SPECIFICATION.md",
     "link": "../config_management/API_SPECIFICATION.md",
-    "line": 200,
+    "line": 205,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/serialization/API_SPECIFICATION.md",
     "link": "../documents/API_SPECIFICATION.md",
-    "line": 201,
+    "line": 206,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/serialization/API_SPECIFICATION.md",
     "link": "../cache/API_SPECIFICATION.md",
-    "line": 202,
+    "line": 207,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/serialization/API_SPECIFICATION.md",
     "link": "README.md",
-    "line": 208,
+    "line": 213,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/serialization/API_SPECIFICATION.md",
     "link": "AGENTS.md",
-    "line": 209,
+    "line": 214,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/serialization/API_SPECIFICATION.md",
     "link": "SPEC.md",
-    "line": 210,
+    "line": 215,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/serialization/API_SPECIFICATION.md",
     "link": "../AGENTS.md",
-    "line": 211,
+    "line": 216,
     "status": "ok",
     "message": "File exists"
   },
@@ -69708,35 +69806,35 @@
   {
     "file": "src/codomyrmex/pai_pm/server/SPEC.md",
     "link": "https://bun.sh",
-    "line": 8,
+    "line": 7,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "src/codomyrmex/pai_pm/server/SPEC.md",
     "link": "../README.md",
-    "line": 139,
+    "line": 138,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/pai_pm/server/SPEC.md",
     "link": "README.md",
-    "line": 140,
+    "line": 139,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/pai_pm/server/SPEC.md",
     "link": "AGENTS.md",
-    "line": 141,
+    "line": 140,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/pai_pm/server/SPEC.md",
     "link": "../../../../README.md",
-    "line": 142,
+    "line": 141,
     "status": "ok",
     "message": "File exists"
   },
@@ -69750,14 +69848,14 @@
   {
     "file": "src/codomyrmex/pai_pm/server/README.md",
     "link": "../README.md",
-    "line": 42,
+    "line": 44,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/pai_pm/server/README.md",
     "link": "AGENTS.md",
-    "line": 47,
+    "line": 49,
     "status": "ok",
     "message": "File exists"
   },
@@ -70079,49 +70177,49 @@
   {
     "file": "src/codomyrmex/templating/API_SPECIFICATION.md",
     "link": "../documentation/API_SPECIFICATION.md",
-    "line": 279,
+    "line": 259,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/templating/API_SPECIFICATION.md",
     "link": "../deployment/API_SPECIFICATION.md",
-    "line": 280,
+    "line": 260,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/templating/API_SPECIFICATION.md",
     "link": "../module_template/API_SPECIFICATION.md",
-    "line": 281,
+    "line": 261,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/templating/API_SPECIFICATION.md",
     "link": "README.md",
-    "line": 287,
+    "line": 267,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/templating/API_SPECIFICATION.md",
     "link": "AGENTS.md",
-    "line": 288,
+    "line": 268,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/templating/API_SPECIFICATION.md",
     "link": "SPEC.md",
-    "line": 289,
+    "line": 269,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/templating/API_SPECIFICATION.md",
     "link": "../AGENTS.md",
-    "line": 290,
+    "line": 270,
     "status": "ok",
     "message": "File exists"
   },
@@ -71486,21 +71584,21 @@
   {
     "file": "src/codomyrmex/edge_computing/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 290,
+    "line": 112,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/edge_computing/MCP_TOOL_SPECIFICATION.md",
     "link": "API_SPECIFICATION.md",
-    "line": 291,
+    "line": 113,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/edge_computing/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 292,
+    "line": 114,
     "status": "ok",
     "message": "File exists"
   },
@@ -73040,28 +73138,28 @@
   {
     "file": "src/codomyrmex/cache/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 215,
+    "line": 167,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/cache/MCP_TOOL_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 216,
+    "line": 168,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/cache/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 217,
+    "line": 169,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/cache/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 218,
+    "line": 170,
     "status": "ok",
     "message": "File exists"
   },
@@ -74643,28 +74741,28 @@
   {
     "file": "src/codomyrmex/plugin_system/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 159,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/plugin_system/MCP_TOOL_SPECIFICATION.md",
-    "link": "../../AGENTS.md",
-    "line": 160,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/plugin_system/MCP_TOOL_SPECIFICATION.md",
-    "link": "../../../docs/README.md",
     "line": 161,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/plugin_system/MCP_TOOL_SPECIFICATION.md",
-    "link": "../../../README.md",
+    "link": "../../AGENTS.md",
     "line": 162,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/plugin_system/MCP_TOOL_SPECIFICATION.md",
+    "link": "../../../docs/README.md",
+    "line": 163,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/plugin_system/MCP_TOOL_SPECIFICATION.md",
+    "link": "../../../README.md",
+    "line": 164,
     "status": "ok",
     "message": "File exists"
   },
@@ -81986,49 +82084,49 @@
   {
     "file": "docs/modules/networking/API_SPECIFICATION.md",
     "link": "../api/API_SPECIFICATION.md",
-    "line": 257,
+    "line": 276,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/networking/API_SPECIFICATION.md",
     "link": "../scrape/API_SPECIFICATION.md",
-    "line": 258,
+    "line": 277,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/networking/API_SPECIFICATION.md",
     "link": "../cloud/API_SPECIFICATION.md",
-    "line": 259,
+    "line": 278,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/networking/API_SPECIFICATION.md",
     "link": "README.md",
-    "line": 265,
+    "line": 284,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/networking/API_SPECIFICATION.md",
     "link": "AGENTS.md",
-    "line": 266,
+    "line": 285,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/networking/API_SPECIFICATION.md",
     "link": "SPEC.md",
-    "line": 267,
+    "line": 286,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/networking/API_SPECIFICATION.md",
     "link": "../AGENTS.md",
-    "line": 268,
+    "line": 287,
     "status": "ok",
     "message": "File exists"
   },
@@ -83827,14 +83925,21 @@
   {
     "file": "docs/modules/fpf/MCP_TOOL_SPECIFICATION.md",
     "link": "API_SPECIFICATION.md",
-    "line": 171,
+    "line": 9,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/fpf/MCP_TOOL_SPECIFICATION.md",
+    "link": "API_SPECIFICATION.md",
+    "line": 74,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/fpf/MCP_TOOL_SPECIFICATION.md",
     "link": "README.md",
-    "line": 172,
+    "line": 75,
     "status": "ok",
     "message": "File exists"
   },
@@ -84484,29 +84589,29 @@
   },
   {
     "file": "docs/modules/documentation/CHANGELOG.md",
-    "link": "../../../src/codomyrmex/documentation/CHANGELOG.md",
-    "line": 4,
-    "status": "ok",
-    "message": "File exists"
+    "link": "https://keepachangelog.com/en/1.0.0/",
+    "line": 5,
+    "status": "external",
+    "message": "External link (not validated)"
+  },
+  {
+    "file": "docs/modules/documentation/CHANGELOG.md",
+    "link": "https://semver.org/spec/v2.0.0.html",
+    "line": 6,
+    "status": "external",
+    "message": "External link (not validated)"
   },
   {
     "file": "docs/modules/documentation/CHANGELOG.md",
     "link": "README.md",
-    "line": 19,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/modules/documentation/CHANGELOG.md",
-    "link": "../../../src/codomyrmex/documentation/CHANGELOG.md",
-    "line": 20,
+    "line": 46,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/documentation/CHANGELOG.md",
     "link": "../../../CHANGELOG.md",
-    "line": 21,
+    "line": 47,
     "status": "ok",
     "message": "File exists"
   },
@@ -85919,29 +86024,22 @@
   },
   {
     "file": "docs/modules/cerebrum/MCP_TOOL_SPECIFICATION.md",
-    "link": "../README.md",
-    "line": 394,
+    "link": "./README.md",
+    "line": 168,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/cerebrum/MCP_TOOL_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 395,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/modules/cerebrum/MCP_TOOL_SPECIFICATION.md",
-    "link": "../../../docs/README.md",
-    "line": 396,
+    "line": 169,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/cerebrum/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 397,
+    "line": 170,
     "status": "ok",
     "message": "File exists"
   },
@@ -86291,49 +86389,49 @@
   {
     "file": "docs/modules/system_discovery/MCP_TOOL_SPECIFICATION.md",
     "link": "./README.md",
-    "line": 58,
+    "line": 26,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/system_discovery/MCP_TOOL_SPECIFICATION.md",
     "link": "./API_SPECIFICATION.md",
-    "line": 59,
+    "line": 27,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/system_discovery/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 60,
+    "line": 28,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/system_discovery/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 181,
+    "line": 125,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/system_discovery/MCP_TOOL_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 182,
+    "line": 126,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/system_discovery/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 183,
+    "line": 127,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/system_discovery/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 184,
+    "line": 128,
     "status": "ok",
     "message": "File exists"
   },
@@ -86767,49 +86865,49 @@
   {
     "file": "docs/modules/compression/API_SPECIFICATION.md",
     "link": "../documents/API_SPECIFICATION.md",
-    "line": 192,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/modules/compression/API_SPECIFICATION.md",
-    "link": "../deployment/API_SPECIFICATION.md",
-    "line": 193,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/modules/compression/API_SPECIFICATION.md",
-    "link": "../cache/API_SPECIFICATION.md",
     "line": 194,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/compression/API_SPECIFICATION.md",
+    "link": "../deployment/API_SPECIFICATION.md",
+    "line": 195,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/compression/API_SPECIFICATION.md",
+    "link": "../cache/API_SPECIFICATION.md",
+    "line": 196,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/compression/API_SPECIFICATION.md",
     "link": "README.md",
-    "line": 200,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/modules/compression/API_SPECIFICATION.md",
-    "link": "AGENTS.md",
-    "line": 201,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "docs/modules/compression/API_SPECIFICATION.md",
-    "link": "SPEC.md",
     "line": 202,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/compression/API_SPECIFICATION.md",
-    "link": "../AGENTS.md",
+    "link": "AGENTS.md",
     "line": 203,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/compression/API_SPECIFICATION.md",
+    "link": "SPEC.md",
+    "line": 204,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/compression/API_SPECIFICATION.md",
+    "link": "../AGENTS.md",
+    "line": 205,
     "status": "ok",
     "message": "File exists"
   },
@@ -86963,28 +87061,28 @@
   {
     "file": "docs/modules/ci_cd_automation/API_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 303,
+    "line": 213,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/ci_cd_automation/API_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 304,
+    "line": 214,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/ci_cd_automation/API_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 305,
+    "line": 215,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/ci_cd_automation/API_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 306,
+    "line": 216,
     "status": "ok",
     "message": "File exists"
   },
@@ -87467,28 +87565,28 @@
   {
     "file": "docs/modules/validation/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 17,
+    "line": 55,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/validation/MCP_TOOL_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 18,
+    "line": 56,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/validation/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 19,
+    "line": 57,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/validation/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 20,
+    "line": 58,
     "status": "ok",
     "message": "File exists"
   },
@@ -91415,28 +91513,28 @@
   {
     "file": "docs/modules/networks/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 187,
+    "line": 126,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/networks/MCP_TOOL_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 188,
+    "line": 127,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/networks/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 189,
+    "line": 128,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/networks/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 190,
+    "line": 129,
     "status": "ok",
     "message": "File exists"
   },
@@ -92898,29 +92996,36 @@
   },
   {
     "file": "docs/modules/data_visualization/MCP_TOOL_SPECIFICATION.md",
+    "link": "#chart-functions-without-mcp-tools",
+    "line": 5,
+    "status": "ok",
+    "message": "Anchor link"
+  },
+  {
+    "file": "docs/modules/data_visualization/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 400,
+    "line": 144,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/data_visualization/MCP_TOOL_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 401,
+    "line": 145,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/data_visualization/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 402,
+    "line": 146,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/data_visualization/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 403,
+    "line": 147,
     "status": "ok",
     "message": "File exists"
   },
@@ -94208,28 +94313,28 @@
   {
     "file": "docs/modules/config_management/API_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 279,
+    "line": 253,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/config_management/API_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 280,
+    "line": 254,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/config_management/API_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 281,
+    "line": 255,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/config_management/API_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 282,
+    "line": 256,
     "status": "ok",
     "message": "File exists"
   },
@@ -94397,49 +94502,49 @@
   {
     "file": "docs/modules/terminal_interface/MCP_TOOL_SPECIFICATION.md",
     "link": "./README.md",
-    "line": 58,
+    "line": 29,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/terminal_interface/MCP_TOOL_SPECIFICATION.md",
     "link": "./API_SPECIFICATION.md",
-    "line": 59,
+    "line": 30,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/terminal_interface/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 60,
+    "line": 31,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/terminal_interface/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 164,
+    "line": 147,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/terminal_interface/MCP_TOOL_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 165,
+    "line": 148,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/terminal_interface/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 166,
+    "line": 149,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/terminal_interface/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 167,
+    "line": 150,
     "status": "ok",
     "message": "File exists"
   },
@@ -95054,22 +95159,36 @@
   },
   {
     "file": "docs/modules/quantum/MCP_TOOL_SPECIFICATION.md",
+    "link": "#circuit-format",
+    "line": 39,
+    "status": "ok",
+    "message": "Anchor link"
+  },
+  {
+    "file": "docs/modules/quantum/MCP_TOOL_SPECIFICATION.md",
+    "link": "#circuit-format",
+    "line": 81,
+    "status": "ok",
+    "message": "Anchor link"
+  },
+  {
+    "file": "docs/modules/quantum/MCP_TOOL_SPECIFICATION.md",
     "link": "API_SPECIFICATION.md",
-    "line": 216,
+    "line": 133,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/quantum/MCP_TOOL_SPECIFICATION.md",
     "link": "README.md",
-    "line": 217,
+    "line": 134,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/quantum/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 218,
+    "line": 135,
     "status": "ok",
     "message": "File exists"
   },
@@ -96049,28 +96168,28 @@
   {
     "file": "docs/modules/orchestrator/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 196,
+    "line": 189,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/orchestrator/MCP_TOOL_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 197,
+    "line": 190,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/orchestrator/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 198,
+    "line": 191,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/orchestrator/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 199,
+    "line": 192,
     "status": "ok",
     "message": "File exists"
   },
@@ -97022,28 +97141,28 @@
   {
     "file": "docs/modules/containerization/API_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 337,
+    "line": 193,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/containerization/API_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 338,
+    "line": 194,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/containerization/API_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 339,
+    "line": 195,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/containerization/API_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 340,
+    "line": 196,
     "status": "ok",
     "message": "File exists"
   },
@@ -97687,49 +97806,49 @@
   {
     "file": "docs/modules/serialization/API_SPECIFICATION.md",
     "link": "../config_management/API_SPECIFICATION.md",
-    "line": 200,
+    "line": 205,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/serialization/API_SPECIFICATION.md",
     "link": "../documents/API_SPECIFICATION.md",
-    "line": 201,
+    "line": 206,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/serialization/API_SPECIFICATION.md",
     "link": "../cache/API_SPECIFICATION.md",
-    "line": 202,
+    "line": 207,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/serialization/API_SPECIFICATION.md",
     "link": "README.md",
-    "line": 208,
+    "line": 213,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/serialization/API_SPECIFICATION.md",
     "link": "AGENTS.md",
-    "line": 209,
+    "line": 214,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/serialization/API_SPECIFICATION.md",
     "link": "SPEC.md",
-    "line": 210,
+    "line": 215,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/serialization/API_SPECIFICATION.md",
     "link": "../AGENTS.md",
-    "line": 211,
+    "line": 216,
     "status": "ok",
     "message": "File exists"
   },
@@ -98303,49 +98422,49 @@
   {
     "file": "docs/modules/templating/API_SPECIFICATION.md",
     "link": "../documentation/API_SPECIFICATION.md",
-    "line": 279,
+    "line": 259,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/templating/API_SPECIFICATION.md",
     "link": "../deployment/API_SPECIFICATION.md",
-    "line": 280,
+    "line": 260,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/templating/API_SPECIFICATION.md",
     "link": "../module_template/API_SPECIFICATION.md",
-    "line": 281,
+    "line": 261,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/templating/API_SPECIFICATION.md",
     "link": "README.md",
-    "line": 287,
+    "line": 267,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/templating/API_SPECIFICATION.md",
     "link": "AGENTS.md",
-    "line": 288,
+    "line": 268,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/templating/API_SPECIFICATION.md",
     "link": "SPEC.md",
-    "line": 289,
+    "line": 269,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/templating/API_SPECIFICATION.md",
     "link": "../AGENTS.md",
-    "line": 290,
+    "line": 270,
     "status": "ok",
     "message": "File exists"
   },
@@ -98905,21 +99024,21 @@
   {
     "file": "docs/modules/edge_computing/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 290,
+    "line": 112,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/edge_computing/MCP_TOOL_SPECIFICATION.md",
     "link": "API_SPECIFICATION.md",
-    "line": 291,
+    "line": 113,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/edge_computing/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 292,
+    "line": 114,
     "status": "ok",
     "message": "File exists"
   },
@@ -99262,28 +99381,28 @@
   {
     "file": "docs/modules/cache/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 215,
+    "line": 167,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/cache/MCP_TOOL_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 216,
+    "line": 168,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/cache/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 217,
+    "line": 169,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/cache/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 218,
+    "line": 170,
     "status": "ok",
     "message": "File exists"
   },
@@ -99612,28 +99731,28 @@
   {
     "file": "docs/modules/plugin_system/MCP_TOOL_SPECIFICATION.md",
     "link": "../README.md",
-    "line": 228,
+    "line": 161,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/plugin_system/MCP_TOOL_SPECIFICATION.md",
     "link": "../../AGENTS.md",
-    "line": 229,
+    "line": 162,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/plugin_system/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../docs/README.md",
-    "line": 230,
+    "line": 163,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/plugin_system/MCP_TOOL_SPECIFICATION.md",
     "link": "../../../README.md",
-    "line": 231,
+    "line": 164,
     "status": "ok",
     "message": "File exists"
   },
@@ -110028,63 +110147,63 @@
   {
     "file": "docs/development/testing-strategy.md",
     "link": "../project/contributing.md",
-    "line": 550,
+    "line": 605,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/testing-strategy.md",
     "link": "../getting-started/tutorials/creating-a-module.md",
-    "line": 551,
+    "line": 606,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/testing-strategy.md",
     "link": "../reference/performance.md",
-    "line": 552,
+    "line": 607,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/testing-strategy.md",
     "link": "environment-setup.md",
-    "line": 553,
+    "line": 608,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/testing-strategy.md",
     "link": "../examples/README.md",
-    "line": 554,
+    "line": 609,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/testing-strategy.md",
     "link": "../README.md",
-    "line": 562,
+    "line": 617,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/testing-strategy.md",
     "link": "../../AGENTS.md",
-    "line": 563,
+    "line": 618,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/testing-strategy.md",
     "link": "../../docs/README.md",
-    "line": 564,
+    "line": 619,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/testing-strategy.md",
     "link": "../../README.md",
-    "line": 565,
+    "line": 620,
     "status": "ok",
     "message": "File exists"
   },
@@ -110245,42 +110364,42 @@
   {
     "file": "docs/development/documentation.md",
     "link": "../reference/inventory.md",
-    "line": 168,
+    "line": 174,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/documentation.md",
     "link": "README.md",
-    "line": 270,
+    "line": 361,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/documentation.md",
     "link": "testing-strategy.md",
-    "line": 271,
+    "line": 362,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/documentation.md",
     "link": "../reference/inventory.md",
-    "line": 272,
+    "line": 363,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/documentation.md",
     "link": "../plans/readme_agents_hand_pass.md",
-    "line": 273,
+    "line": 364,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/development/documentation.md",
     "link": "../../AGENTS.md",
-    "line": 274,
+    "line": 365,
     "status": "ok",
     "message": "File exists"
   },

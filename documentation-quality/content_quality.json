@@ -28,11 +28,23 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 160,
+      "heading_count": 161,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 10459,
+      "word_count": 10914,
       "link_count": 3
+    }
+  },
+  {
+    "file": "REVIEW_LOG_2026-10-12.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 9,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 1674,
+      "link_count": 0
     }
   },
   {
@@ -88,10 +100,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 7,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 789,
+      "word_count": 477,
       "link_count": 1
     }
   },
@@ -163,7 +175,7 @@
       "heading_count": 39,
       "placeholder_count": 0,
       "code_block_count": 11,
-      "word_count": 5409,
+      "word_count": 5424,
       "link_count": 555
     }
   },
@@ -930,7 +942,7 @@
       "heading_count": 37,
       "placeholder_count": 0,
       "code_block_count": 11,
-      "word_count": 5138,
+      "word_count": 5153,
       "link_count": 542
     }
   },
@@ -2106,6 +2118,30 @@
       "code_block_count": 0,
       "word_count": 104,
       "link_count": 2
+    }
+  },
+  {
+    "file": "config/documentation/theme/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 5,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 88,
+      "link_count": 3
+    }
+  },
+  {
+    "file": "config/documentation/theme/README.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 1,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 55,
+      "link_count": 1
     }
   },
   {
@@ -7432,7 +7468,7 @@
       "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 108,
+      "word_count": 138,
       "link_count": 2
     }
   },
@@ -7444,7 +7480,7 @@
       "heading_count": 8,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 192,
+      "word_count": 200,
       "link_count": 1
     }
   },
@@ -7456,7 +7492,7 @@
       "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 61,
+      "word_count": 69,
       "link_count": 2
     }
   },
@@ -8175,10 +8211,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 8,
+      "heading_count": 9,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 284,
+      "word_count": 400,
       "link_count": 3
     }
   },
@@ -8202,7 +8238,7 @@
       "heading_count": 7,
       "placeholder_count": 0,
       "code_block_count": 4,
-      "word_count": 464,
+      "word_count": 560,
       "link_count": 5
     }
   },
@@ -10384,7 +10420,7 @@
       "heading_count": 6,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 165,
+      "word_count": 203,
       "link_count": 4
     }
   },
@@ -10408,8 +10444,8 @@
       "heading_count": 6,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 138,
-      "link_count": 2
+      "word_count": 241,
+      "link_count": 4
     }
   },
   {
@@ -18193,10 +18229,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 11,
+      "heading_count": 21,
       "placeholder_count": 0,
-      "code_block_count": 1,
-      "word_count": 917,
+      "code_block_count": 3,
+      "word_count": 570,
       "link_count": 0
     }
   },
@@ -18932,7 +18968,7 @@
       "heading_count": 42,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 1628,
+      "word_count": 1675,
       "link_count": 7
     }
   },
@@ -19282,7 +19318,7 @@
       "heading_count": 36,
       "placeholder_count": 0,
       "code_block_count": 16,
-      "word_count": 2162,
+      "word_count": 2305,
       "link_count": 0
     }
   },
@@ -20671,10 +20707,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 31,
+      "heading_count": 32,
       "placeholder_count": 0,
-      "code_block_count": 19,
-      "word_count": 609,
+      "code_block_count": 20,
+      "word_count": 740,
       "link_count": 7
     }
   },
@@ -21225,10 +21261,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 11,
+      "heading_count": 12,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 545,
+      "word_count": 630,
       "link_count": 4
     }
   },
@@ -22771,10 +22807,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 47,
+      "heading_count": 31,
       "placeholder_count": 0,
       "code_block_count": 5,
-      "word_count": 1172,
+      "word_count": 809,
       "link_count": 0
     }
   },
@@ -23317,10 +23353,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 4,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 114,
+      "word_count": 144,
       "link_count": 0
     }
   },
@@ -23341,10 +23377,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 5,
+      "heading_count": 4,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 146,
+      "word_count": 217,
       "link_count": 0
     }
   },
@@ -23501,11 +23537,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 15,
+      "heading_count": 8,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 689,
-      "link_count": 2
+      "word_count": 373,
+      "link_count": 3
     }
   },
   {
@@ -24549,11 +24585,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 16,
+      "heading_count": 6,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 406,
-      "link_count": 6
+      "word_count": 263,
+      "link_count": 4
     }
   },
   {
@@ -24648,7 +24684,7 @@
       "heading_count": 18,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 625,
+      "word_count": 634,
       "link_count": 5
     }
   },
@@ -25078,7 +25114,7 @@
       "heading_count": 15,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 592,
+      "word_count": 621,
       "link_count": 4
     }
   },
@@ -25211,10 +25247,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 8,
+      "heading_count": 6,
       "placeholder_count": 0,
-      "code_block_count": 4,
-      "word_count": 286,
+      "code_block_count": 2,
+      "word_count": 260,
       "link_count": 3
     }
   },
@@ -26461,10 +26497,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 8,
+      "heading_count": 10,
       "placeholder_count": 0,
-      "code_block_count": 4,
-      "word_count": 291,
+      "code_block_count": 5,
+      "word_count": 256,
       "link_count": 0
     }
   },
@@ -26951,10 +26987,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 53,
+      "heading_count": 50,
       "placeholder_count": 0,
-      "code_block_count": 7,
-      "word_count": 2506,
+      "code_block_count": 1,
+      "word_count": 1090,
       "link_count": 4
     }
   },
@@ -27074,7 +27110,7 @@
       "heading_count": 100,
       "placeholder_count": 0,
       "code_block_count": 32,
-      "word_count": 4571,
+      "word_count": 4576,
       "link_count": 5
     }
   },
@@ -27524,7 +27560,7 @@
       "heading_count": 27,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 965,
+      "word_count": 975,
       "link_count": 3
     }
   },
@@ -27620,7 +27656,7 @@
       "heading_count": 76,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 1344,
+      "word_count": 1352,
       "link_count": 4
     }
   },
@@ -27905,10 +27941,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 22,
+      "heading_count": 20,
       "placeholder_count": 0,
-      "code_block_count": 6,
-      "word_count": 592,
+      "code_block_count": 4,
+      "word_count": 514,
       "link_count": 7
     }
   },
@@ -28042,7 +28078,7 @@
       "heading_count": 10,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 303,
+      "word_count": 319,
       "link_count": 4
     }
   },
@@ -28286,7 +28322,7 @@
       "heading_count": 19,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 551,
+      "word_count": 599,
       "link_count": 0
     }
   },
@@ -28608,7 +28644,7 @@
       "heading_count": 25,
       "placeholder_count": 0,
       "code_block_count": 14,
-      "word_count": 512,
+      "word_count": 566,
       "link_count": 7
     }
   },
@@ -28839,10 +28875,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 24,
+      "heading_count": 27,
       "placeholder_count": 0,
-      "code_block_count": 13,
-      "word_count": 952,
+      "code_block_count": 4,
+      "word_count": 1250,
       "link_count": 4
     }
   },
@@ -28901,10 +28937,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 21,
+      "heading_count": 22,
       "placeholder_count": 0,
-      "code_block_count": 2,
-      "word_count": 652,
+      "code_block_count": 3,
+      "word_count": 555,
       "link_count": 4
     }
   },
@@ -29590,7 +29626,7 @@
       "heading_count": 6,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 190,
+      "word_count": 242,
       "link_count": 4
     }
   },
@@ -30559,10 +30595,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 39,
+      "heading_count": 35,
       "placeholder_count": 0,
-      "code_block_count": 11,
-      "word_count": 1780,
+      "code_block_count": 8,
+      "word_count": 1554,
       "link_count": 4
     }
   },
@@ -30888,7 +30924,7 @@
       "heading_count": 13,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 625,
+      "word_count": 660,
       "link_count": 4
     }
   },
@@ -31034,7 +31070,7 @@
       "heading_count": 36,
       "placeholder_count": 0,
       "code_block_count": 27,
-      "word_count": 1576,
+      "word_count": 1582,
       "link_count": 0
     }
   },
@@ -32641,11 +32677,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 21,
+      "heading_count": 4,
       "placeholder_count": 0,
-      "code_block_count": 2,
-      "word_count": 1133,
-      "link_count": 4
+      "code_block_count": 1,
+      "word_count": 209,
+      "link_count": 5
     }
   },
   {
@@ -33404,15 +33440,13 @@
   },
   {
     "file": "src/codomyrmex/agents/hermes/provider_router_pkg/README.md",
-    "score": 90,
-    "issues": [
-      "Document appears too short"
-    ],
+    "score": 100,
+    "issues": [],
     "metrics": {
       "heading_count": 1,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 13,
+      "word_count": 58,
       "link_count": 0
     }
   },
@@ -34169,11 +34203,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 15,
+      "heading_count": 7,
       "placeholder_count": 0,
-      "code_block_count": 11,
-      "word_count": 983,
-      "link_count": 4
+      "code_block_count": 3,
+      "word_count": 264,
+      "link_count": 5
     }
   },
   {
@@ -35008,7 +35042,7 @@
       "heading_count": 23,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 581,
+      "word_count": 676,
       "link_count": 0
     }
   },
@@ -35351,10 +35385,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 19,
+      "heading_count": 20,
       "placeholder_count": 0,
-      "code_block_count": 8,
-      "word_count": 2633,
+      "code_block_count": 9,
+      "word_count": 3001,
       "link_count": 5
     }
   },
@@ -35375,11 +35409,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 12,
+      "heading_count": 13,
       "placeholder_count": 0,
       "code_block_count": 6,
-      "word_count": 1262,
-      "link_count": 7
+      "word_count": 1333,
+      "link_count": 8
     }
   },
   {
@@ -35399,11 +35433,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 19,
+      "heading_count": 26,
       "placeholder_count": 0,
       "code_block_count": 11,
-      "word_count": 1877,
-      "link_count": 0
+      "word_count": 2068,
+      "link_count": 1
     }
   },
   {
@@ -35463,10 +35497,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 1,
+      "heading_count": 2,
       "placeholder_count": 0,
-      "code_block_count": 0,
-      "word_count": 203,
+      "code_block_count": 1,
+      "word_count": 306,
       "link_count": 0
     }
   },
@@ -35499,10 +35533,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 28,
+      "heading_count": 29,
       "placeholder_count": 0,
       "code_block_count": 15,
-      "word_count": 908,
+      "word_count": 1056,
       "link_count": 0
     }
   },
@@ -35559,10 +35593,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 50,
+      "heading_count": 51,
       "placeholder_count": 0,
       "code_block_count": 31,
-      "word_count": 1305,
+      "word_count": 1398,
       "link_count": 0
     }
   },
@@ -35571,10 +35605,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 9,
+      "heading_count": 10,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 171,
+      "word_count": 233,
       "link_count": 7
     }
   },
@@ -35586,7 +35620,7 @@
       "heading_count": 8,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 219,
+      "word_count": 230,
       "link_count": 1
     }
   },
@@ -35595,10 +35629,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 5,
+      "heading_count": 6,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 79,
+      "word_count": 143,
       "link_count": 2
     }
   },
@@ -35721,10 +35755,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 12,
+      "heading_count": 13,
       "placeholder_count": 0,
-      "code_block_count": 0,
-      "word_count": 531,
+      "code_block_count": 1,
+      "word_count": 800,
       "link_count": 4
     }
   },
@@ -35745,10 +35779,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 5,
+      "heading_count": 6,
       "placeholder_count": 0,
-      "code_block_count": 0,
-      "word_count": 73,
+      "code_block_count": 1,
+      "word_count": 312,
       "link_count": 2
     }
   },
@@ -35879,10 +35913,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 30,
+      "heading_count": 21,
       "placeholder_count": 0,
       "code_block_count": 3,
-      "word_count": 914,
+      "word_count": 573,
       "link_count": 4
     }
   },
@@ -37169,11 +37203,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 15,
+      "heading_count": 16,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 644,
-      "link_count": 0
+      "word_count": 780,
+      "link_count": 1
     }
   },
   {
@@ -38321,8 +38355,8 @@
     "metrics": {
       "heading_count": 23,
       "placeholder_count": 0,
-      "code_block_count": 10,
-      "word_count": 988,
+      "code_block_count": 9,
+      "word_count": 1005,
       "link_count": 4
     }
   },
@@ -39011,10 +39045,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 22,
+      "heading_count": 25,
       "placeholder_count": 0,
-      "code_block_count": 6,
-      "word_count": 629,
+      "code_block_count": 4,
+      "word_count": 675,
       "link_count": 7
     }
   },
@@ -39417,11 +39451,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 7,
+      "heading_count": 8,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 145,
-      "link_count": 0
+      "word_count": 204,
+      "link_count": 1
     }
   },
   {
@@ -39878,7 +39912,7 @@
       "heading_count": 15,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 543,
+      "word_count": 767,
       "link_count": 3
     }
   },
@@ -39899,11 +39933,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 5,
+      "heading_count": 6,
       "placeholder_count": 0,
-      "code_block_count": 0,
-      "word_count": 78,
-      "link_count": 2
+      "code_block_count": 1,
+      "word_count": 170,
+      "link_count": 3
     }
   },
   {
@@ -40769,11 +40803,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 30,
+      "heading_count": 20,
       "placeholder_count": 0,
-      "code_block_count": 4,
-      "word_count": 1032,
-      "link_count": 3
+      "code_block_count": 3,
+      "word_count": 579,
+      "link_count": 5
     }
   },
   {
@@ -41095,10 +41129,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 83,
+      "heading_count": 19,
       "placeholder_count": 0,
-      "code_block_count": 9,
-      "word_count": 3105,
+      "code_block_count": 2,
+      "word_count": 583,
       "link_count": 0
     }
   },
@@ -41547,10 +41581,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 25,
+      "heading_count": 20,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 668,
+      "word_count": 571,
       "link_count": 0
     }
   },
@@ -42767,10 +42801,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 15,
+      "heading_count": 20,
       "placeholder_count": 0,
-      "code_block_count": 2,
-      "word_count": 554,
+      "code_block_count": 3,
+      "word_count": 876,
       "link_count": 0
     }
   },
@@ -42830,7 +42864,7 @@
       "heading_count": 19,
       "placeholder_count": 0,
       "code_block_count": 15,
-      "word_count": 1512,
+      "word_count": 2372,
       "link_count": 1
     }
   },
@@ -44472,7 +44506,7 @@
       "heading_count": 22,
       "placeholder_count": 0,
       "code_block_count": 5,
-      "word_count": 647,
+      "word_count": 674,
       "link_count": 7
     }
   },
@@ -44827,8 +44861,8 @@
     "metrics": {
       "heading_count": 23,
       "placeholder_count": 0,
-      "code_block_count": 12,
-      "word_count": 1064,
+      "code_block_count": 5,
+      "word_count": 1100,
       "link_count": 4
     }
   },
@@ -45606,7 +45640,7 @@
       "heading_count": 26,
       "placeholder_count": 0,
       "code_block_count": 14,
-      "word_count": 501,
+      "word_count": 604,
       "link_count": 7
     }
   },
@@ -45687,10 +45721,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 11,
+      "heading_count": 28,
       "placeholder_count": 0,
-      "code_block_count": 1,
-      "word_count": 914,
+      "code_block_count": 4,
+      "word_count": 952,
       "link_count": 0
     }
   },
@@ -45795,10 +45829,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 101,
+      "heading_count": 30,
       "placeholder_count": 0,
-      "code_block_count": 11,
-      "word_count": 3920,
+      "code_block_count": 3,
+      "word_count": 777,
       "link_count": 0
     }
   },
@@ -45977,10 +46011,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 9,
+      "heading_count": 10,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 252,
+      "word_count": 350,
       "link_count": 3
     }
   },
@@ -47193,10 +47227,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 13,
+      "heading_count": 14,
       "placeholder_count": 0,
-      "code_block_count": 2,
-      "word_count": 788,
+      "code_block_count": 3,
+      "word_count": 901,
       "link_count": 5
     }
   },
@@ -47217,10 +47251,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 5,
+      "heading_count": 6,
       "placeholder_count": 0,
-      "code_block_count": 0,
-      "word_count": 161,
+      "code_block_count": 1,
+      "word_count": 274,
       "link_count": 2
     }
   },
@@ -47409,10 +47443,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 33,
+      "heading_count": 31,
       "placeholder_count": 0,
-      "code_block_count": 18,
-      "word_count": 807,
+      "code_block_count": 16,
+      "word_count": 764,
       "link_count": 7
     }
   },
@@ -47765,10 +47799,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 27,
+      "heading_count": 26,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 723,
+      "word_count": 715,
       "link_count": 0
     }
   },
@@ -48529,10 +48563,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 39,
+      "heading_count": 21,
       "placeholder_count": 0,
-      "code_block_count": 7,
-      "word_count": 1318,
+      "code_block_count": 3,
+      "word_count": 355,
       "link_count": 3
     }
   },
@@ -48813,10 +48847,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 75,
+      "heading_count": 35,
       "placeholder_count": 0,
-      "code_block_count": 9,
-      "word_count": 3596,
+      "code_block_count": 2,
+      "word_count": 1021,
       "link_count": 0
     }
   },
@@ -49865,10 +49899,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 40,
+      "heading_count": 33,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 961,
+      "word_count": 763,
       "link_count": 4
     }
   },
@@ -50992,7 +51026,7 @@
       "heading_count": 20,
       "placeholder_count": 0,
       "code_block_count": 4,
-      "word_count": 724,
+      "word_count": 784,
       "link_count": 4
     }
   },
@@ -53224,7 +53258,7 @@
       "heading_count": 36,
       "placeholder_count": 0,
       "code_block_count": 16,
-      "word_count": 2162,
+      "word_count": 2305,
       "link_count": 0
     }
   },
@@ -53305,10 +53339,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 31,
+      "heading_count": 32,
       "placeholder_count": 0,
-      "code_block_count": 19,
-      "word_count": 609,
+      "code_block_count": 20,
+      "word_count": 740,
       "link_count": 7
     }
   },
@@ -53955,10 +53989,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 47,
+      "heading_count": 31,
       "placeholder_count": 0,
       "code_block_count": 5,
-      "word_count": 1172,
+      "word_count": 809,
       "link_count": 0
     }
   },
@@ -54293,10 +54327,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 4,
+      "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 114,
+      "word_count": 144,
       "link_count": 0
     }
   },
@@ -54377,11 +54411,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 15,
+      "heading_count": 8,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 689,
-      "link_count": 2
+      "word_count": 373,
+      "link_count": 3
     }
   },
   {
@@ -54689,10 +54723,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 3,
+      "heading_count": 6,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 93,
+      "word_count": 263,
       "link_count": 4
     }
   },
@@ -54872,7 +54906,7 @@
       "heading_count": 15,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 592,
+      "word_count": 621,
       "link_count": 4
     }
   },
@@ -55205,10 +55239,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 8,
+      "heading_count": 10,
       "placeholder_count": 0,
-      "code_block_count": 4,
-      "word_count": 291,
+      "code_block_count": 5,
+      "word_count": 256,
       "link_count": 0
     }
   },
@@ -55457,11 +55491,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 57,
+      "heading_count": 27,
       "placeholder_count": 0,
-      "code_block_count": 6,
-      "word_count": 1951,
-      "link_count": 4
+      "code_block_count": 2,
+      "word_count": 975,
+      "link_count": 3
     }
   },
   {
@@ -55663,10 +55697,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 22,
+      "heading_count": 20,
       "placeholder_count": 0,
-      "code_block_count": 6,
-      "word_count": 592,
+      "code_block_count": 4,
+      "word_count": 514,
       "link_count": 7
     }
   },
@@ -55858,7 +55892,7 @@
       "heading_count": 19,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 551,
+      "word_count": 599,
       "link_count": 0
     }
   },
@@ -55930,7 +55964,7 @@
       "heading_count": 25,
       "placeholder_count": 0,
       "code_block_count": 14,
-      "word_count": 512,
+      "word_count": 566,
       "link_count": 7
     }
   },
@@ -56011,10 +56045,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 24,
+      "heading_count": 27,
       "placeholder_count": 0,
-      "code_block_count": 13,
-      "word_count": 952,
+      "code_block_count": 4,
+      "word_count": 1250,
       "link_count": 4
     }
   },
@@ -56023,10 +56057,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 21,
+      "heading_count": 22,
       "placeholder_count": 0,
-      "code_block_count": 2,
-      "word_count": 652,
+      "code_block_count": 3,
+      "word_count": 555,
       "link_count": 4
     }
   },
@@ -56251,10 +56285,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 3,
+      "heading_count": 6,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 207,
+      "word_count": 242,
       "link_count": 4
     }
   },
@@ -57234,7 +57268,7 @@
       "heading_count": 13,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 625,
+      "word_count": 660,
       "link_count": 4
     }
   },
@@ -57382,7 +57416,7 @@
       "heading_count": 36,
       "placeholder_count": 0,
       "code_block_count": 27,
-      "word_count": 1583,
+      "word_count": 1589,
       "link_count": 0
     }
   },
@@ -57866,7 +57900,7 @@
       "heading_count": 23,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 581,
+      "word_count": 676,
       "link_count": 0
     }
   },
@@ -58055,10 +58089,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 30,
+      "heading_count": 21,
       "placeholder_count": 0,
       "code_block_count": 3,
-      "word_count": 914,
+      "word_count": 573,
       "link_count": 4
     }
   },
@@ -58813,11 +58847,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 57,
+      "heading_count": 17,
       "placeholder_count": 0,
-      "code_block_count": 6,
-      "word_count": 2626,
-      "link_count": 4
+      "code_block_count": 2,
+      "word_count": 800,
+      "link_count": 5
     }
   },
   {
@@ -59395,8 +59429,8 @@
     "metrics": {
       "heading_count": 23,
       "placeholder_count": 0,
-      "code_block_count": 10,
-      "word_count": 988,
+      "code_block_count": 9,
+      "word_count": 1005,
       "link_count": 4
     }
   },
@@ -59504,7 +59538,7 @@
       "heading_count": 21,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 559,
+      "word_count": 600,
       "link_count": 0
     }
   },
@@ -59513,10 +59547,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 22,
+      "heading_count": 25,
       "placeholder_count": 0,
-      "code_block_count": 6,
-      "word_count": 629,
+      "code_block_count": 4,
+      "word_count": 675,
       "link_count": 7
     }
   },
@@ -59825,11 +59859,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 30,
+      "heading_count": 20,
       "placeholder_count": 0,
-      "code_block_count": 4,
-      "word_count": 1032,
-      "link_count": 3
+      "code_block_count": 3,
+      "word_count": 579,
+      "link_count": 5
     }
   },
   {
@@ -59969,10 +60003,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 83,
+      "heading_count": 19,
       "placeholder_count": 0,
-      "code_block_count": 9,
-      "word_count": 3105,
+      "code_block_count": 2,
+      "word_count": 583,
       "link_count": 0
     }
   },
@@ -60451,10 +60485,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 33,
+      "heading_count": 21,
       "placeholder_count": 0,
-      "code_block_count": 1,
-      "word_count": 893,
+      "code_block_count": 3,
+      "word_count": 897,
       "link_count": 4
     }
   },
@@ -60960,7 +60994,7 @@
       "heading_count": 22,
       "placeholder_count": 0,
       "code_block_count": 5,
-      "word_count": 637,
+      "word_count": 664,
       "link_count": 7
     }
   },
@@ -61043,8 +61077,8 @@
     "metrics": {
       "heading_count": 23,
       "placeholder_count": 0,
-      "code_block_count": 12,
-      "word_count": 1064,
+      "code_block_count": 5,
+      "word_count": 1100,
       "link_count": 4
     }
   },
@@ -61322,7 +61356,7 @@
       "heading_count": 26,
       "placeholder_count": 0,
       "code_block_count": 14,
-      "word_count": 501,
+      "word_count": 604,
       "link_count": 7
     }
   },
@@ -61403,10 +61437,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 11,
+      "heading_count": 28,
       "placeholder_count": 0,
-      "code_block_count": 1,
-      "word_count": 914,
+      "code_block_count": 4,
+      "word_count": 952,
       "link_count": 0
     }
   },
@@ -61511,10 +61545,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 101,
+      "heading_count": 30,
       "placeholder_count": 0,
-      "code_block_count": 11,
-      "word_count": 3920,
+      "code_block_count": 3,
+      "word_count": 777,
       "link_count": 0
     }
   },
@@ -61705,10 +61739,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 33,
+      "heading_count": 31,
       "placeholder_count": 0,
-      "code_block_count": 18,
-      "word_count": 807,
+      "code_block_count": 16,
+      "word_count": 764,
       "link_count": 7
     }
   },
@@ -61825,10 +61859,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 27,
+      "heading_count": 26,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 723,
+      "word_count": 715,
       "link_count": 0
     }
   },
@@ -62053,10 +62087,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 39,
+      "heading_count": 21,
       "placeholder_count": 0,
-      "code_block_count": 7,
-      "word_count": 1318,
+      "code_block_count": 3,
+      "word_count": 355,
       "link_count": 3
     }
   },
@@ -62137,10 +62171,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 75,
+      "heading_count": 35,
       "placeholder_count": 0,
-      "code_block_count": 9,
-      "word_count": 3596,
+      "code_block_count": 2,
+      "word_count": 1021,
       "link_count": 0
     }
   },
@@ -62293,10 +62327,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 40,
+      "heading_count": 33,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 961,
+      "word_count": 763,
       "link_count": 4
     }
   },
@@ -62461,10 +62495,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 40,
+      "heading_count": 20,
       "placeholder_count": 0,
-      "code_block_count": 1,
-      "word_count": 1036,
+      "code_block_count": 4,
+      "word_count": 784,
       "link_count": 4
     }
   },
@@ -62836,7 +62870,7 @@
       "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 564,
+      "word_count": 566,
       "link_count": 5
     }
   },
@@ -62872,7 +62906,7 @@
       "heading_count": 18,
       "placeholder_count": 0,
       "code_block_count": 14,
-      "word_count": 649,
+      "word_count": 659,
       "link_count": 7
     }
   },
@@ -65105,10 +65139,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 29,
+      "heading_count": 30,
       "placeholder_count": 0,
       "code_block_count": 15,
-      "word_count": 2091,
+      "word_count": 2618,
       "link_count": 10
     }
   },
@@ -65153,10 +65187,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 11,
+      "heading_count": 14,
       "placeholder_count": 0,
-      "code_block_count": 13,
-      "word_count": 1347,
+      "code_block_count": 16,
+      "word_count": 2001,
       "link_count": 6
     }
   },

@@ -1,21 +1,21 @@
 {
-  "generated": "2026-10-11T04:55:24.861512",
+  "generated": "2026-10-12T21:39:29.152973",
   "links": {
-    "total": 16387,
+    "total": 16404,
     "broken": 0,
-    "valid": 15957,
-    "external": 430
+    "valid": 15970,
+    "external": 434
   },
   "quality": {
-    "files": 5462,
-    "avg_score": 99.17246429879165,
+    "files": 5465,
+    "avg_score": 99.17474839890211,
     "min_score": 75,
     "max_score": 100,
     "placeholder_total": 0
   },
   "agents": {
-    "total": 1371,
-    "valid": 1371,
+    "total": 1372,
+    "valid": 1372,
     "avg_score": 100.0
   }
 }

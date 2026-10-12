@@ -408,6 +408,18 @@
     "score": 100
   },
   {
+    "file": "config/documentation/theme/AGENTS.md",
+    "valid": true,
+    "missing_sections": [],
+    "warnings": [
+      "Consider adding 'Code Style' section",
+      "Consider adding 'Testing' section",
+      "Consider adding 'Integration Points' section",
+      "Consider adding 'Common Tasks' section"
+    ],
+    "score": 100
+  },
+  {
     "file": "config/relations/AGENTS.md",
     "valid": true,
     "missing_sections": [],
