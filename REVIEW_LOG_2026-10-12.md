@@ -157,3 +157,19 @@ The local collaborative browser measured comment contrast at 4.89:1 light /
 5.34:1 dark and footer contrast at 6.32:1 light / 6.53:1 dark, after palette
 transitions completed. The owned browser tab and local server were closed.
 The refreshed hosted Lighthouse result remains pending.
+
+## Lighthouse version-selector correction
+
+Hosted Lighthouse on `73a9a2500` passed with performance 99, accessibility 100
+and SEO 100. Its remaining best-practices deduction came solely from the missing
+`versions.json` request. The configuration enabled Mike, although the declared
+Pages workflow uploads a plain `mkdocs build --strict` site and the repository
+has no Mike dependency or deployment commands. The unused version provider is
+removed from site configuration. No deployment or published version inventory
+is created or changed.
+
+Verification: complete `make docs-check` and applicable changed-file hooks pass.
+The local browser's generated client config has no version provider, resource
+entries record zero `versions.json` requests, the search index loads, and the
+search dialog retains its name. Server logs contain no 404 response. The owned
+browser tab and local server were closed. Hosted rerun remains required.

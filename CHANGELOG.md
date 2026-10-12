@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Comprehensive repository hardening (2026-10-12)
 
+- Remove the unused Mike version selector from the single-site MkDocs build
+  so page initialization does not request a missing `versions.json`.
+
 - Name the Material search dialog and improve light/dark syntax-comment and
   footer contrast after inspecting the hosted Lighthouse findings.
 
