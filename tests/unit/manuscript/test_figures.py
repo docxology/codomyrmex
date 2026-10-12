@@ -2,35 +2,32 @@
 
 from __future__ import annotations
 
-import subprocess
-import sys
 from pathlib import Path
 
 import pytest
 
 
 @pytest.fixture(scope="module", autouse=True)
-def _ensure_generated_manuscript_snapshot() -> None:
-    """Prepare and load the authoritative snapshot when running from a fresh clone."""
-    snapshot = (
-        Path(__file__).resolve().parents[3] / "output/data/manuscript_variables.json"
-    )
-    if not snapshot.exists():
-        root = snapshot.parents[2]
-        subprocess.run(
-            [sys.executable, str(root / "scripts/z_generate_manuscript_variables.py")],
-            cwd=root,
-            check=True,
-        )
+def _ensure_generated_manuscript_snapshot(generated_manuscript_snapshot: Path):
+    """Load a freshly generated isolated snapshot and restore prior cache state."""
+    snapshot = generated_manuscript_snapshot
     # Another test module can import the figure package during collection, before
     # this fixture creates the ignored snapshot. Refresh that cached empty map.
     from codomyrmex.manuscript.figures import _common
 
+    saved_variables = dict(_common._VARIABLES)
     _common._VARIABLES.clear()
     _common._VARIABLES.update(_common._load_json(snapshot))
+    try:
+        yield
+    finally:
+        _common._VARIABLES.clear()
+        _common._VARIABLES.update(saved_variables)
 
 
-def test_figure_registry_lists_all_referenced_generators() -> None:
+def test_figure_registry_lists_all_referenced_generators(
+    generated_manuscript_snapshot: Path,
+) -> None:
     import json
 
     import yaml
@@ -41,9 +38,7 @@ def test_figure_registry_lists_all_referenced_generators() -> None:
     configured = yaml.safe_load(
         (root / "docs/manuscript/config.yaml").read_text(encoding="utf-8")
     )["figures"]
-    variables = json.loads(
-        (root / "output/data/manuscript_variables.json").read_text(encoding="utf-8")
-    )
+    variables = json.loads(generated_manuscript_snapshot.read_text(encoding="utf-8"))
     assert len(FIGURES) == len(configured)
     names = {name for name, _ in FIGURES}
     assert "cover.png" in names

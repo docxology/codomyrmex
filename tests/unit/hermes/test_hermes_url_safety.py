@@ -11,14 +11,15 @@ from pathlib import Path
 
 import pytest
 
+from codomyrmex.agents.hermes.hermes_paths import discover_hermes_agent_repo
+
 # ---------------------------------------------------------------------------
 # Import helpers
 # ---------------------------------------------------------------------------
 
 
 def _hermes_agent_root() -> Path | None:
-    candidate = Path.home() / ".hermes" / "hermes-agent"
-    return candidate if candidate.exists() else None
+    return discover_hermes_agent_repo()
 
 
 def _import_url_safety():
@@ -132,25 +133,18 @@ class TestIsSafeUrl:
         assert us.is_safe_url("http://metadata.goog/") is False
 
     def _skip_if_allow_private_enabled(self) -> None:
-        """Skip tests that expect private-IP blocking when the user's config allows it."""
-        from pathlib import Path
+        """Validate isolated policy; operator configuration never controls these tests."""
+        import os
 
-        try:
-            import yaml
+        from codomyrmex.config_management.core.config_loader import ConfigurationManager
 
-            config_path = Path.home() / ".hermes" / "config.yaml"
-            if config_path.exists():
-                cfg = yaml.safe_load(config_path.read_text()) or {}
-                if (
-                    cfg.get("security", {}).get("allow_private_urls")
-                    or cfg.get("browser", {}).get("allow_private_urls")
-                    or cfg.get("allow_private_urls")
-                ):
-                    pytest.skip(
-                        "~/.hermes/config.yaml has allow_private_urls=true — private-IP blocking disabled"
-                    )
-        except Exception:
-            pass
+        home = Path(os.environ["HERMES_HOME"])
+        config = ConfigurationManager(config_dir=str(home)).load_configuration(
+            "url_safety_fixture", sources=["config.yaml"]
+        )
+        assert config.get_value("security.allow_private_urls") is False
+        assert not config.get_value("browser.allow_private_urls", False)
+        assert not config.get_value("allow_private_urls", False)
 
     def test_localhost_blocked(self) -> None:
         self._skip_if_allow_private_enabled()

@@ -1,184 +1,123 @@
 # Networks - MCP Tool Specification
 
-This document outlines the specification for tools within the Networks module that are intended to be integrated with the Model Context Protocol (MCP).
+This document specifies the Model Context Protocol (MCP) tools of the Networks module. They are defined with `@mcp_tool` in `mcp_tools.py` and surfaced by the PAI MCP bridge as `codomyrmex.<name>`.
 
 ## General Considerations
 
-- **Dependencies**: Requires the `logging_monitoring` module. Ensure `setup_logging()` is called at startup.
-- **Initialization**: No module-level initialization required beyond standard import.
-- **Error Handling**: Errors are logged via `logging_monitoring`. Tools return an `{"error": "description"}` object on failure.
+- **Stateless graphs**: Each tool builds a new `Network` from the `nodes` and `edges` arguments; no named network is stored between calls. Edges are `[source, target]` pairs, and pairs with fewer than two items are ignored.
+- **Error Handling**: Tools catch exceptions and return `{"status": "error", "message": "<description>"}`.
+- **Security**: Pure in-memory computation; no file system or network access.
+- **Method tool**: `graph.py` also decorates the method `NetworkGraph.shortest_path` (registered as `NetworkGraph.shortest_path`). It needs a `NetworkGraph` instance, so use it from Python rather than through MCP.
 
 ---
 
-## Tool: `network_get_neighbors`
+## Tool: `networks_analyze`
 
 ### 1. Tool Purpose and Description
 
-Query the neighbors of a node in a network. Returns all node IDs connected to the specified node via inbound or outbound edges. Useful for agents exploring graph topology, dependency analysis, and traversal planning.
+Builds a network and returns node and edge counts, density, connected components and degree centrality.
 
 ### 2. Invocation Name
 
-`network_get_neighbors`
+`networks_analyze`
 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `network_name` | `string` | Yes | Name of the network to query | `"module_deps"` |
-| `node_id` | `string` | Yes | ID of the node whose neighbors to retrieve | `"agents"` |
+| :--- | :--- | :--- | :--- | :--- |
+| `nodes` | `array[string]` | Yes | Node IDs | `["a", "b", "c"]` |
+| `edges` | `array[array[string]]` | Yes | `[source, target]` pairs | `[["a", "b"]]` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
-| `status` | `string` | "success" or "error" | `"success"` |
-| `node_id` | `string` | The queried node ID | `"agents"` |
-| `neighbors` | `array[string]` | List of neighboring node IDs | `["logging", "cli"]` |
-| `count` | `integer` | Number of neighbors | `2` |
-
-### 5. Error Handling
-
-- **Node Not Found**: Returns error if `node_id` does not exist in the network.
-- **Network Not Found**: Returns error if no network with `network_name` is registered.
-
-### 6. Idempotency
-
-- **Idempotent**: Yes. Repeated calls with the same parameters return the same result without side effects.
-
-### 7. Usage Examples
-
 ```json
 {
-  "tool_name": "network_get_neighbors",
-  "arguments": {
-    "network_name": "module_deps",
-    "node_id": "agents"
-  }
+  "status": "success",
+  "node_count": 3,
+  "edge_count": 1,
+  "density": 0.3333333333333333,
+  "num_components": 2,
+  "is_connected": false,
+  "degree_centrality": {"a": 0.5, "b": 0.5, "c": 0.0}
 }
 ```
 
-### 8. Security Considerations
+### 5. Idempotency
 
-- **Input Validation**: `node_id` and `network_name` are validated as non-empty strings.
-- **Permissions**: Read-only operation; no file system or network access.
-- **Data Handling**: No sensitive data is processed or logged beyond node identifiers.
+- **Idempotent**: Yes
 
 ---
 
-## Tool: `network_add_node`
+## Tool: `networks_has_path`
 
 ### 1. Tool Purpose and Description
 
-Add a node to an existing network. Enables agents to dynamically construct graph topologies during planning and build phases.
+Builds a network and reports whether `target` is reachable from `source`.
 
 ### 2. Invocation Name
 
-`network_add_node`
+`networks_has_path`
 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `network_name` | `string` | Yes | Name of the target network | `"module_deps"` |
-| `node_id` | `string` | Yes | Unique identifier for the new node | `"networks"` |
-| `data` | `any` | No | Payload data for the node | `"Core"` |
-| `attributes` | `object` | No | Arbitrary key-value attributes | `{"layer": 2}` |
+| :--- | :--- | :--- | :--- | :--- |
+| `nodes` | `array[string]` | Yes | Node IDs | `["a", "b", "c"]` |
+| `edges` | `array[array[string]]` | Yes | `[source, target]` pairs | `[["a", "b"]]` |
+| `source` | `string` | Yes in practice | Source node ID (default `""`) | `"a"` |
+| `target` | `string` | Yes in practice | Target node ID (default `""`) | `"c"` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
-| `status` | `string` | "success", "duplicate", or "error" | `"success"` |
-| `node_id` | `string` | The created node ID | `"networks"` |
-| `message` | `string` | Human-readable result message | `"Node 'networks' added"` |
-
-### 5. Error Handling
-
-- **Duplicate Node**: Returns status "duplicate" if node ID already exists (no-op).
-- **Network Not Found**: Returns error if no network with `network_name` is registered.
-
-### 6. Idempotency
-
-- **Idempotent**: Yes. Adding an existing node is a no-op.
-
-### 7. Usage Examples
-
 ```json
-{
-  "tool_name": "network_add_node",
-  "arguments": {
-    "network_name": "module_deps",
-    "node_id": "networks",
-    "data": "Core",
-    "attributes": {"layer": 2}
-  }
-}
+{"status": "success", "has_path": false, "source": "a", "target": "c"}
 ```
 
-### 8. Security Considerations
+An empty `source` or `target` returns `{"status": "error", "message": "source and target are required"}`.
 
-- **Input Validation**: `node_id` validated as non-empty string. `attributes` validated as a flat key-value object.
-- **Permissions**: Mutates in-memory state only; no file system or network access.
+### 5. Idempotency
+
+- **Idempotent**: Yes
 
 ---
 
-## Tool: `network_add_edge`
+## Tool: `networks_to_dict`
 
 ### 1. Tool Purpose and Description
 
-Add a directed, weighted edge between two existing nodes in a network. Enables agents to build graph relationships incrementally.
+Builds a network and returns its JSON-compatible serialisation.
 
 ### 2. Invocation Name
 
-`network_add_edge`
+`networks_to_dict`
 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `network_name` | `string` | Yes | Name of the target network | `"module_deps"` |
-| `source` | `string` | Yes | Source node ID | `"agents"` |
-| `target` | `string` | Yes | Target node ID | `"logging"` |
-| `weight` | `float` | No | Edge weight (default: 1.0) | `1.0` |
-| `attributes` | `object` | No | Arbitrary key-value attributes | `{"relation": "depends_on"}` |
+| :--- | :--- | :--- | :--- | :--- |
+| `name` | `string` | No | Network name (default `"default"`) | `"deps"` |
+| `nodes` | `array[string]` | No | Node IDs (default none) | `["a", "b"]` |
+| `edges` | `array[array[string]]` | No | `[source, target]` pairs (default none) | `[["a", "b"]]` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
-| `status` | `string` | "success" or "error" | `"success"` |
-| `source` | `string` | Source node ID | `"agents"` |
-| `target` | `string` | Target node ID | `"logging"` |
-| `weight` | `float` | Edge weight | `1.0` |
-
-### 5. Error Handling
-
-- **Node Not Found**: Returns error if either `source` or `target` node does not exist.
-- **Network Not Found**: Returns error if no network with `network_name` is registered.
-
-### 6. Idempotency
-
-- **Idempotent**: No. Each call adds a new edge, even if an identical edge already exists.
-
-### 7. Usage Examples
-
 ```json
 {
-  "tool_name": "network_add_edge",
-  "arguments": {
-    "network_name": "module_deps",
-    "source": "agents",
-    "target": "logging",
-    "weight": 1.0,
-    "attributes": {"relation": "depends_on"}
+  "status": "success",
+  "network": {
+    "name": "deps",
+    "nodes": [
+      {"id": "a", "data": null, "attributes": {}},
+      {"id": "b", "data": null, "attributes": {}}
+    ],
+    "edges": [{"source": "a", "target": "b", "weight": 1.0, "attributes": {}}]
   }
 }
 ```
 
-### 8. Security Considerations
+### 5. Idempotency
 
-- **Input Validation**: `source` and `target` validated as non-empty strings. `weight` validated as numeric.
-- **Permissions**: Mutates in-memory state only; no file system or network access.
+- **Idempotent**: Yes
 
 ---
 
@@ -188,3 +127,5 @@ Add a directed, weighted edge between two existing nodes in a network. Enables a
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
+
+<!-- markdownlint-configure-file { "MD024": { "siblings_only": true } } -->

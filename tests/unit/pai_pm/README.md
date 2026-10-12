@@ -6,7 +6,16 @@
 
 Validation coverage, fixtures, and regression checks for Pai Pm.
 
+## Focused regression checks
+
+```bash
+uv run --locked pytest -q tests/unit/pai_pm/test_spa_accessibility.py
+```
+
+These checks use real production components and deterministic inputs.
+
 ## Directory Contents
+
 - `README.md` – File
 - `__init__.py` – File
 - `conftest.py` – File
@@ -17,6 +26,7 @@ Validation coverage, fixtures, and regression checks for Pai Pm.
 - `test_server_manager.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: ../../../../../README.md
 

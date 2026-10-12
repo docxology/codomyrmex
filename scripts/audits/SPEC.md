@@ -9,19 +9,21 @@ Audit scripts for verifying codebase quality including documentation coverage, m
 ## Functional Requirements
 
 - **audit_documentation.py**: Audits documentation coverage by scanning all module directories for README.md and docstrings
-- **audit_exports.py**: Verifies that module __all__ exports match actual public API surface
+- **audit_exports.py**: Verifies that module **all** exports match actual public API surface
 - **audit_imports.py**: Analyzes import dependencies between modules to detect circular imports
+- **audit_path_portability.py**: Requires the actual Git root and rejects case/Unicode-equivalent tracked file or directory paths, including staged additions/removals; returns 1 for collisions and 2 for unreadable/invalid roots. No file mutation.
 - **audit_rasp.py**: Checks RASP documentation compliance (README, AGENTS, SPEC, PAI) across all modules
-
 
 ## Execution
 
 **Prerequisites:**
+
 ```bash
 uv sync
 ```
 
 **Run:**
+
 ```bash
 uv run python scripts/audits/audit_documentation.py --root src/codomyrmex
 ```

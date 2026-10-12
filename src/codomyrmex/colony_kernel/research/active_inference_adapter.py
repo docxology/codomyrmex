@@ -121,7 +121,7 @@ class ColonyActiveInferenceAdapter:
                 posterior, action
             )
 
-        best_action = min(fe_dist, key=fe_dist.get)  # type: ignore
+        best_action = min(fe_dist, key=fe_dist.__getitem__)
 
         gate_res = self.gate.evaluate(
             ReferenceInput(

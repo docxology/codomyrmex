@@ -5,24 +5,31 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 @mcp_tool(category="system_discovery")
 def health_check(module: str | None = None) -> dict:
-    """Run a health check on the system or a specific module.
+    """Run health checks on one module, or on every module with a dedicated check.
 
     Args:
-        module: Optional module name to check (checks all if omitted)
+        module: Optional top-level module name to check, e.g. ``"coding"``.
+            When omitted, every module in ``HealthChecker.module_checks`` is
+            checked.
 
     Returns:
-        Health status report with module statuses.
+        ``healthy`` is true only if every checked module reports ``healthy``;
+        ``details`` maps each checked module to its ``HealthCheckResult``.
     """
-    from codomyrmex.system_discovery import HealthChecker
+    from codomyrmex.system_discovery.health.health_checker import (
+        HealthChecker,
+        HealthStatus,
+    )
 
     try:
-        checker = HealthChecker()
-        result = checker.check_module(module) if module else checker.check_all()
+        results = HealthChecker().run_checks([module] if module else None)
         return {
             "status": "success",
-            "healthy": result.healthy if hasattr(result, "healthy") else True,
+            "healthy": all(
+                result.status is HealthStatus.HEALTHY for result in results.values()
+            ),
             "module": module or "all",
-            "details": result.to_dict() if hasattr(result, "to_dict") else str(result),
+            "details": {name: result.to_dict() for name, result in results.items()},
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}

@@ -101,7 +101,7 @@ repository's authoritative reader build is `make docs-check` with MkDocs.
 | `build_static_site(package_manager="npm", docs_root=None)` | Builds the package-local Docusaurus site, or an explicit documentation checkout |
 | `serve_static_site(package_manager="npm", docs_root=None)` | Serves a previously built package-local site, or an explicit documentation checkout |
 | `assess_site()` | Opens the configured URL and prints a manual checklist |
-| `aggregate_docs(source_root=None, dest_root=None)` | Copies recognized module docs and may replace destination subtrees |
+| `aggregate_docs(source_root=None, dest_root=None)` | Copies recognized module docs with canonical filename casing to project-root `docs/modules/` by default; explicit destinations may replace subtrees |
 | `validate_doc_versions()` | Returns `(valid, errors, warnings)` for source/aggregate comparisons |
 
 Package-manager and aggregation operations mutate local state. They are not

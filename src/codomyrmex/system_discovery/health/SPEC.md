@@ -4,70 +4,67 @@
 
 ## Overview
 
-Module health verification system that probes importability, dependency satisfaction, and documentation completeness across Codomyrmex modules. Produces per-module and aggregate health reports.
+Module health verification for Codomyrmex packages. `HealthChecker` imports a
+top-level `codomyrmex.<module>` package and then runs a check that exercises
+it (renders a plot, runs the static analyzer on a sample file, executes code
+in the sandbox, pings Docker, ...). `HealthReporter` aggregates the results.
 
 ## Architecture
 
-```
-HealthChecker(discovery_engine: DiscoveryEngine)
-  +-- check(module_name) -> HealthResult
-  +-- check_all() -> HealthReport
-  +-- register_probe(probe: HealthProbe)
+```text
+HealthChecker()
+  +-- module_checks: dict[str, Callable]   # top-level package -> dedicated check
+  +-- perform_health_check(module_name) -> HealthCheckResult
+  +-- run_checks(module_names=None) -> dict[str, HealthCheckResult]
 
-HealthResult
-  +-- module: str
-  +-- status: "healthy" | "degraded" | "unhealthy"
-  +-- import_ok: bool
-  +-- deps_satisfied: bool
-  +-- rasp_complete: bool
-  +-- details: dict
+HealthCheckResult
+  +-- module_name, status: HealthStatus, timestamp
+  +-- checks_performed, issues, recommendations: list[str]
+  +-- metrics: dict, dependencies: dict[str, HealthStatus]
+  +-- to_dict() -> dict
 
-HealthReport
-  +-- results: list[HealthResult]
-  +-- score: float (0.0-100.0)
-  +-- healthy_count / degraded_count / unhealthy_count
-  +-- summary() -> str
+HealthReporter()
+  +-- generate_health_report(modules) -> HealthReport
 ```
 
 ## Key Classes
 
-### HealthResult
-
-| Field | Type | Notes |
-|-------|------|-------|
-| `module` | `str` | Module name |
-| `status` | `str` | `"healthy"`, `"degraded"`, or `"unhealthy"` |
-| `import_ok` | `bool` | Whether `importlib.import_module` succeeds |
-| `deps_satisfied` | `bool` | All required deps importable |
-| `rasp_complete` | `bool` | All 4 RASP docs present |
-| `details` | `dict` | Error messages, missing deps list |
-
 ### HealthChecker Methods
 
 | Method | Returns | Description |
-|--------|---------|-------------|
-| `check(module_name)` | `HealthResult` | Probe single module |
-| `check_all()` | `HealthReport` | Probe all discovered modules |
-| `register_probe(probe)` | `None` | Add custom health probe |
+| --- | --- | --- |
+| `perform_health_check(module_name)` | `HealthCheckResult` | Import the package, then run its dedicated check from `module_checks`, or a generic import-and-inspect check |
+| `run_checks(module_names=None)` | `dict[str, HealthCheckResult]` | Check several modules; defaults to every module in `module_checks` |
 
-### HealthReport
+Dedicated checks exist for `logging_monitoring`, `environment_setup`,
+`static_analysis`, `coding`, `data_visualization`, `git_operations`,
+`security`, `llm`, `performance`, `logistics` and `containerization`.
 
-| Field | Type | Notes |
-|-------|------|-------|
-| `results` | `list[HealthResult]` | Per-module results |
-| `score` | `float` | Percentage of healthy modules |
-| `healthy_count` | `int` | Count by status |
-| `summary()` | `str` | One-line summary string |
+### HealthStatus
+
+`healthy` (no issues), `degraded` (issues that do not mention an import,
+dependency or unavailability), `unhealthy` (the package does not import, or
+such a critical issue) and `unknown` (the check itself raised).
+
+## Consumers
+
+- `codomyrmex.system_discovery.mcp_tools.health_check` — MCP tool; checks one
+  module or every module in `module_checks`.
+- `cli_commands()["health"]` in `system_discovery/__init__.py` — prints each
+  checked module's status and issues.
 
 ## Dependencies
 
-- `system_discovery/core` for module enumeration
 - `importlib` (stdlib) for import probing
 - `codomyrmex.logging_monitoring`
+- The modules each dedicated check exercises; `docker` (optional) for the
+  containerization check
 
 ## Constraints
 
 - Import probing may trigger module-level side effects.
+- The `coding` and `containerization` checks need a running Docker daemon;
+  without one they report `degraded` with the reason.
 - Health score treats `degraded` as partial (0.5 weight), not full failure.
 
 ## Navigation

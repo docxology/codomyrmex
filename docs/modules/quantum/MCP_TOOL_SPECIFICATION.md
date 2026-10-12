@@ -2,212 +2,129 @@
 
 ## General Considerations for Quantum Tools
 
+- **Registration**: Tools are defined with `@mcp_tool` in `mcp_tools.py` and surfaced by the PAI MCP bridge as `codomyrmex.<name>`.
 - **Dependencies**: No external dependencies. Uses only Python standard library (`cmath`, `math`, `random`).
-- **Initialization**: `QuantumSimulator` is instantiated per-request. No persistent state between calls.
-- **Error Handling**: Tools return `{"error": "description"}` on failure. Invalid qubit indices produce an error response.
+- **Initialization**: `QuantumSimulator` is instantiated per call. No persistent state between calls.
+- **Error Handling**: Invalid circuits raise `ValueError` (for example `"Invalid gate type: <type>"`, `"Gate requires a target qubit"`, `"CNOT gate requires a control qubit"`), which surfaces as a tool error.
 - **Performance**: Statevector simulation scales as O(2^n) in memory. Practical limit is approximately 20 qubits.
+
+### Circuit format
+
+`circuit_data` is an object with:
+
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `num_qubits` | `integer` | Number of qubits (default `1`) |
+| `gates` | `array[object]` | Gates in order: `{"gate_type", "target", "control"?, "parameter"?}` |
+| `measure_all` | `boolean` | Add a measurement on every qubit (default `false`) |
+
+`gate_type` is case-insensitive and applied for `H`, `X`, `Y`, `Z`, `CNOT`, `CZ`, `SWAP` (these three need `control`) and `RX`, `RY`, `RZ` (these need `parameter`, an angle in radians). `T` and `S` are accepted but not applied, and gates without `gate_type` are skipped.
 
 ---
 
-## Tool: `quantum_simulate`
+## Tool: `quantum_run_circuit`
 
 ### 1. Tool Purpose and Description
 
-Runs a quantum circuit simulation for a specified number of shots and returns measurement probability distributions as bitstring counts.
+Builds a circuit from `circuit_data`, simulates it `shots` times and returns measurement counts.
 
 ### 2. Invocation Name
 
-`quantum_simulate`
+`quantum_run_circuit`
 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
 | :--- | :--- | :--- | :--- | :--- |
-| `circuit` | `object` | Yes | Circuit definition (see `quantum_create_circuit` output) | See below |
-| `shots` | `integer` | No | Number of simulation runs. Default: `1024` | `4096` |
-
-The `circuit` object schema:
-
-| Field | Type | Required | Description |
-| :--- | :--- | :--- | :--- |
-| `num_qubits` | `integer` | Yes | Number of qubits |
-| `gates` | `array[object]` | Yes | Ordered list of `{gate_type, target, control?, parameter?}` |
-| `measure_all` | `boolean` | No | Measure all qubits. Default: `true` |
+| `circuit_data` | `object` | Yes | Circuit definition (see [Circuit format](#circuit-format)) | see example |
+| `shots` | `integer` | No | Number of simulation runs (default `1024`) | `100` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name | Type | Description | Example Value |
-| :--- | :--- | :--- | :--- |
-| `counts` | `object` | Bitstring to count mapping | `{"00": 510, "11": 514}` |
-| `shots` | `integer` | Total shots executed | `1024` |
-| `num_qubits` | `integer` | Number of qubits in the circuit | `2` |
+An object mapping measured bitstrings to counts, e.g. `{"00": 54, "11": 46}`.
 
-### 5. Error Handling
-
-- `INVALID_CIRCUIT`: Circuit definition is malformed.
-- `QUBIT_OUT_OF_RANGE`: A gate references a qubit index outside the circuit range.
-- `SIMULATION_ERROR`: Runtime error during statevector computation.
-
-### 6. Idempotency
-
-- **Idempotent**: No. Measurement outcomes are probabilistic. Results vary between runs.
-
-### 7. Usage Examples
+### 5. Usage Examples
 
 ```json
 {
-  "tool_name": "quantum_simulate",
+  "tool_name": "quantum_run_circuit",
   "arguments": {
-    "circuit": {
+    "circuit_data": {
       "num_qubits": 2,
       "gates": [
         {"gate_type": "H", "target": 0},
-        {"gate_type": "CNOT", "target": 1, "control": 0}
+        {"gate_type": "CNOT", "control": 0, "target": 1}
       ],
       "measure_all": true
     },
-    "shots": 1024
+    "shots": 100
   }
 }
 ```
 
-### 8. Security Considerations
-
-- **Resource Limits**: Circuits with more than 20 qubits may exhaust memory. Callers should validate qubit count.
-- **Data Handling**: No file system or network access. Pure computation.
-
 ---
 
-## Tool: `quantum_create_circuit`
+## Tool: `quantum_circuit_stats`
 
 ### 1. Tool Purpose and Description
 
-Builds a quantum circuit from a high-level description. Supports named circuit templates (bell, ghz, qft) or custom gate sequences. Returns a circuit object suitable for `quantum_simulate`.
+Builds a circuit from `circuit_data` and returns its statistics without simulating it.
 
 ### 2. Invocation Name
 
-`quantum_create_circuit`
+`quantum_circuit_stats`
 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
 | :--- | :--- | :--- | :--- | :--- |
-| `template` | `string` | No | Named template: `"bell"`, `"ghz"`, or `"qft"` | `"bell"` |
-| `num_qubits` | `integer` | Conditional | Required for `ghz`, `qft`, or custom circuits | `3` |
-| `gates` | `array[object]` | No | Custom gate list. Each: `{gate_type, target, control?, parameter?}` | See below |
-| `measure_all` | `boolean` | No | Add measurement to all qubits. Default: `true` | `true` |
+| `circuit_data` | `object` | Yes | Circuit definition (see [Circuit format](#circuit-format)) | see `quantum_run_circuit` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name | Type | Description | Example Value |
-| :--- | :--- | :--- | :--- |
-| `num_qubits` | `integer` | Number of qubits | `2` |
-| `num_gates` | `integer` | Total gates in circuit | `3` |
-| `gates` | `array[object]` | Gate list with `{gate_type, target, control?, parameter?}` | See below |
-| `measurements` | `object` | Qubit-to-classical-bit mapping | `{"0": 0, "1": 1}` |
-
-### 5. Error Handling
-
-- `UNKNOWN_TEMPLATE`: Template name is not recognized.
-- `MISSING_NUM_QUBITS`: `num_qubits` is required but was not provided.
-- `INVALID_GATE`: A gate definition is malformed.
-
-### 6. Idempotency
-
-- **Idempotent**: Yes. Same inputs always produce the same circuit.
-
-### 7. Usage Examples
-
 ```json
 {
-  "tool_name": "quantum_create_circuit",
-  "arguments": {
-    "template": "ghz",
-    "num_qubits": 4
-  }
+  "num_qubits": 2,
+  "num_gates": 2,
+  "gate_counts": {"H": 1, "CNOT": 1},
+  "depth": 2,
+  "has_measurements": true
 }
 ```
 
+---
+
+## Tool: `quantum_bell_state_demo`
+
+### 1. Tool Purpose and Description
+
+Simulates the two-qubit Bell state circuit (H then CNOT, measured) and returns counts, an ASCII drawing and circuit statistics.
+
+### 2. Invocation Name
+
+`quantum_bell_state_demo`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name | Type | Required | Description | Example Value |
+| :--- | :--- | :--- | :--- | :--- |
+| `shots` | `integer` | No | Number of simulation runs (default `1024`) | `100` |
+
+### 4. Output Schema (Return Value)
+
 ```json
 {
-  "tool_name": "quantum_create_circuit",
-  "arguments": {
+  "counts": {"00": 54, "11": 46},
+  "ascii_circuit": "q0: -H--*--M-\nq1: ----X--M-",
+  "stats": {
     "num_qubits": 2,
-    "gates": [
-      {"gate_type": "H", "target": 0},
-      {"gate_type": "RZ", "target": 1, "parameter": 1.5708},
-      {"gate_type": "CNOT", "target": 1, "control": 0}
-    ]
+    "num_gates": 2,
+    "gate_counts": {"H": 1, "CNOT": 1},
+    "depth": 2,
+    "has_measurements": true
   }
 }
 ```
-
-### 8. Security Considerations
-
-- **Input Validation**: Gate types are validated against the `GateType` enum. Unknown types are rejected.
-- **Resource Limits**: `num_qubits` should be capped by the caller to prevent memory exhaustion.
-
----
-
-## Tool: `quantum_measure`
-
-### 1. Tool Purpose and Description
-
-Measures specific qubits in a previously simulated circuit state, returning collapsed measurement results. Useful for partial measurement scenarios.
-
-### 2. Invocation Name
-
-`quantum_measure`
-
-### 3. Input Schema (Parameters)
-
-| Parameter Name | Type | Required | Description | Example Value |
-| :--- | :--- | :--- | :--- | :--- |
-| `circuit` | `object` | Yes | Circuit definition to simulate | See `quantum_create_circuit` |
-| `qubits` | `array[integer]` | No | Specific qubit indices to measure. Default: all | `[0, 2]` |
-| `shots` | `integer` | No | Number of measurement shots. Default: `1024` | `512` |
-
-### 4. Output Schema (Return Value)
-
-| Field Name | Type | Description | Example Value |
-| :--- | :--- | :--- | :--- |
-| `counts` | `object` | Bitstring to count mapping (only measured qubits) | `{"00": 256, "01": 256, "10": 256, "11": 256}` |
-| `measured_qubits` | `array[integer]` | Qubit indices that were measured | `[0, 2]` |
-| `shots` | `integer` | Total shots | `512` |
-
-### 5. Error Handling
-
-- `QUBIT_OUT_OF_RANGE`: Requested qubit index exceeds circuit size.
-- `INVALID_CIRCUIT`: Circuit definition is malformed.
-
-### 6. Idempotency
-
-- **Idempotent**: No. Measurement results are probabilistic.
-
-### 7. Usage Examples
-
-```json
-{
-  "tool_name": "quantum_measure",
-  "arguments": {
-    "circuit": {
-      "num_qubits": 3,
-      "gates": [
-        {"gate_type": "H", "target": 0},
-        {"gate_type": "CNOT", "target": 1, "control": 0},
-        {"gate_type": "CNOT", "target": 2, "control": 0}
-      ]
-    },
-    "qubits": [0, 1],
-    "shots": 2048
-  }
-}
-```
-
-### 8. Security Considerations
-
-- **Resource Limits**: Same O(2^n) memory constraint as `quantum_simulate`.
-- **Data Handling**: No state persisted between calls. No file system or network access.
 
 ---
 
@@ -216,3 +133,5 @@ Measures specific qubits in a previously simulated circuit state, returning coll
 - **API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
 - **Human Documentation**: [README.md](README.md)
 - **Parent Directory**: [codomyrmex](../README.md)
+
+<!-- markdownlint-configure-file { "MD024": { "siblings_only": true } } -->

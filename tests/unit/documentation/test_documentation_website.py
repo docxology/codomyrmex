@@ -304,7 +304,7 @@ class TestAggregateDocs:
         dest = tmp_path / "dest"
         aggregate_docs(source_root=str(src), dest_root=str(dest))
 
-        copied = dest / "my_module" / "readme.md"  # lowercased
+        copied = dest / "my_module" / "README.md"  # canonical casing
         assert copied.exists()
         assert copied.read_text() == "# My Module"
 
@@ -319,7 +319,7 @@ class TestAggregateDocs:
         dest = tmp_path / "dest"
         aggregate_docs(source_root=str(src), dest_root=str(dest))
 
-        copied = dest / "mod_a" / "api_specification.md"
+        copied = dest / "mod_a" / "API_SPECIFICATION.md"
         assert copied.exists()
         assert copied.read_text() == "## API"
 
@@ -334,7 +334,7 @@ class TestAggregateDocs:
         dest = tmp_path / "dest"
         aggregate_docs(source_root=str(src), dest_root=str(dest))
 
-        assert (dest / "mod_b" / "mcp_tool_specification.md").exists()
+        assert (dest / "mod_b" / "MCP_TOOL_SPECIFICATION.md").exists()
 
     def test_copies_usage_examples(self, tmp_path):
         from codomyrmex.documentation.documentation_website import aggregate_docs
@@ -347,7 +347,7 @@ class TestAggregateDocs:
         dest = tmp_path / "dest"
         aggregate_docs(source_root=str(src), dest_root=str(dest))
 
-        assert (dest / "mod_c" / "usage_examples.md").exists()
+        assert (dest / "mod_c" / "USAGE_EXAMPLES.md").exists()
 
     def test_copies_changelog(self, tmp_path):
         from codomyrmex.documentation.documentation_website import aggregate_docs
@@ -360,7 +360,7 @@ class TestAggregateDocs:
         dest = tmp_path / "dest"
         aggregate_docs(source_root=str(src), dest_root=str(dest))
 
-        assert (dest / "mod_d" / "changelog.md").exists()
+        assert (dest / "mod_d" / "CHANGELOG.md").exists()
 
     def test_copies_security(self, tmp_path):
         from codomyrmex.documentation.documentation_website import aggregate_docs
@@ -373,7 +373,7 @@ class TestAggregateDocs:
         dest = tmp_path / "dest"
         aggregate_docs(source_root=str(src), dest_root=str(dest))
 
-        assert (dest / "mod_e" / "security.md").exists()
+        assert (dest / "mod_e" / "SECURITY.md").exists()
 
     def test_skips_documentation_module(self, tmp_path):
         from codomyrmex.documentation.documentation_website import aggregate_docs
@@ -390,7 +390,7 @@ class TestAggregateDocs:
         # documentation module must be skipped
         assert not (dest / "documentation").exists()
         # other module must be present
-        assert (dest / "other_module" / "readme.md").exists()
+        assert (dest / "other_module" / "README.md").exists()
 
     def test_skips_non_directory_entries(self, tmp_path):
         from codomyrmex.documentation.documentation_website import aggregate_docs
@@ -458,7 +458,7 @@ class TestAggregateDocs:
         aggregate_docs(source_root=str(src), dest_root=str(dest))
 
         for name in ["alpha", "beta", "gamma"]:
-            assert (dest / name / "readme.md").exists()
+            assert (dest / name / "README.md").exists()
 
     def test_missing_optional_files_no_error(self, tmp_path):
         """Modules that lack optional doc files still work."""
@@ -711,7 +711,7 @@ class TestMainArgparse:
         finally:
             sys.argv = original_argv
 
-        assert (dest / "alpha" / "readme.md").read_text() == "# Alpha\n"
+        assert (dest / "alpha" / "README.md").read_text() == "# Alpha\n"
 
     def test_main_validate_docs_action(self):
         """main() with 'validate_docs' runs."""
@@ -774,7 +774,7 @@ class TestAggregateDocsEdgeCases:
         dest.mkdir()  # pre-create
 
         aggregate_docs(source_root=str(src), dest_root=str(dest))
-        assert (dest / "existing_mod" / "readme.md").exists()
+        assert (dest / "existing_mod" / "README.md").exists()
 
     def test_unrecognized_files_not_copied(self, tmp_path):
         """Files not in the recognized list are NOT copied."""
@@ -789,7 +789,7 @@ class TestAggregateDocsEdgeCases:
         dest = tmp_path / "dest"
         aggregate_docs(source_root=str(src), dest_root=str(dest))
 
-        assert (dest / "mymod" / "readme.md").exists()
+        assert (dest / "mymod" / "README.md").exists()
         assert not (dest / "mymod" / "random_file.txt").exists()
 
     def test_nested_docs_with_subdirectories(self, tmp_path):
@@ -806,3 +806,59 @@ class TestAggregateDocsEdgeCases:
         aggregate_docs(source_root=str(src), dest_root=str(dest))
 
         assert (dest / "deep_mod" / "docs" / "sub1" / "sub2" / "nested.md").exists()
+
+
+@pytest.mark.unit
+def test_default_aggregation_uses_canonical_root_in_real_copy(tmp_path):
+    """A relocated real script must not recreate the obsolete package mirror."""
+    import shutil
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    from codomyrmex.documentation import documentation_website
+
+    script = tmp_path / "src/codomyrmex/documentation/documentation_website.py"
+    script.parent.mkdir(parents=True)
+    shutil.copyfile(documentation_website.__file__, script)
+    source = tmp_path / "src/codomyrmex/example"
+    source.mkdir()
+    (source / "README.md").write_text("# Example\n")
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            "import runpy, sys; module = runpy.run_path(sys.argv[1]); module['aggregate_docs']()",
+            str(script),
+        ],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        timeout=30,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    assert (tmp_path / "docs/modules/example/README.md").read_text() == "# Example\n"
+    assert not (script.parent / "docs/modules").exists()
+
+
+@pytest.mark.unit
+@pytest.mark.parametrize("legacy_name", ["readme.md", "api_specification.md"])
+def test_legacy_destination_casing_fails_before_any_copy(tmp_path, legacy_name):
+    from codomyrmex.documentation.documentation_website import aggregate_docs
+
+    source = tmp_path / "src"
+    for name in ("first", "legacy"):
+        module = source / name
+        module.mkdir(parents=True)
+        (module / "README.md").write_text("# Source\n")
+        (module / "API_SPECIFICATION.md").write_text("# API\n")
+    dest = tmp_path / "dest"
+    legacy = dest / "legacy"
+    legacy.mkdir(parents=True)
+    (legacy / legacy_name).write_text("Keep this existing document\n")
+    with pytest.raises(FileExistsError, match="casing collision"):
+        aggregate_docs(str(source), str(dest))
+    assert not (dest / "first").exists()
+    assert sorted(path.name for path in legacy.iterdir()) == [legacy_name]
+    assert (legacy / legacy_name).read_text() == "Keep this existing document\n"

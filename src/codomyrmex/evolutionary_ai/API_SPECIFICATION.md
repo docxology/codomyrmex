@@ -45,47 +45,44 @@ The Evolutionary AI module provides genetic algorithm primitives for evolving AI
 
 ### Class: `Population`
 
-- **Description**: Manages a population of genomes.
+- **Description**: Manages a collection of `Individual` objects and evolves them generation by generation. Attributes: `individuals`, `generation` and `history` (one `GenerationStats` per generation).
 - **Constructor**:
-    - `size` (int): Population size.
-    - `genome_factory` (Callable, optional): Factory for creating genomes.
-    - `genomes` (list[Genome], optional): Initial genomes.
+    - `individuals` (list[Individual]): Initial individuals.
 - **Methods**:
 
-#### `initialize(genome_factory: Callable) -> None`
+#### `random_genome_population(size: int, genome_length: int, gene_low: float = 0.0, gene_high: float = 1.0) -> Population` (classmethod)
 
-- **Description**: Initialize population with random genomes.
+- **Description**: Create a population of random float-vector genomes.
 - **Parameters/Arguments**:
-    - `genome_factory` (Callable): Factory that creates random genomes.
+    - `size` (int): Number of individuals.
+    - `genome_length` (int): Number of genes per genome.
+    - `gene_low` (float): Lower bound for random gene values.
+    - `gene_high` (float): Upper bound for random gene values.
 
-#### `evaluate(fitness_func: Callable) -> None`
+#### `evaluate(fitness_fn: Callable[[Individual], float]) -> None`
 
-- **Description**: Evaluate fitness for all genomes.
+- **Description**: Evaluate fitness for all individuals.
 - **Parameters/Arguments**:
-    - `fitness_func` (Callable): Fitness evaluation function.
+    - `fitness_fn` (Callable): Takes an `Individual` and returns its fitness.
 
-#### `evolve(generations: int, operators: dict) -> EvolutionResult`
+#### `evolve(selection_operator: SelectionOperator | None = None, crossover_operator: CrossoverOperator | None = None, mutation_operator: MutationOperator | None = None, elitism: int = 2) -> GenerationStats`
 
-- **Description**: Evolve the population for multiple generations.
+- **Description**: Perform one generation of evolution. Call it in a loop for multiple generations.
 - **Parameters/Arguments**:
-    - `generations` (int): Number of generations.
-    - `operators` (dict): Genetic operators configuration.
+    - `selection_operator`: Selection operator (default: `TournamentSelection`).
+    - `crossover_operator`: Crossover operator (default: `SinglePointCrossover`).
+    - `mutation_operator`: Mutation operator (default: `GaussianMutation`).
+    - `elitism` (int): Number of top individuals carried over unchanged.
 - **Returns**:
-    - `EvolutionResult`: Evolution statistics.
+    - `GenerationStats`: `generation`, `best_fitness`, `mean_fitness`, `median_fitness`, `worst_fitness`, `std_fitness`, `diversity` and `population_size`.
 
-#### `get_best(n: int = 1) -> list[Genome]`
+#### `get_best() -> Individual`
 
-- **Description**: Get the best n genomes by fitness.
-- **Parameters/Arguments**:
-    - `n` (int): Number of genomes to return.
-- **Returns**:
-    - `list[Genome]`: Best genomes.
+- **Description**: Return the individual with the highest fitness (`get_worst()` returns the lowest).
 
-#### `get_statistics() -> PopulationStats`
+#### `is_converged(threshold: float = 1e-06, window: int = 5) -> bool`
 
-- **Description**: Get population statistics.
-- **Returns**:
-    - `PopulationStats`: Statistics (mean, std, min, max fitness).
+- **Description**: True when the best fitness has not improved by more than `threshold` over the last `window` generations. `mean_fitness()` and `to_dict()` summarize the current population.
 
 ### Function: `crossover()`
 
@@ -122,6 +119,7 @@ The Evolutionary AI module provides genetic algorithm primitives for evolving AI
 ## Data Models
 
 ### Model: `EvolutionResult`
+
 - `generations` (int): Number of generations evolved.
 - `best_fitness` (float): Best fitness achieved.
 - `best_genome` (Genome): Best genome found.
@@ -129,6 +127,7 @@ The Evolutionary AI module provides genetic algorithm primitives for evolving AI
 - `diversity_history` (list[float]): Population diversity per generation.
 
 ### Model: `PopulationStats`
+
 - `size` (int): Population size.
 - `mean_fitness` (float): Mean fitness.
 - `std_fitness` (float): Standard deviation of fitness.

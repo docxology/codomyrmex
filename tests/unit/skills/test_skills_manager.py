@@ -65,6 +65,14 @@ def _init_repo_with_skills(path: Path, skills: dict[str, dict]) -> None:
     )
 
 
+@pytest.fixture
+def local_skills_origin(temp_dir: Path) -> Path:
+    """Real local clone input for tests that need no public network service."""
+    origin = temp_dir / "local-origin"
+    _init_repo_with_skills(origin, {"baseline/skill": {"description": "Local origin"}})
+    return origin
+
+
 # ---- Tests ----
 
 
@@ -128,7 +136,7 @@ def test_sync_upstream(temp_dir):
 
 
 @pytest.mark.unit
-def test_get_skill(temp_dir):
+def test_get_skill(temp_dir, local_skills_origin):
     """Test getting a skill."""
     skills_dir = temp_dir / "skills"
     upstream_dir = skills_dir / "upstream" / "test-category" / "test-skill"
@@ -139,7 +147,9 @@ def test_get_skill(temp_dir):
     with open(skill_file, "w", encoding="utf-8") as f:
         yaml.dump(skill_data, f)
 
-    manager = SkillsManager(skills_dir, "https://github.com/test/repo", "main")
+    manager = SkillsManager(
+        skills_dir, str(local_skills_origin), "main", auto_sync=False
+    )
     manager.initialize()
 
     skill = manager.get_skill("test-category", "test-skill")
@@ -148,7 +158,7 @@ def test_get_skill(temp_dir):
 
 
 @pytest.mark.unit
-def test_list_skills(temp_dir):
+def test_list_skills(temp_dir, local_skills_origin):
     """Test listing skills."""
     skills_dir = temp_dir / "skills"
     upstream_dir = skills_dir / "upstream"
@@ -161,7 +171,9 @@ def test_list_skills(temp_dir):
         with open(skill_file, "w", encoding="utf-8") as f:
             yaml.dump({"description": f"Skill {i}"}, f)
 
-    manager = SkillsManager(skills_dir, "https://github.com/test/repo", "main")
+    manager = SkillsManager(
+        skills_dir, str(local_skills_origin), "main", auto_sync=False
+    )
     manager.initialize()
 
     skills = manager.list_skills()
@@ -173,7 +185,7 @@ def test_list_skills(temp_dir):
 
 
 @pytest.mark.unit
-def test_search_skills(temp_dir):
+def test_search_skills(temp_dir, local_skills_origin):
     """Test searching skills."""
     skills_dir = temp_dir / "skills"
     upstream_dir = skills_dir / "upstream"
@@ -188,7 +200,9 @@ def test_search_skills(temp_dir):
     with open(skill_file, "w", encoding="utf-8") as f:
         yaml.dump(skill_data, f)
 
-    manager = SkillsManager(skills_dir, "https://github.com/test/repo", "main")
+    manager = SkillsManager(
+        skills_dir, str(local_skills_origin), "main", auto_sync=False
+    )
     manager.initialize()
 
     results = manager.search_skills("authentication")
@@ -196,12 +210,15 @@ def test_search_skills(temp_dir):
 
 
 @pytest.mark.unit
-def test_add_custom_skill(temp_dir):
+def test_add_custom_skill(temp_dir, local_skills_origin):
     """Test adding a custom skill."""
     skills_dir = temp_dir / "skills"
 
-    manager = SkillsManager(skills_dir, "https://github.com/test/repo", "main")
-    manager.initialize()
+    manager = SkillsManager(
+        skills_dir, str(local_skills_origin), "main", auto_sync=False
+    )
+    assert manager.initialize() is True
+    assert (skills_dir / "upstream" / "baseline" / "skill" / "skill.yaml").is_file()
 
     skill_data = {
         "description": "Custom skill",
@@ -222,7 +239,7 @@ def test_add_custom_skill(temp_dir):
 
 
 @pytest.mark.unit
-def test_get_categories(temp_dir):
+def test_get_categories(temp_dir, local_skills_origin):
     """Test getting categories."""
     skills_dir = temp_dir / "skills"
     upstream_dir = skills_dir / "upstream"
@@ -235,7 +252,9 @@ def test_get_categories(temp_dir):
         with open(skill_file, "w", encoding="utf-8") as f:
             yaml.dump({"description": "Test"}, f)
 
-    manager = SkillsManager(skills_dir, "https://github.com/test/repo", "main")
+    manager = SkillsManager(
+        skills_dir, str(local_skills_origin), "main", auto_sync=False
+    )
     manager.initialize()
 
     categories = manager.get_categories()

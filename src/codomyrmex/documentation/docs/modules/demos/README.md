@@ -18,7 +18,7 @@ Centralized registry and orchestration for system demonstrations.
 
 ## Module Documentation
 
-- Extended README: [readme.md](readme.md)
+- Extended README: [extended_readme.md](extended_readme.md)
 - Agent coordination: [AGENTS.md](AGENTS.md)
 
 ## Navigation

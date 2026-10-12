@@ -1,8 +1,16 @@
 # Formal Verification — Changelog
 
+## [Unreleased]
+
+- Restrict model evaluation to explicit constructors/operators and approved
+  engine/expression methods. Reject module/native/filesystem/global access and
+  logging constructors, with subprocess-isolated negative controls.
+- Correct solver timeout and process-isolation documentation.
+
 ## [0.1.0] - 2026-02-17
 
 ### Added
+
 - Initial module implementation
 - Z3 SMT solver backend via z3-solver pip package
 - Z3 source as git submodule at vendor/z3/
@@ -17,6 +25,7 @@
 - Unit test suite
 
 ### References
+
 - Inspired by PAI Discussion #707 (Spirotot)
 - mcp-solver architecture: github.com/szeider/mcp-solver
 - Z3 Prover: github.com/Z3Prover/z3

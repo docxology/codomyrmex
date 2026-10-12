@@ -38,14 +38,8 @@ def cli_commands():
             ),
         },
         "health": {
-            "help": "Show system health status across all modules",
-            "handler": lambda **kwargs: print(
-                "System Health Check:\n"
-                "  Discovery engine: available\n"
-                "  Capability scanner: available\n"
-                "  Status reporter: available\n"
-                "  System context: available"
-            ),
+            "help": "Run the module health checks and show each module's status",
+            "handler": lambda **kwargs: _print_health_checks(),
         },
         "catalog": {
             "help": "Show top-level source module catalog counts and parity gaps",
@@ -56,6 +50,15 @@ def cli_commands():
             "handler": lambda **kwargs: print(audit_module_structure().to_markdown()),
         },
     }
+
+
+def _print_health_checks() -> None:
+    """Run every dedicated module health check and print the results."""
+    lines = ["System Health Check:"]
+    for name, result in HealthChecker().run_checks().items():
+        lines.append(f"  {name}: {result.status.value}")
+        lines.extend(f"    - {issue}" for issue in result.issues)
+    print("\n".join(lines))
 
 
 def _print_module_catalog() -> None:

@@ -4,9 +4,16 @@ Uses real networking clients and servers where possible, with skip markers
 for tests requiring external services.
 """
 
+from __future__ import annotations
+
+import os
 import socket
+from typing import TYPE_CHECKING
 
 import pytest
+
+if TYPE_CHECKING:
+    from codomyrmex.networking.ssh_sftp import SSHClient as SSHClientType
 
 try:
     from codomyrmex.networking import PortScanner, SSHClient, TCPClient, UDPClient
@@ -20,41 +27,22 @@ pytestmark = pytest.mark.skipif(
     reason="networking dependencies (paramiko, etc.) not installed",
 )
 
-# Check for real SSH
-_HAS_SSH = False
-try:
-    s = socket.create_connection(("localhost", 22), timeout=0.5)
-    s.close()
-    _HAS_SSH = True
-except Exception:
-    pass
-
 requires_ssh = pytest.mark.skipif(
-    not _HAS_SSH,
-    reason="SSH server not available on localhost:22",
+    os.environ.get("CODOMYRMEX_RUN_LIVE_SSH_TESTS") != "1",
+    reason="Credentialed SSH requires CODOMYRMEX_RUN_LIVE_SSH_TESTS=1",
 )
 
 
 @pytest.mark.unit
 @requires_ssh
-def test_ssh_client_logic():
-    """Test SSHClient command execution with a real SSH connection."""
-    # Skip if no proper credentials (this requires key-based auth)
-    import os
-
-    key_path = os.path.expanduser("~/.ssh/id_rsa")
-    if not os.path.exists(key_path):
-        pytest.skip("No SSH key found at ~/.ssh/id_rsa")
-
-    username = os.environ.get("USER", os.environ.get("USERNAME", ""))
-    if not username:
-        pytest.skip("Cannot determine current username")
-
-    client = SSHClient("localhost", username, key_filename=key_path)
-    client.connect()
-    status, out, _err = client.execute_command("echo hello world")
-    client.close()
-
+def test_ssh_client_logic(live_ssh_client: SSHClientType):
+    """Use only the explicitly configured live account and trust store."""
+    client = live_ssh_client
+    try:
+        client.connect()
+        status, out, _err = client.execute_command("echo hello world")
+    finally:
+        client.close()
     assert status == 0
     assert "hello world" in out
 

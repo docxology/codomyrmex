@@ -7,22 +7,15 @@ Covers:
     provider init fails — exercised without real Google credentials)
   - MCP tool schemas are registered (decorator present)
 
-Live Google Calendar API tests are module-level guarded by GOOGLE_CALENDAR_TOKEN_FILE
-or GOOGLE_CLIENT_ID env var; skipped when credentials are absent.
+Live API tests require CODOMYRMEX_RUN_LIVE_CALENDAR_TESTS=1 before credential
+acquisition. Default tests use explicit absent token and ADC files.
 """
 
 import os
 
 import pytest
 
-# ── Module-level guard for live tests ────────────────────────────────────────
-
-_HAS_LIVE_CREDS = bool(
-    os.environ.get("GOOGLE_CLIENT_ID") and os.environ.get("GOOGLE_CLIENT_SECRET")
-)
-
 # ── Import the module under test ─────────────────────────────────────────────
-
 from codomyrmex.calendar_integration.mcp_tools import (
     _get_provider,
     _with_default_attendee,
@@ -116,89 +109,38 @@ class TestGetProviderErrors:
     """
 
     def test_raises_when_no_token_file(self):
-        """Raises RuntimeError when gcal_token.json does not exist."""
-        # Ensure token file is absent by using a path that cannot exist
-
-        # Temporarily redirect home-based token path by patching Path.home
-        # WITHOUT monkeypatch — we check the real error: token path absent
-        # Since we cannot control ~/.codomyrmex/gcal_token.json easily without
-        # monkeypatch, we test via a real temp dir scenario using subprocess-free
-        # introspection of the exception raised.
-        #
-        # Strategy: If the token file doesn't exist on this machine, calling
-        # _get_provider() raises RuntimeError about authentication.
-        # If it does exist but creds aren't set, it raises about env vars.
-        # Either way, it must raise RuntimeError.
-        try:
+        """Real ADC lookup fails on the explicitly selected absent credential file."""
+        with pytest.raises(
+            RuntimeError, match="not authenticated|dependencies not installed"
+        ):
             _get_provider()
-            pytest.skip("Real credentials present — skipping error path test")
-        except RuntimeError as exc:
-            # Any RuntimeError is the expected error path
-            assert str(exc)  # non-empty message
-        except ImportError:
-            pytest.skip("Google Calendar deps not installed")
 
     def test_runtime_error_message_is_informative(self):
-        """RuntimeError from _get_provider must have a non-trivial message."""
-        try:
+        with pytest.raises(RuntimeError) as exc_info:
             _get_provider()
-            pytest.skip("Real credentials present")
-        except RuntimeError as exc:
-            msg = str(exc)
-            assert len(msg) > 10, f"Error message too short: {msg!r}"
-        except ImportError:
-            pytest.skip("Google Calendar deps not installed")
+        assert len(str(exc_info.value)) > 10
 
 
 @pytest.mark.unit
 class TestGetProviderMalformedToken:
-    """Tests for provider initialization with malformed tokens.
+    """Exercise real selected token files without changing HOME or Path.home."""
 
-    Verifies handling of invalid JSON in the token file. Conforms to the
-    Zero-Mock policy by using real temporary files and Path.home
-    replacement (via direct attribute surgery) instead of monkeypatch.
-    """
-
-    def test_malformed_json_raises_runtime_error(
-        self, tmp_path, monkeypatch: pytest.MonkeyPatch
-    ):
-        """Write a malformed JSON token and verify RuntimeError is raised."""
-        from pathlib import Path as _Path
-
-        # Build a fake token path with invalid JSON
-        fake_dir = tmp_path / ".codomyrmex"
-        fake_dir.mkdir()
-        token_file = fake_dir / "gcal_token.json"
+    def test_malformed_json_raises_runtime_error(self, tmp_path, monkeypatch):
+        token_file = tmp_path / "token.json"
         token_file.write_text("{ not valid json !!!}")
+        monkeypatch.setenv("GOOGLE_CALENDAR_TOKEN_FILE", str(token_file))
+        with pytest.raises(
+            RuntimeError,
+            match="Failed to read calendar token|dependencies not installed",
+        ):
+            _get_provider()
 
-        monkeypatch.setattr(_Path, "home", staticmethod(lambda: tmp_path))
-        try:
-            with pytest.raises(RuntimeError) as exc_info:
-                _get_provider()
-            msg = str(exc_info.value)
-            # Either "not authenticated" (token not found at new path lookup)
-            # or "Failed to read calendar token" — both are valid RuntimeError paths
-            assert len(msg) > 5
-        except ImportError:
-            pytest.skip("Google Calendar deps not installed")
-
-    def test_no_token_file_raises_runtime_error(
-        self, tmp_path, monkeypatch: pytest.MonkeyPatch
-    ):
-        """No token file in the expected location raises RuntimeError."""
-        from pathlib import Path as _Path
-
-        # tmp_path has no .codomyrmex subdir — token cannot exist
-        monkeypatch.setattr(_Path, "home", staticmethod(lambda: tmp_path))
-        try:
-            with pytest.raises(RuntimeError) as exc_info:
-                _get_provider()
-            msg = str(exc_info.value)
-            if "dependencies not installed" in msg:
-                pytest.skip("Google Calendar deps not installed")
-            assert "not authenticated" in msg
-        except ImportError:
-            pytest.skip("Google Calendar deps not installed")
+    def test_no_token_file_raises_runtime_error(self, tmp_path, monkeypatch):
+        monkeypatch.setenv("GOOGLE_CALENDAR_TOKEN_FILE", str(tmp_path / "missing.json"))
+        with pytest.raises(
+            RuntimeError, match="not authenticated|dependencies not installed"
+        ):
+            _get_provider()
 
 
 # ── MCP tool error-return paths ───────────────────────────────────────────────
@@ -217,8 +159,6 @@ class TestCalendarListEventsErrorPath:
         assert isinstance(result, dict)
         assert "status" in result
         # Without credentials, must be error
-        if result["status"] == "success":
-            pytest.skip("Live credentials present")
         assert result["status"] == "error"
         assert "message" in result
         assert isinstance(result["message"], str)
@@ -230,7 +170,7 @@ class TestCalendarListEventsErrorPath:
 
     def test_default_days_ahead_accepted(self):
         result = calendar_list_events()
-        assert result["status"] in ("success", "error")
+        assert result["status"] == "error"
 
 
 @pytest.mark.unit
@@ -249,8 +189,6 @@ class TestCalendarCreateEventErrorPath:
         )
         assert isinstance(result, dict)
         assert "status" in result
-        if result["status"] == "success":
-            pytest.skip("Live credentials present")
         assert result["status"] == "error"
         assert "message" in result
 
@@ -262,7 +200,7 @@ class TestCalendarCreateEventErrorPath:
             description="Weekly sync",
             location="Room 42",
         )
-        assert result["status"] in ("success", "error")
+        assert result["status"] == "error"
 
     def test_with_attendees_list(self):
         result = calendar_create_event(
@@ -271,7 +209,7 @@ class TestCalendarCreateEventErrorPath:
             end_time="2026-05-01T10:00:00",
             attendees=["user@example.com"],
         )
-        assert result["status"] in ("success", "error")
+        assert result["status"] == "error"
 
 
 @pytest.mark.unit
@@ -286,14 +224,12 @@ class TestCalendarGetEventErrorPath:
         result = calendar_get_event("fake_event_id_xyz_12345")
         assert isinstance(result, dict)
         assert "status" in result
-        if result["status"] == "success":
-            pytest.skip("Live credentials present")
         assert result["status"] == "error"
         assert "message" in result
 
     def test_empty_event_id_handled(self):
         result = calendar_get_event("")
-        assert result["status"] in ("success", "error")
+        assert result["status"] == "error"
 
 
 @pytest.mark.unit
@@ -308,8 +244,6 @@ class TestCalendarDeleteEventErrorPath:
         result = calendar_delete_event("fake_event_id_xyz_12345")
         assert isinstance(result, dict)
         assert "status" in result
-        if result["status"] == "success":
-            pytest.skip("Live credentials present")
         assert result["status"] == "error"
         assert "message" in result
 
@@ -330,8 +264,6 @@ class TestCalendarUpdateEventErrorPath:
         )
         assert isinstance(result, dict)
         assert "status" in result
-        if result["status"] == "success":
-            pytest.skip("Live credentials present")
         assert result["status"] == "error"
         assert "message" in result
 
@@ -345,7 +277,7 @@ class TestCalendarUpdateEventErrorPath:
             location="New loc",
             attendees=["a@example.com"],
         )
-        assert result["status"] in ("success", "error")
+        assert result["status"] == "error"
 
 
 # ── MCP decorator registration ────────────────────────────────────────────────
@@ -394,16 +326,16 @@ class TestMcpToolRegistration:
 # ── Live integration tests (skipped without credentials) ──────────────────────
 
 
-@pytest.mark.unit
+@pytest.mark.network
 @pytest.mark.skipif(
-    not _HAS_LIVE_CREDS,
-    reason="GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET not set — skipping live calendar tests",
+    os.environ.get("CODOMYRMEX_RUN_LIVE_CALENDAR_TESTS") != "1",
+    reason="Live calendar reads require CODOMYRMEX_RUN_LIVE_CALENDAR_TESTS=1",
 )
 class TestCalendarToolsLive:
     """Live integration tests for calendar MCP tools.
 
-    These tests run only when real Google credentials are provided in
-    the environment. They interact with the live API, following the
+    These tests run only after explicit live-test opt-in and use credentials
+    selected by the operator. They interact with the live API, following the
     Zero-Mock policy for integration verification.
     """
 
@@ -411,11 +343,13 @@ class TestCalendarToolsLive:
         result = calendar_list_events(days_ahead=1)
         assert result["status"] == "success"
         assert "events" in result
-        assert isinstance(result["events"], list)
+        events_type = type(result["events"])
+        assert events_type is list
 
     def test_event_fields_present(self):
         result = calendar_list_events(days_ahead=7)
-        if result["status"] == "success":
-            for event in result["events"]:
-                for key in ("id", "summary", "start_time", "end_time"):
-                    assert key in event
+        assert result["status"] == "success", "Live calendar list failed"
+        for event in result["events"]:
+            keys = set(event)
+            for key in ("id", "summary", "start_time", "end_time"):
+                assert key in keys, "Live calendar event schema was incomplete"

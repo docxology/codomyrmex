@@ -4,13 +4,26 @@ Rate Limiters
 Rate limiter implementations: fixed window, sliding window, token bucket.
 """
 
+import math
 import threading
 import time
 from abc import ABC, abstractmethod
 from collections import deque
+from collections.abc import Callable
 from datetime import datetime, timedelta
 
 from .models import RateLimitExceeded, RateLimitResult
+
+
+def _validate_cost(cost: int) -> None:
+    """Costs count quota units; zero is an explicit no-op."""
+    if isinstance(cost, bool) or not isinstance(cost, int) or cost < 0:
+        raise ValueError("cost must be a non-negative integer")
+
+
+def _validate_positive_integer(value: int, name: str) -> None:
+    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+        raise ValueError(f"{name} must be a positive integer")
 
 
 class RateLimiter(ABC):
@@ -58,6 +71,8 @@ class FixedWindowLimiter(RateLimiter):
     """Fixed window rate limiter."""
 
     def __init__(self, limit: int, window_seconds: int):
+        _validate_positive_integer(limit, "limit")
+        _validate_positive_integer(window_seconds, "window_seconds")
         self.limit = limit
         self.window_seconds = window_seconds
         self._counts: dict[str, tuple[int, datetime]] = {}
@@ -72,6 +87,7 @@ class FixedWindowLimiter(RateLimiter):
 
     def check(self, key: str, cost: int = 1) -> RateLimitResult:
         """Check without consuming."""
+        _validate_cost(cost)
         window_start = self._get_window_start()
         reset_at = window_start + timedelta(seconds=self.window_seconds)
 
@@ -85,10 +101,13 @@ class FixedWindowLimiter(RateLimiter):
                         remaining=remaining,
                         limit=self.limit,
                         reset_at=reset_at,
+                        retry_after=(reset_at - datetime.now()).total_seconds()
+                        if remaining < cost <= self.limit
+                        else None,
                     )
 
             return RateLimitResult(
-                allowed=True,
+                allowed=self.limit >= cost,
                 remaining=self.limit,
                 limit=self.limit,
                 reset_at=reset_at,
@@ -96,6 +115,7 @@ class FixedWindowLimiter(RateLimiter):
 
     def acquire(self, key: str, cost: int = 1) -> RateLimitResult:
         """Acquire quota."""
+        _validate_cost(cost)
         window_start = self._get_window_start()
         reset_at = window_start + timedelta(seconds=self.window_seconds)
 
@@ -134,47 +154,75 @@ class FixedWindowLimiter(RateLimiter):
 class SlidingWindowLimiter(RateLimiter):
     """Sliding window rate limiter."""
 
-    def __init__(self, limit: int, window_seconds: int):
+    def __init__(
+        self,
+        limit: int,
+        window_seconds: int,
+        *,
+        clock: Callable[[], float] = time.monotonic,
+    ):
+        _validate_positive_integer(limit, "limit")
+        _validate_positive_integer(window_seconds, "window_seconds")
         self.limit = limit
         self.window_seconds = window_seconds
-        self._requests: dict[str, deque] = {}
+        self._clock = clock
+        self._requests: dict[str, deque[float]] = {}
         self._lock = threading.Lock()
 
     def _clean_old_requests(self, key: str, now: float) -> None:
         """Remove expired requests from window."""
-        if key not in self._requests:
+        queue = self._requests.get(key)
+        if not queue:
             return
         cutoff = now - self.window_seconds
-        while self._requests[key] and self._requests[key][0] < cutoff:
-            self._requests[key].popleft()
+        while queue and queue[0] < cutoff:
+            queue.popleft()
 
     def check(self, key: str, cost: int = 1) -> RateLimitResult:
         """Check without consuming."""
-        now = time.time()
+        _validate_cost(cost)
         with self._lock:
+            now = self._clock()
             self._clean_old_requests(key, now)
             current_count = len(self._requests.get(key, []))
             remaining = max(0, self.limit - current_count)
+            retry_after = None
+            if remaining < cost <= self.limit:
+                required_expirations = current_count + cost - self.limit
+                retry_after = (
+                    self._requests[key][required_expirations - 1]
+                    + self.window_seconds
+                    - now
+                )
             return RateLimitResult(
                 allowed=remaining >= cost,
                 remaining=remaining,
                 limit=self.limit,
-                reset_at=datetime.fromtimestamp(now + self.window_seconds),
+                reset_at=datetime.now() + timedelta(seconds=self.window_seconds),
+                retry_after=retry_after,
             )
 
     def acquire(self, key: str, cost: int = 1) -> RateLimitResult:
         """Acquire quota."""
-        now = time.time()
+        _validate_cost(cost)
         with self._lock:
+            now = self._clock()
             if key not in self._requests:
                 self._requests[key] = deque()
             self._clean_old_requests(key, now)
             current_count = len(self._requests[key])
             if current_count + cost > self.limit:
-                if self._requests[key]:
-                    retry_after = self._requests[key][0] + self.window_seconds - now
+                if cost <= self.limit:
+                    required_expirations = current_count + cost - self.limit
+                    retry_after = (
+                        self._requests[key][required_expirations - 1]
+                        + self.window_seconds
+                        - now
+                    )
                 else:
-                    retry_after = self.window_seconds
+                    # No amount of waiting makes a request larger than the
+                    # configured quota possible.
+                    retry_after = None
                 raise RateLimitExceeded(
                     f"Rate limit exceeded for {key}",
                     retry_after=retry_after,
@@ -186,7 +234,7 @@ class SlidingWindowLimiter(RateLimiter):
                 allowed=True,
                 remaining=remaining,
                 limit=self.limit,
-                reset_at=datetime.fromtimestamp(now + self.window_seconds),
+                reset_at=datetime.now() + timedelta(seconds=self.window_seconds),
             )
 
     def reset(self, key: str) -> None:
@@ -205,7 +253,20 @@ class TokenBucketLimiter(RateLimiter):
         refill_rate: float,
         refill_interval: float = 1.0,
         initial_tokens: int | None = None,
+        *,
+        clock: Callable[[], float] = time.monotonic,
     ):
+        _validate_positive_integer(capacity, "capacity")
+        if not math.isfinite(refill_rate) or refill_rate <= 0:
+            raise ValueError("refill_rate must be finite and positive")
+        if not math.isfinite(refill_interval) or refill_interval <= 0:
+            raise ValueError("refill_interval must be finite and positive")
+        if initial_tokens is not None and (
+            isinstance(initial_tokens, bool)
+            or not isinstance(initial_tokens, int)
+            or not 0 <= initial_tokens <= capacity
+        ):
+            raise ValueError("initial_tokens must be an integer between 0 and capacity")
         self.capacity = capacity
         self.refill_rate = refill_rate
         self.refill_interval = refill_interval
@@ -213,17 +274,18 @@ class TokenBucketLimiter(RateLimiter):
             initial_tokens if initial_tokens is not None else capacity
         )
         self._buckets: dict[str, tuple[float, float]] = {}
+        self._clock = clock
         self._lock = threading.Lock()
 
     def _get_tokens(self, key: str) -> float:
         """Get current token count for key."""
-        now = time.time()
+        now = self._clock()
         if key not in self._buckets:
             # Initialize the bucket on first access
             self._buckets[key] = (float(self._initial_tokens), now)
             return float(self._initial_tokens)
         tokens, last_update = self._buckets[key]
-        elapsed = now - last_update
+        elapsed = max(0.0, now - last_update)
         refilled = (elapsed / self.refill_interval) * self.refill_rate
         current = min(self.capacity, tokens + refilled)
         # Update the stored state so future calls see the refill
@@ -232,27 +294,35 @@ class TokenBucketLimiter(RateLimiter):
 
     def check(self, key: str, cost: int = 1) -> RateLimitResult:
         """Check without consuming."""
+        _validate_cost(cost)
         with self._lock:
             tokens = self._get_tokens(key)
             return RateLimitResult(
                 allowed=tokens >= cost,
                 remaining=int(tokens),
                 limit=self.capacity,
+                retry_after=((cost - tokens) / self.refill_rate) * self.refill_interval
+                if tokens < cost <= self.capacity
+                else None,
             )
 
     def acquire(self, key: str, cost: int = 1) -> RateLimitResult:
         """Acquire tokens."""
-        now = time.time()
+        _validate_cost(cost)
         with self._lock:
             tokens = self._get_tokens(key)
             if tokens < cost:
                 needed = cost - tokens
-                retry_after = (needed / self.refill_rate) * self.refill_interval
+                retry_after = (
+                    (needed / self.refill_rate) * self.refill_interval
+                    if cost <= self.capacity
+                    else None
+                )
                 raise RateLimitExceeded(
                     f"Rate limit exceeded for {key}",
                     retry_after=retry_after,
                 )
-            self._buckets[key] = (tokens - cost, now)
+            self._buckets[key] = (tokens - cost, self._buckets[key][1])
             return RateLimitResult(
                 allowed=True,
                 remaining=int(tokens - cost),
@@ -287,6 +357,7 @@ class CompositeRateLimiter(RateLimiter):
 
         Returns the most restrictive result (lowest remaining).
         """
+        _validate_cost(cost)
         most_restrictive = None
         for limiter in self.limiters.values():
             result = limiter.check(key, cost)
@@ -302,9 +373,17 @@ class CompositeRateLimiter(RateLimiter):
     def acquire(self, key: str, cost: int = 1) -> RateLimitResult:
         """Acquire quota from all limiters.
 
-        All limiters must allow the request. If any raises
-        RateLimitExceeded, the exception propagates.
+        Preflight every limiter before consuming. Independent limiters can
+        change between check and acquire; this is not a rollback transaction.
         """
+        _validate_cost(cost)
+        for limiter in self.limiters.values():
+            result = limiter.check(key, cost)
+            if not result.allowed:
+                raise RateLimitExceeded(
+                    f"Composite rate limit exceeded for {key}",
+                    retry_after=result.retry_after,
+                )
         results = []
         for limiter in self.limiters.values():
             results.append(limiter.acquire(key, cost))
@@ -334,13 +413,14 @@ class RateLimiterMiddleware:
         """Acquire quota, returning a result instead of raising."""
         try:
             return self.limiter.acquire(key, cost)
-        except RateLimitExceeded:
+        except RateLimitExceeded as exc:
             result = self.limiter.check(key, cost)
             return RateLimitResult(
                 allowed=False,
                 remaining=result.remaining,
                 limit=result.limit,
                 reset_at=result.reset_at,
+                retry_after=exc.retry_after,
             )
 
     def would_allow(self, key: str, cost: int = 1) -> bool:

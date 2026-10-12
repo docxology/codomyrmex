@@ -16,7 +16,7 @@ Text-to-SQL engine -- schema-aware natural language to SQL query generation.
 
 ## Module Documentation
 
-- Extended README: [readme.md](readme.md)
+- Extended README: [extended_readme.md](extended_readme.md)
 - Agent coordination: [AGENTS.md](AGENTS.md)
 
 ## Navigation

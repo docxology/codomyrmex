@@ -30,7 +30,11 @@ class QuotaManager:
         }
 
     def acquire_all(self, key: str, cost: int = 1) -> dict[str, RateLimitResult]:
-        """Acquire from all limiters (atomic)."""
+        """Preflight then acquire sequentially; shared limiters are not atomic.
+
+        Concurrent callers can change quota between these operations. A later
+        rejection can leave earlier acquisitions consumed; no rollback occurs.
+        """
         # First check all
         for name, limiter in self._limiters.items():
             result = limiter.check(key, cost)

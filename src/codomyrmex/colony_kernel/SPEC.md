@@ -31,7 +31,7 @@ All shared types are defined in `models.py`. Canonical subsystem implementations
 **Source trust multipliers applied on deposit**:
 
 | Source | Multiplier |
-|--------|-----------|
+| -------- | ----------- |
 | HUMAN | 2.0 |
 | TEST | 1.5 |
 | SECURITY | 1.5 |
@@ -48,7 +48,7 @@ clamps them. These are distinct input and stored-state bounds, not a claim about
 biological pheromone concentration.
 
 | Method | Inputs | Output | Invariants |
-|--------|--------|--------|------------|
+| -------- | -------- | -------- | ------------ |
 | `deposit(signal, trust_factor=1.0)` | `ColonySignal`, `float` | `None` | Effective strength ≥ 0; compound key created or reinforced |
 | `reinforce(location, signal_type)` | `str`, `SignalType` | `None` | No-op if key absent |
 | `sense(location, signal_type)` | `str`, `SignalType` | `float` | Returns 0.0 if absent; never raises |
@@ -67,7 +67,7 @@ biological pheromone concentration.
 **Seven cost dimensions** (all in `ResourceCost`):
 
 | Dimension | Type | Fraction constraint |
-|-----------|------|---------------------|
+| ----------- | ------ | --------------------- |
 | `llm_calls` | int | ≥ 0 |
 | `runtime_seconds` | float | ≥ 0.0 |
 | `risk_level` | float | [0.0, 1.0] |
@@ -77,7 +77,7 @@ biological pheromone concentration.
 | `security_exposure` | float | [0.0, 1.0] |
 
 | Method | Inputs | Output | Invariants |
-|--------|--------|--------|------------|
+| -------- | -------- | -------- | ------------ |
 | `check_budget(estimate)` | `ResourceCost` | `(bool, str)` | Does not modify accumulator; returns (True, "within budget") or (False, "<dimension> projected … > ceiling …") |
 | `consume(cost)` | `ResourceCost` | `None` | Adds to accumulator; may trigger `_maybe_reset` if period elapsed |
 | `usage_summary()` | — | `dict` | Returns all dimensions as {"used": …, "max": …} pairs plus `period_start` |
@@ -95,7 +95,7 @@ biological pheromone concentration.
 
 **Gate score formula**:
 
-```
+```text
 gate_score = (
     budget_ok    * 0.30
   + risk_ok      * 0.30
@@ -106,7 +106,8 @@ gate_score = clamp(gate_score, 0.0, 1.0)
 ```
 
 **Local hazard component**:
-```
+
+```text
 effective_hazard = max(
     PheromoneStore.sense(target, RISK),
     PheromoneStore.sense(target, FAILURE),
@@ -119,7 +120,7 @@ risk_ok = 0.0 if effective_hazard >= 6.0
 **Falsification penalty** (max weight across all findings):
 
 | Severity | Weight |
-|----------|--------|
+| ---------- | -------- |
 | LOW | 0.05 |
 | MEDIUM | 0.20 |
 | HIGH | 0.45 |
@@ -128,7 +129,7 @@ risk_ok = 0.0 if effective_hazard >= 6.0
 **Routing thresholds**:
 
 | Condition | Decision |
-|-----------|----------|
+| ----------- | ---------- |
 | `budget_approved == False` supplied by kernel | HOLD |
 | standalone ledger budget check fails | REFUSE |
 | `profile.role == SANDBOX` | REFUSE (unconditional) |
@@ -139,7 +140,7 @@ risk_ok = 0.0 if effective_hazard >= 6.0
 | `gate_score < 0.50` | REFUSE |
 
 | Method | Inputs | Output |
-|--------|--------|--------|
+| -------- | -------- | -------- |
 | `evaluate(proposal, profile, findings, budget_approved)` | `ActionProposal`, `AgentTrustProfile`, `list[FalsificationFinding]`, `bool` | `GateResult` |
 
 ---
@@ -151,12 +152,14 @@ risk_ok = 0.0 if effective_hazard >= 6.0
 **Purpose**: SQLite-backed storage for accepted consequence records and per-agent trust profiles. The ordinary path is caller-supplied and unlinked. Optional/required kernel attestation can validate the local lifecycle before a record reaches this store, but `ConsequenceMemory` itself is not an execution witness. The default `:memory:` database lasts only for one process.
 
 **Schema**:
+
 - `consequences` — one row per `ConsequenceRecord`
 - `agent_profiles` — one row per agent; upserted on every `record()` call
 - `consequence_history` — chronological ordered mapping of agent_id → consequence_id; capped at 200 rows per agent
 
 **Trust delta algorithm**:
-```
+
+```text
 delta  = +0.04   if tests_passed  else  -0.08
 delta += -0.05   if repair_needed
 delta +=  human_feedback × 0.03   (human_feedback ∈ [-1.0, 1.0])
@@ -165,7 +168,7 @@ delta +=  human_feedback × 0.03   (human_feedback ∈ [-1.0, 1.0])
 Resulting delta is applied to `trust_score` via `AgentTrustProfile.apply_delta`, which clamps to [0.0, 1.0].
 
 | Method | Inputs | Output | Invariants |
-|--------|--------|--------|------------|
+| -------- | -------- | -------- | ------------ |
 | `record(record)` | `ConsequenceRecord` | `ConsequenceRecord` | Computes trust_delta if 0.0; persists atomically; returns record with trust_delta populated |
 | `get_profile(agent_id)` | `str` | `AgentTrustProfile` | Creates SANDBOX default if agent unknown; never raises |
 | `recent_consequences(limit=10)` | `int` | `list[dict]` | Most recent rows descending by recorded_at |
@@ -182,7 +185,7 @@ Resulting delta is applied to `trust_score` via `AgentTrustProfile.apply_delta`,
 **Promotion ladder**:
 
 | Condition | Role |
-|-----------|------|
+| ----------- | ------ |
 | `total_proposals < 3` (regardless of trust) | SANDBOX |
 | `trust_score ≥ 0.70` | GUARD_ANT |
 | `trust_score ≥ 0.50` | DISPATCHER |
@@ -191,7 +194,7 @@ Resulting delta is applied to `trust_score` via `AgentTrustProfile.apply_delta`,
 | Otherwise | SANDBOX |
 
 | Method | Inputs | Output | Invariants |
-|--------|--------|--------|------------|
+| -------- | -------- | -------- | ------------ |
 | `infer_role(profile)` | `AgentTrustProfile` | `AgentRole` | Pure function; no side effects |
 | `update(profile)` | `AgentTrustProfile` (mutated in place) | `bool` | Returns True if role changed; updates `profile.role` and `profile.last_updated` |
 
@@ -208,7 +211,7 @@ explicitly reviewed path into `docs/plans/archived/`.
 **Pruning criteria**:
 
 | Criterion | Confidence | Condition |
-|-----------|-----------|-----------|
+| ----------- | ----------- | ----------- |
 | Never used | 0.90 | `call_count == 0 and last_used == 0.0` |
 | Duplicate | 0.85 | `duplicate_of` field is set |
 | No calls for >30 days | 0.70 | `call_count == 0`, nonzero `last_used`, and age > 30 days |
@@ -220,7 +223,7 @@ strength ≥ 2.0 are not nominated.
 **Minimum reported confidence**: 0.50 (candidates below this threshold are suppressed).
 
 | Method | Inputs | Output | Invariants |
-|--------|--------|--------|------------|
+| -------- | -------- | -------- | ------------ |
 | `scan(module_registry)` | `dict[str, dict]` | `list[PruningCandidate]` | Sorted by confidence descending; read-only |
 | `report()` | — | `dict[str, list[PruningCandidate]]` | Standalone filesystem heuristics: unused, duplicate SPEC, stale-doc placeholder, and missing-test categories |
 | `archive(candidate, dry_run=True)` | `PruningCandidate`, `bool` | `str` | Non-mutating plan by default; validates repository containment before an opt-in move |
@@ -236,7 +239,7 @@ strength ≥ 2.0 are not nominated.
 **Attack vectors** (operate on `ActionProposal` or plan dictionaries):
 
 | Check | Attack Vector | Triggers When | Severity |
-|-------|--------------|---------------|----------|
+| ------- | -------------- | --------------- | ---------- |
 | Dependency risk | `dependency_risk` | dependency list references broad, unstable, or wildcard dependency sets | MEDIUM |
 | Security risk | `security_risk` | security-sensitive action without credible safeguards | HIGH |
 | Circular architecture | `circular_architecture` | proposed target/source relationship creates an architectural cycle | HIGH |
@@ -251,7 +254,7 @@ strength ≥ 2.0 are not nominated.
 **Composite severity score** (MCP pre-flight version): mean of `{LOW: 0.05, MEDIUM: 0.20, HIGH: 0.45, CRITICAL: 1.0}` weights across all findings.
 
 | Method | Output |
-|--------|--------|
+| -------- | -------- |
 | `analyze(proposal)` | `list[FalsificationFinding]` |
 | `evaluate_plan(plan)` | `FalsificationReport` with findings, severity-derived verdict, and required changes |
 
@@ -264,7 +267,7 @@ strength ≥ 2.0 are not nominated.
 **Purpose**: Top-level integration class. Owns subsystem lifecycle; exposes five core public methods plus optional attestation, pruning, and emergency-reset controls.
 
 | Method | Pipeline | Output |
-|--------|----------|--------|
+| -------- | ---------- | -------- |
 | `propose_action(proposal)` | FalsificationWorker → ResourceLedger → ConsequenceMemory (profile) → RoleAdapter → ActuationGate → optional proposal/verdict ledger events → deposit FAILURE if REFUSE | `GateResult` |
 | `record_outcome(proposal, outcome, tests_passed, human_feedback)` | Ordinary caller-report path; rejected in required mode → state update | `ConsequenceRecord` |
 | `record_attested_outcome(proposal, outcome, tests_passed, human_feedback, actor_id)` | Require prior EXECUTE authorization and receipt → append outcome event → state update | `ConsequenceRecord` |
@@ -278,7 +281,7 @@ strength ≥ 2.0 are not nominated.
 
 The colony runs a continuous cycle. Each phase feeds the next:
 
-```
+```text
 1. PRESSURE    — pheromone field encodes accumulated history at every location
 2. PROPOSAL    — agent submits ActionProposal with target, rationale, budget, rollback
 3. GATE        — falsification → budget → trust → ActuationGate → GateResult
@@ -322,7 +325,7 @@ The `ResourceLedger` enforces seven independent ceilings. In the integrated `Col
 **Default `ResourceBudget` values**:
 
 | Dimension | Default Ceiling | Period |
-|-----------|----------------|--------|
+| ----------- | ---------------- | -------- |
 | llm_calls | 500 | 24 hours |
 | runtime_seconds | 3600.0 | 24 hours |
 | risk_level | 0.8 | 24 hours |
@@ -332,6 +335,7 @@ The `ResourceLedger` enforces seven independent ceilings. In the integrated `Col
 | security_exposure | 0.5 | 24 hours |
 
 **Enforcement invariants**:
+
 - `check_budget` is non-consuming; it only projects and checks.
 - `consume` is called after either accepted outcome path; callers may pass actual cost via `outcome["cost"]`.
 - `risk_level`, `merge_risk`, and `security_exposure` are additive but capped at 1.0 per `ResourceCost.__add__`.
@@ -343,7 +347,7 @@ The `ResourceLedger` enforces seven independent ceilings. In the integrated `Col
 
 Roles are inferred deterministically by `RoleAdapter.infer_role`. The algorithm is:
 
-```
+```text
 if total_proposals < 3:
     return SANDBOX
 elif trust_score >= 0.70:
@@ -361,7 +365,7 @@ else:
 **Role behavior enforced by ActuationGate**:
 
 | Role | Implemented gate behavior |
-|------|----------------|
+| ------ | ---------------- |
 | SANDBOX | Unconditional REFUSE for every proposal |
 | REPAIR_ANT | No action-specific role constraint |
 | MEMORY_ANT | No action-specific role constraint |
@@ -383,7 +387,7 @@ performs import-graph traversal.
 **Confidence thresholds**:
 
 | Criterion | Confidence Formula | Minimum Reported |
-|-----------|-------------------|------------------|
+| ----------- | ------------------- | ------------------ |
 | Never used | 0.90 (fixed) | 0.50 |
 | Duplicate | 0.85 (fixed) | 0.50 |
 | No calls for >30 days | 0.70 (fixed) | 0.50 |
@@ -410,7 +414,7 @@ score = mean([SEVERITY_WEIGHTS[f.severity.value] for f in findings])
 **Recommendation routing**:
 
 | score | recommendation |
-|-------|----------------|
+| ------- | ---------------- |
 | ≥ 0.75 | `"refuse"` |
 | 0.40 – 0.75 | `"hold"` |
 | < 0.40 | `"execute"` |
@@ -430,10 +434,41 @@ A CRITICAL finding (`falsification_penalty == 1.0`) triggers an unconditional RE
 ## Error Conditions
 
 | Error | Trigger | Resolution |
-|-------|---------|------------|
+| ------- | --------- | ------------ |
 | `ValueError` on `ColonySignal` | `location` empty or `strength < 0` | Validate before constructing |
 | `ValueError` on `ResourceCost` | Fraction fields outside [0.0, 1.0] or negative counts | Clamp or validate inputs |
 | `ValueError` on `AgentTrustProfile` | `trust_score` outside [0.0, 1.0] | Use `apply_delta` rather than direct assignment |
 | `ValueError` on `ConsequenceRecord` | `human_feedback` outside [-1.0, 1.0] | Use `_parse_human_feedback` helper |
 | SQLite `OperationalError` | Disk full or corrupted db file | Supply `db_path=":memory:"` for tests; check disk space for production |
 | `json.JSONDecodeError` in MCP tools | `evidence` or `plan_json` argument not valid JSON | Validate JSON before calling |
+
+## Runtime invariant crosswalk
+
+`invariants.py` provides deterministic diagnostics over actual subsystem state:
+
+| Predicate | Input and checked contract |
+| --- | --- |
+| `check_budget_monotonic` | Sequence of cumulative `ResourceCost` snapshots from one budget period; all seven dimensions are finite/nonnegative and nondecreasing, with risk fractions bounded by one. Start a new sequence after a period reset. |
+| `check_gate_decision_space_closed` | `GateResult` records use the `GateDecision` enum, bounded scores/severity, and a Boolean budget verdict; EXECUTE requires approved budget and no critical falsification. |
+| `check_consequence_trust_bounds` | `ConsequenceRecord` feedback lies in [-1, 1], and computed trust deltas stay within bounds derived from canonical runtime trust constants. The zero computation sentinel is permitted. |
+
+`all_invariants_hold(profiles=None, strengths=None, *, budget_usage=None,
+gate_results=None, consequences=None)` retains its existing positional inputs
+and adds those three keyword-only observed-state inputs. Its report adds
+`budget_monotonic`, `gate_decision_space_closed`, and `consequence_trust_bounds`.
+Omitted state is a vacuous check, not evidence of an observed healthy system.
+Existing configuration predicates reject negative gate weights, nonfinite or
+out-of-range role thresholds, and malformed threshold conversions. Scalar inputs
+and unavailable observation sequences fail closed on ordinary exceptions; process
+interruptions remain visible. Integer LLM-call counts retain exact precision,
+including counts above 2**53.
+
+These predicates identify inconsistent runtime state. They do not prove solver
+obligations, establish that costs/outcomes were externally observed, authenticate
+caller reports, or enforce a budget reservation. The integration regression test
+uses a real ledger, gate, SQLite consequence memory, and trust profile, with
+negative controls for corrupted records and decreasing consumption.
+
+```bash
+uv run --locked pytest -q tests/unit/colony_kernel/test_invariants.py
+```

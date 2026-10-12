@@ -9,7 +9,7 @@ Documentation tooling, generated references, and publishing assets for Finance.
 - `SPEC.md` – Project file
 - `api_specification.md` – Project file
 - `mcp_tool_specification.md` – Project file
-- `readme.md` – Project file
+- `extended_readme.md` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -22,7 +22,7 @@ Documentation tooling, generated references, and publishing assets for Finance.
 - `SPEC.md`
 - `api_specification.md`
 - `mcp_tool_specification.md`
-- `readme.md`
+- `extended_readme.md`
 
 ## Dependencies
 - Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.

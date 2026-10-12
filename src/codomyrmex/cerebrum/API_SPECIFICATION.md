@@ -19,6 +19,7 @@ Main orchestrator for case-based reasoning and Bayesian inference.
 Initialize CEREBRUM engine.
 
 **Parameters:**
+
 - `config` (Optional[CerebrumConfig]): Configuration object
 
 **Returns:** None
@@ -28,6 +29,7 @@ Initialize CEREBRUM engine.
 Create a new cognitive model.
 
 **Parameters:**
+
 - `name` (str): Model name (must be unique)
 - `model_type` (str): Type of model (e.g., "case_based", "bayesian")
 - `config` (Optional[dict[str, Any]]): Model configuration parameters
@@ -35,6 +37,7 @@ Create a new cognitive model.
 **Returns:** `Model` - Created model
 
 **Raises:**
+
 - `ModelError`: If model already exists
 
 ##### `add_case(case: Case) -> None`
@@ -42,11 +45,13 @@ Create a new cognitive model.
 Add a case to the case base.
 
 **Parameters:**
+
 - `case` (Case): Case to add
 
 **Returns:** None
 
 **Raises:**
+
 - `InvalidCaseError`: If case is invalid
 
 ##### `reason(case: Case, context: Optional[dict[str, Any]] = None) -> ReasoningResult`
@@ -54,6 +59,7 @@ Add a case to the case base.
 Perform reasoning on a case.
 
 **Parameters:**
+
 - `case` (Case): Query case
 - `context` (Optional[dict[str, Any]]): Additional context
 
@@ -64,6 +70,7 @@ Perform reasoning on a case.
 Learn from a case by updating the case base.
 
 **Parameters:**
+
 - `case` (Case): Case to learn from
 - `outcome` (Any): Observed outcome
 
@@ -74,6 +81,7 @@ Learn from a case by updating the case base.
 Transform a model through adaptation or learning.
 
 **Parameters:**
+
 - `model` (Model): Model to transform
 - `transformation` (str): Transformation type ("adapt_to_case", "learn_from_feedback", etc.)
 - `**kwargs`: Transformation-specific parameters
@@ -81,6 +89,7 @@ Transform a model through adaptation or learning.
 **Returns:** `Model` - Transformed model
 
 **Raises:**
+
 - `TransformationError`: If transformation fails
 
 ##### `set_bayesian_network(network: BayesianNetwork) -> None`
@@ -88,6 +97,7 @@ Transform a model through adaptation or learning.
 Set Bayesian network for probabilistic inference.
 
 **Parameters:**
+
 - `network` (BayesianNetwork): Bayesian network
 
 **Returns:** None
@@ -97,6 +107,7 @@ Set Bayesian network for probabilistic inference.
 Set active inference agent.
 
 **Parameters:**
+
 - `agent` (ActiveInferenceAgent): Active inference agent
 
 **Returns:** None
@@ -128,6 +139,7 @@ Convert case to dictionary.
 Create case from dictionary.
 
 **Parameters:**
+
 - `data` (dict[str, Any]): Case data
 
 **Returns:** `Case` - Case object
@@ -143,6 +155,7 @@ Collection of cases with similarity search.
 Add a case to the case base.
 
 **Parameters:**
+
 - `case` (Case): Case to add
 
 **Returns:** None
@@ -152,6 +165,7 @@ Add a case to the case base.
 Retrieve k most similar cases.
 
 **Parameters:**
+
 - `query` (Case): Query case
 - `k` (int): Number of cases to retrieve
 - `threshold` (float): Minimum similarity threshold
@@ -163,6 +177,7 @@ Retrieve k most similar cases.
 Compute similarity between two cases.
 
 **Parameters:**
+
 - `case1` (Case): First case
 - `case2` (Case): Second case
 
@@ -179,6 +194,7 @@ Retrieves similar cases using various strategies.
 Retrieve similar cases.
 
 **Parameters:**
+
 - `query` (Case): Query case
 - `k` (int): Number of cases to retrieve
 - `threshold` (float): Minimum similarity threshold
@@ -198,6 +214,7 @@ Represents a Bayesian network (probabilistic graphical model).
 Add a node to the network.
 
 **Parameters:**
+
 - `node` (str): Node name
 - `values` (list[Any]): Possible values
 - `prior` (Optional[list[float]]): Prior probabilities
@@ -205,6 +222,7 @@ Add a node to the network.
 **Returns:** None
 
 **Raises:**
+
 - `NetworkStructureError`: If node already exists
 
 ##### `add_edge(parent: str, child: str) -> None`
@@ -212,12 +230,14 @@ Add a node to the network.
 Add a directed edge.
 
 **Parameters:**
+
 - `parent` (str): Parent node name
 - `child` (str): Child node name
 
 **Returns:** None
 
 **Raises:**
+
 - `NetworkStructureError`: If nodes don't exist
 
 ##### `set_cpt(node: str, cpt: dict[tuple, dict[Any, float]]) -> None`
@@ -225,6 +245,7 @@ Add a directed edge.
 Set conditional probability table.
 
 **Parameters:**
+
 - `node` (str): Node name
 - `cpt` (dict[tuple, dict[Any, float]]): Conditional probability table
 
@@ -241,12 +262,14 @@ Performs probabilistic inference.
 Perform inference.
 
 **Parameters:**
+
 - `query` (dict[str, Any]): Variables to query
 - `evidence` (Optional[dict[str, Any]]): Observed evidence
 
 **Returns:** `dict[str, Distribution]` - Posterior distributions
 
 **Raises:**
+
 - `InferenceError`: If inference fails
 
 ##### `compute_marginal(variable: str, evidence: Optional[dict[str, Any]] = None) -> Distribution`
@@ -254,6 +277,7 @@ Perform inference.
 Compute marginal distribution.
 
 **Parameters:**
+
 - `variable` (str): Variable name
 - `evidence` (Optional[dict[str, Any]]): Optional evidence
 
@@ -275,6 +299,7 @@ Represents a probability distribution.
 Sample from the distribution.
 
 **Parameters:**
+
 - `n` (int): Number of samples
 
 **Returns:** `list[Any]` - Samples
@@ -286,6 +311,7 @@ Compute expectation (for numeric values).
 **Returns:** `float` - Expected value
 
 **Raises:**
+
 - `ValueError`: If values are not numeric
 
 ##### `mode() -> Any`
@@ -307,6 +333,7 @@ Implements active inference agent.
 Predict state distribution.
 
 **Parameters:**
+
 - `observation` (Optional[dict[str, Any]]): Optional observation
 
 **Returns:** `dict[str, float]` - Predicted state distribution
@@ -316,6 +343,7 @@ Predict state distribution.
 Select action based on expected free energy.
 
 **Parameters:**
+
 - `state` (Optional[dict[str, Any]]): Optional current state
 
 **Returns:** `str` - Selected action
@@ -325,6 +353,7 @@ Select action based on expected free energy.
 Update beliefs based on observation.
 
 **Parameters:**
+
 - `observation` (dict[str, Any]): New observation
 
 **Returns:** None
@@ -334,6 +363,7 @@ Update beliefs based on observation.
 Compute variational free energy.
 
 **Parameters:**
+
 - `beliefs` (Optional[BeliefState]): Belief state
 - `observations` (Optional[dict[str, Any]]): Observations
 
@@ -352,6 +382,7 @@ Manages model transformations.
 Transform a model.
 
 **Parameters:**
+
 - `model` (Model): Model to transform
 - `transformation_type` (str): Type of transformation
 - `transformer_name` (Optional[str]): Specific transformer
@@ -372,6 +403,7 @@ Visualizes Bayesian networks.
 Visualize Bayesian network structure.
 
 **Parameters:**
+
 - `network` (BayesianNetwork): Network to visualize
 
 **Returns:** `Figure` - Matplotlib figure
@@ -387,6 +419,7 @@ Visualizes case similarity.
 Plot case similarity scores.
 
 **Parameters:**
+
 - `cases` (list[tuple[Case, float]]): Cases with similarities
 - `query_case` (Optional[Case]): Optional query case
 
@@ -421,8 +454,6 @@ Configuration for CEREBRUM engine.
 - `TransformationError`: Transformation errors
 - `VisualizationError`: Visualization errors
 
-
-
 ## Free-Energy Loop (v1.3.0)
 
 ### FreeEnergyLoop
@@ -434,6 +465,7 @@ Closed-loop free-energy minimization runner for active inference agents.
 ##### `__init__(agent: ActiveInferenceAgent, max_steps: int = 50, fe_threshold: float = 0.1, convergence_window: int = 3) -> None`
 
 **Parameters:**
+
 - `agent` (ActiveInferenceAgent): Active inference agent to run
 - `max_steps` (int): Maximum perception-action cycles
 - `fe_threshold` (float): Free energy convergence threshold
@@ -441,12 +473,15 @@ Closed-loop free-energy minimization runner for active inference agents.
 
 #### Methods
 
-##### `run(observation: dict[str, Any]) -> LoopResult`
+##### `run(initial_observation: dict[str, Any]) -> LoopResult`
 
 Run the free-energy minimization loop.
 
 **Parameters:**
-- `observation` (dict[str, Any]): Initial observation
+
+- `initial_observation` (dict[str, Any]): Starting observation
+
+**Raises:** `ActiveInferenceError` if the agent raises during stepping.
 
 **Returns:** `LoopResult` - Result of the loop execution
 
@@ -455,6 +490,7 @@ Run the free-energy minimization loop.
 Result of a single perception-action cycle.
 
 #### Attributes
+
 - `step` (int): Step number
 - `free_energy` (float): Free energy at this step
 - `action` (str): Action selected
@@ -465,12 +501,12 @@ Result of a single perception-action cycle.
 Result of the full free-energy loop execution.
 
 #### Attributes
+
 - `converged` (bool): Whether the loop converged
 - `steps` (int): Total steps taken
 - `final_free_energy` (float): Final free energy value
 - `action_history` (list[str]): Sequence of actions taken
 - `step_results` (list[StepResult]): Per-step detail
-
 
 ## Navigation Links
 
@@ -478,4 +514,3 @@ Result of the full free-energy loop execution.
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
-

@@ -10,7 +10,7 @@ This file tracks open research items, formal gaps, and architectural improvement
 ## Evidence Program (Implemented Substrate, Open Studies)
 
 | ID | Title | Scope & Artifacts | Acceptance Criteria |
-|:---|:------|:------------------|:--------------------|
+| :--- | :------ | :------------------ | :-------------------- |
 | **R2** | **External actuation study** | Adapter and deterministic verification tests are implemented. | Run a declared deployment adapter against independently sourced execution evidence; retain replay, forgery, linkage, and overhead results. |
 | **R3** | **Adversarial workload study** | Synthetic evaluator and external benchmark protocols are implemented. | Execute preregistered external workloads with unique cases, paired assignments, complete traces, failure stratification, and independent rerun. |
 | **R4** | **Trust calibration study** | Calibration harness is implemented. | Acquire held-out independently observed outcomes; report missingness, Brier score, ECE, log loss, selective risk, utility, and uncertainty. |
@@ -20,20 +20,10 @@ This file tracks open research items, formal gaps, and architectural improvement
 
 ---
 
-## Engineering Follow-up
-
-| ID | Title | Scope & Artifacts | Acceptance Criteria |
-|:---|:------|:------------------|:--------------------|
-| **F3** | **Formalism-to-Code Runtime Invariant Crosswalk** | `src/codomyrmex/colony_kernel/invariants.py`, `tests/unit/colony_kernel/test_invariants.py` | Extended runtime invariant predicates validating budget monotonicity, gate decision space closure, consequence trust bounds, and cross-subsystem invariant suites. |
-
----
-
 ## Maintenance
 
 | ID | Title | Scope & Artifacts | Acceptance Criteria |
-|:---|:------|:------------------|:--------------------|
-| **M1** | **Type Safety & `py.typed` Markers** | `src/codomyrmex/colony_kernel/research/py.typed`, `src/codomyrmex/colony_kernel/falsification/py.typed`, strict type annotations | Package markers present, zero unsafe type ignores in core kernel packages, full stub parity. |
-| **M2** | **Docs Crosswalk & Inventory Audit** | `docs/reference/inventory.md`, `docs/todo/COLONY_KERNEL.md` | Inventory counters, module links, and roadmap alignment fully verified with live code tree. |
+| :--- | :------ | :------------------ | :-------------------- |
 | **M3** | **Test Speed & Suite Optimization** | `pyproject.toml`, test runner configs | Benchmark/xdist isolation, deterministic execution without timeout stalls across unit test suites. |
 
 ---
@@ -45,26 +35,13 @@ This file tracks open research items, formal gaps, and architectural improvement
 - Preserve failed gates, negative controls, `not_estimated` calibration status, and conditional or `not_run` claims.
 - Zero-Mock Policy: All test suites must exercise authentic functional implementations.
 
-## Agent Ergonomics (2026-08-31 pass)
+## Documentation contract completeness
 
-| ID | Severity | Title | Files |
-|:---|:---------|:------|:------|
-| **M-ERG-1** | Minor | Test-count snapshot conflict resolved this pass (36,028 -> 36,049 with supersede note); keep INDEX.md numbers linked to inventory.md | `INDEX.md`, `docs/reference/inventory.md` |
-| **M-ERG-2** | Medium | Backlog reachability fixed this pass (TODO.md now linked from README.md and AGENTS.md); keep one-hop reachability when entry docs change | `README.md`, `AGENTS.md`, `TODO.md` |
-| **M-ERG-3** | Medium | Root security audit was a dated 2026-07-31 point-in-time report with superseded counts; archived to docs/compliance/ this pass | `docs/compliance/SECURITY_AUDIT_REPORT_2026-07-31.md` |
-| **M-ERG-4** | Minor | Dated review log convention created (`REVIEW_LOG_2026-08-31.md`); append future deep-pass logs rather than starting new formats | `REVIEW_LOG_2026-08-31.md` |
+The specification validators report unresolved API signatures and undocumented
+MCP tools explicitly. Resolve these inventories and extend resolution/annotation
+coverage before claiming complete public API/MCP documentation parity. A gate
+with zero broken resolved references does not establish that stronger claim.
 
-M-ERG-1 through M-ERG-4 were completed in the 2026-08-31 pass (see REVIEW_LOG_2026-08-31.md); retained as record.
-
-## Agent Ergonomics (2026-09-11 pass)
-
-| ID | Severity | Title | Files |
-|:---|:---------|:------|:------|
-| **M-ERG-5** | High | All 352 open PRs triaged in one pass: 101 merged/applied (14 GitHub squash + 87 re-based applications), 251 closed with rationale (duplicate/superseded/broken); zero open PRs remain; see CHANGELOG 2026-09-11 entry | `CHANGELOG.md` |
-| **M-ERG-5** | Medium | Duplicate-PR sentinel added (`scripts/maintenance/close_duplicate_prs.py` + 6-hourly workflow) to auto-close stale duplicate families with a 7-day freshness guard | `scripts/maintenance/close_duplicate_prs.py`, `.github/workflows/duplicate-pr-sentinel.yml` |
-| **M-ERG-6** | Medium | `.jules/palette.md` authored (was 0 bytes) with dedupe-before-proposing rules; `.jules/bolt.md`/`.jules/sentinel.md` gained session-hygiene sections and retired-topic lists so agent floods cannot re-propose merged work | `.jules/` |
-| **M-ERG-7** | Minor | New modules `preprocessing` and `language_detection` reached full structure-audit parity (docs/modules counterparts, py.typed, PAI/API/MCP specs); module snapshots updated 130 → 132 | `docs/modules/`, `INDEX.md`, `AGENTS.md`, `README.md`, `docs/reference/inventory.md` |
-
-M-ERG-5 through M-ERG-7 plus the triage receipt (M-ERG-4 numbering continues
-from the 2026-08-31 pass) were completed in the 2026-09-11 pass; retained as
-record.
+Completed F3/M1/M2 engineering and inventory work is recorded in CHANGELOG.md
+and REVIEW_LOG_2026-10-12.md. Completed agent ergonomics entries remain in
+historical review logs and git history rather than this open backlog.

@@ -111,7 +111,7 @@ PUBLIC_CLAIM_FILES = [
     "docs/modules/agents/open_gauss/AGENTS.md",
     "docs/modules/agents/open_gauss/README.md",
     "docs/modules/agents/open_gauss/SPEC.md",
-    "src/codomyrmex/documentation/docs/modules/colony_kernel/readme.md",
+    "src/codomyrmex/documentation/docs/modules/colony_kernel/README.md",
     "src/codomyrmex/skills/skills/custom/colony_kernel/decisions.md",
 ]
 

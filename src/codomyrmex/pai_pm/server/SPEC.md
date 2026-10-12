@@ -1,6 +1,5 @@
 # SPEC.md — PAI PM Module Specification
 
-
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: May 2026
 
 **Module**: `scripts/pai/pm/`
@@ -14,7 +13,7 @@ Complete Mission → Project → Task management system for the Personal AI Infr
 
 ## Architecture
 
-```
+```text
 scripts/pai/pm/
 ├── config.ts              # Centralized env-overridable configuration
 ├── helpers.ts             # Shared HTTP/WebSocket utilities
@@ -78,7 +77,7 @@ scripts/pai/pm/
 
 All state is stored as YAML/JSON files under `$PAI_STATE_DIR` (default: `~/.claude/MEMORY/STATE/`):
 
-```
+```text
 ~/.claude/MEMORY/STATE/
 ├── missions/
 │   └── <slug>/
@@ -140,3 +139,13 @@ The Python `PAIProviderMixin` (in `src/codomyrmex/website/pai_mixin.py`) delegat
 - **Readme**: [README.md](README.md)
 - **Agents**: [AGENTS.md](AGENTS.md)
 - **Repository Root**: [README.md](../../../../README.md)
+
+## SPA accessible form names
+
+`spa/index.html` gives form controls stable accessible names across data search, inline editing, task creation, GitHub operations, interviews, calendar events, email, and voice replies. Visible labels use explicit `for`/`id` associations; `field()` retains its visible label rather than overriding it with placeholder text. Unlabelled controls use descriptive `aria-label` values.
+
+```bash
+uv run --locked pytest -q tests/unit/pai_pm/test_spa_accessibility.py
+```
+
+The suite parses production form markup and executes the real `field()` renderer through Node.js. It also checks all inline JavaScript syntax. These checks establish markup and renderer contracts. Local Chromium verification additionally confirms Tab/Shift+Tab containment, Escape dismissal, background inertness and restoration of the originating focus and prior inert states. Screen-reader-specific acceptance remains separate.

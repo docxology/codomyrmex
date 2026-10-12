@@ -90,7 +90,7 @@ class FabricConfigManager:
 
 
 # Convenience functions
-def get_fabric_config() -> FabricConfig:
-    """Get Fabric configuration."""
-    manager = FabricConfigManager()
+def get_fabric_config(config_path: str | None = None) -> FabricConfig:
+    """Get configuration from an explicit file or the legacy default path."""
+    manager = FabricConfigManager(config_path=config_path)
     return manager.config

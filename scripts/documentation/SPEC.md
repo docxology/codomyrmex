@@ -14,12 +14,30 @@ run:
 1. RASP pair presence in check mode;
 2. package-wide README/AGENTS integrity;
 3. comprehensive link validation;
-4. content quality and AGENTS structure validation;
-5. aggregate quality and triple-check;
-6. strict MkDocs.
+4. code references, MCP tool names, and API signatures;
+5. content quality and AGENTS structure validation;
+6. aggregate quality and triple-check;
+7. strict MkDocs.
 
 The composition may write reports under `output/` and build output under
 `site/`; it must not rewrite editorial sources.
+
+## Specification validation
+
+`validate_mcp_tool_specs.py` statically discovers MCP registrations and checks
+documented tool names within their owning package. It fails on nonexistent
+documented tools under `--fail-on-broken`; undocumented tools are informational.
+
+`validate_api_signatures.py` resolves documented callables in their packages
+and compares parameter names. Unsupported documented parameters and missing
+required parameters fail under `--fail-on-broken`. Defaults, annotations, and
+parameter order are outside this comparison. Unresolved signatures and skipped
+files must be reported explicitly and do not constitute successful validation.
+
+Both commands support JSON receipts and bounded explicit specification paths.
+Neither rewrites specifications. Package imports in the API validator may
+require optional dependencies; this gate is not a runtime or scientific
+acceptance test.
 
 ## README/AGENTS audit
 

@@ -100,12 +100,14 @@ class TestOrchestrationIntegration:
         assert result is not None
         assert result.workflow_name == "test_workflow"
 
-    def test_project_creation_and_management(self):
+    def test_project_creation_and_management(self, tmp_path):
         """Test project creation and management."""
         project = self.project_manager.create_project(
             name="test_project",
             type=ProjectType.AI_ANALYSIS,
             description="Test project for integration testing",
+            # The shared manager's projects_root is the CWD (the repository).
+            path=tmp_path / "test_project",
         )
 
         assert project is not None

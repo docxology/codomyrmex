@@ -7,6 +7,7 @@
 Validation coverage, fixtures, and regression checks for Llm.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -39,9 +40,14 @@ Validation coverage, fixtures, and regression checks for Llm.
 - `test_safety_fabric_multimodal.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: ../../../../../README.md
 
 ## Related Documents
 
 - **Agents**: [AGENTS.md](AGENTS.md)
+
+## Fabric CLI controls
+
+`test_fabric_cli_contract.py` exercises real temporary executables for metadata, successful/empty listing, explicit nonzero errors, and local stdin execution. Installed Fabric listing and provider workflows require `RUN_LIVE_FABRIC=1`. Configuration tests pass temporary paths through `get_fabric_config(config_path=...)`.

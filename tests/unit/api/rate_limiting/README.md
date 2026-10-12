@@ -6,7 +6,16 @@
 
 Validation coverage, fixtures, and regression checks for Rate Limiting.
 
+## Focused regression checks
+
+```bash
+uv run --locked pytest -q tests/unit/api/rate_limiting/test_sliding_window_expiry.py
+```
+
+These checks use real production components and deterministic inputs.
+
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -15,6 +24,7 @@ Validation coverage, fixtures, and regression checks for Rate Limiting.
 - `test_rate_limiting.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [api](../README.md)
 - **Project Root**: ../../../../../../README.md
 

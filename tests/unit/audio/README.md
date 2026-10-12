@@ -34,3 +34,24 @@ Validation coverage, fixtures, and regression checks for Audio.
 ## Related Documents
 
 - **Agents**: [AGENTS.md](AGENTS.md)
+
+## Model-independent input and lifecycle checks
+
+`test_input_preflight.py` runs real MCP functions in a fresh subprocess with an
+empty Hugging Face cache and offline mode. Invalid inputs must produce path/format
+errors without acquiring models or creating cache/output directories.
+`test_edge_tts_lifecycle.py` checks actual session-owned connector lifetimes and
+finite socket timeouts, independently of remote Edge service availability.
+
+```bash
+uv run --locked pytest -q tests/unit/audio/test_input_preflight.py tests/unit/audio/test_edge_tts_lifecycle.py
+```
+
+The capability subprocess control compares actual installed backend metadata to
+the public `whisper` provider entry and checks that `faster_whisper`, CTranslate2,
+and PyAV were not imported by discovery.
+
+Edge request configuration controls verify default, accelerated/raised-pitch,
+and slowed/lowered-pitch cases against the real library's rate/pitch/volume fields.
+Invalid volume fails before construction, and empty direct-file calls cannot
+create zero-byte output artifacts.

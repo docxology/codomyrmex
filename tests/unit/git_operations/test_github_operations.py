@@ -48,7 +48,10 @@ from codomyrmex.git_operations.core.git import (
 _GITHUB_TOKEN = None
 _SKIP_GITHUB = True
 
-if check_git_availability():
+if (
+    os.environ.get("CODOMYRMEX_RUN_LIVE_GITHUB_TESTS") == "1"
+    and check_git_availability()
+):
     try:
         _GITHUB_TOKEN = _validate_github_token(None)
         _SKIP_GITHUB = False
@@ -57,7 +60,10 @@ if check_git_availability():
 
 pytestmark = [
     pytest.mark.unit,
-    pytest.mark.skipif(_SKIP_GITHUB, reason="Git unavailable or GITHUB_TOKEN not set"),
+    pytest.mark.skipif(
+        _SKIP_GITHUB,
+        reason="Live GitHub mutations require CODOMYRMEX_RUN_LIVE_GITHUB_TESTS=1, Git and a token",
+    ),
 ]
 
 
@@ -65,13 +71,17 @@ pytestmark = [
 _test_repositories = []
 _local_test_dirs = []
 _test_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-_output_dir = Path("@output/01_github_ops_test_results")
+
+
+@pytest.fixture(scope="module")
+def github_ops_output_dir(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    """Directory for the JSON and Markdown result logs these tests write."""
+    return tmp_path_factory.mktemp("github_ops_test_results")
 
 
 @pytest.fixture(autouse=True, scope="module")
 def _module_setup_teardown():
-    """Module-level setup and teardown for GitHub operations tests."""
-    _output_dir.mkdir(parents=True, exist_ok=True)
+    """Module-level teardown: delete the repositories the tests created."""
     yield
     # Clean up GitHub repositories
     for repo_info in _test_repositories:
@@ -106,13 +116,13 @@ class TestGitHubOperationsComprehensive:
     """
 
     @pytest.fixture(autouse=True)
-    def _setup(self, tmp_path):
+    def _setup(self, tmp_path, github_ops_output_dir):
         """set up test fixtures for each test."""
         self.github_token = _GITHUB_TOKEN
         self.test_dir = str(tmp_path)
         _local_test_dirs.append(self.test_dir)
         self.test_timestamp = _test_timestamp
-        self.output_dir = _output_dir
+        self.output_dir = github_ops_output_dir
         self.private_repo_name = f"private_test_{self.test_timestamp}"
         self.public_repo_name = f"public_test_{self.test_timestamp}"
 

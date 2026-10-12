@@ -39,7 +39,11 @@ from codomyrmex.colony_kernel.formal import (
 )
 from codomyrmex.colony_kernel.invariants import (
     all_invariants_hold,
+    check_budget_monotonic,
+    check_consequence_trust_bounds,
     check_enum_values_no_conflict,
+    check_gate_decision_space_closed,
+    check_gate_thresholds_ordered,
     check_gate_weights_sum_to_one,
     check_pheromone_strength_bounds,
     check_role_ladder_monotonic,
@@ -132,7 +136,11 @@ __all__ = [
     "SignalType",
     "ThreadSafeResourceLedger",
     "all_invariants_hold",
+    "check_budget_monotonic",
+    "check_consequence_trust_bounds",
     "check_enum_values_no_conflict",
+    "check_gate_decision_space_closed",
+    "check_gate_thresholds_ordered",
     "check_gate_weights_sum_to_one",
     "check_pheromone_strength_bounds",
     "check_role_ladder_monotonic",

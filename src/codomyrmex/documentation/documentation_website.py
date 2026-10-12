@@ -1,6 +1,11 @@
+"""Main entry point and utility functions
+
+This module provides documentation_website functionality including checks for
+environment, verifying dependencies, and managing the documentation lifecycle.
+"""
+
 import argparse
 import glob
-import logging
 import os
 import shutil  # For checking if command exists
 import subprocess
@@ -9,106 +14,16 @@ import webbrowser
 
 from codomyrmex.logging_monitoring import get_logger, setup_logging
 
-# Standard logging remains available for the fallback basicConfig path.
+# Importing this module must not configure logging: handlers belong to the
+# application. main() configures logging for the command-line entry point.
+logger = get_logger(__name__)
 
-# --- Determine project structure and add appropriate path to sys.path for package import ---
-
-"""Main entry point and utility functions
-
-This module provides documentation_website functionality including checks for
-environment, verifying dependencies, and managing the documentation lifecycle.
-"""
-_codomyrmex_dir_for_import_msg = "Unknown"
-_path_added_for_import_msg = "Unknown"
-
-try:
-    # Assumes __file__ is defined (standard for scripts)
-    # SCRIPT_DIR is the directory containing this script (e.g., .../codomyrmex/src/codomyrmex/documentation/)
-    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-    # CODOMYRMEX_DIR is the root of the 'codomyrmex' package (e.g., .../codomyrmex/src/)
-    CODOMYRMEX_SRC_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
-    # To import 'from codomyrmex.something import ...', the src directory needs to be in sys.path
-    PATH_TO_ADD_FOR_MODULE_IMPORT = CODOMYRMEX_SRC_DIR
-except NameError:
-    # Fallback if __file__ is not defined (e.g., interactive execution)
-    # Assume CWD is the script's directory: .../codomyrmex/src/codomyrmex/documentation/
-    SCRIPT_DIR = os.getcwd()
-    CODOMYRMEX_SRC_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
-    PATH_TO_ADD_FOR_MODULE_IMPORT = CODOMYRMEX_SRC_DIR
-
-_codomyrmex_dir_for_import_msg = CODOMYRMEX_SRC_DIR
-_path_added_for_import_msg = PATH_TO_ADD_FOR_MODULE_IMPORT
-
-if PATH_TO_ADD_FOR_MODULE_IMPORT not in sys.path:
-    pass
-#     sys.path.insert(0, PATH_TO_ADD_FOR_MODULE_IMPORT)  # Removed sys.path manipulation
-# --- End sys.path modification ---
-
-# Global logger variable, to be initialized by custom or fallback logging
-logger = None
-
-try:
-    # Call setup_logging() which reads .env from the project root and configures handlers.
-    # This should be called once, early in the application.
-    # setup_logging() itself calls load_dotenv() which should find the .env file
-    # in CODOMYRMEX_DIR if this script is run from SCRIPT_DIR.
-    setup_logging()
-    logger = get_logger(
-        __name__
-    )  # Use __name__ which will be '__main__' if script is run directly
-    logger.info(
-        "Codomyrmex centralized logging initialized successfully via documentation_website.py."
-    )
-except ImportError as e_import:
-    # Fallback if the custom logging module cannot be imported
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s (fallback due to import error)",
-        handlers=[logging.StreamHandler(sys.stdout)],  # Ensure logs go to stdout
-    )
-    logger = logging.getLogger(__name__)
-    logger.warning(
-        "Could not import 'codomyrmex.logging_monitoring' (Error: %s). "
-        "Attempted to add parent of CODOMYRMEX_DIR ('%s') to sys.path. "
-        "Identified CODOMYRMEX_DIR as '%s'. "
-        "Relevant sys.path entries (first 3): %s. "
-        "This might indicate a missing '__init__.py' in the 'codomyrmex' directory or its parent not being the correct path. "
-        "Using basic Python logging as a fallback.",
-        e_import,
-        _path_added_for_import_msg,
-        _codomyrmex_dir_for_import_msg,
-        sys.path[:3],
-    )
-except Exception as e_setup:
-    # Fallback if importing works but setup_logging() itself fails
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s (fallback due to setup error)",
-        handlers=[logging.StreamHandler(sys.stdout)],  # Ensure logs go to stdout
-    )
-    logger = logging.getLogger(__name__)
-    logger.error(
-        "Error occurred during setup_logging from 'codomyrmex.logging_monitoring' (Error: %s). "
-        "Using basic Python logging as a fallback.",
-        e_setup,
-    )
-
-# Final check to ensure logger is always minimally configured (should not be strictly necessary if above logic is sound)
-if logger is None:
-    logging.basicConfig(
-        level=logging.WARNING,
-        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s (critical fallback - logger was None)",
-        handlers=[logging.StreamHandler(sys.stdout)],
-    )
-    logger = logging.getLogger(__name__)
-    logger.critical(
-        "Logger was not initialized by custom or primary fallback setups. Using emergency basic configuration."
-    )
-
-# All subsequent logging in this script should use the 'logger' instance.
-# For example: logger.info("Starting script operations...")
-# Make sure to replace any direct calls to logging.info, print() used for logging, etc.,
-# with logger.info, logger.warning, etc. throughout the rest of this file.
+# SCRIPT_DIR is the directory containing this module
+# (e.g., .../codomyrmex/src/codomyrmex/documentation/).
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+# CODOMYRMEX_SRC_DIR is the directory that holds the 'codomyrmex' package
+# (e.g., .../codomyrmex/src/).
+CODOMYRMEX_SRC_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
 
 # Script's directory is 'documentation/'
 DOCUSAURUS_ROOT_DIR = SCRIPT_DIR  # This script is inside the Docusaurus root
@@ -443,12 +358,10 @@ def aggregate_docs(source_root: str | None = None, dest_root: str | None = None)
 
     project_root = os.path.abspath(os.path.join(DOCUSAURUS_ROOT_DIR, "..", "..", ".."))
     source_root = source_root or os.path.join(project_root, "src", "codomyrmex")
-    dest_root = dest_root or os.path.join(DOCUSAURUS_ROOT_DIR, "docs", "modules")
+    dest_root = dest_root or os.path.join(project_root, "docs", "modules")
 
     logger.info("Source docs root: %s", source_root)
     logger.info("Destination docs root: %s", dest_root)
-
-    os.makedirs(dest_root, exist_ok=True)
 
     # Recognized top-level module doc filenames to copy
     top_level_files = [
@@ -460,7 +373,42 @@ def aggregate_docs(source_root: str | None = None, dest_root: str | None = None)
         "SECURITY.md",
     ]
 
-    for module_path in sorted(glob.glob(os.path.join(source_root, "*"))):
+    module_paths = [
+        path
+        for path in sorted(glob.glob(os.path.join(source_root, "*")))
+        if os.path.isdir(path) and os.path.basename(path) != "documentation"
+    ]
+    # Validate the complete copy plan before any filesystem mutation. Reused
+    # legacy destinations must be migrated explicitly, preserving both blobs.
+    for module_path in module_paths:
+        module_name = os.path.basename(module_path)
+        if os.path.isdir(dest_root):
+            variants = [
+                name
+                for name in os.listdir(dest_root)
+                if name.casefold() == module_name.casefold()
+            ]
+            if any(name != module_name for name in variants):
+                raise FileExistsError(
+                    "Documentation destination has a module casing collision"
+                )
+        dest_module_dir = os.path.join(dest_root, module_name)
+        if not os.path.isdir(dest_module_dir):
+            continue
+        names = os.listdir(dest_module_dir)
+        for filename in top_level_files:
+            if not os.path.isfile(os.path.join(module_path, filename)):
+                continue
+            variants = [
+                name for name in names if name.casefold() == filename.casefold()
+            ]
+            if any(name != filename for name in variants):
+                raise FileExistsError(
+                    "Documentation destination has a filename casing collision"
+                )
+    os.makedirs(dest_root, exist_ok=True)
+
+    for module_path in module_paths:
         if not os.path.isdir(module_path):
             continue
         module_name = os.path.basename(module_path)
@@ -478,8 +426,8 @@ def aggregate_docs(source_root: str | None = None, dest_root: str | None = None)
             src = os.path.join(module_path, fname)
             if os.path.exists(src):
                 try:
-                    # Convert filename to lowercase for consistency with Docusaurus
-                    dest_fname = fname.lower()
+                    # Preserve canonical casing on macOS, Windows and Linux.
+                    dest_fname = fname
                     dest_path = os.path.join(dest_module_dir, dest_fname)
                     shutil.copy2(src, dest_path)
                     logger.info("Copied %s -> %s", src, dest_path)
@@ -521,7 +469,7 @@ def validate_doc_versions():
 
     project_root = os.path.abspath(os.path.join(DOCUSAURUS_ROOT_DIR, "..", "..", ".."))
     source_root = os.path.join(project_root, "src", "codomyrmex")
-    dest_root = os.path.join(DOCUSAURUS_ROOT_DIR, "docs", "modules")
+    dest_root = os.path.join(project_root, "docs", "modules")
 
     validation_errors = []
     validation_warnings = []
@@ -615,6 +563,7 @@ def assess_site():
 
 def main():
     """Main."""
+    setup_logging()
 
     parser = argparse.ArgumentParser(
         description=(

@@ -39,6 +39,8 @@ composition emits both human-readable Markdown and machine-readable JSON.
 | :--- | :--- | :--- |
 | `audit_readme_agents.py` | Pair, heading, command, skill, and local-link integrity | Reports only |
 | `validate_links_comprehensive.py` | Repository Markdown links | Reports only |
+| `validate_mcp_tool_specs.py` | Documented MCP tool names against static registrations | Reports only; missing documentation is informational |
+| `validate_api_signatures.py` | Documented callable parameter names against runtime signatures | Reports only; unresolved signatures are explicit findings |
 | `analyze_content_quality.py` | Content-quality metrics | Reports only |
 | `validate_agents_structure.py` | AGENTS structure and required sections | Reports only |
 | `enforce_quality_gate.py` | Aggregated documentation policy | Reports only |
@@ -50,6 +52,13 @@ composition emits both human-readable Markdown and machine-readable JSON.
 Other scripts in this directory are maintenance utilities, not implied release
 gates. Inspect their `--help`, source, Git impact, and proposed path set before
 running them.
+
+The specification validators fail with `--fail-on-broken` when a documented
+tool is absent or a resolved signature has unsupported or missing required
+parameters. The API checker imports documented packages, requiring their
+optional dependencies where applicable. Unresolved signatures and undocumented
+tools remain visible in JSON receipts; a passing check does not establish
+complete API documentation, runtime tool availability, or scientific validity.
 
 ## Safe module-doc workflow
 

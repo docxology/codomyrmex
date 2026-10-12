@@ -200,7 +200,7 @@ class TestSystemDiscoveryInit:
         assert sd.project_root == tmp_path
         assert sd.src_path == tmp_path / "src"
         assert sd.codomyrmex_path == tmp_path / "src" / "codomyrmex"
-        assert sd.testing_path == tmp_path / "testing"
+        assert sd.testing_path == tmp_path / "tests"
 
 
 # ===================================================================
@@ -339,11 +339,32 @@ class TestHasTests:
     def test_has_test_file(self, tmp_path):
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
 
-        testing_dir = tmp_path / "testing" / "unit"
+        testing_dir = tmp_path / "tests" / "unit"
         testing_dir.mkdir(parents=True)
         (testing_dir / "test_mymod.py").write_text("# test\n")
         sd = SystemDiscovery(project_root=tmp_path)
         assert sd._analyzer.has_tests("mymod") is True
+
+    def test_has_test_package_directory(self, tmp_path):
+        """The repository layout: tests/unit/<module>/test_*.py."""
+        from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
+
+        module_tests = tmp_path / "tests" / "unit" / "mymod" / "core"
+        module_tests.mkdir(parents=True)
+        (module_tests / "test_engine.py").write_text("# test\n")
+        (tmp_path / "tests" / "unit" / "empty_mod").mkdir()
+        sd = SystemDiscovery(project_root=tmp_path)
+        assert sd._analyzer.has_tests("mymod") is True
+        assert sd._analyzer.has_tests("empty_mod") is False
+
+    def test_repository_modules_have_tests(self):
+        """Discovery run against this checkout finds the real unit tests."""
+        from tests.support.repo_paths import REPO_ROOT
+
+        from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
+
+        sd = SystemDiscovery(project_root=REPO_ROOT)
+        assert sd._analyzer.has_tests("system_discovery") is True
 
     def test_no_test_file(self, tmp_path):
         from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
@@ -904,8 +925,8 @@ class TestCheckCoreDependencies:
         sd._check_core_dependencies()
         captured = capsys.readouterr()
         assert "Core Dependencies" in captured.out
-        # numpy is installed, should show checkmark
-        assert "numpy" in captured.out
+        # pyyaml is a declared core dependency and is installed.
+        assert "   OK pyyaml " in captured.out
 
 
 # ===================================================================

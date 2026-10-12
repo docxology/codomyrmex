@@ -122,42 +122,57 @@ WebSocket client for real-time communication.
 from codomyrmex.networking import WebSocketClient
 ```
 
+Requires the `websockets` package; the constructor raises `ImportError` without it.
+
 #### Constructor
 
 ```python
 WebSocketClient(
     url: str,
-    on_message: Optional[Callable] = None,
-    on_error: Optional[Callable] = None,
-    on_close: Optional[Callable] = None
+    headers: dict[str, str] | None = None,
+    reconnect_interval: float = 1.0,
+    max_reconnect_delay: float = 30.0,
 )
 ```
 
+- `url`: WebSocket URL.
+- `headers`: Extra handshake headers.
+- `reconnect_interval`: Initial delay in seconds before reconnecting; it grows by 1.5x per failure.
+- `max_reconnect_delay`: Upper bound for the reconnection delay in seconds.
+
 #### Methods
+
+##### on
+
+```python
+def on(handler: Callable[[Any], Any]) -> None
+```
+
+Register a message handler (sync or async). JSON text messages are decoded before they are passed to handlers.
 
 ##### connect
 
 ```python
-def connect() -> bool
+async def connect() -> None
 ```
 
-Establish WebSocket connection.
+Connect and process incoming messages, reconnecting with backoff until `close()` is called. Run it as a task.
 
 ##### send
 
 ```python
-def send(message: str) -> bool
+async def send(message: str | bytes | dict) -> None
 ```
 
-Send message through WebSocket.
+Send a message; a dict is sent as JSON. Raises `WebSocketError` when not connected or when sending fails.
 
 ##### close
 
 ```python
-def close() -> None
+async def close() -> None
 ```
 
-Close WebSocket connection.
+Stop reconnecting and close the connection.
 
 ---
 
@@ -225,19 +240,23 @@ except NetworkingError as e:
 ### WebSocket Communication
 
 ```python
+import asyncio
+
 from codomyrmex.networking import WebSocketClient
 
-def on_message(message):
-    print(f"Received: {message}")
 
-client = WebSocketClient(
-    "wss://ws.example.com/socket",
-    on_message=on_message
-)
+async def main() -> None:
+    client = WebSocketClient("wss://ws.example.com/socket")
+    client.on(lambda message: print(f"Received: {message}"))
 
-client.connect()
-client.send("Hello, Server!")
-client.close()
+    listener = asyncio.create_task(client.connect())
+    await asyncio.sleep(1)  # allow the connection to open
+    await client.send("Hello, Server!")
+    await client.close()
+    await listener
+
+
+asyncio.run(main())
 ```
 
 ---

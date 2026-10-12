@@ -14,11 +14,19 @@ from codomyrmex.agents.hermes.provider_router_pkg import ProviderRouter
 
 
 @pytest.fixture
-def rotation_router(tmp_path: Path) -> ProviderRouter:
+def rotation_router(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> ProviderRouter:
     """Build a ProviderRouter with a real rotation config file."""
-    router = ProviderRouter(
-        primary_provider="openrouter", model="google/gemini-flash-1.5-free"
-    )
+    hermes_home = tmp_path / "hermes-home"
+    hermes_home.mkdir()
+    monkeypatch.setenv("HERMES_HOME", str(hermes_home))
+    for variable in (
+        "OPENROUTER_API_KEY",
+        "NOUS_API_KEY",
+        "OPENAI_API_KEY",
+        "ANTHROPIC_API_KEY",
+        "ZAI_API_KEY",
+    ):
+        monkeypatch.delenv(variable, raising=False)
     rotation_file = tmp_path / "hermes_rotation_test.json"
     rotation_file.write_text(
         """
@@ -30,8 +38,55 @@ def rotation_router(tmp_path: Path) -> ProviderRouter:
         }
         """
     )
-    router._rotation_path = str(rotation_file)
-    return router
+    return ProviderRouter(
+        primary_provider="openrouter",
+        model="google/gemini-flash-1.5-free",
+        env_path=str(hermes_home / ".env"),
+        rotation_path=str(rotation_file),
+    )
+
+
+def test_constructor_isolates_rotation_and_credentials_before_io(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Recognized home and explicit paths take effect before constructor I/O."""
+    home = tmp_path / "hermes-home"
+    home.mkdir()
+    monkeypatch.setenv("HERMES_HOME", str(home))
+    for variable in (
+        "OPENROUTER_API_KEY",
+        "NOUS_API_KEY",
+        "OPENAI_API_KEY",
+        "ANTHROPIC_API_KEY",
+        "ZAI_API_KEY",
+    ):
+        monkeypatch.delenv(variable, raising=False)
+    (home / ".env").write_text(
+        "OPENROUTER_API_KEY=unit-only-default\n"  # pragma: allowlist secret
+    )
+    default = ProviderRouter()
+    assert default._env_path == str(home / ".env")
+    assert default._rotation_path == str(home / "rotation.json")
+    assert default.has_credentials("openrouter")
+    assert (home / "rotation.json").is_file()
+
+    explicit_env = tmp_path / "explicit.env"
+    explicit_env.write_text(
+        "OPENROUTER_API_KEY=unit-only-explicit\n"  # pragma: allowlist secret
+    )
+    explicit_rotation = tmp_path / "explicit" / "rotation.json"
+    router = ProviderRouter(
+        env_path=str(explicit_env), rotation_path=str(explicit_rotation)
+    )
+    assert router._env_path == str(explicit_env)
+    assert router._rotation_path == str(explicit_rotation)
+    assert router.has_credentials("openrouter")
+    assert explicit_rotation.is_file()
+
+    monkeypatch.chdir(tmp_path)
+    relative = ProviderRouter(env_path=str(explicit_env), rotation_path="rotation.json")
+    assert relative._rotation_path == "rotation.json"
+    assert (tmp_path / "rotation.json").is_file()
 
 
 def test_rotation_on_429(

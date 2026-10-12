@@ -214,6 +214,37 @@ class TestUserModel:
 class TestMCPBridgeManager:
     """Verify MCP bridge server management."""
 
+    def test_default_config_uses_recognized_home(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        home = tmp_path / "selected-hermes-home"
+        home.mkdir()
+        config = home / "mcp_servers.json"
+        config.write_text(json.dumps({"isolated": {"command": "echo"}}))
+        monkeypatch.setenv("HERMES_HOME", str(home))
+        mgr = MCPBridgeManager()
+        assert mgr._config_path == config
+        assert mgr.servers == {"isolated": {"command": "echo"}}
+        mgr.register_server("local", command="cat")
+        assert set(json.loads(config.read_text())) == {"isolated", "local"}
+
+    def test_explicit_config_precedes_recognized_home(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        home = tmp_path / "selected-hermes-home"
+        home.mkdir()
+        default = home / "mcp_servers.json"
+        default.write_text(json.dumps({"home": {"command": "echo"}}))
+        explicit = tmp_path / "explicit.json"
+        explicit.write_text(json.dumps({"explicit": {"command": "cat"}}))
+        monkeypatch.setenv("HERMES_HOME", str(home))
+        mgr = MCPBridgeManager(config_path=str(explicit))
+        assert mgr._config_path == explicit
+        assert mgr.servers == {"explicit": {"command": "cat"}}
+        mgr.register_server("added", command="echo")
+        assert set(json.loads(explicit.read_text())) == {"explicit", "added"}
+        assert json.loads(default.read_text()) == {"home": {"command": "echo"}}
+
     def test_register_and_list(self, tmp_path: Path) -> None:
         config = tmp_path / "mcp_servers.json"
         mgr = MCPBridgeManager(config_path=str(config))
@@ -246,13 +277,22 @@ class TestMCPBridgeManager:
         assert len(mgr2.list_servers()) == 1
         assert mgr2.servers["persistent"]["command"] == "cat"
 
-    def test_reload(self, tmp_path: Path) -> None:
+    def test_reload(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        # A real local executable verifies CLI arguments without contacting an
+        # installed Hermes daemon or loading its operator configuration.
+        executable = tmp_path / "hermes"
+        executable.write_text('#!/bin/sh\nprintf "%s %s\\n" "$1" "$2"\n')
+        executable.chmod(0o700)
+        monkeypatch.setenv("PATH", str(tmp_path))
         config = tmp_path / "mcp_servers.json"
         mgr = MCPBridgeManager(config_path=str(config))
+        mgr.register_server("local", command="echo")
         result = mgr.reload()
-        assert isinstance(result, dict)
-        assert "success" in result
-        assert "servers_loaded" in result
+        assert result == {
+            "success": True,
+            "servers_loaded": 1,
+            "output": "mcp reload",
+        }
 
     def test_nonexistent_config(self, tmp_path: Path) -> None:
         config = tmp_path / "nonexistent" / "mcp_servers.json"

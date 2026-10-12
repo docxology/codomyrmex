@@ -13,6 +13,7 @@ from typing import TYPE_CHECKING, Any
 from codomyrmex.agents.core import AgentRequest, AgentResponse
 from codomyrmex.agents.core.exceptions import AgentError, AgentTimeoutError
 from codomyrmex.agents.hermes.client_pkg.errors import AutoRetryException, HermesError
+from codomyrmex.agents.hermes.hermes_paths import resolve_hermes_home
 from codomyrmex.agents.hermes.session import HermesSession, SQLiteSessionStore
 from codomyrmex.agents.hermes.skill_names import (
     SESSION_METADATA_HERMES_SKILLS_KEY,
@@ -31,7 +32,8 @@ class HermesExecutionMixin:
         Checks two sources:
         1. ``hermes config`` output — looks for API key lines that show
            actual key values (not ``(not set)``).
-        2. ``~/.hermes/.env`` — scans for a non-empty ``OPENROUTER_API_KEY=``.
+        2. ``HERMES_HOME/.env`` (default ``~/.hermes/.env``) — scans for a
+           non-empty ``OPENROUTER_API_KEY=``.
 
         Returns:
             True if at least one API key is configured.
@@ -71,9 +73,9 @@ class HermesExecutionMixin:
                 "Failed to parse `hermes config` output: %s", exc
             )  # Fall through to .env check
 
-        # Method 2: check ~/.hermes/.env directly
+        # Method 2: inspect only the configured Hermes data home.
         try:
-            hermenv = os.path.expanduser("~/.hermes/.env")
+            hermenv = resolve_hermes_home() / ".env"
             if os.path.exists(hermenv):
                 with open(hermenv) as f:
                     for line in f:
@@ -83,7 +85,7 @@ class HermesExecutionMixin:
                         ):
                             return True
         except Exception as exc:
-            self.logger.debug("Failed to read ~/.hermes/.env: %s", exc)
+            self.logger.debug("Failed to read configured Hermes .env: %s", exc)
 
         # Method 3: check environment variable
         if os.environ.get("OPENROUTER_API_KEY"):
@@ -113,6 +115,8 @@ class HermesExecutionMixin:
         self, request: AgentRequest, max_tokens: int | None = None
     ) -> AgentResponse:
         """Execute via the primary active backend (CLI or Ollama)."""
+        if self._active_backend not in {"cli", "ollama"}:
+            raise HermesError("No supported Hermes backend configured")
         if self._active_backend == "ollama":
             return self._execute_via_ollama(request, max_tokens=max_tokens)
         if not self._is_cli_configured():
@@ -179,8 +183,8 @@ class HermesExecutionMixin:
                 "ANTHROPIC_API_KEY",
             ):
                 if key_name not in subprocess_env:
-                    # Try loading from ~/.hermes/.env
-                    hermenv = os.path.expanduser("~/.hermes/.env")
+                    # Load credentials only from the configured data home.
+                    hermenv = resolve_hermes_home() / ".env"
                     if os.path.exists(hermenv):
                         with open(hermenv) as f:
                             for line in f:
@@ -296,6 +300,8 @@ class HermesExecutionMixin:
 
     def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
         """Stream output from the active backend."""
+        if self._active_backend not in {"cli", "ollama"}:
+            raise HermesError("No supported Hermes backend configured")
         if self._active_backend == "ollama":
             yield from self._stream_via_ollama(request)
         else:

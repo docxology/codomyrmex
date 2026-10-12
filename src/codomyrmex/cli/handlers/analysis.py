@@ -72,18 +72,24 @@ def handle_code_analysis(path: str, output_dir: str | None) -> bool:
         return False
 
 
-def handle_git_analysis(repo_path: str) -> bool:
-    """Handle git repository analysis command."""
+def handle_git_analysis(repo_path: str, output_dir: str = "./git_analysis") -> bool:
+    """Handle git repository analysis command.
+
+    Args:
+        repo_path: Repository to analyze.
+        output_dir: Directory for the generated reports; by default
+            ``git_analysis/`` in the current working directory.
+    """
     try:
         from codomyrmex.data_visualization.git.git_visualizer import (
             visualize_git_repository,
         )
 
         print(f"Analyzing git repository at: {repo_path}...")
-        result = visualize_git_repository(repo_path, output_dir="./git_analysis")
+        result = visualize_git_repository(repo_path, output_dir=output_dir)
 
         if result:
-            print_success("Git analysis complete. Check ./git_analysis/ for results.")
+            print_success(f"Git analysis complete. Check {output_dir} for results.")
             return True
         print_error("Git analysis failed")
         return False

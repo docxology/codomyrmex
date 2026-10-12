@@ -59,6 +59,7 @@ def test_google_calendar_auth_error():
     os.environ.get("CODOMYRMEX_RUN_LIVE_CALENDAR_TESTS") != "1",
     reason="Live calendar tests require CODOMYRMEX_RUN_LIVE_CALENDAR_TESTS=1 and credentials.",
 )
+@pytest.mark.network
 def test_google_calendar_live_integration():
     """
     Live integration test for Google Calendar.
@@ -69,15 +70,17 @@ def test_google_calendar_live_integration():
         from google.auth import default
 
         creds, _ = default()
-    except Exception as e:
-        pytest.skip(f"Could not load default Google credentials: {e}")
+    except Exception:
+        pytest.fail("Explicit live Google Calendar credentials were unavailable")
 
     provider = GoogleCalendar(credentials=creds)
 
-    # 1. list events (make sure it doesn't crash)
-    now = datetime.now(UTC)
-    events = provider.list_events(now, now + timedelta(days=7))
-    assert isinstance(events, list)
+    try:
+        now = datetime.now(UTC)
+        events = provider.list_events(now, now + timedelta(days=7))
+        assert isinstance(events, list)
+    finally:
+        provider.close()
 
     # We could theoretically create an event, assert it's returned by get_event,
     # and then delete it. However, we'll keep this simple for safety unless more

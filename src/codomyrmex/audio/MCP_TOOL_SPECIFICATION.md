@@ -350,7 +350,7 @@ All tools return errors in this format:
 ### Error Types
 
 | Error Type | Description |
-|------------|-------------|
+| ------------ | ------------- |
 | TranscriptionError | STT processing failed |
 | SynthesisError | TTS processing failed |
 | AudioFormatError | Unsupported audio format |
@@ -365,7 +365,7 @@ All tools return errors in this format:
 ### Compute
 
 | Model | VRAM | CPU Fallback |
-|-------|------|--------------|
+| ------- | ------ | -------------- |
 | tiny | ~1GB | Yes |
 | base | ~1GB | Yes |
 | small | ~2GB | Slow |
@@ -375,7 +375,7 @@ All tools return errors in this format:
 ### Network
 
 | Provider | Network Required |
-|----------|------------------|
+| ---------- | ------------------ |
 | pyttsx3 | No |
 | edge-tts | Yes |
 | Whisper | No (local) |
@@ -431,3 +431,21 @@ All tools return errors in this format:
   }
 ]
 ```
+
+## Validation before model acquisition
+
+`audio_transcribe` and `audio_detect_language` return the existing error envelope
+for missing/nonfile or unsupported-format inputs before constructing a model.
+Valid model configuration is still checked before input validation in
+`audio_transcribe`. `audio_batch_transcribe` preflights paths, counts invalid files
+as failures, and preserves input order for valid files. An all-invalid or empty
+batch with an installed Whisper backend returns zero processed files without
+loading weights or creating the output directory. Missing-backend errors retain
+the existing `ProviderNotAvailableError` contract. Real offline subprocess tests
+use an empty model cache to ensure model absence cannot mask input diagnostics.
+
+`audio_get_capabilities` discovers the actual `faster_whisper` package by import
+metadata while retaining the public provider name `whisper`. Discovery imports
+no model/native backend. Its `ready` flag indicates installed provider packages;
+model-cache contents and external service availability are not established by
+that flag.

@@ -29,7 +29,7 @@ uv run pytest tests/unit/data_curation/ -q
 
 ## Navigation
 
-- **Module Overview**: README.md is rendered in this mirror as [readme.md](readme.md)
+- **Module Overview**: README.md is rendered in this mirror as [extended_readme.md](extended_readme.md)
 - **Agent Guidance**: [AGENTS.md](AGENTS.md)
 - **API Specification**: [api_specification.md](api_specification.md)
 - **MCP Tools**: [mcp_tool_specification.md](mcp_tool_specification.md)

@@ -7,7 +7,7 @@ Documentation tooling, generated references, and publishing assets for Ai Gatewa
 
 ## Active Components
 - `mcp_tool_specification.md` – Project file
-- `readme.md` – Project file
+- `extended_readme.md` – Project file
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -18,7 +18,7 @@ Documentation tooling, generated references, and publishing assets for Ai Gatewa
 - `AGENTS.md` - Agent coordination and navigation
 - `README.md` - Directory overview
 - `mcp_tool_specification.md`
-- `readme.md`
+- `extended_readme.md`
 
 ## Dependencies
 - Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.

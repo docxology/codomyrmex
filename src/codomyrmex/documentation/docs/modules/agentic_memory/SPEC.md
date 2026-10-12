@@ -99,6 +99,6 @@ def memory_search(query: str, k: int = 5) -> list[dict[str, Any]]
 ## Navigation
 
 - **Source**: [src/codomyrmex/agentic_memory/](../../../../agentic_memory/)
-- **Extended README**: [README.md](readme.md)
+- **Extended README**: [README.md](extended_readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

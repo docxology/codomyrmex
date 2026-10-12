@@ -45,6 +45,7 @@ os.environ["CODOMYRMEX_TRUST_LEDGER_PATH"] = str(
 os.environ["CODOMYRMEX_HERMES_SESSION_DB"] = str(
     _PROCESS_TEST_STATE / "hermes-sessions.db"
 )
+os.environ["HERMES_HOME"] = str(_PROCESS_TEST_STATE / "hermes-home")
 
 # pytest-asyncio 1.3 briefly swaps event-loop policies around each async test.
 # On Python 3.13, its compatibility lookup creates an idle loop when no loop
@@ -101,6 +102,7 @@ import pytest
 import yaml
 
 from codomyrmex.logging_monitoring import get_logger, setup_logging
+from tests.support.stray_paths import StrayPathPlugin, guard_mode
 
 
 def pytest_configure(config):
@@ -118,6 +120,20 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "bench: Opt-in benchmark and timing tests")
     config.addinivalue_line("markers", "benchmark: Opt-in pytest-benchmark tests")
     config.addinivalue_line("markers", "performance: Performance test suite")
+    _register_stray_path_guard(config)
+
+
+def _register_stray_path_guard(config: pytest.Config) -> None:
+    """Report paths that tests leave in the repository (tests/support/stray_paths.py)."""
+    try:
+        mode = guard_mode()
+    except ValueError as exc:
+        raise pytest.UsageError(str(exc)) from exc
+    if mode == "off":
+        return
+    config.pluginmanager.register(
+        StrayPathPlugin(config, _TESTS_ROOT.parent, mode), "codomyrmex-stray-paths"
+    )
 
 
 def _close_event_loop(candidate: asyncio.AbstractEventLoop) -> None:
@@ -296,6 +312,7 @@ def setup_test_environment(request: pytest.FixtureRequest):
     original_git_prompt = os.environ.get("GIT_TERMINAL_PROMPT")
     original_trust_ledger = os.environ.get("CODOMYRMEX_TRUST_LEDGER_PATH")
     original_hermes_db = os.environ.get("CODOMYRMEX_HERMES_SESSION_DB")
+    original_hermes_home = os.environ.get("HERMES_HOME")
     os.environ["GIT_EDITOR"] = "true"
     os.environ["GIT_TERMINAL_PROMPT"] = "0"
     test_token = hashlib.sha256(request.node.nodeid.encode()).hexdigest()[:16]
@@ -304,6 +321,7 @@ def setup_test_environment(request: pytest.FixtureRequest):
     hermes_db = test_state / "codomyrmex-hermes-sessions.db"
     os.environ["CODOMYRMEX_TRUST_LEDGER_PATH"] = str(trust_ledger)
     os.environ["CODOMYRMEX_HERMES_SESSION_DB"] = str(hermes_db)
+    os.environ["HERMES_HOME"] = str(test_state / "hermes-home")
 
     # Most trust tests import the module during collection, before fixtures
     # run. Redirect that already-created (but lazily unloaded) singleton too.
@@ -346,6 +364,11 @@ def setup_test_environment(request: pytest.FixtureRequest):
         os.environ["CODOMYRMEX_HERMES_SESSION_DB"] = original_hermes_db
     else:
         os.environ.pop("CODOMYRMEX_HERMES_SESSION_DB", None)
+
+    if original_hermes_home is not None:
+        os.environ["HERMES_HOME"] = original_hermes_home
+    else:
+        os.environ.pop("HERMES_HOME", None)
 
     client_factory_module = sys.modules.get(
         "codomyrmex.agents.hermes.mcp_tools_pkg._client"

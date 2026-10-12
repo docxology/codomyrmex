@@ -66,17 +66,13 @@ class ConfigurationMonitor:
         self.monitoring_dir = self.workspace_dir / "config_monitoring"
         self.snapshots_dir = self.monitoring_dir / "snapshots"
         self.audits_dir = self.workspace_dir / "config_audits"
-        self._ensure_directories()
+        # Directories are created when a file is first written into them:
+        # constructing a monitor (for example just to hash a file) must not
+        # create them in the workspace, which defaults to the CWD.
 
         self._changes: list[ConfigChange] = []
         self._snapshots: dict[str, ConfigSnapshot] = {}
         self._audits: list[ConfigAudit] = []
-
-    def _ensure_directories(self):
-        """Ensure required directories exist."""
-        self.monitoring_dir.mkdir(parents=True, exist_ok=True)
-        self.snapshots_dir.mkdir(parents=True, exist_ok=True)
-        self.audits_dir.mkdir(parents=True, exist_ok=True)
 
     def calculate_file_hash(self, file_path: str) -> str:
         """Calculate hash of a configuration file.
@@ -187,6 +183,7 @@ class ConfigurationMonitor:
             except (json.JSONDecodeError, OSError) as e:
                 logger.debug("Hash store unreadable, starting fresh: %s", e)
         existing.update(file_hashes)
+        hash_store_path.parent.mkdir(parents=True, exist_ok=True)
         with open(hash_store_path, "w") as f:
             json.dump(existing, f, indent=2)
 
@@ -220,6 +217,7 @@ class ConfigurationMonitor:
 
         # Save snapshot
         snapshot_file = self.snapshots_dir / f"{snapshot_id}.json"
+        snapshot_file.parent.mkdir(parents=True, exist_ok=True)
         with open(snapshot_file, "w") as f:
             json.dump(
                 {
@@ -389,6 +387,7 @@ class ConfigurationMonitor:
 
         # Save audit results
         audit_file = self.audits_dir / f"{audit_id}.json"
+        audit_file.parent.mkdir(parents=True, exist_ok=True)
         with open(audit_file, "w") as f:
             json.dump(
                 {

@@ -294,8 +294,8 @@ class Tensor:
             else:
                 grad = out.grad
                 if not keepdims and axis is not None:
-                    grad = np.expand_dims(grad, axis=axis)  # type: ignore
-                self.grad += np.broadcast_to(grad, self.data.shape).copy()  # type: ignore
+                    grad = np.expand_dims(grad, axis=axis)
+                self.grad += np.broadcast_to(grad, self.data.shape).copy()
 
         out._backward = _backward
         return out
@@ -314,7 +314,7 @@ class Tensor:
             else:
                 grad = out.grad
                 if not keepdims and axis is not None:
-                    grad = np.expand_dims(grad, axis=axis)  # type: ignore
+                    grad = np.expand_dims(grad, axis=axis)
                 self.grad += np.broadcast_to(grad / n, self.data.shape).copy()  # type: ignore
 
         out._backward = _backward

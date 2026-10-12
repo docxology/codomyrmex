@@ -30,6 +30,6 @@
 ## Navigation
 
 - **Source**: [src/codomyrmex/search/](../../../../search/)
-- **Extended README**: [README.md](readme.md)
+- **Extended README**: [README.md](extended_readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

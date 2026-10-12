@@ -16,7 +16,7 @@ from codomyrmex.logging_monitoring import get_logger, setup_logging
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable
 
-setup_logging()
+# Importing this module must not configure logging; main() does that.
 logger = get_logger(__name__)
 
 
@@ -417,6 +417,7 @@ def _process_todos(
 
 def main() -> None:
     """Main entry point with interactive prompt and enhanced processing."""
+    setup_logging()
     parser = argparse.ArgumentParser(
         description="🤖 Codomyrmex Droid TODO Processor",
         formatter_class=argparse.RawDescriptionHelpFormatter,

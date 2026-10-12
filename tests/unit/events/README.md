@@ -7,6 +7,7 @@
 Validation coverage, fixtures, and regression checks for Events.
 
 ## Directory Contents
+
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -27,9 +28,14 @@ Validation coverage, fixtures, and regression checks for Events.
 - `test_zero_mock.py` – File
 
 ## Navigation
+
 - **Parent Directory**: [unit](../README.md)
 - **Project Root**: ../../../../../README.md
 
 ## Related Documents
 
 - **Agents**: [AGENTS.md](AGENTS.md)
+
+## One-time listener controls
+
+`test_event_system_review.py` verifies atomic one-time dispatch with real concurrent publishers, queued async wrappers, and recursive publication. Async signals use the owning loop's `call_soon_threadsafe`; a single-worker completion fence replaces timing sleeps.

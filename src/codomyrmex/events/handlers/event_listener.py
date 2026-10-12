@@ -6,6 +6,7 @@ with filtering, prioritization, and lifecycle management.
 """
 
 import inspect
+import threading
 from collections.abc import Callable
 from typing import Any
 
@@ -77,27 +78,36 @@ class EventListener:
         filter_func: Callable[[Event], bool] | None = None,
         priority: int = 0,
     ) -> str:
-        """Register a one-time event handler."""
+        """Register a handler claimed at most once, before callback execution."""
         if handler_name is None:
             handler_name = f"{self.listener_id}_once_{len(self.handlers)}"
 
         is_async = inspect.iscoroutinefunction(handler)
+        claim_lock = threading.Lock()
+        claimed = False
+
+        def claim() -> bool:
+            nonlocal claimed
+            with claim_lock:
+                if claimed:
+                    return False
+                claimed = True
+                # Remove before user code, including recursive publication.
+                # Already queued wrappers also share this atomic claim.
+                self.off(handler_name)
+                return True
 
         if is_async:
 
             async def one_time_wrapper(event: Event):
-                try:
+                if claim():
                     await handler(event)
-                finally:
-                    self.off(handler_name)
 
         else:
 
             def one_time_wrapper(event: Event):
-                try:
+                if claim():
                     handler(event)
-                finally:
-                    self.off(handler_name)
 
         return self.on(
             event_types, one_time_wrapper, handler_name, filter_func, priority

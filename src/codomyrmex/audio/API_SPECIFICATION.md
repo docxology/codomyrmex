@@ -23,6 +23,7 @@ Transcriber(
 ```
 
 **Parameters:**
+
 - `provider`: STT provider name (currently "whisper")
 - `model_size`: Whisper model size enum or string value such as `"tiny"`
 - `device`: Compute device ("auto", "cpu", "cuda")
@@ -46,6 +47,7 @@ def transcribe(
 Transcribe an audio file synchronously.
 
 **Parameters:**
+
 - `audio_path`: Path to audio file
 - `language`: ISO 639-1 language code (None for auto-detect)
 - `task`: "transcribe" or "translate" (to English)
@@ -55,6 +57,7 @@ Transcribe an audio file synchronously.
 **Returns:** `TranscriptionResult`
 
 **Raises:**
+
 - `TranscriptionError`: If transcription fails
 - `AudioFormatError`: If format not supported
 
@@ -140,7 +143,7 @@ Unload model to free memory.
 #### Attributes
 
 | Attribute | Type | Description |
-|-----------|------|-------------|
+| ----------- | ------ | ------------- |
 | text | str | Full transcription text |
 | segments | list[Segment] | Timed segments |
 | language | str | Detected/specified language |
@@ -153,7 +156,7 @@ Unload model to free memory.
 #### Properties
 
 | Property | Type | Description |
-|----------|------|-------------|
+| ---------- | ------ | ------------- |
 | word_count | int | Total word count |
 | segment_count | int | Number of segments |
 
@@ -173,7 +176,7 @@ def save_vtt(path) -> Path # Save to VTT file
 #### Attributes
 
 | Attribute | Type | Description |
-|-----------|------|-------------|
+| ----------- | ------ | ------------- |
 | id | int | Segment index |
 | start | float | Start time (seconds) |
 | end | float | End time (seconds) |
@@ -185,7 +188,7 @@ def save_vtt(path) -> Path # Save to VTT file
 ### Word
 
 | Attribute | Type | Description |
-|-----------|------|-------------|
+| ----------- | ------ | ------------- |
 | word | str | Word text |
 | start | float | Start time |
 | end | float | End time |
@@ -223,6 +226,7 @@ Synthesizer(
 ```
 
 **Parameters:**
+
 - `provider`: TTS provider ("pyttsx3" or "edge-tts")
 - `config`: Default synthesis configuration
 
@@ -244,6 +248,7 @@ def synthesize(
 Synthesize speech from text.
 
 **Parameters:**
+
 - `text`: Text to synthesize
 - `voice`: Voice ID (None for default)
 - `rate`: Speaking rate (0.5 = half speed, 2.0 = double)
@@ -253,6 +258,7 @@ Synthesize speech from text.
 **Returns:** `SynthesisResult`
 
 **Raises:**
+
 - `SynthesisError`: If synthesis fails
 - `VoiceNotFoundError`: If voice not available
 
@@ -345,7 +351,7 @@ Set the default voice for synthesis.
 #### Attributes
 
 | Attribute | Type | Description |
-|-----------|------|-------------|
+| ----------- | ------ | ------------- |
 | audio_data | bytes | Raw audio bytes |
 | format | AudioFormat | WAV or MP3 |
 | duration | float | Duration (seconds) |
@@ -358,7 +364,7 @@ Set the default voice for synthesis.
 #### Properties
 
 | Property | Type | Description |
-|----------|------|-------------|
+| ---------- | ------ | ------------- |
 | size_bytes | int | Audio data size |
 | size_kb | float | Size in KB |
 
@@ -372,7 +378,7 @@ def to_dict() -> dict               # Metadata dictionary
 ### VoiceInfo
 
 | Attribute | Type | Description |
-|-----------|------|-------------|
+| ----------- | ------ | ------------- |
 | id | str | Unique voice ID |
 | name | str | Display name |
 | language | str | Language code |
@@ -486,3 +492,12 @@ VoiceNotFoundError(
     available_voices: Optional[list[str]] = None
 )
 ```
+
+## Transcription input validation
+
+`codomyrmex.audio.speech_to_text.validation.validate_audio_path(audio_path: str |
+Path) -> Path` validates regular-file existence and the shared supported suffix
+set without importing a model runtime. It raises `TranscriptionError` for a
+missing/nonfile input and `AudioFormatError` for an unsupported suffix. MCP
+wrappers run preflight before model resource acquisition; the `Transcriber`
+constructor itself remains eager-loading.

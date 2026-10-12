@@ -302,7 +302,9 @@ class TestCLIAnalysis:
         assert callable(handle_git_analysis)
 
         # Try to analyze (may fail if visualization tools not available)
-        result = handle_git_analysis(str(test_repo))
+        result = handle_git_analysis(
+            str(test_repo), output_dir=str(tmp_path / "git_analysis")
+        )
 
         # Should return True or False (not raise exception)
         assert isinstance(result, bool)

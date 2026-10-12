@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -11,20 +12,77 @@ from codomyrmex.manuscript.variables import (
     _canonical_sqlite_sha256,
     _load_yaml_without_duplicate_keys,
     _run_colony_kernel_coverage,
+    _template_hydration_contract,
     validate_variable_contract,
 )
 
 
-def test_pdf_margin_is_configured_and_injected() -> None:
+@pytest.mark.parametrize(
+    ("failure", "message"),
+    [
+        ("revision", "revision mismatch"),
+        ("dirty", "checkout is dirty"),
+        ("module", "missing the hydration module"),
+        ("directory", "does not identify a directory"),
+    ],
+)
+def test_explicit_template_checkout_fails_closed(
+    tmp_path: Path, monkeypatch, failure: str, message: str
+) -> None:
+    """A configured checkout cannot silently fall back to local hydration."""
+    checkout = tmp_path / "template"
+    checkout.mkdir()
+    subprocess.run(["git", "init", "-q", str(checkout)], check=True)
+    (checkout / "tracked.txt").write_text("pinned input\n", encoding="utf-8")
+    subprocess.run(["git", "-C", str(checkout), "add", "tracked.txt"], check=True)
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(checkout),
+            "-c",
+            "user.name=Test",
+            "-c",
+            "user.email=test@example.invalid",
+            "-c",
+            "commit.gpgsign=false",
+            "commit",
+            "-qm",
+            "Fixture pin",
+        ],
+        check=True,
+    )
+    revision = subprocess.run(
+        ["git", "-C", str(checkout), "rev-parse", "HEAD"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    if failure == "revision":
+        revision = "0" * 40
+    elif failure == "dirty":
+        (checkout / "tracked.txt").write_text("modified\n", encoding="utf-8")
+    elif failure == "directory":
+        checkout = tmp_path / "missing"
+    monkeypatch.setenv("TEMPLATE_REPO_ROOT", str(checkout))
+    config = yaml.safe_load(
+        (
+            Path(__file__).resolve().parents[3] / "docs/manuscript/config.yaml"
+        ).read_text()
+    )
+    config["template"]["revision"] = revision
+    with pytest.raises(RuntimeError, match=message):
+        _template_hydration_contract(config, tmp_path / "config.yaml", tmp_path)
+
+
+def test_pdf_margin_is_configured_and_injected(
+    generated_manuscript_snapshot: Path,
+) -> None:
     root = Path(__file__).resolve().parents[3]
     config_path = root / "docs" / "manuscript" / "config.yaml"
     config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
     expected = str(config["paper"]["pdf_margin"])
-    variables = json.loads(
-        (root / "output" / "data" / "manuscript_variables.json").read_text(
-            encoding="utf-8"
-        )
-    )
+    variables = json.loads(generated_manuscript_snapshot.read_text(encoding="utf-8"))
     preamble = (root / "docs" / "manuscript" / "preamble.md").read_text(
         encoding="utf-8"
     )
@@ -32,6 +90,11 @@ def test_pdf_margin_is_configured_and_injected() -> None:
     assert "{{CONFIG_PDF_MARGIN}}" in preamble
     assert variables["CONFIG_PDF_MARGIN"] == expected
     assert re.fullmatch(r"(?:0|[0-9]+(?:\.[0-9]+)?)(?:in|cm|mm|pt)", expected)
+    hydrated = (
+        generated_manuscript_snapshot.parents[1] / "manuscript" / "preamble.md"
+    ).read_text(encoding="utf-8")
+    assert "{{CONFIG_PDF_MARGIN}}" not in hydrated
+    assert rf"\geometry{{margin={expected},headheight=14pt}}" in hydrated
 
 
 def test_sqlite_artifact_digest_is_stable_across_temporary_paths(

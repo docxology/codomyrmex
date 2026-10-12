@@ -1,0 +1,12 @@
+# Third-party and generated content: not edited by hand, not linted.
+**/node_modules/**
+**/vendor/**
+**/upstream/**
+src/codomyrmex/agents/hermes/evolution/**
+src/codomyrmex/agents/open_gauss/**
+# The FPF specification is fetched verbatim from upstream and parsed by
+# codomyrmex.fpf; reformatting it would change the parsed document.
+**/FPF-Spec.md
+# Legacy generated Docusaurus mirror, including verbatim README snapshots.
+# Canonical source docs and project-root docs remain subject to the lint gate.
+src/codomyrmex/documentation/docs/modules/**

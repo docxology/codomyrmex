@@ -26,6 +26,12 @@ ENV_HERMES_CLI_PATH = "HERMES_CLI_PATH"
 ENV_HERMES_SESSION_DB = "CODOMYRMEX_HERMES_SESSION_DB"
 
 
+def resolve_hermes_home() -> Path:
+    """Resolve Hermes data/configuration home without reading operator files."""
+    configured = os.environ.get("HERMES_HOME")
+    return Path(configured).expanduser() if configured else Path.home() / ".hermes"
+
+
 def _hermes_module_dir() -> Path:
     return Path(__file__).resolve().parent
 

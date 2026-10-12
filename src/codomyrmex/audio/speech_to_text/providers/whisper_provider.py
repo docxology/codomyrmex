@@ -30,6 +30,10 @@ from codomyrmex.audio.speech_to_text.models import (
     WhisperModelSize,
     Word,
 )
+from codomyrmex.audio.speech_to_text.validation import (
+    SUPPORTED_FORMATS,
+    validate_audio_path,
+)
 
 from .base import STTProvider
 
@@ -41,21 +45,6 @@ def _load_whisper_model_class() -> Any:
     """Import ``WhisperModel`` only when transcription is requested."""
     return importlib.import_module("faster_whisper").WhisperModel
 
-
-# Supported audio formats
-SUPPORTED_FORMATS = {
-    ".wav",
-    ".mp3",
-    ".flac",
-    ".ogg",
-    ".m4a",
-    ".webm",
-    ".mp4",
-    ".mpeg",
-    ".mpga",
-    ".oga",
-    ".opus",
-}
 
 # Language codes supported by Whisper
 WHISPER_LANGUAGES = [
@@ -272,22 +261,7 @@ class WhisperProvider(STTProvider):
             AudioFormatError: If format is not supported
 
         """
-        path = Path(audio_path)
-
-        if not path.exists():
-            raise TranscriptionError(
-                f"Audio file not found: {path}",
-                audio_path=path,
-            )
-
-        if path.suffix.lower() not in SUPPORTED_FORMATS:
-            raise AudioFormatError(
-                f"Unsupported audio format: {path.suffix}",
-                format_type=path.suffix,
-                supported_formats=list(SUPPORTED_FORMATS),
-            )
-
-        return path
+        return validate_audio_path(audio_path)
 
     def transcribe(
         self,

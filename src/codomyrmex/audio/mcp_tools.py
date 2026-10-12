@@ -10,8 +10,8 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 def audio_get_capabilities() -> dict[str, Any]:
     """Return available audio processing capabilities.
 
-    Reports which speech-to-text and text-to-speech providers are
-    installed and ready to use.
+    Reports which speech-to-text and text-to-speech provider packages are
+    installed. Model assets and remote service availability are separate.
 
     Returns:
         Dictionary with lists of available STT and TTS providers.
@@ -23,7 +23,7 @@ def audio_get_capabilities() -> dict[str, Any]:
             "tts_providers": [],
         }
 
-        if importlib.util.find_spec("whisper") is not None:
+        if importlib.util.find_spec("faster_whisper") is not None:
             capabilities["stt_providers"].append("whisper")
 
         if importlib.util.find_spec("pyttsx3") is not None:
@@ -121,8 +121,10 @@ def audio_transcribe(
     """
     try:
         from codomyrmex.audio.speech_to_text import Transcriber, WhisperModelSize
+        from codomyrmex.audio.speech_to_text.validation import validate_audio_path
 
         model_size_enum = WhisperModelSize(model_size)
+        validate_audio_path(audio_path)
 
         with Transcriber(model_size=model_size_enum) as transcriber:
             result = transcriber.transcribe(
@@ -181,7 +183,9 @@ def audio_detect_language(audio_path: str) -> dict[str, Any]:
     """
     try:
         from codomyrmex.audio.speech_to_text import Transcriber
+        from codomyrmex.audio.speech_to_text.validation import validate_audio_path
 
+        validate_audio_path(audio_path)
         with Transcriber() as transcriber:
             language, confidence = transcriber.detect_language(audio_path)
 
@@ -276,34 +280,45 @@ def audio_batch_transcribe(
 
     try:
         from codomyrmex.audio.speech_to_text import Transcriber, WhisperModelSize
+        from codomyrmex.audio.speech_to_text.providers import WHISPER_AVAILABLE
+        from codomyrmex.audio.speech_to_text.validation import validate_audio_path
 
         model_size_enum = WhisperModelSize(model_size)
 
-        os.makedirs(output_directory, exist_ok=True)
-
         results_list = []
         failed = 0
+        valid_paths = []
+        for path in audio_paths:
+            try:
+                validate_audio_path(path)
+                valid_paths.append(path)
+            except Exception:
+                failed += 1
 
-        with Transcriber(model_size=model_size_enum) as transcriber:
-            for path in audio_paths:
-                try:
-                    result = transcriber.transcribe(path, language=language)
-                    output_file = os.path.join(
-                        output_directory, f"{os.path.basename(path)}.txt"
-                    )
-                    with open(output_file, "w") as f:
-                        f.write(result.text)
+        # Preserve the missing-backend error contract, but avoid model/resource
+        # acquisition when an installed backend has no valid input to process.
+        if valid_paths or not WHISPER_AVAILABLE:
+            with Transcriber(model_size=model_size_enum) as transcriber:
+                os.makedirs(output_directory, exist_ok=True)
+                for path in valid_paths:
+                    try:
+                        result = transcriber.transcribe(path, language=language)
+                        output_file = os.path.join(
+                            output_directory, f"{os.path.basename(path)}.txt"
+                        )
+                        with open(output_file, "w") as f:
+                            f.write(result.text)
 
-                    results_list.append(
-                        {
-                            "input": path,
-                            "output": output_file,
-                            "duration": result.duration,
-                            "language": result.language,
-                        }
-                    )
-                except Exception as _exc:
-                    failed += 1
+                        results_list.append(
+                            {
+                                "input": path,
+                                "output": output_file,
+                                "duration": result.duration,
+                                "language": result.language,
+                            }
+                        )
+                    except Exception as _exc:
+                        failed += 1
 
         return {
             "success": True,
