@@ -48,12 +48,16 @@ class FabricManager:
             self.logger.warning("Fabric availability check failed: %s", e)
             return False
 
-    def list_patterns(self) -> list[str]:  # type: ignore
+    def list_patterns(self) -> list[str]:
         """
         Get list of available Fabric patterns.
 
         Returns:
-            list of pattern names
+            Pattern names, or an empty list if the binary is unavailable.
+
+        Raises:
+            subprocess.CalledProcessError: Listing exited unsuccessfully.
+            subprocess.TimeoutExpired: Listing exceeded its finite timeout.
         """
         if not self.fabric_available:
             return []
@@ -65,13 +69,12 @@ class FabricManager:
                 text=True,
                 timeout=30,
             )
-            if result.returncode == 0:
-                patterns = [
-                    line.strip()
-                    for line in result.stdout.split("\n")
-                    if line.strip() and not line.startswith("Available patterns:")
-                ]
-                return patterns
+            result.check_returncode()
+            return [
+                line.strip()
+                for line in result.stdout.splitlines()
+                if line.strip() and not line.strip().startswith("Available patterns:")
+            ]
         except subprocess.TimeoutExpired as e:
             self.logger.warning("Fabric command timed out: %s", str(e))
             raise

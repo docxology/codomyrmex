@@ -23,6 +23,7 @@ from codomyrmex.documentation import (
     check_doc_environment,
     generate_quality_report,
 )
+from codomyrmex.logging_monitoring import setup_logging
 from codomyrmex.utils.cli_helpers import (
     print_error,
     print_info,
@@ -111,4 +112,5 @@ def run_orchestration():
 
 
 if __name__ == "__main__":
+    setup_logging()
     run_orchestration()

@@ -50,7 +50,8 @@ _skip_no_ollama = pytest.mark.skipif(
     not _OLLAMA_AVAILABLE, reason="Ollama server not reachable"
 )
 _skip_no_fabric = pytest.mark.skipif(
-    not _FABRIC_AVAILABLE, reason="fabric CLI not installed"
+    not (_FABRIC_AVAILABLE and os.environ.get("RUN_LIVE_FABRIC") == "1"),
+    reason="Installed Fabric workflows require RUN_LIVE_FABRIC=1",
 )
 
 # ============================================================================
@@ -811,14 +812,11 @@ class TestFabricManager:
         assert manager.fabric_binary == "fabric"
         assert isinstance(manager.results_history, list)
 
-    def test_fabric_not_available_when_missing(self):
+    def test_fabric_not_available_when_missing(self, tmp_path):
         """Test FabricManager handles unavailable fabric."""
-        if _FABRIC_AVAILABLE:
-            pytest.skip("fabric is installed -- cannot test unavailable path")
-
         from codomyrmex.llm.fabric.fabric_manager import FabricManager
 
-        manager = FabricManager()
+        manager = FabricManager(str(tmp_path / "missing-fabric"))
 
         assert manager.fabric_available is False
         assert manager.is_available() is False
@@ -848,14 +846,11 @@ class TestFabricManager:
         assert "success" in result
         assert "pattern" in result
 
-    def test_run_pattern_unavailable_returns_error(self):
+    def test_run_pattern_unavailable_returns_error(self, tmp_path):
         """Test run_pattern returns error when fabric unavailable."""
-        if _FABRIC_AVAILABLE:
-            pytest.skip("fabric is installed -- cannot test unavailable path")
-
         from codomyrmex.llm.fabric.fabric_manager import FabricManager
 
-        manager = FabricManager()
+        manager = FabricManager(str(tmp_path / "missing-fabric"))
         result = manager.run_pattern("test_pattern", "test input")
 
         assert result["success"] is False

@@ -14,7 +14,7 @@ Speech-to-text (STT) transcription module.
 ### Components
 
 | Component | Type | Description |
-|-----------|------|-------------|
+| ----------- | ------ | ------------- |
 | `WhisperModelSize` | Class | Available Whisper model sizes. |
 | `Transcriber` | Class | High-level transcription interface; accepts `WhisperModelSize` values or their string values. |
 | `Word` | Class | A single word with timing information. |
@@ -51,3 +51,12 @@ uv run python -m pytest tests/ -k speech_to_text -v
 - **Readme**: [README.md](README.md)
 - **Agents**: [AGENTS.md](AGENTS.md)
 - **Repository Root**: [README.md](../../../../README.md)
+
+## Input preflight
+
+`validation.validate_audio_path(path)` requires an existing regular file with a
+supported audio suffix and returns its `Path`. Missing/nonfile inputs raise
+`TranscriptionError`; unsupported suffixes raise `AudioFormatError`. The helper
+uses only filesystem metadata and acquires no model/native resources. Whisper
+provider validation delegates to it. MCP transcription and language detection
+perform this check before constructing the eager-loading `Transcriber`.

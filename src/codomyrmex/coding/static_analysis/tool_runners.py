@@ -93,10 +93,17 @@ class ToolRunner:
         return results
 
     def run_ruff(self, file_path: str) -> list[AnalysisResult]:
-        """Run the repository Ruff rules on a file."""
+        """Run the repository Ruff rules without writing a cache in the CWD."""
         results = []
         try:
-            cmd = ["ruff", "check", "--output-format", "concise", file_path]
+            cmd = [
+                "ruff",
+                "check",
+                "--no-cache",
+                "--output-format",
+                "concise",
+                file_path,
+            ]
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
 
             if result.stdout:

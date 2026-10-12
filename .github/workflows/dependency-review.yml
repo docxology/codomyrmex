@@ -1,4 +1,4 @@
-# Dependency review for pull requests (GitHub Dependency graph + advisory DB)
+# Audit every locked group/extra without requiring GitHub Dependency graph.
 name: Dependency Review
 
 on:
@@ -14,5 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Dependency Review
-        uses: actions/dependency-review-action@v5
+      - uses: astral-sh/setup-uv@v7
+        with:
+          python-version: '3.13'
+
+      - name: Audit the complete dependency lock
+        run: uv run --locked --extra security_audit python scripts/security/audit_uv_lock.py

@@ -25,3 +25,20 @@ External datasets and services are caller-supplied and opt-in. No result may
 be described as calibrated, causal, optimal, safe, or biologically equivalent
 without the corresponding artifact, falsifier, uncertainty estimate, and
 reproduction record.
+
+## Inline typing contract
+
+The research and falsification packages carry tracked `py.typed` markers and
+provide inline annotations; they do not maintain separate `.pyi` stubs. The
+active-inference policy selection uses dictionary item lookup as its typed key
+function, preserving minimum-value and insertion-order tie behavior without a
+bare type suppression. This change does not alter published study artifacts.
+
+```bash
+uv run --locked ty check --output-format concise src/codomyrmex/colony_kernel
+uv run --locked pytest -q tests/unit/colony_kernel/test_typing_contract.py
+```
+
+The marker checks read the real importable packages. The source guard rejects
+bare `type: ignore` comments in the kernel tree. Distribution archive inclusion
+must also be checked when packaging a release.

@@ -494,32 +494,19 @@ class TestGmailProviderFromEnv:
         assert hasattr(GmailProvider, "from_env")
         assert callable(GmailProvider.from_env)
 
-    def test_from_env_raises_without_credentials(self):
-        """from_env() raises an auth exception when no credentials are available."""
-        import os
-
+    def test_from_env_raises_without_credentials(self, monkeypatch, tmp_path):
+        """Explicit missing ADC input must not inspect cached operator credentials."""
         from codomyrmex.email.gmail.provider import GMAIL_AVAILABLE, GmailProvider
 
         if not GMAIL_AVAILABLE:
             pytest.skip("Gmail SDK not installed")
-
-        # Temporarily clear all Google env vars to force the no-credentials path
-        saved = {
-            k: os.environ.pop(k, None)
-            for k in (
-                "GOOGLE_REFRESH_TOKEN",
-                "GOOGLE_CLIENT_ID",
-                "GOOGLE_CLIENT_SECRET",
-                "GOOGLE_APPLICATION_CREDENTIALS",
-            )
-        }
-        try:
-            with pytest.raises((EmailAuthError, ImportError)):
-                GmailProvider.from_env()
-        finally:
-            for k, v in saved.items():
-                if v is not None:
-                    os.environ[k] = v
+        for key in ("GOOGLE_REFRESH_TOKEN", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"):
+            monkeypatch.delenv(key, raising=False)
+        monkeypatch.setenv(
+            "GOOGLE_APPLICATION_CREDENTIALS", str(tmp_path / "missing.json")
+        )
+        with pytest.raises(EmailAuthError, match="No Gmail credentials found"):
+            GmailProvider.from_env()
 
     def test_from_env_raises_import_error_when_sdk_missing(self):
         """from_env() raises ImportError when GMAIL_AVAILABLE is False.
@@ -565,7 +552,9 @@ class TestAgentMailProviderGuards:
         try:
             am_mod.AGENTMAIL_AVAILABLE = False
             with pytest.raises(ImportError, match="AgentMail dependencies"):
-                am_mod.AgentMailProvider(api_key="test")
+                am_mod.AgentMailProvider(
+                    api_key="test"  # pragma: allowlist secret
+                )
         finally:
             am_mod.AGENTMAIL_AVAILABLE = original
 

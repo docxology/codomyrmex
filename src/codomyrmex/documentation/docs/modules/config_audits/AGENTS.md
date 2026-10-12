@@ -5,7 +5,7 @@ Documentation bundle for the `config_audits` module: configuration audit specifi
 
 ## Active Components
 - `SPEC.md` — technical specification
-- `readme.md` — extended module README
+- `extended_readme.md` — extended module README
 
 ## Operating Contracts
 - Keep this documentation in sync with `src/codomyrmex/config_audits/`.

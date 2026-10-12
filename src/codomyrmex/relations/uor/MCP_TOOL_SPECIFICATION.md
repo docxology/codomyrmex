@@ -4,90 +4,54 @@
 
 ## Overview
 
-MCP tool definitions for the UOR submodule. These tools enable LLM agents to perform PRISM coordinate computation, entity management, and graph traversal.
+MCP tool definitions for the UOR submodule, defined with `@mcp_tool` in `mcp_tools.py` and surfaced by the PAI MCP bridge as `codomyrmex.<name>`. Both tools share one process-wide `UORGraph` (quantum level 0), so entities persist between calls.
+
+PRISM coordinate computation, correlation, entity search or removal, and relationship creation are available from the Python API (`PrismEngine`, `EntityManager`, `UORGraph`) but are not MCP tools. Because no MCP tool adds relationships, `uor_find_path` only finds paths for relationships created from Python in the same process.
 
 ## Tools
 
-### `uor_compute_triad`
+### `uor_add_entity`
 
-Compute triadic coordinates for a digital value.
+Create a content-addressed UOR entity in the shared graph.
 
 ```json
 {
-  "name": "uor_compute_triad",
-  "description": "Compute PRISM triadic coordinates (datum, stratum, spectrum) for a value",
+  "name": "uor_add_entity",
   "inputSchema": {
     "type": "object",
     "properties": {
-      "value": { "type": "integer", "description": "Integer value to compute coordinates for" },
-      "quantum": { "type": "integer", "default": 0, "description": "Quantum level (0=8-bit)" }
+      "name": { "type": "string", "description": "Human-readable entity name" },
+      "entity_type": { "type": "string", "description": "Category, e.g. 'agent' or 'document'" },
+      "attributes": { "type": "object", "description": "Entity properties (default {})" }
     },
-    "required": ["value"]
+    "required": ["name", "entity_type"]
   }
 }
 ```
 
-### `uor_correlate`
-
-Measure structural similarity between two values.
-
-```json
-{
-  "name": "uor_correlate",
-  "description": "Compute Hamming-distance fidelity between two values via PRISM",
-  "inputSchema": {
-    "type": "object",
-    "properties": {
-      "a": { "type": "integer", "description": "First value" },
-      "b": { "type": "integer", "description": "Second value" },
-      "quantum": { "type": "integer", "default": 0 }
-    },
-    "required": ["a", "b"]
-  }
-}
-```
-
-### `uor_manage_entity`
-
-CRUD operations on UOR entities.
-
-```json
-{
-  "name": "uor_manage_entity",
-  "description": "Create, read, update, or delete a content-addressed UOR entity",
-  "inputSchema": {
-    "type": "object",
-    "properties": {
-      "action": { "type": "string", "enum": ["create", "get", "remove", "search"] },
-      "name": { "type": "string" },
-      "entity_type": { "type": "string", "default": "generic" },
-      "attributes": { "type": "object" },
-      "entity_id": { "type": "string" },
-      "query": { "type": "string" }
-    },
-    "required": ["action"]
-  }
-}
-```
+Returns `{"status": "success", "entity": {...}}`, where `entity` has `id`, `name`, `entity_type`, `attributes`, `content_hash`, `created_at` and `triadic_coordinates` (`datum`, `stratum`, `spectrum`, `total_stratum`).
 
 ### `uor_find_path`
 
-Find the shortest path between two entities in the UOR graph.
+Find the shortest (BFS) path between two entities in the shared graph.
 
 ```json
 {
   "name": "uor_find_path",
-  "description": "BFS shortest path between two entities in the UOR relationship graph",
   "inputSchema": {
     "type": "object",
     "properties": {
-      "source_id": { "type": "string" },
-      "target_id": { "type": "string" }
+      "source_id": { "type": "string", "description": "Starting entity ID" },
+      "target_id": { "type": "string", "description": "Destination entity ID" }
     },
     "required": ["source_id", "target_id"]
   }
 }
 ```
+
+Returns `{"status": "success", "path": ["<id>", ...]}`, or `{"status": "success", "message": "No path found."}` when the entities are not connected.
+
+Both tools return `{"status": "error", "message": "<description>"}` on failure.
 
 ## Navigation
 

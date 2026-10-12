@@ -32,6 +32,6 @@ def add_case_reference(case: dict) -> dict
 ## Navigation
 
 - **Source**: [src/codomyrmex/cerebrum/](../../../../cerebrum/)
-- **Extended README**: [README.md](readme.md)
+- **Extended README**: [README.md](extended_readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

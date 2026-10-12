@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Package-wide README/AGENTS auditing with portable receipts.
 - Fail-closed module enrichment and placeholder-repair CLIs.
 - Dry-run-first MCP PAI generation with content hashes and execution receipts.
@@ -23,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Example tutorial `docs/modules/documentation/docs/tutorials/example_tutorial.md` (now named "Adding a New Module to Documentation").
 
 ### Changed
+
 - The repository's authoritative reader-facing build is strict MkDocs;
   package-local Docusaurus helpers remain available but are not the release
   documentation gate.
@@ -33,46 +35,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implemented comprehensive security guidelines for documentation operations and access control.
 - Added comprehensive usage examples for documentation website management and automation.
 
-### Deprecated
-- 
-
-### Removed
-- 
-
 ### Fixed
+
 - Rejected traversal-shaped documentation MCP module names.
 - Removed stale public examples with nonexistent signatures and corrected the
   `audit_rasp()` exit-code contract.
 
-### Security
-- 
+## Navigation
 
-## [Version X.Y.Z] - YYYY-MM-DD
-
-### Added
-- Feature A.
-
-### Changed
-- Enhancement B.
-
-### Fixed
-- Bug C. 
-## Navigation Links
-
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
-
-## Detailed Architecture and Implementation
-
-
-
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+- [Module overview](README.md)
+- [Repository changelog](../../../CHANGELOG.md)

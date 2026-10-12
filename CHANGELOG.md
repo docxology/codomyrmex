@@ -8,6 +8,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Comprehensive repository hardening (2026-10-12)
+
+- Replace the unverified PR Pages preview claim with a current-run build
+  artifact link and remove PR branch-publishing privileges.
+
+- Remove the unused Mike version selector from the single-site MkDocs build
+  so page initialization does not request a missing `versions.json`.
+
+- Name the Material search dialog and improve light/dark syntax-comment and
+  footer contrast after inspecting the hosted Lighthouse findings.
+
+- Narrow reduction gradients before NumPy calls across Python 3.11/3.13
+  dependency profiles; reject unseeded backward closures before mutation.
+
+- Consolidate specification gates and import/test hygiene from #568/#571;
+  retain real health checks, fail-closed stray-path observations and xdist
+  evidence, and isolate Ruff caches without changing diagnostic rules.
+- Replace #570's incomplete callable-origin denylist with explicit Z3
+  model-building capabilities. Reject filesystem/native/global APIs and
+  constructor logging; document resource-isolation limits accurately.
+- Consolidate #569/#573 accessible form names and visible-label associations.
+  Modals contain keyboard focus, suppress background shortcuts and restore
+  previous focus and inert states, including hidden/disabled/empty controls.
+- Apply #572's local-deque cleanup and correct quota-cost validation, fresh
+  fixed-window checks, weighted retry delays and monotonic lock timing.
+  Composite preflight avoids predictable partial consumption; shared-limiter
+  operations remain explicitly non-transactional.
+- Preserve all 130 colliding README snapshots as `extended_readme.md`, fix
+  documentation aggregation/version validation to canonical root/casing,
+  reject legacy destination casing before mutation and gate tracked paths.
+- Audit all 496 distinct locked package/version pins across environment
+  markers. Retain both existing exact-version advisory exceptions in JSON;
+  reject incomplete or malformed advisory evidence.
+- Complete the F3 runtime invariant crosswalk, M1 inline typing/archive marker
+  checks and M2 inventory refresh. Malformed/unavailable observations fail
+  closed; integer call counts preserve exact precision. Research studies
+  retain their independent evidence requirements.
+- Fix Edge TTS session/connector ownership for streaming and direct-file output;
+  reject invalid MCP audio inputs before acquiring models, and discover the
+  actual faster-whisper backend using metadata without native imports.
+- Preserve the generated legacy mirror under the declared Markdown boundary;
+  format and lint edited canonical documentation without relaxing lint rules.
+- Isolate test credentials and Hermes configuration before collection and
+  per test; require explicit opt-in for live calendar, workspace, GitHub and SSH
+  account operations. Hermes routing respects `HERMES_HOME` and explicit
+  rotation paths, and resolves its shipped rotation template correctly.
+- Make one-time event listeners claim/unsubscribe before callback execution,
+  including queued, concurrent, recursive and failing handlers.
+- Surface failed Fabric pattern-list commands explicitly and accept an explicit
+  configuration path. Live installed-Fabric workflows require opt-in.
+- Replace collection-wide cloud SDK substitutions with genuine local SDK
+  contracts; isolate manuscript generation inputs/output and use local Git
+  origins for skills tests. Pinned-template validation remains fail closed.
+- Remove seven unused type-check suppressions; no checker rules were relaxed.
+- #574/#576 are journal-only proposals and #575 is empty. Preserve their
+  rationale in the review log; no misleading runtime-fix claims were merged.
+
 ### Orchestration and CLI that actually run (#566, #567)
 
 - Project orchestration dispatches real work (#566): `ActionRegistry` /
@@ -673,9 +730,9 @@ Incremental release focused on eliminating remaining type errors and tightening 
 
 - **Type Safety Diagnostics**: Reduced `ty` diagnostics from 1,446 down to **962** (successfully achieving target <1,000)
 - **Top Offenders Remedied**: Resolved ~400+ `invalid-assignment`, `invalid-return-type`, and `call-non-callable` violations via:
-  - Replacing implicit None returns with `NoReturn` or proper typed returns in factories
-  - Injecting `if TYPE_CHECKING:` guards to satisfy static analysis while preventing circular references (e.g. `test_dark_pdf.py`)
-  - Fixing conditional import type checking
+    - Replacing implicit None returns with `NoReturn` or proper typed returns in factories
+    - Injecting `if TYPE_CHECKING:` guards to satisfy static analysis while preventing circular references (e.g. `test_dark_pdf.py`)
+    - Fixing conditional import type checking
 - **Quantum Subsystem Tests**: Fixed 12 failing tests in `test_mcp_tools_quantum.py` to correctly map to exported MCP tools (`quantum_run_circuit`, `quantum_circuit_stats`, `quantum_bell_state_demo`)
 - **Stale Lint Ignores**: Audited and removed multiple stale `# type: ignore` and `# noqa` flags to ensure true static analysis representation
 - **Broken Symlinks**: Removed broken `.cursorrules` symlinks causing warnings during `uv build`
@@ -903,14 +960,14 @@ First feature release targeting external consumption. All 9 planned items implem
 ### Changed
 
 - **TODO.md**: Reconciled 15 stale metrics with verified actuals:
-  - Modules: 88 → **124**
-  - Source files: 1,623 → **1,793**; LOC: 290K → **308K** (source), 490K → **558K** (total)
-  - Tests: ~20,530 → **21,036**; Test files: 700 → **767**
-  - MCP tools: ~214 → **~250** decorators / **299** registered; Auto-discovered modules: 45 → **78**
-  - Pass-only stubs: 227 → **2** (massive improvement)
-  - py.typed markers: 88 → **538**; PAI skills: 76 → **81**
-  - Ruff violations: corrected "0" claim to actual **1,226** (regressed via new modules)
-  - Coverage gate: corrected "68%" claim to actual **~32%** (needs investigation)
+    - Modules: 88 → **124**
+    - Source files: 1,623 → **1,793**; LOC: 290K → **308K** (source), 490K → **558K** (total)
+    - Tests: ~20,530 → **21,036**; Test files: 700 → **767**
+    - MCP tools: ~214 → **~250** decorators / **299** registered; Auto-discovered modules: 45 → **78**
+    - Pass-only stubs: 227 → **2** (massive improvement)
+    - py.typed markers: 88 → **538**; PAI skills: 76 → **81**
+    - Ruff violations: corrected "0" claim to actual **1,226** (regressed via new modules)
+    - Coverage gate: corrected "68%" claim to actual **~32%** (needs investigation)
 
 ### Fixed
 
@@ -925,20 +982,20 @@ First feature release targeting external consumption. All 9 planned items implem
 ### Added
 
 - **Sprint 17 — MCP Coverage Expansion** (6 new modules):
-  - `serialization/mcp_tools.py` — 3 tools: `serialize_data`, `deserialize_data`, `serialization_list_formats`
-  - `cache/mcp_tools.py` — 4 tools: `cache_get`, `cache_set`, `cache_delete`, `cache_stats`
-  - `deployment/mcp_tools.py` — 3 tools: `deployment_execute`, `deployment_list_strategies`, `deployment_get_history`
-  - `model_ops/mcp_tools.py` — 3 tools: `model_ops_score_output`, `model_ops_sanitize_dataset`, `model_ops_list_scorers`
-  - `testing/mcp_tools.py` — 2 tools: `testing_generate_data`, `testing_list_strategies`
-  - `templating/mcp_tools.py` — 2 tools: `template_render`, `template_validate`
+    - `serialization/mcp_tools.py` — 3 tools: `serialize_data`, `deserialize_data`, `serialization_list_formats`
+    - `cache/mcp_tools.py` — 4 tools: `cache_get`, `cache_set`, `cache_delete`, `cache_stats`
+    - `deployment/mcp_tools.py` — 3 tools: `deployment_execute`, `deployment_list_strategies`, `deployment_get_history`
+    - `model_ops/mcp_tools.py` — 3 tools: `model_ops_score_output`, `model_ops_sanitize_dataset`, `model_ops_list_scorers`
+    - `testing/mcp_tools.py` — 2 tools: `testing_generate_data`, `testing_list_strategies`
+    - `templating/mcp_tools.py` — 2 tools: `template_render`, `template_validate`
 - **Sprint 16 — MCP Coverage Expansion** (3 new modules):
-  - `static_analysis/mcp_tools.py` — 3 tools
-  - `vector_store/mcp_tools.py` — 4 tools
-  - `feature_flags/mcp_tools.py` — 3 tools
+    - `static_analysis/mcp_tools.py` — 3 tools
+    - `vector_store/mcp_tools.py` — 4 tools
+    - `feature_flags/mcp_tools.py` — 3 tools
 - **Sprint 16 — Rules Submodule Enhancements** (`agentic_memory/rules/`):
-  - 5 new MCP tools: `rules_get_section`, `rules_search`, `rules_list_cross_module`, `rules_list_file_specific`, `rules_list_all`
-  - `RuleRegistry.list_all_rules()` + `RuleEngine.list_all_rules()` for full 75-rule inventory
-  - 11 new tests for rules submodule (54 total)
+    - 5 new MCP tools: `rules_get_section`, `rules_search`, `rules_list_cross_module`, `rules_list_file_specific`, `rules_list_all`
+    - `RuleRegistry.list_all_rules()` + `RuleEngine.list_all_rules()` for full 75-rule inventory
+    - 11 new tests for rules submodule (54 total)
 - **44 new tests** across 6 Sprint 17 test files — all passing
 - **27 new tests** for Sprint 16 MCP modules
 - **102 new tests** for coverage: `ide/antigravity/client.py` (65), `git_operations/cli/repo.py` (37)
@@ -949,8 +1006,8 @@ First feature release targeting external consumption. All 9 planned items implem
 ### Changed
 
 - **TODO unification**: Merged `TO-DO.md` + `TODO.md` into single authoritative `TODO.md`
-  - Updated 6 cross-references (`chat.py`, `core.py`, `orchestrator.py`, `defense/DEPRECATED.md`, `embodiment/DEPRECATED.md`, `INDEX.md`)
-  - Deleted redundant `TO-DO.md`
+    - Updated 6 cross-references (`chat.py`, `core.py`, `orchestrator.py`, `defense/DEPRECATED.md`, `embodiment/DEPRECATED.md`, `INDEX.md`)
+    - Deleted redundant `TO-DO.md`
 - **Ruff violations**: 43 → **0** (Sprint 16: F405 star-imports eliminated)
 - **MCP tool count**: 181 → **~198** (+17 tools)
 - **Auto-discovered MCP modules**: 33 → **39** (+6 Sprint 17)
@@ -961,8 +1018,8 @@ First feature release targeting external consumption. All 9 planned items implem
 ### Fixed
 
 - **Circular import audit** (Sprint 16): 1,646 modules imported cleanly; 0 circular imports detected
-  - Fixed `ImportError` in `ci_cd_automation/build/build_manager.py`
-  - Fixed `ImportError` in `model_ops/fine_tuning/fine_tuning.py`
+    - Fixed `ImportError` in `ci_cd_automation/build/build_manager.py`
+    - Fixed `ImportError` in `model_ops/fine_tuning/fine_tuning.py`
 - **Jinja2 bug**: `templating/engines/template_engine.py:141` — `Jinja2Template(template, environment=env)` → `env.from_string(template)` (TypeError with modern Jinja2)
 
 ### Metrics
@@ -981,11 +1038,11 @@ First feature release targeting external consumption. All 9 planned items implem
 ### Added
 
 - **agentic_memory/obsidian v3.0**: Comprehensive dual-mode Obsidian vault integration
-  - **Filesystem layer** (7 modules): `vault.py`, `parser.py`, `models.py`, `crud.py`, `graph.py`, `search.py`, `canvas.py`
-  - **CLI layer** (12 modules): `cli.py`, `cli_search.py`, `daily_notes.py`, `properties.py`, `tasks.py`, `plugins.py`, `sync.py`, `bookmarks.py`, `templates.py`, `workspace.py`, `developer.py`, `commands.py`
-  - **Models**: `CodeBlock`, `MathBlock`, `DataviewField`, `SnippetInfo`, `ThemeInfo`, `PublishStatus`, `SyncHistoryEntry` + 11 existing models enhanced
-  - **Key functions**: `search_regex`, `filter_by_tags(match_all=)`, `find_dead_ends`, `find_hubs`, `get_shortest_path`, `append_note`, `prepend_note`, `move_note`, `save_canvas`, factory functions (`create_text_node`, `connect_nodes`), `eval_js`, `cdp_command`
-  - **Flat `__init__.py`** exports ~100 public names for convenience imports
+    - **Filesystem layer** (7 modules): `vault.py`, `parser.py`, `models.py`, `crud.py`, `graph.py`, `search.py`, `canvas.py`
+    - **CLI layer** (12 modules): `cli.py`, `cli_search.py`, `daily_notes.py`, `properties.py`, `tasks.py`, `plugins.py`, `sync.py`, `bookmarks.py`, `templates.py`, `workspace.py`, `developer.py`, `commands.py`
+    - **Models**: `CodeBlock`, `MathBlock`, `DataviewField`, `SnippetInfo`, `ThemeInfo`, `PublishStatus`, `SyncHistoryEntry` + 11 existing models enhanced
+    - **Key functions**: `search_regex`, `filter_by_tags(match_all=)`, `find_dead_ends`, `find_hubs`, `get_shortest_path`, `append_note`, `prepend_note`, `move_note`, `save_canvas`, factory functions (`create_text_node`, `connect_nodes`), `eval_js`, `cdp_command`
+    - **Flat `__init__.py`** exports ~100 public names for convenience imports
 - **skills/mcp_tools.py**: 7 MCP tools (`skills_list`, `skills_get`, `skills_search`, `skills_sync`, `skills_add_custom`, `skills_get_categories`, `skills_get_upstream_status`) via `@mcp_tool` decorator
 - **skills/skill_runner.py**: Execution bridge (`run_skill`, `run_skill_by_name`, `list_runnable_skills`) connecting discovery registry to skill execution
 - **skills/skills/templates/**: 3 starter YAML skill templates (`code_review`, `testing`, `documentation`) with patterns, anti-patterns, validations, and sharp edges
@@ -1049,9 +1106,9 @@ First feature release targeting external consumption. All 9 planned items implem
 ### Added
 
 - **Comprehensive TO-DO.md overhaul** with deep audit data:
-  - Codebase snapshot: 2,046 files, 414K LOC, 23K functions, 5K classes
-  - 30 tracked debt items with severity, targets, and status
-  - New sections: Security patterns, Broad exception handling, Oversized `__init__.py`, Circular imports, Deprecated typing, Wildcard imports, Stale documentation, Skip reduction breakdown
+    - Codebase snapshot: 2,046 files, 414K LOC, 23K functions, 5K classes
+    - 30 tracked debt items with severity, targets, and status
+    - New sections: Security patterns, Broad exception handling, Oversized `__init__.py`, Circular imports, Deprecated typing, Wildcard imports, Stale documentation, Skip reduction breakdown
 
 ### Metrics
 
@@ -1073,13 +1130,13 @@ First feature release targeting external consumption. All 9 planned items implem
 ### Fixed
 
 - **44 → 1 test failures** across Rounds 2–3:
-  - `trust_gateway.py`: `SAFE_TOOL_COUNT`/`DESTRUCTIVE_TOOL_COUNT` changed from lambdas to eagerly-evaluated `int` constants; `SAFE_TOOLS` from function ref to `frozenset`
-  - `auth.py`: Added missing `from .exceptions import InfomaniakAuthError` import
-  - Stale `logging_monitoring.logger_config` → `logging_monitoring.core.logger_config` paths in `test_improvements.py` and `demo_defense.py`
-  - `audit_documentation.py`: `documentation.audit` → `documentation.quality.audit` module path
-  - `security/secrets/__init__.py`: `generate_secret()` stdlib `secrets` namespace collision resolved via `sys.modules` pop/restore (4 xfail tests now pass)
-  - `infomaniak/security.py`: Updated deprecated `codomyrmex.defense` → `codomyrmex.security.ai_safety` import
-  - `test_github_functionality_demo.py`: Fixed `return True` → `return` (PytestReturnNotNoneWarning)
+    - `trust_gateway.py`: `SAFE_TOOL_COUNT`/`DESTRUCTIVE_TOOL_COUNT` changed from lambdas to eagerly-evaluated `int` constants; `SAFE_TOOLS` from function ref to `frozenset`
+    - `auth.py`: Added missing `from .exceptions import InfomaniakAuthError` import
+    - Stale `logging_monitoring.logger_config` → `logging_monitoring.core.logger_config` paths in `test_improvements.py` and `demo_defense.py`
+    - `audit_documentation.py`: `documentation.audit` → `documentation.quality.audit` module path
+    - `security/secrets/__init__.py`: `generate_secret()` stdlib `secrets` namespace collision resolved via `sys.modules` pop/restore (4 xfail tests now pass)
+    - `infomaniak/security.py`: Updated deprecated `codomyrmex.defense` → `codomyrmex.security.ai_safety` import
+    - `test_github_functionality_demo.py`: Fixed `return True` → `return` (PytestReturnNotNoneWarning)
 - Added `filterwarnings` for `google.generativeai` FutureWarning and PytestCollectionWarning
 
 ### Metrics

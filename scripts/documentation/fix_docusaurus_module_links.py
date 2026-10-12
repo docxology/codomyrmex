@@ -22,7 +22,7 @@ from pathlib import Path
 
 _LINK_TARGET_RE = re.compile(r"\]\(([^)]+)\)")
 _LOCAL_DOC_TARGETS = {
-    "README.md": "readme.md",
+    "README.md": "README.md",
     "API_SPECIFICATION.md": "api_specification.md",
     "MCP_TOOL_SPECIFICATION.md": "mcp_tool_specification.md",
     "SECURITY.md": "security.md",

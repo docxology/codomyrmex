@@ -240,6 +240,9 @@ def generate_documentation(
 
 def main():
     """Main entry point."""
+    from codomyrmex.logging_monitoring import setup_logging
+
+    setup_logging()
 
     parser = argparse.ArgumentParser(
         description="Automatically generate module documentation"

@@ -216,7 +216,7 @@ class TestCheckProjectStructure:
 
         # Create expected structure
         (tmp_path / "src" / "codomyrmex" / "documentation").mkdir(parents=True)
-        (tmp_path / "testing").mkdir()
+        (tmp_path / "tests").mkdir()
         (tmp_path / ".venv").mkdir()
         (tmp_path / "pyproject.toml").touch()
         (tmp_path / "README.md").touch()

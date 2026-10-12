@@ -3,6 +3,7 @@
 import logging
 import os
 from datetime import datetime
+from pathlib import Path
 
 try:
     from codomyrmex.logging_monitoring import get_logger
@@ -32,6 +33,16 @@ except ImportError:
     GCAL_AVAILABLE = False
 
 _GCAL_SCOPES = ["https://www.googleapis.com/auth/calendar"]
+
+
+def _calendar_token_path() -> Path:
+    """Resolve the selected OAuth token file without probing other locations."""
+    configured = os.environ.get("GOOGLE_CALENDAR_TOKEN_FILE")
+    if configured is not None:
+        if not configured.strip():
+            raise CalendarAuthError("GOOGLE_CALENDAR_TOKEN_FILE must not be empty")
+        return Path(configured).expanduser()
+    return Path.home() / ".codomyrmex" / "gcal_token.json"
 
 
 class GoogleCalendar(CalendarProvider):
@@ -79,7 +90,7 @@ class GoogleCalendar(CalendarProvider):
         """Create a GoogleCalendar from environment variables.
 
         Tries GOOGLE_REFRESH_TOKEN + GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET first,
-        then the PAI dashboard token file (~/.codomyrmex/gcal_token.json),
+        then GOOGLE_CALENDAR_TOKEN_FILE (or ~/.codomyrmex/gcal_token.json),
         then Application Default Credentials.
 
         Raises:
@@ -109,9 +120,8 @@ class GoogleCalendar(CalendarProvider):
 
         # Option 1b: Token file from PMServer OAuth flow
         import json
-        from pathlib import Path
 
-        token_path = Path.home() / ".codomyrmex" / "gcal_token.json"
+        token_path = _calendar_token_path()
         if token_path.exists() and client_id and client_secret:
             try:
                 token_data = json.loads(token_path.read_text())

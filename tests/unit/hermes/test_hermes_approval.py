@@ -12,14 +12,15 @@ from pathlib import Path
 import pytest
 from tests.unit.hermes.hermes_imports import prepare_hermes_imports
 
+from codomyrmex.agents.hermes.hermes_paths import discover_hermes_agent_repo
+
 # ---------------------------------------------------------------------------
 # Import helpers
 # ---------------------------------------------------------------------------
 
 
 def _hermes_agent_root() -> Path | None:
-    candidate = Path.home() / ".hermes" / "hermes-agent"
-    return candidate if candidate.exists() else None
+    return discover_hermes_agent_repo()
 
 
 def _import_approval():

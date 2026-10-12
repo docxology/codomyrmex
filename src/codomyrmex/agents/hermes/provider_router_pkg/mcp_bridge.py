@@ -12,6 +12,8 @@ from contextlib import suppress
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+from codomyrmex.agents.hermes.hermes_paths import resolve_hermes_home
+
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
 
@@ -35,11 +37,13 @@ class MCPBridgeManager:
         """Initialize MCP bridge manager.
 
         Args:
-            config_path: Path to MCP servers JSON config.
+            config_path: Explicit MCP servers JSON config. Otherwise use
+                HERMES_HOME/mcp_servers.json, then ~/.hermes/mcp_servers.json.
 
         """
-        self._config_path = Path(
-            config_path or os.path.expanduser("~/.hermes/mcp_servers.json")
+        hermes_home = resolve_hermes_home()
+        self._config_path = (
+            Path(config_path) if config_path else hermes_home / "mcp_servers.json"
         )
         self._servers: dict[str, dict[str, Any]] = {}
         self._load_config()

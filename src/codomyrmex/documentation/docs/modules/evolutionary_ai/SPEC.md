@@ -19,7 +19,7 @@
 ## Navigation
 
 - **Source**: [src/codomyrmex/evolutionary_ai/](../../../../evolutionary_ai/)
-- **Extended README**: [README.md](readme.md)
+- **Extended README**: [README.md](extended_readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)
 ## Maintenance Notes

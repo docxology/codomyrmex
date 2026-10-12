@@ -5,7 +5,7 @@ Documentation tooling, generated references, and publishing assets for the `conf
 
 ## Active Components
 - `SPEC.md` — technical specification
-- `readme.md` — extended README
+- `extended_readme.md` — extended README
 
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.

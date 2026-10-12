@@ -37,9 +37,15 @@ It performs, in order:
 4. code-reference validation: every `import codomyrmex…` / `from codomyrmex…
    import …` in a fenced Python block is imported for real
    (`scripts/documentation/validate_code_references.py`);
-5. content-quality and agent-structure validation;
-6. the documentation quality gate and triple-check;
-7. a strict MkDocs build.
+5. MCP tool specification validation: every tool an `MCP_TOOL_SPECIFICATION.md`
+   documents must be defined by its module's code
+   (`scripts/documentation/validate_mcp_tool_specs.py`);
+6. API signature validation: call signatures shown in each module's
+   `API_SPECIFICATION.md` (and its `docs/modules/` mirror) are compared with
+   the real functions (`scripts/documentation/validate_api_signatures.py`);
+7. content-quality and agent-structure validation;
+8. the documentation quality gate and triple-check;
+9. a strict MkDocs build.
 
 The equivalent `just docs-check` recipe is kept in parity. Validation may write
 receipts beneath `output/` and the MkDocs build beneath `site/`; it does not
@@ -229,6 +235,91 @@ A block that deliberately shows code which does not exist yet — for example a
 tutorial step that creates a new module — is skipped when the line directly
 above its opening fence is `<!-- docs-check: skip-imports -->`. Use the marker
 only for that; documentation of shipped APIs must import cleanly.
+
+### MCP tool specifications
+
+`make docs-check` also compares every `MCP_TOOL_SPECIFICATION.md` (in
+`src/codomyrmex/` and the `docs/modules/` mirrors) with the tools the code
+defines. Tools are found statically, without importing modules: functions
+decorated with `@mcp_tool` (using its `name=` argument when given), FastMCP
+`@<server>.tool()` registrations, `get_tool_definitions()` adapters, and the
+PAI bridge's static `TOOL_DEFINITIONS`. The `codomyrmex.` prefix the bridge
+adds is ignored when comparing names.
+
+A tool counts as documented when it appears in a heading
+(`` ## Tool: `name` ``, `` ### `name` ``, `## name`), on the line after a
+`### 2. Invocation Name` heading, or in the first column of a table headed
+`Tool`, `Tool Name`, `Invocation`, `Exposed name` or `Implemented Tool Function`.
+Each documented name must be defined in the specification's own package (or be
+a static bridge tool); otherwise the gate fails. Real tools that a package's
+specification does not mention are listed as informational only. Check a single
+specification while editing:
+
+```bash
+uv run python scripts/documentation/validate_mcp_tool_specs.py --repo-root . src/codomyrmex/cache/MCP_TOOL_SPECIFICATION.md
+```
+
+Describe Python helpers that are not MCP tools in prose or in a table headed
+`Function`, not as tool headings. A specification that intentionally documents
+planned tools is skipped when it contains `<!-- docs-check: skip-mcp-tools -->`.
+
+### API specification signatures
+
+`make docs-check` also checks the signatures in every `API_SPECIFICATION.md`
+under `src/codomyrmex/` and `docs/modules/`. A signature is a heading code span
+such as ``### Function: `run_pipeline(pipeline_name: str, config_path: str | None = None) -> Pipeline` ``,
+a declaration-style `def name(...): ...` (or a bodiless `def` line) in a Python
+block, or a block that only lists `Name(param: type, ...)` signatures. Each is
+resolved inside the specification's own package (`codomyrmex.<module>`); a
+bare method name under a heading that names a class (``### Class: `Pipeline` ``,
+`### Pipeline`) or a submodule is resolved on that class or module. Parameter
+names, not annotations or defaults, are compared with `inspect.signature`, and
+two kinds of drift fail the gate:
+
+- a documented parameter the callable does not accept (unless it takes
+  `**kwargs`), including a documented `*args`/`**kwargs` it does not have;
+- a required parameter of the callable that the documentation leaves out.
+
+Anything the checker cannot parse or resolve with confidence is skipped and
+listed under `unresolved` in `output/documentation/api_signatures.json`:
+`name()` used as a plain reference, a name defined in several submodules, a
+method of a class that does not exist, example `def`s with a real body, and
+modules whose optional dependency is not installed. Check one file while
+editing:
+
+```bash
+uv run python scripts/documentation/validate_api_signatures.py --repo-root . src/codomyrmex/<module>/API_SPECIFICATION.md
+```
+
+Put `<!-- docs-check: skip-signatures -->` on the line directly above a heading
+(which also skips everything nested under it) or a fence to exclude a planned
+or intentionally abbreviated signature. Fix shipped APIs instead of skipping
+them, and update the `docs/modules/<module>/` mirror together with the
+`src/` copy.
+
+## Markdown style
+
+`.markdownlint.yaml` holds the Markdown rules used by the pre-commit
+`markdownlint` hook (which lints the Markdown files a change touches) and by
+editors. It enables every default rule except line length (MD013), inline HTML
+(MD033), a leading H1 (MD041) and bare URLs (MD034, because `<url>` autolinks
+break the Docusaurus MDX build), and sets two project conventions:
+
+- nested lists are indented by four spaces (MD007), which Python-Markdown and
+  therefore MkDocs require for nesting;
+- repeated headings are allowed when they have different parents (MD024
+  `siblings_only`), so every class can have its own `Methods` section.
+
+`.markdownlintignore` excludes third-party checkouts and documents that must
+stay byte-for-byte identical to upstream (for example `FPF-Spec.md`, which
+`codomyrmex.fpf` parses). Fix what you touch with:
+
+```bash
+npx markdownlint-cli --config .markdownlint.yaml --fix path/to/file.md
+```
+
+In tables, escape a literal pipe inside a code span as `\|` (for example
+`` `str \| None` ``); otherwise it starts a new cell.
 
 ## Mermaid diagrams
 

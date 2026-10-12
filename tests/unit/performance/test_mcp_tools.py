@@ -28,7 +28,7 @@ def test_performance_check_regression_error():
     # Pass invalid type for measured_value to trigger TypeError inside the function
     result = performance_check_regression(
         benchmark_name="test_bench",
-        measured_value=None,  # type: ignore
+        measured_value=None,
         baseline_mean=1.0,
     )
     assert result["status"] == "error"
@@ -55,7 +55,7 @@ def test_performance_compare_benchmarks_error():
     # Pass invalid type for before to trigger TypeError inside the function
     result = performance_compare_benchmarks(
         name="test_compare",
-        before=None,  # type: ignore
+        before=None,
         after=1.5,
     )
     assert result["status"] == "error"

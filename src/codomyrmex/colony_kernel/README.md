@@ -150,7 +150,7 @@ Other colony-kernel imports are explicit: subsystem classes share `models.py`, a
 Eight MCP tools expose the colony kernel to AI agents via Model Context Protocol. All tools route through a module-level `ColonyKernel` singleton.
 
 | Tool | Purpose |
-|------|---------|
+| ------ | --------- |
 | `colony_propose_action` | Submit an action proposal; returns the full `GateResult` |
 | `colony_record_outcome` | Record the actual consequence of an executed action |
 | `colony_agent_profile` | Read an agent's current trust profile and role |
@@ -242,3 +242,13 @@ Key test modules:
 - **Formal Specification**: [SPEC.md](SPEC.md)
 - **MCP Tools**: [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md)
 - **Stigmergy Integration**: [agentic_memory/stigmergy](../agentic_memory/)
+
+## Runtime invariant crosswalk
+
+`all_invariants_hold` accepts observed cumulative budget snapshots, gate results,
+and consequence records alongside profiles and pheromone strengths. It checks
+budget monotonicity, ternary decision closure, and canonical trust-update bounds.
+Start a new budget snapshot sequence after each period reset. Omitted inputs are
+vacuous checks; passing diagnostics do not establish external execution or
+scientific acceptance. See [SPEC.md](SPEC.md#runtime-invariant-crosswalk) for
+individual predicates and the real subsystem integration regression.

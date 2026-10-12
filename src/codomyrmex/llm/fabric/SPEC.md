@@ -46,3 +46,8 @@ Provides integration with Fabric AI framework for pattern-based AI workflows. It
 
 The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
 
+## CLI and configuration contracts
+
+`FabricManager.list_patterns()` returns `list[str]` for successful listing, including an empty list for no patterns. An unavailable binary returns `[]`. A nonzero listing exit raises `subprocess.CalledProcessError` with captured output; a listing timeout propagates `subprocess.TimeoutExpired` (30 seconds). `FabricOrchestrator.list_patterns()` forwards this contract. Metadata availability checks do not establish that an executable named `fabric` is the intended AI framework.
+
+`get_fabric_config(config_path=None)` accepts an explicit configuration file; omitting it retains the legacy personal configuration path. Tests pass temporary files. Installed Fabric workflows require `RUN_LIVE_FABRIC=1`; default coverage uses real temporary executables and does not load operator configuration or invoke a provider.

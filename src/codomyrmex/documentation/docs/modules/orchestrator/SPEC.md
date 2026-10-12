@@ -100,10 +100,10 @@ def with_retry(max_retries: int = 3, delay: float = 1.0) -> Callable: ...
 
 ## Navigation
 
-- [readme.md](readme.md) -- Module overview
+- [extended_readme.md](extended_readme.md) -- Module overview
 - [AGENTS.md](AGENTS.md) -- Agent coordination
 - [Source Module](../../../../orchestrator/)
 
 ## Related Documents
 
-- **Readme**: [README.md](readme.md)
+- **Readme**: [README.md](extended_readme.md)

@@ -375,13 +375,13 @@ class TestFabricConfigManager:
         from codomyrmex.llm.fabric.fabric_config_manager import FabricConfigManager
 
         config_data = {
-            "api_key": "my-key",
+            "api_key": "my-key",  # pragma: allowlist secret
             "default_model": "gpt-3.5-turbo",
         }
         config_file = tmp_path / "config.json"
         config_file.write_text(json.dumps(config_data))
         manager = FabricConfigManager(config_path=str(config_file))
-        assert manager.config.api_key == "my-key"
+        assert manager.config.api_key == config_data["api_key"]
         assert manager.config.default_model == "gpt-3.5-turbo"
 
     def test_add_pattern_stores_by_name(self, tmp_path):
@@ -453,8 +453,11 @@ class TestFabricConfigManager:
             get_fabric_config,
         )
 
-        result = get_fabric_config()
+        config = tmp_path / "fabric.json"
+        config.write_text('{"default_model": "isolated-model"}')
+        result = get_fabric_config(config_path=str(config))
         assert isinstance(result, FabricConfig)
+        assert result.default_model == "isolated-model"
 
 
 # ===========================================================================

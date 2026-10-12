@@ -84,6 +84,6 @@ TEMPLATE_FILES: list[str] = [
 
 ## Navigation
 
-- [readme.md](readme.md) -- Module overview
+- [extended_readme.md](extended_readme.md) -- Module overview
 - [AGENTS.md](AGENTS.md) -- Agent coordination
 - [Source Module](../../../../module_template/)

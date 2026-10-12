@@ -155,6 +155,116 @@ class TestHealthChecker:
         assert isinstance(result.checks_performed, list)
 
 
+@pytest.mark.unit
+class TestHealthChecksExerciseRealModules:
+    """Dedicated checks, the MCP tool and the CLI command run real checks."""
+
+    def test_dedicated_checks_name_real_packages(self):
+        from tests.support.repo_paths import PACKAGE_ROOT
+
+        from codomyrmex.system_discovery.health.health_checker import HealthChecker
+
+        for name in HealthChecker().module_checks:
+            assert (PACKAGE_ROOT / name / "__init__.py").is_file(), name
+
+    def test_run_checks_covers_every_dedicated_check(self):
+        from codomyrmex.system_discovery.health.health_checker import (
+            HealthChecker,
+            HealthStatus,
+        )
+
+        checker = HealthChecker()
+        results = checker.run_checks()
+        assert list(results) == list(checker.module_checks)
+        for name, result in results.items():
+            # Each dedicated check records what it did beyond importing.
+            assert len(result.checks_performed) > 1, name
+            assert result.status is not HealthStatus.UNKNOWN, (name, result.issues)
+
+    def test_data_visualization_check_renders_a_plot(self):
+        from codomyrmex.system_discovery.health.health_checker import (
+            HealthChecker,
+            HealthStatus,
+        )
+
+        result = HealthChecker().perform_health_check("data_visualization")
+        assert result.status is HealthStatus.HEALTHY, result.issues
+        assert result.metrics["plot_rendered"] is True
+
+    def test_mcp_health_check_single_module(self):
+        from codomyrmex.system_discovery.mcp_tools import health_check
+
+        response = health_check("logging_monitoring")
+        assert response["status"] == "success"
+        assert response["healthy"] is True
+        assert response["details"]["logging_monitoring"]["status"] == "healthy"
+
+    def test_mcp_health_check_reports_unavailable_module(self):
+        from codomyrmex.system_discovery.mcp_tools import health_check
+
+        response = health_check("nonexistent_module_xyz")
+        assert response["status"] == "success"
+        assert response["healthy"] is False
+        assert response["details"]["nonexistent_module_xyz"]["status"] == "unhealthy"
+
+    def test_cli_health_command_prints_each_checked_module(self, capsys):
+        from codomyrmex.system_discovery import cli_commands
+        from codomyrmex.system_discovery.health.health_checker import (
+            HealthChecker,
+            HealthStatus,
+        )
+
+        cli_commands()["health"]["handler"]()
+        # Log records may share stdout when an earlier test configured
+        # logging, so look at the report's own lines.
+        lines = capsys.readouterr().out.splitlines()
+        report = lines[lines.index("System Health Check:") + 1 :]
+        statuses = {s.value for s in HealthStatus}
+        for name in HealthChecker().module_checks:
+            status = next(line for line in report if line.startswith(f"  {name}: "))
+            assert status.split(": ", 1)[1] in statuses
+        assert not any(line.endswith(": available") for line in report)
+
+
+@pytest.mark.unit
+class TestDemoWorkflows:
+    """SystemHealthChecker.run_demo_workflows uses the real module names."""
+
+    def test_demo_plot_is_written_to_output_dir(self, tmp_path, capsys):
+        from codomyrmex.system_discovery.core.discovery_engine import ModuleInfo
+        from codomyrmex.system_discovery.core.health_checker import (
+            SystemHealthChecker,
+        )
+
+        def info(name: str) -> ModuleInfo:
+            return ModuleInfo(
+                name=name,
+                path="",
+                description="",
+                version="",
+                capabilities=[],
+                dependencies=[],
+                is_importable=True,
+                has_tests=True,
+                has_docs=True,
+                last_modified="",
+            )
+
+        modules = {
+            name: info(name)
+            for name in ("data_visualization", "logging_monitoring", "coding")
+        }
+        checker = SystemHealthChecker(tmp_path, tmp_path / "src", tmp_path / "tests")
+        completed = checker.run_demo_workflows(modules, output_dir=tmp_path)
+
+        out = capsys.readouterr().out
+        assert (tmp_path / "demo_plot.png").stat().st_size > 0
+        # The code execution demo runs for the "coding" module; it needs a
+        # Docker sandbox, so it succeeds or reports why it could not run.
+        assert "Testing Code Execution..." in out
+        assert completed >= 2
+
+
 # ===================================================================
 # DiscoveryEngine
 # ===================================================================

@@ -138,9 +138,16 @@ class TestHermesExecutionTools:
         result = mcp_tools.hermes_run_coverage_loop("/invalid/path/to/nothing")
         assert result["status"] in ("success", "error")
 
-    def test_hermes_mcp_reload(self) -> None:
+    def test_hermes_mcp_reload(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Exercise actual local reload without signaling an installed agent."""
+        monkeypatch.setenv("PATH", str(tmp_path))
         result = mcp_tools.hermes_mcp_reload()
-        assert result["status"] in ("success", "error")
+        assert result["status"] == "success"
+        assert result["success"] is True
+        assert result["servers_loaded"] == 0
+        assert result["output"] == "Config reloaded (CLI signal skipped)"
 
     def test_hermes_doctor(self, monkeypatch: pytest.MonkeyPatch) -> None:
         from codomyrmex.agents.hermes.client_pkg import HermesClient
@@ -184,7 +191,11 @@ class TestHermesRegistryTools:
         result = mcp_tools.hermes_skills_validate_registry()
         assert result["status"] in ("success", "error", "ok", "skipped", "mismatch")
 
-    def test_hermes_search_knowledge_items(self) -> None:
+    def test_hermes_search_knowledge_items(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        # KnowledgeMemory's default SQLite store is ./memory.db in the CWD.
+        monkeypatch.chdir(tmp_path)
         result = mcp_tools.hermes_search_knowledge_items("test layout")
         assert result["status"] in ("success", "error")
 

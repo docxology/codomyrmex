@@ -1,11 +1,12 @@
 # Cache - MCP Tool Specification
 
-This document outlines the specification for tools within the Cache module that are intended to be integrated with the Model Context Protocol (MCP).
+This document specifies the Model Context Protocol (MCP) tools of the Cache module. They are defined with `@mcp_tool` in `mcp_tools.py` and surfaced by the PAI MCP bridge as `codomyrmex.<name>`.
 
 ## General Considerations
 
-- **Tool Integration**: This module provides caching infrastructure for improving performance.
-- **Configuration**: Supports multiple backends (memory, file, Redis) with configurable TTLs.
+- **Backend**: All tools share one module-level `CacheManager` whose caches use the in-memory backend, so entries live only as long as the server process.
+- **Named caches**: `cache_name` selects a cache; it is created on first use.
+- **Tags and namespaces**: Not supported by the MCP tools. Use the Python `CacheManager` API for other backends.
 
 ---
 
@@ -13,7 +14,7 @@ This document outlines the specification for tools within the Cache module that 
 
 ### 1. Tool Purpose and Description
 
-Retrieves a value from the cache by its key. Returns null if the key doesn't exist or has expired.
+Retrieves a value by key. Returns `null` if the key is missing or has expired.
 
 ### 2. Invocation Name
 
@@ -22,28 +23,21 @@ Retrieves a value from the cache by its key. Returns null if the key doesn't exi
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--- | :--- | :--- | :--- | :--- |
 | `key` | `string` | Yes | Cache key to retrieve | `"user:123:profile"` |
-| `backend` | `string` | No | Specific backend to use (default: configured default) | `"redis"` |
-| `namespace` | `string` | No | Namespace prefix for the key | `"myapp"` |
+| `cache_name` | `string` | No | Named cache (default `"default"`) | `"http_cache"` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
-| `status` | `string` | "hit", "miss", or "error" | `"hit"` |
-| `value` | `any` | The cached value (null if miss) | `{"name": "John"}` |
-| `ttl_remaining` | `integer` | Seconds until expiration (null if no TTL) | `3600` |
-| `metadata` | `object` | Cache entry metadata | `{"created_at": "..."}` |
+The cached value itself, or `null` on a miss.
 
 ### 5. Error Handling
 
-- **Backend Unavailable**: Returns error if cache backend is not accessible
-- **Deserialization Error**: Returns error if cached value cannot be deserialized
+- Misses are not errors; they return `null`.
 
 ### 6. Idempotency
 
-- **Idempotent**: Yes
+- **Idempotent**: Yes (hit/miss counters change).
 
 ### 7. Usage Examples
 
@@ -52,15 +46,14 @@ Retrieves a value from the cache by its key. Returns null if the key doesn't exi
   "tool_name": "cache_get",
   "arguments": {
     "key": "api_response:endpoint1",
-    "namespace": "http_cache"
+    "cache_name": "http_cache"
   }
 }
 ```
 
 ### 8. Security Considerations
 
-- **Key Validation**: Keys should be validated to prevent injection
-- **Sensitive Data**: Consider encryption for sensitive cached data
+- **Sensitive Data**: Values are stored unencrypted in process memory.
 
 ---
 
@@ -68,7 +61,7 @@ Retrieves a value from the cache by its key. Returns null if the key doesn't exi
 
 ### 1. Tool Purpose and Description
 
-Stores a value in the cache with an optional TTL (time-to-live).
+Stores a value under a key with an optional TTL (time-to-live).
 
 ### 2. Invocation Name
 
@@ -77,31 +70,23 @@ Stores a value in the cache with an optional TTL (time-to-live).
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--- | :--- | :--- | :--- | :--- |
 | `key` | `string` | Yes | Cache key | `"user:123:profile"` |
-| `value` | `any` | Yes | Value to cache (must be serializable) | `{"name": "John"}` |
-| `ttl` | `integer` | No | Time-to-live in seconds (null = no expiration) | `3600` |
-| `backend` | `string` | No | Specific backend to use | `"memory"` |
-| `namespace` | `string` | No | Namespace prefix for the key | `"myapp"` |
-| `tags` | `array[string]` | No | Tags for cache invalidation | `["user", "profile"]` |
+| `value` | `any` | Yes | Value to cache | `{"name": "John"}` |
+| `ttl` | `integer` | No | Time-to-live in seconds; `null` uses the cache default | `3600` |
+| `cache_name` | `string` | No | Named cache (default `"default"`) | `"http_cache"` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
-| `status` | `string` | "success" or "error" | `"success"` |
-| `key` | `string` | Full key that was set | `"myapp:user:123:profile"` |
-| `expires_at` | `string` | ISO timestamp of expiration | `"2024-01-01T12:00:00Z"` |
+`true` once the value is stored.
 
 ### 5. Error Handling
 
-- **Serialization Error**: Returns error if value cannot be serialized
-- **Backend Full**: Returns error if cache storage is exhausted
-- **Backend Unavailable**: Returns error if cache backend is not accessible
+- Backend errors propagate as tool errors.
 
 ### 6. Idempotency
 
-- **Idempotent**: Yes
+- **Idempotent**: Yes (setting the same key and value again leaves the same state).
 
 ---
 
@@ -109,7 +94,7 @@ Stores a value in the cache with an optional TTL (time-to-live).
 
 ### 1. Tool Purpose and Description
 
-Removes a value from the cache by its key.
+Removes a key from the cache.
 
 ### 2. Invocation Name
 
@@ -118,60 +103,21 @@ Removes a value from the cache by its key.
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
+| :--- | :--- | :--- | :--- | :--- |
 | `key` | `string` | Yes | Cache key to delete | `"user:123:profile"` |
-| `backend` | `string` | No | Specific backend to use | `"redis"` |
-| `namespace` | `string` | No | Namespace prefix | `"myapp"` |
+| `cache_name` | `string` | No | Named cache (default `"default"`) | `"http_cache"` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name | Type | Description |
-|:-----------|:-----|:------------|
-| `status` | `string` | "deleted", "not_found", or "error" |
-| `key` | `string` | Full key that was deleted |
+`true` if the key was deleted, `false` if it did not exist.
 
 ### 5. Error Handling
 
-- **Backend Unavailable**: Returns error if cache backend is not accessible
+- A missing key is not an error; it returns `false`.
 
 ### 6. Idempotency
 
-- **Idempotent**: Yes
-
----
-
-## Tool: `cache_invalidate_by_tag`
-
-### 1. Tool Purpose and Description
-
-Invalidates all cache entries with a specific tag or set of tags.
-
-### 2. Invocation Name
-
-`cache_invalidate_by_tag`
-
-### 3. Input Schema (Parameters)
-
-| Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `tags` | `array[string]` | Yes | Tags to invalidate | `["user", "123"]` |
-| `match_all` | `boolean` | No | If true, entry must have all tags (default: any) | `true` |
-| `backend` | `string` | No | Specific backend | `"redis"` |
-
-### 4. Output Schema (Return Value)
-
-| Field Name | Type | Description |
-|:-----------|:-----|:------------|
-| `status` | `string` | "success" or "error" |
-| `invalidated_count` | `integer` | Number of entries invalidated |
-
-### 5. Error Handling
-
-- **Backend Unavailable**: Returns error if cache backend is not accessible
-
-### 6. Idempotency
-
-- **Idempotent**: Yes
+- **Idempotent**: Yes (the second call returns `false`).
 
 ---
 
@@ -179,7 +125,7 @@ Invalidates all cache entries with a specific tag or set of tags.
 
 ### 1. Tool Purpose and Description
 
-Returns statistics about cache usage, hit rates, and storage.
+Returns usage statistics for one named cache.
 
 ### 2. Invocation Name
 
@@ -188,21 +134,27 @@ Returns statistics about cache usage, hit rates, and storage.
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `backend` | `string` | No | Specific backend (default: all) | `"redis"` |
+| :--- | :--- | :--- | :--- | :--- |
+| `cache_name` | `string` | No | Named cache (default `"default"`) | `"http_cache"` |
 
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description |
-|:-----------|:-----|:------------|
-| `backends` | `object` | Stats per backend |
-| `total_entries` | `integer` | Total cached entries |
-| `hit_rate` | `number` | Cache hit percentage |
-| `memory_usage` | `string` | Approximate memory usage |
+| :--- | :--- | :--- |
+| `hits` | `integer` | Lookups that found a value |
+| `misses` | `integer` | Lookups that found nothing |
+| `total_requests` | `integer` | `hits + misses` |
+| `hit_rate` | `number` | Hit ratio between 0 and 1 |
+| `size` | `integer` | Current number of entries |
+| `max_size` | `integer` | Capacity of the cache |
+| `usage_percent` | `number` | `size` as a percentage of `max_size` |
+| `evictions` | `integer` | Entries evicted for capacity |
+| `writes` | `integer` | Successful `set` calls |
+| `deletes` | `integer` | Successful deletions |
 
 ### 5. Error Handling
 
-- Returns partial stats if some backends are unavailable
+- Unknown cache names are created empty, so the call returns zeroed statistics.
 
 ### 6. Idempotency
 
@@ -216,3 +168,5 @@ Returns statistics about cache usage, hit rates, and storage.
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
+
+<!-- markdownlint-configure-file { "MD024": { "siblings_only": true } } -->

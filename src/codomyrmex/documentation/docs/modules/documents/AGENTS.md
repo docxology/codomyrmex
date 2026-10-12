@@ -9,7 +9,7 @@ Documentation tooling, generated references, and publishing assets for Documents
 - `SPEC.md` – Project file
 - `api_specification.md` – Project file
 - `mcp_tool_specification.md` – Project file
-- `readme.md` – Project file
+- `extended_readme.md` – Project file
 - `security.md` – Project file
 - `usage_examples.md` – Project file
 
@@ -24,7 +24,7 @@ Documentation tooling, generated references, and publishing assets for Documents
 - `SPEC.md`
 - `api_specification.md`
 - `mcp_tool_specification.md`
-- `readme.md`
+- `extended_readme.md`
 - `security.md`
 - `usage_examples.md`
 

@@ -9,7 +9,7 @@ Documentation tooling, generated references, and publishing assets for Coding.
 - `SPEC.md` – Project file
 - `api_specification.md` – Project file
 - `mcp_tool_specification.md` – Project file
-- `readme.md` – Project file
+- `extended_readme.md` – Project file
 - `security.md` – Project file
 
 ## Operating Contracts
@@ -23,7 +23,7 @@ Documentation tooling, generated references, and publishing assets for Coding.
 - `SPEC.md`
 - `api_specification.md`
 - `mcp_tool_specification.md`
-- `readme.md`
+- `extended_readme.md`
 - `security.md`
 
 ## Dependencies

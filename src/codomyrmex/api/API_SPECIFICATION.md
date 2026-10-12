@@ -3,21 +3,25 @@
 **Version**: v1.1.9 | **Status**: Stable | **Last Updated**: February 2026
 
 ## 1. Overview
+
 The `api` module provides foundations for defining, documenting, and standardizing APIs within Codomyrmex. It supports REST and GraphQL paradigms and includes automated documentation generation.
 
 ## 2. Core Components
 
 ### 2.1 Documentation
+
 - **`APIDocumentationGenerator`**: Analyzes code to produce API docs.
 - **`generate_api_docs`**: Helper function to trigger doc generation.
 - **`generate_openapi_spec_from_docs`**: Converts internal docs to OpenAPI 3.0.
 
 ### 2.2 Standardization
+
 - **`RESTAPI`**: Framework for defining RESTful interfaces.
 - **`GraphQLAPI`**: Framework for defining GraphQL schemas.
 - **`APIVersionManager`**: Handles API versioning strategies.
 
 ### 2.3 Data Structures
+
 - **`APIEndpoint`**: Metadata for a single API route.
 - **`APISchema`**: Definition of data models.
 - **`OpenAPISpecification`**: Wrapper for OpenAPI structure.
@@ -36,3 +40,7 @@ def get_items():
 
 app.include_router(router)
 ```
+
+## In-memory rate limiting
+
+`codomyrmex.api.rate_limiting` exports fixed/sliding windows and token buckets. Sliding/token constructors accept a keyword-only `clock: Callable[[], float]`, defaulting to `time.monotonic`. Existing positional constructor parameters remain available. Costs must be non-negative integers; zero preserves quota. Invalid arguments raise `ValueError` even through `consume`, while quota denial raises `RateLimitExceeded` from `acquire`. Configuration, retry, and boundary contracts are defined in [rate_limiting/SPEC.md](rate_limiting/SPEC.md).

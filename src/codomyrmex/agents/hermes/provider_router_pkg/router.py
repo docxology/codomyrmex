@@ -12,6 +12,8 @@ from contextlib import suppress
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+from codomyrmex.agents.hermes.hermes_paths import resolve_hermes_home
+
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
 
@@ -41,6 +43,8 @@ class ProviderRouter:
         model: str = "hermes3",
         fallback_model: str | None = None,
         env_path: str | None = None,
+        *,
+        rotation_path: str | None = None,
     ) -> None:
         """Initialize the provider router.
 
@@ -49,15 +53,21 @@ class ProviderRouter:
             fallback_provider: Fallback provider on primary failure.
             model: Primary model name.
             fallback_model: Fallback model name.
-            env_path: Path to .env file for credential lookup.
+            env_path: Explicit .env path for credential lookup. Defaults to
+                HERMES_HOME/.env, or ~/.hermes/.env.
+            rotation_path: Explicit model-rotation JSON path. Defaults to
+                HERMES_HOME/rotation.json, or ~/.hermes/rotation.json.
 
         """
         self.primary_provider = primary_provider
         self.fallback_provider = fallback_provider
         self.model = model
         self.fallback_model = fallback_model or model
-        self._env_path = env_path or os.path.expanduser("~/.hermes/.env")
-        self._rotation_path = os.path.expanduser("~/.hermes/rotation.json")
+        hermes_home = str(resolve_hermes_home())
+        self._env_path = env_path or os.path.join(hermes_home, ".env")
+        self._rotation_path = rotation_path or os.path.join(
+            hermes_home, "rotation.json"
+        )
         self._credentials: dict[str, str] = {}
         self._cooldowns: dict[str, float] = {}  # model_id -> end_time
         self._load_credentials()
@@ -142,10 +152,15 @@ class ProviderRouter:
         if not os.path.exists(self._rotation_path):
             try:
                 template_path = (
-                    Path(__file__).parent / "templates" / "rotation_template.json"
+                    Path(__file__).parent.parent
+                    / "templates"
+                    / "rotation_template.json"
                 )
                 if template_path.exists():
-                    os.makedirs(os.path.dirname(self._rotation_path), exist_ok=True)
+                    os.makedirs(
+                        os.path.dirname(os.path.abspath(self._rotation_path)),
+                        exist_ok=True,
+                    )
                     shutil.copy(template_path, self._rotation_path)
                     logger.info(
                         "Created rotation config: %s",

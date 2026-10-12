@@ -28,7 +28,6 @@ FORBIDDEN_MODULES = ("unittest.mock", "pytest_mock", "mock")
 
 # Per-file baselines (relative to the repository root) when the guard landed.
 MONKEYPATCH_SETATTR_BASELINE: dict[str, int] = {
-    "tests/integration/calendar_integration/test_mcp_tools.py": 1,
     "tests/integration/hermes/test_gateway_context_summarization.py": 1,
     "tests/integration/hermes/test_gateway_coverage_loop.py": 6,
     "tests/integration/hermes/test_gateway_delegation.py": 1,
@@ -46,7 +45,6 @@ MONKEYPATCH_SETATTR_BASELINE: dict[str, int] = {
     "tests/unit/agents/pai/test_pai_webhook_hardening.py": 1,
     "tests/unit/agents/test_hermes_client_execution.py": 2,
     "tests/unit/agents/test_mission_control_client.py": 1,
-    "tests/unit/calendar_integration/test_mcp_tools.py": 2,
     "tests/unit/cloud/test_mcp_tools.py": 9,
     "tests/unit/colony_kernel/test_mcp_tools.py": 1,
     "tests/unit/hermes/test_hermes_client.py": 2,
@@ -54,7 +52,6 @@ MONKEYPATCH_SETATTR_BASELINE: dict[str, int] = {
     "tests/unit/manuscript/test_figures.py": 4,
     "tests/unit/scrape/test_scrape_core.py": 1,
     "tests/unit/skills/test_hermes_skill_bridge.py": 1,
-    "tests/unit/system_discovery/test_health_checker_missing_deps.py": 2,
     "tests/unit/system_discovery/test_profilers.py": 16,
     "tests/unit/templating/test_init.py": 1,
     "tests/unit/test_conftest.py": 4,

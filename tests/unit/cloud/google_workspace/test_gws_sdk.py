@@ -1,7 +1,8 @@
 """Zero-stub tests for cloud/google_workspace SDK module.
 
 Tests exception/auth class logic directly without SDK calls.
-Tests requiring the SDK or live credentials are guarded with skipif.
+Live external tests additionally require CODOMYRMEX_RUN_LIVE_GWS_TESTS=1;
+credential availability alone never authorizes provider requests.
 """
 
 from __future__ import annotations
@@ -29,6 +30,7 @@ def _find_spec_safe(name: str) -> bool:
 
 _SDK_INSTALLED = _find_spec_safe("googleapiclient")
 _GOOGLE_AUTH_INSTALLED = _find_spec_safe("google.oauth2.service_account")
+_LIVE_GWS_OPT_IN = os.getenv("CODOMYRMEX_RUN_LIVE_GWS_TESTS") == "1"
 _GWS_CREDS_SET = bool(
     os.getenv("GWS_SERVICE_ACCOUNT_FILE") or os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 )
@@ -488,8 +490,13 @@ class TestDriveClientBehavior:
         assert isinstance(result, dict)
 
 
+@pytest.mark.network
+@pytest.mark.skipif(
+    not _LIVE_GWS_OPT_IN,
+    reason="Live GWS requests require CODOMYRMEX_RUN_LIVE_GWS_TESTS=1",
+)
 class TestLiveSDKClients:
-    """Live API tests — only run when SDK is installed and creds are configured."""
+    """Explicit opt-in plus installed SDK and configured credentials required."""
 
     @pytest.mark.slow
     @pytest.mark.skipif(

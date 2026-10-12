@@ -15,7 +15,7 @@ Observer pattern with two registration modes: explicit (`EventListener.on()`) an
 ### `EventListener`
 
 | Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
+| -------- | ----------- | --------- | ------------- |
 | `__init__` | `listener_id: str`, `event_bus: EventBus \ | None` | `None` Initialize with ID and optional bus |
 | `on` | `event_types`, `handler`, `handler_name`, `filter_func`, `priority` | `str` | Register handler; returns handler name |
 | `once` | (same as `on`) | `str` | Register one-shot handler (auto-unsubscribes after first call) |
@@ -26,18 +26,18 @@ Observer pattern with two registration modes: explicit (`EventListener.on()`) an
 ### `AutoEventListener`
 
 | Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
+| -------- | ----------- | --------- | ------------- |
 | `register_handlers` | `obj: Any` | `None` | Scan object for `@event_handler`-decorated methods and auto-register them |
 
 ### `EventLogger`
 
 | Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
-| `__init__` | `max_entries: int = 10000`, `event_bus: EventBus \ | None` | `None` Initialize bounded log and subscribe to all events |
+| -------- | ----------- | --------- | ------------- |
+| `__init__` | `max_entries: int = 10000`, `event_bus: EventBus \| None` | `None` | Initialize bounded log and subscribe to all events |
 | `log_event` | `event: Event`, `handler_count: int`, `processing_time: float` | `None` | Record an event entry |
 | `get_event_statistics` | — | `dict` | Return total events, per-type counts, error counts |
-| `get_events` | `event_type: str \ | None`, `start_time`, `end_time` | `list[EventLogEntry]` Filter event history |
-| `get_events_by_type` | `event_type: EventType \ | str` | `list[EventLogEntry]` Filter by specific type |
+| `get_events` | `event_type: str \| None`, `start_time`, `end_time` | `list[EventLogEntry]` | Filter event history |
+| `get_events_by_type` | `event_type: EventType \| str` | `list[EventLogEntry]` | Filter by specific type |
 | `get_error_events` | — | `list[EventLogEntry]` | Return entries where type contains "error" |
 | `get_recent_events` | `limit: int = 50` | `list[EventLogEntry]` | Return last N entries |
 | `get_performance_report` | — | `dict` | Total and average processing times by event type |
@@ -71,3 +71,7 @@ Observer pattern with two registration modes: explicit (`EventListener.on()`) an
 - **Readme**: [README.md](README.md)
 - **Agents**: [AGENTS.md](AGENTS.md)
 - **Repository Root**: [README.md](../../../../README.md)
+
+## One-time listener guarantee
+
+`EventListener.once` atomically claims its callback at most once and removes the subscription before invoking user code. This applies to synchronous recursive/concurrent publication and asynchronous wrappers already queued by the event bus. Callback exceptions do not restore a consumed subscription. Async callbacks run on the event bus worker loop; callers must signal another loop with its `call_soon_threadsafe` API.

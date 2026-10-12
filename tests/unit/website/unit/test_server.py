@@ -928,8 +928,12 @@ class TestPaiActionEndpoint:
         assert data.get("success") is False
 
     @_skip_no_agentic_memory
-    def test_add_memory_with_content_returns_200(self, live_server):
+    def test_add_memory_with_content_returns_200(
+        self, live_server, tmp_path, monkeypatch
+    ):
         """add_memory with non-empty content returns 200 with success=True."""
+        # memory_put stores into ./memory.db; the server thread shares the CWD.
+        monkeypatch.chdir(tmp_path)
         status, data = live_server.post(
             "/api/pai/action", {"action": "add_memory", "content": "test note"}
         )

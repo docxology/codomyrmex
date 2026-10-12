@@ -3,11 +3,13 @@
 Zero-mock policy: all tests use real ``HermesClient`` instantiation, real
 ``SQLiteSessionStore`` (in-memory mode), and real ``TemplateLibrary``.
 
-Tests requiring Ollama are gated with ``pytest.mark.skipif``.
+Provider-backed tests require explicit ``RUN_LIVE_HERMES=1`` and an available
+backend. Local error/status, template, and session checks run independently.
 """
 
 from __future__ import annotations
 
+import os
 import shutil
 import sys
 from pathlib import Path
@@ -28,10 +30,11 @@ if _evo_path.exists() and str(_evo_path) not in sys.path:
 _OLLAMA_AVAILABLE = bool(shutil.which("ollama"))
 _HERMES_CLI_AVAILABLE = bool(shutil.which("hermes"))
 _ANY_BACKEND = _OLLAMA_AVAILABLE or _HERMES_CLI_AVAILABLE
+_RUN_LIVE_HERMES = os.environ.get("RUN_LIVE_HERMES") == "1"
 
 requires_backend = pytest.mark.skipif(
-    not _ANY_BACKEND,
-    reason="Neither ollama nor hermes CLI available",
+    not (_RUN_LIVE_HERMES and _ANY_BACKEND),
+    reason="Live Hermes tests require RUN_LIVE_HERMES=1 and an available backend",
 )
 
 
@@ -502,6 +505,7 @@ class TestRunMCPTools:
         assert isinstance(result, dict)
         assert "status" in result
 
+    @requires_backend
     def test_run_mcp_tools_consolidated(self) -> None:
         from codomyrmex.agents.hermes.scripts.run_mcp_tools import run_mcp_tools
 
@@ -637,7 +641,7 @@ class TestNewMCPTools:
         """hermes_stream always returns status/lines/line_count regardless of backend."""
         from codomyrmex.agents.hermes.mcp_tools import hermes_stream
 
-        result = hermes_stream(prompt="hello", backend="cli", timeout=5)
+        result = hermes_stream(prompt="hello", backend="none", timeout=5)
         assert isinstance(result, dict)
         assert "status" in result
         assert "lines" in result

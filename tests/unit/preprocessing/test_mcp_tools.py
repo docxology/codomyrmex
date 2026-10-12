@@ -17,7 +17,7 @@ def test_preprocess_data_empty():
 
 def test_preprocess_data_non_string_returns_error_status():
     """The spec promises a status dict, not an AttributeError, for bad input."""
-    result = preprocess_data(42)  # type: ignore[arg-type]
+    result = preprocess_data(42)
     assert result == {"status": "error", "message": "data must be a string, got int"}
 
 

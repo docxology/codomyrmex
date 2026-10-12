@@ -60,13 +60,13 @@ jobs:
         id: changes
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ] || [ "${{ github.ref }}" == "refs/heads/main" ]; then
-            echo "docs=true" >> $GITHUB_OUTPUT
+            echo "docs=true" >> "$GITHUB_OUTPUT"
           else
             # Check if documentation files have changed in PR
             if git diff --name-only origin/main...HEAD | grep -E "(README\.md|docs/|CHANGELOG\.md|API_SPECIFICATION\.md|MCP_TOOL_SPECIFICATION\.md|USAGE_EXAMPLES\.md|documentation/)" > /dev/null; then
-              echo "docs=true" >> $GITHUB_OUTPUT
+              echo "docs=true" >> "$GITHUB_OUTPUT"
             else
-              echo "docs=false" >> $GITHUB_OUTPUT
+              echo "docs=false" >> "$GITHUB_OUTPUT"
             fi
           fi
 
@@ -267,11 +267,11 @@ jobs:
           echo "🔍 Testing documentation build..."
 
           # Check if build directory exists and contains files
-          if [[ -d "build" ]] && [[ -n "$(ls -A build)" ]]; then
+          if [[ -d "build" ]] && [[ -n "$(find build -mindepth 1 -maxdepth 1 -print -quit)" ]]; then
             echo "✅ Documentation build successful"
             echo "📊 Build size: $(du -sh build | cut -f1)"
             echo "📁 Build contents:"
-            ls -la build/ | head -10
+            find build -maxdepth 1 -print
           else
             echo "❌ Documentation build failed or empty"
             exit 1
@@ -351,13 +351,15 @@ jobs:
 
       - name: Generate link report
         run: |
-          echo "# Link Check Report" > link-report.md
-          echo "" >> link-report.md
-          echo "Checked at: $(date)" >> link-report.md
-          echo "" >> link-report.md
-          echo '```text' >> link-report.md
-          cat link-checker.log >> link-report.md
-          echo '```' >> link-report.md
+          {
+            echo "# Link Check Report"
+            echo ""
+            echo "Checked at: $(date)"
+            echo ""
+            echo '```text'
+            cat link-checker.log
+            echo '```'
+          } > link-report.md
 
       - name: Upload link check report
         uses: actions/upload-artifact@v7
@@ -368,46 +370,44 @@ jobs:
             link-checker.log
 
   documentation-pr-preview:
-    name: Documentation PR Preview
+    name: Documentation Build Artifact
     runs-on: ubuntu-latest
     needs: [validate-documentation, build-documentation]
-    if: github.event_name == 'pull_request' && needs.validate-documentation.outputs.docs-changed == 'true'
+    if: >-
+      github.event_name == 'pull_request' &&
+      needs.validate-documentation.outputs.docs-changed == 'true' &&
+      github.event.pull_request.head.repo.full_name == github.repository
     permissions:
-      contents: write
-      issues: write
+      contents: read
+      actions: read
       pull-requests: write
     steps:
-      - name: Download documentation build
-        uses: actions/download-artifact@v8
-        with:
-          name: documentation-build
-          path: ./build
-
-      - name: Deploy PR Preview
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
-          destination_dir: pr-preview/pr-${{ github.event.number }}
-
-      - name: Comment PR
+      - name: Link successful documentation artifact
         uses: actions/github-script@v9
         with:
           script: |
-            const prNumber = context.payload.pull_request.number;
-            const previewUrl = `https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/pr-${prNumber}/`;
+            const artifacts = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId
+            });
+            const builds = artifacts.filter(artifact =>
+              artifact.name === 'documentation-build' && !artifact.expired
+            );
+            if (builds.length !== 1) {
+              throw new Error('Expected one available documentation-build artifact for this run');
+            }
+            const runUrl = `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const comment = `## 📚 Documentation Build Artifact
 
-            const comment = `## 📚 Documentation Preview
+            The package-local Docusaurus documentation build succeeded.
 
-            Your documentation changes are ready for review!
+            Download **documentation-build** from the Artifacts section of [this workflow run](${runUrl}). GitHub sign-in may be required.
 
-            🔗 **Preview URL**: ${previewUrl}
-
-            This preview will be updated automatically when you push new changes to this PR.
+            Public preview availability has not been verified. Canonical MkDocs checks are reported separately.
             `;
-
-            github.rest.issues.createComment({
-              issue_number: prNumber,
+            await github.rest.issues.createComment({
+              issue_number: context.payload.pull_request.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: comment
@@ -422,41 +422,41 @@ jobs:
     steps:
       - name: Check Documentation Status
         run: |
-          echo "## Documentation Workflow Status" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Documentation Workflow Status" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
 
           if [[ "${{ needs.validate-documentation.result }}" == "success" ]]; then
-            echo "✅ **Validation**: Passed" >> $GITHUB_STEP_SUMMARY
+            echo "✅ **Validation**: Passed" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "❌ **Validation**: Failed" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **Validation**: Failed" >> "$GITHUB_STEP_SUMMARY"
           fi
 
           if [[ "${{ needs.aggregate-documentation.result }}" == "success" ]]; then
-            echo "✅ **Aggregation**: Passed" >> $GITHUB_STEP_SUMMARY
+            echo "✅ **Aggregation**: Passed" >> "$GITHUB_STEP_SUMMARY"
           elif [[ "${{ needs.aggregate-documentation.result }}" == "skipped" ]]; then
-            echo "⏭️  **Aggregation**: Skipped (no doc changes)" >> $GITHUB_STEP_SUMMARY
+            echo "⏭️  **Aggregation**: Skipped (no doc changes)" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "❌ **Aggregation**: Failed" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **Aggregation**: Failed" >> "$GITHUB_STEP_SUMMARY"
           fi
 
           if [[ "${{ needs.build-documentation.result }}" == "success" ]]; then
-            echo "✅ **Build**: Passed" >> $GITHUB_STEP_SUMMARY
+            echo "✅ **Build**: Passed" >> "$GITHUB_STEP_SUMMARY"
           elif [[ "${{ needs.build-documentation.result }}" == "skipped" ]]; then
-            echo "⏭️  **Build**: Skipped (no doc changes)" >> $GITHUB_STEP_SUMMARY
+            echo "⏭️  **Build**: Skipped (no doc changes)" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "❌ **Build**: Failed" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **Build**: Failed" >> "$GITHUB_STEP_SUMMARY"
           fi
 
           if [[ "${{ needs.link-checker.result }}" == "success" ]]; then
-            echo "✅ **Rendered links**: Passed" >> $GITHUB_STEP_SUMMARY
+            echo "✅ **Rendered links**: Passed" >> "$GITHUB_STEP_SUMMARY"
           elif [[ "${{ needs.link-checker.result }}" == "skipped" ]]; then
-            echo "⏭️  **Rendered links**: Skipped (no documentation build)" >> $GITHUB_STEP_SUMMARY
+            echo "⏭️  **Rendered links**: Skipped (no documentation build)" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "❌ **Rendered links**: Failed" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **Rendered links**: Failed" >> "$GITHUB_STEP_SUMMARY"
           fi
 
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Docs Changed**: ${{ needs.validate-documentation.outputs.docs-changed }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Docs Changed**: ${{ needs.validate-documentation.outputs.docs-changed }}" >> "$GITHUB_STEP_SUMMARY"
 
           validation_result="${{ needs.validate-documentation.result }}"
           aggregate_result="${{ needs.aggregate-documentation.result }}"

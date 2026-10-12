@@ -75,6 +75,7 @@ jobs:
       - name: Enforce architectural layering (LP5)
         continue-on-error: false
         run: |
+          uv run python scripts/audits/audit_path_portability.py --root .
           uv run lint-imports --config pyproject.toml
           uv run python scripts/audits/audit_imports.py --root .
           uv run python scripts/audits/audit_exports.py --root .

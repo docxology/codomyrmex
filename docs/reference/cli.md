@@ -141,11 +141,11 @@ Run analysis tasks.
 
 ```bash
 codomyrmex analyze code <path> [--output DIRECTORY]
-codomyrmex analyze git [--repo PATH]
+codomyrmex analyze git [--repo PATH] [--output DIRECTORY]
 ```
 
 - `code` — run code-quality analysis for the specified path, optionally writing reports to `--output`.
-- `git` — analyze a repository (defaults to the current directory unless `--repo` is provided).
+- `git` — analyze a repository (defaults to the current directory unless `--repo` is provided) and write the reports to `--output` (default `./git_analysis`).
 
 ### `codomyrmex build`
 

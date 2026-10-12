@@ -2,49 +2,20 @@
 
 ## Overview
 
-This document specifies the Model Context Protocol (MCP) tools provided by the `terminal_interface` module.
+This document specifies the Model Context Protocol (MCP) tools provided by the `terminal_interface` module. The tools are defined with the `@mcp_tool` decorator and are surfaced by the PAI MCP bridge as `codomyrmex.<name>`.
 
-## Available Tools
+| Tool | Defined in | Purpose |
+| :--- | :--- | :--- |
+| `terminal_info` | `mcp_tools.py` | Report terminal type, shell and dimensions |
+| `terminal_list_themes` | `mcp_tools.py` | List the named output themes |
+| `terminal_format` | `mcp_tools.py` | Prefix and measure text for a named style |
+| `create_ascii_art` | `utils/terminal_utils.py` | Render text as plain or block-letter ASCII art |
 
-### `tool_name`
-
-**Description**: [Tool description]
-
-**Parameters**:
-
-```json
-{
-  "param1": {
-    "type": "string",
-    "description": "Parameter description",
-    "required": true
-  },
-  "param2": {
-    "type": "integer",
-    "description": "Parameter description",
-    "required": false,
-    "default": 0
-  }
-}
-```
-
-**Returns**: Return value description
-
-**Example**:
-
-```json
-{
-  "tool": "tool_name",
-  "parameters": {
-    "param1": "value",
-    "param2": 42
-  }
-}
-```
+None of these tools execute commands or start shells.
 
 ## Tool Registration
 
-Tools are defined with the `@mcp_tool` decorator in `mcp_tools.py` and are auto-discovered by the PAI MCP bridge; no manual registration call is needed. The decorated functions can also be called directly:
+Tools are defined with the `@mcp_tool` decorator in `mcp_tools.py` (and `utils/terminal_utils.py`) and are auto-discovered by the PAI MCP bridge; no manual registration call is needed. The decorated functions can also be called directly:
 
 ```python
 from codomyrmex.terminal_interface.mcp_tools import terminal_info, terminal_list_themes
@@ -61,103 +32,115 @@ themes = terminal_list_themes()
 
 ---
 
-## Tool: `run_terminal_command`
+## Tool: `terminal_info`
 
 ### 1. Tool Purpose and Description
 
-Execute terminal commands and capture output for system administration and development tasks.
+Reads the terminal environment: `TERM`, `SHELL`, `COLORTERM`, `TERM_PROGRAM` and the terminal size (falling back to 80x24).
 
 ### 2. Invocation Name
 
-`run_terminal_command`
+`terminal_info`
 
 ### 3. Input Schema (Parameters)
 
-| Parameter Name | Type | Required | Description | Example Value |
-| :--- | :--- | :--- | :--- | :--- |
-| `command` | `string` | Yes | Terminal command to execute | `"ls -la"` |
-| `working_directory` | `string` | No | Directory to execute command in | `"/path/to/project"` |
-| `timeout_seconds` | `integer` | No | Command execution timeout | `30` |
-| `capture_output` | `boolean` | No | Whether to capture and return command output | `true` |
+None.
 
 ### 4. Output Schema (Return Value)
 
 ```json
 {
-  "command": "ls -la",
-  "return_code": 0,
-  "stdout": "total 48
-drwxr-xr-x  12 user  staff   384 Jan 18 13:46 .
-drwxr-xr-x   3 user  staff    96 Jan 18 13:46 ..
--rw-r--r--   1 user  staff  1073 Jan 18 13:46 README.md
-",
-  "stderr": "",
-  "execution_time": 0.023,
-  "working_directory": "/path/to/project"
+  "status": "success",
+  "terminal": "xterm-256color",
+  "shell": "/bin/zsh",
+  "columns": 80,
+  "lines": 24,
+  "colorterm": "truecolor",
+  "term_program": ""
 }
 ```
 
-## Tool: `format_terminal_output`
+Unset variables are reported as `"unknown"` (`terminal`, `shell`) or `""` (`colorterm`, `term_program`). On failure the tool returns `{"status": "error", "message": "<error>"}`.
+
+## Tool: `terminal_list_themes`
 
 ### 1. Tool Purpose and Description
 
-Format and enhance terminal output with colors, tables, and structured display for better readability.
+Lists the named terminal output themes (`default`, `rich`, `minimal`, `json`) with one-line descriptions.
 
 ### 2. Invocation Name
 
-`format_terminal_output`
+`terminal_list_themes`
 
 ### 3. Input Schema (Parameters)
 
-| Parameter Name | Type | Required | Description | Example Value |
-| :--- | :--- | :--- | :--- | :--- |
-| `content` | `string` | Yes | Content to format | `"Error: Connection failed"` |
-| `format_type` | `string` | No | Type of formatting (success, error, warning, info, table, json) | `"error"` |
-| `table_headers` | `array[string]` | No | Headers for table formatting | `["Name", "Status", "Size"]` |
-| `table_rows` | `array[array[string]]` | No | Data rows for table formatting | `[["file1.txt", "active", "1.2MB"]]` |
+None.
 
 ### 4. Output Schema (Return Value)
 
 ```json
 {
-  "formatted_content": "\u001b[31m❌ Error: Connection failed\u001b[0m",
-  "format_type": "error",
-  "original_content": "Error: Connection failed",
-  "terminal_codes": ["31m", "0m"]
+  "status": "success",
+  "themes": {
+    "default": "Standard terminal output with basic formatting",
+    "rich": "Rich text formatting with colors, tables, and syntax highlighting",
+    "minimal": "Minimal output, no decorations or colors",
+    "json": "JSON-structured output for machine consumption"
+  },
+  "count": 4
 }
 ```
 
-## Tool: `start_interactive_shell`
+## Tool: `terminal_format`
 
 ### 1. Tool Purpose and Description
 
-Launch an interactive terminal shell session for complex multi-step operations and exploration.
+Prefixes every line of `text` with the marker for `style` followed by a space (`title` → `#`, `success` → `✓`, `error` → `✗`, `warning` → `⚠`); `code` indents by two spaces and `default` or unknown styles add nothing. No ANSI colour codes are added and lines are not wrapped; `width` is only reported back.
 
 ### 2. Invocation Name
 
-`start_interactive_shell`
+`terminal_format`
 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
 | :--- | :--- | :--- | :--- | :--- |
-| `shell_type` | `string` | No | Type of shell to launch (bash, zsh, python, codomyrmex) | `"codomyrmex"` |
-| `working_directory` | `string` | No | Initial working directory | `"/path/to/project"` |
-| `prompt` | `string` | No | Custom shell prompt | `"codomyrmex> "` |
-| `startup_commands` | `array[string]` | No | Commands to execute on shell startup | `["cd /project", "git status"]` |
+| `text` | `string` | Yes | Text to format | `"Build finished"` |
+| `style` | `string` | No | `default`, `title`, `success`, `error`, `warning` or `code` (default `default`) | `"success"` |
+| `width` | `integer` | No | Width to report; `0` or less uses the terminal width (default `0`) | `100` |
 
 ### 4. Output Schema (Return Value)
 
 ```json
 {
-  "shell_id": "shell_12345",
-  "shell_type": "codomyrmex",
-  "status": "started",
-  "working_directory": "/path/to/project",
-  "startup_commands_executed": 2,
-  "available_commands": ["analyze", "build", "deploy", "help"]
+  "status": "success",
+  "formatted": "✓ Build finished",
+  "style": "success",
+  "width": 100,
+  "line_count": 1
 }
 ```
+
+## Tool: `create_ascii_art`
+
+### 1. Tool Purpose and Description
+
+Returns `text` unchanged for the `simple` style, or five rows of block letters for the `block` style. Block glyphs exist for `A`, `B`, `C` and space; other characters render as a solid block. Unknown styles return `text` unchanged.
+
+### 2. Invocation Name
+
+`create_ascii_art`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name | Type | Required | Description | Example Value |
+| :--- | :--- | :--- | :--- | :--- |
+| `text` | `string` | Yes | Text to render | `"CAB"` |
+| `style` | `string` | No | `simple` or `block` (default `simple`) | `"block"` |
+
+### 4. Output Schema (Return Value)
+
+A plain string (not a dictionary): the ASCII art, with rows separated by newlines.
 
 ## Navigation Links
 

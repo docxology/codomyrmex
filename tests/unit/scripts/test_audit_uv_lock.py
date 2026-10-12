@@ -69,3 +69,101 @@ def test_every_scoped_ignore_is_justified(audit) -> None:
         assert ignore.package
         assert ignore.version.count(".") >= 1
         assert len(ignore.justification) > 40
+
+
+@pytest.mark.unit
+def test_every_marker_specific_pin_is_retained(audit):
+    text = (
+        "numpy==2.4.6; python_version < '3.12'\n"
+        "numpy==2.5.3; python_version >= '3.12'\n"
+        "mlx==0.31.1; sys_platform == 'darwin'\n"
+    )
+    pairs = audit.locked_pairs(text)
+    assert pairs == [("mlx", "0.31.1"), ("numpy", "2.4.6"), ("numpy", "2.5.3")]
+    batches = audit.audit_batches(pairs)
+    assert sorted(pair for batch in batches for pair in batch) == pairs
+    assert all(len({name for name, _ in batch}) == len(batch) for batch in batches)
+
+
+@pytest.mark.unit
+def test_conflicting_pin_disables_global_exception(audit):
+    conflicting = EXPORT + "wasmtime==43.0.0; sys_platform == 'darwin'\n"
+    assert audit.locked_version(conflicting, "wasmtime") is None
+    assert "PYSEC-2026-151" not in {
+        item.advisory for item in audit.applicable_ignores(conflicting)
+    }
+
+
+@pytest.mark.unit
+def test_advisory_exception_is_bound_to_report_version_and_retained(audit):
+    vulnerability = {
+        "id": "GHSA-example",
+        "aliases": ["PYSEC-2026-151"],
+        "fix_versions": [],
+    }
+    reviewed = {"name": "wasmtime", "version": "42.0.0", "vulns": [vulnerability]}
+    unreviewed = {"name": "wasmtime", "version": "43.0.0", "vulns": [vulnerability]}
+    audit.apply_scoped_ignores(reviewed)
+    audit.apply_scoped_ignores(unreviewed)
+    assert reviewed["vulns"] == []
+    assert reviewed["ignored_vulns"][0]["id"] == "GHSA-example"
+    assert reviewed["ignored_vulns"][0]["justification"]
+    assert unreviewed["vulns"] == [vulnerability]
+    assert "ignored_vulns" not in unreviewed
+
+
+@pytest.mark.unit
+@pytest.mark.parametrize(
+    "text", ["", "package @ https://example.invalid/package.whl\n", "package>=1\n"]
+)
+def test_unauditable_export_fails_closed(audit, text):
+    with pytest.raises(ValueError):
+        audit.locked_pairs(text)
+
+
+@pytest.mark.unit
+@pytest.mark.parametrize(
+    ("dependency", "status"),
+    [
+        ({"name": "pkg", "version": "1", "vulns": []}, 1),
+        ({"name": "pkg", "version": "1", "vulns": [{"id": "CVE-example"}]}, 0),
+        (
+            {"name": "pkg", "version": "1", "vulns": [{"aliases": ["PYSEC-2026-151"]}]},
+            1,
+        ),
+        (
+            {
+                "name": "pkg",
+                "version": "1",
+                "vulns": [{"id": "CVE-example", "aliases": "bad"}],
+            },
+            1,
+        ),
+        (
+            {
+                "name": "pkg",
+                "version": "1",
+                "vulns": [],
+                "skip_reason": "collection failed",
+            },
+            0,
+        ),
+    ],
+)
+def test_malformed_or_failed_collection_cannot_be_green(audit, dependency, status):
+    with pytest.raises(ValueError):
+        audit.validate_batch_report(
+            {"dependencies": [dependency]}, [("pkg", "1")], status
+        )
+
+
+@pytest.mark.unit
+def test_complete_report_must_cover_all_requested_versions(audit):
+    dependency = {"name": "pkg", "version": "1", "vulns": []}
+    assert audit.validate_batch_report(
+        {"dependencies": [dependency]}, [("pkg", "1")], 0
+    ) == [dependency]
+    with pytest.raises(ValueError):
+        audit.validate_batch_report(
+            {"dependencies": [dependency]}, [("pkg", "1"), ("other", "2")], 0
+        )

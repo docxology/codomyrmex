@@ -104,6 +104,7 @@ lint:
 
 lint-imports:
 	@echo "Enforcing architectural layering and explicit interface contracts..."
+	uv run --locked python scripts/audits/audit_path_portability.py --root .
 	uv run --locked lint-imports --config pyproject.toml
 	uv run --locked python scripts/audits/audit_imports.py --root .
 	uv run --locked python scripts/audits/audit_exports.py --root .
@@ -147,6 +148,9 @@ docs: docs-check
 
 docs-check:
 	@echo "Checking documentation status..."
+	uv run --locked --group docs python src/codomyrmex/documentation/documentation_website.py validate_docs
+	uv run --locked --group docs python scripts/documentation/validate_mcp_tool_specs.py --repo-root . --output output/documentation/mcp_tool_specs.json --fail-on-broken
+	uv run --locked --group docs --all-extras python scripts/documentation/validate_api_signatures.py --repo-root . --output output/documentation/api_signatures.json --fail-on-broken
 	uv run --locked --group docs python scripts/rasp_gap_report.py --repo-root . --check
 	uv run --locked --group docs python scripts/documentation/audit_readme_agents.py --repo-root . --strict
 	uv run --locked --group docs python scripts/documentation/validate_links_comprehensive.py --repo-root . --format both --fail-on-broken

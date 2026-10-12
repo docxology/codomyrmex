@@ -15,9 +15,11 @@ Requirements:
 """
 
 import asyncio
+import math
 import socket
 import time
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from codomyrmex.audio.exceptions import (
     ProviderNotAvailableError,
@@ -33,6 +35,9 @@ from codomyrmex.audio.text_to_speech.models import (
 )
 
 from .base import TTSProvider
+
+if TYPE_CHECKING:
+    from edge_tts import Communicate
 
 # Check if edge-tts is available
 try:
@@ -97,7 +102,7 @@ class EdgeTTSProvider(TTSProvider):
 
     @staticmethod
     def _new_http_connector():
-        """Create a connector with deterministic, drainable socket cleanup.
+        """Create a voice-inventory connector with drainable socket cleanup.
 
         ``edge-tts`` delegates connection setup to ``aiohttp``. On macOS,
         Happy-Eyeballs can leave an in-flight IPv6 transport behind when the
@@ -117,6 +122,47 @@ class EdgeTTSProvider(TTSProvider):
         # aiohttp documents a short event-loop drain after SSL session close;
         # without it asyncio.run can report transports during loop teardown.
         await asyncio.sleep(0.25)
+
+    @staticmethod
+    def _new_communicate(text: str, voice: str, config: TTSConfig) -> "Communicate":
+        """Let each library stream session own its connector.
+
+        The Edge library opens separate sessions for chunks and its built-in
+        403 recovery. A supplied connector is closed by the first session and
+        cannot be reused by a later session. Per-session defaults retain the
+        library's finite socket connect/read timeouts without shared ownership.
+        """
+        for name in ("rate", "pitch", "volume"):
+            value = getattr(config, name)
+            try:
+                finite = math.isfinite(value)
+            except (TypeError, OverflowError):
+                finite = False
+            if (
+                isinstance(value, bool)
+                or not isinstance(value, (int, float))
+                or not finite
+            ):
+                raise SynthesisError(f"{name} must be a finite number")
+        if config.rate <= 0:
+            raise SynthesisError("rate must be positive")
+        if not 0.0 <= config.volume <= 1.0:
+            raise SynthesisError("volume must be in [0.0, 1.0]")
+        try:
+            rate = int((config.rate - 1.0) * 100)
+            pitch = int((config.pitch - 1.0) * 50)
+            volume = int((config.volume - 1.0) * 100)
+        except (OverflowError, ValueError) as exc:
+            raise SynthesisError("Prosody adjustment exceeds numeric range") from exc
+        return edge_tts.Communicate(
+            text,
+            voice=voice,
+            rate=f"{rate:+d}%",
+            pitch=f"{pitch:+d}Hz",
+            volume=f"{volume:+d}%",
+            connect_timeout=10,
+            receive_timeout=60,
+        )
 
     async def _load_voices(self) -> None:
         """Load available voices from Edge TTS service."""
@@ -220,33 +266,14 @@ class EdgeTTSProvider(TTSProvider):
                 )
 
         try:
-            # Build rate and pitch strings
-            # Edge TTS uses percentage format: "+50%" or "-25%"
-            rate_pct = int((config.rate - 1.0) * 100)
-            rate_str = f"+{rate_pct}%" if rate_pct >= 0 else f"{rate_pct}%"
-
-            pitch_pct = int((config.pitch - 1.0) * 50)  # pitch is more sensitive
-            pitch_str = f"+{pitch_pct}Hz" if pitch_pct >= 0 else f"{pitch_pct}Hz"
-
-            connector = self._new_http_connector()
-            # Create communicate instance
-            communicate = edge_tts.Communicate(
-                text,
-                voice=voice,
-                rate=rate_str,
-                pitch=pitch_str,
-                connector=connector,
-            )
+            communicate = self._new_communicate(text, voice, config)
 
             # Collect audio data
             audio_chunks: list[bytes] = []
 
-            try:
-                async for chunk in communicate.stream():
-                    if chunk["type"] == "audio":
-                        audio_chunks.append(chunk["data"])
-            finally:
-                await self._close_http_connector(connector)
+            async for chunk in communicate.stream():
+                if chunk["type"] == "audio":
+                    audio_chunks.append(chunk["data"])
 
             if not audio_chunks:
                 raise SynthesisError("No audio data generated")
@@ -297,26 +324,16 @@ class EdgeTTSProvider(TTSProvider):
             Path to the saved file
 
         """
+        if not text or not text.strip():
+            raise SynthesisError("Cannot synthesize empty text")
+
         config = config or TTSConfig()
         output_path = Path(output_path)
 
         voice = config.voice or self.default_voice
 
-        rate_pct = int((config.rate - 1.0) * 100)
-        rate_str = f"+{rate_pct}%" if rate_pct >= 0 else f"{rate_pct}%"
-
-        connector = self._new_http_connector()
-        try:
-            communicate = edge_tts.Communicate(
-                text,
-                voice=voice,
-                rate=rate_str,
-                connector=connector,
-            )
-
-            await communicate.save(str(output_path))
-        finally:
-            await self._close_http_connector(connector)
+        communicate = self._new_communicate(text, voice, config)
+        await communicate.save(str(output_path))
         return output_path
 
     def list_voices(

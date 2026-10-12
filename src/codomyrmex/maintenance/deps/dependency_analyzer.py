@@ -1,5 +1,4 @@
 import ast
-import logging
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -20,12 +19,8 @@ Usage:
 """
 
 
-try:
-    setup_logging()
-    logger = get_logger(__name__)
-except ImportError:
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
+# Importing this module must not configure logging; main() does that.
+logger = get_logger(__name__)
 
 __all__ = ["DependencyAnalyzer"]
 
@@ -347,6 +342,7 @@ class DependencyAnalyzer:
 
 def main() -> int:
     """Main entry point."""
+    setup_logging()
     repo_root = Path(__file__).parent.parent.parent.parent
     analyzer = DependencyAnalyzer(repo_root)
 

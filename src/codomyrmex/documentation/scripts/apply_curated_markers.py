@@ -18,13 +18,7 @@ from codomyrmex.documentation.scripts.bootstrap_agents_readmes import (
 )
 from codomyrmex.logging_monitoring import get_logger, setup_logging
 
-try:
-    setup_logging()
-except Exception:
-    import logging
-
-    logging.basicConfig(level=logging.INFO)
-
+# Importing this module must not configure logging; main() does that.
 logger = get_logger(__name__)
 
 _HEAD_BYTES = 800
@@ -51,6 +45,7 @@ def _prepend_marker(path: Path, marker: str, *, dry_run: bool) -> bool:
 
 
 def main() -> int:
+    setup_logging()
     parser = argparse.ArgumentParser(
         description="Prepend curated markers to AGENTS.md and README.md under bootstrap surfaces."
     )

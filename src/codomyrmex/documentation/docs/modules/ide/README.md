@@ -30,7 +30,7 @@ themselves, allowing sophisticated control and automation of development workflo
 
 ## Module Documentation
 
-- Extended README: [readme.md](readme.md)
+- Extended README: [extended_readme.md](extended_readme.md)
 - Agent coordination: [AGENTS.md](AGENTS.md)
 - Technical specification: [SPEC.md](SPEC.md)
 

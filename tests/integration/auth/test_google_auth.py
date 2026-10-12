@@ -13,28 +13,28 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-def test_google_authenticator_init():
+def test_google_authenticator_init(tmp_path):
     """Test that GoogleAuthenticator initializes correctly with custom paths."""
     auth = GoogleAuthenticator(
-        client_secrets_file="/tmp/dummy_client_secrets.json",
-        token_cache_file="/tmp/dummy_token.json",
+        client_secrets_file=str(tmp_path / "dummy_client_secrets.json"),
+        token_cache_file=str(tmp_path / "dummy_token.json"),
         scopes=["https://www.googleapis.com/auth/calendar.readonly"],
     )
 
-    assert auth.client_secrets_file == "/tmp/dummy_client_secrets.json"
-    assert auth.token_file == "/tmp/dummy_token.json"
+    assert auth.client_secrets_file == str(tmp_path / "dummy_client_secrets.json")
+    assert auth.token_file == str(tmp_path / "dummy_token.json")
     assert len(auth.scopes) == 1
     assert "calendar.readonly" in auth.scopes[0]
 
 
-def test_google_authenticator_missing_secrets():
+def test_google_authenticator_missing_secrets(tmp_path):
     """Test that GoogleAuthenticator fails fast if secrets file is missing and it has to run flow."""
     auth = GoogleAuthenticator(
-        client_secrets_file="/tmp/this_file_does_not_exist.json",
-        token_cache_file="/tmp/no_token_here.json",
+        client_secrets_file=str(tmp_path / "this_file_does_not_exist.json"),
+        token_cache_file=str(tmp_path / "no_token_here.json"),
     )
 
     # We expect a FileNotFoundError because the interactive flow falls back to reading the client_secrets
     with pytest.raises(FileNotFoundError):
-        # Prevent actual browser pop-ups just in case something acts unexpected during Zero-Mock tests
+        # Both selected credential files are absent from this isolated directory.
         auth.get_credentials()

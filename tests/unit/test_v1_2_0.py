@@ -8,6 +8,8 @@ from __future__ import annotations
 import json
 from typing import TYPE_CHECKING
 
+import pytest
+
 if TYPE_CHECKING:
     from pathlib import Path
 
@@ -64,6 +66,11 @@ from codomyrmex.cli.handlers.memory import (
 
 class TestMemoryCLI:
     """Verify memory CLI subcommands."""
+
+    @pytest.fixture(autouse=True)
+    def _run_in_tmp_path(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        # The memory commands open SQLiteStore(), whose database is ./memory.db.
+        monkeypatch.chdir(tmp_path)
 
     def test_memory_list(self) -> None:
         result = handle_memory_list(limit=5)

@@ -287,15 +287,17 @@ class Tensor:
         out = Tensor(result, _children=(self,), _op="sum")
 
         def _backward() -> None:
+            grad = out.grad
+            if grad is None:
+                raise RuntimeError("Reduction backward requires an output gradient")
             if self.grad is None:
                 self.grad = np.zeros_like(self.data)
-            if out.grad.shape == ():
-                self.grad += np.ones_like(self.data) * float(out.grad)
+            if grad.shape == ():
+                self.grad += np.ones_like(self.data) * float(grad)
             else:
-                grad = out.grad
                 if not keepdims and axis is not None:
-                    grad = np.expand_dims(grad, axis=axis)  # type: ignore
-                self.grad += np.broadcast_to(grad, self.data.shape).copy()  # type: ignore
+                    grad = np.expand_dims(grad, axis=axis)
+                self.grad += np.broadcast_to(grad, self.data.shape).copy()
 
         out._backward = _backward
         return out
@@ -307,15 +309,17 @@ class Tensor:
         n = self.data.size if axis is None else self.data.shape[axis]
 
         def _backward() -> None:
+            grad = out.grad
+            if grad is None:
+                raise RuntimeError("Reduction backward requires an output gradient")
             if self.grad is None:
                 self.grad = np.zeros_like(self.data)
-            if out.grad.shape == ():
-                self.grad += np.ones_like(self.data) * float(out.grad) / n
+            if grad.shape == ():
+                self.grad += np.ones_like(self.data) * float(grad) / n
             else:
-                grad = out.grad
                 if not keepdims and axis is not None:
-                    grad = np.expand_dims(grad, axis=axis)  # type: ignore
-                self.grad += np.broadcast_to(grad / n, self.data.shape).copy()  # type: ignore
+                    grad = np.expand_dims(grad, axis=axis)
+                self.grad += np.broadcast_to(grad / n, self.data.shape).copy()
 
         out._backward = _backward
         return out

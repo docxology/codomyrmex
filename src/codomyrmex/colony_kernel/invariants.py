@@ -14,7 +14,9 @@ These invariants serve three purposes:
    to detect configuration drift.
 
 All invariant functions return ``True`` when the invariant holds and
-``False`` when it is violated, never raising.
+``False`` when it is violated or state observation fails. Ordinary exceptions
+(including an unavailable input sequence) fail closed; ``BaseException``
+interruptions such as KeyboardInterrupt and SystemExit still propagate.
 
 The canonical thresholds and strength limits are imported from the runtime modules
 that enforce them. This prevents a second, stale set of constants from masquerading
@@ -23,11 +25,21 @@ as a formal model.
 
 from __future__ import annotations
 
+import math
 from collections.abc import Sequence
+from dataclasses import fields
 from typing import TYPE_CHECKING
 
 from codomyrmex.agentic_memory.stigmergy.models import StigmergyConfig
 from codomyrmex.colony_kernel.actuation_gate import GATE_SCORE_WEIGHTS
+from codomyrmex.colony_kernel.models import (
+    _TRUST_DELTA_FAIL,
+    _TRUST_DELTA_HUMAN_WEIGHT,
+    _TRUST_DELTA_PASS,
+    _TRUST_DELTA_REPAIR,
+    GateDecision,
+    ResourceCost,
+)
 from codomyrmex.colony_kernel.role_adapter import (
     _ROLE_DISPATCHER_MIN_TRUST,
     _ROLE_GUARD_MIN_TRUST,
@@ -36,7 +48,11 @@ from codomyrmex.colony_kernel.role_adapter import (
 )
 
 if TYPE_CHECKING:
-    from codomyrmex.colony_kernel.models import AgentTrustProfile, DecayRate
+    from codomyrmex.colony_kernel.models import (
+        AgentTrustProfile,
+        ConsequenceRecord,
+        GateResult,
+    )
 
 # ---------------------------------------------------------------------------
 # Gate-weight invariant
@@ -73,10 +89,13 @@ def check_gate_weights_sum_to_one(
     if weights is None:
         weights = _GATE_WEIGHTS
     try:
-        total = sum(float(w) for w in weights)
-    except (TypeError, ValueError):
+        values = [float(w) for w in weights]
+        total = sum(values)
+    except Exception:
         return False
-    return abs(total - 1.0) < _WEIGHT_TOLERANCE
+    return all(0.0 <= value <= 1.0 for value in values) and (
+        abs(total - 1.0) < _WEIGHT_TOLERANCE
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -112,13 +131,13 @@ def check_trust_score_in_range(
     """
     if profiles is None:
         return True
-    for profile in profiles:
-        try:
+    try:
+        for profile in profiles:
             score = float(profile.trust_score)
-        except (TypeError, AttributeError, ValueError):
-            return False
-        if not (0.0 <= score <= 1.0):
-            return False
+            if not (0.0 <= score <= 1.0):
+                return False
+    except Exception:
+        return False
     return True
 
 
@@ -151,13 +170,13 @@ def check_pheromone_strength_bounds(
     """
     if strengths is None:
         return True
-    for s in strengths:
-        try:
+    try:
+        for s in strengths:
             val = float(s)
-        except (TypeError, ValueError):
-            return False
-        if not (_PHEROMONE_MIN_STRENGTH <= val <= _PHEROMONE_MAX_STRENGTH):
-            return False
+            if not (_PHEROMONE_MIN_STRENGTH <= val <= _PHEROMONE_MAX_STRENGTH):
+                return False
+    except Exception:
+        return False
     return True
 
 
@@ -201,14 +220,14 @@ def check_role_ladder_monotonic(
     """
     if thresholds is None:
         thresholds = _ROLE_LADDER_THRESHOLDS
-    items = list(thresholds)
-    if not items:
-        return True
     try:
+        items = list(thresholds)
         floats = [float(t) for t in items]
-    except (TypeError, ValueError):
+    except Exception:
         return False
-    return all(floats[i] > floats[i - 1] for i in range(1, len(floats)))
+    return all(0.0 <= value <= 1.0 for value in floats) and all(
+        floats[i] > floats[i - 1] for i in range(1, len(floats))
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -259,9 +278,112 @@ def check_gate_thresholds_ordered(
     Ensures the gate decision space is strictly partitioned into [0, hold),
     [hold, execute), and [execute, 1] without overlapping or inverted regions.
     """
-    ex = _GATE_SCORE_EXECUTE if execute_thresh is None else float(execute_thresh)
-    hd = _GATE_SCORE_HOLD if hold_thresh is None else float(hold_thresh)
+    try:
+        ex = _GATE_SCORE_EXECUTE if execute_thresh is None else float(execute_thresh)
+        hd = _GATE_SCORE_HOLD if hold_thresh is None else float(hold_thresh)
+    except Exception:
+        return False
     return 0.0 <= hd < ex <= 1.0
+
+
+def check_budget_monotonic(
+    usage: Sequence[ResourceCost] | None = None,
+) -> bool:
+    """Validate finite, nonnegative cumulative usage within one budget period.
+
+    Each dimension must never decrease between successive snapshots. Period
+    resets must start a new sequence; saturating risk dimensions may stay equal.
+    This checks accounting consistency, not whether an actual cost was observed.
+    """
+    if usage is None:
+        return True
+    previous: dict[str, float] = {}
+    previous_calls = 0
+    fractions = {"risk_level", "merge_risk", "security_exposure"}
+    try:
+        for snapshot in usage:
+            if not isinstance(snapshot, ResourceCost):
+                return False
+            calls = snapshot.llm_calls
+            if isinstance(calls, bool) or not isinstance(calls, int):
+                return False
+            if calls < previous_calls:
+                return False
+            previous_calls = calls
+            for dimension in fields(ResourceCost):
+                if dimension.name == "llm_calls":
+                    continue
+                raw = getattr(snapshot, dimension.name)
+                value = float(raw)
+                if not math.isfinite(value) or value < 0:
+                    return False
+                if dimension.name in fractions and value > 1:
+                    return False
+                if value < previous.get(dimension.name, 0.0):
+                    return False
+                previous[dimension.name] = value
+    except Exception:
+        return False
+    return True
+
+
+def check_gate_decision_space_closed(
+    results: Sequence[GateResult] | None = None,
+) -> bool:
+    """Check ternary verdict identity and bounded scores on observed results."""
+    if results is None:
+        return True
+    try:
+        for result in results:
+            if not isinstance(result.decision, GateDecision):
+                return False
+            if not isinstance(result.budget_approved, bool):
+                return False
+            if not 0.0 <= float(result.gate_score) <= 1.0:
+                return False
+            if not 0.0 <= float(result.falsification_severity) <= 1.0:
+                return False
+            if result.decision == GateDecision.EXECUTE and (
+                not result.budget_approved or result.falsification_severity >= 1.0
+            ):
+                return False
+    except Exception:
+        return False
+    return True
+
+
+def check_consequence_trust_bounds(
+    records: Sequence[ConsequenceRecord] | None = None,
+) -> bool:
+    """Check feedback and trust deltas against canonical runtime policy bounds.
+
+    These are bounds on records after trust-delta computation. Unprocessed
+    records may carry the documented zero sentinel. Actual profile trust is
+    checked separately; this does not authenticate caller-reported outcomes.
+    """
+    if records is None:
+        return True
+    minimum = (
+        min(_TRUST_DELTA_FAIL, _TRUST_DELTA_PASS)
+        + min(0.0, _TRUST_DELTA_REPAIR)
+        - abs(_TRUST_DELTA_HUMAN_WEIGHT)
+    )
+    maximum = (
+        max(_TRUST_DELTA_FAIL, _TRUST_DELTA_PASS)
+        + max(0.0, _TRUST_DELTA_REPAIR)
+        + abs(_TRUST_DELTA_HUMAN_WEIGHT)
+    )
+    try:
+        for record in records:
+            feedback = float(record.human_feedback)
+            delta = float(record.trust_delta)
+            if not -1.0 <= feedback <= 1.0:
+                return False
+            if not minimum <= delta <= maximum:
+                return False
+    except Exception:
+        return False
+    return True
 
 
 # ---------------------------------------------------------------------------
@@ -272,12 +394,19 @@ def check_gate_thresholds_ordered(
 def all_invariants_hold(
     profiles: Sequence[AgentTrustProfile] | None = None,
     strengths: Sequence[float] | None = None,
+    *,
+    budget_usage: Sequence[ResourceCost] | None = None,
+    gate_results: Sequence[GateResult] | None = None,
+    consequences: Sequence[ConsequenceRecord] | None = None,
 ) -> dict[str, bool]:
     """Run all invariant checks and return a summary dict.
 
     Args:
         profiles: Optional agent profiles for the trust-score check.
         strengths: Optional pheromone strengths for the bounds check.
+        budget_usage: Cumulative usage snapshots within one budget period.
+        gate_results: Observed gate results to check for closed decision space.
+        consequences: Consequence records with bounded feedback/trust deltas.
 
     Returns:
         Dict mapping invariant name → bool.  All values True = healthy.
@@ -294,6 +423,9 @@ def all_invariants_hold(
         "pheromone_strength_bounds": check_pheromone_strength_bounds(strengths),
         "role_ladder_monotonic": check_role_ladder_monotonic(),
         "enum_values_no_conflict": check_enum_values_no_conflict(),
+        "budget_monotonic": check_budget_monotonic(budget_usage),
+        "gate_decision_space_closed": check_gate_decision_space_closed(gate_results),
+        "consequence_trust_bounds": check_consequence_trust_bounds(consequences),
     }
 
 
@@ -303,7 +435,10 @@ def all_invariants_hold(
 
 __all__ = [
     "all_invariants_hold",
+    "check_budget_monotonic",
+    "check_consequence_trust_bounds",
     "check_enum_values_no_conflict",
+    "check_gate_decision_space_closed",
     "check_gate_thresholds_ordered",
     "check_gate_weights_sum_to_one",
     "check_pheromone_strength_bounds",

@@ -4,12 +4,20 @@ Uses real HTTP requests (via httpbin.org or local echo), real loopback
 TCP/UDP sockets, and skip markers for external services (SSH, WebSocket).
 """
 
+from __future__ import annotations
+
 import contextlib
+import os
 import socket
 import threading
+from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 import requests as requests_lib
+
+if TYPE_CHECKING:
+    from codomyrmex.networking.ssh_sftp import SSHClient as SSHClientType
 
 try:
     from codomyrmex import networking
@@ -376,22 +384,22 @@ class TestWebSocketClient:
 # SSHClient Tests — Skip if no local SSH
 # ==============================================================================
 
-_HAS_SSH = False
-try:
-    s = socket.create_connection(("localhost", 22), timeout=0.5)
-    s.close()
-    _HAS_SSH = True
-except Exception:
-    pass
-
-requires_ssh = pytest.mark.skipif(not _HAS_SSH, reason="No local SSH server")
+requires_ssh = pytest.mark.skipif(
+    os.environ.get("CODOMYRMEX_RUN_LIVE_SSH_TESTS") != "1",
+    reason="Credentialed SSH requires CODOMYRMEX_RUN_LIVE_SSH_TESTS=1",
+)
 
 
 class TestSSHClient:
     """Tests for SSHClient — uses real paramiko if SSH available."""
 
-    def test_ssh_client_initialization(self):
-        client = SSHClient(hostname="example.com", username="user", password="pass")
+    def test_ssh_client_initialization(self, known_hosts_file: Path):
+        client = SSHClient(
+            hostname="example.com",
+            username="user",
+            password="pass",  # pragma: allowlist secret
+            known_hosts_file=str(known_hosts_file),
+        )
         assert client.hostname == "example.com"
         assert client.username == "user"
         assert client.port == 22
@@ -400,41 +408,43 @@ class TestSSHClient:
 
         assert isinstance(client.client._policy, paramiko.RejectPolicy)
 
-    def test_ssh_client_key_based_auth(self):
+    def test_ssh_client_key_based_auth(self, known_hosts_file: Path):
         client = SSHClient(
-            hostname="example.com", username="user", key_filename="/path/to/key"
+            hostname="example.com",
+            username="user",
+            key_filename="/path/to/key",
+            known_hosts_file=str(known_hosts_file),
         )
         assert client.key_filename == "/path/to/key"
 
-    def test_ssh_client_custom_port(self):
-        client = SSHClient(hostname="example.com", username="user", port=2222)
+    def test_ssh_client_custom_port(self, known_hosts_file: Path):
+        client = SSHClient(
+            hostname="example.com",
+            username="user",
+            port=2222,
+            known_hosts_file=str(known_hosts_file),
+        )
         assert client.port == 2222
 
-    def test_unknown_host_keys_require_explicit_opt_in(self):
+    def test_unknown_host_keys_require_explicit_opt_in(self, known_hosts_file: Path):
         import paramiko
 
         client = SSHClient(
             hostname="example.com",
             username="user",
             allow_unknown_host_keys=True,
+            known_hosts_file=str(known_hosts_file),
         )
         assert isinstance(client.client._policy, paramiko.WarningPolicy)
 
     @requires_ssh
-    def test_ssh_client_connect_and_execute(self):
-        import os
-
-        key_path = os.path.expanduser("~/.ssh/id_rsa")
-        if not os.path.exists(key_path):
-            pytest.skip("No SSH key at ~/.ssh/id_rsa")
-        username = os.environ.get("USER", "")
-        if not username:
-            pytest.skip("Cannot determine current user")
-
-        client = SSHClient("localhost", username, key_filename=key_path)
-        client.connect()
-        status, out, _err = client.execute_command("echo hello")
-        client.close()
+    def test_ssh_client_connect_and_execute(self, live_ssh_client: SSHClientType):
+        client = live_ssh_client
+        try:
+            client.connect()
+            status, out, _err = client.execute_command("echo hello")
+        finally:
+            client.close()
         assert status == 0
         assert "hello" in out
 

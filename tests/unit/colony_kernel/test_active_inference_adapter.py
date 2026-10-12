@@ -41,3 +41,19 @@ def test_custom_generative_model_specification() -> None:
     assert len(adapter.spec.states) == 3
     assert len(adapter.spec.actions) == 2
     assert "safe" in adapter.spec.preferences
+
+
+def test_equal_free_energy_preserves_declared_action_order() -> None:
+    """Equal transition models select the first declared policy without a stub."""
+    spec = create_default_colony_generative_model()
+    spec.transitions["refuse"] = {
+        state: dict(row) for state, row in spec.transitions["execute"].items()
+    }
+    decision = ColonyActiveInferenceAdapter(spec=spec).evaluate_step(
+        risk_pressure=0.0, trust_score=0.8
+    )
+    assert (
+        decision.free_energy_distribution["execute"]
+        == (decision.free_energy_distribution["refuse"])
+    )
+    assert decision.policy_action == spec.actions[0]

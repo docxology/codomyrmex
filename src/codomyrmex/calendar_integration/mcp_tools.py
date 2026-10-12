@@ -9,7 +9,6 @@ import os
 from collections.abc import Iterator
 from contextlib import contextmanager
 from datetime import UTC, datetime, timedelta
-from pathlib import Path
 from typing import Any
 
 from codomyrmex.calendar_integration.exceptions import CalendarAuthError
@@ -36,8 +35,8 @@ def _get_provider() -> Any:
     Authentication priority (v1.2.4):
         1. **Env vars** — ``GOOGLE_REFRESH_TOKEN`` + ``GOOGLE_CLIENT_ID`` +
            ``GOOGLE_CLIENT_SECRET`` (same unified OAuth2 pattern as GmailProvider).
-        2. **Token file** — ``~/.codomyrmex/gcal_token.json`` (PAI dashboard OAuth
-           flow).
+        2. **Token file** — ``GOOGLE_CALENDAR_TOKEN_FILE`` when set, otherwise
+           ``~/.codomyrmex/gcal_token.json`` (PAI dashboard OAuth flow).
         3. **ADC** — Application Default Credentials via ``gcloud auth``.
 
     Returns:
@@ -50,6 +49,7 @@ def _get_provider() -> Any:
         from codomyrmex.calendar_integration.gcal.provider import (
             GCAL_AVAILABLE,
             GoogleCalendar,
+            _calendar_token_path,
         )
     except ImportError:
         raise RuntimeError(
@@ -71,7 +71,10 @@ def _get_provider() -> Any:
         return GoogleCalendar.from_env()
 
     # Priority 2: token-file OAuth path (PAI dashboard auth)
-    token_path = Path.home() / ".codomyrmex" / "gcal_token.json"
+    try:
+        token_path = _calendar_token_path()
+    except CalendarAuthError as exc:
+        raise RuntimeError(str(exc)) from exc
     if token_path.exists():
         logger.debug("calendar: authenticating via token file %s", token_path)
         try:

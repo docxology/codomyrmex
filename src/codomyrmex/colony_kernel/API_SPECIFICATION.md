@@ -75,16 +75,16 @@ an accepted ordinary or attested outcome path. With attestation enabled, this
 method appends local proposal and verdict events. Those events do not attest
 that an external action occurred.
 
-**Parameters**
+#### Parameters
 
 | Name | Type | Description |
-|------|------|-------------|
+| ------ | ------ | ------------- |
 | `proposal` | `ActionProposal` | The action to evaluate. All required fields must be non-empty strings. |
 
 **Returns** `GateResult`
 
 | Field | Type | Description |
-|-------|------|-------------|
+| ------- | ------ | ------------- |
 | `decision` | `GateDecision` | `EXECUTE`, `HOLD`, or `REFUSE` |
 | `gate_score` | `float` | Composite approval score in `[0.0, 1.0]` |
 | `reason` | `str` | Human-readable explanation |
@@ -92,12 +92,12 @@ that an external action occurred.
 | `budget_approved` | `bool` | Whether the budget pre-check passed |
 | `falsification_severity` | `float` | `0.0` = clean; `1.0` = strong adversarial signal against execution |
 
-**Side effects**
+#### Side effects
 
 - On `REFUSE`: deposits a `FAILURE` pheromone at `proposal.target` with
   strength `1.0 + falsification_severity * 3.0`.
 
-**Raises**
+#### Raises
 
 - `ValueError` — if `proposal` fields fail `ActionProposal.__post_init__`
   validation.
@@ -124,10 +124,10 @@ When the kernel is configured with required attestation, callers must use the
 authenticated `authorize_execution` → `record_execution_receipt` path and
 call `record_attested_outcome` instead.
 
-**Parameters**
+#### Parameters
 
 | Name | Type | Description |
-|------|------|-------------|
+| ------ | ------ | ------------- |
 | `proposal` | `ActionProposal` | Caller-supplied proposal context. On this ordinary method it is not checked against a prior gate authorization. |
 | `outcome` | `dict[str, Any]` | Caller-supplied result dict. Recognised keys: `summary` (str), `repair_needed` (bool), `action_taken` (str), `cost` (dict matching `ResourceCost` fields). |
 | `tests_passed` | `bool` | Caller's report of whether tests passed. |
@@ -136,7 +136,7 @@ call `record_attested_outcome` instead.
 **Returns** `ConsequenceRecord`
 
 | Field | Type | Description |
-|-------|------|-------------|
+| ------- | ------ | ------------- |
 | `proposal` | `ActionProposal` | Original proposal |
 | `action_taken` | `str` | From `outcome["action_taken"]` or `proposal.action_type` |
 | `actual_outcome` | `str` | From `outcome["summary"]` or `str(outcome)` |
@@ -147,7 +147,7 @@ call `record_attested_outcome` instead.
 | `recorded_at` | `float` | Unix timestamp |
 | `consequence_id` | `str` | UUID4 |
 
-**Side effects**
+#### Side effects
 
 - Calls `ResourceLedger.consume` with a valid `outcome["cost"]` mapping when
   present; otherwise falls back to `proposal.budget_estimate`.
@@ -174,16 +174,16 @@ def agent_profile(self, agent_id: str) -> AgentTrustProfile
 Return the current `AgentTrustProfile` for `agent_id`.  Creates a default
 `SANDBOX` profile (trust 0.1) if the agent is unknown.
 
-**Parameters**
+#### Parameters
 
 | Name | Type | Description |
-|------|------|-------------|
+| ------ | ------ | ------------- |
 | `agent_id` | `str` | Unique agent identifier |
 
 **Returns** `AgentTrustProfile`
 
 | Field | Type | Description |
-|-------|------|-------------|
+| ------- | ------ | ------------- |
 | `agent_id` | `str` | As requested |
 | `role` | `AgentRole` | Deterministic role label derived from trust/history: `SANDBOX`, `REPAIR_ANT`, `MEMORY_ANT`, `DISPATCHER`, or `GUARD_ANT` |
 | `trust_score` | `float` | `[0.0, 1.0]`; new agents start at `0.1` |
@@ -205,7 +205,7 @@ Return a dashboard snapshot of the colony's current state.
 **Returns** `dict` with keys:
 
 | Key | Type | Description |
-|-----|------|-------------|
+| ----- | ------ | ------------- |
 | `tick_count` | `int` | Number of colony ticks elapsed since kernel initialization |
 | `pheromone_summary` | `dict` | `total_signals` (int) and `top_signals` (list of top-10 strongest signals) |
 | `budget_usage` | `dict` | Current period consumption vs ceiling from `ResourceLedger.usage_summary()` |
@@ -255,7 +255,7 @@ Because the receipt and outcome payloads remain caller-supplied, it does not
 independently observe external actuation or establish deployment safety.
 
 | Method | Purpose | Output |
-|--------|---------|--------|
+| -------- | --------- | -------- |
 | `authorize_execution(proposal_id, actor_id)` | Authorize an attested EXECUTE verdict | `LedgerEvent` |
 | `record_execution_receipt(proposal_id, receipt, actor_id="executor")` | Link a caller receipt to an authorization | `LedgerEvent` |
 | `record_attested_outcome(proposal, outcome, tests_passed, human_feedback=None, actor_id="observer")` | Record a consequence after an execution receipt | `ConsequenceRecord` |
@@ -332,7 +332,7 @@ operator caps accumulated fraction fields with `min(1.0, ...)`.
 ### `GateDecision` (enum)
 
 | Value | Meaning |
-|-------|---------|
+| ------- | --------- |
 | `EXECUTE` | Proposal cleared the current policy; downstream actuation remains caller-controlled |
 | `HOLD` | Return revision requirements; any requeue is caller-controlled |
 | `REFUSE` | Proposal rejected by the policy; the integrated kernel deposits FAILURE |
@@ -340,7 +340,7 @@ operator caps accumulated fraction fields with `min(1.0, ...)`.
 ### `AgentRole` (enum)
 
 | Value | Current enforcement and intended specialization |
-|-------|-------------------------------------------------|
+| ------- | ------------------------------------------------- |
 | `SANDBOX` | ActuationGate unconditionally returns REFUSE for every proposal |
 | `REPAIR_ANT` | Label associated with repair work; no action-specific permission is enforced |
 | `MEMORY_ANT` | Label associated with memory/documentation work; no action-specific permission is enforced |
@@ -378,3 +378,21 @@ action-by-role authorization matrix.
 Eight `@mcp_tool` endpoints are exposed via `colony_kernel/mcp_tools.py` and
 auto-discovered by the PAI MCP bridge.  See `MCP_TOOL_SPECIFICATION.md` for
 the full tool schema.
+
+## Runtime invariant diagnostics
+
+The package exports these additive functions from `invariants.py`:
+
+| Function | Signature |
+| --- | --- |
+| `check_budget_monotonic` | `(usage: Sequence[ResourceCost] \| None = None) -> bool` |
+| `check_gate_decision_space_closed` | `(results: Sequence[GateResult] \| None = None) -> bool` |
+| `check_consequence_trust_bounds` | `(records: Sequence[ConsequenceRecord] \| None = None) -> bool` |
+| `check_gate_thresholds_ordered` | `(execute_thresh: float \| None = None, hold_thresh: float \| None = None) -> bool` |
+| `all_invariants_hold` | `(profiles=None, strengths=None, *, budget_usage=None, gate_results=None, consequences=None) -> dict[str, bool]` |
+
+The composite report adds `budget_monotonic`, `gate_decision_space_closed`, and
+`consequence_trust_bounds` while retaining existing report keys and positional
+inputs. Malformed supplied state returns `False`; omitted state is vacuous.
+[The specification](SPEC.md#runtime-invariant-crosswalk) defines snapshot period
+boundaries, gate verdict guards, canonical delta bounds, and evidence limits.

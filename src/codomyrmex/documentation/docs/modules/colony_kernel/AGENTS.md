@@ -25,7 +25,7 @@ gating, consequence memory, pheromone deposits, and pruning reports.
 ## Key Files
 
 - `AGENTS.md` - Agent coordination and documentation mirror contract.
-- `readme.md` - Generated colony-kernel overview for the docs site.
+- `extended_readme.md` - Generated colony-kernel overview for the docs site.
 - `api_specification.md` - Lower-case mirror of the source API specification.
 - `mcp_tool_specification.md` - Lower-case mirror of the source MCP contract.
 
@@ -41,7 +41,7 @@ uv run codomyrmex doctor --all
 
 ## Navigation
 
-- **Module Overview**: [readme.md](readme.md)
+- **Module Overview**: [extended_readme.md](extended_readme.md)
 - **API Specification**: [api_specification.md](api_specification.md)
 - **MCP Tools**: [mcp_tool_specification.md](mcp_tool_specification.md)
 - **Source Module**: [../../../../colony_kernel/README.md](../../../../colony_kernel/README.md)

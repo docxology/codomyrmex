@@ -59,6 +59,6 @@
 ## Navigation
 
 - **Source**: [src/codomyrmex/git_operations/](../../../../git_operations/)
-- **Extended README**: [README.md](readme.md)
+- **Extended README**: [README.md](extended_readme.md)
 - **AGENTS**: [AGENTS.md](AGENTS.md)
 - **Parent**: [All Modules](../README.md)

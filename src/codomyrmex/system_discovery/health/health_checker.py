@@ -93,22 +93,23 @@ class HealthChecker:
     """
 
     def __init__(self):
-        """Initialize the health checker."""
+        """Initialize the health checker.
+
+        ``module_checks`` maps top-level ``codomyrmex`` package names to a
+        check that exercises the package; every other package gets the
+        generic import-and-inspect check.
+        """
         self.module_checks = {
             "logging_monitoring": self._check_logging_monitoring,
             "environment_setup": self._check_environment_setup,
-            "model_context_protocol": self._check_model_context_protocol,
-            "terminal_interface": self._check_terminal_interface,
-            "ai_code_editing": self._check_ai_code_editing,
             "static_analysis": self._check_static_analysis,
-            "code": self._check_code,
+            "coding": self._check_code,
             "data_visualization": self._check_data_visualization,
-            "pattern_matching": self._check_pattern_matching,
             "git_operations": self._check_git_operations,
             "security": self._check_security_digital,
             "llm": self._check_ollama_integration,
             "performance": self._check_performance,
-            "project_orchestration": self._check_project_orchestration,
+            "logistics": self._check_project_orchestration,
             "containerization": self._check_containerization,
         }
 
@@ -150,6 +151,21 @@ class HealthChecker:
             )
 
         return result
+
+    def run_checks(
+        self, module_names: list[str] | None = None
+    ) -> dict[str, HealthCheckResult]:
+        """Run :meth:`perform_health_check` for several modules.
+
+        Args:
+            module_names: Modules to check. Defaults to every module that has
+                a dedicated check in ``module_checks``.
+
+        Returns:
+            Mapping of module name to its result, in the order checked.
+        """
+        names = list(self.module_checks) if module_names is None else module_names
+        return {name: self.perform_health_check(name) for name in names}
 
     def _check_module_availability(self, module_name: str) -> bool:
         """Check if a module is available and importable."""
@@ -263,8 +279,10 @@ class HealthChecker:
             if test_result.get("status") == "success":
                 result.add_metric("sandbox_working", True)
             else:
+                result.add_metric("sandbox_working", False)
                 result.add_issue(
-                    "Sandbox execution failed",
+                    f"Sandbox execution failed ({test_result.get('status')}): "
+                    f"{test_result.get('error_message', '')}",
                     "Check Docker installation and configuration",
                 )
 
@@ -329,12 +347,8 @@ class HealthChecker:
         try:
             from codomyrmex.performance import get_system_metrics, profile_function
 
-            @profile_function
-            def test_func():
-                return sum(range(100))
-
-            test_func()  # type: ignore
-            result.add_metric("profiling_working", True)
+            profile = profile_function(sum, range(100))
+            result.add_metric("profiling_working", "execution_time" in profile)
 
             metrics = get_system_metrics()
             result.add_metric("system_metrics_available", bool(metrics))
@@ -382,51 +396,73 @@ class HealthChecker:
         """Check containerization module health."""
         result.checks_performed.extend(["docker_client", "image_management"])
 
-        try:
-            client = docker.from_env()
-            client.ping()
-
-            result.add_metric("docker_available", True)
-
-            info = client.info()
-            result.add_metric("docker_containers", info.get("Containers", 0))
-            result.add_metric("docker_images", info.get("Images", 0))
-
-        except ImportError:
+        if not HAS_DOCKER:
             result.add_issue(
                 "Docker library not available", "Install docker Python package"
             )
+            return
+
+        from codomyrmex.coding.sandbox.container import check_docker_available
+
+        # Ask the Docker CLI first: docker-py leaves its socket open when it
+        # cannot reach the daemon.
+        if not check_docker_available():
+            result.add_metric("docker_available", False)
+            result.add_issue(
+                "Docker daemon not reachable", "Check Docker daemon status"
+            )
+            return
+
+        try:
+            client = docker.from_env()
+            try:
+                client.ping()
+                result.add_metric("docker_available", True)
+
+                info = client.info()
+                result.add_metric("docker_containers", info.get("Containers", 0))
+                result.add_metric("docker_images", info.get("Images", 0))
+            finally:
+                client.close()
+
         except Exception as e:
             result.add_issue(
                 f"Docker connection error: {e!s}", "Check Docker daemon status"
             )
 
-    def _check_model_context_protocol(self, result: HealthCheckResult) -> None:
-        """Check model context protocol module health."""
-        result.checks_performed.append("mcp_initialization")
-
-    def _check_terminal_interface(self, result: HealthCheckResult) -> None:
-        """Check terminal interface module health."""
-        result.checks_performed.append("terminal_capabilities")
-
-    def _check_ai_code_editing(self, result: HealthCheckResult) -> None:
-        """Check AI code editing module health."""
-        result.checks_performed.append("ai_services")
-
     def _check_data_visualization(self, result: HealthCheckResult) -> None:
-        """Check data visualization module health."""
-        result.checks_performed.append("plotting_libraries")
+        """Check data visualization module health by rendering a small plot."""
+        result.checks_performed.extend(["plotting_libraries", "plot_rendering"])
 
         try:
-            result.add_metric("matplotlib_available", True)
+            import matplotlib as mpl
         except ImportError:
             result.add_issue(
                 "Matplotlib not available", "Install matplotlib for plotting"
             )
+            return
+        result.add_metric("matplotlib_version", mpl.__version__)
 
-    def _check_pattern_matching(self, result: HealthCheckResult) -> None:
-        """Check pattern matching module health."""
-        result.checks_performed.append("ast_processing")
+        try:
+            from codomyrmex.data_visualization import create_line_plot
+
+            with tempfile.TemporaryDirectory() as tmp:
+                plot_path = os.path.join(tmp, "health_check.png")
+                create_line_plot(
+                    x_data=[0, 1, 2],
+                    y_data=[0, 1, 4],
+                    title="health check",
+                    output_path=plot_path,
+                    show_plot=False,
+                )
+                rendered = os.path.getsize(plot_path) > 0
+            result.add_metric("plot_rendered", rendered)
+            if not rendered:
+                result.add_issue("Plot rendering produced an empty file")
+        except Exception as e:
+            result.add_issue(
+                f"Plot rendering error: {e!s}", "Check the matplotlib backend"
+            )
 
     def _check_git_operations(self, result: HealthCheckResult) -> None:
         """Check git operations module health."""

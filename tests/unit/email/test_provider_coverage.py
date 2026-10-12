@@ -108,7 +108,9 @@ class TestAgentMailProviderGuards:
         try:
             am_mod.AGENTMAIL_AVAILABLE = False
             with pytest.raises(ImportError, match="AgentMail dependencies"):
-                am_mod.AgentMailProvider(api_key="fake-key")
+                am_mod.AgentMailProvider(
+                    api_key="fake-key"  # pragma: allowlist secret
+                )
         finally:
             am_mod.AGENTMAIL_AVAILABLE = original
 
@@ -149,7 +151,7 @@ class TestAgentMailProviderGuards:
     def test_uses_env_var_api_key(self):
         """Constructor reads AGENTMAIL_API_KEY from environment."""
         saved = os.environ.get("AGENTMAIL_API_KEY")
-        os.environ["AGENTMAIL_API_KEY"] = "env-test-key"
+        os.environ["AGENTMAIL_API_KEY"] = "env-test-key"  # pragma: allowlist secret
         try:
             from codomyrmex.email.agentmail.provider import (
                 AgentMailProvider,
@@ -481,26 +483,17 @@ class TestGmailProviderGuards:
             GmailProvider(credentials=None, service=None)
 
     @pytest.mark.skipif(not HAS_GMAIL, reason="Gmail SDK not installed")
-    def test_from_env_raises_without_any_credentials(self):
-        """from_env() raises EmailAuthError when no env vars are configured."""
-        saved = {}
-        env_keys = [
-            "GOOGLE_REFRESH_TOKEN",
-            "GOOGLE_CLIENT_ID",
-            "GOOGLE_CLIENT_SECRET",
-            "GOOGLE_APPLICATION_CREDENTIALS",
-        ]
-        for k in env_keys:
-            saved[k] = os.environ.pop(k, None)
-        try:
-            from codomyrmex.email.gmail.provider import GmailProvider
+    def test_from_env_raises_without_any_credentials(self, monkeypatch, tmp_path):
+        """Explicit missing ADC input must not inspect cached operator credentials."""
+        from codomyrmex.email.gmail.provider import GmailProvider
 
-            with pytest.raises((EmailAuthError, ImportError)):
-                GmailProvider.from_env()
-        finally:
-            for k, v in saved.items():
-                if v is not None:
-                    os.environ[k] = v
+        for key in ("GOOGLE_REFRESH_TOKEN", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"):
+            monkeypatch.delenv(key, raising=False)
+        monkeypatch.setenv(
+            "GOOGLE_APPLICATION_CREDENTIALS", str(tmp_path / "missing.json")
+        )
+        with pytest.raises(EmailAuthError, match="No Gmail credentials found"):
+            GmailProvider.from_env()
 
 
 # ===========================================================================

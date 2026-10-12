@@ -1,0 +1,13 @@
+/* Keep syntax comments above 4.5:1 against each palette's code background. */
+[data-md-color-scheme="default"] {
+  --md-code-hl-comment-color: #6b6b6b;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-code-hl-comment-color: #9e9e9e;
+}
+
+/* Material's copyright uses the lighter footer foreground variable. */
+.md-footer {
+  --md-footer-fg-color--lighter: #999999;
+}

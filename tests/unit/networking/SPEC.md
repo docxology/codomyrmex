@@ -1,59 +1,13 @@
-# networking Functional Specification
+# Networking test specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+Default networking tests validate local HTTP, URL, socket, response, and SSH object contracts with isolated resources. SSH constructors receive an explicit temporary known-hosts file. A real generated key and Paramiko host-key store verify loading only that file; a real socket-pair transport verifies that the default `RejectPolicy` rejects an unknown key without adding trust.
 
-## Core Concept
+The two credentialed SSH execution tests require `CODOMYRMEX_RUN_LIVE_SSH_TESTS=1` and explicit key, known-hosts file, and username environment inputs documented in [README.md](README.md). Binary availability, an open localhost port, or a personal key file does not authorize a live test. Every live client is closed in a `finally` block.
 
-[DESCRIBE THE CORE ARCHITECTURAL OR FUNCTIONAL CONCEPT OF networking]
-
-## Functional Requirements
-
-- [REQUIREMENT 1: Describe a specific capability]
-- [REQUIREMENT 2: Describe another specific capability]
-
-## Modularity & Interfaces
-
-- Inputs: [DESCRIBE INPUTS]
-- Outputs: [DESCRIBE OUTPUTS]
-- Dependencies: [LIST DEPENDENCIES]
-
-## Coherence
-
-[DESCRIBE HOW THIS COMPONENT FITS INTO THE LARGER CODOMYRMEX SYSTEM]
+Run `.venv/bin/python -m pytest -q tests/unit/networking` from the repository root. Local trust controls remain enabled with Paramiko installed; they require no daemon, account credentials, personal configuration, or network service.
 
 ## Navigation
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [unit](../README.md)
-- **Repository Root**: [../../../../../README.md](../../../../../README.md)
-- **Repository SPEC**: [../../../../../SPEC.md](../../../../../SPEC.md)
-
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-### Design Principles
-
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
-
-## Detailed Architecture and Implementation
-
-### Design Principles
-
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+- [README.md](README.md)
+- [AGENTS.md](AGENTS.md)
+- [Parent directory](../README.md)

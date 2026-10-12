@@ -24,7 +24,7 @@ def test_pytest_configure_not_314(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_pytest_configure_already_imported(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test pytest_configure when compression is already imported."""
     monkeypatch.setattr(sys, "version_info", (3, 14))
-    monkeypatch.setitem(sys.modules, "compression", "already_imported")  # type: ignore
+    monkeypatch.setitem(sys.modules, "compression", "already_imported")
     monkeypatch.delenv("HYPOTHESIS_NO_NPY", raising=False)
     config = object()
 

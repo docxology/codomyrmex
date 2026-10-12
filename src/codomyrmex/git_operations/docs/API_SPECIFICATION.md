@@ -15,19 +15,19 @@ This document specifies the Application Programming Interface (API) for the `git
 - **Returns**: `bool` - True if Git is available, False otherwise
 - **Raises**: None (returns False on errors)
 
-### `is_git_repository(path: str = None) -> bool`
+### `is_git_repository(repository_path: str | None = None) -> bool`
 
 - **Description**: Checks if the specified path (or current directory) is a Git repository.
 - **Parameters**:
-    - `path` (str, optional): Path to check. Defaults to current working directory.
+    - `repository_path` (str, optional): Path to check. Defaults to current working directory.
 - **Returns**: `bool` - True if path is a Git repository, False otherwise
 - **Raises**: None (returns False on errors)
 
-### `initialize_git_repository(path: str, initial_commit: bool = True) -> bool`
+### `initialize_git_repository(repository_path: str, initial_commit: bool = True) -> bool`
 
 - **Description**: Creates a new Git repository at the specified path with optional initial commit.
 - **Parameters**:
-    - `path` (str): Directory path where the repository will be created
+    - `repository_path` (str): Directory path where the repository will be created
     - `initial_commit` (bool, optional): Whether to create an initial commit with README.md. Defaults to True.
 - **Returns**: `bool` - True if repository was created successfully, False otherwise
 - **Raises**: None (returns False on errors)
@@ -76,13 +76,13 @@ This document specifies the Application Programming Interface (API) for the `git
     - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
 - **Returns**: `bool` - True if merge was successful, False otherwise
 
-### `rebase_branch(branch_name: str, base_branch: str, repository_path: str = None) -> bool`
+### `rebase_branch(target_branch: str, repository_path: str | None = None, interactive: bool = False) -> bool`
 
-- **Description**: Rebases a branch onto another branch.
+- **Description**: Rebases the current branch onto `target_branch`.
 - **Parameters**:
-    - `branch_name` (str): Branch to rebase
-    - `base_branch` (str): Branch to rebase onto
+    - `target_branch` (str): Branch to rebase onto
     - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
+    - `interactive` (bool, optional): Run an interactive rebase. Defaults to False.
 - **Returns**: `bool` - True if rebase was successful, False otherwise
 
 ## File Operations
@@ -110,12 +110,13 @@ This document specifies the Application Programming Interface (API) for the `git
     - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
 - **Returns**: `dict[str, Any]` - Dictionary containing status information (branch, changes, etc.)
 
-### `get_diff(repository_path: str = None, staged: bool = False) -> str`
+### `get_diff(target: str | None = None, repository_path: str | None = None, cached: bool = False) -> str`
 
 - **Description**: Get the diff of changes in the repository.
 - **Parameters**:
+    - `target` (str, optional): Revision to diff against (for example `HEAD`, `main` or a commit SHA). Without it, diffs the working tree against the index, or the index against `HEAD` when `cached` is True.
     - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
-    - `staged` (bool, optional): Whether to show staged changes. Defaults to False.
+    - `cached` (bool, optional): Show staged changes (`--cached`). Defaults to False.
 - **Returns**: `str` - Diff output as string
 
 ### `reset_changes(repository_path: str = None, mode: str = "mixed") -> bool`
@@ -148,14 +149,13 @@ This document specifies the Application Programming Interface (API) for the `git
 
 ## History & Information
 
-### `get_commit_history(repository_path: str = None, max_count: int = 10, branch: str = None) -> list[dict[str, Any]]`
+### `get_commit_history(limit: int = 10, repository_path: str | None = None) -> list[dict[str, str]]`
 
-- **Description**: Get commit history for the repository.
+- **Description**: Get recent commit history of the current branch.
 - **Parameters**:
+    - `limit` (int, optional): Maximum number of commits to return. Defaults to 10.
     - `repository_path` (str, optional): Path to Git repository. Defaults to current directory.
-    - `max_count` (int, optional): Maximum number of commits to return. Defaults to 10.
-    - `branch` (str, optional): Branch to get history for. Defaults to current branch.
-- **Returns**: `list[dict[str, Any]]` - List of commit dictionaries with metadata
+- **Returns**: `list[dict[str, str]]` - One dictionary per commit with `hash`, `author_name`, `author_email`, `date` and `message`; empty on error
 
 ## Tag Operations
 
@@ -203,6 +203,7 @@ This document specifies the Application Programming Interface (API) for the `git
 ## GitHub API Operations
 
 The module also provides GitHub API integration through the `github_api` submodule. See `github_api.py` for functions like:
+
 - `create_github_repository()`
 - `create_pull_request()`
 - `get_pull_requests()`
@@ -211,6 +212,7 @@ The module also provides GitHub API integration through the `github_api` submodu
 ## Visualization Integration
 
 When `data_visualization` module is available, the following functions are provided:
+
 - `create_git_analysis_report()`
 - `visualize_git_branches()`
 - `visualize_commit_activity()`
@@ -221,7 +223,9 @@ See `visualization_integration.py` for details.
 ## Data Models
 
 ### Repository Status Dictionary
+
 Returned by `get_status()`:
+
 ```python
 {
     "branch": str,           # Current branch name
@@ -235,7 +239,9 @@ Returned by `get_status()`:
 ```
 
 ### Commit History Dictionary
+
 Returned by `get_commit_history()`:
+
 ```python
 {
     "sha": str,              # Full commit SHA
@@ -270,6 +276,7 @@ This API follows the Codomyrmex project versioning strategy. API stability is ma
 ## Complete Documentation
 
 For comprehensive documentation with detailed examples, parameter descriptions, and usage patterns, see:
+
 - [USAGE_EXAMPLES.md](./USAGE_EXAMPLES.md) - Practical usage examples
 - [SECURITY.md](./SECURITY.md) - Security considerations and best practices
 

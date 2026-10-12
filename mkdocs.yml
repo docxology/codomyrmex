@@ -35,8 +35,12 @@ exclude_docs: |
 not_in_nav: |
   **
 
+extra_css:
+  - theme-accessibility.css
+
 theme:
   name: material
+  custom_dir: config/documentation/theme
   # System font stack: no render-blocking request to Google Fonts (faster
   # first paint, and the docs make no third-party requests).
   font: false
@@ -127,5 +131,3 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/docxology/codomyrmex
-  version:
-    provider: mike

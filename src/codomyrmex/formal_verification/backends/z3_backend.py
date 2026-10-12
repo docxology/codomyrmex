@@ -14,6 +14,109 @@ import ast
 import contextlib
 from typing import Any
 
+# Deliberately exclude file parsers, logging/configuration, native bindings,
+# contexts, and imported Python modules. A callable's origin is not a sandbox.
+_MODEL_NAMES = frozenset(
+    [
+        "Int",
+        "Ints",
+        "IntVal",
+        "Real",
+        "Reals",
+        "RealVal",
+        "Bool",
+        "Bools",
+        "BoolVal",
+        "BitVec",
+        "BitVecs",
+        "BitVecVal",
+        "Array",
+        "Const",
+        "Consts",
+        "Function",
+        "IntSort",
+        "RealSort",
+        "BoolSort",
+        "BitVecSort",
+        "ArraySort",
+        "And",
+        "Or",
+        "Not",
+        "Implies",
+        "If",
+        "Xor",
+        "ForAll",
+        "Exists",
+        "Sum",
+        "Product",
+        "Distinct",
+        "Abs",
+        "ToReal",
+        "ToInt",
+        "IsInt",
+        "Select",
+        "Store",
+        "K",
+        "Concat",
+        "Extract",
+        "ZeroExt",
+        "SignExt",
+        "ULT",
+        "ULE",
+        "UGT",
+        "UGE",
+        "LShR",
+        "RotateLeft",
+        "RotateRight",
+        "sat",
+        "unsat",
+        "unknown",
+    ]
+)
+_SOLVER_METHODS = frozenset(
+    {"add", "assert_and_track", "push", "pop", "reset", "assertions"}
+)
+_OPTIMIZER_METHODS = frozenset(
+    {"add", "add_soft", "minimize", "maximize", "push", "pop", "assertions"}
+)
+_EXPRESSION_METHODS = frozenset(
+    {"sort", "size", "as_long", "as_fraction", "as_decimal", "sexpr"}
+)
+
+
+def _model_attribute(obj: Any, name: str) -> Any:
+    """Resolve only model-building capabilities, never arbitrary attributes."""
+    if name.startswith("_"):
+        raise AttributeError("Access to private attributes is forbidden")
+    allowed: frozenset[str] = frozenset()
+    if obj is z3:
+        allowed = _MODEL_NAMES
+    elif isinstance(obj, z3.Solver):
+        allowed = _SOLVER_METHODS
+    elif isinstance(obj, z3.Optimize):
+        allowed = _OPTIMIZER_METHODS
+    elif isinstance(obj, z3.ExprRef):
+        allowed = _EXPRESSION_METHODS
+    if name not in allowed:
+        raise AttributeError(f"Model attribute {name!r} is not allowed")
+    return getattr(obj, name)
+
+
+def _model_callable(func: Any) -> bool:
+    """Accept approved constructors, symbolic declarations, and bound methods."""
+    if any(func is getattr(z3, name, None) for name in _MODEL_NAMES):
+        return callable(func)
+    if isinstance(func, z3.FuncDeclRef):
+        return True
+    owner = getattr(func, "__self__", None)
+    name = getattr(func, "__name__", "")
+    if owner is None:
+        return False
+    try:
+        return func == _model_attribute(owner, name)
+    except AttributeError:
+        return False
+
 
 def _safe_exec(code: str, namespace: dict[str, Any]) -> None:
     """Execute python statements safely by manually traversing the AST.
@@ -37,11 +140,13 @@ def _safe_exec(code: str, namespace: dict[str, Any]) -> None:
             raise TypeError(f"Unsupported Name context: {type(node.ctx)}")
         if isinstance(node, ast.Attribute):
             obj = _eval(node.value)
-            if node.attr.startswith("_"):
-                raise AttributeError("Access to private attributes is forbidden")
-            return getattr(obj, node.attr)
+            return _model_attribute(obj, node.attr)
         if isinstance(node, ast.Call):
             func = _eval(node.func)
+            if not _model_callable(func):
+                raise TypeError("Only approved model-building calls are allowed")
+            if any(kw.arg is None for kw in node.keywords):
+                raise TypeError("Expanded keyword arguments are not allowed")
             args = [_eval(arg) for arg in node.args]
             kwargs = {
                 kw.arg: _eval(kw.value) for kw in node.keywords if kw.arg is not None
@@ -192,9 +297,9 @@ def _require_z3() -> None:
 class Z3Backend(SolverBackend):
     """Z3 SMT solver backend implementing the mcp-solver 6-tool interface.
 
-    Items are Z3 Python expressions stored as strings that get exec'd into
-    a namespace containing z3 imports. This mirrors mcp-solver's approach
-    where users build models incrementally via code strings.
+    Items are a restricted subset of Z3 Python expressions interpreted by an
+    AST evaluator. Only approved constructors and model-building methods are
+    reachable; solver timeouts do not isolate native code or model building.
     """
 
     def __init__(self) -> None:
@@ -240,33 +345,7 @@ class Z3Backend(SolverBackend):
         # Build a namespace with z3 imports for executing model items
         namespace: dict[str, Any] = {"z3": z3}
         # Pre-populate common z3 types for convenience
-        for name in [
-            "Int",
-            "Real",
-            "Bool",
-            "BitVec",
-            "Array",
-            "IntSort",
-            "RealSort",
-            "BoolSort",
-            "BitVecSort",
-            "ArraySort",
-            "Solver",
-            "Optimize",
-            "And",
-            "Or",
-            "Not",
-            "Implies",
-            "If",
-            "Xor",
-            "ForAll",
-            "Exists",
-            "Sum",
-            "Product",
-            "sat",
-            "unsat",
-            "unknown",
-        ]:
+        for name in _MODEL_NAMES:
             if hasattr(z3, name):
                 namespace[name] = getattr(z3, name)
 

@@ -27,3 +27,16 @@ The package-wide coverage gate is exercised separately by `make test`.
 See [AGENTS.md](AGENTS.md) for maintenance constraints and the
 [source specification](../../../src/codomyrmex/colony_kernel/SPEC.md) for the
 normative behavior.
+
+## Runtime crosswalk and typing checks
+
+`test_invariants.py` checks finite/bounded configuration, cumulative budget
+monotonicity, gate result closure, and consequence trust bounds. Its integration
+case uses actual ledger, gate, SQLite consequence records, and profiles; malformed
+state is a negative control. `test_typing_contract.py` reads actual package typing
+markers and guards against bare typing suppressions.
+
+```bash
+uv run --locked pytest -q tests/unit/colony_kernel/test_invariants.py tests/unit/colony_kernel/test_typing_contract.py
+uv run --locked ty check --output-format concise src/codomyrmex/colony_kernel
+```

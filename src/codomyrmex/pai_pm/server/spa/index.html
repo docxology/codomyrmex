@@ -2879,7 +2879,7 @@
         '<button class="data-sub-tab' + (dataSubTab === 'projects' ? ' active' : '') + '" onclick="setDataSubTab(\'projects\')">Projects</button>' +
         '<button class="data-sub-tab' + (dataSubTab === 'tasks' ? ' active' : '') + '" onclick="setDataSubTab(\'tasks\')">Tasks</button>' +
         '</div>' +
-        '<input class="search-bar" type="text" placeholder="Search..." value="' + esc(searchFilter) + '" oninput="searchFilter=this.value;renderDataView()" id="data-search-input">' +
+        '<input class="search-bar" type="text" placeholder="Search..." value="' + esc(searchFilter) + '" oninput="searchFilter=this.value;renderDataView()" id="data-search-input" aria-label="Search data">' +
         '</div>' +
         '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;align-items:center;">' +
         '<span style="font-size:11px;color:var(--text-dim);">Filter:</span>' +
@@ -3120,7 +3120,7 @@
 
       if (inputType === 'select') {
         var options = (optionsStr || '').split(',');
-        var html = '<select onchange="commitEditing(this.value)" onkeydown="if(event.key===\'Escape\')cancelEditing()">';
+        var html = '<select aria-label="Edit ' + esc(fieldName) + '" onchange="commitEditing(this.value)" onkeydown="if(event.key===\'Escape\')cancelEditing()">';
         for (var i = 0; i < options.length; i++) {
           html += '<option value="' + options[i] + '"' + (options[i] === currentValue ? ' selected' : '') + '>' + options[i] + '</option>';
         }
@@ -3128,10 +3128,10 @@
         td.innerHTML = html;
         td.querySelector('select').focus();
       } else if (inputType === 'date') {
-        td.innerHTML = '<input type="date" value="' + esc(currentValue || '') + '" onblur="commitEditing(this.value)" onkeydown="if(event.key===\'Enter\')commitEditing(this.value);if(event.key===\'Escape\')cancelEditing()">';
+        td.innerHTML = '<input aria-label="Edit ' + esc(fieldName) + '" type="date" value="' + esc(currentValue || '') + '" onblur="commitEditing(this.value)" onkeydown="if(event.key===\'Enter\')commitEditing(this.value);if(event.key===\'Escape\')cancelEditing()">';
         td.querySelector('input').focus();
       } else {
-        td.innerHTML = '<input type="text" value="' + esc(currentValue || '') + '" onblur="commitEditing(this.value)" onkeydown="if(event.key===\'Enter\')commitEditing(this.value);if(event.key===\'Escape\')cancelEditing()">';
+        td.innerHTML = '<input aria-label="Edit ' + esc(fieldName) + '" type="text" value="' + esc(currentValue || '') + '" onblur="commitEditing(this.value)" onkeydown="if(event.key===\'Enter\')commitEditing(this.value);if(event.key===\'Escape\')cancelEditing()">';
         var inp = td.querySelector('input');
         inp.focus();
         inp.select();
@@ -3146,7 +3146,7 @@
       editingCell = { td: td, entityType: 'task', slug: projectSlug, fieldName: 'moveTo', taskTitle: taskTitle, originalHTML: td.innerHTML };
       td.classList.add('editing');
       var sections = ['backlog', 'up_next', 'in_progress', 'completed', 'blocked'];
-      var html = '<select onchange="commitTaskEditing(this.value)" onkeydown="if(event.key===\'Escape\')cancelEditing()">';
+      var html = '<select aria-label="Task section" onchange="commitTaskEditing(this.value)" onkeydown="if(event.key===\'Escape\')cancelEditing()">';
       for (var i = 0; i < sections.length; i++) {
         html += '<option value="' + sections[i] + '"' + (sections[i] === currentSection ? ' selected' : '') + '>' + sections[i] + '</option>';
       }
@@ -3164,7 +3164,7 @@
       td.classList.add('editing');
       if (fieldName === 'priority') {
         var options = ['HIGH', 'MEDIUM', 'LOW'];
-        var html = '<select onchange="commitTaskEditing(this.value)" onkeydown="if(event.key===\'Escape\')cancelEditing()">';
+        var html = '<select aria-label="Task priority" onchange="commitTaskEditing(this.value)" onkeydown="if(event.key===\'Escape\')cancelEditing()">';
         html += '<option value="">-</option>';
         for (var i = 0; i < options.length; i++) {
           html += '<option value="' + options[i] + '"' + (options[i] === currentValue ? ' selected' : '') + '>' + options[i] + '</option>';
@@ -3182,7 +3182,7 @@
       }
       editingCell = { td: td, entityType: 'task', slug: projectSlug, fieldName: 'due', taskTitle: taskTitle, originalHTML: td.innerHTML };
       td.classList.add('editing');
-      td.innerHTML = '<input type="date" value="' + esc(currentValue || '') + '" onblur="commitTaskEditing(this.value)" onkeydown="if(event.key===\'Enter\')commitTaskEditing(this.value);if(event.key===\'Escape\')cancelEditing()">';
+      td.innerHTML = '<input aria-label="Task due date" type="date" value="' + esc(currentValue || '') + '" onblur="commitTaskEditing(this.value)" onkeydown="if(event.key===\'Enter\')commitTaskEditing(this.value);if(event.key===\'Escape\')cancelEditing()">';
       td.querySelector('input').focus();
     }
 
@@ -3792,8 +3792,8 @@
         (goalOrSection && type !== 'task' ? '<p style="color:var(--text-dim);font-size:13px;margin-bottom:16px;">' + esc(goalOrSection) + '</p>' : '') +
 
         '<div style="margin-bottom:20px;padding:12px;background:var(--bg);border-radius:var(--radius);border:1px solid var(--border);">' +
-        '<label style="display:block;margin-bottom:8px;font-size:12px;font-weight:600;color:var(--text-dim);text-transform:uppercase;">Execution Engine</label>' +
-        '<select onchange="setDispatchMode(this.value)" style="width:100%;padding:8px;border-radius:4px;border:1px solid var(--border);background:var(--panel);color:var(--text);">' +
+        '<label for="dispatch-engine" style="display:block;margin-bottom:8px;font-size:12px;font-weight:600;color:var(--text-dim);text-transform:uppercase;">Execution Engine</label>' +
+        '<select id="dispatch-engine" onchange="setDispatchMode(this.value)" style="width:100%;padding:8px;border-radius:4px;border:1px solid var(--border);background:var(--panel);color:var(--text);">' +
         '<option value="copy"' + (dispatchMode === 'copy' ? ' selected' : '') + '>\uD83D\uDCCB Copy to Clipboard</option>' +
         '<option value="claude"' + (dispatchMode === 'claude' ? ' selected' : '') + '>\uD83E\uDD16 Execute via Claude Code</option>' +
         '<option value="ollama"' + (dispatchMode === 'ollama' ? ' selected' : '') + '>\uD83E\uDD99 Execute via Ollama</option>' +
@@ -3953,11 +3953,11 @@
       html += '<div style="margin-top:16px;padding:12px 16px;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-lg);">' +
         '<div style="font-weight:600;margin-bottom:8px;font-size:13px;">Add Task</div>' +
         '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;">' +
-        '<input id="add-task-text" type="text" placeholder="Task description" style="flex:1;min-width:200px;padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;">' +
-        '<select id="add-task-priority" style="padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;">' +
+        '<input id="add-task-text" type="text" placeholder="Task description" style="flex:1;min-width:200px;padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;" aria-label="Task description">' +
+        '<select id="add-task-priority" style="padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;" aria-label="Task priority">' +
         '<option value="">Priority</option><option value="HIGH">HIGH</option><option value="MEDIUM">MEDIUM</option><option value="LOW">LOW</option></select>' +
-        '<input id="add-task-spec" type="text" placeholder="Acceptance criteria (optional)" style="flex:1;min-width:200px;padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;">' +
-        '<input id="add-task-depends" type="text" placeholder="Depends on (optional)" style="min-width:150px;padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;">' +
+        '<input id="add-task-spec" type="text" placeholder="Acceptance criteria (optional)" style="flex:1;min-width:200px;padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;" aria-label="Acceptance criteria (optional)">' +
+        '<input id="add-task-depends" type="text" placeholder="Depends on (optional)" style="min-width:150px;padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;" aria-label="Task dependencies (optional)">' +
         '<button class="btn btn-primary btn-sm" onclick="addTaskInline(&quot;' + esc(project.id) + '&quot;)">Add</button>' +
         '</div></div>';
 
@@ -4775,7 +4775,7 @@
                 '<td>' + badge(projData.priority || '-', (projData.priority || '').toLowerCase()) + '</td>' +
                 '<td>' + ((projData.tasks || []).length) + ' tasks</td>' +
                 '<td><div style="display:flex;gap:4px;align-items:center;">' +
-                '<input id="git-link-' + esc(up.project) + '" type="text" placeholder="owner/repo" style="width:180px;padding:4px 8px;font-size:12px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);">' +
+                '<input aria-label="GitHub repository link" id="git-link-' + esc(up.project) + '" type="text" placeholder="owner/repo" style="width:180px;padding:4px 8px;font-size:12px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);">' +
                 '<button class="btn btn-ghost btn-xs" onclick="gitLinkProject(\'' + esc(up.project) + '\')">Link</button>' +
                 '<button class="btn btn-xs" style="background:var(--cyan);color:white;" onclick="gitCreateAndLink(\'' + esc(up.project) + '\')">Create &amp; Link</button>' +
                 '</div></td>' +
@@ -4840,8 +4840,8 @@
       var modeLabels = { copy: '📋 Copy Mode', claude: '🤖 Claude Code', ollama: '🦙 Ollama', gemini: '💎 Gemini CLI' };
       var modeColors = { copy: 'copy', claude: 'claude', ollama: 'ollama', gemini: 'gemini' };
       var html = '<div class="dispatch-mode-bar">' +
-        '<label>Dispatch Mode:</label>' +
-        '<select onchange="setDispatchMode(this.value)">' +
+        '<label for="dispatch-mode">Dispatch Mode:</label>' +
+        '<select id="dispatch-mode" onchange="setDispatchMode(this.value)">' +
         '<option value="copy"' + (dispatchMode === 'copy' ? ' selected' : '') + '>📋 Copy to Clipboard</option>' +
         '<option value="claude"' + (dispatchMode === 'claude' ? ' selected' : '') + '>🤖 Execute via Claude Code</option>' +
         '<option value="ollama"' + (dispatchMode === 'ollama' ? ' selected' : '') + '>🦙 Execute via Ollama</option>' +
@@ -5151,10 +5151,10 @@
         '<h3>Link Project → Repo</h3>' +
         '<p>Connect a PAI project to a GitHub repository for sync.</p>' +
         '<div style="margin-top:8px">' +
-        '<select id="gh-link-project" style="width:100%;margin-bottom:8px;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;">' +
+        '<select id="gh-link-project" style="width:100%;margin-bottom:8px;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;" aria-label="Project to link">' +
         '<option value="">Select PAI Project...</option>' +
         '</select>' +
-        '<input id="gh-link-repo" type="text" placeholder="owner/repo (e.g. docxology/MetaInformAnt)" style="width:100%;margin-bottom:8px;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;">' +
+        '<input id="gh-link-repo" type="text" placeholder="owner/repo (e.g. docxology/MetaInformAnt)" style="width:100%;margin-bottom:8px;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;" aria-label="GitHub repository to link">' +
         '<button class="btn btn-primary" onclick="ghLinkProject()">Link</button>' +
         '<button class="btn btn-ghost" onclick="ghUnlinkProject()" style="margin-left:6px;">Unlink</button>' +
         '<button class="btn" style="background:var(--cyan);color:white;margin-left:6px;" onclick="ghCreateAndLink()">Create &amp; Link</button>' +
@@ -5165,7 +5165,7 @@
         '<h3>Sync Controls</h3>' +
         '<p>Push PAI tasks to GitHub Issues or pull GitHub Issues into PAI.</p>' +
         '<div style="margin-top:8px;display:flex;flex-direction:column;gap:8px;">' +
-        '<select id="gh-sync-project" style="width:100%;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;">' +
+        '<select id="gh-sync-project" style="width:100%;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;" aria-label="Project to synchronize">' +
         '<option value="">Select Linked Project...</option>' +
         '</select>' +
         '<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
@@ -5180,7 +5180,7 @@
         '</div>' +
         '<hr style="border-color:var(--border);margin:4px 0;">' +
         '<div style="display:flex;gap:6px;">' +
-        '<input id="gh-new-issue-title" type="text" placeholder="New issue title..." style="flex:1;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;">' +
+        '<input id="gh-new-issue-title" type="text" placeholder="New issue title..." style="flex:1;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;" aria-label="New issue title">' +
         '<button class="btn btn-primary" onclick="ghCreateIssue()">Create Issue</button>' +
         '</div>' +
         '</div>' +
@@ -5190,7 +5190,7 @@
         '<h3>Diff Preview</h3>' +
         '<p>Compare local TASKS.md vs GitHub Issues before syncing.</p>' +
         '<div style="margin-top:8px;display:flex;gap:6px;">' +
-        '<select id="gh-diff-project" style="flex:1;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;">' +
+        '<select id="gh-diff-project" style="flex:1;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;" aria-label="Project to compare">' +
         '<option value="">Select Linked Project...</option>' +
         '</select>' +
         '<button class="btn btn-primary" onclick="ghDiffPreview()">Show Diff</button>' +
@@ -5202,7 +5202,7 @@
         '<h3>Cleanup Test Issues</h3>' +
         '<p>Close test-generated issues (PAI Test, API Test, etc.) from a repository.</p>' +
         '<div style="margin-top:8px;display:flex;gap:6px;">' +
-        '<input id="gh-cleanup-repo" type="text" placeholder="owner/repo" style="flex:1;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;">' +
+        '<input id="gh-cleanup-repo" type="text" placeholder="owner/repo" style="flex:1;padding:6px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;" aria-label="GitHub repository to clean up">' +
         '<button class="btn btn-ghost" onclick="ghCleanupDry()">Dry Run</button>' +
         '<button class="btn" style="background:var(--warning);color:white;" onclick="ghCleanupExecute()">Cleanup</button>' +
         '</div>' +
@@ -5223,7 +5223,7 @@
         '<div class="integration-card"><h3>Export Markdown</h3><p>Generate a markdown report of all missions and projects.</p>' +
         '<button class="btn btn-primary" onclick="exportMarkdown()">Download Markdown</button></div>' +
         '<div class="integration-card"><h3>Import JSON</h3><p>Import missions and projects from a JSON file.</p>' +
-        '<input type="file" accept=".json" onchange="importJSON(event)" style="margin-top:8px"></div>' +
+        '<input aria-label="Import JSON data" type="file" accept=".json" onchange="importJSON(event)" style="margin-top:8px"></div>' +
         '</div>';
 
       // Populate project dropdowns
@@ -5355,7 +5355,7 @@
           '</div>' +
           '<div style="margin-bottom:16px;">' +
           '<div style="font-size:14px;font-weight:500;margin-bottom:12px;line-height:1.5;">' + q.q + '</div>' +
-          '<textarea id="interview-answer" rows="6" style="width:100%;padding:12px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;resize:vertical;" placeholder="Your response...">' + (q.a || '') + '</textarea>' +
+          '<textarea id="interview-answer" rows="6" style="width:100%;padding:12px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;resize:vertical;" placeholder="Your response..." aria-label="Your response">' + (q.a || '') + '</textarea>' +
           '</div>' +
           '<div style="display:flex;gap:8px;justify-content:space-between;">' +
           '<button class="btn btn-ghost" onclick="interviewSkip()">Skip</button>' +
@@ -5427,7 +5427,7 @@
         '<div class="modal" style="width:400px;">' +
         '<h2 style="margin-bottom:16px;font-size:16px;">Start Interview</h2>' +
         '<div style="margin-bottom:16px;">' +
-        '<label style="display:block;font-size:12px;color:var(--text-dim);margin-bottom:6px;">Select Entity</label>' +
+        '<label for="interview-entity" style="display:block;font-size:12px;color:var(--text-dim);margin-bottom:6px;">Select Entity</label>' +
         '<select id="interview-entity" style="width:100%;padding:10px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;">' +
         '<option value="">-- Select --</option>' +
         '<optgroup label="Missions">' + missionOpts + '</optgroup>' +
@@ -5435,7 +5435,7 @@
         '</select>' +
         '</div>' +
         '<div style="margin-bottom:16px;">' +
-        '<label style="display:block;font-size:12px;color:var(--text-dim);margin-bottom:6px;">Interview Type</label>' +
+        '<label for="interview-type" style="display:block;font-size:12px;color:var(--text-dim);margin-bottom:6px;">Interview Type</label>' +
         '<select id="interview-type" style="width:100%;padding:10px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;">' +
         '<option value="checkpoint">Checkpoint - Progress & blockers</option>' +
         '<option value="onboarding">Onboarding - New entity setup</option>' +
@@ -5741,6 +5741,7 @@
     }
 
     var _modalPrevFocus = null;
+    var _modalInertNodes = [];
     function showModal(title, bodyHtml) {
       var modalRoot = document.getElementById('modal-root');
       modalRoot.innerHTML = '<div class="modal-overlay" onclick="if(event.target===this)closeModal()">' +
@@ -5753,20 +5754,35 @@
     }
     function closeModal() {
       document.getElementById('modal-root').innerHTML = '';
+      _modalInertNodes.forEach(function (entry) { entry.node.inert = entry.previous; });
+      _modalInertNodes = [];
       if (_modalPrevFocus && _modalPrevFocus.focus) { _modalPrevFocus.focus(); _modalPrevFocus = null; }
     }
+    function _modalFocusables(modal) {
+      return Array.from(modal.querySelectorAll('a[href],button,input,select,textarea,[tabindex]')).filter(function (node) {
+        return !node.disabled && node.tabIndex >= 0 && node.getClientRects().length && getComputedStyle(node).visibility !== 'hidden';
+      });
+    }
     function _openModal() {
-      _modalPrevFocus = document.activeElement;
+      if (!_modalPrevFocus) _modalPrevFocus = document.activeElement;
       var root = document.getElementById('modal-root');
+      if (!_modalInertNodes.length) {
+        Array.from(document.body.children).forEach(function (node) {
+          if (node === root) return;
+          _modalInertNodes.push({ node: node, previous: node.inert });
+          node.inert = true;
+        });
+      }
       var overlay = root.querySelector('.modal-overlay');
       if (overlay) { overlay.setAttribute('role', 'dialog'); overlay.setAttribute('aria-modal', 'true'); }
       var modal = root.querySelector('.modal');
       if (modal) {
         var h2 = modal.querySelector('h2');
         if (h2 && !h2.id) { h2.id = 'modal-title-' + Date.now(); }
-        if (h2) overlay.setAttribute('aria-labelledby', h2.id);
-        var focusable = modal.querySelector('input,select,textarea,button,.btn');
-        if (focusable) focusable.focus();
+        if (h2 && overlay) overlay.setAttribute('aria-labelledby', h2.id);
+        var focusable = _modalFocusables(modal)[0];
+        if (!focusable) { modal.tabIndex = -1; focusable = modal; }
+        focusable.focus();
       }
     }
 
@@ -6436,6 +6452,17 @@
     // Keyboard Navigation for Tabs + Modal Escape
     // ============================================================================
     document.addEventListener('keydown', function (e) {
+      var activeModal = document.querySelector('#modal-root .modal');
+      if (e.key === 'Tab' && activeModal) {
+        var focusable = _modalFocusables(activeModal);
+        var first = focusable[0], last = focusable[focusable.length - 1];
+        if (!first) { e.preventDefault(); activeModal.tabIndex = -1; activeModal.focus(); return; }
+        if (!activeModal.contains(document.activeElement) || (e.shiftKey && document.activeElement === first) || (!e.shiftKey && document.activeElement === last)) {
+          e.preventDefault();
+          (e.shiftKey ? last : first).focus();
+        }
+        return;
+      }
       // Don't trigger shortcuts when typing in inputs
       var tag = (e.target.tagName || '').toLowerCase();
       var isInput = tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable;
@@ -6447,7 +6474,7 @@
         if (isInput) { e.target.blur(); return; }
       }
 
-      if (isInput) return; // Don't trigger shortcuts while typing
+      if (activeModal || isInput) return; // Modal keys never dispatch background shortcuts
 
       // Number keys 1-9 + 0 for tab switching
       var tabOrder = ['analytics', 'awareness', 'blockers', 'board', 'calendar', 'data', 'dispatch', 'git', 'integration', 'interview', 'network', 'projects', 'timeline'];
@@ -6568,7 +6595,7 @@
         if (ev.description) h += '<div style="color:var(--text-dim);font-size:0.8rem;margin-top:4px;white-space:pre-line;">' + esc(ev.description).substring(0, 200) + '</div>';
         if (!ev._synthetic) {
           h += '<div style="margin-top:6px;display:flex;gap:6px;align-items:center;">';
-          h += '<select onchange="calLinkEvent(&#39;' + esc(ev.id) + '&#39;,this.value)" style="background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:0.75rem;">';
+          h += '<select aria-label="Link event to project" onchange="calLinkEvent(&#39;' + esc(ev.id) + '&#39;,this.value)" style="background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:0.75rem;">';
           h += '<option value="">Link to project...</option>';
           for (var pi = 0; pi < prjs.length; pi++) h += '<option value="' + esc(prjs[pi].id) + '"' + (ev._pai_link === prjs[pi].id ? ' selected' : '') + '>' + esc(prjs[pi].title) + '</option>';
           h += '</select>';
@@ -6802,12 +6829,12 @@
         createForm = '<div style="background:var(--panel);border:1px solid var(--primary);border-radius:8px;padding:16px;margin-bottom:12px;">' +
           '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-weight:700;font-size:0.95rem;">New Calendar Event</span><button class="btn btn-ghost btn-sm" aria-label="Close" onclick="calState.showCreateForm=false;renderCalendarView()">&#x2715;</button></div>' +
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
-          '<div style="grid-column:1/-1;"><input id="cal-new-summary" placeholder="Event title..." style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:8px;font-size:0.85rem;"></div>' +
-          '<div><label style="font-size:0.75rem;color:var(--text-muted);">Date</label><input id="cal-new-date" type="date" value="' + calState.createDate + '" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.85rem;"></div>' +
-          '<div><label style="font-size:0.75rem;color:var(--text-muted);">Time (optional)</label><input id="cal-new-time" type="time" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.85rem;"></div>' +
-          '<div><label style="font-size:0.75rem;color:var(--text-muted);">Duration (min)</label><input id="cal-new-duration" type="number" value="60" min="15" step="15" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.85rem;"></div>' +
-          '<div><label style="font-size:0.75rem;color:var(--text-muted);">Link to Project</label><select id="cal-new-project" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.85rem;">' + prjOpts + '</select></div>' +
-          '<div style="grid-column:1/-1;"><label style="font-size:0.75rem;color:var(--text-muted);">Description</label><textarea id="cal-new-desc" rows="2" placeholder="Notes..." style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.85rem;resize:vertical;"></textarea></div>' +
+          '<div style="grid-column:1/-1;"><input id="cal-new-summary" placeholder="Event title..." style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:8px;font-size:0.85rem;" aria-label="Event title"></div>' +
+          '<div><label for="cal-new-date" style="font-size:0.75rem;color:var(--text-muted);">Date</label><input id="cal-new-date" type="date" value="' + calState.createDate + '" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.85rem;"></div>' +
+          '<div><label for="cal-new-time" style="font-size:0.75rem;color:var(--text-muted);">Time (optional)</label><input id="cal-new-time" type="time" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.85rem;"></div>' +
+          '<div><label for="cal-new-duration" style="font-size:0.75rem;color:var(--text-muted);">Duration (min)</label><input id="cal-new-duration" type="number" value="60" min="15" step="15" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.85rem;"></div>' +
+          '<div><label for="cal-new-project" style="font-size:0.75rem;color:var(--text-muted);">Link to Project</label><select id="cal-new-project" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.85rem;">' + prjOpts + '</select></div>' +
+          '<div style="grid-column:1/-1;"><label for="cal-new-desc" style="font-size:0.75rem;color:var(--text-muted);">Description</label><textarea id="cal-new-desc" rows="2" placeholder="Notes..." style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.85rem;resize:vertical;"></textarea></div>' +
           '</div>' +
           '<div style="margin-top:10px;display:flex;gap:8px;"><button class="btn btn-primary btn-sm" onclick="calSubmitCreate()">Create & Invite DAF</button><button class="btn btn-ghost btn-sm" onclick="calState.showCreateForm=false;renderCalendarView()">Cancel</button></div>' +
           '<div style="margin-top:6px;font-size:0.7rem;color:var(--text-dim);">danielarifriedman@gmail.com will be automatically invited.</div>' +
@@ -6922,7 +6949,7 @@
         if (!se._synthetic) {
           detailPanel += '<div style="margin-top:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
             '<label style="font-size:0.8rem;color:var(--text-muted);">Link to project:</label>' +
-            '<select onchange="calLinkEvent(calState.selectedEvent.id,this.value)" style="background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:0.8rem;">' + projOptions + '</select>' +
+            '<select aria-label="Link event to project" onchange="calLinkEvent(calState.selectedEvent.id,this.value)" style="background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:0.8rem;">' + projOptions + '</select>' +
             '<button class="btn btn-ghost btn-sm" style="color:#ef4444;" onclick="calDeleteEvent(calState.selectedEvent.id)">🗑 Delete</button>' +
             (se.htmlLink ? '<a href="' + esc(se.htmlLink) + '" target="_blank" class="btn btn-ghost btn-sm">↗ Open in Google</a>' : '') +
             '</div>';
@@ -7229,8 +7256,8 @@
         '<button class="btn-template' + composingClass + '" onclick="emailLlmComposeCustom()" title="Write a custom prompt for the LLM to compose an email">' +
         '<span class="template-icon">✉️</span> Custom</button>' +
         '<div class="toolbar-divider"></div>' +
-        '<select class="toolbar-select" onchange="emailState.llmProject=this.value" title="Select project for project-specific templates">' + projectOptions + '</select>' +
-        '<select class="toolbar-select" onchange="emailState.llmBackend=this.value" title="Select LLM backend">' +
+        '<select aria-label="Email template project" class="toolbar-select" onchange="emailState.llmProject=this.value" title="Select project for project-specific templates">' + projectOptions + '</select>' +
+        '<select aria-label="Email template backend" class="toolbar-select" onchange="emailState.llmBackend=this.value" title="Select LLM backend">' +
         '<option value="ollama"' + (emailState.llmBackend === 'ollama' ? ' selected' : '') + '>🦙 Ollama</option>' +
         '<option value="claude"' + (emailState.llmBackend === 'claude' ? ' selected' : '') + '>🤖 Claude</option>' +
         '<option value="gemini"' + (emailState.llmBackend === 'gemini' ? ' selected' : '') + '>💎 Gemini</option>' +
@@ -7254,11 +7281,11 @@
         composePanel = '<div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:16px;">' +
           '<div style="font-weight:600;margin-bottom:12px;color:var(--text);">New Email</div>' +
           '<div style="display:grid;gap:8px;">' +
-          '<input id="email-to" type="email" placeholder="To" value="' + esc(emailState.composeTo) + '" oninput="emailState.composeTo=this.value" style="width:100%;">' +
-          '<input id="email-subject" type="text" placeholder="Subject" value="' + esc(emailState.composeSubject) + '" oninput="emailState.composeSubject=this.value" style="width:100%;">' +
-          '<textarea id="email-body" placeholder="Message..." rows="8" oninput="emailState.composeBody=this.value" style="width:100%;resize:vertical;font-family:inherit;line-height:1.5;">' + esc(emailState.composeBody) + '</textarea>' +
+          '<input id="email-to" type="email" placeholder="To" value="' + esc(emailState.composeTo) + '" oninput="emailState.composeTo=this.value" style="width:100%;" aria-label="Recipient email address">' +
+          '<input id="email-subject" type="text" placeholder="Subject" value="' + esc(emailState.composeSubject) + '" oninput="emailState.composeSubject=this.value" style="width:100%;" aria-label="Email subject">' +
+          '<textarea id="email-body" placeholder="Message..." rows="8" oninput="emailState.composeBody=this.value" style="width:100%;resize:vertical;font-family:inherit;line-height:1.5;" aria-label="Email message">' + esc(emailState.composeBody) + '</textarea>' +
           '<div style="display:flex;align-items:center;gap:8px;">' +
-          '<select onchange="emailState.composeProvider=this.value" style="flex:0 0 auto;"><option value="agentmail"' + (emailState.composeProvider === 'agentmail' ? ' selected' : '') + '>AgentMail</option><option value="gmail"' + (emailState.composeProvider === 'gmail' ? ' selected' : '') + '>Gmail</option></select>' +
+          '<select aria-label="Email provider" onchange="emailState.composeProvider=this.value" style="flex:0 0 auto;"><option value="agentmail"' + (emailState.composeProvider === 'agentmail' ? ' selected' : '') + '>AgentMail</option><option value="gmail"' + (emailState.composeProvider === 'gmail' ? ' selected' : '') + '>Gmail</option></select>' +
           '<button class="btn btn-primary btn-sm" onclick="emailSend()" ' + (emailState.sending ? 'disabled' : '') + '>' + (emailState.sending ? 'Sending...' : 'Send') + '</button>' +
           '<button class="btn btn-ghost btn-sm" onclick="emailState.showCompose=false;renderEmailView();">Cancel</button>' +
           '</div></div></div>';
@@ -7718,7 +7745,7 @@
         '<div style="display:flex;align-items:center;gap:12px;">' +
         '<div class="bikeride-llm-select">' +
         '<label>Summarize via:</label>' +
-        '<select class="toolbar-select" onchange="bikeRideState.backend=this.value" style="min-width:110px;">' +
+        '<select aria-label="Voice reply backend" class="toolbar-select" onchange="bikeRideState.backend=this.value" style="min-width:110px;">' +
         '<option value="ollama"' + (bikeRideState.backend === 'ollama' ? ' selected' : '') + '>\ud83e\udd99 Ollama</option>' +
         '<option value="claude"' + (bikeRideState.backend === 'claude' ? ' selected' : '') + '>\ud83e\udd16 Claude</option>' +
         '<option value="gemini"' + (bikeRideState.backend === 'gemini' ? ' selected' : '') + '>\ud83d\udc8e Gemini</option>' +
@@ -7797,7 +7824,7 @@
             (isRecording ? '⬛' : '🎙️') +
             '</button>' +
             '</div>' +
-            '<textarea id="bikeride-draft-' + t.id + '" class="bikeride-draft-textarea" placeholder="Click the microphone to start dictating your reply, or type here..." oninput="bikeRideUpdateVoiceDraft(\'' + t.id + '\', this.value)">' + esc(voiceDraftText) + '</textarea>' +
+            '<textarea aria-label="Voice reply draft" id="bikeride-draft-' + t.id + '" class="bikeride-draft-textarea" placeholder="Click the microphone to start dictating your reply, or type here..." oninput="bikeRideUpdateVoiceDraft(\'' + t.id + '\', this.value)">' + esc(voiceDraftText) + '</textarea>' +
             '<div class="bikeride-voice-actions">' +
             '<button class="bikeride-improve-btn' + (isImproving ? ' improving' : '') + '" onclick="bikeRideImprove(' + idx + ')">' +
             (isImproving ? '<div class="spinner" style="width:12px;height:12px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 1s linear infinite;"></div> Polishing...' : '<span class="sparkle">✨</span> Improve w/ Context') +

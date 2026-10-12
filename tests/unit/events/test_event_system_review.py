@@ -3,6 +3,8 @@ Comprehensive zero-mock tests for the Codomyrmex Event System to verify improvem
 """
 
 import asyncio
+import threading
+from concurrent.futures import ThreadPoolExecutor
 
 import pytest
 
@@ -68,41 +70,125 @@ class TestEventBusReview:
         assert len(received) == 1
 
     @pytest.mark.asyncio
-    async def test_listener_once_async(self, event_bus):
-        """Verify that 'once' async handlers only fire once."""
-        # Use a fresh bus and listener for this test to avoid state issues
-        bus = EventBus()
+    async def test_listener_once_async(self):
+        """Signal the owning loop and drain work before checking a second event."""
+        bus = EventBus(max_workers=1)
+        loop = asyncio.get_running_loop()
         received = asyncio.Event()
+        calls = []
         listener = EventListener("test_listener_async", event_bus=bus)
 
-        async def async_handler(e):
-            received.set()
+        async def async_handler(event):
+            calls.append(event.event_type)
+            loop.call_soon_threadsafe(received.set)
 
         listener.once(EventType.SYSTEM_STARTUP, async_handler)
-
-        # Create a proper Event
-        from codomyrmex.events.core.event_schema import Event
-
-        ev = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
-
-        # Publish will use the executor for async handlers
-        bus.publish(ev)
-
-        # Wait for the worker thread to finish
+        event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
         try:
+            bus.publish(event)
             await asyncio.wait_for(received.wait(), timeout=2.0)
-        except TimeoutError:
-            pytest.fail("Async handler was not called")
+            # One worker makes this fence follow all previously queued work.
+            await asyncio.wrap_future(bus.executor.submit(lambda: None))
+            assert not listener.subscriptions
+            bus.publish(event)
+            await asyncio.wrap_future(bus.executor.submit(lambda: None))
+            assert calls == [EventType.SYSTEM_STARTUP]
+            assert bus.events_failed == 0
+        finally:
+            bus.shutdown()
 
-        assert received.is_set()
+    @pytest.mark.asyncio
+    async def test_listener_once_claims_already_queued_async_wrappers(self):
+        bus = EventBus(max_workers=1)
+        gate = threading.Event()
+        blocker = bus.executor.submit(gate.wait, 2.0)
+        calls = []
+        listener = EventListener("queued_once", event_bus=bus)
 
-        # Reset and check it doesn't fire again
-        received.clear()
-        bus.publish(ev)
-        await asyncio.sleep(0.2)
+        async def handler(event):
+            assert not listener.subscriptions
+            calls.append(event.event_type)
 
-        assert not received.is_set()
-        bus.shutdown()
+        listener.once(EventType.SYSTEM_STARTUP, handler)
+        event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
+        try:
+            # Both wrappers are queued before either can claim the listener.
+            bus.publish(event)
+            bus.publish(event)
+            gate.set()
+            assert await asyncio.wrap_future(blocker)
+            await asyncio.wrap_future(bus.executor.submit(lambda: None))
+            assert calls == [EventType.SYSTEM_STARTUP]
+            assert bus.events_failed == 0
+        finally:
+            gate.set()
+            bus.shutdown()
+
+    def test_listener_once_claims_concurrent_sync_snapshots(self, event_bus):
+        rendezvous = threading.Barrier(2)
+        event_bus.subscribe(
+            [EventType.SYSTEM_STARTUP],
+            lambda event: rendezvous.wait(timeout=2.0),
+            priority=10,
+        )
+        calls = []
+        listener = EventListener("concurrent_once", event_bus=event_bus)
+        listener.once(EventType.SYSTEM_STARTUP, calls.append)
+        event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
+        # Both publishers snapshot the once subscription before rendezvous.
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            futures = [executor.submit(event_bus.publish, event) for _ in range(2)]
+            for future in futures:
+                future.result(timeout=3.0)
+        assert calls == [event]
+        assert not listener.subscriptions
+        assert event_bus.events_failed == 0
+
+    def test_listener_once_unsubscribes_before_recursive_publish(self, event_bus):
+        calls = []
+        listener = EventListener("recursive_once", event_bus=event_bus)
+        event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
+
+        def handler(received):
+            calls.append(received)
+            assert not listener.subscriptions
+            if len(calls) == 1:
+                event_bus.publish(event)
+
+        listener.once(EventType.SYSTEM_STARTUP, handler)
+        event_bus.publish(event)
+        assert calls == [event]
+        assert event_bus.events_failed == 0
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("async_callback", [False, True])
+    async def test_listener_once_remains_consumed_after_callback_error(
+        self, async_callback
+    ):
+        bus = EventBus(max_workers=1)
+        listener = EventListener("failing_once", event_bus=bus)
+        calls = []
+
+        def fail(event):
+            calls.append(event)
+            assert not listener.subscriptions
+            raise ValueError("expected local callback error")
+
+        async def fail_async(event):
+            fail(event)
+
+        listener.once(EventType.SYSTEM_STARTUP, fail_async if async_callback else fail)
+        event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
+        try:
+            bus.publish(event)
+            await asyncio.wrap_future(bus.executor.submit(lambda: None))
+            bus.publish(event)
+            await asyncio.wrap_future(bus.executor.submit(lambda: None))
+            assert calls == [event]
+            assert bus.events_failed == 1
+            assert not listener.subscriptions
+        finally:
+            bus.shutdown()
 
     def test_event_filtering(self, event_bus):
         """Verify subscription filters."""
