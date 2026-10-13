@@ -1,5 +1,6 @@
 """EmbeddingCache, EmbeddingIndex, EmbeddingService, and chunk_text utility."""
 
+import collections
 import hashlib
 import threading
 from collections.abc import Callable
@@ -24,8 +25,10 @@ class EmbeddingCache:
 
     def __init__(self, max_size: int = 10000):
         self.max_size = max_size
-        self._cache: dict[str, Embedding] = {}
-        self._access_order: list[str] = []
+        # PERFORMANCE OPTIMIZATION:
+        # Use collections.OrderedDict for O(1) cache eviction (popitem) and updates (move_to_end),
+        # rather than list.pop(0) and list.remove() which are O(N).
+        self._cache: collections.OrderedDict[str, Embedding] = collections.OrderedDict()
         self._lock = threading.Lock()
 
     def _make_key(self, text: str, model: str) -> str:
@@ -38,8 +41,7 @@ class EmbeddingCache:
         key = self._make_key(text, model)
         with self._lock:
             if key in self._cache:
-                self._access_order.remove(key)
-                self._access_order.append(key)
+                self._cache.move_to_end(key)
                 return self._cache[key]
         return None
 
@@ -48,19 +50,16 @@ class EmbeddingCache:
         key = self._make_key(embedding.text, embedding.model)
         with self._lock:
             if key in self._cache:
-                self._access_order.remove(key)
+                self._cache.move_to_end(key)
             elif len(self._cache) >= self.max_size:
-                oldest = self._access_order.pop(0)
-                del self._cache[oldest]
+                self._cache.popitem(last=False)
 
             self._cache[key] = embedding
-            self._access_order.append(key)
 
     def clear(self) -> None:
         """Clear the cache."""
         with self._lock:
             self._cache.clear()
-            self._access_order.clear()
 
     @property
     def size(self) -> int:
