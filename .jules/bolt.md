@@ -42,6 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
 ## 2026-10-13 - O(1) Cache Eviction using OrderedDict for LRU Cache implementations
 
 **Learning:** LRU cache implementations that use separate structures for data (e.g. `dict`) and order (e.g. `list`), typically do `$list.pop(0)$` or `$list.remove(key)$`. This is problematic, because both of those have $O(N)$ behavior. `CachedVectorStore` and `EmbeddingCache` were found using this anti-pattern.

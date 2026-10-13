@@ -167,7 +167,9 @@ class CachedVectorStore(VectorStore):
         # PERFORMANCE OPTIMIZATION:
         # Use collections.OrderedDict for O(1) cache eviction (popitem) and updates (move_to_end),
         # rather than list.pop(0) and list.remove() which are O(N).
-        self._cache: collections.OrderedDict[str, VectorEntry] = collections.OrderedDict()
+        self._cache: collections.OrderedDict[str, VectorEntry] = (
+            collections.OrderedDict()
+        )
         self._lock = threading.Lock()
 
     def _update_cache(self, entry: VectorEntry) -> None:
