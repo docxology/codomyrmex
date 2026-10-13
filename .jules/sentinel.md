@@ -47,3 +47,8 @@ executors.
   (proposals #482/#484 rejected).
 - Transcription/STT command injection was fixed by merged #423 at the live
   call site; the `transcription_tools.py` file does not exist on `main`.
+
+## 2024-10-12 - Command Injection in Quick Commands via `shell=True`
+**Vulnerability:** Found `subprocess.run(exec_cmd, shell=True...)` in `src/codomyrmex/agents/open_gauss/cli.py` and `asyncio.create_subprocess_shell(exec_cmd)` in `src/codomyrmex/agents/open_gauss/gateway/run.py` for executing quick commands, which allowed command injection if user inputs or config contained malicious payloads.
+**Learning:** `shell=True` enables the evaluation of arbitrary shell operators (like `;`, `|`, `&&`) within the string command, making it easy for an attacker to execute unintended commands.
+**Prevention:** Instead of using `shell=True` or `asyncio.create_subprocess_shell`, always parse commands securely by using `shlex.split()` to properly tokenize arguments while keeping strings grouped safely. Pass these tokenized arguments to `subprocess.run` with `shell=False` or use `asyncio.create_subprocess_exec`.
