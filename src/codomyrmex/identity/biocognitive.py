@@ -18,6 +18,7 @@ The module exposes:
 
 from __future__ import annotations
 
+import collections
 from typing import Any
 
 import numpy as np
@@ -47,7 +48,7 @@ class BioCognitiveVerifier:
 
     def __init__(self) -> None:
         # keyed by user_id -> metric_name -> list of values
-        self._baselines: dict[str, dict[str, list[float]]] = {}
+        self._baselines: dict[str, dict[str, collections.deque[float]]] = {}
         self._thresholds: dict[str, float] = {
             "keystroke_flight_time": 0.15,  # Variance allowed
             "decision_latency": 0.20,
@@ -64,12 +65,9 @@ class BioCognitiveVerifier:
         if user_id not in self._baselines:
             self._baselines[user_id] = {}
         if metric not in self._baselines[user_id]:
-            self._baselines[user_id][metric] = []
+            self._baselines[user_id][metric] = collections.deque(maxlen=100)
 
         self._baselines[user_id][metric].append(value)
-        # Keep window of last 100 samples to adapt to drift
-        if len(self._baselines[user_id][metric]) > 100:
-            self._baselines[user_id][metric].pop(0)
 
     def verify(self, user_id: str, metric: str, current_value: float) -> bool:
         """Verify if current value matches user's baseline using statistical analysis.

@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2026-10-14 - O(1) Queue Operations Using deque
+**Learning:** Implementing queues or sliding windows with `list.append()` and `list.pop(0)` results in $O(N)$ time complexity due to shifting elements. This creates performance degradation during high-throughput message processing (like in `Broadcaster` or `IntegrationBus`) or streaming metrics analysis.
+**Action:** Always use `collections.deque` for double-ended queue operations. Use `deque.popleft()` for $O(1)$ removal, and `deque(maxlen=N)` for automatic, $O(1)$ sliding window retention without manual length checks.
