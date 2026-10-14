@@ -8,6 +8,7 @@ from __future__ import annotations
 import fnmatch
 import re
 import time
+import collections
 from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
@@ -75,7 +76,7 @@ class IntegrationBus:
         ] = defaultdict(list)
         self._history: list[IntegrationEvent] = []
         # Per-agent mailboxes for P2P direct messaging
-        self._mailboxes: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        self._mailboxes: dict[str, collections.deque[dict[str, Any]]] = defaultdict(collections.deque)
         # Optional append-only EventStore for durable P2P records
         self._event_store = event_store
         self._compiled_patterns: dict[str, re.Pattern] = {}
@@ -239,7 +240,7 @@ class IntegrationBus:
         deadline = _time.time() + timeout
         while True:
             if self._mailboxes[agent_id]:
-                return self._mailboxes[agent_id].pop(0)
+                return self._mailboxes[agent_id].popleft()
             if _time.time() >= deadline:
                 return None
             _time.sleep(0.05)  # 50 ms poll interval
