@@ -5,10 +5,10 @@ Routes events between modules with topic-based subscriptions.
 
 from __future__ import annotations
 
+import collections
 import fnmatch
 import re
 import time
-import collections
 from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
@@ -76,7 +76,9 @@ class IntegrationBus:
         ] = defaultdict(list)
         self._history: list[IntegrationEvent] = []
         # Per-agent mailboxes for P2P direct messaging
-        self._mailboxes: dict[str, collections.deque[dict[str, Any]]] = defaultdict(collections.deque)
+        self._mailboxes: dict[str, collections.deque[dict[str, Any]]] = defaultdict(
+            collections.deque
+        )
         # Optional append-only EventStore for durable P2P records
         self._event_store = event_store
         self._compiled_patterns: dict[str, re.Pattern] = {}

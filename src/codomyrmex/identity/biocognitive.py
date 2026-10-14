@@ -18,9 +18,9 @@ The module exposes:
 
 from __future__ import annotations
 
+import collections
 from typing import Any
 
-import collections
 import numpy as np
 
 from codomyrmex.logging_monitoring import get_logger

@@ -4,8 +4,8 @@ Provides topic-based pub/sub patterns for agent swarms.
 """
 
 import asyncio
-import inspect
 import collections
+import inspect
 import uuid
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -76,7 +76,9 @@ class Broadcaster:
             self._topics[topic] = set()
             self._topic_created_at[topic] = datetime.now()
             self._message_counts[topic] = 0
-            self._retained_messages[topic] = collections.deque(maxlen=self._retention_count)
+            self._retained_messages[topic] = collections.deque(
+                maxlen=self._retention_count
+            )
             logger.info("Created topic: %s", topic)
 
     def delete_topic(self, topic: str) -> bool:
