@@ -46,5 +46,6 @@ templating regex precompile (#397/#402 family), `config_loader` env regex
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
 
 ## 2026-10-15 - OrderedDict instead of dict+list for cache tracking
+
 **Learning:** Combining a `dict` for data storage with a `list` for tracking LRU access order degrades cache performance to O(N) when updating existing keys via `list.remove(key)` or evicting oldest keys via `list.pop(0)`.
 **Action:** Use `collections.OrderedDict` for LRU cache implementations to guarantee O(1) eviction via `.popitem(last=False)` and O(1) access order updates via `.move_to_end(key)`.
