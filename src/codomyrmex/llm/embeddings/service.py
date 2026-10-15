@@ -2,8 +2,8 @@
 
 import hashlib
 import threading
-from collections.abc import Callable
 from collections import OrderedDict
+from collections.abc import Callable
 from typing import Any
 
 from .models import Embedding, SimilarityResult
