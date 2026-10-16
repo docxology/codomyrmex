@@ -6,6 +6,7 @@ designed for use in asyncio contexts.
 
 import asyncio
 import time
+from collections import deque
 from dataclasses import dataclass
 
 __all__ = ["AsyncSlidingWindow", "AsyncTokenBucket", "RateLimitConfig"]
@@ -98,7 +99,7 @@ class AsyncSlidingWindow:
         """
         self._max_requests = max_requests
         self._window = window_seconds
-        self._timestamps: list[float] = []
+        self._timestamps: deque[float] = deque()
         self._lock = asyncio.Lock()
 
     async def acquire(self, timeout: float | None = None) -> bool:
@@ -118,9 +119,13 @@ class AsyncSlidingWindow:
         while True:
             async with self._lock:
                 now = time.monotonic()
-                self._timestamps = [
-                    t for t in self._timestamps if now - t < self._window
-                ]
+                # PERFORMANCE OPTIMIZATION:
+                # Use a while loop with deque.popleft() instead of list comprehensions
+                # to optimize time-windowed calculations. This changes the complexity
+                # of eviction from O(N) (creating a new list for every acquire) to O(K)
+                # where K is the number of expired timestamps.
+                while self._timestamps and now - self._timestamps[0] >= self._window:
+                    self._timestamps.popleft()
                 if len(self._timestamps) < self._max_requests:
                     self._timestamps.append(now)
                     return True

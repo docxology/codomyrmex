@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2026-10-16 - O(1) Sliding Window cleanup in AsyncSlidingWindow
+**Learning:** `AsyncSlidingWindow` previously used a list comprehension to filter out expired timestamps (`[t for t in self._timestamps if now - t < self._window]`). This forces an $O(N)$ allocation and full traversal of the window on every `acquire()` call.
+**Action:** Replace `list` with `collections.deque` and use a `while` loop with `.popleft()` to achieve strict $O(K)$ cleanup, where $K$ is the number of elements removed. Never use `bisect` on `deque` because it lacks $O(1)$ random access.
