@@ -47,3 +47,14 @@ executors.
   (proposals #482/#484 rejected).
 - Transcription/STT command injection was fixed by merged #423 at the live
   call site; the `transcription_tools.py` file does not exist on `main`.
+
+## 2026-10-16 - Fix Command Injection Vulnerability in mini-SWE-agent
+
+**Vulnerability:**
+The `github_issue.py` script in the `mini-SWE-agent` submodule previously used string interpolation to build a command passed to `agent.env.execute()` (`agent.env.execute(f"git clone {repo_url} /testbed", cwd="/")`). Since `repo_url` is derived from `issue_url` (an unsanitized command-line argument), this enables a command injection attack.
+
+**Learning:**
+Even when using string-based shell execution interfaces (like `env.execute` wrappers), unsanitized user inputs must be properly escaped. String interpolation without escaping exposes the system to command injection vulnerabilities.
+
+**Prevention:**
+Always use `shlex.quote` on user-supplied arguments before injecting them into shell command strings.
