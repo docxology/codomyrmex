@@ -11,7 +11,9 @@ Duplicate definitions across modules (e.g., repeating the `SecretType` definitio
 
 **Prevention:**
 Use descriptive suffixes or alternatives (e.g., changing `"password"` to `"password_type"`) for model or type definitions. Implement robust CI checks to enforce single-source-of-truth patterns rather than duplicating classes.
+
 ## 2026-08-04 - Prevent Command Injection via shell=True
+
 **Vulnerability:** Command Injection risk from using shell=True in subprocess.run for transcription_tools.py.
 **Learning:** Even when interpolating quoted strings, shell=True exposes the system to injection if templates are misconfigured or arguments leak.
 **Prevention:** Use shell=False combined with shlex.split() to safely tokenize commands while maintaining argument grouping.
@@ -26,6 +28,7 @@ already list-args without a shell), and "fixing" intentionally shell-based
 executors.
 
 **Action (mandatory, in order):**
+
 1. `gh pr list --state open --search "<callsite>"` and
    `git log --oneline -50 -- <target-file>`; read the callsite on `main`. If
    the injection is already fixed (list args, no shell, parameterized SQL,
@@ -35,6 +38,7 @@ executors.
    `.jules/` journal-only diffs, no test-suite deletions.
 
 **Dispositions (do not re-propose):**
+
 - Interactive shell sessions and agent shell executors (`do_shell`,
   `_shell_session`, `SystemOpsMixin`, OS provider diagnostic commands marked
   `# nosec B602`) are intentional design. Converting them to
@@ -47,3 +51,14 @@ executors.
   (proposals #482/#484 rejected).
 - Transcription/STT command injection was fixed by merged #423 at the live
   call site; the `transcription_tools.py` file does not exist on `main`.
+
+## 2026-10-16 - Fix Command Injection Vulnerability in mini-SWE-agent
+
+**Vulnerability:**
+The `github_issue.py` script in the `mini-SWE-agent` submodule previously used string interpolation to build a command passed to `agent.env.execute()` (`agent.env.execute(f"git clone {repo_url} /testbed", cwd="/")`). Since `repo_url` is derived from `issue_url` (an unsanitized command-line argument), this enables a command injection attack.
+
+**Learning:**
+Even when using string-based shell execution interfaces (like `env.execute` wrappers), unsanitized user inputs must be properly escaped. String interpolation without escaping exposes the system to command injection vulnerabilities.
+
+**Prevention:**
+Always use `shlex.quote` on user-supplied arguments before injecting them into shell command strings.
