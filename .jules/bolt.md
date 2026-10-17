@@ -42,3 +42,6 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+## 2024-10-17 - LRU Cache Performance Downgrades
+**Learning:** Combining a `dict` for data with a `list` for access order in Python creates significant performance bottlenecks for LRU caches, because `list.pop(0)` and `list.remove(key)` are O(N) operations. In large caches, this degrades throughput exponentially.
+**Action:** Always use `collections.OrderedDict` for LRU caches to ensure O(1) eviction via `.popitem(last=False)` and O(1) access updates via `.move_to_end(key)`.
