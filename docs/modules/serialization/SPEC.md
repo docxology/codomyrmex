@@ -56,7 +56,7 @@ graph TD
     AvroSerializer[Avro Serializer]
     ParquetSerializer[Parquet Serializer]
     SerializationManager[Serialization Manager]
-    
+
     SerializerInterface --> JSONSerializer
     SerializerInterface --> YAMLSerializer
     SerializerInterface --> TOMLSerializer

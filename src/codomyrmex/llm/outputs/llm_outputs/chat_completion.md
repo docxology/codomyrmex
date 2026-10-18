@@ -27,4 +27,3 @@ passed
 ## Response
 
 The answer to 2 + 2 is 4!
-

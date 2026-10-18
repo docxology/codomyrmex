@@ -161,16 +161,16 @@ def validate_workflow_parameters(params: Dict[str, Any]) -> Dict[str, Any]:
         # Validate parameter name
         if not re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', key):
             raise ValidationError(f"Invalid parameter name: {key}")
-        
+
         # Sanitize string values
         if isinstance(value, str):
             # Remove potentially dangerous characters
             value = re.sub(r'[;&|`$]', '', value)
             # Limit length
             value = value[:1000]
-        
+
         validated[key] = value
-    
+
     return validated
 ```
 
@@ -190,7 +190,7 @@ def allocate_with_limits(requirements: Dict[str, Any]) -> bool:
     for resource, amount in requirements.items():
         if amount > resource_limits.get(resource, 0):
             raise ResourceLimitError(f"Requested {resource} exceeds limit")
-    
+
     return allocate_resources(requirements)
 ```
 
@@ -205,17 +205,17 @@ def validate_project_path(path: str, base_dir: str) -> Path:
     # Resolve path and ensure it's within base directory
     resolved = Path(path).resolve()
     base = Path(base_dir).resolve()
-    
+
     # Check if path is within base directory
     try:
         resolved.relative_to(base)
     except ValueError:
         raise SecurityError("Path outside allowed directory")
-    
+
     # Additional security checks
     if any(part.startswith('.') for part in resolved.parts):
         raise SecurityError("Hidden directories not allowed")
-    
+
     return resolved
 ```
 

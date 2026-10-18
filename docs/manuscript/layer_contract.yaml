@@ -22,5 +22,4 @@
 # Enforcement: verified by test_layer_contract_forbids_infrastructure_imports in
 # tests/unit/colony_kernel/test_manuscript_consistency.py, which asserts every
 # *.py file under src/codomyrmex/ imports no infrastructure.* symbol.
-allow_infrastructure_imports:
-  []
+allow_infrastructure_imports: []

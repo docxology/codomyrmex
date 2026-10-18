@@ -2,7 +2,7 @@
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-**Module**: cloud/aws  
+**Module**: cloud/aws
 **Status**: Active
 
 ## Context

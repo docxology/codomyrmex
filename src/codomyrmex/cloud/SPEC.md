@@ -45,7 +45,7 @@ The `CloudClient` ABC defines operations for general cloud resources (compute, d
 graph TD
     subgraph "Cloud Module"
         Init[__init__.py]
-        
+
         subgraph "Common Layer"
             CloudClient[CloudClient ABC]
             StorageClient[StorageClient ABC]
@@ -55,7 +55,7 @@ graph TD
             Enums[CloudProvider, ResourceType]
             Errors[CloudError]
         end
-        
+
         subgraph "Storage Implementations"
             AWS[aws/S3Client]
             GCP[gcp/GCSClient]

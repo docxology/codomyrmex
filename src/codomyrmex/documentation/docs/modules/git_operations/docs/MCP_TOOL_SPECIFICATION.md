@@ -8,7 +8,7 @@ Its primary purpose is to define project-wide Git practices (branching, commits,
 
 If, in the future, specific Git operations are identified as beneficial to be exposed as MCP tools (e.g., a tool to get current branch status, or list recent commits in a structured way for an agent), this document will be updated to define their specifications.
 
-For now, this specification is N/A (Not Applicable). 
+For now, this specification is N/A (Not Applicable).
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

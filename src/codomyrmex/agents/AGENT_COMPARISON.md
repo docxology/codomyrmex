@@ -44,7 +44,7 @@ These agents integrate directly with provider APIs:
 
 ### Jules (`jules`)
 
-**Type**: CLI-based  
+**Type**: CLI-based
 **Best For**: Simple command-based code generation tasks
 
 **Features**:
@@ -69,7 +69,7 @@ client = JulesClient()
 
 ### Claude (`claude`)
 
-**Type**: API-based  
+**Type**: API-based
 **Best For**: High-quality code generation, complex reasoning tasks, production use
 
 **Features**:
@@ -99,7 +99,7 @@ client = ClaudeClient(config={
 
 ### Codex (`codex`)
 
-**Type**: API-based  
+**Type**: API-based
 **Best For**: Code-focused tasks, OpenAI ecosystem integration
 
 **Features**:
@@ -128,7 +128,7 @@ client = CodexClient(config={
 
 ### O1 (`o1`)
 
-**Type**: API-based  
+**Type**: API-based
 **Best For**: Complex reasoning tasks, mathematical proofs, multi-step problem solving
 
 **Features**:
@@ -157,7 +157,7 @@ client = O1Client(config={
 
 ### DeepSeek (`deepseek`)
 
-**Type**: API-based  
+**Type**: API-based
 **Best For**: Cost-effective code generation, code completion, open-weight models
 
 **Features**:
@@ -185,7 +185,7 @@ client = DeepSeekClient(config={
 
 ### Qwen (`qwen`)
 
-**Type**: API-based  
+**Type**: API-based
 **Best For**: Multilingual code tasks, Alibaba DashScope ecosystem
 
 **Features**:
@@ -213,7 +213,7 @@ client = QwenClient(config={
 
 ### OpenCode (`opencode`)
 
-**Type**: CLI-based  
+**Type**: CLI-based
 **Best For**: Open-source alternative, local execution
 
 **Features**:
@@ -238,7 +238,7 @@ client = OpenCodeClient()
 
 ### Gemini (`gemini`)
 
-**Type**: CLI-based  
+**Type**: CLI-based
 **Best For**: Google ecosystem integration, file operations
 
 **Features**:
@@ -267,7 +267,7 @@ client = GeminiClient(config={
 
 ### Mistral Vibe (`mistral_vibe`)
 
-**Type**: CLI-based  
+**Type**: CLI-based
 **Best For**: Mistral AI models, vibe CLI tool integration
 
 **Features**:
@@ -294,7 +294,7 @@ client = MistralVibeClient(config={
 
 ### Every Code (`every_code`)
 
-**Type**: CLI-based  
+**Type**: CLI-based
 **Best For**: Multi-agent orchestration, complex workflows, browser integration
 
 **Features**:
@@ -330,7 +330,7 @@ client = EveryCodeClient(config={
 
 ### Ollama (`ollama`)
 
-**Type**: Local  
+**Type**: Local
 **Best For**: Private development, offline use, no-cost local execution
 
 **Features**:

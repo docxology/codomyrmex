@@ -50,4 +50,3 @@ These rules apply when *using* templates across the Codomyrmex project (instanti
 -   If using a template: Have all placeholders been correctly replaced? Does the new component adhere to the template's structure and intent?
 -   If modifying a template: Is the change justified? Has it been documented? Have related templates or documentation been updated if necessary? Is the template still easy to understand and use?
 -   If creating a new template: Is it well-documented? Does it address a clear need for reusability?
-

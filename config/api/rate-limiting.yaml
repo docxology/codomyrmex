@@ -6,11 +6,9 @@ rate_limiting:
     requests_per_minute: 60
     requests_per_hour: 1000
     burst: 20
-  
+
   endpoints:
     "/api/v1/projects":
       requests_per_minute: 30
     "/api/v1/workflows":
       requests_per_minute: 20
-
-

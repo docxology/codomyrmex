@@ -83,7 +83,7 @@ CODOMYRMEX_LOG_OUTPUT_TYPE=TEXT
 
 ### Expected Outcome
 
-- **Console Output**: 
+- **Console Output**:
     - Only WARNING and ERROR level messages will be displayed.
     - The format will be more detailed: `%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(funcName)s:%(lineno)d - %(message)s`.
     - You would *not* see the "Application starting..." (INFO) and debug messages because the level is WARNING.
@@ -125,7 +125,7 @@ ZeroDivisionError: division by zero"}
 ## Common Pitfalls & Troubleshooting
 
 - **Issue**: No logs are appearing, or logs are not at the expected level.
-  - **Solution**: 
+  - **Solution**:
     1. Ensure `setup_logging()` is called once at the very beginning of your application.
     2. Verify the `CODOMYRMEX_LOG_LEVEL` in your `.env` file is set correctly (e.g., `DEBUG`, `INFO`).
     3. Check that the `.env` file is in the project root and is being loaded (e.g., no typos in environment variable names).
@@ -141,10 +141,10 @@ ZeroDivisionError: division by zero"}
     3. Look for any warning messages printed to the console by `setup_logging()` regarding file access issues.
 
 - **Issue**: Logs from third-party libraries are too verbose or are missing.
-  - **Solution**: 
+  - **Solution**:
     - The current `setup_logging()` configures the root logger. If third-party libraries use standard Python logging, their messages should be captured.
     - To silence a specific verbose library: `logging.getLogger("some_verbose_library").setLevel(logging.WARNING)` *after* your `setup_logging()` call.
-    - To make a quiet library louder (if it logs to a specific logger and its level is higher than your root logger): `logging.getLogger("some_quiet_library").setLevel(logging.DEBUG)` *after* `setup_logging()`. You also need to ensure your root logger level (set by `CODOMYRMEX_LOG_LEVEL`) is also at least DEBUG. 
+    - To make a quiet library louder (if it logs to a specific logger and its level is higher than your root logger): `logging.getLogger("some_quiet_library").setLevel(logging.DEBUG)` *after* `setup_logging()`. You also need to ensure your root logger level (set by `CODOMYRMEX_LOG_LEVEL`) is also at least DEBUG.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

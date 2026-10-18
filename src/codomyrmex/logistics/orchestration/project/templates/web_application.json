@@ -13,20 +13,9 @@
     ".codomyrmex/"
   ],
   "template_files": {},
-  "workflows": [
-    "build-and-test",
-    "deploy"
-  ],
-  "required_modules": [
-    "build_synthesis",
-    "code",
-    "documentation"
-  ],
-  "optional_modules": [
-    "ai_code_editing",
-    "static_analysis",
-    "git_operations"
-  ],
+  "workflows": ["build-and-test", "deploy"],
+  "required_modules": ["build_synthesis", "code", "documentation"],
+  "optional_modules": ["ai_code_editing", "static_analysis", "git_operations"],
   "default_config": {
     "frontend": {
       "framework": "react",

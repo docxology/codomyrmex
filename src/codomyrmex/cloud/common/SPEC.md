@@ -17,24 +17,24 @@ class StorageClient(ABC):
     @abstractmethod
     def list_buckets(self) -> List[str]:
         """Return names of all accessible buckets."""
-    
+
     @abstractmethod
     def create_bucket(self, name: str) -> bool:
         """Create a new bucket. Returns success status."""
-    
+
     @abstractmethod
     def upload_file(self, bucket: str, key: str, data: bytes,
                     content_type: Optional[str] = None) -> str:
         """Upload data to bucket. Returns object URL/path."""
-    
+
     @abstractmethod
     def download_file(self, bucket: str, key: str) -> bytes:
         """Download object contents as bytes."""
-    
+
     @abstractmethod
     def delete_object(self, bucket: str, key: str) -> bool:
         """Delete object. Returns success status."""
-    
+
     @abstractmethod
     def generate_presigned_url(self, bucket: str, key: str,
                                expires_in: int = 3600) -> str:
@@ -48,19 +48,19 @@ class ComputeClient(ABC):
     @abstractmethod
     def list_instances(self) -> List[Dict[str, Any]]:
         """List all compute instances."""
-    
+
     @abstractmethod
     def start_instance(self, instance_id: str) -> bool:
         """Start stopped instance."""
-    
+
     @abstractmethod
     def stop_instance(self, instance_id: str) -> bool:
         """Stop running instance."""
-    
+
     @abstractmethod
     def terminate_instance(self, instance_id: str) -> bool:
         """Permanently terminate instance."""
-    
+
     @abstractmethod
     def create_instance(self, name: str, instance_type: str,
                         image_id: str, **kwargs) -> Dict[str, Any]:
@@ -74,17 +74,17 @@ class ServerlessClient(ABC):
     @abstractmethod
     def list_functions(self) -> List[Dict[str, Any]]:
         """List all serverless functions."""
-    
+
     @abstractmethod
     def invoke_function(self, function_name: str,
                         payload: Dict[str, Any]) -> Dict[str, Any]:
         """Invoke function with payload."""
-    
+
     @abstractmethod
     def create_function(self, name: str, runtime: str, handler: str,
                         code_path: str, **kwargs) -> Dict[str, Any]:
         """Deploy new function."""
-    
+
     @abstractmethod
     def delete_function(self, function_name: str) -> bool:
         """Delete function."""
@@ -120,7 +120,7 @@ class CloudResource:
     created_at: Optional[datetime]
     tags: Dict[str, str]         # Resource tags
     metadata: Dict[str, Any]     # Additional data
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
 ```

@@ -58,4 +58,4 @@
 
 ## Versioning
 
-(Explain the API versioning strategy.) 
+(Explain the API versioning strategy.)

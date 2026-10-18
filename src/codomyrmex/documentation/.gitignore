@@ -43,4 +43,4 @@ logs/
 # Coverage reports
 coverage/
 .coverage
-.pytest_cache/ 
+.pytest_cache/

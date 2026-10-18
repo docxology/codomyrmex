@@ -32,5 +32,3 @@ backups:
   retention:
     keep_daily: 3
     keep_weekly: 2
-
-

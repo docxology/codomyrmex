@@ -5,20 +5,20 @@
 backups:
   # Backup directory
   directory: "${BACKUP_DIR:backups}"
-  
+
   # Backup naming pattern
   naming_pattern: "{database}_{timestamp}.backup"
   timestamp_format: "%Y%m%d_%H%M%S"
-  
+
   # Backup format
-  format: "sql"  # sql, dump, custom
-  
+  format: "sql" # sql, dump, custom
+
   # Compression
   compression:
     enabled: true
-    algorithm: "gzip"  # gzip, bzip2, xz
-    level: 6  # 1-9 for gzip
-  
+    algorithm: "gzip" # gzip, bzip2, xz
+    level: 6 # 1-9 for gzip
+
   # Encryption
   encryption:
     enabled: false
@@ -33,7 +33,7 @@ schedules:
     time: "02:00"
     retention:
       keep_days: 7
-  
+
   # Weekly backups
   weekly:
     enabled: true
@@ -41,7 +41,7 @@ schedules:
     time: "02:00"
     retention:
       keep_weeks: 4
-  
+
   # Monthly backups
   monthly:
     enabled: true
@@ -57,19 +57,19 @@ retention:
     keep_daily: 7
     keep_weekly: 4
     keep_monthly: 12
-  
+
   # Environment-specific retention
   environments:
     development:
       keep_daily: 3
       keep_weekly: 2
       keep_monthly: 3
-    
+
     staging:
       keep_daily: 7
       keep_weekly: 4
       keep_monthly: 6
-    
+
     production:
       keep_daily: 30
       keep_weekly: 12
@@ -82,7 +82,7 @@ storage:
     enabled: true
     directory: "${BACKUP_DIR:backups}"
     max_size: "100GB"
-  
+
   # Remote storage
   remote:
     enabled: false
@@ -91,12 +91,12 @@ storage:
         bucket: "${S3_BACKUP_BUCKET}"
         region: "${AWS_REGION}"
         enabled: "${USE_S3_BACKUP:false}"
-      
+
       - type: "azure_blob"
         container: "${AZURE_BACKUP_CONTAINER}"
         account: "${AZURE_STORAGE_ACCOUNT}"
         enabled: "${USE_AZURE_BACKUP:false}"
-      
+
       - type: "gcp_storage"
         bucket: "${GCP_BACKUP_BUCKET}"
         project: "${GCP_PROJECT_ID}"
@@ -105,14 +105,14 @@ storage:
 # Backup Verification
 verification:
   enabled: true
-  
+
   # Verify backup integrity
   integrity_check: true
-  
+
   # Verify backup restore
   restore_test: false
   restore_test_interval: "weekly"
-  
+
   # Backup validation
   validation:
     enabled: true
@@ -122,20 +122,20 @@ verification:
 # Backup Monitoring
 monitoring:
   enabled: true
-  
+
   # Monitor backup success
   success_monitoring: true
-  
+
   # Monitor backup failures
   failure_monitoring: true
-  
+
   # Alert on backup failures
   alerts:
     enabled: true
     channels:
       - email
       - slack
-    threshold: 1  # Alert after 1 failure
+    threshold: 1 # Alert after 1 failure
 
 # Backup Recovery
 recovery:
@@ -148,11 +148,9 @@ recovery:
         - "Restore backup file"
         - "Verify database integrity"
         - "Restart database connections"
-  
+
   # Recovery testing
   testing:
     enabled: false
     schedule: "monthly"
     test_database: "${TEST_DATABASE_URL}"
-
-

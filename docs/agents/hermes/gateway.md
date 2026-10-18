@@ -18,17 +18,17 @@ flowchart TD
     Step3 --> Step4{4. Check gateway.pid}
     Step4 -->|PID missing or stale| Step5[5. Write own PID to gateway.pid]
     Step5 --> Step6[6. Initialize platform adapters]
-    
+
     Step6 --> P1[Telegram]
     Step6 --> P2[WhatsApp]
     Step6 --> P3[Discord]
     Step6 --> P4[Slack]
-    
+
     P1 --> Step7
     P2 --> Step7
     P3 --> Step7
     P4 --> Step7
-    
+
     Step7[7. Start cron ticker 60s interval] --> Step8[8. Build channel directory]
     Step8 --> MainLoop([9. Enter main event loop])
 ```

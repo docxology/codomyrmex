@@ -107,7 +107,7 @@ sequenceDiagram
 
     T->>A: Read latest algorithm version
     T->>S: Load identity variables
-    
+
     T->>T: Concatenate components
     T->>T: Inject {{ALGORITHM_VERSION}}
     T->>T: Resolve {DAIDENTITY.NAME},<br/>{PRINCIPAL.NAME}, etc.

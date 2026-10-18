@@ -38,4 +38,4 @@ This security policy applies only to the `Market` module within the Codomyrmex p
 - Follow the principle of least privilege when configuring access or permissions related to this module.
 - Regularly review configurations and logs for suspicious activity.
 
-Thank you for helping keep Codomyrmex and the Market module secure. 
+Thank you for helping keep Codomyrmex and the Market module secure.

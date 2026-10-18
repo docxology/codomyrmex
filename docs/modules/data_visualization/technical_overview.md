@@ -72,15 +72,15 @@ graph TD
     PyAPICall --> PyPlotFunc
     MCPRequest --> MCPHandlers
     MCPHandlers --> PyPlotFunc
-    
+
     PyPlotFunc -- Uses --> PlotUtils
     PyPlotFunc -- Uses --> MathematicsLibraries
     PlotUtils -- Uses --> MathematicsLibraries
     PlotUtils -- Uses --> LoggingService
-    
+
     MathematicsLibraries -- Generates --> PlotInMemory[(Plot Object in Memory)]
     PlotUtils -- Saves Plot --> FileSystem
-    
+
     PyPlotFunc --> PyResponse["Python: None / (Future: Fig, Ax)"]
     MCPHandlers -- Forms Response (output_path, status) --> MCPResponse["MCP JSON Response"]
     PlotInMemory -- Rendered by backend, details used by --> PlotUtils

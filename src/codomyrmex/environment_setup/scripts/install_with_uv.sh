@@ -31,7 +31,7 @@ EOF
 # Check if uv is installed
 check_uv() {
     echo -e "${BLUE}🔍 Checking for uv package manager...${NC}"
-    
+
     if command -v uv &> /dev/null; then
         UV_VERSION=$(uv --version | cut -d' ' -f2)
         echo -e "${GREEN}✅ uv is installed (version: $UV_VERSION)${NC}"
@@ -45,13 +45,13 @@ check_uv() {
 # Install uv
 install_uv() {
     echo -e "${BLUE}📦 Installing uv package manager...${NC}"
-    
+
     # Install uv using the official installer
     curl -LsSf https://astral.sh/uv/install.sh | sh
-    
+
     # Add to PATH for current session
     export PATH="$HOME/.cargo/bin:$PATH"
-    
+
     # Verify installation
     if command -v uv &> /dev/null; then
         UV_VERSION=$(uv --version | cut -d' ' -f2)
@@ -65,13 +65,13 @@ install_uv() {
 # Check Python version
 check_python() {
     echo -e "${BLUE}🐍 Checking Python version...${NC}"
-    
+
     # Check if Python 3.10+ is available
     if command -v python3 &> /dev/null; then
         PYTHON_VERSION=$(python3 --version | cut -d' ' -f2)
         PYTHON_MAJOR=$(echo $PYTHON_VERSION | cut -d'.' -f1)
         PYTHON_MINOR=$(echo $PYTHON_VERSION | cut -d'.' -f2)
-        
+
         if [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -ge 10 ]; then
             echo -e "${GREEN}✅ Python $PYTHON_VERSION is compatible${NC}"
         else
@@ -86,14 +86,14 @@ check_python() {
 # Install Codomyrmex with uv
 install_codomyrmex() {
     echo -e "${BLUE}🚀 Installing Codomyrmex with uv...${NC}"
-    
+
     # Create virtual environment and install
     echo -e "${CYAN}Creating virtual environment...${NC}"
     uv venv .venv
-    
+
     echo -e "${CYAN}Activating virtual environment...${NC}"
     source .venv/bin/activate
-    
+
     echo -e "${CYAN}Installing Codomyrmex and dependencies...${NC}"
     uv sync
 
@@ -107,10 +107,10 @@ install_codomyrmex() {
 # Verify installation
 verify_installation() {
     echo -e "${BLUE}🔍 Verifying installation...${NC}"
-    
+
     # Activate virtual environment
     source .venv/bin/activate
-    
+
     # Test basic import
     echo -e "${CYAN}Testing basic imports...${NC}"
     python3 -c "
@@ -124,7 +124,7 @@ except ImportError as e:
     print(f'❌ Import failed: {e}')
     sys.exit(1)
 "
-    
+
     # Test CLI
     echo -e "${CYAN}Testing CLI...${NC}"
     if command -v codomyrmex &> /dev/null; then
@@ -134,7 +134,7 @@ except ImportError as e:
         echo -e "${YELLOW}⚠️  CLI command not found in PATH${NC}"
         echo -e "${BLUE}💡 You can run: source .venv/bin/activate && codomyrmex info${NC}"
     fi
-    
+
     # Test modules
     echo -e "${CYAN}Testing core modules...${NC}"
     python3 -c "
@@ -144,14 +144,14 @@ from codomyrmex.data_visualization import create_line_plot
 from codomyrmex.logging_monitoring import get_logger
 print('✅ Core modules imported successfully')
 "
-    
+
     echo -e "${GREEN}✅ Installation verification complete!${NC}"
 }
 
 # Setup environment variables
 setup_env() {
     echo -e "${BLUE}⚙️  Setting up environment...${NC}"
-    
+
     if [ ! -f ".env" ]; then
         echo -e "${CYAN}Creating .env file template...${NC}"
         cat > .env << EOF
@@ -180,7 +180,7 @@ EOF
 # Show next steps
 show_next_steps() {
     echo -e "\n${WHITE}🎉 Installation Complete!${NC}\n"
-    
+
     echo -e "${CYAN}Next Steps:${NC}"
     echo -e "1. ${GREEN}Activate the virtual environment:${NC}"
     echo -e "   ${YELLOW}source .venv/bin/activate${NC}"

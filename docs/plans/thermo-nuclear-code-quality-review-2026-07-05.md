@@ -1,7 +1,7 @@
 # Thermo-Nuclear Code Quality Review — Codomyrmex
 
-**Date:** 2026-07-05  
-**Scope:** Whole-repo health (`projects/ongoing/codomyrmex`, v1.3.0)  
+**Date:** 2026-07-05
+**Scope:** Whole-repo health (`projects/ongoing/codomyrmex`, v1.3.0)
 **Rubric:** thermo-nuclear-code-quality-review (cursor-team-kit)
 
 > Historical snapshot. The paths and blocker counts below describe the state observed

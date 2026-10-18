@@ -51,7 +51,7 @@ A central construct is the **Markov blanket** — the set of states separating a
 ```mermaid
 graph TB
     subgraph EXTERNAL["External States (environment)"]
-        E1["e₁"] 
+        E1["e₁"]
         E2["e₂"]
         E3["e₃"]
     end

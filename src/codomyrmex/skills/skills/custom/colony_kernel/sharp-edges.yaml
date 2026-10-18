@@ -27,7 +27,7 @@ sharp_edges:
       - Trust scores stuck at 0.1 (initial value) for active agents
       - Budget ledger shows zero consumption despite many executed actions
       - Pheromone field has only DEPENDENCY signals but no SUCCESS/FAILURE
-    detection_pattern: 'propose_action(?!.*record_outcome)'
+    detection_pattern: "propose_action(?!.*record_outcome)"
 
   - id: sandbox-agent-bypass
     summary: Treating SANDBOX agent gate responses as actionable
@@ -51,7 +51,7 @@ sharp_edges:
       - Agents with trust_score=0.1 performing write operations
       - gate_score=0.0 treated as approval
       - Direct record_outcome calls without prior propose_action
-    detection_pattern: 'SANDBOX.*write|sandbox.*execute|bypass.*gate'
+    detection_pattern: "SANDBOX.*write|sandbox.*execute|bypass.*gate"
     decision_tree: |
       ```mermaid
       flowchart TD
@@ -90,7 +90,7 @@ sharp_edges:
       - High SUCCESS pheromone at locations with frequent test failures
       - Gate score high despite real bugs
       - Multiple agents report "clean" at a location that breaks in CI
-    detection_pattern: 'tests_passed=True.*before.*pytest|record.*before.*test'
+    detection_pattern: "tests_passed=True.*before.*pytest|record.*before.*test"
 
   - id: ignoring-budget-hold
     summary: Repeatedly resubmitting the same proposal after budget HOLD
@@ -114,7 +114,7 @@ sharp_edges:
       - Same proposal submitted dozens of times in a row
       - Budget violations accumulate without resolution
       - Ledger history shows repeated HOLD for same agent/target
-    detection_pattern: 'HOLD.*resubmit|budget.*ignore|ceiling.*retry'
+    detection_pattern: "HOLD.*resubmit|budget.*ignore|ceiling.*retry"
 
   - id: manual-role-assignment
     summary: Hard-assigning agent roles instead of letting RoleAdapter infer from trust
@@ -167,4 +167,4 @@ sharp_edges:
       - Gate scores stuck low at previously-failing locations
       - Pheromone field size grows without bound
       - Old failures suppress new proposals at the same target
-    detection_pattern: 'never.*tick|tick.*never|pheromone.*unbounded'
+    detection_pattern: "never.*tick|tick.*never|pheromone.*unbounded"

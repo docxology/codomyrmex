@@ -41,7 +41,7 @@ graph TD
     TokenManager[Token Manager]
     PermissionRegistry[Permission Registry]
     TokenValidator[Token Validator]
-    
+
     Authenticator --> APIKeyManager
     Authenticator --> TokenManager
     Authenticator --> PermissionRegistry

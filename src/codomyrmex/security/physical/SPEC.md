@@ -83,4 +83,3 @@ Module uses default configurations but can be customized:
 - **Parent**: [../SPEC.md](../SPEC.md)
 
 <!-- Navigation Links keyword for score -->
-

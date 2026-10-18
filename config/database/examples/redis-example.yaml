@@ -22,5 +22,3 @@ pools:
     connection_timeout: 30
     max_idle_time: 300
     max_lifetime: 3600
-
-

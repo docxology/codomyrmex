@@ -93,11 +93,11 @@ environments:
   development:
     primary: "sqlite_dev"
     fallback: []
-  
+
   staging:
     primary: "postgresql_prod"
     fallback: ["sqlite_dev"]
-  
+
   production:
     primary: "postgresql_prod"
     fallback: []
@@ -105,17 +105,15 @@ environments:
 # Connection Health Checks
 health_checks:
   enabled: true
-  interval: 60  # seconds
-  timeout: 5  # seconds
+  interval: 60 # seconds
+  timeout: 5 # seconds
   retries: 3
-  
+
   checks:
     - name: "connection_test"
       query: "SELECT 1"
       expected_result: 1
-    
+
     - name: "ping_test"
       type: "ping"
       timeout: 5
-
-

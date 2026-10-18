@@ -86,7 +86,7 @@ menu_discovery() {
         echo -e "${GREEN}0)${NC} Back to Main Menu"
         echo ""
         read -p "Choose option (0-4): " choice
-        
+
         case $choice in
             1)
                 echo -e "\n${CYAN}Scanning the Codomyrmex ecosystem...${NC}"
@@ -125,7 +125,7 @@ menu_pai() {
         echo -e "${GREEN}0)${NC} Back to Main Menu"
         echo ""
         read -p "Choose option (0-4): " choice
-        
+
         case $choice in
             1) uv run python scripts/pai/dashboard.py; pause ;;
             2) uv run python scripts/pai/generate_skills.py; pause ;;
@@ -153,7 +153,7 @@ menu_agents() {
         echo -e "${GREEN}0)${NC} Back to Main Menu"
         echo ""
         read -p "Choose option (0-6): " choice
-        
+
         case $choice in
             1) uv run python scripts/agents/multi_agent_workflow.py; pause ;;
             2) uv run python scripts/agents/discursive_debate.py; pause ;;
@@ -180,17 +180,17 @@ menu_frameworks() {
         echo -e "${GREEN}0)${NC} Back to Main Menu"
         echo ""
         read -p "Choose option (0-3): " choice
-        
+
         case $choice in
-            1) 
+            1)
                 if [ -f "scripts/bio_simulation/run_colony.py" ]; then
                     uv run python scripts/bio_simulation/run_colony.py
                 else
                     echo "Script not found."
                 fi
-                pause 
+                pause
                 ;;
-            2) 
+            2)
                 if [ -d "scripts/data_visualization" ]; then
                     files=(scripts/data_visualization/*.py)
                     if [ ${#files[@]} -gt 0 ] && [ -f "${files[0]}" ]; then
@@ -202,10 +202,10 @@ menu_frameworks() {
                 else
                     echo "Module not found."
                 fi
-                pause 
+                pause
                 ;;
-            3) 
-                uv run python scripts/agents/advanced_workflow.py; pause 
+            3)
+                uv run python scripts/agents/advanced_workflow.py; pause
                 ;;
             0) return ;;
             *) echo -e "${RED}Invalid choice${NC}"; sleep 1 ;;
@@ -221,10 +221,10 @@ dynamic_script_explorer() {
         clear
         echo -e "${CYAN}🗄️ Dynamic Script Explorer${NC}"
         echo -e "Dynamically discover and execute ANY script across $PWD/scripts\n"
-        
+
         # Discover all subdirectories in scripts/
         mapfile -t domains < <(find scripts -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort)
-        
+
         if [ ${#domains[@]} -eq 0 ]; then
             echo -e "${YELLOW}No script domains found in scripts/.${NC}"
             pause
@@ -237,18 +237,18 @@ dynamic_script_explorer() {
         echo -e "${GREEN} 0)${NC} Back to Main Menu"
         echo ""
         read -p "Select a domain to explore (0-${#domains[@]}): " domain_idx
-        
+
         if [[ "$domain_idx" == "0" ]]; then
             return
         elif [[ "$domain_idx" =~ ^[0-9]+$ ]] && [ "$domain_idx" -ge 1 ] && [ "$domain_idx" -le "${#domains[@]}" ]; then
             selected_domain="${domains[$((domain_idx-1))]}"
-            
+
             while true; do
                 clear
                 echo -e "${CYAN}🗄️ Domain :: ${selected_domain}${NC}\n"
                 # Find python/sh scripts
                 mapfile -t scr_files < <(find "scripts/${selected_domain}" -maxdepth 1 \( -name "*.py" -o -name "*.sh" \) -exec basename {} \; | sort)
-                
+
                 if [ ${#scr_files[@]} -eq 0 ]; then
                     echo -e "${YELLOW}No executable .py or .sh scripts found in this domain.${NC}"
                     pause
@@ -261,7 +261,7 @@ dynamic_script_explorer() {
                 echo -e "${GREEN} 0)${NC} Back to Domains"
                 echo ""
                 read -p "Select a script to run (0-${#scr_files[@]}): " script_idx
-                
+
                 if [[ "$script_idx" == "0" ]]; then
                     break
                 elif [[ "$script_idx" =~ ^[0-9]+$ ]] && [ "$script_idx" -ge 1 ] && [ "$script_idx" -le "${#scr_files[@]}" ]; then
@@ -300,7 +300,7 @@ menu_testing_dev() {
         echo -e "${GREEN}0)${NC} Back to Main Menu"
         echo ""
         read -p "Choose option (0-7): " choice
-        
+
         case $choice in
             1) make test; pause ;;
             2) make test-fast; pause ;;
@@ -308,7 +308,7 @@ menu_testing_dev() {
             4) uv run ruff check src/codomyrmex/; pause ;;
             5) uv run ty check src/; pause ;;
             6) uv run bandit -r src/codomyrmex/; pause ;;
-            7) 
+            7)
                 uv run ruff format src/codomyrmex/
                 uv run ruff check src/codomyrmex/
                 uv run ty check src/
@@ -328,13 +328,13 @@ menu_config() {
     clear
     echo -e "${CYAN}⚙️ Configuration & Setup${NC}\n"
     INSTALL_SCRIPT="src/codomyrmex/environment_setup/scripts/install_with_uv.sh"
-    
+
     echo -e "${GREEN}1)${NC} Run UV Installation Script"
     echo -e "${GREEN}2)${NC} Configure LLM API Keys"
     echo -e "${GREEN}0)${NC} Back to Main Menu"
     echo ""
     read -p "Choose option (0-2): " choice
-    
+
     case $choice in
         1)
             if [[ -f "$INSTALL_SCRIPT" ]]; then
@@ -414,11 +414,11 @@ main() {
     check_environment
     activate_venv
     ensure_dependencies
-    
+
     while true; do
         show_banner
         echo -e "${WHITE}🚀 Welcome to the Epistemic Forager Nest${NC}\n"
-        
+
         echo -e "${GREEN}1)${NC} 🔍 ${CYAN}System Discovery & Status${NC}"
         echo -e "${GREEN}2)${NC} 🖥️  ${CYAN}Personal AI Infrastructure (PAI)${NC}"
         echo -e "${GREEN}3)${NC} 🧠 ${CYAN}AI Agents & Swarms${NC}"
@@ -431,7 +431,7 @@ main() {
         echo -e "${GREEN}0)${NC} 🚪 ${CYAN}Exit${NC}"
         echo ""
         read -p "$(echo -e ${PURPLE}Choose your path \(0-9\):${NC} )" main_choice
-        
+
         case $main_choice in
             1) menu_discovery ;;
             2) menu_pai ;;
@@ -439,19 +439,19 @@ main() {
             4) menu_frameworks ;;
             5) dynamic_script_explorer ;;
             6) menu_testing_dev ;;
-            7) 
+            7)
                 echo -e "${YELLOW}Key documentation files:${NC}"
                 find docs/ -name "README.md" -o -name "*.md" | head -10
                 pause
                 ;;
             8) menu_config ;;
             9) menu_interactive ;;
-            0) 
+            0)
                 echo -e "\n${CYAN}🐜 Thank you for exploring the Codomyrmex nest!${NC}"
                 echo -e "${YELLOW}Until next time, happy foraging! 🌟${NC}\n"
                 exit 0
                 ;;
-            *) 
+            *)
                 echo -e "${RED}Invalid choice. Please select 0-9.${NC}"
                 sleep 1
                 ;;

@@ -1,6 +1,6 @@
 # Hermes — MCP tools
 
-**Module**: `codomyrmex.agents.hermes`  
+**Module**: `codomyrmex.agents.hermes`
 **Definitions**: [`mcp_tools.py`](mcp_tools.py)
 
 ## Summary

@@ -26,12 +26,12 @@ while IFS= read -r task || [ -n "$task" ]; do
     if [[ -z "$task" ]] || [[ "$task" == \#* ]]; then
         continue
     fi
-    
+
     echo "Launching Agent for task: $task"
     # Launch in background to achieve concurrency
     jules new --repo "$REPO" "$task" > /dev/null 2>&1 &
     job_count=$((job_count + 1))
-    
+
     # Optional slight delay to avoid hammering the initial API handshake
     sleep 1
 done < "$TASKS_FILE"

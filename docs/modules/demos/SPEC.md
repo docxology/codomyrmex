@@ -1,7 +1,7 @@
 # Demos — Functional Specification
 
-**Module**: `codomyrmex.demos`  
-**Version**: v0.1.0  
+**Module**: `codomyrmex.demos`
+**Version**: v0.1.0
 **Status**: Active
 
 ## 1. Overview

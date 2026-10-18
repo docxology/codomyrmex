@@ -227,7 +227,7 @@ engine = TemplateEngine()
 python_template = '''
 class {{ class_name }}:
     """{{ docstring }}"""
-    
+
     def __init__(self{% for attr in attributes %}, {{ attr.name }}: {{ attr.type }}{% endfor %}):
 {% for attr in attributes %}
         self.{{ attr.name }} = {{ attr.name }}

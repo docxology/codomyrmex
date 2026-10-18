@@ -33,7 +33,7 @@ graph TD
     ThreeD --> Scene[Scene Building]
     ThreeD --> Mesh[Mesh Generation]
     ThreeD --> Render[Rendering]
-    
+
     FourD --> Temporal[Temporal Modeling]
     WorldModels --> Simulation[World Simulation]
 ```

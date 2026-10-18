@@ -109,7 +109,7 @@ Refer to `data_visualization/API_SPECIFICATION.md` for a full list of parameters
 - Experiment with different `startangle` values and `explode` combinations.
 - Try creating a pie chart without `autopct` or with a custom function for it.
 - Use different color palettes or let Matplotlib choose default colors by not providing the `colors` parameter.
-- Plot proportional data from your own projects, such as survey results or market share data. 
+- Plot proportional data from your own projects, such as survey results or market share data.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

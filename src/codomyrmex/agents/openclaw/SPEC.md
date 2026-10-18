@@ -29,7 +29,7 @@ The `openclaw` module integrates the OpenClaw autonomous AI agent framework into
 3. **Message Send**: Route messages to channels via `send_message`.
 4. **Gateway**: Manage control plane via `start_gateway` / `get_gateway_status`.
 5. **Doctor**: Health check via `run_doctor`.
-6. 
+6.
 ## Interface Contracts
 
 ### Public API

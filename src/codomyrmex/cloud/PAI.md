@@ -2,7 +2,7 @@
 
 **Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
-**Module**: cloud  
+**Module**: cloud
 **Status**: Active
 
 ## Context

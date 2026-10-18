@@ -49,9 +49,9 @@ Main manager for physical object operations with advanced spatial and network an
 
 ```python
 def create_object(object_id: str, name: str, object_type: ObjectType,
-                 x: float, y: float, z: float, 
+                 x: float, y: float, z: float,
                  material: MaterialType = MaterialType.UNKNOWN,
-                 mass: float = 1.0, volume: float = 1.0, 
+                 mass: float = 1.0, volume: float = 1.0,
                  temperature: float = 293.15, **properties) -> PhysicalObject
 ```
 
@@ -80,7 +80,7 @@ Registry for managing physical objects with event system and network analysis.
 ```python
 def add_event_handler(event_type: EventType, handler: Callable[[ObjectEvent], None]) -> None
 def remove_event_handler(event_type: EventType, handler: Callable[[ObjectEvent], None]) -> bool
-def get_events(event_type: Optional[EventType] = None, 
+def get_events(event_type: Optional[EventType] = None,
                object_id: Optional[str] = None,
                since: Optional[float] = None) -> List[ObjectEvent]
 ```
@@ -133,7 +133,7 @@ Advanced physics simulation with energy tracking and constraints.
 ```python
 # Basic operations
 vec1 + vec2          # Addition
-vec1 - vec2          # Subtraction  
+vec1 - vec2          # Subtraction
 vec * scalar         # Scaling
 vec.magnitude()      # Calculate magnitude
 vec.normalize()      # Normalize to unit vector
@@ -148,7 +148,7 @@ Advanced sensor management with calibration, health monitoring, and drift detect
 #### Calibration
 
 ```python
-def calibrate_sensor(sensor_id: str, reference_values: List[Tuple[float, float]], 
+def calibrate_sensor(sensor_id: str, reference_values: List[Tuple[float, float]],
                     sensor_type: SensorType) -> Dict[str, float]
 def apply_calibration(reading: SensorReading) -> SensorReading
 ```
@@ -187,7 +187,7 @@ def add_data(stream_id: str, value: float, source_id: str,
 #### Alert System
 
 ```python
-def create_alert(stream_id: str, condition: str, 
+def create_alert(stream_id: str, condition: str,
                 threshold: float, message: str) -> None
 ```
 
@@ -215,7 +215,7 @@ Machine learning and statistical prediction methods.
 #### Prediction Methods
 
 ```python
-def predict_linear_trend(data_points: List[DataPoint], 
+def predict_linear_trend(data_points: List[DataPoint],
                         future_seconds: float) -> Optional[float]
 def detect_anomalies(data_points: List[DataPoint],
                     std_dev_threshold: float = 3.0) -> List[DataPoint]
@@ -271,7 +271,7 @@ props = MaterialProperties.from_material_type(MaterialType.METAL)
 All methods include proper error handling and logging. Common exceptions:
 
 - `ValueError`: Invalid parameters or data
-- `AttributeError`: Missing required attributes  
+- `AttributeError`: Missing required attributes
 - `KeyError`: Object or resource not found
 - Custom logging through Python logging module
 
@@ -297,7 +297,7 @@ All methods include proper error handling and logging. Common exceptions:
 ### Basic Object Management
 ```python
 manager = PhysicalObjectManager()
-sensor = manager.create_object("sensor_001", "Temperature Sensor", 
+sensor = manager.create_object("sensor_001", "Temperature Sensor",
                               ObjectType.SENSOR, x=0, y=0, z=0,
                               material=MaterialType.PLASTIC)
 sensor.add_tag("critical")

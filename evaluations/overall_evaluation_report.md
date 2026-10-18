@@ -98,4 +98,3 @@ Generated: 2026-03-12T12:31:57.172662
 - Add explicit type hints for all parameters and return values
 
 ---
-

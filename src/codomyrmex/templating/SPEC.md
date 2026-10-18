@@ -53,7 +53,7 @@ graph TD
     MakoEngine[Mako Engine]
     TemplateManager[Template Manager]
     TemplateCache[Template Cache]
-    
+
     TemplateInterface --> Jinja2Engine
     TemplateInterface --> MakoEngine
     TemplateManager --> TemplateInterface

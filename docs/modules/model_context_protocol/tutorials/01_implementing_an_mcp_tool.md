@@ -115,7 +115,7 @@ def concatenate_strings(strings_to_join: list[str], separator: str = " ") -> str
         raise TypeError("Input 'strings' must be a list.")
     if not all(isinstance(s, str) for s in strings_to_join):
         raise ValueError("All items in 'strings' must be strings.")
-    
+
     return separator.join(strings_to_join)
 
 ```
@@ -141,7 +141,7 @@ from model_context_protocol.mcp_schemas import MCPToolCall, MCPToolResult, MCPEr
 from pydantic import ValidationError # For catching Pydantic validation errors
 
 # Assuming concatenate_strings is defined as in Step 2
-# from .core import concatenate_strings 
+# from .core import concatenate_strings
 
 def handle_concatenate_tool_call(mcp_call_data: dict) -> dict:
     """
@@ -153,7 +153,7 @@ def handle_concatenate_tool_call(mcp_call_data: dict) -> dict:
         # 1. Parse the incoming call data (already a dict, or parse from JSON string if needed)
         #    In a real system, you'd also validate mcp_call_data.tool_name here.
         parsed_call = MCPToolCall(**mcp_call_data)
-        
+
         # Extract arguments - Pydantic handles default for separator if not provided
         # For robust parsing according to your tool's JSON Schema, you might use a
         # dedicated Pydantic model for your tool's specific arguments.
@@ -207,7 +207,7 @@ def handle_concatenate_tool_call(mcp_call_data: dict) -> dict:
                 # Avoid sending detailed internal stack traces in error_details to the agent
             )
         )
-    
+
     # 4. Return as dictionary (ready for JSON serialization)
     return mcp_result.model_dump(exclude_none=True) # exclude_none for cleaner JSON
 
@@ -221,7 +221,7 @@ if __name__ == "__main__":
             "separator": " - "
         }
     }
-    
+
     result_dict_success = handle_concatenate_tool_call(example_call_data_success)
     import json
     print("Success Result JSON:")
@@ -302,11 +302,11 @@ def dispatch_mcp_tool_call(mcp_call_data: dict) -> dict:
 # --- Example of invoking the dispatcher ---
 if __name__ == "__main__":
     # This __main__ block would typically be in a test file or an example script
-    
+
     # Setup for the string_utils.concatenate handler example:
     # This is a bit circular for the standalone script, but demonstrates the idea.
     # In a real module, handle_concatenate_tool_call would be imported.
-    
+
     # Simulate an incoming MCP call data (as a dictionary)
     example_call_data = {
         "tool_name": "string_utils.concatenate",
@@ -315,7 +315,7 @@ if __name__ == "__main__":
             "separator": " : "
         }
     }
-    
+
     response_dict = dispatch_mcp_tool_call(example_call_data)
     import json
     print("Dispatcher Response JSON:")
@@ -345,7 +345,7 @@ You have now learned the basic steps to implement an MCP-compliant tool in Pytho
 -   Explore the `model_context_protocol/USAGE_EXAMPLES.md` for more examples.
 -   Consider creating dedicated Pydantic models for the `arguments` of each of your tools for stricter validation that aligns perfectly with your JSON Schemas.
 
-This approach ensures your tools are well-defined, robust, and can be easily integrated into the broader Codomyrmex AI agent ecosystem. 
+This approach ensures your tools are well-defined, robust, and can be easily integrated into the broader Codomyrmex AI agent ecosystem.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

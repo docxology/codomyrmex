@@ -53,7 +53,7 @@ graph TD
     TarCompressor[TAR Compressor]
     GzipCompressor[Gzip Compressor]
     ArchiveManager[Archive Manager]
-    
+
     CompressionInterface --> ZipCompressor
     CompressionInterface --> TarCompressor
     CompressionInterface --> GzipCompressor

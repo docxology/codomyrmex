@@ -8,15 +8,8 @@
   "template": "ai_analysis",
   "config": {
     "analysis": {
-      "include_patterns": [
-        "*.py",
-        "*.js",
-        "*.ts"
-      ],
-      "exclude_patterns": [
-        "*/node_modules/*",
-        "*/__pycache__/*"
-      ],
+      "include_patterns": ["*.py", "*.js", "*.ts"],
+      "exclude_patterns": ["*/node_modules/*", "*/__pycache__/*"],
       "max_file_size": "1MB"
     },
     "ai": {
@@ -24,12 +17,7 @@
       "model": "gpt-4"
     },
     "output": {
-      "formats": [
-        "json",
-        "html",
-        "pdf",
-        "markdown"
-      ],
+      "formats": ["json", "html", "pdf", "markdown"],
       "include_visualizations": true
     },
     "logging": {
@@ -38,15 +26,8 @@
       "output": "both"
     }
   },
-  "workflows": [
-    "analysis",
-    "visualization",
-    "reporting",
-    "full-pipeline"
-  ],
-  "active_workflows": [
-    "analysis"
-  ],
+  "workflows": ["analysis", "visualization", "reporting", "full-pipeline"],
+  "active_workflows": ["analysis"],
   "required_modules": [
     "logging_monitoring",
     "config_management",
@@ -65,12 +46,7 @@
     "llm"
   ],
   "author": "Codomyrmex Team",
-  "tags": [
-    "reference",
-    "template",
-    "demonstration",
-    "ai-analysis"
-  ],
+  "tags": ["reference", "template", "demonstration", "ai-analysis"],
   "created_at": "2025-10-21T18:41:18.209323+00:00",
   "updated_at": "2026-02-12T14:18:00.000000+00:00",
   "milestones": {

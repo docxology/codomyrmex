@@ -2,7 +2,7 @@
 
 **Version**: v1.1.9 | **Status**: Active | **Last Updated**: March 2026
 
-**Module**: `codomyrmex.tool_use`  
+**Module**: `codomyrmex.tool_use`
 **Status**: Active
 
 ## 1. Overview

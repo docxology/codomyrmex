@@ -2,8 +2,8 @@
 
 # Language Detection — Functional Specification
 
-**Module**: `codomyrmex.language_detection`  
-**Version**: v1.3.0  
+**Module**: `codomyrmex.language_detection`
+**Version**: v1.3.0
 **Status**: Active
 
 ## 1. Overview
@@ -38,4 +38,3 @@ from codomyrmex.language_detection import detect_language, detect_languages_with
 ```bash
 uv run python -m pytest tests/ -k language_detection -v
 ```
-

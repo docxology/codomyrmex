@@ -23,7 +23,7 @@ sequenceDiagram
 
     U->>P: Natural language request
     H->>P: FormatReminder hook classifies depth
-    
+
     rect rgb(230, 245, 255)
         Note over A: Phase 1: OBSERVE
         P->>A: Reverse-engineer intent → ISC
@@ -86,18 +86,18 @@ flowchart TD
     START([Server Startup]) --> STATIC["Register 15 Static Core Tools<br/>(File I/O, Git, PAI, Testing)"]
     STATIC --> PROXY["Register 3 Universal Proxy Tools<br/>(list_module_functions, call_module_function, get_module_readme)"]
     PROXY --> PHASE1["Phase 1: Scan @mcp_tool Decorators"]
-    
+
     PHASE1 --> SCAN["Scan 13 target modules:<br/>visualization, llm, security,<br/>git_operations, static_analysis,<br/>coding.execution, documentation,<br/>data_visualization.*, terminal_interface"]
-    
+
     SCAN --> DECORATED["Collect decorated functions<br/>with schemas from decorators"]
     DECORATED --> PHASE2["Phase 2: Auto-Discover ALL<br/>Public Functions"]
-    
+
     PHASE2 --> INSPECT["For each codomyrmex.* module:<br/>1. importlib.import_module()<br/>2. inspect.getmembers(mod, isfunction)<br/>3. inspect.signature(func)<br/>4. Generate JSON Schema"]
-    
+
     INSPECT --> DEDUP["Deduplicate<br/>(decorated tools take priority)"]
     DEDUP --> REGISTER["Register in MCPToolRegistry"]
     REGISTER --> COUNT["Total: 100+ registered tools"]
-    
+
     COUNT --> RESOURCES["Register 2 Resources<br/>(codomyrmex://modules, codomyrmex://status)"]
     RESOURCES --> PROMPTS["Register 10 Prompt Templates<br/>(analyze, debug, test, workflows)"]
     PROMPTS --> READY([MCP Server Ready])
@@ -134,10 +134,10 @@ graph TD
     B -->|"Test pass/fail signals"| H
     C -->|"Change patterns"| H
     D -->|"System health snapshots"| I
-    
+
     E -->|"Enumerates stores"| Memory
     F -->|"Reads awareness data"| Memory
-    
+
     H -->|"Consolidation<br/>(periodic)"| I
     G -->|"Session end<br/>capture"| H
 ```
@@ -225,11 +225,11 @@ flowchart LR
         G --> H["Register prompts (10)"]
         H --> I["Log tool/resource/prompt counts"]
     end
-    
+
     I --> J{Transport?}
     J -->|stdio| K["server.run()<br/>(stdin/stdout)"]
     J -->|HTTP| L["server.run()<br/>(HTTP endpoint)"]
-    
+
     K --> M["PAI Agent connects<br/>via claude_desktop_config.json"]
     L --> M
 ```

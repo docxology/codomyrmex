@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """Fix Installation sections that got wrong content injected."""
+
 import os
 import re
 
-SRC = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(
-    os.path.abspath(__file__)))), "src", "codomyrmex")
+SRC = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    "src",
+    "codomyrmex",
+)
 
 fixed = 0
 for d in sorted(os.listdir(SRC)):
@@ -56,6 +60,3 @@ for d in sorted(os.listdir(SRC)):
         fixed += 1
 
 print(f"Fixed {fixed} Installation sections")
-
-
-

@@ -88,7 +88,7 @@ This security policy applies *only* to the `Data Visualization` module within th
 -   **Monitor Resource Usage**: If generating a large number of plots or plots from very large datasets, monitor the resource consumption of the application.
 -   **Least Privilege**: Run the application utilizing this module with the minimum necessary permissions, especially file system permissions related to `output_path`.
 
-Thank you for helping keep Codomyrmex and the Data Visualization module secure. 
+Thank you for helping keep Codomyrmex and the Data Visualization module secure.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

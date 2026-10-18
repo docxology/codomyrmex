@@ -150,5 +150,3 @@ capabilities:
     supported_models:
       - "gpt-4"
       - "claude-3-opus"
-
-

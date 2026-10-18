@@ -36,23 +36,23 @@ graph TD
         SS[SkillSync]
         SR[SkillRegistry]
     end
-    
+
     subgraph "External"
         VSR[vibeship-spawner-skills<br/>Git Repository]
     end
-    
+
     subgraph "Storage"
         US[Upstream Skills<br/>skills/upstream/]
         CS[Custom Skills<br/>skills/custom/]
         MC[Merged Cache<br/>skills/.cache/]
     end
-    
+
     subgraph "Integration"
         GO[git_operations]
         MCP[model_context_protocol]
         LM[logging_monitoring]
     end
-    
+
     VSR -->|Clone/Pull| SS
     SS --> US
     SM --> SL

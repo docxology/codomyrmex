@@ -29,7 +29,7 @@ Full-featured client for Anthropic Claude API with retry logic, session manageme
 ```python
 class ClaudeClient(APIAgentBase):
     """Client for interacting with Claude API."""
-    
+
     # Default configuration
     DEFAULT_MAX_RETRIES: int = 3
     DEFAULT_INITIAL_DELAY: float = 1.0
@@ -46,7 +46,7 @@ def __init__(
     session_manager: Optional[SessionManager] = None,
 ) -> None:
     """Initialize Claude client.
-    
+
     Args:
         config: Configuration override dictionary:
             - claude_api_key: API key (or ANTHROPIC_API_KEY env var)
@@ -57,7 +57,7 @@ def __init__(
             - max_retries: Maximum retry attempts (default: 3)
             - initial_retry_delay: Initial delay between retries
         session_manager: Optional session manager for multi-turn conversations
-    
+
     Raises:
         AgentConfigurationError: If API key not found
     """
@@ -70,20 +70,20 @@ def __init__(
 ```python
 def execute(self, request: AgentRequest) -> AgentResponse:
     """Execute Claude API request with automatic retry.
-    
+
     Args:
         request: AgentRequest with prompt and optional context
-    
+
     Returns:
         AgentResponse containing:
             - content: Response text
             - tokens_used: Total tokens
             - execution_time: Time in seconds
             - metadata: {usage, stop_reason, cost_usd, tool_calls}
-    
+
     Raises:
         ClaudeError: On API errors after retries exhausted
-    
+
     Example:
         >>> client = ClaudeClient()
         >>> response = client.execute(AgentRequest(prompt="Hello Claude"))
@@ -96,13 +96,13 @@ def execute(self, request: AgentRequest) -> AgentResponse:
 ```python
 def stream(self, request: AgentRequest) -> Iterator[str]:
     """Stream Claude API response.
-    
+
     Args:
         request: AgentRequest with prompt and context
-    
+
     Yields:
         Chunks of response content as strings
-    
+
     Example:
         >>> for chunk in client.stream(AgentRequest(prompt="Tell me a story")):
         ...     print(chunk, end="", flush=True)
@@ -122,13 +122,13 @@ def register_tool(
     handler: Optional[Callable] = None,
 ) -> None:
     """Register a tool for function calling.
-    
+
     Args:
         name: Unique tool name
         description: Description of tool functionality
         input_schema: JSON Schema for tool parameters
         handler: Optional callable to execute tool
-    
+
     Example:
         >>> client.register_tool(
         ...     name="get_weather",
@@ -152,15 +152,15 @@ def execute_with_tools(
     max_tool_rounds: int = 10,
 ) -> AgentResponse:
     """Execute request with automatic tool execution loop.
-    
+
     Args:
         request: AgentRequest
         auto_execute: Whether to automatically execute tool calls
         max_tool_rounds: Maximum tool execution iterations
-    
+
     Returns:
         AgentResponse with final content and tool_calls metadata
-    
+
     Raises:
         ClaudeError: If max_tool_rounds exceeded
     """
@@ -175,14 +175,14 @@ def execute_tool_call(
     tool_input: dict[str, Any],
 ) -> Any:
     """Execute a registered tool handler.
-    
+
     Args:
         tool_name: Name of registered tool
         tool_input: Input parameters for tool
-    
+
     Returns:
         Tool execution result
-    
+
     Raises:
         ClaudeError: If tool not found or execution fails
     """
@@ -198,10 +198,10 @@ def create_session(
     session_id: Optional[str] = None
 ) -> AgentSession:
     """Create a new conversation session.
-    
+
     Args:
         session_id: Optional specific session ID
-    
+
     Returns:
         New AgentSession instance
     """
@@ -217,15 +217,15 @@ def execute_with_session(
     session_id: Optional[str] = None,
 ) -> AgentResponse:
     """Execute request with session context.
-    
+
     Args:
         request: AgentRequest
         session: Existing session to use
         session_id: Session ID to retrieve from manager
-    
+
     Returns:
         AgentResponse with session context preserved
-    
+
     Example:
         >>> session = client.create_session()
         >>> r1 = client.execute_with_session(
@@ -251,12 +251,12 @@ def edit_file(
     language: Optional[str] = None,
 ) -> dict[str, Any]:
     """Apply AI-guided edits to a file.
-    
+
     Args:
         file_path: Absolute path to file
         instructions: Natural language edit instructions
         language: Programming language (auto-detected if None)
-    
+
     Returns:
         Dictionary with:
             - success: bool
@@ -264,7 +264,7 @@ def edit_file(
             - modified_content: str
             - diff: Unified diff string
             - explanation: Description of changes
-    
+
     Example:
         >>> result = client.edit_file(
         ...     "/path/to/file.py",
@@ -284,18 +284,18 @@ def create_file(
     language: str = "python",
 ) -> dict[str, Any]:
     """Generate a new file from description.
-    
+
     Args:
         file_path: Path where file should be created
         description: Description of file contents
         language: Programming language
-    
+
     Returns:
         Dictionary with:
             - success: bool
             - content: Generated file content
             - file_path: Actual file path
-    
+
     Example:
         >>> result = client.create_file(
         ...     "/path/to/utils.py",
@@ -314,12 +314,12 @@ def review_code(
     analysis_type: str = "general",
 ) -> dict[str, Any]:
     """Perform AI-powered code review.
-    
+
     Args:
         code: Code to review
         language: Programming language
         analysis_type: One of "general", "security", "bugs", "performance"
-    
+
     Returns:
         Dictionary with:
             - success: bool
@@ -340,13 +340,13 @@ def scan_directory(
     exclude_patterns: Optional[list[str]] = None,
 ) -> dict[str, Any]:
     """Scan directory for project context.
-    
+
     Args:
         path: Directory path to scan
         max_depth: Maximum directory depth
         include_patterns: Glob patterns to include
         exclude_patterns: Glob patterns to exclude
-    
+
     Returns:
         Dictionary with:
             - success: bool
@@ -366,12 +366,12 @@ def generate_diff(
     filename: str = "file",
 ) -> dict[str, Any]:
     """Generate unified diff between code versions.
-    
+
     Args:
         original: Original code content
         modified: Modified code content
         filename: Filename for diff header
-    
+
     Returns:
         Dictionary with:
             - diff: Unified diff string
@@ -391,13 +391,13 @@ def run_command(
     capture_output: bool = True,
 ) -> dict[str, Any]:
     """Execute a shell command.
-    
+
     Args:
         command: Shell command to execute
         cwd: Working directory for execution
         timeout: Maximum execution time in seconds
         capture_output: Whether to capture stdout/stderr
-    
+
     Returns:
         Dictionary with:
             - success: bool
@@ -405,7 +405,7 @@ def run_command(
             - stdout: Standard output
             - stderr: Standard error
             - duration: Execution time
-    
+
     Example:
         >>> result = client.run_command("ls -la")
         >>> print(result["stdout"])
@@ -422,12 +422,12 @@ def get_project_structure(
     include_analysis: bool = False,
 ) -> dict[str, Any]:
     """Get comprehensive project structure analysis.
-    
+
     Args:
         path: Root directory of the project
         max_depth: Maximum scan depth
         include_analysis: Include AI-powered analysis
-    
+
     Returns:
         Dictionary with:
             - success: bool
@@ -435,7 +435,7 @@ def get_project_structure(
             - file_count: Total files
             - language_breakdown: Files by language
             - analysis: AI analysis (if requested)
-    
+
     Example:
         >>> result = client.get_project_structure("/path/to/project")
         >>> print(result["language_breakdown"])
@@ -452,12 +452,12 @@ def explain_code(
     detail_level: str = "medium",
 ) -> dict[str, Any]:
     """Generate comprehensive code explanation.
-    
+
     Args:
         code: Code to explain
         language: Programming language
         detail_level: "brief", "medium", or "detailed"
-    
+
     Returns:
         Dictionary with:
             - success: bool
@@ -465,7 +465,7 @@ def explain_code(
             - summary: One-line summary
             - concepts: Key concepts mentioned
             - tokens_used: Tokens consumed
-    
+
     Example:
         >>> result = client.explain_code("def fib(n): ...")
         >>> print(result["summary"])
@@ -482,19 +482,19 @@ def suggest_tests(
     framework: Optional[str] = None,
 ) -> dict[str, Any]:
     """Generate test suggestions for code.
-    
+
     Args:
         code: Code to generate tests for
         language: Programming language
         framework: Testing framework (e.g., "pytest", "jest")
-    
+
     Returns:
         Dictionary with:
             - success: bool
             - tests: Generated test code
             - test_cases: List of test case descriptions
             - coverage_notes: Notes about test coverage
-    
+
     Example:
         >>> result = client.suggest_tests("def add(a, b): return a + b")
         >>> print(result["tests"])
@@ -519,7 +519,7 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
 ```python
 def __init__(self, agent: ClaudeClient) -> None:
     """Initialize adapter with Claude client.
-    
+
     Args:
         agent: ClaudeClient instance
     """
@@ -541,7 +541,7 @@ def adapt_for_ai_code_editing(
     **kwargs: Any
 ) -> str:
     """Generate code using Claude.
-    
+
     Args:
         prompt: Description of code to generate
         language: Target programming language
@@ -549,13 +549,13 @@ def adapt_for_ai_code_editing(
         context_code: Existing code for context
         max_tokens: Override max output tokens
         temperature: Override sampling temperature
-    
+
     Returns:
         Generated code as string
-    
+
     Raises:
         RuntimeError: If generation fails
-    
+
     Example:
         >>> adapter = ClaudeIntegrationAdapter(client)
         >>> code = adapter.adapt_for_ai_code_editing(
@@ -577,12 +577,12 @@ def adapt_for_llm(
     **kwargs: Any
 ) -> dict[str, Any]:
     """OpenAI-compatible interface for LLM module.
-    
+
     Args:
         messages: List of message dicts with "role" and "content"
         model: Model name (optional)
         system_prompt: System prompt
-    
+
     Returns:
         Completion result with:
             - content: Response text
@@ -603,12 +603,12 @@ def adapt_for_code_execution(
     **kwargs: Any
 ) -> dict[str, Any]:
     """Analyze code for code execution sandbox.
-    
+
     Args:
         code: Code to analyze
         language: Programming language
         analysis_type: "general", "security", "bugs", or "performance"
-    
+
     Returns:
         Analysis result with:
             - success: bool
@@ -629,12 +629,12 @@ def adapt_for_code_refactoring(
     **kwargs: Any
 ) -> dict[str, Any]:
     """Refactor code based on instructions.
-    
+
     Args:
         code: Code to refactor
         instruction: Refactoring instruction
         language: Programming language
-    
+
     Returns:
         Result with:
             - success: bool
@@ -689,7 +689,7 @@ class AgentResponse:
     tokens_used: Optional[int] = None        # Total tokens consumed
     execution_time: Optional[float] = None   # Execution time in seconds
     metadata: dict[str, Any] = field(default_factory=dict)
-    
+
     def is_success(self) -> bool:
         """Return True if no error."""
 ```

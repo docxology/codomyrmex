@@ -1,7 +1,7 @@
 # Personal AI Infrastructure - LLM Scripts Context
 
-**Module**: scripts/llm  
-**Status**: Active  
+**Module**: scripts/llm
+**Status**: Active
 **Last Updated**: February 2026
 
 ## Context

@@ -19,4 +19,3 @@ Files and subdirectories in this directory support the project's {{project_type}
 - **AGENTS.md**: Agent configuration for this directory
 - **Parent README**: [../README.md](../README.md) - Project overview
 - **Parent AGENTS**: [../AGENTS.md](../AGENTS.md) - Project agents
-

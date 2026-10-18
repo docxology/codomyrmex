@@ -103,12 +103,12 @@ graph TB
     Pipeline --> Analyzer
     Pipeline --> Visualizer
     Pipeline --> Reporter
-    
+
     Analyzer --> Data
     Visualizer --> Reports
     Reporter --> Reports
     Main --> Config
-    
+
     Main --> Foundation
     Analyzer --> Core
     Visualizer --> Core

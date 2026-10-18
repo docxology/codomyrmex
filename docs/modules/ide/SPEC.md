@@ -50,32 +50,32 @@ The IDE module provides programmatic integration and automation capabilities for
 graph TD
     subgraph sg_59c232f3c1 [IDE Module]
         IDEBase[ide_base.py<br/>Base Classes]
-        
+
         subgraph sg_090512d93f [Integrations]
             Antigravity[antigravity/<br/>Antigravity IDE]
             Cursor[cursor/<br/>Cursor IDE]
             VSCode[vs-code/<br/>VS Code]
         end
     end
-    
+
     subgraph sg_1d609d050e [Codomyrmex Core]
         Logging[logging_monitoring]
         Config[config_management]
         Agents[agents]
     end
-    
+
     IDEBase --> Antigravity
     IDEBase --> Cursor
     IDEBase --> VSCode
-    
+
     Antigravity --> Logging
     Cursor --> Logging
     VSCode --> Logging
-    
+
     Antigravity --> Config
     Cursor --> Config
     VSCode --> Config
-    
+
     Antigravity --> Agents
     Cursor --> Agents
     VSCode --> Agents
@@ -120,19 +120,19 @@ graph TD
 class IDEClient(ABC):
     @abstractmethod
     def connect(self) -> bool: ...
-    
+
     @abstractmethod
     def disconnect(self) -> None: ...
-    
+
     @abstractmethod
     def get_capabilities(self) -> dict: ...
-    
+
     @abstractmethod
     def execute_command(self, command: str, args: dict = None) -> Any: ...
-    
+
     @abstractmethod
     def get_active_file(self) -> Optional[str]: ...
-    
+
     @abstractmethod
     def open_file(self, path: str) -> bool: ...
 ```

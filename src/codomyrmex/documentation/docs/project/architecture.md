@@ -18,9 +18,9 @@ This document provides a high-level overview of the Codomyrmex project architect
 ```mermaid
 graph TD
     A[User/Developer Interface (e.g., IDE Plugin, CLI)] --> B{Codomyrmex Core Orchestrator (Conceptual)}
-    
+
     B --> MCP[Model Context Protocol Layer]
-    
+
     MCP --> M1[AI Code Editing Module]
     MCP --> M2[Build Synthesis Module]
     MCP --> M3[Code Execution Sandbox Module]
@@ -118,7 +118,7 @@ While not a single, monolithic component, the concept of a "Core Orchestrator" r
 
 For more in-depth information on specific modules, refer to their respective documentation sections available in the sidebar.
 
-This high-level overview will be expanded as the project evolves. 
+This high-level overview will be expanded as the project evolves.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

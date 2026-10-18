@@ -2,7 +2,7 @@
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-**Module**: `codomyrmex.api.mocking`  
+**Module**: `codomyrmex.api.mocking`
 **Status**: Active
 
 ## Context

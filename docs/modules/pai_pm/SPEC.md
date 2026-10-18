@@ -1,7 +1,7 @@
 # Pai Pm — Functional Specification
 
-**Module**: `codomyrmex.pai_pm`  
-**Version**: v1.0.0  
+**Module**: `codomyrmex.pai_pm`
+**Version**: v1.0.0
 **Status**: Active
 
 ## 1. Overview

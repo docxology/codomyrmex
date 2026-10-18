@@ -34,11 +34,11 @@ graph TD
     Orchestration[Orchestration Submodule]
     Task[Task Submodule]
     Schedule[Schedule Submodule]
-    
+
     Logistics --> Orchestration
     Logistics --> Task
     Logistics --> Schedule
-    
+
     Orchestration --> Project[Project Orchestration]
     Task --> Queue[Queue Management]
     Schedule --> Cron[Cron Scheduling]

@@ -30,7 +30,7 @@ sequenceDiagram
     participant Router as ProviderRouter
     participant Remote as OpenRouter(API)
     participant Local as Ollama(Local)
-    
+
     App->>Router: Execute Prompt
     Router->>Remote: Attempt Network Call
     alt Remote Fails or Timeout
@@ -117,7 +117,7 @@ Codomyrmex binds Hermes into the broader swarm ecosystem by actively exposing ov
 ```mermaid
 graph LR
     SwarmProxy[Jules / Claude] --> |Action Request| MCP[Codomyrmex MCP Server]
-    
+
     subgraph codomyrmexTools [Codomyrmex Tools]
         MCP --> SessionMgmt(Session: fork, export, stats, prune, archive)
         MCP --> Chat(hermes_chat_session / hermes_batch_execute)
@@ -128,7 +128,7 @@ graph LR
         MCP --> SwarmTools("hermes_spawn_agent<br/>orchestrator_run_dag<br/>events_send_to_agent<br/>events_agent_inbox")
         MCP --> SkillPreload("Skill preload<br/>hermes_skills_list<br/>hermes_skills_resolve<br/>hermes_skills_validate_registry")
     end
-    
+
     SessionMgmt -.-> DB[(state.db)]
     Chat --> |Direct Exec| HermesCli[Hermes Executable]
     SkillPreload --> |"-s preload + validate"| HermesCli

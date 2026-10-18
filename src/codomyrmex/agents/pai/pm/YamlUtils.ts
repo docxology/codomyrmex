@@ -1,6 +1,6 @@
 /**
  * YamlUtils.ts - Shared YAML Utilities for PAI System
- * 
+ *
  * Provides centralized YAML parsing and writing logic standardized across
  * all PAI CLI tools (Layer 1) and server components (Layer 2).
  */

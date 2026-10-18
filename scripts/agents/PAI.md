@@ -1,7 +1,7 @@
 # Personal AI Infrastructure - Agent Scripts Context
 
-**Module**: scripts/agents  
-**Version**: v0.2.0  
+**Module**: scripts/agents
+**Version**: v0.2.0
 **Status**: Active
 
 ## Context
