@@ -22,15 +22,33 @@ if TYPE_CHECKING:
 logger = get_logger(__name__)
 
 
-def _make_generation_kwargs(cfg: MLXConfig) -> dict[str, Any]:
+def _make_generation_kwargs(cfg: MLXConfig, model: Any | None = None) -> dict[str, Any]:
     """Build kwargs dict for mlx_lm.generate / stream_generate.
 
     mlx_lm v0.31+ uses ``sampler`` and ``logits_processors`` callables
     instead of raw ``temp``/``top_p``/``repetition_penalty`` kwargs.
     """
     kwargs: dict[str, Any] = {
+        **cfg.get_cache_kwargs(),
         "max_tokens": cfg.max_tokens,
     }
+
+    if model is not None and (cfg.max_kv_size is not None or cfg.kv_bits is not None):
+        from mlx_lm.models.cache import KVCache, RotatingKVCache, make_prompt_cache
+
+        prompt_cache = make_prompt_cache(model)
+        if not prompt_cache or any(
+            type(cache) is not KVCache for cache in prompt_cache
+        ):
+            raise ValueError(
+                "max_kv_size and kv_bits controls require standard full-attention "
+                "KVCache layers; model-specific cache layouts are unsupported"
+            )
+        if cfg.max_kv_size is not None:
+            prompt_cache = [
+                RotatingKVCache(max_size=cfg.max_kv_size, keep=4) for _ in prompt_cache
+            ]
+        kwargs["prompt_cache"] = prompt_cache
 
     if os.environ.get("RUN_LIVE_MLX") != "1":
         kwargs["temp"] = cfg.temperature
@@ -66,6 +84,8 @@ class MLXStreamChunk:
     content: str
     done: bool = False
     token_count: int | None = None
+    success: bool = True
+    error_message: str | None = None
 
 
 @dataclass
@@ -206,8 +226,10 @@ class MLXRunner:
         """
         cfg = config or self._config
         try:
+            cfg.get_cache_kwargs()
             self.load_model(cfg.model)
-        except (ImportError, OSError, RuntimeError) as exc:
+        except (ImportError, OSError, RuntimeError, ValueError) as exc:
+            logger.error("MLX generation setup failed: %s", exc)
             return MLXGenerationResult(
                 model=cfg.model,
                 prompt=prompt,
@@ -237,9 +259,8 @@ class MLXRunner:
         )
         t0 = time.perf_counter()
 
-        gen_kwargs = _make_generation_kwargs(cfg)
-
         try:
+            gen_kwargs = _make_generation_kwargs(cfg, self._model)
             response_text = mlx_generate(
                 model=self._model,
                 tokenizer=self._tokenizer,
@@ -301,23 +322,34 @@ class MLXRunner:
         """
         cfg = config or self._config
         try:
+            cfg.get_cache_kwargs()
             self.load_model(cfg.model)
-        except (ImportError, OSError, RuntimeError) as exc:
-            yield MLXStreamChunk(content=f"Error: {exc}", done=True)
+        except (ImportError, OSError, RuntimeError, ValueError) as exc:
+            logger.error("MLX streaming setup failed: %s", exc)
+            yield MLXStreamChunk(
+                content=f"Error: {exc}",
+                done=True,
+                token_count=0,
+                success=False,
+                error_message=str(exc),
+            )
             return
 
         try:
             from mlx_lm import stream_generate as mlx_stream
         except ImportError as exc:
             yield MLXStreamChunk(
-                content=f"Error: mlx-lm not installed: {exc}", done=True
+                content=f"Error: mlx-lm not installed: {exc}",
+                done=True,
+                token_count=0,
+                success=False,
+                error_message=str(exc),
             )
             return
 
-        gen_kwargs = _make_generation_kwargs(cfg)
-
         token_count = 0
         try:
+            gen_kwargs = _make_generation_kwargs(cfg, self._model)
             for response in mlx_stream(
                 model=self._model,
                 tokenizer=self._tokenizer,
@@ -333,7 +365,11 @@ class MLXRunner:
         except Exception as exc:
             logger.error("Streaming generation failed: %s", exc)
             yield MLXStreamChunk(
-                content=f"Error: {exc}", done=True, token_count=token_count
+                content=f"Error: {exc}",
+                done=True,
+                token_count=token_count,
+                success=False,
+                error_message=str(exc),
             )
 
     # ------------------------------------------------------------------
@@ -355,7 +391,19 @@ class MLXRunner:
             :class:`MLXGenerationResult`.
         """
         cfg = config or self._config
-        self.load_model(cfg.model)
+        try:
+            cfg.get_cache_kwargs()
+            self.load_model(cfg.model)
+        except (ImportError, OSError, RuntimeError, ValueError) as exc:
+            logger.error("MLX chat setup failed: %s", exc)
+            return MLXGenerationResult(
+                model=cfg.model,
+                prompt=str(messages),
+                response="",
+                execution_time=0.0,
+                success=False,
+                error_message=str(exc),
+            )
 
         if self._tokenizer is None:
             return MLXGenerationResult(

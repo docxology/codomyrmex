@@ -74,6 +74,28 @@ config = LLMConfig(
 )
 ```
 
+## Portable MLX Configuration Profiling
+
+Agents can import `profile_cache_configuration` from
+`codomyrmex.llm.mlx.profiling` and rendering/writing helpers from
+`codomyrmex.llm.mlx.profile_report`. These are direct Python APIs, not new MCP
+tools, and do not import native `mlx`/`mlx_lm`. Keep measurement passes separate;
+active caller profiling, tracing, or monitoring must cause rejection, not silent
+instrumentation removal. Under coverage, run collection in an uninstrumented
+subprocess. The Python 3.15 PEP 723 CLI and Make/just wrappers are documented in
+[scripts/llm](../../../scripts/llm/README.md#portable-mlx-configuration-profile).
+
+Each non-overwriting bundle records raw timing samples, median/MAD, separate
+Python allocation and CPU-profile evidence, effective settings, environment,
+revision/dirty state, and source hashes. Its final manifest hashes the JSON,
+SVG, HTML, and companion Markdown files. Keep those artifacts together and review
+identifying metadata before sharing; see [security guidance](SECURITY.md#portable-mlx-profiling-artifacts).
+Follow the [study protocol](../../../docs/modules/llm/mlx-profiling-study.md) for
+four-scenario methodology and background-only StreamingLLM/KIVI references. Do
+not infer native Python 3.15 support, KIVI implementation, inference throughput,
+Metal-memory savings, or recall from Python configuration evidence. Results are
+not published here, and central manuscript/tokenized artifacts remain separate.
+
 ## PAI Architecture
 
 ```mermaid
@@ -184,8 +206,8 @@ export OLLAMA_HOST="http://localhost:11434"
 export OLLAMA_MODELS_DIR="~/.ollama/models"
 
 # Cloud Fallback (optional)
-export OPENAI_API_KEY="sk-..."
-export ANTHROPIC_API_KEY="sk-..."
+export OPENAI_API_KEY
+export ANTHROPIC_API_KEY
 
 # LLM Settings
 export CODOMYRMEX_LLM_PROVIDER="ollama"
@@ -218,7 +240,7 @@ providers:
 ## PAI Algorithm Phase Mapping
 
 | Phase | Activity | Key Functions/Tools |
-|-------|----------|-------------------|
+| --- | --- | --- |
 | **OBSERVE** | Discover available models and provider status; inspect context window usage | `OllamaManager.list_models()`, `list_local_models`, `ContextManager.usage()` |
 | **THINK** | Chain-of-thought decomposition; multi-step deliberative reasoning over prompts | `chain_of_thought.think()`, `chain_of_thought.reason()`, `chain_of_thought.conclude()` |
 | **PLAN** | Select provider and model; configure token budgets and routing strategy | `LLMConfig.from_environment()`, `LLMConfigPresets`, `router` module |
@@ -230,7 +252,7 @@ providers:
 ## MCP Tools Available
 
 | Tool | Description | Trust Level |
-|------|-------------|-------------|
+| --- | --- | --- |
 | `generate_text` | Generate text using a specified LLM provider and model | SAFE |
 | `list_local_models` | List available local models managed by Ollama | SAFE |
 | `query_fabric_metadata` | Query configuration metadata for Fabric integration | SAFE |
@@ -242,7 +264,7 @@ All LLM module MCP tools are read-only or generative and classified as SAFE. No 
 ## Agent Capabilities
 
 | Agent Type | Primary Use | Key Submodules |
-|-----------|-------------|---------------|
+| --- | --- | --- |
 | **Engineer** | Code generation via LLM, embedding-based search, RAG-augmented coding | `providers`, `rag`, `embeddings`, `streaming` |
 | **Architect** | Chain-of-thought reasoning for design decisions, model selection strategy | `chain_of_thought`, `config`, `router` |
 | **QATester** | Guardrail validation of LLM outputs, cost and quality auditing | `guardrails`, `cost_tracking` |

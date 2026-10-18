@@ -36,15 +36,15 @@ def _env_int(key: str, default: int) -> int:
         return default
 
 
-def _env_optional_int(key: str) -> int | None:
-    """Get environment variable as optional int (None if unset)."""
+def _env_optional_int(key: str, default: int | None = None) -> int | None:
+    """Read an integer cache control, rejecting malformed values."""
     val = os.getenv(key)
     if val is None:
-        return None
+        return default
     try:
         return int(val)
-    except (ValueError, TypeError):
-        return None
+    except (ValueError, TypeError) as exc:
+        raise ValueError(f"{key} must be an integer, got {val!r}") from exc
 
 
 # ---------------------------------------------------------------------------
@@ -68,6 +68,10 @@ class MLXConfig:
         MLX_TOP_P              Top-p / nucleus sampling (default: 0.9)
         MLX_REPETITION_PENALTY Repetition penalty ≥1.0 (default: 1.1)
         MLX_MAX_KV_SIZE        Rotating KV-cache cap (default: None / unlimited)
+        MLX_PREFILL_STEP_SIZE  Prefill chunk size (default: automatic)
+        MLX_KV_BITS            KV-cache quantization bits (default: None)
+        MLX_KV_GROUP_SIZE      KV quantization group size (default: 64)
+        MLX_QUANTIZED_KV_START Token offset to start KV quantization (default: 0)
         MLX_CACHE_DIR          Local cache for downloaded models
         MLX_SEED               Random seed for reproducibility (default: None)
 
@@ -88,6 +92,10 @@ class MLXConfig:
     max_kv_size: int | None = None
     cache_dir: str = ""
     seed: int | None = None
+    prefill_step_size: int | None = None
+    kv_bits: int | None = None
+    kv_group_size: int | None = None
+    quantized_kv_start: int | None = None
 
     def __post_init__(self) -> None:
         """Apply environment-variable defaults for any field left at its
@@ -110,6 +118,14 @@ class MLXConfig:
             self.max_kv_size = _env_optional_int("MLX_MAX_KV_SIZE")
         if not self.cache_dir:
             self.cache_dir = _env_str("MLX_CACHE_DIR", DEFAULT_MLX_CACHE_DIR)
+        if self.prefill_step_size is None:
+            self.prefill_step_size = _env_optional_int("MLX_PREFILL_STEP_SIZE")
+        if self.kv_bits is None:
+            self.kv_bits = _env_optional_int("MLX_KV_BITS")
+        if self.kv_group_size is None:
+            self.kv_group_size = _env_optional_int("MLX_KV_GROUP_SIZE", 64)
+        if self.quantized_kv_start is None:
+            self.quantized_kv_start = _env_optional_int("MLX_QUANTIZED_KV_START", 0)
 
     # ------------------------------------------------------------------
     # Serialisation helpers
@@ -126,11 +142,46 @@ class MLXConfig:
             "max_kv_size": self.max_kv_size,
             "cache_dir": self.cache_dir,
             "seed": self.seed,
+            "prefill_step_size": self.prefill_step_size,
+            "kv_bits": self.kv_bits,
+            "kv_group_size": self.kv_group_size,
+            "quantized_kv_start": self.quantized_kv_start,
         }
+
+    def get_cache_kwargs(self) -> dict[str, Any]:
+        """Validate and resolve cache controls for upstream generation.
+
+        Bounded caches use one-token prefill until the upstream attention-sink
+        masking fix is verified. Quantized caches default to smaller chunks to
+        limit temporary attention allocations, not to guarantee peak memory.
+        """
+        validation = self.validate()
+        if not validation["valid"]:
+            raise ValueError(
+                "Invalid MLX configuration: " + "; ".join(validation["errors"])
+            )
+        step = self.prefill_step_size
+        if step is None:
+            step = (
+                1
+                if self.max_kv_size is not None
+                else (512 if self.kv_bits is not None else 2048)
+            )
+        kwargs: dict[str, Any] = {"prefill_step_size": step}
+        if self.max_kv_size is not None:
+            kwargs["max_kv_size"] = self.max_kv_size
+        if self.kv_bits is not None:
+            kwargs.update(
+                kv_bits=self.kv_bits,
+                kv_group_size=self.kv_group_size,
+                quantized_kv_start=self.quantized_kv_start,
+            )
+        return kwargs
 
     def get_generation_kwargs(self) -> dict[str, Any]:
         """Return the subset of parameters used by ``mlx_lm.generate``."""
         kwargs: dict[str, Any] = {
+            **self.get_cache_kwargs(),
             "max_tokens": self.max_tokens,
             "temp": self.temperature,
             "top_p": self.top_p,
@@ -163,8 +214,34 @@ class MLXConfig:
             errors.append(
                 f"repetition_penalty {self.repetition_penalty} must be >= 1.0"
             )
-        if self.max_kv_size is not None and self.max_kv_size < 1:
-            errors.append(f"max_kv_size {self.max_kv_size} must be >= 1 or None")
+        if self.max_kv_size is not None and (
+            type(self.max_kv_size) is not int or self.max_kv_size <= 4
+        ):
+            errors.append("max_kv_size must be an integer > 4 (pinned sinks) or None")
+        if self.prefill_step_size is not None and (
+            type(self.prefill_step_size) is not int or self.prefill_step_size < 1
+        ):
+            errors.append("prefill_step_size must be a positive integer or None")
+        if self.kv_bits is not None and (
+            type(self.kv_bits) is not int or self.kv_bits not in (2, 3, 4, 5, 6, 8)
+        ):
+            errors.append("kv_bits must be one of 2, 3, 4, 5, 6, 8 or None")
+        if type(self.kv_group_size) is not int or self.kv_group_size not in (
+            32,
+            64,
+            128,
+        ):
+            errors.append("kv_group_size must be one of 32, 64, 128")
+        if type(self.quantized_kv_start) is not int or self.quantized_kv_start < 0:
+            errors.append("quantized_kv_start must be a nonnegative integer")
+        if self.max_kv_size is not None and self.kv_bits is not None:
+            errors.append(
+                "max_kv_size cannot be combined with kv_bits: rotating-cache quantization is unsupported"
+            )
+        if self.max_kv_size is not None and self.prefill_step_size not in (None, 1):
+            errors.append(
+                "max_kv_size requires prefill_step_size=1 until the upstream sink-mask fix is verified (mlx-lm PR #1978)"
+            )
         return {"valid": len(errors) == 0, "errors": errors}
 
 
