@@ -1,7 +1,7 @@
 # LLM Scripts Specification
 
-**Module**: scripts/llm  
-**Version**: v1.1.9  
+**Module**: scripts/llm
+**Version**: v1.1.9
 **Status**: Active
 
 ## 1. Functional Requirements
@@ -16,10 +16,29 @@ The `scripts/llm` module must:
 
 ## 2. Provider Specifications
 
+### Portable MLX Configuration Profiling CLI
+
+`mlx_profile.py` requires `--output-dir` and accepts `--iterations` (default 2000)
+and `--repeats` (default 7). Invoke with
+`uv run --python 3.15 --script scripts/llm/mlx_profile.py --output-dir <new-path>`.
+PEP 723 dependencies exclude native MLX; configuration profiling does not prove
+native Python 3.15 compatibility. Git revision/dirty status is captured before
+collection. Expected operational/input errors exit with code 2; successful output
+is a JSON mapping of artifact names to paths.
+
+The shared collector runs four scenarios with separate uninstrumented timing,
+cProfile, and tracemalloc passes. The shared writer creates JSON, SVG, HTML,
+companion Markdown, and a final hash manifest without named-artifact overwrite.
+No native inference, model download, or Metal measurements are performed. Retain
+raw samples and provenance. Local exploratory collection is verified, without
+publishing performance numbers; independent reruns and production-model studies
+remain open.
+See the [study protocol](../../docs/modules/llm/mlx-profiling-study.md).
+
 ### OpenRouter Provider
 
 | Property | Value |
-|----------|-------|
+| --- | --- |
 | Base URL | `https://openrouter.ai/api/v1` |
 | Auth | `OPENROUTER_API_KEY` environment variable |
 | Default Model | `openrouter/free` (auto-selects best free model) |
@@ -27,7 +46,7 @@ The `scripts/llm` module must:
 
 **Required Headers:**
 
-```
+```text
 HTTP-Referer: https://github.com/codomyrmex
 X-Title: Codomyrmex
 Authorization: Bearer <api_key>
@@ -43,7 +62,7 @@ Authorization: Bearer <api_key>
 ### Ollama Provider
 
 | Property | Value |
-|----------|-------|
+| --- | --- |
 | Base URL | `http://localhost:11434` (configurable) |
 | Auth | None (local) |
 | Protocol | Ollama native REST API |
@@ -137,7 +156,7 @@ CompletionResponse(
 ## 6. Error Handling
 
 | Error | Action |
-|-------|--------|
+| --- | --- |
 | Missing API key | Exit with clear message and setup instructions |
 | Network timeout | Retry with exponential backoff |
 | Rate limited | Wait and retry |

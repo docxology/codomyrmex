@@ -10,6 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### MLX KV-cache safety and prefill controls (2026-10-17)
 
+- Add portable Python 3.15 PEP 723 configuration profiling for four requested
+  cache settings, with separate timing/cProfile/tracemalloc passes and source
+  provenance. Offline JSON/SVG/HTML/companion Markdown bundles include a final
+  SHA-256 manifest and refuse named-artifact overwrite. These are config-only
+  tools, not native MLX inference or Metal metrics. Local exploratory collection
+  and bundle integrity are verified; numerical performance results are not
+  published here. Independent reruns and production benchmarking remain open.
+- Document methodology and versioned StreamingLLM/KIVI background in the
+  [study protocol](docs/modules/llm/mlx-profiling-study.md); MLX is not claimed
+  to implement KIVI. Add portable collector/report/CLI regression coverage.
+
 - Forward the previously ignored `max_kv_size` through synchronous and streaming
   inference and enforce caps on standard model-owned KV caches.
 - Add environment-aware prefill sizing and KV quantization controls. Quantized

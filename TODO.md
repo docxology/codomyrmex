@@ -22,6 +22,14 @@ This file tracks open research items, formal gaps, and architectural improvement
 
 ## Maintenance
 
+- **Portable MLX configuration study:** Independently rerun the Python 3.15
+  config-only [protocol](docs/modules/llm/mlx-profiling-study.md) in a declared
+  environment. Local exploratory collection and bundle integrity are verified;
+  retain raw samples, source snapshot/hashes, dependency versions, revision/dirty
+  state, and a verified bundle manifest before interpreting timing differences.
+  Numerical results remain unpublished here. Independent replication, production
+  inference, and Metal-memory/recall studies remain open work.
+
 - **MLX upstream follow-up:** Verify ml-explore/mlx-lm PR #1978 after release,
   compare bounded chunked-prefill logits/recall against token-by-token prefill,
   and only then relax the temporary one-token bounded-cache policy. Reproduce

@@ -1,7 +1,7 @@
 # Codomyrmex Development Makefile
 # Common development tasks and workflows
 
-.PHONY: help dev install setup submodules test lint lint-imports format format-check type-check security audit-lock clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast verify-release dev-server docs-check manuscript-check manuscript-pdf-check docs-generate serve-docs
+.PHONY: help dev install setup submodules test lint lint-imports format format-check type-check security audit-lock clean docs serve build deploy benchmark benchmark-mcp mlx-profile test-obsidian test-fast verify-release dev-server docs-check manuscript-check manuscript-pdf-check docs-generate serve-docs
 
 # Hypothesis loads its pytest plugin (and may bind NumPy RNG) before any conftest runs.
 # Export for all subprocesses so `uv run pytest` sees it even when not using a shell wrapper.
@@ -32,6 +32,7 @@ help:
 	@echo "  audit-lock   - Audit all locked groups and extras"
 	@echo "  docs         - Generate and check documentation"
 	@echo "  manuscript-check - Validate manuscript source, figures, claims, and provenance"
+	@echo "  mlx-profile  - Python 3.15 configuration profile (requires MLX_PROFILE_OUTPUT)"
 	@echo "  manuscript-pdf-check - Require current rendered HTML and PDF/UA-2 evidence"
 	@echo "  serve-docs   - Serve documentation locally"
 	@echo "  dev-server   - Start development server placeholder"
@@ -142,6 +143,10 @@ benchmark-mcp:
 
 benchmark: benchmark-mcp
 	@echo "All benchmarks completed."
+
+mlx-profile:
+	@test -n "$(MLX_PROFILE_OUTPUT)" || (echo "Set MLX_PROFILE_OUTPUT to a new artifact directory" >&2; exit 2)
+	uv run --python 3.15 --script scripts/llm/mlx_profile.py --output-dir "$(MLX_PROFILE_OUTPUT)"
 
 # Documentation
 docs: docs-check

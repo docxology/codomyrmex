@@ -7,6 +7,8 @@
 Documentation tooling, generated references, and publishing assets for Llm.
 
 ## Directory Contents
+
+- [mlx-profiling-study.md](mlx-profiling-study.md) – Configuration-only Python 3.15 protocol; local exploratory baseline verified, independent reruns open
 - `API_SPECIFICATION.md` – File
 - `MCP_TOOL_SPECIFICATION.md` – File
 - `PAI.md` – File
@@ -15,6 +17,7 @@ Documentation tooling, generated references, and publishing assets for Llm.
 - `SPEC.md` – File
 
 ## Navigation
+
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: ../../../README.md
 

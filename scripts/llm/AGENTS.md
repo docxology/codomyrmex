@@ -3,9 +3,12 @@
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 ## Purpose
+
 Automation and utility scripts.
 
 ## Active Components
+
+- `mlx_profile.py` – Python 3.15 PEP 723 configuration profiling and offline bundle CLI
 - `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
@@ -21,11 +24,20 @@ Automation and utility scripts.
 - `test_ollama.py` – Project file
 
 ## Operating Contracts
+
+- Profile only portable configuration setup; never infer native MLX support,
+  inference speed, or Metal-memory savings from these artifacts.
+- Keep CLI orchestration thin and measurements/rendering in the MLX source APIs.
+  Use fresh output paths and preserve partial bundles; the manifest is written last.
+- The script's inline dependencies intentionally exclude native MLX to avoid
+  the `cp315` packaging constraint. See the
+  [study protocol](../../docs/modules/llm/mlx-profiling-study.md).
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Key Files
+
 - `AGENTS.md` - Agent coordination and navigation
 - `README.md` - Directory overview
 - `PAI.md`
@@ -36,13 +48,16 @@ Automation and utility scripts.
 - `test_ollama.py`
 
 ## Dependencies
+
 - Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
 ## Development Guidelines
+
 - Follow the universal agent protocols defined in the root `AGENTS.md`.
 - Adhere to the Python PEP 8 style guide and project-specific linting rules.
 - Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
+
 - **📁 Parent Directory**: [scripts](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../README.md - Main project documentation

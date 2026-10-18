@@ -17,7 +17,7 @@ print(result.response)
 ## Features
 
 | Feature | Description |
-|:--|:--|
+| :-- | :-- |
 | **Zero-copy inference** | Leverages Apple Silicon unified memory — no CPU↔GPU transfer |
 | **Lazy model loading** | Model is loaded on first call and kept resident |
 | **Streaming** | Token-by-token streaming via `stream_generate()` |
@@ -28,13 +28,15 @@ print(result.response)
 
 ## Architecture
 
-```
+```text
 mlx/
 ├── __init__.py          # Public API exports
 ├── config.py            # MLXConfig, presets, model recommendations
 ├── model_manager.py     # Download / list / inspect / delete
 ├── runner.py            # generate / stream_generate / chat
 ├── quantization.py      # Presets, size estimation, conversion
+├── profiling.py         # Portable configuration-only collector
+├── profile_report.py    # Offline evidence bundle rendering
 ├── README.md            # This file
 ├── AGENTS.md            # Agent coordination
 └── SPEC.md              # Functional specification
@@ -45,7 +47,7 @@ mlx/
 All parameters support environment variable overrides:
 
 | Parameter | Env Variable | Default |
-|:--|:--|:--|
+| :-- | :-- | :-- |
 | `model` | `MLX_MODEL` | `mlx-community/Llama-3.2-3B-Instruct-4bit` |
 | `temperature` | `MLX_TEMPERATURE` | `0.7` |
 | `max_tokens` | `MLX_MAX_TOKENS` | `1000` |
@@ -123,10 +125,31 @@ mixing mlx-lm 0.31.3 with mlx 0.31.1 fails upstream during import because
 `new_thread_local_stream` is unavailable. These are compatibility checks,
 not the 8k–30k production-model memory or recall benchmarks.
 
+## Portable Configuration Profiling
+
+Profile configuration setup without installing or importing native MLX:
+
+```bash
+uv run --python 3.15 --script scripts/llm/mlx_profile.py \
+    --output-dir output/mlx-profile-study --iterations 2000 --repeats 7
+```
+
+Run from the repository root. PEP 723 script dependencies avoid the native MLX
+`cp315` packaging constraint; this does not demonstrate native Python 3.15 support.
+Unset `MLX_MAX_KV_SIZE`, `MLX_KV_BITS`, and `MLX_PREFILL_STEP_SIZE` first.
+The four scenarios cover unbounded, bounded-4096, 4-bit, and 8-bit requested cache
+settings. Timing, cProfile, and tracemalloc use separate passes: only Python
+configuration construction, serialization, validation, and kwargs are measured.
+No model inference or Metal metrics are collected, and no numerical results are
+published here. A new, non-overwriting bundle contains JSON, SVG, HTML, a companion
+Markdown manuscript, and a SHA-256 manifest. See the
+[study protocol](../../../../docs/modules/llm/mlx-profiling-study.md) for methodology,
+provenance, scholarly background, and interpretation limits.
+
 ## Recommended Models (16 GB Mac Mini M4)
 
 | Model | Size | RAM | Notes |
-|:--|:--|:--|:--|
+| :-- | :-- | :-- | :-- |
 | Llama 3.2 3B 4-bit | ~2 GB | 8 GB+ | Default — best quality-to-size |
 | Qwen 2.5 3B 4-bit | ~2 GB | 8 GB+ | Multilingual + coding |
 | Mistral 7B 4-bit | ~4.5 GB | 16 GB | Step-up quality |

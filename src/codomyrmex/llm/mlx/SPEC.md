@@ -18,6 +18,7 @@ The MLX module provides native Apple Silicon LLM inference within the Codomyrmex
 - RAM-aware model recommendations for 8–64 GB machines
 - Environment-variable-based configuration
 - Validated KV-cache limits, quantization controls, and prefill chunk sizing
+- Portable Python configuration profiling and offline evidence bundles
 
 ### Out of Scope
 
@@ -30,7 +31,7 @@ The MLX module provides native Apple Silicon LLM inference within the Codomyrmex
 ## Key Classes
 
 | Class | File | Responsibility |
-|:--|:--|:--|
+| :-- | :-- | :-- |
 | `MLXConfig` | `config.py` | Configuration with env-var overrides |
 | `MLXConfigPresets` | `config.py` | Pre-built configs (creative, precise, fast, coding) |
 | `MLXModelManager` | `model_manager.py` | Model lifecycle management |
@@ -40,7 +41,7 @@ The MLX module provides native Apple Silicon LLM inference within the Codomyrmex
 ## Key Dataclasses
 
 | Dataclass | File | Purpose |
-|:--|:--|:--|
+| :-- | :-- | :-- |
 | `MLXGenerationResult` | `runner.py` | Complete generation result with timing |
 | `MLXStreamChunk` | `runner.py` | Single streaming token/fragment |
 | `MLXModelInfo` | `model_manager.py` | Cached model metadata |
@@ -114,6 +115,23 @@ manager.delete_model("mlx-community/Llama-3.2-3B-Instruct-4bit")
   chunks with `success=False` and `error_message`, without downloading a model.
 - Benchmark results from external hardware are motivation, not measured local
   performance guarantees. See [README.md](README.md#long-prompts-and-kv-cache-safety).
+
+## Portable Configuration Profile Contract
+
+`profiling.profile_cache_configuration()` measures construction, serialization,
+validation, and generation-kwargs resolution for four requested configurations:
+unbounded, bounded-4096, 4-bit, and 8-bit. Rotating-order uninstrumented batch
+timing is separate from cProfile and tracemalloc passes. Median and MAD describe
+timing samples; traced allocations describe a Python batch, not Metal memory.
+Imports and native inference are outside the workload.
+
+`profile_report.write_profile_bundle()` writes `profile.json`, `timings.svg`,
+`report.html`, `manuscript.md`, and a final `manifest.json` with artifact hashes.
+It refuses named-artifact overwrite and symlinks; exclusive writes are not a
+transactional bundle commit. Missing manifests indicate incomplete output.
+Source hashes, revision/dirty status, environment, and raw samples support review,
+not a claim of independent replication. See the
+[study protocol](../../../../docs/modules/llm/mlx-profiling-study.md).
 
 ## Security
 

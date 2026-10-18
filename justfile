@@ -83,6 +83,10 @@ clean:
 rebuild: clean build
 
 # ─── Documentation ───────────────────────────────────────────────
+# Profile Python configuration setup, not native inference; refuses overwrites
+mlx-profile output_dir:
+    uv run --python 3.15 --script scripts/llm/mlx_profile.py --output-dir {{quote(output_dir)}}
+
 # Serve docs locally
 docs-serve:
     NO_MKDOCS_2_WARNING=1 uv run --locked --group docs mkdocs serve

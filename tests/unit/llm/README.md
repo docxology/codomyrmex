@@ -6,12 +6,34 @@
 
 Validation coverage, fixtures, and regression checks for Llm.
 
+## Portable MLX Profiling Regressions
+
+`test_mlx_profiling.py` exercises the real configuration collector and offline
+bundle writer with small workloads and temporary directories. Collector fixtures
+use uninstrumented subprocesses even when pytest runs under coverage. Checks cover
+scenario/schema evidence, invalid workloads, ambient cache overrides, preservation
+of caller instrumentation, artifact hashes/non-overwrite, symlink rejection,
+escaped offline renderers, invalid reports, and CLI read-only/error behavior.
+Follow-up cases reject inconsistent median/MAD and invalid allocation counts,
+preserve caller trace/monitoring tools, and encode Markdown metadata literally.
+CLI subprocess checks reject accidental native imports. No model weights or mocks
+are required; passing checks is not a performance measurement or native-support claim.
+
+```bash
+uv run --locked pytest -q tests/unit/llm/test_mlx_profiling.py
+```
+
+Python 3.15 profiling uses the separate PEP 723 script, not a claim that the
+project's native extras install on that interpreter. See the
+[study protocol](../../../docs/modules/llm/mlx-profiling-study.md).
+
 ## Directory Contents
 
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
 - `__init__.py` – File
+- `test_mlx_profiling.py` – Real portable collector, offline bundle, and CLI regressions
 - `chains/` – Subdirectory
 - `cost_tracking/` – Subdirectory
 - `embeddings/` – Subdirectory

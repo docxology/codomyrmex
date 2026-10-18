@@ -13,6 +13,8 @@ Native Apple Silicon LLM inference via MLX. Provides model management, text gene
 - `model_manager.py` — `MLXModelManager` for download/list/inspect/delete of HuggingFace models
 - `runner.py` — `MLXRunner` for generate/stream_generate/chat, `MLXGenerationResult`, `MLXStreamChunk`
 - `quantization.py` — `MLXQuantizer`, `QuantizationPreset`, size estimation utilities
+- `profiling.py` — Portable `MLXConfig` setup measurements, not native inference
+- `profile_report.py` — Offline JSON/SVG/HTML/Markdown bundle with a hash manifest
 
 ## Operating Contracts
 
@@ -32,6 +34,12 @@ Native Apple Silicon LLM inference via MLX. Provides model management, text gene
   layouts rather than replacing them indiscriminately.
 - Streaming errors retain compatibility text and expose `success=False` plus an
   `error_message` on the terminal chunk.
+- Keep timing, cProfile, and tracemalloc passes separate. Never interpret Python
+  allocation peaks as Metal memory or scenario names as native cache validation.
+- Run the Python 3.15 PEP 723 script with a fresh output location; preserve failed
+  partial bundles and caller-owned tracing. Do not publish unmeasured results.
+- Follow the [profiling study protocol](../../../../docs/modules/llm/mlx-profiling-study.md)
+  for provenance and claim boundaries; KIVI is background, not the MLX algorithm.
 
 ## Key Files
 

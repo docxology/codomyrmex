@@ -3,9 +3,12 @@
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: August 2026
 
 ## Purpose
+
 Validation coverage, fixtures, and regression checks for Llm.
 
 ## Active Components
+
+- `test_mlx_profiling.py` – Portable collector, report integrity, and CLI checks
 - `PAI.md` – Project file
 - `README.md` – Project file
 - `SPEC.md` – Project file
@@ -41,6 +44,14 @@ Validation coverage, fixtures, and regression checks for Llm.
 
 - Live Ollama integration tests require explicit `RUN_LIVE_OLLAMA=1`; pure
   provider and serialization tests remain runnable without a local service.
+- Profiling tests use real `MLXConfig`, small workloads, and temporary output;
+  preserve caller instrumentation and reject ambient automatic-cache overrides.
+  Verify hashes, escaping, offline output, and non-overwrite without native MLX.
+  Passing these tests does not publish timings or establish Metal-memory savings.
+- Run collector fixtures in uninstrumented subprocesses even under coverage;
+  reject active caller tracing/monitoring rather than disabling it. Check summary
+  consistency against raw samples, integer retained/peak bytes, and literal
+  Markdown metadata encoding.
 - MLX KV-cache regressions live in `test_mlx_kv_cache.py`. Portable checks must
   not import the native backend. `RUN_LIVE_MLX=1` enables real tiny-model cache
   transitions and local saved-model generation; never download weights in these
@@ -50,6 +61,7 @@ Validation coverage, fixtures, and regression checks for Llm.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Key Files
+
 - `AGENTS.md` - Agent coordination and navigation
 - `README.md` - Directory overview
 - `PAI.md`
@@ -77,13 +89,16 @@ Validation coverage, fixtures, and regression checks for Llm.
 - `test_safety_fabric_multimodal.py`
 
 ## Dependencies
+
 - Inherits dependencies from the parent module. See `pyproject.toml` or `package.json` for global dependencies.
 
 ## Development Guidelines
+
 - Follow the universal agent protocols defined in the root `AGENTS.md`.
 - Adhere to the Python PEP 8 style guide and project-specific linting rules.
 - Ensure all new features are accompanied by corresponding tests (zero-mock policy).
 
 ## Navigation Links
+
 - **📁 Parent Directory**: [unit](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../../../README.md - Main project documentation
