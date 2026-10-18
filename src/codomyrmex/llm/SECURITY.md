@@ -34,10 +34,41 @@ The LLM (Large Language Model) module handles interactions with language models 
 3. **Execution Isolation**: Isolate model execution from sensitive system resources.
 4. **Model Access Control**: Control which users/processes can run which models.
 
+## Portable MLX Profiling Artifacts
+
+The portable collector constructs synthetic `MLXConfig` values without native
+MLX imports, model loading, provider requests, or credentials. Its PEP 723
+dependency installation can require network access; the generated dashboard has
+no scripts or remote assets. It does not collect inference or Metal metrics.
+
+- Treat environment/build/dependency metadata, revision/dirty status, source
+  hashes, and profiler filenames/function names as potentially identifying.
+  Basename-only hotspots and synthetic model/cache paths are not anonymization.
+- Use a trusted output location and restrict access before collecting. Symlink
+  output directories and existing named artifacts are rejected; exclusive file
+  creation is not a sandbox, permission policy, or atomic bundle transaction.
+  Preserve partial failures and retry at a fresh location.
+- HTML/SVG renderers escape dynamic content, and Markdown metadata is normalized
+  and encoded as literal text. These protections do not authorize executing
+  imported report content or accepting arbitrary bundles as trusted evidence.
+- Bundle validation rejects inconsistent median/MAD versus raw samples, invalid
+  numeric evidence, and noninteger allocations or retained bytes exceeding peak.
+  Validation checks consistency, not scientific truth or provenance authenticity.
+- The final SHA-256 manifest detects changed bytes, not malicious replacement of
+  both report and manifest. Review the source snapshot and revision/dirty state
+  independently before sharing or trusting results. Missing manifests identify
+  incomplete output.
+- Active tracemalloc, CPU profiling, tracing, or monitoring is rejected without
+  taking over caller instrumentation. Use an uninstrumented subprocess under
+  coverage; do not disable another agent's diagnostic session.
+
+See the [profiling study](../../../docs/modules/llm/mlx-profiling-study.md) and
+[script agent workflow](../../../scripts/llm/PAI.md#portable-mlx-configuration-evidence).
+
 ## Threat Model
 
 | Threat | Impact | Mitigation |
-|--------|--------|------------|
+| --- | --- | --- |
 | Prompt injection | Unauthorized actions | Input sanitization, prompt design |
 | API key exposure | Account compromise | Environment variables, secrets management |
 | Response data leakage | Information disclosure | Response filtering, secure logging |
@@ -109,6 +140,7 @@ class SecureLLMClient:
 ## Vulnerability Reporting
 
 Report security vulnerabilities via the main project's security reporting process. Include:
+
 - Provider/model affected
 - Type of vulnerability (injection, exposure, etc.)
 - Steps to reproduce
