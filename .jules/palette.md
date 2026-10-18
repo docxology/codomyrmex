@@ -44,3 +44,6 @@ icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
+## 2026-10-18 - Added ARIA labels to expandable nav items
+**Learning:** Found an accessibility issue pattern specific to this app's components where the nav-rail expandable buttons lacked context for screen readers. Using `aria-label` with dynamic state descriptions (e.g. `Collapse ${item.label}`) improves accessibility significantly while also providing tooltips via `title`.
+**Action:** Always ensure icon-only buttons that toggle nested items carry dynamic `aria-label` values that reflect their current expanded/collapsed state and contextual label.
