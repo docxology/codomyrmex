@@ -229,6 +229,10 @@ class TestMLXConfigSerialisation:
             "top_p",
             "repetition_penalty",
             "max_kv_size",
+            "prefill_step_size",
+            "kv_bits",
+            "kv_group_size",
+            "quantized_kv_start",
             "cache_dir",
             "seed",
         }

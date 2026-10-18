@@ -39,6 +39,18 @@ Validation coverage, fixtures, and regression checks for Llm.
 - `test_router.py` – File
 - `test_safety_fabric_multimodal.py` – File
 
+## MLX KV-cache regressions
+
+`test_mlx_kv_cache.py` covers configuration precedence, invalid combinations,
+serialization, forwarding, and pre-load failure receipts without native imports.
+With `RUN_LIVE_MLX=1`, it also exercises real tiny-model generation and cache
+transitions without model downloads. See the
+[MLX configuration guide](../../../src/codomyrmex/llm/mlx/README.md).
+
+```bash
+uv run --locked --python 3.13 pytest -q tests/unit/llm/test_mlx_kv_cache.py
+```
+
 ## Navigation
 
 - **Parent Directory**: [unit](../README.md)

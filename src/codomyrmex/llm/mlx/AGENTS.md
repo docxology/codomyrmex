@@ -23,6 +23,15 @@ Native Apple Silicon LLM inference via MLX. Provides model management, text gene
 - Native MLX/MLX-LM execution is explicitly gated behind `RUN_LIVE_MLX=1`; the
   default suite exercises portable configuration paths without importing the
   native backend.
+- Forward cache controls through the shared generation helper for both sync and
+  streaming requests; validate before loading a model.
+- Bounded caches require `max_kv_size > 4` and one-token prefill until the upstream
+  sink-mask fix is verified. Never silently ignore caps on model-owned caches.
+- Quantized caches default to 512-token prefill and cannot be combined with
+  bounded caches. Preserve model-specific cache semantics by rejecting unsupported
+  layouts rather than replacing them indiscriminately.
+- Streaming errors retain compatibility text and expose `success=False` plus an
+  `error_message` on the terminal chunk.
 
 ## Key Files
 

@@ -52,7 +52,76 @@ All parameters support environment variable overrides:
 | `top_p` | `MLX_TOP_P` | `0.9` |
 | `repetition_penalty` | `MLX_REPETITION_PENALTY` | `1.1` |
 | `max_kv_size` | `MLX_MAX_KV_SIZE` | `None` (unlimited) |
+| `prefill_step_size` | `MLX_PREFILL_STEP_SIZE` | `None` (automatic policy below) |
+| `kv_bits` | `MLX_KV_BITS` | `None` (no KV-cache quantization) |
+| `kv_group_size` | `MLX_KV_GROUP_SIZE` | `64` |
+| `quantized_kv_start` | `MLX_QUANTIZED_KV_START` | `0` |
 | `cache_dir` | `MLX_CACHE_DIR` | `~/.cache/mlx-models` |
+
+### Long prompts and KV-cache safety
+
+`max_kv_size` limits attention history, not model weights or total Metal memory.
+It discards older context except the first four attention-sink tokens; do not
+enable it when retrieval requires the entire prompt. The cap must be an integer
+greater than four. Synchronous, streaming, and chat generation share the same
+validated cache settings.
+Malformed cache environment values raise `ValueError` during configuration
+construction rather than silently disabling a requested memory control.
+
+Codomyrmex uses the following prefill policy:
+
+- Unbounded, unquantized KV cache: 2048 tokens per chunk.
+- Quantized KV cache: 512 tokens per chunk unless explicitly overridden.
+- Bounded KV cache: one token per step. Explicit larger chunks are rejected
+  while the upstream attention-sink masking fix remains unverified here.
+
+The bounded policy is a correctness workaround for
+[mlx-lm PR #1978](https://github.com/ml-explore/mlx-lm/pull/1978), which was still
+open on October 17, 2026. It can substantially slow prefill; it is not the
+upstream mask fix. No upstream classes are monkeypatched. Ordinary full-attention
+`KVCache` layers, including those returned by `model.make_cache()`, are explicitly
+replaced with bounded caches. Model-specific cache layouts are rejected rather
+than silently ignoring the cap or changing their attention semantics.
+
+Quantized and bounded caches cannot be combined: upstream rotating-cache
+quantization is not implemented. Quantization accepts 2, 3, 4, 5, 6, or 8 bits,
+with groups of 32, 64, or 128 elements. Group size must also divide the model's
+attention head dimension; model-specific incompatibilities remain runtime errors.
+Only standard full-attention KV-cache layouts are supported for these optional
+cache controls. Model weight quantization is independent of KV-cache quantization.
+
+```python
+from codomyrmex.llm.mlx import MLXConfig
+
+bounded = MLXConfig(max_kv_size=4096)  # automatically uses one-token prefill
+quantized = MLXConfig(kv_bits=4, prefill_step_size=512, quantized_kv_start=0)
+assert bounded.get_cache_kwargs()["prefill_step_size"] == 1
+assert quantized.validate()["valid"]
+```
+
+The smaller quantized prefill default is a memory-oriented policy motivated by
+[Bobby's upstream measurements](https://gist.github.com/robertcprice/88f542f29ec8b97f2a8b1edde3fdc903),
+not a promise of a particular RAM or throughput improvement. Those measurements
+used specific models, hardware, and mlx-lm 0.31.3; the largest reported savings
+compare both quantization and chunk size against an fp16 baseline. Smaller chunks
+can also help unquantized caches. Measure peak memory, prefill time, decode
+throughput, and recall together on your workload.
+
+Native execution remains opt-in with `RUN_LIVE_MLX=1`. Portable regression tests
+do not import the native backend; the opt-in tests use tiny random models and
+real cache transitions without downloading model weights:
+
+```bash
+uv run --locked --python 3.13 pytest -q tests/unit/llm/test_mlx_kv_cache.py
+RUN_LIVE_MLX=1 uv run --locked --python 3.13 pytest -q tests/unit/llm/test_mlx_kv_cache.py
+```
+
+The native cache suite was verified on Python 3.13 with the locked
+`mlx==0.31.1` / `mlx-lm==0.31.1` pair and, separately, the report's
+`mlx==0.31.2` / `mlx-lm==0.31.3` pair. Use compatible core/LM versions;
+mixing mlx-lm 0.31.3 with mlx 0.31.1 fails upstream during import because
+`new_thread_local_stream` is unavailable. These are compatibility checks,
+not the 8k–30k production-model memory or recall benchmarks.
 
 ## Recommended Models (16 GB Mac Mini M4)
 

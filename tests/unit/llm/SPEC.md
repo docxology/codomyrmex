@@ -8,6 +8,17 @@
 
 ## Functional Requirements
 
+### MLX KV-cache checks
+
+`test_mlx_kv_cache.py` checks automatic and explicit prefill policy, environment
+precedence, serialization, invalid combinations, shared generation forwarding,
+and unsuccessful results before model loading. Opt-in native cases build tiny
+real models and local tokenizer/model artifacts under `tmp_path`; they verify
+cache eviction, conversion to quantized caches, rejection of model-specific
+layouts, and sync/stream/chat per-call overrides without network downloads.
+The direct bounded reference uses token-by-token prefill. These tests do not
+establish long-context recall or peak-memory performance on production models.
+
 - [REQUIREMENT 1: Describe a specific capability]
 - [REQUIREMENT 2: Describe another specific capability]
 

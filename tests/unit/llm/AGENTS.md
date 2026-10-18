@@ -41,6 +41,10 @@ Validation coverage, fixtures, and regression checks for Llm.
 
 - Live Ollama integration tests require explicit `RUN_LIVE_OLLAMA=1`; pure
   provider and serialization tests remain runnable without a local service.
+- MLX KV-cache regressions live in `test_mlx_kv_cache.py`. Portable checks must
+  not import the native backend. `RUN_LIVE_MLX=1` enables real tiny-model cache
+  transitions and local saved-model generation; never download weights in these
+  regression tests or substitute mocks for native caches.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

@@ -22,6 +22,13 @@ This file tracks open research items, formal gaps, and architectural improvement
 
 ## Maintenance
 
+- **MLX upstream follow-up:** Verify ml-explore/mlx-lm PR #1978 after release,
+  compare bounded chunked-prefill logits/recall against token-by-token prefill,
+  and only then relax the temporary one-token bounded-cache policy. Reproduce
+  long-context peak-memory/throughput/recall measurements on declared hardware
+  before making performance claims; existing tiny-model regressions are not
+  that benchmark study.
+
 | ID | Title | Scope & Artifacts | Acceptance Criteria |
 | :--- | :------ | :------------------ | :-------------------- |
 | **M3** | **Test Speed & Suite Optimization** | `pyproject.toml`, test runner configs | Benchmark/xdist isolation, deterministic execution without timeout stalls across unit test suites. |

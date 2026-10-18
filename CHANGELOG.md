@@ -8,6 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### MLX KV-cache safety and prefill controls (2026-10-17)
+
+- Forward the previously ignored `max_kv_size` through synchronous and streaming
+  inference and enforce caps on standard model-owned KV caches.
+- Add environment-aware prefill sizing and KV quantization controls. Quantized
+  caches default to 512-token prefill; bounded caches use one-token prefill until
+  the upstream attention-sink masking fix is verified.
+- Reject unsupported cache combinations and layouts explicitly; validate invalid
+  configuration before model loading and expose structured stream failures.
+- Reject malformed cache environment integers instead of silently disabling
+  requested limits or quantization.
+- Add portable regression checks and opt-in tiny-model native cache tests.
+  External benchmark figures are not claimed as locally reproduced results.
+
 ### Comprehensive repository hardening (2026-10-12)
 
 - Replace the unverified PR Pages preview claim with a current-run build
