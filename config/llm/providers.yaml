@@ -103,8 +103,8 @@ provider_selection:
 # Provider Health Checks
 health_checks:
   enabled: true
-  interval: 60 # seconds
-  timeout: 10 # seconds
+  interval: 60  # seconds
+  timeout: 10  # seconds
 
   checks:
     - name: "provider_availability"
@@ -127,6 +127,6 @@ monitoring:
     - "cost"
 
   thresholds:
-    max_error_rate: 0.05 # 5%
-    max_response_time: 30 # seconds
-    max_cost_per_hour: 100 # dollars
+    max_error_rate: 0.05  # 5%
+    max_response_time: 30  # seconds
+    max_cost_per_hour: 100  # dollars

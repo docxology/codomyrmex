@@ -60,7 +60,7 @@ policies:
 # Migration Execution
 execution:
   # Execution order
-  order: "sequential" # sequential or parallel
+  order: "sequential"  # sequential or parallel
 
   # Parallel execution settings
   parallel:

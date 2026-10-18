@@ -11,7 +11,7 @@ metrics:
 
   # Metrics storage
   storage:
-    type: "memory" # memory, file, database, prometheus
+    type: "memory"  # memory, file, database, prometheus
     path: "${METRICS_STORAGE_PATH:metrics.db}"
     retention: "7_days"
 
@@ -90,7 +90,7 @@ export:
 # Metrics Aggregation
 aggregation:
   enabled: true
-  window: 300 # seconds
+  window: 300  # seconds
   functions:
     - "mean"
     - "min"

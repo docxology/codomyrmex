@@ -120,7 +120,7 @@ fallback_provider: ollama
 worktree:
   enabled: false
   base_dir: ~/.codomyrmex/worktrees
-  auto_cleanup: true # Remove worktree when session ends
+  auto_cleanup: true  # Remove worktree when session ends
 
 # ── Filesystem Checkpoints ────────────────────────────────────────────
 # Auto-snapshot before destructive operations (dispatch --apply).

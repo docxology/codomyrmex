@@ -45,9 +45,9 @@ providers:
     validation:
       algorithm: "HS256"
       secret: "${JWT_SECRET}"
-      expiration: 3600 # seconds
+      expiration: 3600  # seconds
       refresh_enabled: true
-      refresh_expiration: 86400 # 24 hours
+      refresh_expiration: 86400  # 24 hours
 
   # Session-based Authentication
   session:
@@ -56,7 +56,7 @@ providers:
     secure: true
     http_only: true
     same_site: "strict"
-    max_age: 3600 # seconds
+    max_age: 3600  # seconds
 
 # Authentication Methods
 methods:
@@ -72,7 +72,7 @@ methods:
 settings:
   # Session management
   session:
-    timeout: 3600 # seconds
+    timeout: 3600  # seconds
     max_concurrent_sessions: 5
     enforce_single_session: false
 
@@ -117,7 +117,7 @@ events:
 
   # Events to alert on
   alert_events:
-    - "login_failure_threshold" # Multiple failures
+    - "login_failure_threshold"  # Multiple failures
     - "suspicious_activity"
     - "token_compromise"
 
