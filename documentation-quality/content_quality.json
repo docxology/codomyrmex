@@ -28,11 +28,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 161,
+      "heading_count": 162,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 10914,
-      "link_count": 3
+      "word_count": 11113,
+      "link_count": 4
     }
   },
   {
@@ -103,8 +103,8 @@
       "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 477,
-      "link_count": 1
+      "word_count": 579,
+      "link_count": 2
     }
   },
   {
@@ -15695,11 +15695,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 18,
+      "heading_count": 19,
       "placeholder_count": 0,
       "code_block_count": 4,
-      "word_count": 473,
-      "link_count": 4
+      "word_count": 619,
+      "link_count": 5
     }
   },
   {
@@ -15710,8 +15710,8 @@
       "heading_count": 8,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 241,
-      "link_count": 1
+      "word_count": 317,
+      "link_count": 2
     }
   },
   {
@@ -15719,11 +15719,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 5,
+      "heading_count": 6,
       "placeholder_count": 0,
-      "code_block_count": 0,
-      "word_count": 89,
-      "link_count": 2
+      "code_block_count": 2,
+      "word_count": 233,
+      "link_count": 3
     }
   },
   {
@@ -15731,11 +15731,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 14,
+      "heading_count": 16,
       "placeholder_count": 0,
-      "code_block_count": 4,
-      "word_count": 348,
-      "link_count": 0
+      "code_block_count": 5,
+      "word_count": 585,
+      "link_count": 2
     }
   },
   {
@@ -45853,11 +45853,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 12,
+      "heading_count": 13,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 545,
-      "link_count": 0
+      "word_count": 796,
+      "link_count": 2
     }
   },
   {
@@ -45889,11 +45889,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 21,
+      "heading_count": 22,
       "placeholder_count": 0,
       "code_block_count": 9,
-      "word_count": 877,
-      "link_count": 8
+      "word_count": 1052,
+      "link_count": 11
     }
   },
   {
@@ -45901,11 +45901,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 7,
+      "heading_count": 9,
       "placeholder_count": 0,
-      "code_block_count": 1,
-      "word_count": 159,
-      "link_count": 0
+      "code_block_count": 2,
+      "word_count": 519,
+      "link_count": 2
     }
   },
   {
@@ -46443,11 +46443,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 15,
+      "heading_count": 17,
       "placeholder_count": 0,
       "code_block_count": 4,
-      "word_count": 415,
-      "link_count": 4
+      "word_count": 770,
+      "link_count": 6
     }
   },
   {
@@ -46458,8 +46458,8 @@
       "heading_count": 8,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 289,
-      "link_count": 3
+      "word_count": 462,
+      "link_count": 4
     }
   },
   {
@@ -46467,11 +46467,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 8,
+      "heading_count": 10,
       "placeholder_count": 0,
-      "code_block_count": 2,
-      "word_count": 400,
-      "link_count": 5
+      "code_block_count": 5,
+      "word_count": 1045,
+      "link_count": 8
     }
   },
   {
@@ -61565,6 +61565,18 @@
     }
   },
   {
+    "file": "docs/modules/llm/mlx-profiling-study.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 9,
+      "placeholder_count": 0,
+      "code_block_count": 1,
+      "word_count": 1028,
+      "link_count": 8
+    }
+  },
+  {
     "file": "docs/modules/llm/SECURITY.md",
     "score": 100,
     "issues": [],
@@ -61584,7 +61596,7 @@
       "heading_count": 8,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 197,
+      "word_count": 250,
       "link_count": 1
     }
   },
@@ -61596,8 +61608,8 @@
       "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 66,
-      "link_count": 2
+      "word_count": 80,
+      "link_count": 3
     }
   },
   {
@@ -62870,7 +62882,7 @@
       "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 566,
+      "word_count": 609,
       "link_count": 5
     }
   },

@@ -85,36 +85,43 @@
   },
   {
     "file": "CHANGELOG.md",
+    "link": "docs/modules/llm/mlx-profiling-study.md",
+    "line": 21,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "CHANGELOG.md",
     "link": "http://localhost:11434/api/embed`",
-    "line": 497,
+    "line": 522,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:11434\"",
-    "line": 497,
+    "line": 522,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:3100`",
-    "line": 503,
+    "line": 528,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "mailto:FristonBlanket@gmail.com",
-    "line": 591,
+    "line": 616,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:8080/`",
-    "line": 1432,
+    "line": 1457,
     "status": "external",
     "message": "External link (not validated)"
   },
@@ -262,6 +269,13 @@
     "file": "TODO.md",
     "link": "CHANGELOG.md",
     "line": 6,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "TODO.md",
+    "link": "docs/modules/llm/mlx-profiling-study.md",
+    "line": 26,
     "status": "ok",
     "message": "File exists"
   },
@@ -1303,7 +1317,7 @@
   },
   {
     "file": "README.md",
-    "link": "https://img.shields.io/badge/tests-36%2C970-brightgreen?style=flat-square\"",
+    "link": "https://img.shields.io/badge/tests-37%2C060-brightgreen?style=flat-square\"",
     "line": 22,
     "status": "external",
     "message": "External link (not validated)"
@@ -6399,7 +6413,7 @@
   },
   {
     "file": ".github/README.md",
-    "link": "https://img.shields.io/badge/tests-36%2C970-brightgreen?style=flat-square\"",
+    "link": "https://img.shields.io/badge/tests-37%2C060-brightgreen?style=flat-square\"",
     "line": 25,
     "status": "external",
     "message": "External link (not validated)"
@@ -27014,64 +27028,99 @@
   },
   {
     "file": "scripts/llm/SPEC.md",
+    "link": "../../docs/modules/llm/mlx-profiling-study.md",
+    "line": 36,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "scripts/llm/SPEC.md",
     "link": "https://openrouter.ai/api/v1`",
-    "line": 23,
+    "line": 42,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "scripts/llm/SPEC.md",
     "link": "http://localhost:11434`",
-    "line": 47,
+    "line": 66,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "scripts/llm/SPEC.md",
     "link": "../README.md",
-    "line": 150,
+    "line": 169,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/llm/SPEC.md",
     "link": "README.md",
-    "line": 151,
+    "line": 170,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/llm/SPEC.md",
     "link": "AGENTS.md",
-    "line": 152,
+    "line": 171,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/llm/SPEC.md",
     "link": "../../README.md",
-    "line": 153,
+    "line": 172,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "scripts/llm/AGENTS.md",
+    "link": "../../docs/modules/llm/mlx-profiling-study.md",
+    "line": 34,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/llm/AGENTS.md",
     "link": "../README.md",
-    "line": 47,
+    "line": 62,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "scripts/llm/README.md",
+    "link": "../../docs/modules/llm/mlx-profiling-study.md",
+    "line": 50,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/llm/README.md",
     "link": "../README.md",
-    "line": 25,
+    "line": 54,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "scripts/llm/README.md",
     "link": "AGENTS.md",
-    "line": 30,
+    "line": 59,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "scripts/llm/PAI.md",
+    "link": "../../docs/modules/llm/mlx-profiling-study.md",
+    "line": 84,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "scripts/llm/PAI.md",
+    "link": "../../src/codomyrmex/llm/SECURITY.md#portable-mlx-profiling-artifacts",
+    "line": 98,
     "status": "ok",
     "message": "File exists"
   },
@@ -68397,6 +68446,20 @@
     "message": "File exists"
   },
   {
+    "file": "src/codomyrmex/llm/SECURITY.md",
+    "link": "../../../docs/modules/llm/mlx-profiling-study.md",
+    "line": 65,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/llm/SECURITY.md",
+    "link": "../../../scripts/llm/PAI.md#portable-mlx-configuration-evidence",
+    "line": 66,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
     "file": "src/codomyrmex/llm/AGENTS.md",
     "link": "../README.md",
     "line": 85,
@@ -68419,57 +68482,92 @@
   },
   {
     "file": "src/codomyrmex/llm/PAI.md",
+    "link": "../../../scripts/llm/README.md#portable-mlx-configuration-profile",
+    "line": 86,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/llm/PAI.md",
+    "link": "SECURITY.md#portable-mlx-profiling-artifacts",
+    "line": 92,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/llm/PAI.md",
+    "link": "../../../docs/modules/llm/mlx-profiling-study.md",
+    "line": 93,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/llm/PAI.md",
     "link": "PAI.md",
-    "line": 256,
+    "line": 278,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/llm/PAI.md",
     "link": "../PAI.md",
-    "line": 257,
+    "line": 279,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/llm/PAI.md",
     "link": "../../../PAI.md",
-    "line": 258,
+    "line": 280,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/llm/PAI.md",
     "link": "README.md",
-    "line": 262,
+    "line": 284,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/llm/PAI.md",
     "link": "AGENTS.md",
-    "line": 263,
+    "line": 285,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/llm/PAI.md",
     "link": "ollama/README.md",
-    "line": 264,
+    "line": 286,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/llm/PAI.md",
     "link": "fabric/README.md",
-    "line": 265,
+    "line": 287,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/llm/PAI.md",
     "link": "../agents/PAI.md",
-    "line": 266,
+    "line": 288,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/llm/API_SPECIFICATION.md",
+    "link": "mlx/SPEC.md#kv-cache-contract",
+    "line": 39,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/llm/API_SPECIFICATION.md",
+    "link": "../../../docs/modules/llm/mlx-profiling-study.md",
+    "line": 87,
     "status": "ok",
     "message": "File exists"
   },
@@ -68958,50 +69056,71 @@
   },
   {
     "file": "src/codomyrmex/llm/mlx/SPEC.md",
+    "link": "README.md#long-prompts-and-kv-cache-safety",
+    "line": 117,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/llm/mlx/SPEC.md",
+    "link": "../../../../docs/modules/llm/mlx-profiling-study.md",
+    "line": 134,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/llm/mlx/SPEC.md",
     "link": "../README.md",
-    "line": 97,
+    "line": 143,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/llm/mlx/SPEC.md",
     "link": "README.md",
-    "line": 98,
+    "line": 144,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/llm/mlx/SPEC.md",
     "link": "AGENTS.md",
-    "line": 99,
+    "line": 145,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/llm/mlx/SPEC.md",
     "link": "../../../../README.md",
-    "line": 100,
+    "line": 146,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/llm/mlx/AGENTS.md",
+    "link": "../../../../docs/modules/llm/mlx-profiling-study.md",
+    "line": 41,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/llm/mlx/AGENTS.md",
     "link": "../README.md",
-    "line": 51,
+    "line": 68,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/llm/mlx/AGENTS.md",
     "link": "../../../../README.md",
-    "line": 52,
+    "line": 69,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/llm/mlx/AGENTS.md",
     "link": "../ollama/AGENTS.md",
-    "line": 53,
+    "line": 70,
     "status": "ok",
     "message": "File exists"
   },
@@ -69021,22 +69140,43 @@
   },
   {
     "file": "src/codomyrmex/llm/mlx/README.md",
+    "link": "https://github.com/ml-explore/mlx-lm/pull/1978",
+    "line": 81,
+    "status": "external",
+    "message": "External link (not validated)"
+  },
+  {
+    "file": "src/codomyrmex/llm/mlx/README.md",
+    "link": "https://gist.github.com/robertcprice/88f542f29ec8b97f2a8b1edde3fdc903",
+    "line": 105,
+    "status": "external",
+    "message": "External link (not validated)"
+  },
+  {
+    "file": "src/codomyrmex/llm/mlx/README.md",
+    "link": "../../../../docs/modules/llm/mlx-profiling-study.md",
+    "line": 146,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/llm/mlx/README.md",
     "link": "../README.md",
-    "line": 76,
+    "line": 168,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/llm/mlx/README.md",
     "link": "../../../../README.md",
-    "line": 77,
+    "line": 169,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/llm/mlx/README.md",
     "link": "../ollama/README.md",
-    "line": 78,
+    "line": 170,
     "status": "ok",
     "message": "File exists"
   },
@@ -98105,23 +98245,86 @@
     "message": "File exists"
   },
   {
+    "file": "docs/modules/llm/mlx-profiling-study.md",
+    "link": "https://arxiv.org/abs/2309.17453v4",
+    "line": 125,
+    "status": "external",
+    "message": "External link (not validated)"
+  },
+  {
+    "file": "docs/modules/llm/mlx-profiling-study.md",
+    "link": "https://arxiv.org/abs/2402.02750v2",
+    "line": 130,
+    "status": "external",
+    "message": "External link (not validated)"
+  },
+  {
+    "file": "docs/modules/llm/mlx-profiling-study.md",
+    "link": "https://github.com/ml-explore/mlx-lm/pull/1978",
+    "line": 136,
+    "status": "external",
+    "message": "External link (not validated)"
+  },
+  {
+    "file": "docs/modules/llm/mlx-profiling-study.md",
+    "link": "https://gist.github.com/robertcprice/88f542f29ec8b97f2a8b1edde3fdc903",
+    "line": 137,
+    "status": "external",
+    "message": "External link (not validated)"
+  },
+  {
+    "file": "docs/modules/llm/mlx-profiling-study.md",
+    "link": "README.md",
+    "line": 144,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/llm/mlx-profiling-study.md",
+    "link": "../../../src/codomyrmex/llm/mlx/README.md",
+    "line": 145,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/llm/mlx-profiling-study.md",
+    "link": "../../../src/codomyrmex/llm/API_SPECIFICATION.md#25-portable-mlx-configuration-profiling",
+    "line": 146,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/llm/mlx-profiling-study.md",
+    "link": "../../../README.md",
+    "line": 147,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
     "file": "docs/modules/llm/AGENTS.md",
     "link": "../README.md",
-    "line": 40,
+    "line": 52,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "docs/modules/llm/README.md",
+    "link": "mlx-profiling-study.md",
+    "line": 11,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/llm/README.md",
     "link": "../README.md",
-    "line": 18,
+    "line": 21,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/modules/llm/README.md",
     "link": "AGENTS.md",
-    "line": 23,
+    "line": 26,
     "status": "ok",
     "message": "File exists"
   },
@@ -101236,35 +101439,35 @@
   {
     "file": "docs/reference/inventory.md",
     "link": "../agents/hermes/codomyrmex_integration.md",
-    "line": 18,
+    "line": 23,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/reference/inventory.md",
     "link": "README.md",
-    "line": 78,
+    "line": 83,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/reference/inventory.md",
     "link": "../plans/agents-readme-gap-report.md",
-    "line": 79,
+    "line": 84,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/reference/inventory.md",
     "link": "mcp-tool-spec-coverage.md",
-    "line": 80,
+    "line": 85,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "docs/reference/inventory.md",
     "link": "../development/documentation.md",
-    "line": 81,
+    "line": 86,
     "status": "ok",
     "message": "File exists"
   },
