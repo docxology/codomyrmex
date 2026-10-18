@@ -8,7 +8,7 @@ set -e  # Exit on any error
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
+
 PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 WHITE='\033[1;37m'
@@ -85,7 +85,7 @@ menu_discovery() {
         echo -e "${GREEN}4)${NC} Check Git Repositories Status"
         echo -e "${GREEN}0)${NC} Back to Main Menu"
         echo ""
-        read -p "Choose option (0-4): " choice
+        read -r -p "Choose option (0-4): " choice
 
         case $choice in
             1)
@@ -124,7 +124,7 @@ menu_pai() {
         echo -e "${GREEN}4)${NC} Update PAI Knowledge Documentation"
         echo -e "${GREEN}0)${NC} Back to Main Menu"
         echo ""
-        read -p "Choose option (0-4): " choice
+        read -r -p "Choose option (0-4): " choice
 
         case $choice in
             1) uv run python scripts/pai/dashboard.py; pause ;;
@@ -152,7 +152,7 @@ menu_agents() {
         echo -e "${GREEN}6)${NC} Recursive Task Strategy Engine"
         echo -e "${GREEN}0)${NC} Back to Main Menu"
         echo ""
-        read -p "Choose option (0-6): " choice
+        read -r -p "Choose option (0-6): " choice
 
         case $choice in
             1) uv run python scripts/agents/multi_agent_workflow.py; pause ;;
@@ -179,7 +179,7 @@ menu_frameworks() {
         echo -e "${GREEN}3)${NC} Advanced Orchestrator Workflows"
         echo -e "${GREEN}0)${NC} Back to Main Menu"
         echo ""
-        read -p "Choose option (0-3): " choice
+        read -r -p "Choose option (0-3): " choice
 
         case $choice in
             1)
@@ -236,7 +236,7 @@ dynamic_script_explorer() {
         done
         echo -e "${GREEN} 0)${NC} Back to Main Menu"
         echo ""
-        read -p "Select a domain to explore (0-${#domains[@]}): " domain_idx
+        read -r -p "Select a domain to explore (0-${#domains[@]}): " domain_idx
 
         if [[ "$domain_idx" == "0" ]]; then
             return
@@ -260,7 +260,7 @@ dynamic_script_explorer() {
                 done
                 echo -e "${GREEN} 0)${NC} Back to Domains"
                 echo ""
-                read -p "Select a script to run (0-${#scr_files[@]}): " script_idx
+                read -r -p "Select a script to run (0-${#scr_files[@]}): " script_idx
 
                 if [[ "$script_idx" == "0" ]]; then
                     break
@@ -299,7 +299,7 @@ menu_testing_dev() {
         echo -e "${GREEN}7)${NC} Run All Dev Tools (Format, Lint, Type, Security)"
         echo -e "${GREEN}0)${NC} Back to Main Menu"
         echo ""
-        read -p "Choose option (0-7): " choice
+        read -r -p "Choose option (0-7): " choice
 
         case $choice in
             1) make test; pause ;;
@@ -333,7 +333,7 @@ menu_config() {
     echo -e "${GREEN}2)${NC} Configure LLM API Keys"
     echo -e "${GREEN}0)${NC} Back to Main Menu"
     echo ""
-    read -p "Choose option (0-2): " choice
+    read -r -p "Choose option (0-2): " choice
 
     case $choice in
         1)
@@ -374,7 +374,7 @@ menu_interactive() {
         echo -e "${GREEN}3)${NC} Run Demo Workflows"
         echo -e "${GREEN}0)${NC} Back to Main Menu"
         echo ""
-        read -p "Choose option (0-3): " choice
+        read -r -p "Choose option (0-3): " choice
         case $choice in
             1)
                 uv run python -c "
@@ -388,9 +388,9 @@ shell.run()
             2)
                 echo -e "Enter CLI command (e.g. status, info, help) or type exit to return:"
                 while true; do
-                    read -p "codomyrmex> " cli_cmd
+                    read -r -p "codomyrmex> " cli_cmd
                     if [[ "$cli_cmd" == "exit" ]]; then break; fi
-                    if [[ -n "$cli_cmd" ]]; then uv run codomyrmex $cli_cmd; fi
+                    if [[ -n "$cli_cmd" ]]; then uv run codomyrmex "$cli_cmd"; fi
                 done
                 ;;
             3)
@@ -430,7 +430,7 @@ main() {
         echo -e "${GREEN}9)${NC} 💻 ${CYAN}Interactive Tools & CLI${NC}"
         echo -e "${GREEN}0)${NC} 🚪 ${CYAN}Exit${NC}"
         echo ""
-        read -p "$(echo -e ${PURPLE}Choose your path \(0-9\):${NC} )" main_choice
+        read -r -p "$(echo -e "${PURPLE}Choose your path (0-9):${NC}" )" main_choice
 
         case $main_choice in
             1) menu_discovery ;;

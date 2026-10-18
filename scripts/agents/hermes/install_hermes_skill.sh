@@ -68,7 +68,7 @@ log_ok()    { echo "[OK]    $*"; }
 log_warn()  { echo "[WARN]  $*"; }
 log_error() { echo "[ERROR] $*" >&2; }
 
-divider() { printf '%-50s\n' | tr ' ' '─'; }
+divider() { printf '%50s\n' "" | tr ' ' '─'; }
 
 # ── Banner ───────────────────────────────────────────────────────────────────
 echo ""

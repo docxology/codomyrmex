@@ -56,6 +56,7 @@ setup_uv_environment() {
 
     # Activate uv environment
     echo_info "Activating uv virtual environment..."
+    # shellcheck disable=SC1091
     source "$VENV_DIR/bin/activate"
 
     # Check if activation worked
@@ -87,7 +88,7 @@ check_python_version() {
     major=$(echo "$version_output" | cut -d. -f1)
     minor=$(echo "$version_output" | cut -d. -f2)
 
-    if [ "$major" -lt "$PYTHON_VERSION_MAJOR" ] || ([ "$major" -eq "$PYTHON_VERSION_MAJOR" ] && [ "$minor" -lt "$PYTHON_VERSION_MINOR" ]); then
+    if [ "$major" -lt "$PYTHON_VERSION_MAJOR" ] || { [ "$major" -eq "$PYTHON_VERSION_MAJOR" ] && [ "$minor" -lt "$PYTHON_VERSION_MINOR" ]; }; then
         echo_error "Python version $major.$minor is installed. Codomyrmex requires Python ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR} or higher."
     fi
     echo_info "Python version $major.$minor found ($python_cmd). Looks good."
@@ -109,7 +110,7 @@ check_uv
 echo_info "Using uv for environment setup..."
 
 # 1. Ensure we are in the project root (rudimentary check)
-if ([ ! -f "$REQUIREMENTS_FILE" ] && [ ! -f "$PYPROJECT_FILE" ]) || [ ! -d "src/codomyrmex/environment_setup" ]; then
+if { [ ! -f "$REQUIREMENTS_FILE" ] && [ ! -f "$PYPROJECT_FILE" ]; } || [ ! -d "src/codomyrmex/environment_setup" ]; then
     echo_error "This script must be run from the root directory of the Codomyrmex project."
 fi
 echo_info "Running in project root: $(pwd)"

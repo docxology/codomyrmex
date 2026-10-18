@@ -69,8 +69,8 @@ check_python() {
     # Check if Python 3.10+ is available
     if command -v python3 &> /dev/null; then
         PYTHON_VERSION=$(python3 --version | cut -d' ' -f2)
-        PYTHON_MAJOR=$(echo $PYTHON_VERSION | cut -d'.' -f1)
-        PYTHON_MINOR=$(echo $PYTHON_VERSION | cut -d'.' -f2)
+        PYTHON_MAJOR=$(echo "$PYTHON_VERSION" | cut -d'.' -f1)
+        PYTHON_MINOR=$(echo "$PYTHON_VERSION" | cut -d'.' -f2)
 
         if [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -ge 10 ]; then
             echo -e "${GREEN}✅ Python $PYTHON_VERSION is compatible${NC}"
@@ -92,6 +92,7 @@ install_codomyrmex() {
     uv venv .venv
 
     echo -e "${CYAN}Activating virtual environment...${NC}"
+    # shellcheck disable=SC1091
     source .venv/bin/activate
 
     echo -e "${CYAN}Installing Codomyrmex and dependencies...${NC}"
@@ -109,6 +110,7 @@ verify_installation() {
     echo -e "${BLUE}🔍 Verifying installation...${NC}"
 
     # Activate virtual environment
+    # shellcheck disable=SC1091
     source .venv/bin/activate
 
     # Test basic import
@@ -132,7 +134,8 @@ except ImportError as e:
         codomyrmex info
     else
         echo -e "${YELLOW}⚠️  CLI command not found in PATH${NC}"
-        echo -e "${BLUE}💡 You can run: source .venv/bin/activate && codomyrmex info${NC}"
+        echo -e "${BLUE}💡 You can run: # shellcheck disable=SC1091
+    source .venv/bin/activate && codomyrmex info${NC}"
     fi
 
     # Test modules
@@ -183,7 +186,8 @@ show_next_steps() {
 
     echo -e "${CYAN}Next Steps:${NC}"
     echo -e "1. ${GREEN}Activate the virtual environment:${NC}"
-    echo -e "   ${YELLOW}source .venv/bin/activate${NC}"
+    echo -e "   ${YELLOW}# shellcheck disable=SC1091
+    source .venv/bin/activate${NC}"
     echo ""
     echo -e "2. ${GREEN}Try Codomyrmex:${NC}"
     echo -e "   ${YELLOW}codomyrmex info${NC}"

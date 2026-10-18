@@ -27,7 +27,7 @@ PROJECT_ID=$(gcloud config get-value project 2>/dev/null || echo "")
 
 if [ -z "$PROJECT_ID" ]; then
     echo "[!] No default GCP project is set."
-    read -p "Enter your GCP Project ID to use for Vertex AI: " PROJECT_ID
+    read -r -p "Enter your GCP Project ID to use for Vertex AI: " PROJECT_ID
     gcloud config set project "$PROJECT_ID"
 else
     echo "[✔] Active GCP Project: $PROJECT_ID"
