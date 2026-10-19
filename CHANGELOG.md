@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### LRU cache recency bookkeeping
+
+- Replace linear list operations in the embedding and cached vector stores
+  with ordered-map recency updates and eviction. Preserve their locks and
+  positive-capacity cache behavior. Real-component regressions cover hit and
+  replacement recency, model separation, and delete/clear after eviction.
+  No elapsed-time improvement is claimed without retained measurements.
+- Bound the Hermes vault-search fixture to real temporary notes instead of
+  scanning shared `/tmp`. Include tracked examples in the isolated manuscript
+  snapshot so nested collection preserves the strict stray-path baseline.
+
 ### MLX KV-cache safety and prefill controls (2026-10-17)
 
 - Add portable Python 3.15 PEP 723 configuration profiling for four requested

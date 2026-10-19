@@ -199,10 +199,24 @@ class TestHermesRegistryTools:
         result = mcp_tools.hermes_search_knowledge_items("test layout")
         assert result["status"] in ("success", "error")
 
-    def test_hermes_search_vault(self) -> None:
-        # Check actual parameters needed, or just pass a few strings
-        result = mcp_tools.hermes_search_vault(vault_path="/tmp", query="query")
-        assert result["status"] in ("success", "error")
+    def test_hermes_search_vault(self, tmp_path: Path) -> None:
+        (tmp_path / "matching.md").write_text(
+            "# Matching note\nA unique vault query.\n"
+        )
+        (tmp_path / "other.md").write_text("# Other note\nUnrelated contents.\n")
+
+        result = mcp_tools.hermes_search_vault(
+            vault_path=str(tmp_path), query="unique vault query"
+        )
+
+        assert result["status"] == "success"
+        assert result["count"] == 1
+        assert len(result["results"]) == 1
+        assert "unique vault query" in str(result["results"][0]["matches"])
+        missing = mcp_tools.hermes_search_vault(
+            vault_path=str(tmp_path), query="absent phrase"
+        )
+        assert missing == {"status": "success", "results": [], "count": 0}
 
 
 class TestHermesSubagentTools:

@@ -19,6 +19,48 @@ from codomyrmex.llm.embeddings import (
 )
 
 
+def test_cache_hit_preserves_recent_embedding_on_overflow():
+    cache = EmbeddingCache(max_size=2)
+    first = Embedding(vector=[1.0], text="first", model="local")
+    second = Embedding(vector=[2.0], text="second", model="local")
+    third = Embedding(vector=[3.0], text="third", model="local")
+    cache.set(first)
+    cache.set(second)
+    assert cache.get("first", "local") is first
+    cache.set(third)
+    assert cache.get("second", "local") is None
+    assert cache.get("first", "local") is first
+    assert cache.get("third", "local") is third
+    assert cache.size == 2
+
+
+def test_replacing_embedding_refreshes_recency_and_value():
+    cache = EmbeddingCache(max_size=2)
+    cache.set(Embedding(vector=[1.0], text="first", model="local"))
+    cache.set(Embedding(vector=[2.0], text="second", model="local"))
+    replacement = Embedding(vector=[4.0], text="first", model="local")
+    cache.set(replacement)
+    cache.set(Embedding(vector=[3.0], text="third", model="local"))
+    assert cache.get("first", "local") is replacement
+    assert cache.get("second", "local") is None
+    assert cache.size == 2
+
+
+def test_embedding_cache_separates_models_and_reuses_after_clear():
+    cache = EmbeddingCache(max_size=2)
+    first = Embedding(vector=[1.0], text="shared", model="first-model")
+    second = Embedding(vector=[2.0], text="shared", model="second-model")
+    cache.set(first)
+    cache.set(second)
+    assert cache.get("shared", "first-model") is first
+    assert cache.get("shared", "second-model") is second
+    cache.clear()
+    assert cache.size == 0
+    assert cache.get("shared", "first-model") is None
+    cache.set(first)
+    assert cache.get("shared", "first-model") is first
+
+
 class TestEmbedding:
     """Tests for Embedding class."""
 

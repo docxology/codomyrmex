@@ -23,6 +23,37 @@ if not HAS_MODULE:
     pytest.skip("vector_store.persistent module not available", allow_module_level=True)
 
 
+def test_repeated_cached_add_retains_latest_backend_value():
+    backend = InMemoryVectorStore()
+    store = CachedVectorStore(backend=backend, cache_size=2)
+    store.add("first", [1.0, 0.0], {"revision": 1})
+    store.add("second", [0.0, 1.0])
+    store.add("first", [0.5, 0.5], {"revision": 2})
+    store.add("third", [1.0, 1.0])
+    entry = store.get("first")
+    assert entry is not None
+    assert entry.embedding == [0.5, 0.5]
+    assert entry.metadata == {"revision": 2}
+    assert store.count() == 3
+    assert store.cache_stats()["cache_size"] == 2
+
+
+def test_cached_store_delete_and_clear_after_eviction():
+    backend = InMemoryVectorStore()
+    store = CachedVectorStore(backend=backend, cache_size=1)
+    store.add("first", [1.0, 0.0])
+    store.add("second", [0.0, 1.0])
+    assert store.delete("first") is True
+    assert store.get("first") is None
+    assert store.get("second") is not None
+    store.clear()
+    assert store.count() == 0
+    assert store.cache_stats()["cache_size"] == 0
+    assert store.get("second") is None
+    store.add("third", [0.5, 0.5])
+    assert store.get("third") is not None
+
+
 # ---------------------------------------------------------------------------
 # PersistentVectorStore
 # ---------------------------------------------------------------------------
