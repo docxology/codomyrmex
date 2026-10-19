@@ -382,10 +382,10 @@ jobs:
       - name: Run TruffleHog
         # v3.63.7 expanded commit messages into its bash script (shell
         # injection on push); v3.97.4+ passes commit IDs through env.
-        uses: trufflesecurity/trufflehog@v3.97.9
+        uses: trufflesecurity/trufflehog@v3.99.2
         with:
           path: ./
-          version: 3.97.9
+          version: 3.99.2
           base: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           head: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
           extra_args: --debug --only-verified
