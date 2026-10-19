@@ -9,6 +9,7 @@ import threading
 from abc import ABC, abstractmethod
 from collections import deque
 from collections.abc import AsyncIterator, Callable
+from itertools import islice
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -92,7 +93,12 @@ class InMemoryStream(Stream):
 
     def get_recent_events(self, count: int = 10) -> list[Event]:
         """Get recent events from buffer."""
-        return list(self._event_buffer)[-count:]
+        start, _, _ = slice(-count, None).indices(len(self._event_buffer))
+        recent = list(
+            islice(reversed(self._event_buffer), len(self._event_buffer) - start)
+        )
+        recent.reverse()
+        return recent
 
 
 class SSEStream(Stream):
