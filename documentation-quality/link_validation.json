@@ -86,42 +86,42 @@
   {
     "file": "CHANGELOG.md",
     "link": "docs/modules/llm/mlx-profiling-study.md",
-    "line": 21,
+    "line": 32,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:11434/api/embed`",
-    "line": 522,
+    "line": 533,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:11434\"",
-    "line": 522,
+    "line": 533,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:3100`",
-    "line": 528,
+    "line": 539,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "mailto:FristonBlanket@gmail.com",
-    "line": 616,
+    "line": 627,
     "status": "external",
     "message": "External link (not validated)"
   },
   {
     "file": "CHANGELOG.md",
     "link": "http://localhost:8080/`",
-    "line": 1457,
+    "line": 1468,
     "status": "external",
     "message": "External link (not validated)"
   },
