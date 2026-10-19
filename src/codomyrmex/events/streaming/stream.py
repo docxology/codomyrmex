@@ -7,7 +7,9 @@ In-memory and SSE stream backends.
 import asyncio
 import threading
 from abc import ABC, abstractmethod
+from collections import deque
 from collections.abc import AsyncIterator, Callable
+from itertools import islice
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -42,7 +44,7 @@ class InMemoryStream(Stream):
 
     def __init__(self):
         self._subscriptions: dict[str, Subscription] = {}
-        self._event_buffer: list[Event] = []
+        self._event_buffer: deque[Event] = deque()
         self._buffer_size = 1000
         self._lock = threading.Lock()
 
@@ -51,7 +53,7 @@ class InMemoryStream(Stream):
         with self._lock:
             self._event_buffer.append(event)
             if len(self._event_buffer) > self._buffer_size:
-                self._event_buffer.pop(0)
+                self._event_buffer.popleft()
             for sub in self._subscriptions.values():
                 if sub.should_receive(event) and sub.handler:
                     try:
@@ -91,7 +93,12 @@ class InMemoryStream(Stream):
 
     def get_recent_events(self, count: int = 10) -> list[Event]:
         """Get recent events from buffer."""
-        return self._event_buffer[-count:]
+        start, _, _ = slice(-count, None).indices(len(self._event_buffer))
+        recent = list(
+            islice(reversed(self._event_buffer), len(self._event_buffer) - start)
+        )
+        recent.reverse()
+        return recent
 
 
 class SSEStream(Stream):
@@ -101,13 +108,13 @@ class SSEStream(Stream):
         self._subscriptions: dict[str, Subscription] = {}
         self._event_queues: dict[str, asyncio.Queue] = {}
         self._buffer_size = buffer_size
-        self._event_buffer: list[Event] = []
+        self._event_buffer: deque[Event] = deque()
 
     async def publish(self, event: Event) -> None:
         """Publish an event."""
         self._event_buffer.append(event)
         if len(self._event_buffer) > self._buffer_size:
-            self._event_buffer.pop(0)
+            self._event_buffer.popleft()
         for sub_id, sub in self._subscriptions.items():
             if sub.should_receive(event) and sub_id in self._event_queues:
                 await self._event_queues[sub_id].put(event)
