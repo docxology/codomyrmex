@@ -43,9 +43,20 @@ class InMemoryStream(Stream):
 
     def __init__(self):
         self._subscriptions: dict[str, Subscription] = {}
-        self._buffer_size = 1000
-        self._event_buffer: deque[Event] = deque(maxlen=self._buffer_size)
+        self._buffer_size_val = 1000
+        self._event_buffer: deque[Event] = deque(maxlen=1000)
         self._lock = threading.Lock()
+
+    @property
+    def _buffer_size(self) -> int:
+        return self._buffer_size_val
+
+    @_buffer_size.setter
+    def _buffer_size(self, value: int) -> None:
+        self._buffer_size_val = value
+        new_buffer: deque[Event] = deque(maxlen=value)
+        new_buffer.extend(self._event_buffer)
+        self._event_buffer = new_buffer
 
     async def publish(self, event: Event) -> None:
         """Publish an event."""
@@ -99,8 +110,19 @@ class SSEStream(Stream):
     def __init__(self, buffer_size: int = 100):
         self._subscriptions: dict[str, Subscription] = {}
         self._event_queues: dict[str, asyncio.Queue] = {}
-        self._buffer_size = buffer_size
-        self._event_buffer: deque[Event] = deque(maxlen=self._buffer_size)
+        self._buffer_size_val = buffer_size
+        self._event_buffer: deque[Event] = deque(maxlen=buffer_size)
+
+    @property
+    def _buffer_size(self) -> int:
+        return self._buffer_size_val
+
+    @_buffer_size.setter
+    def _buffer_size(self, value: int) -> None:
+        self._buffer_size_val = value
+        new_buffer: deque[Event] = deque(maxlen=value)
+        new_buffer.extend(self._event_buffer)
+        self._event_buffer = new_buffer
 
     async def publish(self, event: Event) -> None:
         """Publish an event."""
