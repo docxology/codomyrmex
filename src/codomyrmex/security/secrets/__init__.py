@@ -18,8 +18,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Optional
 
-
-from .models import SecretType, SecretSeverity, DetectedSecret, ScanResult
+from .models import DetectedSecret, ScanResult, SecretSeverity, SecretType
 
 
 class SecretPatterns:
