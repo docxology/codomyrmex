@@ -6,6 +6,7 @@ In-memory and SSE stream backends.
 
 import asyncio
 import threading
+from collections import deque
 from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator, Callable
 
@@ -42,16 +43,14 @@ class InMemoryStream(Stream):
 
     def __init__(self):
         self._subscriptions: dict[str, Subscription] = {}
-        self._event_buffer: list[Event] = []
         self._buffer_size = 1000
+        self._event_buffer: deque[Event] = deque(maxlen=self._buffer_size)
         self._lock = threading.Lock()
 
     async def publish(self, event: Event) -> None:
         """Publish an event."""
         with self._lock:
             self._event_buffer.append(event)
-            if len(self._event_buffer) > self._buffer_size:
-                self._event_buffer.pop(0)
             for sub in self._subscriptions.values():
                 if sub.should_receive(event) and sub.handler:
                     try:
@@ -91,7 +90,7 @@ class InMemoryStream(Stream):
 
     def get_recent_events(self, count: int = 10) -> list[Event]:
         """Get recent events from buffer."""
-        return self._event_buffer[-count:]
+        return list(self._event_buffer)[-count:]
 
 
 class SSEStream(Stream):
@@ -101,13 +100,11 @@ class SSEStream(Stream):
         self._subscriptions: dict[str, Subscription] = {}
         self._event_queues: dict[str, asyncio.Queue] = {}
         self._buffer_size = buffer_size
-        self._event_buffer: list[Event] = []
+        self._event_buffer: deque[Event] = deque(maxlen=self._buffer_size)
 
     async def publish(self, event: Event) -> None:
         """Publish an event."""
         self._event_buffer.append(event)
-        if len(self._event_buffer) > self._buffer_size:
-            self._event_buffer.pop(0)
         for sub_id, sub in self._subscriptions.items():
             if sub.should_receive(event) and sub_id in self._event_queues:
                 await self._event_queues[sub_id].put(event)
