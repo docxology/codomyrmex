@@ -22,13 +22,13 @@ This file tracks open research items, formal gaps, and architectural improvement
 
 ## Maintenance
 
-- **Portable MLX configuration study:** Independently rerun the Python 3.15
-  config-only [protocol](docs/modules/llm/mlx-profiling-study.md) in a declared
-  environment. Local exploratory collection and bundle integrity are verified;
-  retain raw samples, source snapshot/hashes, dependency versions, revision/dirty
-  state, and a verified bundle manifest before interpreting timing differences.
-  Numerical results remain unpublished here. Independent replication, production
-  inference, and Metal-memory/recall studies remain open work.
+- **Portable MLX configuration study:** Two fresh-process Python 3.15 runs now
+  retain raw samples, exact source archive/import hashes, full dependency freeze,
+  revision/dirty state, and bundle manifests; see the
+  [replication record](docs/modules/llm/mlx-profiling-study.md#2026-10-19-fresh-process-replication).
+  These are same-host configuration observations, not causal improvements or
+  independent-host replication. Repeat on an independently controlled host;
+  production inference and Metal-memory/recall studies remain open work.
 
 - **MLX upstream follow-up:** Verify ml-explore/mlx-lm PR #1978 after release,
   compare bounded chunked-prefill logits/recall against token-by-token prefill,

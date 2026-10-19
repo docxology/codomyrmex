@@ -1,0 +1,2150 @@
+{
+  "compatibility_basis": "Equal source snapshot, imported source hashes, workload, full installed dependencies, Python executable/build, platform, clock, and isolation flag. Shared uncontrolled host; observational repeatability only, not a causal comparison.",
+  "compatible_pair": true,
+  "driver_sha256": "4e380c084da6e41081a73bc6d22773822cb6360e7023ade6eaa8d7da3871d52f",
+  "executions": [
+    {
+      "argv": ["output/mlx-replication-20261019/collect.py", "run-a"],
+      "dependencies": [
+        ["PyYAML", "6.0.3"],
+        ["Pygments", "2.21.0"],
+        ["aiohappyeyeballs", "2.7.1"],
+        ["aiohttp", "3.14.5"],
+        ["aiosignal", "1.4.0"],
+        ["annotated-types", "0.8.0"],
+        ["attrs", "26.1.0"],
+        ["certifi", "2026.10.18"],
+        ["charset-normalizer", "3.5.2"],
+        ["frozenlist", "1.8.0"],
+        ["idna", "3.20"],
+        ["jsonschema", "4.26.0"],
+        ["jsonschema-specifications", "2025.9.1"],
+        ["markdown-it-py", "4.2.0"],
+        ["mdurl", "0.1.2"],
+        ["multidict", "7.1.0"],
+        ["propcache", "0.5.4"],
+        ["pydantic", "2.14.1"],
+        ["pydantic_core", "2.50.1"],
+        ["python-dotenv", "1.2.4"],
+        ["referencing", "0.37.0"],
+        ["requests", "2.34.2"],
+        ["rich", "15.0.0"],
+        ["rpds-py", "2026.9.1"],
+        ["typing-inspection", "0.4.4"],
+        ["typing_extensions", "4.16.0"],
+        ["urllib3", "2.8.0"],
+        ["yarl", "1.25.1"]
+      ],
+      "finished_at": "2026-10-19T15:27:16.375458+00:00",
+      "host_conditions": "Shared host; GitVault and other project activity ongoing; thermal state uncontrolled; no affinity or frequency controls.",
+      "isolated_flag": 1,
+      "load_average_after": [35.32568359375, 31.65625, 18.55712890625],
+      "load_average_before": [35.42724609375, 31.5576171875, 18.369140625],
+      "loaded_source_sha256": {
+        "src/codomyrmex/__init__.py": "2f017627e1a72b3ff00b095ab06ee864fd55d33195671f63cc5157bdfda90117",
+        "src/codomyrmex/config_management/__init__.py": "c7740771df4d31153e56baefe9fba30eaafaf955ff87701f9ed888e5bb180336",
+        "src/codomyrmex/config_management/core/__init__.py": "259ac5ea0630246dcb087f2b6a1dae3c86d6e70d2022af8064be8f81045f36b1",
+        "src/codomyrmex/config_management/core/_config_validation.py": "cff72abc9dcb7b4c71c2580f51de1cff2a0c04d42711a30f6623de4e800fca02",
+        "src/codomyrmex/config_management/core/config_loader.py": "fe5bd10024b28a54ef03a07faeb9f0639fd4edf8c586122ab539032647d37343",
+        "src/codomyrmex/config_management/defaults.py": "6b644309d39805eeb7ff860df6eed0dc84fc225dddca38e2223bcc648d5cfdb3",
+        "src/codomyrmex/config_management/deployment/__init__.py": "7ff5f3e383b629935f3faf8de0e5ec6322c834d74a80e47a00935d15f6b66313",
+        "src/codomyrmex/config_management/deployment/config_deployer.py": "7416fb624bceba5d7eb4eb240242a47f76beab3d2a4640d7303f0225a9b3a451",
+        "src/codomyrmex/config_monitoring/__init__.py": "65f90f6981158cd2be4545a555db6ed452f5b68f2ac4972f3fd56fe40679c29d",
+        "src/codomyrmex/config_monitoring/config_monitor.py": "f065b070b4ed1b497561a6b23478b21c71a621d2462f4dbaf4bc0c736a212de5",
+        "src/codomyrmex/config_monitoring/watcher.py": "77e1cbcf506c685ea35f8a3d466f00014abea48bb08c9d0ad8800ca816488538",
+        "src/codomyrmex/exceptions/__init__.py": "6613d1c73c11de1e3652de4d89839f0899834dc3122e18d48f08cf4a2f510e7b",
+        "src/codomyrmex/exceptions/ai.py": "4080f1a5fd79c56c7ac59c8d128fff0fd9bba0362ccaf1e926308e77270e7ec5",
+        "src/codomyrmex/exceptions/analysis.py": "06203307de808f109de3d7729029858adee29bdfc4862803dbd1bb756745fdcf",
+        "src/codomyrmex/exceptions/base.py": "6bc4d524922700ae1fae1a114ffeec969a30aa7f0bd1ca98836a5ea2d5be87ee",
+        "src/codomyrmex/exceptions/cerebrum.py": "c3f8cf896ec562c4631831eb71cce324db8bf4ef6a7b47528f81babd1ed84f9d",
+        "src/codomyrmex/exceptions/config.py": "7d3ca5417220fa12f261bae6c0ec8b96ad989c0b05504298168145340380ac4b",
+        "src/codomyrmex/exceptions/execution.py": "74da5ba060f174c0c8109c58e3d6dcb972a8d650a90b6d9a223c8fcda2c56126",
+        "src/codomyrmex/exceptions/git.py": "ce50e8c948c4829d673594e63d5628545a19a2ba781440a09cc8449b23f02de7",
+        "src/codomyrmex/exceptions/io.py": "cf53621ae88313fc15db19af1a76e8bd56c6eadbde41d44293bb7eb826216822",
+        "src/codomyrmex/exceptions/network.py": "7e0fd9bf3213afc990e3cacf81af7e8691b1d0088985a621b76b61fb201427b4",
+        "src/codomyrmex/exceptions/orchestration.py": "dbde09b7f8513ec5e1987735b2f8a38cb1c4b658d43a0f7bd593c9f36110c933",
+        "src/codomyrmex/exceptions/specialized.py": "5e47cf7a734e87b1e0e0af730254844e07fdc640674fb86d9dc56782cd01d19c",
+        "src/codomyrmex/exceptions/viz.py": "43540b2f6304e3e2c4b0f565b3ad16a0626c8a73ae24a877cae6d2867362ae8e",
+        "src/codomyrmex/llm/__init__.py": "00575e30ec8ef8116344645d88b8e641fb997865a4fbaf645d6f2b16df2835af",
+        "src/codomyrmex/llm/chains/__init__.py": "82ecabd4816e4bc12c250388085cb10196bcd5fecadec7c6926d88a1dd3fd24b",
+        "src/codomyrmex/llm/config.py": "1c1debe4fddc47655974cde6216e90bcf6d6d860c28242c08a6dd87e2c6e5e1a",
+        "src/codomyrmex/llm/cost_tracking/__init__.py": "6afa9f4c89f941e0cc7b699b496a0cad538d66f59d48180b0c1b931f9436a7e6",
+        "src/codomyrmex/llm/cost_tracking/models.py": "4a28f7721cbdc52169aa6a09bf487c415192ea9ed91afd13891da20751b5bb81",
+        "src/codomyrmex/llm/cost_tracking/pricing.py": "bece799c218367e683154e2213eab76bbf57a2a9c72a246113934f6b42fb2f64",
+        "src/codomyrmex/llm/cost_tracking/tracker.py": "22d55db17823ebb96109ac798d684aa27acbc93921dede40a09ae357f46c1f9c",
+        "src/codomyrmex/llm/embeddings/__init__.py": "246be78939d055727538f78478afbc4ac6e9e5e57f64b42e517e493d93aca35b",
+        "src/codomyrmex/llm/embeddings/models.py": "838b53a274ed63b4d94b5eecf2efb90c5334085e61e15cc598bf6b7f16973a8d",
+        "src/codomyrmex/llm/embeddings/providers.py": "3c3f2c0cf5195a32c429560091480c4ef9bae021e3a43c09a7dce48a9ae698dd",
+        "src/codomyrmex/llm/embeddings/service.py": "48953707bf8516065c1857302d1f0ae65363864d9edcaaa85a0eabba704ae493",
+        "src/codomyrmex/llm/embeddings/similarity.py": "ff552cba517ec59e6229ad1149087bba54b23f17198da480f56e0f47af29d0b7",
+        "src/codomyrmex/llm/fabric/__init__.py": "2dedc5c6bdf230dd52ff473129b0874c861ef32813ae5e009815bb80f189d294",
+        "src/codomyrmex/llm/fabric/fabric_config_manager.py": "9306dc4d9c27f9367684a3e80d947b64620f4b1c576a31d99cd0f35b5c0587f7",
+        "src/codomyrmex/llm/fabric/fabric_manager.py": "cb051afff1e5215e1d473fb34f92cbeddca9346ac8e03e2a5498eab011f0de23",
+        "src/codomyrmex/llm/fabric/fabric_orchestrator.py": "e8cbed655d867da7e86dabad5182c64f6f960996d13b0178b088eb75bbcf7e00",
+        "src/codomyrmex/llm/guardrails/__init__.py": "de9fe3272d513b26b78e54b1663c34eab7aa7cad679a1d64e6df866a9b5ad7e8",
+        "src/codomyrmex/llm/guardrails/detectors.py": "b85f618517090dbfd6c63d60aa31d40fd2fe8e842b11c0bbfcc3f619f4d893d1",
+        "src/codomyrmex/llm/guardrails/guardrail.py": "45cfa6bd578b4a79b9604d9864dd17760ed64c89a8189ebceb2131018d8607e9",
+        "src/codomyrmex/llm/guardrails/models.py": "8484ffc0f26394c6f29780397888fcbf18c2ab51485af38e54092c304f07c27c",
+        "src/codomyrmex/llm/mcp.py": "eb7176d0ed217c5557caf7f413a4d0635d8de5996f383723867c7dc0828f1dfe",
+        "src/codomyrmex/llm/memory/__init__.py": "320af0af2f226bdfaa6338c69169b55fbc861b3553e8f197241ef843b359bdf4",
+        "src/codomyrmex/llm/mlx/__init__.py": "a9d2fc48fd2ba50f9c05ea08df1e6837eec302d57531739a558bb1acda7d042b",
+        "src/codomyrmex/llm/mlx/config.py": "9c5d1f84075b91cc714c1942b86525bc9e63542fe87795a9cb9ba970454ec9c9",
+        "src/codomyrmex/llm/mlx/model_manager.py": "acf6648c3ee914a0ec7b55f6cbfee3735d1920c73a16bc934d3415321d966a26",
+        "src/codomyrmex/llm/mlx/profile_report.py": "556b021748e47f23fd1fb0f2ed8f82bcdb227cf9c7845bc30260f24d731c0a36",
+        "src/codomyrmex/llm/mlx/profiling.py": "bbeb9f5c080f3c40ddd1987688dc2a94bf14e3719e08a6db0f87cba615a135e6",
+        "src/codomyrmex/llm/mlx/quantization.py": "eb9b41eaed17a3ee41cee971b117a3caa7d25348bf71feef130ba1b327148bb0",
+        "src/codomyrmex/llm/mlx/runner.py": "6933a2a0391b87439088a6599d24cb41ff7e5ca0f4e1855fe991a67d488783c5",
+        "src/codomyrmex/llm/multimodal/__init__.py": "27a9cd3b3f8dfcd016d42e6d3c70165442c84a9d6b48baec02088fe78984b835",
+        "src/codomyrmex/llm/multimodal/builder.py": "4e2b9791cb5cb345b05089631e3e4937c5dd0ff68e1ec1d76758cf77b418a422",
+        "src/codomyrmex/llm/multimodal/models.py": "902a624629514b7ef4712e7ba97b62e384dd9f2ea83f362a2c0c1ffe648a4a54",
+        "src/codomyrmex/llm/multimodal/processors.py": "eecacac97ae2a02a10293c031c4ff750b7368e30591f411b580417e8617af525",
+        "src/codomyrmex/llm/ollama/__init__.py": "5ca253baf698704265d70508d019745dbfc0f0b72dbec206fab6b63cdd4a8679",
+        "src/codomyrmex/llm/ollama/_async_execution.py": "fef91c7c7b60e736fc57a1b3a114f55e0f9a9aaa1ff8f0b00ab77dcd2da866f7",
+        "src/codomyrmex/llm/ollama/_evaluation.py": "e6042dd2f27fedb8603f82b95a5e812a2b7f78c0099c19e09edf6ec3cc14012c",
+        "src/codomyrmex/llm/ollama/_execution.py": "0fd390a1fd3827e91e0417b61a2717259b35372c606a7cd83ef12f303c716e5a",
+        "src/codomyrmex/llm/ollama/config_manager.py": "379da06b2b09085e1141f3ab08b92381c450e04e18e41d5c09c507ebe4314ba3",
+        "src/codomyrmex/llm/ollama/model_runner.py": "a4b39f2856d1f17ed0edf09705c26d44b91e92f5279b2d28dc5f43067bc80752",
+        "src/codomyrmex/llm/ollama/ollama_manager.py": "5f98aae2a35addbccf40faa8a6fbb3a513c5697f90d655f562d61e2adbf7d7f8",
+        "src/codomyrmex/llm/ollama/output_manager.py": "92f689512921e3a7462045a86ff68cbe28c3406f70cff3559d0355f24d60d823",
+        "src/codomyrmex/llm/prompts/__init__.py": "0a0424cd0db82d40c3e733c4c5ec0b2a3f2c7695a4016b081b53af31e2cf9317",
+        "src/codomyrmex/llm/providers/__init__.py": "5db4ac38c7c86d77eeae9dffe7edfc32d50c5ffbf7d8420b40c282030f861d51",
+        "src/codomyrmex/llm/providers/anthropic.py": "5fd747f47e3bc63af7a3b8d7e20f50dc04b75e0ee7357144abc96dfda1974874",
+        "src/codomyrmex/llm/providers/base.py": "beec0f096491975e18d12c7ce277413cdbda35604d69acec2e14581d2dbc6e90",
+        "src/codomyrmex/llm/providers/factory.py": "2a43207db7c6541610c5cc268fb92d7be01a83dc4aca59ca1df7618202c81a58",
+        "src/codomyrmex/llm/providers/gemini.py": "734eab6611ad96f320db0c3069bd6bd6971581250b9579a66dfc9fc64bce2459",
+        "src/codomyrmex/llm/providers/models.py": "ea287e7310fc0af87062070b038854f8134dd5aaf1cf67bb71b942bbf32259c1",
+        "src/codomyrmex/llm/providers/openai.py": "bbc4b1bfb77f5f33750fe471b76e1a457f26990dd27282c8ebbbc37a0dd0788e",
+        "src/codomyrmex/llm/providers/openrouter.py": "06ac7b331098fbb5b1106387703a3f3df81558252389c1c60822f0c4586b21d8",
+        "src/codomyrmex/llm/rag/__init__.py": "63c0b4090b7929a93c8bbf4b3b35891454fe6a636efd017120f35a164e5e89e2",
+        "src/codomyrmex/llm/rag/models.py": "acfbb3546f12535dd8874074ef2eae3a0af2dd6704ea5dfe02b6612f3e49afa4",
+        "src/codomyrmex/llm/rag/pipeline.py": "9b85de6d7a5b37e901be74e331e3c94f32c1144e5cbf1736c79236411eaf0204",
+        "src/codomyrmex/llm/rag/splitters.py": "2fe53db7c380616af2bab3f742f88a36fcfdeb3289de5c1ad3d2e6a0073a6f24",
+        "src/codomyrmex/llm/rag/vectorstore.py": "824700946782289319fd57e6a01b900f299e5b904a44882c2e47e3719a0a0f6e",
+        "src/codomyrmex/llm/safety.py": "f0da9a96f9471d9384ec8b6b90c8c8c54b63de52b74f2054edbba1510fbceae3",
+        "src/codomyrmex/llm/streaming/__init__.py": "bea21c59899074ad2a6455688d23518a2b9fa1b2688b2f5330584d8ba17c436f",
+        "src/codomyrmex/llm/tools/__init__.py": "5ac0f180bbb43224c48ca465747fc2c4705e14ec0e63c7754d18ee02c0399d7d",
+        "src/codomyrmex/logging_monitoring/__init__.py": "39511483340066dae2c77400a8f4cfa27ff4c442806d8f32a9d61ff409546877",
+        "src/codomyrmex/logging_monitoring/core/__init__.py": "6ad4f54aba0a821ed6085b523602794d252478574d6a7b8615e7dc343b1c7957",
+        "src/codomyrmex/logging_monitoring/core/correlation.py": "0cb1a492c706494bfc7fc121b09bfc775df92b19ebbb07df842a6fb237d9fdd8",
+        "src/codomyrmex/logging_monitoring/core/log_aggregator.py": "d0790aade24f207f1e5a36e5a52d83c88fe1032d68b8f99988137774cfcffb0b",
+        "src/codomyrmex/logging_monitoring/core/logger_config.py": "4684221f9e6362820aaf10ad5a20afe815fa8de5f8ea8fa46b636f1b6eff4a79",
+        "src/codomyrmex/logging_monitoring/formatters/__init__.py": "48913a6fde85284478cf51d1e4aadca11144162f537b60f60ff22b33873d28fe",
+        "src/codomyrmex/logging_monitoring/formatters/json_formatter.py": "60174617481c24c410e4b62774d3f1813cc16b2029afd0e30bb958f5e94394f6",
+        "src/codomyrmex/logging_monitoring/formatters/structured_formatter.py": "22a54361d442180cc9959b7b5c8bc5c6efae6b8dfd54b6c95b29f765b5a45297",
+        "src/codomyrmex/logging_monitoring/handlers/__init__.py": "a5370a7d4be28a9241dd0606ed26b4e8456dd1649cad7118eb26a87e896be852",
+        "src/codomyrmex/logging_monitoring/handlers/event_bridge.py": "58d5300ec32ed81fd500d8ed5090176fe565991372f207e4bce1e366f551f718",
+        "src/codomyrmex/logging_monitoring/handlers/performance.py": "20f701eec4a4aff68025bab1b95f7ed03f04979bfd36f32f8ff6aeb3e894dfe1",
+        "src/codomyrmex/logging_monitoring/handlers/rotation.py": "53981e751c31a2e26e697ccdb1d3ddeca37c43add4465b58a9e9e1cf9953e1e7",
+        "src/codomyrmex/logging_monitoring/handlers/ws_handler.py": "af871a218a12fb36c6f1ba4a37bdd3ea4b1b98deaee5546105538f6bed56106f",
+        "src/codomyrmex/utils/__init__.py": "995fabfd99e28c7978fe765f8de45c1173b088af7e3453a0912c09bcbc503e07",
+        "src/codomyrmex/utils/i18n/__init__.py": "aae1349f8e3a99951685d6468bdb1a7b40a8d4875b3f82fa450d25a70319d888",
+        "src/codomyrmex/utils/i18n/date_formatter.py": "1f1b733a3e033cdcf026d1a6fe3a2368296c97c88299ff604dd4a196fe73459c",
+        "src/codomyrmex/utils/i18n/formatters.py": "de56f429e9dfda729e5c1d8729fdab5b517e522b487d39ae4f59c437a0304ee5",
+        "src/codomyrmex/utils/i18n/models.py": "c0b8cd7d86eba4396641d91014e651207372e46aa147608be6fbc4f31d222d60",
+        "src/codomyrmex/utils/i18n/translator.py": "abc508376e1bd0a13b1e424dc090cb1bcfbde24ec22488c09ffd241d58f5ab92",
+        "src/codomyrmex/utils/integration.py": "9a2397f6951a38bbdd4a5c09d47182e4e0d0978d0af8d3a39b9044cfdef319e9",
+        "src/codomyrmex/utils/process/__init__.py": "0393eae2c9ab1bdbb49b01555acf5b73b5dd4f9048cfa2db2ee4202f8cf91bf4",
+        "src/codomyrmex/utils/process/script_base.py": "fcc8b1be5918bdee28cd7a949dea234dcf489d7fffadcbe840b757198cfd10b8",
+        "src/codomyrmex/utils/process/subprocess.py": "c04075396dc2445ef3ab48d5bb0a6a988ae68c91c41c090bd26de591308baa80",
+        "src/codomyrmex/utils/process/subprocess_advanced.py": "2d8808a26365581bbc398bc06acb9080d0c5476595a76e6f2dcf9d4af9fbdc5d",
+        "src/codomyrmex/utils/refined.py": "a808cc8a6dac8155a8892ef6150c58177754a23554d34fb0523e1a75b07322f1",
+        "src/codomyrmex/validation/__init__.py": "12ad0ab80288e58e70249e581cb9bee620448c94975bc462479296997ba4926f",
+        "src/codomyrmex/validation/pai.py": "6ec16c034abf74355c179dd74bdb5e3df8e9118916eebfafcabac70690de35a2",
+        "src/codomyrmex/validation/schemas/__init__.py": "ad3e86f5c2a069c75deb7134329333774428423eb1228500f0dfe66da9f02446",
+        "src/codomyrmex/validation/schemas/code.py": "ea08c2d9a5e903ff8de547106d9c3e7345b38c0a332963daacfa4c70594f05c5",
+        "src/codomyrmex/validation/schemas/core.py": "6dba7f1cfa889511f5d625ea9447817f60d85f27ab814129bf19c99884d4984c",
+        "src/codomyrmex/validation/schemas/infra.py": "b6cadc64c394f2370607bafaa4c55f80b3a8b160ae055904ab7c77d4ec169d5c"
+      },
+      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+      "python_build": "3.15.0 (main, Oct 14 2026, 00:56:12) [Clang 23.1.3 ]",
+      "python_config_args": "'--build=aarch64-apple-darwin' '--host=aarch64-apple-darwin' '--prefix=/install' '--with-openssl=/tmp/tmpr_g0v_07/tools/deps' '--with-system-expat' '--without-ensurepip' '--with-tail-call-interp' '--with-system-libmpdec' 'MODULE_BUILDTYPE=static' '--enable-loadable-sqlite-extensions' '--enable-static-libpython-for-interpreter' '--enable-shared' '--with-mimalloc' '--enable-optimizations' '--enable-experimental-jit=yes-off' '--with-lto=full' '--with-build-python=/tmp/tmpr_g0v_07/tools/host/bin/python3.15' 'ac_cv_lib_intl_textdomain=no' 'ac_cv_func_ptsname_r=no' 'ac_cv_func_explicit_bzero=no' '--with-dbmliborder=ndbm' 'build_alias=aarch64-apple-darwin' 'host_alias=aarch64-apple-darwin' 'PKG_CONFIG=pkg-config --static --define-prefix' 'PKG_CONFIG_PATH=/tmp/tmpr_g0v_07/tools/deps/share/pkgconfig:/tmp/tmpr_g0v_07/tools/deps/lib/pkgconfig' 'CC=clang' 'CFLAGS=-O3 -arch arm64 -mmacosx-version-min=11.0 -Wno-nullability-completeness -Wno-expansion-to-defined -Wno-undef-prefix -fPIC -Werror=unguarded-availability-new' 'LDFLAGS=-arch arm64 -mmacosx-version-min=11.0 -Wl,-headerpad,40' 'CPPFLAGS=-O3 -arch arm64 -mmacosx-version-min=11.0 -Wno-nullability-completeness -Wno-expansion-to-defined -Wno-undef-prefix -fPIC -Werror=unguarded-availability-new' 'PROFILE_TASK=-m test --pgo -j 12' 'BOLT_COMMON_FLAGS=' 'BOLT_APPLY_FLAGS='",
+      "python_executable_sha256": "a01000a3297c2c0d7c6e2d1329e329e674f228622cd51ad634504c6b789320e0",
+      "started_at": "2026-10-19T15:27:04.551181+00:00"
+    },
+    {
+      "argv": ["output/mlx-replication-20261019/collect.py", "run-b"],
+      "dependencies": [
+        ["PyYAML", "6.0.3"],
+        ["Pygments", "2.21.0"],
+        ["aiohappyeyeballs", "2.7.1"],
+        ["aiohttp", "3.14.5"],
+        ["aiosignal", "1.4.0"],
+        ["annotated-types", "0.8.0"],
+        ["attrs", "26.1.0"],
+        ["certifi", "2026.10.18"],
+        ["charset-normalizer", "3.5.2"],
+        ["frozenlist", "1.8.0"],
+        ["idna", "3.20"],
+        ["jsonschema", "4.26.0"],
+        ["jsonschema-specifications", "2025.9.1"],
+        ["markdown-it-py", "4.2.0"],
+        ["mdurl", "0.1.2"],
+        ["multidict", "7.1.0"],
+        ["propcache", "0.5.4"],
+        ["pydantic", "2.14.1"],
+        ["pydantic_core", "2.50.1"],
+        ["python-dotenv", "1.2.4"],
+        ["referencing", "0.37.0"],
+        ["requests", "2.34.2"],
+        ["rich", "15.0.0"],
+        ["rpds-py", "2026.9.1"],
+        ["typing-inspection", "0.4.4"],
+        ["typing_extensions", "4.16.0"],
+        ["urllib3", "2.8.0"],
+        ["yarl", "1.25.1"]
+      ],
+      "finished_at": "2026-10-19T15:27:28.412960+00:00",
+      "host_conditions": "Shared host; GitVault and other project activity ongoing; thermal state uncontrolled; no affinity or frequency controls.",
+      "isolated_flag": 1,
+      "load_average_after": [33.1640625, 31.31982421875, 18.5908203125],
+      "load_average_before": [35.32568359375, 31.65625, 18.55712890625],
+      "loaded_source_sha256": {
+        "src/codomyrmex/__init__.py": "2f017627e1a72b3ff00b095ab06ee864fd55d33195671f63cc5157bdfda90117",
+        "src/codomyrmex/config_management/__init__.py": "c7740771df4d31153e56baefe9fba30eaafaf955ff87701f9ed888e5bb180336",
+        "src/codomyrmex/config_management/core/__init__.py": "259ac5ea0630246dcb087f2b6a1dae3c86d6e70d2022af8064be8f81045f36b1",
+        "src/codomyrmex/config_management/core/_config_validation.py": "cff72abc9dcb7b4c71c2580f51de1cff2a0c04d42711a30f6623de4e800fca02",
+        "src/codomyrmex/config_management/core/config_loader.py": "fe5bd10024b28a54ef03a07faeb9f0639fd4edf8c586122ab539032647d37343",
+        "src/codomyrmex/config_management/defaults.py": "6b644309d39805eeb7ff860df6eed0dc84fc225dddca38e2223bcc648d5cfdb3",
+        "src/codomyrmex/config_management/deployment/__init__.py": "7ff5f3e383b629935f3faf8de0e5ec6322c834d74a80e47a00935d15f6b66313",
+        "src/codomyrmex/config_management/deployment/config_deployer.py": "7416fb624bceba5d7eb4eb240242a47f76beab3d2a4640d7303f0225a9b3a451",
+        "src/codomyrmex/config_monitoring/__init__.py": "65f90f6981158cd2be4545a555db6ed452f5b68f2ac4972f3fd56fe40679c29d",
+        "src/codomyrmex/config_monitoring/config_monitor.py": "f065b070b4ed1b497561a6b23478b21c71a621d2462f4dbaf4bc0c736a212de5",
+        "src/codomyrmex/config_monitoring/watcher.py": "77e1cbcf506c685ea35f8a3d466f00014abea48bb08c9d0ad8800ca816488538",
+        "src/codomyrmex/exceptions/__init__.py": "6613d1c73c11de1e3652de4d89839f0899834dc3122e18d48f08cf4a2f510e7b",
+        "src/codomyrmex/exceptions/ai.py": "4080f1a5fd79c56c7ac59c8d128fff0fd9bba0362ccaf1e926308e77270e7ec5",
+        "src/codomyrmex/exceptions/analysis.py": "06203307de808f109de3d7729029858adee29bdfc4862803dbd1bb756745fdcf",
+        "src/codomyrmex/exceptions/base.py": "6bc4d524922700ae1fae1a114ffeec969a30aa7f0bd1ca98836a5ea2d5be87ee",
+        "src/codomyrmex/exceptions/cerebrum.py": "c3f8cf896ec562c4631831eb71cce324db8bf4ef6a7b47528f81babd1ed84f9d",
+        "src/codomyrmex/exceptions/config.py": "7d3ca5417220fa12f261bae6c0ec8b96ad989c0b05504298168145340380ac4b",
+        "src/codomyrmex/exceptions/execution.py": "74da5ba060f174c0c8109c58e3d6dcb972a8d650a90b6d9a223c8fcda2c56126",
+        "src/codomyrmex/exceptions/git.py": "ce50e8c948c4829d673594e63d5628545a19a2ba781440a09cc8449b23f02de7",
+        "src/codomyrmex/exceptions/io.py": "cf53621ae88313fc15db19af1a76e8bd56c6eadbde41d44293bb7eb826216822",
+        "src/codomyrmex/exceptions/network.py": "7e0fd9bf3213afc990e3cacf81af7e8691b1d0088985a621b76b61fb201427b4",
+        "src/codomyrmex/exceptions/orchestration.py": "dbde09b7f8513ec5e1987735b2f8a38cb1c4b658d43a0f7bd593c9f36110c933",
+        "src/codomyrmex/exceptions/specialized.py": "5e47cf7a734e87b1e0e0af730254844e07fdc640674fb86d9dc56782cd01d19c",
+        "src/codomyrmex/exceptions/viz.py": "43540b2f6304e3e2c4b0f565b3ad16a0626c8a73ae24a877cae6d2867362ae8e",
+        "src/codomyrmex/llm/__init__.py": "00575e30ec8ef8116344645d88b8e641fb997865a4fbaf645d6f2b16df2835af",
+        "src/codomyrmex/llm/chains/__init__.py": "82ecabd4816e4bc12c250388085cb10196bcd5fecadec7c6926d88a1dd3fd24b",
+        "src/codomyrmex/llm/config.py": "1c1debe4fddc47655974cde6216e90bcf6d6d860c28242c08a6dd87e2c6e5e1a",
+        "src/codomyrmex/llm/cost_tracking/__init__.py": "6afa9f4c89f941e0cc7b699b496a0cad538d66f59d48180b0c1b931f9436a7e6",
+        "src/codomyrmex/llm/cost_tracking/models.py": "4a28f7721cbdc52169aa6a09bf487c415192ea9ed91afd13891da20751b5bb81",
+        "src/codomyrmex/llm/cost_tracking/pricing.py": "bece799c218367e683154e2213eab76bbf57a2a9c72a246113934f6b42fb2f64",
+        "src/codomyrmex/llm/cost_tracking/tracker.py": "22d55db17823ebb96109ac798d684aa27acbc93921dede40a09ae357f46c1f9c",
+        "src/codomyrmex/llm/embeddings/__init__.py": "246be78939d055727538f78478afbc4ac6e9e5e57f64b42e517e493d93aca35b",
+        "src/codomyrmex/llm/embeddings/models.py": "838b53a274ed63b4d94b5eecf2efb90c5334085e61e15cc598bf6b7f16973a8d",
+        "src/codomyrmex/llm/embeddings/providers.py": "3c3f2c0cf5195a32c429560091480c4ef9bae021e3a43c09a7dce48a9ae698dd",
+        "src/codomyrmex/llm/embeddings/service.py": "48953707bf8516065c1857302d1f0ae65363864d9edcaaa85a0eabba704ae493",
+        "src/codomyrmex/llm/embeddings/similarity.py": "ff552cba517ec59e6229ad1149087bba54b23f17198da480f56e0f47af29d0b7",
+        "src/codomyrmex/llm/fabric/__init__.py": "2dedc5c6bdf230dd52ff473129b0874c861ef32813ae5e009815bb80f189d294",
+        "src/codomyrmex/llm/fabric/fabric_config_manager.py": "9306dc4d9c27f9367684a3e80d947b64620f4b1c576a31d99cd0f35b5c0587f7",
+        "src/codomyrmex/llm/fabric/fabric_manager.py": "cb051afff1e5215e1d473fb34f92cbeddca9346ac8e03e2a5498eab011f0de23",
+        "src/codomyrmex/llm/fabric/fabric_orchestrator.py": "e8cbed655d867da7e86dabad5182c64f6f960996d13b0178b088eb75bbcf7e00",
+        "src/codomyrmex/llm/guardrails/__init__.py": "de9fe3272d513b26b78e54b1663c34eab7aa7cad679a1d64e6df866a9b5ad7e8",
+        "src/codomyrmex/llm/guardrails/detectors.py": "b85f618517090dbfd6c63d60aa31d40fd2fe8e842b11c0bbfcc3f619f4d893d1",
+        "src/codomyrmex/llm/guardrails/guardrail.py": "45cfa6bd578b4a79b9604d9864dd17760ed64c89a8189ebceb2131018d8607e9",
+        "src/codomyrmex/llm/guardrails/models.py": "8484ffc0f26394c6f29780397888fcbf18c2ab51485af38e54092c304f07c27c",
+        "src/codomyrmex/llm/mcp.py": "eb7176d0ed217c5557caf7f413a4d0635d8de5996f383723867c7dc0828f1dfe",
+        "src/codomyrmex/llm/memory/__init__.py": "320af0af2f226bdfaa6338c69169b55fbc861b3553e8f197241ef843b359bdf4",
+        "src/codomyrmex/llm/mlx/__init__.py": "a9d2fc48fd2ba50f9c05ea08df1e6837eec302d57531739a558bb1acda7d042b",
+        "src/codomyrmex/llm/mlx/config.py": "9c5d1f84075b91cc714c1942b86525bc9e63542fe87795a9cb9ba970454ec9c9",
+        "src/codomyrmex/llm/mlx/model_manager.py": "acf6648c3ee914a0ec7b55f6cbfee3735d1920c73a16bc934d3415321d966a26",
+        "src/codomyrmex/llm/mlx/profile_report.py": "556b021748e47f23fd1fb0f2ed8f82bcdb227cf9c7845bc30260f24d731c0a36",
+        "src/codomyrmex/llm/mlx/profiling.py": "bbeb9f5c080f3c40ddd1987688dc2a94bf14e3719e08a6db0f87cba615a135e6",
+        "src/codomyrmex/llm/mlx/quantization.py": "eb9b41eaed17a3ee41cee971b117a3caa7d25348bf71feef130ba1b327148bb0",
+        "src/codomyrmex/llm/mlx/runner.py": "6933a2a0391b87439088a6599d24cb41ff7e5ca0f4e1855fe991a67d488783c5",
+        "src/codomyrmex/llm/multimodal/__init__.py": "27a9cd3b3f8dfcd016d42e6d3c70165442c84a9d6b48baec02088fe78984b835",
+        "src/codomyrmex/llm/multimodal/builder.py": "4e2b9791cb5cb345b05089631e3e4937c5dd0ff68e1ec1d76758cf77b418a422",
+        "src/codomyrmex/llm/multimodal/models.py": "902a624629514b7ef4712e7ba97b62e384dd9f2ea83f362a2c0c1ffe648a4a54",
+        "src/codomyrmex/llm/multimodal/processors.py": "eecacac97ae2a02a10293c031c4ff750b7368e30591f411b580417e8617af525",
+        "src/codomyrmex/llm/ollama/__init__.py": "5ca253baf698704265d70508d019745dbfc0f0b72dbec206fab6b63cdd4a8679",
+        "src/codomyrmex/llm/ollama/_async_execution.py": "fef91c7c7b60e736fc57a1b3a114f55e0f9a9aaa1ff8f0b00ab77dcd2da866f7",
+        "src/codomyrmex/llm/ollama/_evaluation.py": "e6042dd2f27fedb8603f82b95a5e812a2b7f78c0099c19e09edf6ec3cc14012c",
+        "src/codomyrmex/llm/ollama/_execution.py": "0fd390a1fd3827e91e0417b61a2717259b35372c606a7cd83ef12f303c716e5a",
+        "src/codomyrmex/llm/ollama/config_manager.py": "379da06b2b09085e1141f3ab08b92381c450e04e18e41d5c09c507ebe4314ba3",
+        "src/codomyrmex/llm/ollama/model_runner.py": "a4b39f2856d1f17ed0edf09705c26d44b91e92f5279b2d28dc5f43067bc80752",
+        "src/codomyrmex/llm/ollama/ollama_manager.py": "5f98aae2a35addbccf40faa8a6fbb3a513c5697f90d655f562d61e2adbf7d7f8",
+        "src/codomyrmex/llm/ollama/output_manager.py": "92f689512921e3a7462045a86ff68cbe28c3406f70cff3559d0355f24d60d823",
+        "src/codomyrmex/llm/prompts/__init__.py": "0a0424cd0db82d40c3e733c4c5ec0b2a3f2c7695a4016b081b53af31e2cf9317",
+        "src/codomyrmex/llm/providers/__init__.py": "5db4ac38c7c86d77eeae9dffe7edfc32d50c5ffbf7d8420b40c282030f861d51",
+        "src/codomyrmex/llm/providers/anthropic.py": "5fd747f47e3bc63af7a3b8d7e20f50dc04b75e0ee7357144abc96dfda1974874",
+        "src/codomyrmex/llm/providers/base.py": "beec0f096491975e18d12c7ce277413cdbda35604d69acec2e14581d2dbc6e90",
+        "src/codomyrmex/llm/providers/factory.py": "2a43207db7c6541610c5cc268fb92d7be01a83dc4aca59ca1df7618202c81a58",
+        "src/codomyrmex/llm/providers/gemini.py": "734eab6611ad96f320db0c3069bd6bd6971581250b9579a66dfc9fc64bce2459",
+        "src/codomyrmex/llm/providers/models.py": "ea287e7310fc0af87062070b038854f8134dd5aaf1cf67bb71b942bbf32259c1",
+        "src/codomyrmex/llm/providers/openai.py": "bbc4b1bfb77f5f33750fe471b76e1a457f26990dd27282c8ebbbc37a0dd0788e",
+        "src/codomyrmex/llm/providers/openrouter.py": "06ac7b331098fbb5b1106387703a3f3df81558252389c1c60822f0c4586b21d8",
+        "src/codomyrmex/llm/rag/__init__.py": "63c0b4090b7929a93c8bbf4b3b35891454fe6a636efd017120f35a164e5e89e2",
+        "src/codomyrmex/llm/rag/models.py": "acfbb3546f12535dd8874074ef2eae3a0af2dd6704ea5dfe02b6612f3e49afa4",
+        "src/codomyrmex/llm/rag/pipeline.py": "9b85de6d7a5b37e901be74e331e3c94f32c1144e5cbf1736c79236411eaf0204",
+        "src/codomyrmex/llm/rag/splitters.py": "2fe53db7c380616af2bab3f742f88a36fcfdeb3289de5c1ad3d2e6a0073a6f24",
+        "src/codomyrmex/llm/rag/vectorstore.py": "824700946782289319fd57e6a01b900f299e5b904a44882c2e47e3719a0a0f6e",
+        "src/codomyrmex/llm/safety.py": "f0da9a96f9471d9384ec8b6b90c8c8c54b63de52b74f2054edbba1510fbceae3",
+        "src/codomyrmex/llm/streaming/__init__.py": "bea21c59899074ad2a6455688d23518a2b9fa1b2688b2f5330584d8ba17c436f",
+        "src/codomyrmex/llm/tools/__init__.py": "5ac0f180bbb43224c48ca465747fc2c4705e14ec0e63c7754d18ee02c0399d7d",
+        "src/codomyrmex/logging_monitoring/__init__.py": "39511483340066dae2c77400a8f4cfa27ff4c442806d8f32a9d61ff409546877",
+        "src/codomyrmex/logging_monitoring/core/__init__.py": "6ad4f54aba0a821ed6085b523602794d252478574d6a7b8615e7dc343b1c7957",
+        "src/codomyrmex/logging_monitoring/core/correlation.py": "0cb1a492c706494bfc7fc121b09bfc775df92b19ebbb07df842a6fb237d9fdd8",
+        "src/codomyrmex/logging_monitoring/core/log_aggregator.py": "d0790aade24f207f1e5a36e5a52d83c88fe1032d68b8f99988137774cfcffb0b",
+        "src/codomyrmex/logging_monitoring/core/logger_config.py": "4684221f9e6362820aaf10ad5a20afe815fa8de5f8ea8fa46b636f1b6eff4a79",
+        "src/codomyrmex/logging_monitoring/formatters/__init__.py": "48913a6fde85284478cf51d1e4aadca11144162f537b60f60ff22b33873d28fe",
+        "src/codomyrmex/logging_monitoring/formatters/json_formatter.py": "60174617481c24c410e4b62774d3f1813cc16b2029afd0e30bb958f5e94394f6",
+        "src/codomyrmex/logging_monitoring/formatters/structured_formatter.py": "22a54361d442180cc9959b7b5c8bc5c6efae6b8dfd54b6c95b29f765b5a45297",
+        "src/codomyrmex/logging_monitoring/handlers/__init__.py": "a5370a7d4be28a9241dd0606ed26b4e8456dd1649cad7118eb26a87e896be852",
+        "src/codomyrmex/logging_monitoring/handlers/event_bridge.py": "58d5300ec32ed81fd500d8ed5090176fe565991372f207e4bce1e366f551f718",
+        "src/codomyrmex/logging_monitoring/handlers/performance.py": "20f701eec4a4aff68025bab1b95f7ed03f04979bfd36f32f8ff6aeb3e894dfe1",
+        "src/codomyrmex/logging_monitoring/handlers/rotation.py": "53981e751c31a2e26e697ccdb1d3ddeca37c43add4465b58a9e9e1cf9953e1e7",
+        "src/codomyrmex/logging_monitoring/handlers/ws_handler.py": "af871a218a12fb36c6f1ba4a37bdd3ea4b1b98deaee5546105538f6bed56106f",
+        "src/codomyrmex/utils/__init__.py": "995fabfd99e28c7978fe765f8de45c1173b088af7e3453a0912c09bcbc503e07",
+        "src/codomyrmex/utils/i18n/__init__.py": "aae1349f8e3a99951685d6468bdb1a7b40a8d4875b3f82fa450d25a70319d888",
+        "src/codomyrmex/utils/i18n/date_formatter.py": "1f1b733a3e033cdcf026d1a6fe3a2368296c97c88299ff604dd4a196fe73459c",
+        "src/codomyrmex/utils/i18n/formatters.py": "de56f429e9dfda729e5c1d8729fdab5b517e522b487d39ae4f59c437a0304ee5",
+        "src/codomyrmex/utils/i18n/models.py": "c0b8cd7d86eba4396641d91014e651207372e46aa147608be6fbc4f31d222d60",
+        "src/codomyrmex/utils/i18n/translator.py": "abc508376e1bd0a13b1e424dc090cb1bcfbde24ec22488c09ffd241d58f5ab92",
+        "src/codomyrmex/utils/integration.py": "9a2397f6951a38bbdd4a5c09d47182e4e0d0978d0af8d3a39b9044cfdef319e9",
+        "src/codomyrmex/utils/process/__init__.py": "0393eae2c9ab1bdbb49b01555acf5b73b5dd4f9048cfa2db2ee4202f8cf91bf4",
+        "src/codomyrmex/utils/process/script_base.py": "fcc8b1be5918bdee28cd7a949dea234dcf489d7fffadcbe840b757198cfd10b8",
+        "src/codomyrmex/utils/process/subprocess.py": "c04075396dc2445ef3ab48d5bb0a6a988ae68c91c41c090bd26de591308baa80",
+        "src/codomyrmex/utils/process/subprocess_advanced.py": "2d8808a26365581bbc398bc06acb9080d0c5476595a76e6f2dcf9d4af9fbdc5d",
+        "src/codomyrmex/utils/refined.py": "a808cc8a6dac8155a8892ef6150c58177754a23554d34fb0523e1a75b07322f1",
+        "src/codomyrmex/validation/__init__.py": "12ad0ab80288e58e70249e581cb9bee620448c94975bc462479296997ba4926f",
+        "src/codomyrmex/validation/pai.py": "6ec16c034abf74355c179dd74bdb5e3df8e9118916eebfafcabac70690de35a2",
+        "src/codomyrmex/validation/schemas/__init__.py": "ad3e86f5c2a069c75deb7134329333774428423eb1228500f0dfe66da9f02446",
+        "src/codomyrmex/validation/schemas/code.py": "ea08c2d9a5e903ff8de547106d9c3e7345b38c0a332963daacfa4c70594f05c5",
+        "src/codomyrmex/validation/schemas/core.py": "6dba7f1cfa889511f5d625ea9447817f60d85f27ab814129bf19c99884d4984c",
+        "src/codomyrmex/validation/schemas/infra.py": "b6cadc64c394f2370607bafaa4c55f80b3a8b160ae055904ab7c77d4ec169d5c"
+      },
+      "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+      "python_build": "3.15.0 (main, Oct 14 2026, 00:56:12) [Clang 23.1.3 ]",
+      "python_config_args": "'--build=aarch64-apple-darwin' '--host=aarch64-apple-darwin' '--prefix=/install' '--with-openssl=/tmp/tmpr_g0v_07/tools/deps' '--with-system-expat' '--without-ensurepip' '--with-tail-call-interp' '--with-system-libmpdec' 'MODULE_BUILDTYPE=static' '--enable-loadable-sqlite-extensions' '--enable-static-libpython-for-interpreter' '--enable-shared' '--with-mimalloc' '--enable-optimizations' '--enable-experimental-jit=yes-off' '--with-lto=full' '--with-build-python=/tmp/tmpr_g0v_07/tools/host/bin/python3.15' 'ac_cv_lib_intl_textdomain=no' 'ac_cv_func_ptsname_r=no' 'ac_cv_func_explicit_bzero=no' '--with-dbmliborder=ndbm' 'build_alias=aarch64-apple-darwin' 'host_alias=aarch64-apple-darwin' 'PKG_CONFIG=pkg-config --static --define-prefix' 'PKG_CONFIG_PATH=/tmp/tmpr_g0v_07/tools/deps/share/pkgconfig:/tmp/tmpr_g0v_07/tools/deps/lib/pkgconfig' 'CC=clang' 'CFLAGS=-O3 -arch arm64 -mmacosx-version-min=11.0 -Wno-nullability-completeness -Wno-expansion-to-defined -Wno-undef-prefix -fPIC -Werror=unguarded-availability-new' 'LDFLAGS=-arch arm64 -mmacosx-version-min=11.0 -Wl,-headerpad,40' 'CPPFLAGS=-O3 -arch arm64 -mmacosx-version-min=11.0 -Wno-nullability-completeness -Wno-expansion-to-defined -Wno-undef-prefix -fPIC -Werror=unguarded-availability-new' 'PROFILE_TASK=-m test --pgo -j 12' 'BOLT_COMMON_FLAGS=' 'BOLT_APPLY_FLAGS='",
+      "python_executable_sha256": "a01000a3297c2c0d7c6e2d1329e329e674f228622cd51ad634504c6b789320e0",
+      "started_at": "2026-10-19T15:27:16.932097+00:00"
+    }
+  ],
+  "freeze_sha256": "6321267c9c514fd3c5df7dde0c30a518827fd0ae77d8c9103c45ef872f49519f",
+  "git_version": "git version 2.56.0",
+  "legacy_comparable": false,
+  "legacy_exclusion": "2026-10-17 final bundle lacks retained exact source snapshot, transitive dependency freeze, interpreter binary hash and execution isolation receipt. Selected source hashes and direct versions match; no historical percentage improvement or regression is justified.",
+  "legacy_selected_source_hashes_match": true,
+  "profiles": [
+    {
+      "created_at": "2026-10-19T15:27:16.340367+00:00",
+      "environment": {
+        "clock_resolution_seconds": 4.166666666666666e-8,
+        "dependencies": {
+          "aiohttp": "3.14.5",
+          "jsonschema": "4.26.0",
+          "pydantic": "2.14.1",
+          "python-dotenv": "1.2.4",
+          "pyyaml": "6.0.3",
+          "requests": "2.34.2",
+          "rich": "15.0.0"
+        },
+        "implementation": "CPython",
+        "machine": "arm64",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.15.0",
+        "python_build": "3.15.0 (main, Oct 14 2026, 00:56:12) [Clang 23.1.3 ]"
+      },
+      "metal_memory": "not_measured",
+      "method": {
+        "instrumentation": "separate timing, cProfile, and tracemalloc passes",
+        "iterations": 50000,
+        "repeats": 21,
+        "timing_order": "cyclic rotation per repeat",
+        "uncertainty": "median absolute deviation; not a confidence interval",
+        "warmup_operations": 100
+      },
+      "native_inference": "not_run",
+      "provenance": {
+        "source_dirty": false,
+        "source_revision": "37f86c35adb81a2bc39ac67f04b6dd0885734620",
+        "source_sha256": {
+          "config.py": "9c5d1f84075b91cc714c1942b86525bc9e63542fe87795a9cb9ba970454ec9c9",
+          "profile_report.py": "556b021748e47f23fd1fb0f2ed8f82bcdb227cf9c7845bc30260f24d731c0a36",
+          "profiling.py": "bbeb9f5c080f3c40ddd1987688dc2a94bf14e3719e08a6db0f87cba615a135e6"
+        }
+      },
+      "scenarios": [
+        {
+          "cache_kwargs": {
+            "prefill_step_size": 2048
+          },
+          "configuration": {
+            "cache_dir": "profile/no-cache-written",
+            "kv_bits": null,
+            "kv_group_size": 64,
+            "max_kv_size": null,
+            "max_tokens": 128,
+            "model": "profile/no-model-loaded",
+            "prefill_step_size": null,
+            "quantized_kv_start": 0,
+            "repetition_penalty": 1.1,
+            "seed": 0,
+            "temperature": 0.7,
+            "top_p": 0.9
+          },
+          "hotspots": [
+            {
+              "cumulative_seconds": 0.298660833,
+              "file": "profiling.py",
+              "function": "_exercise",
+              "line": 49,
+              "primitive_calls": 1,
+              "self_seconds": 0.018323021000000002,
+              "total_calls": 1
+            },
+            {
+              "cumulative_seconds": 0.22212388700000002,
+              "file": "profiling.py",
+              "function": "_configuration",
+              "line": 33,
+              "primitive_calls": 50000,
+              "self_seconds": 0.023482219000000002,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.19864166800000002,
+              "file": "<string>",
+              "function": "__init__",
+              "line": 2,
+              "primitive_calls": 50000,
+              "self_seconds": 0.014301546,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.18434012200000002,
+              "file": "config.py",
+              "function": "__post_init__",
+              "line": 100,
+              "primitive_calls": 50000,
+              "self_seconds": 0.022316234,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.162023888,
+              "file": "config.py",
+              "function": "_env_optional_int",
+              "line": 39,
+              "primitive_calls": 150000,
+              "self_seconds": 0.019452574,
+              "total_calls": 150000
+            },
+            {
+              "cumulative_seconds": 0.142571314,
+              "file": "<frozen os>",
+              "function": "getenv",
+              "line": 844,
+              "primitive_calls": 150000,
+              "self_seconds": 0.019208408,
+              "total_calls": 150000
+            },
+            {
+              "cumulative_seconds": 0.12336290600000001,
+              "file": "<frozen _collections_abc>",
+              "function": "get",
+              "line": 792,
+              "primitive_calls": 150000,
+              "self_seconds": 0.03242016,
+              "total_calls": 150000
+            },
+            {
+              "cumulative_seconds": 0.090942746,
+              "file": "<frozen os>",
+              "function": "__getitem__",
+              "line": 724,
+              "primitive_calls": 150000,
+              "self_seconds": 0.044195833000000004,
+              "total_calls": 150000
+            },
+            {
+              "cumulative_seconds": 0.047483246,
+              "file": "config.py",
+              "function": "get_generation_kwargs",
+              "line": 181,
+              "primitive_calls": 50000,
+              "self_seconds": 0.016924716,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.046746913,
+              "file": "<frozen os>",
+              "function": "encode",
+              "line": 812,
+              "primitive_calls": 150000,
+              "self_seconds": 0.027458033000000003,
+              "total_calls": 150000
+            },
+            {
+              "cumulative_seconds": 0.03055853,
+              "file": "config.py",
+              "function": "get_cache_kwargs",
+              "line": 151,
+              "primitive_calls": 50000,
+              "self_seconds": 0.009788442000000001,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.020770088000000003,
+              "file": "config.py",
+              "function": "validate",
+              "line": 198,
+              "primitive_calls": 50000,
+              "self_seconds": 0.017979219,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.01235692,
+              "file": "~",
+              "function": "<method 'encode' of 'str' objects>",
+              "line": 0,
+              "primitive_calls": 150000,
+              "self_seconds": 0.01235692,
+              "total_calls": 150000
+            },
+            {
+              "cumulative_seconds": 0.010730679,
+              "file": "config.py",
+              "function": "to_dict",
+              "line": 134,
+              "primitive_calls": 50000,
+              "self_seconds": 0.010730679,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.00693196,
+              "file": "~",
+              "function": "<built-in method builtins.isinstance>",
+              "line": 0,
+              "primitive_calls": 150000,
+              "self_seconds": 0.00693196,
+              "total_calls": 150000
+            },
+            {
+              "cumulative_seconds": 0.002790869,
+              "file": "~",
+              "function": "<built-in method builtins.len>",
+              "line": 0,
+              "primitive_calls": 50000,
+              "self_seconds": 0.002790869,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 2.025e-5,
+              "file": "__init__.py",
+              "function": "__exit__",
+              "line": 134,
+              "primitive_calls": 1,
+              "self_seconds": 3.75e-6,
+              "total_calls": 1
+            },
+            {
+              "cumulative_seconds": 1.65e-5,
+              "file": "~",
+              "function": "<method 'disable' of '_lsprof.Profiler' objects>",
+              "line": 0,
+              "primitive_calls": 1,
+              "self_seconds": 1.65e-5,
+              "total_calls": 1
+            }
+          ],
+          "mad_ns_per_operation": 45.55165999999963,
+          "median_ns_per_operation": 2366.01416,
+          "name": "unbounded",
+          "python_peak_bytes": 1494,
+          "python_retained_bytes": 0,
+          "timing_ns_per_operation": [
+            2370.6275, 2475.89334, 2485.0825, 2240.63168, 2267.74, 2394.42582,
+            2493.1675, 2358.02084, 2375.45166, 2405.32166, 2425.635, 2411.56582,
+            2281.36418, 2343.45084, 2366.01416, 2348.735, 2335.89916, 2272.58,
+            2220.7575, 2329.385, 2549.06334
+          ]
+        },
+        {
+          "cache_kwargs": {
+            "max_kv_size": 4096,
+            "prefill_step_size": 1
+          },
+          "configuration": {
+            "cache_dir": "profile/no-cache-written",
+            "kv_bits": null,
+            "kv_group_size": 64,
+            "max_kv_size": 4096,
+            "max_tokens": 128,
+            "model": "profile/no-model-loaded",
+            "prefill_step_size": null,
+            "quantized_kv_start": 0,
+            "repetition_penalty": 1.1,
+            "seed": 0,
+            "temperature": 0.7,
+            "top_p": 0.9
+          },
+          "hotspots": [
+            {
+              "cumulative_seconds": 0.24140037500000003,
+              "file": "profiling.py",
+              "function": "_exercise",
+              "line": 49,
+              "primitive_calls": 1,
+              "self_seconds": 0.018688117,
+              "total_calls": 1
+            },
+            {
+              "cumulative_seconds": 0.16259504100000002,
+              "file": "profiling.py",
+              "function": "_configuration",
+              "line": 33,
+              "primitive_calls": 50000,
+              "self_seconds": 0.022917858000000003,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.139677183,
+              "file": "<string>",
+              "function": "__init__",
+              "line": 2,
+              "primitive_calls": 50000,
+              "self_seconds": 0.013612418000000001,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.126064765,
+              "file": "config.py",
+              "function": "__post_init__",
+              "line": 100,
+              "primitive_calls": 50000,
+              "self_seconds": 0.016967364000000002,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.10909740100000001,
+              "file": "config.py",
+              "function": "_env_optional_int",
+              "line": 39,
+              "primitive_calls": 100000,
+              "self_seconds": 0.01331935,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.095778051,
+              "file": "<frozen os>",
+              "function": "getenv",
+              "line": 844,
+              "primitive_calls": 100000,
+              "self_seconds": 0.013064195,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.082713856,
+              "file": "<frozen _collections_abc>",
+              "function": "get",
+              "line": 792,
+              "primitive_calls": 100000,
+              "self_seconds": 0.021304849,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.061409007,
+              "file": "<frozen os>",
+              "function": "__getitem__",
+              "line": 724,
+              "primitive_calls": 100000,
+              "self_seconds": 0.029697911,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.049653648,
+              "file": "config.py",
+              "function": "get_generation_kwargs",
+              "line": 181,
+              "primitive_calls": 50000,
+              "self_seconds": 0.016498663,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.033154985000000005,
+              "file": "config.py",
+              "function": "get_cache_kwargs",
+              "line": 151,
+              "primitive_calls": 50000,
+              "self_seconds": 0.010063142,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.031711096,
+              "file": "<frozen os>",
+              "function": "encode",
+              "line": 812,
+              "primitive_calls": 100000,
+              "self_seconds": 0.018635831000000002,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.023091843,
+              "file": "config.py",
+              "function": "validate",
+              "line": 198,
+              "primitive_calls": 50000,
+              "self_seconds": 0.020313309,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.010463569,
+              "file": "config.py",
+              "function": "to_dict",
+              "line": 134,
+              "primitive_calls": 50000,
+              "self_seconds": 0.010463569,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.008308272,
+              "file": "~",
+              "function": "<method 'encode' of 'str' objects>",
+              "line": 0,
+              "primitive_calls": 100000,
+              "self_seconds": 0.008308272,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.004766993000000001,
+              "file": "~",
+              "function": "<built-in method builtins.isinstance>",
+              "line": 0,
+              "primitive_calls": 100000,
+              "self_seconds": 0.004766993000000001,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.002778534,
+              "file": "~",
+              "function": "<built-in method builtins.len>",
+              "line": 0,
+              "primitive_calls": 50000,
+              "self_seconds": 0.002778534,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 2.2542000000000002e-5,
+              "file": "__init__.py",
+              "function": "__exit__",
+              "line": 134,
+              "primitive_calls": 1,
+              "self_seconds": 4.2510000000000005e-6,
+              "total_calls": 1
+            },
+            {
+              "cumulative_seconds": 1.8291e-5,
+              "file": "~",
+              "function": "<method 'disable' of '_lsprof.Profiler' objects>",
+              "line": 0,
+              "primitive_calls": 1,
+              "self_seconds": 1.8291e-5,
+              "total_calls": 1
+            }
+          ],
+          "mad_ns_per_operation": 55.363360000000284,
+          "median_ns_per_operation": 2063.21332,
+          "name": "bounded_4096",
+          "python_peak_bytes": 1742,
+          "python_retained_bytes": 240,
+          "timing_ns_per_operation": [
+            2118.57668, 2114.75084, 1951.4275, 1964.02, 2114.79418, 1947.30166,
+            2175.6425, 2103.51084, 2027.92584, 2040.50082, 2152.7425, 2086.05,
+            2125.09916, 2057.15666, 1862.67168, 2000.33166, 2063.21332,
+            2061.6325, 1971.22916, 2063.9975, 2184.78168
+          ]
+        },
+        {
+          "cache_kwargs": {
+            "kv_bits": 4,
+            "kv_group_size": 64,
+            "prefill_step_size": 512,
+            "quantized_kv_start": 0
+          },
+          "configuration": {
+            "cache_dir": "profile/no-cache-written",
+            "kv_bits": 4,
+            "kv_group_size": 64,
+            "max_kv_size": null,
+            "max_tokens": 128,
+            "model": "profile/no-model-loaded",
+            "prefill_step_size": null,
+            "quantized_kv_start": 0,
+            "repetition_penalty": 1.1,
+            "seed": 0,
+            "temperature": 0.7,
+            "top_p": 0.9
+          },
+          "hotspots": [
+            {
+              "cumulative_seconds": 0.24580383300000003,
+              "file": "profiling.py",
+              "function": "_exercise",
+              "line": 49,
+              "primitive_calls": 1,
+              "self_seconds": 0.018061719,
+              "total_calls": 1
+            },
+            {
+              "cumulative_seconds": 0.158387725,
+              "file": "profiling.py",
+              "function": "_configuration",
+              "line": 33,
+              "primitive_calls": 50000,
+              "self_seconds": 0.022267399,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.136120326,
+              "file": "<string>",
+              "function": "__init__",
+              "line": 2,
+              "primitive_calls": 50000,
+              "self_seconds": 0.013235574000000002,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.12288475200000001,
+              "file": "config.py",
+              "function": "__post_init__",
+              "line": 100,
+              "primitive_calls": 50000,
+              "self_seconds": 0.016295774000000002,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.106588978,
+              "file": "config.py",
+              "function": "_env_optional_int",
+              "line": 39,
+              "primitive_calls": 100000,
+              "self_seconds": 0.013087648,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.09350133000000001,
+              "file": "<frozen os>",
+              "function": "getenv",
+              "line": 844,
+              "primitive_calls": 100000,
+              "self_seconds": 0.012600349,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.08090098100000001,
+              "file": "<frozen _collections_abc>",
+              "function": "get",
+              "line": 792,
+              "primitive_calls": 100000,
+              "self_seconds": 0.020717434,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.060183547000000004,
+              "file": "<frozen os>",
+              "function": "__getitem__",
+              "line": 724,
+              "primitive_calls": 100000,
+              "self_seconds": 0.028982872000000003,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.059309526,
+              "file": "config.py",
+              "function": "get_generation_kwargs",
+              "line": 181,
+              "primitive_calls": 50000,
+              "self_seconds": 0.01684706,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.042462466000000004,
+              "file": "config.py",
+              "function": "get_cache_kwargs",
+              "line": 151,
+              "primitive_calls": 50000,
+              "self_seconds": 0.014230241000000001,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.031200675,
+              "file": "<frozen os>",
+              "function": "encode",
+              "line": 812,
+              "primitive_calls": 100000,
+              "self_seconds": 0.018276609000000003,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.022076059000000002,
+              "file": "config.py",
+              "function": "validate",
+              "line": 198,
+              "primitive_calls": 50000,
+              "self_seconds": 0.019302573,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.010044863000000001,
+              "file": "config.py",
+              "function": "to_dict",
+              "line": 134,
+              "primitive_calls": 50000,
+              "self_seconds": 0.010044863000000001,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.008175797,
+              "file": "~",
+              "function": "<method 'encode' of 'str' objects>",
+              "line": 0,
+              "primitive_calls": 100000,
+              "self_seconds": 0.008175797,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.006156166,
+              "file": "~",
+              "function": "<method 'update' of 'dict' objects>",
+              "line": 0,
+              "primitive_calls": 50000,
+              "self_seconds": 0.006156166,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.004748269,
+              "file": "~",
+              "function": "<built-in method builtins.isinstance>",
+              "line": 0,
+              "primitive_calls": 100000,
+              "self_seconds": 0.004748269,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.0027734860000000004,
+              "file": "~",
+              "function": "<built-in method builtins.len>",
+              "line": 0,
+              "primitive_calls": 50000,
+              "self_seconds": 0.0027734860000000004,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 1.8375000000000003e-5,
+              "file": "__init__.py",
+              "function": "__exit__",
+              "line": 134,
+              "primitive_calls": 1,
+              "self_seconds": 4.25e-6,
+              "total_calls": 1
+            },
+            {
+              "cumulative_seconds": 1.4125000000000001e-5,
+              "file": "~",
+              "function": "<method 'disable' of '_lsprof.Profiler' objects>",
+              "line": 0,
+              "primitive_calls": 1,
+              "self_seconds": 1.4125000000000001e-5,
+              "total_calls": 1
+            }
+          ],
+          "mad_ns_per_operation": 35.02665999999999,
+          "median_ns_per_operation": 2124.795,
+          "name": "quantized_4bit",
+          "python_peak_bytes": 1742,
+          "python_retained_bytes": 240,
+          "timing_ns_per_operation": [
+            2142.27334, 2181.10166, 2340.09916, 2110.25584, 2164.69916,
+            2002.73418, 2110.19084, 2148.83666, 2176.76916, 2053.64334,
+            2159.82166, 2159.91416, 2116.61084, 2090.12584, 2124.795,
+            2040.25832, 2045.75332, 2119.13084, 2143.14332, 2092.035, 2243.165
+          ]
+        },
+        {
+          "cache_kwargs": {
+            "kv_bits": 8,
+            "kv_group_size": 64,
+            "prefill_step_size": 512,
+            "quantized_kv_start": 0
+          },
+          "configuration": {
+            "cache_dir": "profile/no-cache-written",
+            "kv_bits": 8,
+            "kv_group_size": 64,
+            "max_kv_size": null,
+            "max_tokens": 128,
+            "model": "profile/no-model-loaded",
+            "prefill_step_size": null,
+            "quantized_kv_start": 0,
+            "repetition_penalty": 1.1,
+            "seed": 0,
+            "temperature": 0.7,
+            "top_p": 0.9
+          },
+          "hotspots": [
+            {
+              "cumulative_seconds": 0.269047875,
+              "file": "profiling.py",
+              "function": "_exercise",
+              "line": 49,
+              "primitive_calls": 1,
+              "self_seconds": 0.020522593000000002,
+              "total_calls": 1
+            },
+            {
+              "cumulative_seconds": 0.173136391,
+              "file": "profiling.py",
+              "function": "_configuration",
+              "line": 33,
+              "primitive_calls": 50000,
+              "self_seconds": 0.024776848,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.148359543,
+              "file": "<string>",
+              "function": "__init__",
+              "line": 2,
+              "primitive_calls": 50000,
+              "self_seconds": 0.014164383000000001,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.13419516,
+              "file": "config.py",
+              "function": "__post_init__",
+              "line": 100,
+              "primitive_calls": 50000,
+              "self_seconds": 0.017449426,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.116745734,
+              "file": "config.py",
+              "function": "_env_optional_int",
+              "line": 39,
+              "primitive_calls": 100000,
+              "self_seconds": 0.014032037,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.102713697,
+              "file": "<frozen os>",
+              "function": "getenv",
+              "line": 844,
+              "primitive_calls": 100000,
+              "self_seconds": 0.013425741000000001,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.089287956,
+              "file": "<frozen _collections_abc>",
+              "function": "get",
+              "line": 792,
+              "primitive_calls": 100000,
+              "self_seconds": 0.02250254,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.066785416,
+              "file": "<frozen os>",
+              "function": "__getitem__",
+              "line": 724,
+              "primitive_calls": 100000,
+              "self_seconds": 0.033017497,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.06416564400000001,
+              "file": "config.py",
+              "function": "get_generation_kwargs",
+              "line": 181,
+              "primitive_calls": 50000,
+              "self_seconds": 0.017553411,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.046612233,
+              "file": "config.py",
+              "function": "get_cache_kwargs",
+              "line": 151,
+              "primitive_calls": 50000,
+              "self_seconds": 0.015567180000000002,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.033767919,
+              "file": "<frozen os>",
+              "function": "encode",
+              "line": 812,
+              "primitive_calls": 100000,
+              "self_seconds": 0.019961934,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.024236646,
+              "file": "config.py",
+              "function": "validate",
+              "line": 198,
+              "primitive_calls": 50000,
+              "self_seconds": 0.021375215000000003,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.011223247,
+              "file": "config.py",
+              "function": "to_dict",
+              "line": 134,
+              "primitive_calls": 50000,
+              "self_seconds": 0.011223247,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.008721525,
+              "file": "~",
+              "function": "<method 'encode' of 'str' objects>",
+              "line": 0,
+              "primitive_calls": 100000,
+              "self_seconds": 0.008721525,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.006808407000000001,
+              "file": "~",
+              "function": "<method 'update' of 'dict' objects>",
+              "line": 0,
+              "primitive_calls": 50000,
+              "self_seconds": 0.006808407000000001,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.005084460000000001,
+              "file": "~",
+              "function": "<built-in method builtins.isinstance>",
+              "line": 0,
+              "primitive_calls": 100000,
+              "self_seconds": 0.005084460000000001,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.0028614310000000002,
+              "file": "~",
+              "function": "<built-in method builtins.len>",
+              "line": 0,
+              "primitive_calls": 50000,
+              "self_seconds": 0.0028614310000000002,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 2.0625e-5,
+              "file": "__init__.py",
+              "function": "__exit__",
+              "line": 134,
+              "primitive_calls": 1,
+              "self_seconds": 4.916e-6,
+              "total_calls": 1
+            },
+            {
+              "cumulative_seconds": 1.5709e-5,
+              "file": "~",
+              "function": "<method 'disable' of '_lsprof.Profiler' objects>",
+              "line": 0,
+              "primitive_calls": 1,
+              "self_seconds": 1.5709e-5,
+              "total_calls": 1
+            }
+          ],
+          "mad_ns_per_operation": 33.82497999999987,
+          "median_ns_per_operation": 2140.29166,
+          "name": "quantized_8bit",
+          "python_peak_bytes": 1742,
+          "python_retained_bytes": 240,
+          "timing_ns_per_operation": [
+            2106.46668, 2181.435, 2150.95916, 1995.69418, 2158.995, 2041.10668,
+            2308.17166, 2112.64666, 2191.89416, 2133.8675, 2205.27084,
+            2206.20084, 2140.29166, 2105.39584, 2133.26332, 2134.47166,
+            2146.11082, 2160.2425, 2048.73, 2120.71334, 2188.53916
+          ]
+        }
+      ],
+      "schema": "codomyrmex.mlx.configuration-profile.v1",
+      "scope": "Python MLXConfig construction, serialization, validation, and kwargs only"
+    },
+    {
+      "created_at": "2026-10-19T15:27:28.394286+00:00",
+      "environment": {
+        "clock_resolution_seconds": 4.166666666666666e-8,
+        "dependencies": {
+          "aiohttp": "3.14.5",
+          "jsonschema": "4.26.0",
+          "pydantic": "2.14.1",
+          "python-dotenv": "1.2.4",
+          "pyyaml": "6.0.3",
+          "requests": "2.34.2",
+          "rich": "15.0.0"
+        },
+        "implementation": "CPython",
+        "machine": "arm64",
+        "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "python": "3.15.0",
+        "python_build": "3.15.0 (main, Oct 14 2026, 00:56:12) [Clang 23.1.3 ]"
+      },
+      "metal_memory": "not_measured",
+      "method": {
+        "instrumentation": "separate timing, cProfile, and tracemalloc passes",
+        "iterations": 50000,
+        "repeats": 21,
+        "timing_order": "cyclic rotation per repeat",
+        "uncertainty": "median absolute deviation; not a confidence interval",
+        "warmup_operations": 100
+      },
+      "native_inference": "not_run",
+      "provenance": {
+        "source_dirty": false,
+        "source_revision": "37f86c35adb81a2bc39ac67f04b6dd0885734620",
+        "source_sha256": {
+          "config.py": "9c5d1f84075b91cc714c1942b86525bc9e63542fe87795a9cb9ba970454ec9c9",
+          "profile_report.py": "556b021748e47f23fd1fb0f2ed8f82bcdb227cf9c7845bc30260f24d731c0a36",
+          "profiling.py": "bbeb9f5c080f3c40ddd1987688dc2a94bf14e3719e08a6db0f87cba615a135e6"
+        }
+      },
+      "scenarios": [
+        {
+          "cache_kwargs": {
+            "prefill_step_size": 2048
+          },
+          "configuration": {
+            "cache_dir": "profile/no-cache-written",
+            "kv_bits": null,
+            "kv_group_size": 64,
+            "max_kv_size": null,
+            "max_tokens": 128,
+            "model": "profile/no-model-loaded",
+            "prefill_step_size": null,
+            "quantized_kv_start": 0,
+            "repetition_penalty": 1.1,
+            "seed": 0,
+            "temperature": 0.7,
+            "top_p": 0.9
+          },
+          "hotspots": [
+            {
+              "cumulative_seconds": 0.279566333,
+              "file": "profiling.py",
+              "function": "_exercise",
+              "line": 49,
+              "primitive_calls": 1,
+              "self_seconds": 0.017740992,
+              "total_calls": 1
+            },
+            {
+              "cumulative_seconds": 0.20695637700000002,
+              "file": "profiling.py",
+              "function": "_configuration",
+              "line": 33,
+              "primitive_calls": 50000,
+              "self_seconds": 0.021670337,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.18528604,
+              "file": "<string>",
+              "function": "__init__",
+              "line": 2,
+              "primitive_calls": 50000,
+              "self_seconds": 0.012963443000000002,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.17232259700000002,
+              "file": "config.py",
+              "function": "__post_init__",
+              "line": 100,
+              "primitive_calls": 50000,
+              "self_seconds": 0.020179251000000002,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.152143346,
+              "file": "config.py",
+              "function": "_env_optional_int",
+              "line": 39,
+              "primitive_calls": 150000,
+              "self_seconds": 0.018468199,
+              "total_calls": 150000
+            },
+            {
+              "cumulative_seconds": 0.13367514700000002,
+              "file": "<frozen os>",
+              "function": "getenv",
+              "line": 844,
+              "primitive_calls": 150000,
+              "self_seconds": 0.018478379,
+              "total_calls": 150000
+            },
+            {
+              "cumulative_seconds": 0.115196768,
+              "file": "<frozen _collections_abc>",
+              "function": "get",
+              "line": 792,
+              "primitive_calls": 150000,
+              "self_seconds": 0.029110926000000002,
+              "total_calls": 150000
+            },
+            {
+              "cumulative_seconds": 0.08608584200000001,
+              "file": "<frozen os>",
+              "function": "__getitem__",
+              "line": 724,
+              "primitive_calls": 150000,
+              "self_seconds": 0.041667408,
+              "total_calls": 150000
+            },
+            {
+              "cumulative_seconds": 0.044626757,
+              "file": "config.py",
+              "function": "get_generation_kwargs",
+              "line": 181,
+              "primitive_calls": 50000,
+              "self_seconds": 0.016323241000000002,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.044418434,
+              "file": "<frozen os>",
+              "function": "encode",
+              "line": 812,
+              "primitive_calls": 150000,
+              "self_seconds": 0.025968434000000002,
+              "total_calls": 150000
+            },
+            {
+              "cumulative_seconds": 0.028303516,
+              "file": "config.py",
+              "function": "get_cache_kwargs",
+              "line": 151,
+              "primitive_calls": 50000,
+              "self_seconds": 0.009097018,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.019206498000000002,
+              "file": "config.py",
+              "function": "validate",
+              "line": 198,
+              "primitive_calls": 50000,
+              "self_seconds": 0.016532534,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.011840828000000001,
+              "file": "~",
+              "function": "<method 'encode' of 'str' objects>",
+              "line": 0,
+              "primitive_calls": 150000,
+              "self_seconds": 0.011840828000000001,
+              "total_calls": 150000
+            },
+            {
+              "cumulative_seconds": 0.010242207000000001,
+              "file": "config.py",
+              "function": "to_dict",
+              "line": 134,
+              "primitive_calls": 50000,
+              "self_seconds": 0.010242207000000001,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.006609172000000001,
+              "file": "~",
+              "function": "<built-in method builtins.isinstance>",
+              "line": 0,
+              "primitive_calls": 150000,
+              "self_seconds": 0.006609172000000001,
+              "total_calls": 150000
+            },
+            {
+              "cumulative_seconds": 0.002673964,
+              "file": "~",
+              "function": "<built-in method builtins.len>",
+              "line": 0,
+              "primitive_calls": 50000,
+              "self_seconds": 0.002673964,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 2.4792000000000003e-5,
+              "file": "__init__.py",
+              "function": "__exit__",
+              "line": 134,
+              "primitive_calls": 1,
+              "self_seconds": 5.042e-6,
+              "total_calls": 1
+            },
+            {
+              "cumulative_seconds": 1.9750000000000002e-5,
+              "file": "~",
+              "function": "<method 'disable' of '_lsprof.Profiler' objects>",
+              "line": 0,
+              "primitive_calls": 1,
+              "self_seconds": 1.9750000000000002e-5,
+              "total_calls": 1
+            }
+          ],
+          "mad_ns_per_operation": 52.61416000000008,
+          "median_ns_per_operation": 2275.32416,
+          "name": "unbounded",
+          "python_peak_bytes": 1494,
+          "python_retained_bytes": 0,
+          "timing_ns_per_operation": [
+            2221.39418, 2273.46168, 2197.2825, 2207.42082, 2386.52666,
+            2311.46166, 2312.5275, 2362.30416, 2315.98334, 2523.055, 2349.82666,
+            2306.32084, 2362.74666, 2682.73166, 2219.42584, 2222.71, 2253.4425,
+            2243.7875, 2232.5525, 2275.32416, 2247.52082
+          ]
+        },
+        {
+          "cache_kwargs": {
+            "max_kv_size": 4096,
+            "prefill_step_size": 1
+          },
+          "configuration": {
+            "cache_dir": "profile/no-cache-written",
+            "kv_bits": null,
+            "kv_group_size": 64,
+            "max_kv_size": 4096,
+            "max_tokens": 128,
+            "model": "profile/no-model-loaded",
+            "prefill_step_size": null,
+            "quantized_kv_start": 0,
+            "repetition_penalty": 1.1,
+            "seed": 0,
+            "temperature": 0.7,
+            "top_p": 0.9
+          },
+          "hotspots": [
+            {
+              "cumulative_seconds": 0.22428362500000001,
+              "file": "profiling.py",
+              "function": "_exercise",
+              "line": 49,
+              "primitive_calls": 1,
+              "self_seconds": 0.017218656000000002,
+              "total_calls": 1
+            },
+            {
+              "cumulative_seconds": 0.150868619,
+              "file": "profiling.py",
+              "function": "_configuration",
+              "line": 33,
+              "primitive_calls": 50000,
+              "self_seconds": 0.021469282000000003,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.129399337,
+              "file": "<string>",
+              "function": "__init__",
+              "line": 2,
+              "primitive_calls": 50000,
+              "self_seconds": 0.012547102000000001,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.11685223500000001,
+              "file": "config.py",
+              "function": "__post_init__",
+              "line": 100,
+              "primitive_calls": 50000,
+              "self_seconds": 0.014795303000000001,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.102056932,
+              "file": "config.py",
+              "function": "_env_optional_int",
+              "line": 39,
+              "primitive_calls": 100000,
+              "self_seconds": 0.012507845,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.089549087,
+              "file": "<frozen os>",
+              "function": "getenv",
+              "line": 844,
+              "primitive_calls": 100000,
+              "self_seconds": 0.012360044,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.077189043,
+              "file": "<frozen _collections_abc>",
+              "function": "get",
+              "line": 792,
+              "primitive_calls": 100000,
+              "self_seconds": 0.019486718,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.057702325000000006,
+              "file": "<frozen os>",
+              "function": "__getitem__",
+              "line": 724,
+              "primitive_calls": 100000,
+              "self_seconds": 0.027975865000000003,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.046170451,
+              "file": "config.py",
+              "function": "get_generation_kwargs",
+              "line": 181,
+              "primitive_calls": 50000,
+              "self_seconds": 0.015540516,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.030629935,
+              "file": "config.py",
+              "function": "get_cache_kwargs",
+              "line": 151,
+              "primitive_calls": 50000,
+              "self_seconds": 0.009379603,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.029726460000000003,
+              "file": "<frozen os>",
+              "function": "encode",
+              "line": 812,
+              "primitive_calls": 100000,
+              "self_seconds": 0.017489863,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.021250332,
+              "file": "config.py",
+              "function": "validate",
+              "line": 198,
+              "primitive_calls": 50000,
+              "self_seconds": 0.018696414,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.010025899000000001,
+              "file": "config.py",
+              "function": "to_dict",
+              "line": 134,
+              "primitive_calls": 50000,
+              "self_seconds": 0.010025899000000001,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.007792579000000001,
+              "file": "~",
+              "function": "<method 'encode' of 'str' objects>",
+              "line": 0,
+              "primitive_calls": 100000,
+              "self_seconds": 0.007792579000000001,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.004444018,
+              "file": "~",
+              "function": "<built-in method builtins.isinstance>",
+              "line": 0,
+              "primitive_calls": 100000,
+              "self_seconds": 0.004444018,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.002553918,
+              "file": "~",
+              "function": "<built-in method builtins.len>",
+              "line": 0,
+              "primitive_calls": 50000,
+              "self_seconds": 0.002553918,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 3.2875e-5,
+              "file": "__init__.py",
+              "function": "__exit__",
+              "line": 134,
+              "primitive_calls": 1,
+              "self_seconds": 3.4590000000000003e-6,
+              "total_calls": 1
+            },
+            {
+              "cumulative_seconds": 2.9416e-5,
+              "file": "~",
+              "function": "<method 'disable' of '_lsprof.Profiler' objects>",
+              "line": 0,
+              "primitive_calls": 1,
+              "self_seconds": 2.9416e-5,
+              "total_calls": 1
+            }
+          ],
+          "mad_ns_per_operation": 46.314180000000306,
+          "median_ns_per_operation": 2015.87666,
+          "name": "bounded_4096",
+          "python_peak_bytes": 1742,
+          "python_retained_bytes": 240,
+          "timing_ns_per_operation": [
+            2015.87666, 2033.1025, 1831.95416, 1939.21832, 1995.80584,
+            2028.99916, 2062.19084, 2187.44, 2045.29584, 2113.59334, 2066.245,
+            2069.1475, 2125.86582, 2057.02832, 1980.9475, 1999.23584, 1924.8275,
+            2005.18084, 1921.89666, 2015.6975, 1866.515
+          ]
+        },
+        {
+          "cache_kwargs": {
+            "kv_bits": 4,
+            "kv_group_size": 64,
+            "prefill_step_size": 512,
+            "quantized_kv_start": 0
+          },
+          "configuration": {
+            "cache_dir": "profile/no-cache-written",
+            "kv_bits": 4,
+            "kv_group_size": 64,
+            "max_kv_size": null,
+            "max_tokens": 128,
+            "model": "profile/no-model-loaded",
+            "prefill_step_size": null,
+            "quantized_kv_start": 0,
+            "repetition_penalty": 1.1,
+            "seed": 0,
+            "temperature": 0.7,
+            "top_p": 0.9
+          },
+          "hotspots": [
+            {
+              "cumulative_seconds": 0.24610045800000002,
+              "file": "profiling.py",
+              "function": "_exercise",
+              "line": 49,
+              "primitive_calls": 1,
+              "self_seconds": 0.018041299,
+              "total_calls": 1
+            },
+            {
+              "cumulative_seconds": 0.15803732,
+              "file": "profiling.py",
+              "function": "_configuration",
+              "line": 33,
+              "primitive_calls": 50000,
+              "self_seconds": 0.022270223000000002,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.135767097,
+              "file": "<string>",
+              "function": "__init__",
+              "line": 2,
+              "primitive_calls": 50000,
+              "self_seconds": 0.013127132000000001,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.122639965,
+              "file": "config.py",
+              "function": "__post_init__",
+              "line": 100,
+              "primitive_calls": 50000,
+              "self_seconds": 0.015401405000000002,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.10723856000000001,
+              "file": "config.py",
+              "function": "_env_optional_int",
+              "line": 39,
+              "primitive_calls": 100000,
+              "self_seconds": 0.013005005,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.09423355500000001,
+              "file": "<frozen os>",
+              "function": "getenv",
+              "line": 844,
+              "primitive_calls": 100000,
+              "self_seconds": 0.013099247000000001,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.081134308,
+              "file": "<frozen _collections_abc>",
+              "function": "get",
+              "line": 792,
+              "primitive_calls": 100000,
+              "self_seconds": 0.020605405,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.060528903,
+              "file": "<frozen os>",
+              "function": "__getitem__",
+              "line": 724,
+              "primitive_calls": 100000,
+              "self_seconds": 0.029131949,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.059683240000000005,
+              "file": "config.py",
+              "function": "get_generation_kwargs",
+              "line": 181,
+              "primitive_calls": 50000,
+              "self_seconds": 0.017025064,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.042658176000000006,
+              "file": "config.py",
+              "function": "get_cache_kwargs",
+              "line": 151,
+              "primitive_calls": 50000,
+              "self_seconds": 0.014073999,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.031396954000000005,
+              "file": "<frozen os>",
+              "function": "encode",
+              "line": 812,
+              "primitive_calls": 100000,
+              "self_seconds": 0.018243318,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.022023393000000002,
+              "file": "config.py",
+              "function": "validate",
+              "line": 198,
+              "primitive_calls": 50000,
+              "self_seconds": 0.019315773,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.010338599,
+              "file": "config.py",
+              "function": "to_dict",
+              "line": 134,
+              "primitive_calls": 50000,
+              "self_seconds": 0.010338599,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.008409778,
+              "file": "~",
+              "function": "<method 'encode' of 'str' objects>",
+              "line": 0,
+              "primitive_calls": 100000,
+              "self_seconds": 0.008409778,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.006560784,
+              "file": "~",
+              "function": "<method 'update' of 'dict' objects>",
+              "line": 0,
+              "primitive_calls": 50000,
+              "self_seconds": 0.006560784,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.004743858,
+              "file": "~",
+              "function": "<built-in method builtins.isinstance>",
+              "line": 0,
+              "primitive_calls": 100000,
+              "self_seconds": 0.004743858,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.00270762,
+              "file": "~",
+              "function": "<built-in method builtins.len>",
+              "line": 0,
+              "primitive_calls": 50000,
+              "self_seconds": 0.00270762,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 1.8167e-5,
+              "file": "__init__.py",
+              "function": "__exit__",
+              "line": 134,
+              "primitive_calls": 1,
+              "self_seconds": 4.126e-6,
+              "total_calls": 1
+            },
+            {
+              "cumulative_seconds": 1.4041000000000002e-5,
+              "file": "~",
+              "function": "<method 'disable' of '_lsprof.Profiler' objects>",
+              "line": 0,
+              "primitive_calls": 1,
+              "self_seconds": 1.4041000000000002e-5,
+              "total_calls": 1
+            }
+          ],
+          "mad_ns_per_operation": 51.85331999999971,
+          "median_ns_per_operation": 2105.73166,
+          "name": "quantized_4bit",
+          "python_peak_bytes": 1742,
+          "python_retained_bytes": 240,
+          "timing_ns_per_operation": [
+            2105.73166, 1932.76082, 2053.87834, 2200.62332, 2122.34834,
+            2234.585, 2059.1825, 2135.57832, 2180.09416, 2186.90834, 2242.2425,
+            2137.51, 2114.43832, 2108.445, 2088.42834, 2022.30918, 2054.30166,
+            2058.295, 2036.1625, 1997.79834, 1981.85
+          ]
+        },
+        {
+          "cache_kwargs": {
+            "kv_bits": 8,
+            "kv_group_size": 64,
+            "prefill_step_size": 512,
+            "quantized_kv_start": 0
+          },
+          "configuration": {
+            "cache_dir": "profile/no-cache-written",
+            "kv_bits": 8,
+            "kv_group_size": 64,
+            "max_kv_size": null,
+            "max_tokens": 128,
+            "model": "profile/no-model-loaded",
+            "prefill_step_size": null,
+            "quantized_kv_start": 0,
+            "repetition_penalty": 1.1,
+            "seed": 0,
+            "temperature": 0.7,
+            "top_p": 0.9
+          },
+          "hotspots": [
+            {
+              "cumulative_seconds": 0.243274083,
+              "file": "profiling.py",
+              "function": "_exercise",
+              "line": 49,
+              "primitive_calls": 1,
+              "self_seconds": 0.018081211,
+              "total_calls": 1
+            },
+            {
+              "cumulative_seconds": 0.15565071500000002,
+              "file": "profiling.py",
+              "function": "_configuration",
+              "line": 33,
+              "primitive_calls": 50000,
+              "self_seconds": 0.022015516000000002,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.133635199,
+              "file": "<string>",
+              "function": "__init__",
+              "line": 2,
+              "primitive_calls": 50000,
+              "self_seconds": 0.012941163,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.120694036,
+              "file": "config.py",
+              "function": "__post_init__",
+              "line": 100,
+              "primitive_calls": 50000,
+              "self_seconds": 0.015415843,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.105278193,
+              "file": "config.py",
+              "function": "_env_optional_int",
+              "line": 39,
+              "primitive_calls": 100000,
+              "self_seconds": 0.012896651,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.09238154200000001,
+              "file": "<frozen os>",
+              "function": "getenv",
+              "line": 844,
+              "primitive_calls": 100000,
+              "self_seconds": 0.012764247000000001,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.079617295,
+              "file": "<frozen _collections_abc>",
+              "function": "get",
+              "line": 792,
+              "primitive_calls": 100000,
+              "self_seconds": 0.019955900000000002,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.059661395000000006,
+              "file": "<frozen os>",
+              "function": "__getitem__",
+              "line": 724,
+              "primitive_calls": 100000,
+              "self_seconds": 0.028779355000000003,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.059371537,
+              "file": "config.py",
+              "function": "get_generation_kwargs",
+              "line": 181,
+              "primitive_calls": 50000,
+              "self_seconds": 0.016699841,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.042671696,
+              "file": "config.py",
+              "function": "get_cache_kwargs",
+              "line": 151,
+              "primitive_calls": 50000,
+              "self_seconds": 0.013908077000000001,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.030882040000000003,
+              "file": "<frozen os>",
+              "function": "encode",
+              "line": 812,
+              "primitive_calls": 100000,
+              "self_seconds": 0.018064999,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.022214089000000003,
+              "file": "config.py",
+              "function": "validate",
+              "line": 198,
+              "primitive_calls": 50000,
+              "self_seconds": 0.019575155,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.01017062,
+              "file": "config.py",
+              "function": "to_dict",
+              "line": 134,
+              "primitive_calls": 50000,
+              "self_seconds": 0.01017062,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.008113939,
+              "file": "~",
+              "function": "<method 'encode' of 'str' objects>",
+              "line": 0,
+              "primitive_calls": 100000,
+              "self_seconds": 0.008113939,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.0065495300000000005,
+              "file": "~",
+              "function": "<method 'update' of 'dict' objects>",
+              "line": 0,
+              "primitive_calls": 50000,
+              "self_seconds": 0.0065495300000000005,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 0.004703102000000001,
+              "file": "~",
+              "function": "<built-in method builtins.isinstance>",
+              "line": 0,
+              "primitive_calls": 100000,
+              "self_seconds": 0.004703102000000001,
+              "total_calls": 100000
+            },
+            {
+              "cumulative_seconds": 0.0026389340000000003,
+              "file": "~",
+              "function": "<built-in method builtins.len>",
+              "line": 0,
+              "primitive_calls": 50000,
+              "self_seconds": 0.0026389340000000003,
+              "total_calls": 50000
+            },
+            {
+              "cumulative_seconds": 2.0584e-5,
+              "file": "__init__.py",
+              "function": "__exit__",
+              "line": 134,
+              "primitive_calls": 1,
+              "self_seconds": 4.0420000000000004e-6,
+              "total_calls": 1
+            },
+            {
+              "cumulative_seconds": 1.6542000000000002e-5,
+              "file": "~",
+              "function": "<method 'disable' of '_lsprof.Profiler' objects>",
+              "line": 0,
+              "primitive_calls": 1,
+              "self_seconds": 1.6542000000000002e-5,
+              "total_calls": 1
+            }
+          ],
+          "mad_ns_per_operation": 51.86000000000013,
+          "median_ns_per_operation": 2082.89582,
+          "name": "quantized_8bit",
+          "python_peak_bytes": 1742,
+          "python_retained_bytes": 240,
+          "timing_ns_per_operation": [
+            2051.90084, 2048.02916, 2001.2225, 2031.03582, 2038.84, 2120.28,
+            2082.89582, 2123.30418, 2252.1125, 2160.08166, 2208.24832,
+            2112.16918, 2123.865, 2184.235, 2075.79166, 2009.0, 1999.22916,
+            2128.19334, 1978.6075, 2145.17334, 1952.2375
+          ]
+        }
+      ],
+      "schema": "codomyrmex.mlx.configuration-profile.v1",
+      "scope": "Python MLXConfig construction, serialization, validation, and kwargs only"
+    }
+  ],
+  "reproduction": {
+    "bundle_manifest": {
+      "schema": "codomyrmex.mlx.replication-bundle.v1",
+      "sha256": {
+        "collect.py": "4e380c084da6e41081a73bc6d22773822cb6360e7023ade6eaa8d7da3871d52f",
+        "comparison.html": "5405052a1afc4134d296cbfa85375a6d87df1c06477b8f821c8f3e29bc920786",
+        "comparison.svg": "f7b71596b0a2e0720a5932b0837413c6dabf3a3265f70f69e37006765c601490",
+        "git-status.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replication.json": "59a4d96c5dfa7e260039743e37dbaba451837511a2b7d0b7e41c4495c58ba1b2",
+        "requirements.freeze.txt": "6321267c9c514fd3c5df7dde0c30a518827fd0ae77d8c9103c45ef872f49519f",
+        "revision.txt": "87cca56eae5ef597dc4252eb02095f5c12e317b6bbfd984fb61cd7f4c2665a7a",
+        "run-a.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "run-a.stdout.txt": "5ab817877fefd500da3d3dbba830da981b108d964b8c9a547829a9153bb1ef09",
+        "run-a/execution.json": "9195a4afc50aba7125fea5dfb79b21458caef9872511d5b25270c0ff8b8f322c",
+        "run-a/manifest.json": "9ca02f7eb9b8fff0ba04dfbb21e29f2007e14e5764fe4450327557385f10565f",
+        "run-a/manuscript.md": "a7ebb6506fab85d682aecd531bf85458bb3a6624dd926599eef37dd62caad40b",
+        "run-a/profile.json": "5a841472e906c1eadc60e28376456cae740e4e355471afd239893aec23af3d30",
+        "run-a/report.html": "595bac62ec069574e891f0e4e2ed280947aa1cecca18fd544f1455850fa22dcf",
+        "run-a/timings.svg": "172d7f8a62ae63d1eabe91d0a3c2763e94e35ba2305bb08bfd159cfe9e1e636c",
+        "run-b.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "run-b.stdout.txt": "752884dc463016d333ed3206caa6df8f6892b7d2b0715df9a542807cdc43312b",
+        "run-b/execution.json": "63bdf136fb537f303ed63062e0c2ed90882822a9c2625b233bdecc870533b517",
+        "run-b/manifest.json": "2fdf82644fc736b1348bc91d0365380095218c46bc4a2daa6a5c417df08d09ae",
+        "run-b/manuscript.md": "765648cdfa15677d28277f07f56de554e33e3ab29ac35b28881dd53888531c67",
+        "run-b/profile.json": "a60462d41696828c012268d36adca22b5f159dc5c1849c1f2966691c4eacaab4",
+        "run-b/report.html": "6559bd0bfac2bed98b07fece0abe6e6901fec00c42ce94027e0ba37019cce8d8",
+        "run-b/timings.svg": "c1ec8fb029802015f55e0c591666dd17ec547ed6e473a0bbf48aabf60f9da5ff",
+        "source.tar": "130c1b13eb03eefb63ac95ec45af61dd84ff9cfdcafd334d19f139121c3b2b48",
+        "summarize.py": "a31fa315ef32c127f8bf40a1a09b0bc2340c5715537108a0d5191a6553c4f720",
+        "visualize.py": "50eab9b5756665ead1ec85addf981183e721c50f8c7ececf4bff89000465518a"
+      }
+    },
+    "bundle_manifest_sha256": "43c3280c60e3077d902621e8b6afc1f696d4943f64a46df235929add3ee32230",
+    "collection_driver": "\"\"\"Frozen-source, configuration-only replication driver; no native inference.\"\"\"\n\nimport hashlib\nimport importlib.metadata\nimport json\nimport os\nimport platform\nimport sys\nimport sysconfig\nfrom datetime import UTC, datetime\nfrom pathlib import Path\n\nroot = Path(__file__).resolve().parent\nsource = root / \"source\"\nsys.path.insert(0, str(source / \"src\"))\n\nfrom codomyrmex.llm.mlx.profile_report import write_profile_bundle\nfrom codomyrmex.llm.mlx.profiling import profile_cache_configuration\n\nrun_name = sys.argv[1]\nif run_name not in (\"run-a\", \"run-b\"):\n    raise ValueError(\"expected run-a or run-b\")\nif (root / run_name).exists():\n    raise FileExistsError(run_name)\nstarted = datetime.now(UTC).isoformat()\nload_before = os.getloadavg()\nreport = profile_cache_configuration(\n    iterations=50_000,\n    repeats=21,\n    source_revision=(root / \"revision.txt\").read_text().strip(),\n    source_dirty=bool((root / \"git-status.txt\").read_text()),\n)\npaths = write_profile_bundle(report, root / run_name)\nreceipt = {\n    \"started_at\": started,\n    \"finished_at\": datetime.now(UTC).isoformat(),\n    \"argv\": sys.argv,\n    \"isolated_flag\": sys.flags.isolated,\n    \"python_executable\": sys.executable,\n    \"python_executable_sha256\": hashlib.sha256(Path(sys.executable).read_bytes()).hexdigest(),\n    \"python_build\": sys.version,\n    \"python_config_args\": sysconfig.get_config_var(\"CONFIG_ARGS\"),\n    \"platform\": platform.platform(),\n    \"load_average_before\": load_before,\n    \"load_average_after\": os.getloadavg(),\n    \"host_conditions\": \"Shared host; GitVault and other project activity ongoing; thermal state uncontrolled; no affinity or frequency controls.\",\n    \"dependencies\": sorted(\n        (package.metadata[\"Name\"], package.version)\n        for package in importlib.metadata.distributions()\n    ),\n    \"loaded_source_sha256\": {\n        str(Path(module.__file__).resolve().relative_to(source)): hashlib.sha256(\n            Path(module.__file__).read_bytes()\n        ).hexdigest()\n        for name, module in tuple(sys.modules.items())\n        if name.startswith(\"codomyrmex\")\n        and getattr(module, \"__file__\", None)\n        and Path(module.__file__).resolve().is_relative_to(source)\n    },\n}\nwith (root / run_name / \"execution.json\").open(\"x\") as handle:\n    json.dump(receipt, handle, indent=2, sort_keys=True)\nprint(json.dumps(paths, indent=2))\n",
+    "local_bundle": "output/mlx-replication-20261019",
+    "public_projection": "Machine-local python_executable paths omitted from executions; exact original execution receipts remain hash-bound in the local bundle. Full source archive and installed environment are retained locally, not embedded in this public JSON.",
+    "requirements_freeze": "aiohappyeyeballs==2.7.1\naiohttp==3.14.5\naiosignal==1.4.0\nannotated-types==0.8.0\nattrs==26.1.0\ncertifi==2026.10.18\ncharset-normalizer==3.5.2\nfrozenlist==1.8.0\nidna==3.20\njsonschema==4.26.0\njsonschema-specifications==2025.9.1\nmarkdown-it-py==4.2.0\nmdurl==0.1.2\nmultidict==7.1.0\npropcache==0.5.4\npydantic==2.14.1\npydantic-core==2.50.1\npygments==2.21.0\npython-dotenv==1.2.4\npyyaml==6.0.3\nreferencing==0.37.0\nrequests==2.34.2\nrich==15.0.0\nrpds-py==2026.9.1\ntyping-extensions==4.16.0\ntyping-inspection==0.4.4\nurllib3==2.8.0\nyarl==1.25.1\n"
+  },
+  "rows": [
+    {
+      "absolute_between_run_median_difference_percent_of_a": 3.833028623970706,
+      "name": "unbounded",
+      "runs": [
+        {
+          "first_ten_median_us": 2.38493874,
+          "last_ten_median_us": 2.339675,
+          "mad_us_per_operation": 0.045551659999999626,
+          "median_us_per_operation": 2.36601416,
+          "python_batch_peak_bytes": 1494
+        },
+        {
+          "first_ten_median_us": 2.31199458,
+          "last_ten_median_us": 2.25048166,
+          "mad_us_per_operation": 0.05261416000000008,
+          "median_us_per_operation": 2.2753241600000003,
+          "python_batch_peak_bytes": 1494
+        }
+      ]
+    },
+    {
+      "absolute_between_run_median_difference_percent_of_a": 2.294317293376137,
+      "name": "bounded_4096",
+      "runs": [
+        {
+          "first_ten_median_us": 2.07200583,
+          "last_ten_median_us": 2.0624229100000004,
+          "mad_us_per_operation": 0.055363360000000285,
+          "median_us_per_operation": 2.06321332,
+          "python_batch_peak_bytes": 1742
+        },
+        {
+          "first_ten_median_us": 2.0310508300000003,
+          "last_ten_median_us": 2.00220834,
+          "mad_us_per_operation": 0.04631418000000031,
+          "median_us_per_operation": 2.01587666,
+          "python_batch_peak_bytes": 1742
+        }
+      ]
+    },
+    {
+      "absolute_between_run_median_difference_percent_of_a": 0.8971849048967149,
+      "name": "quantized_4bit",
+      "runs": [
+        {
+          "first_ten_median_us": 2.1455550000000003,
+          "last_ten_median_us": 2.1178708399999997,
+          "mad_us_per_operation": 0.035026659999999994,
+          "median_us_per_operation": 2.124795,
+          "python_batch_peak_bytes": 1742
+        },
+        {
+          "first_ten_median_us": 2.12896333,
+          "last_ten_median_us": 2.05629833,
+          "mad_us_per_operation": 0.05185331999999971,
+          "median_us_per_operation": 2.10573166,
+          "python_batch_peak_bytes": 1742
+        }
+      ]
+    },
+    {
+      "absolute_between_run_median_difference_percent_of_a": 2.681683112291326,
+      "name": "quantized_8bit",
+      "runs": [
+        {
+          "first_ten_median_us": 2.1424133299999997,
+          "last_ten_median_us": 2.13738166,
+          "mad_us_per_operation": 0.033824979999999866,
+          "median_us_per_operation": 2.14029166,
+          "python_batch_peak_bytes": 1742
+        },
+        {
+          "first_ten_median_us": 2.06739833,
+          "last_ten_median_us": 2.09398042,
+          "mad_us_per_operation": 0.05186000000000013,
+          "median_us_per_operation": 2.08289582,
+          "python_batch_peak_bytes": 1742
+        }
+      ]
+    }
+  ],
+  "schema": "codomyrmex.mlx.configuration-replication.v1",
+  "scope": "configuration only; no native inference, long-context recall, or Metal memory",
+  "source_archive_scope": [
+    "src",
+    "scripts/llm/mlx_profile.py",
+    "pyproject.toml",
+    "uv.lock"
+  ],
+  "source_archive_sha256": "130c1b13eb03eefb63ac95ec45af61dd84ff9cfdcafd334d19f139121c3b2b48",
+  "source_dirty": false,
+  "source_revision": "37f86c35adb81a2bc39ac67f04b6dd0885734620",
+  "uv_version": "uv 0.13.1 (Homebrew 2026-10-14 aarch64-apple-darwin)"
+}
