@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Queue maintenance and scanner alignment
+
+- Use deques for retained messages, per-agent inboxes, behavioral sample
+  windows, and asynchronous sliding-window expiry. Preserve public FIFO,
+  enrollment-copy and oversized-enrollment behavior, negative integer
+  retention, and callbacks that publish during retained replay. Verification
+  formulas and thresholds are unchanged; synthetic regression tests do not
+  establish authentication or scientific validity.
+- Use the reviewed TruffleHog v3.99.2 stable tag and align its
+  scanner-version input to 3.99.2. Preserve the existing verified-result
+  policy, revision range, and workflow permissions.
+
 ### LRU cache recency bookkeeping
 
 - Replace linear list operations in the embedding and cached vector stores
