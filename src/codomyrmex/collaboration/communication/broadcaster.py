@@ -4,6 +4,7 @@ Provides topic-based pub/sub patterns for agent swarms.
 """
 
 import asyncio
+import collections
 import inspect
 import uuid
 from collections.abc import Callable
@@ -67,7 +68,7 @@ class Broadcaster:
         self._topic_created_at: dict[str, datetime] = {}
         self._message_counts: dict[str, int] = {}
         self._retention_count = retention_count
-        self._retained_messages: dict[str, list[AgentMessage]] = {}
+        self._retained_messages: dict[str, collections.deque[AgentMessage]] = {}
 
     def create_topic(self, topic: str) -> None:
         """Create a new topic."""
@@ -75,7 +76,9 @@ class Broadcaster:
             self._topics[topic] = set()
             self._topic_created_at[topic] = datetime.now()
             self._message_counts[topic] = 0
-            self._retained_messages[topic] = []
+            self._retained_messages[topic] = collections.deque(
+                maxlen=max(0, self._retention_count)
+            )
             logger.info("Created topic: %s", topic)
 
     def delete_topic(self, topic: str) -> bool:
@@ -121,7 +124,7 @@ class Broadcaster:
 
         # Replay retained messages if requested
         if replay_retained and topic in self._retained_messages:
-            for message in self._retained_messages[topic]:
+            for message in tuple(self._retained_messages[topic]):
                 if filter_fn is None or filter_fn(message):
                     try:
                         if inspect.iscoroutinefunction(handler):
@@ -181,8 +184,6 @@ class Broadcaster:
         self._message_counts[topic] += 1
 
         self._retained_messages[topic].append(message)
-        if len(self._retained_messages[topic]) > self._retention_count:
-            self._retained_messages[topic].pop(0)
 
         delivered = 0
         for sub_id in self._topics[topic]:
@@ -215,8 +216,6 @@ class Broadcaster:
 
         # Retain message
         self._retained_messages[topic].append(message)
-        if len(self._retained_messages[topic]) > self._retention_count:
-            self._retained_messages[topic].pop(0)
 
         delivered = 0
         for sub_id in self._topics[topic]:

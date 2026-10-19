@@ -140,3 +140,55 @@ class TestStreamProjection:
         proj = StreamProjection(store)
         cum = proj.running_aggregate("m", lambda e: e.data["v"])
         assert cum == [10, 30, 60]
+
+
+import pytest
+
+from codomyrmex.events.streaming.models import Event
+from codomyrmex.events.streaming.stream import InMemoryStream, SSEStream
+
+
+@pytest.mark.parametrize("stream_type", [InMemoryStream, SSEStream])
+@pytest.mark.asyncio
+async def test_fifo_resize_preserves_history_until_publication(stream_type):
+    stream = stream_type()
+    for value in range(5):
+        await stream.publish(Event(data=value))
+    stream._buffer_size = 2
+    assert [event.data for event in stream._event_buffer] == [0, 1, 2, 3, 4]
+    await stream.publish(Event(data=5))
+    assert [event.data for event in stream._event_buffer] == [1, 2, 3, 4, 5]
+
+
+@pytest.mark.parametrize("stream_type", [InMemoryStream, SSEStream])
+@pytest.mark.asyncio
+async def test_fifo_nonpositive_capacity_retains_existing_assignment_contract(
+    stream_type,
+):
+    stream = stream_type()
+    await stream.publish(Event(data="retained"))
+    stream._buffer_size = -1
+    assert stream._buffer_size == -1
+    await stream.publish(Event(data="next"))
+    assert [event.data for event in stream._event_buffer] == ["next"]
+    stream._buffer_size = 0
+    await stream.publish(Event(data="last"))
+    assert [event.data for event in stream._event_buffer] == ["last"]
+
+
+@pytest.mark.parametrize(
+    ("count", "expected"),
+    [
+        (0, [0, 1, 2, 3, 4]),
+        (2, [3, 4]),
+        (-2, [2, 3, 4]),
+        (20, [0, 1, 2, 3, 4]),
+        (-20, []),
+    ],
+)
+@pytest.mark.asyncio
+async def test_fifo_recent_event_slice_contract(count, expected):
+    stream = InMemoryStream()
+    for value in range(5):
+        await stream.publish(Event(data=value))
+    assert [event.data for event in stream.get_recent_events(count)] == expected
