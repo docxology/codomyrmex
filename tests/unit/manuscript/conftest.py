@@ -32,7 +32,9 @@ def generated_manuscript_snapshot(tmp_path_factory) -> Path:
         capture_output=True,
         text=True,
     ).stdout.split("\0")
-    surfaces = {"src", "docs", "config", "scripts", "tests", ".github"}
+    # Collection imports example consumers; keep their tracked source present
+    # before the nested repository stray-path guard records its baseline.
+    surfaces = {"src", "docs", "config", "scripts", "tests", "examples", ".github"}
     for entry in tracked:
         if not entry:
             continue
