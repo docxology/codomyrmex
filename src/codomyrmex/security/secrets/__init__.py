@@ -68,7 +68,7 @@ class SecretPatterns:
             0.99,
         ),
         (
-            r"-----BEGIN PGP PRIVATE KEY BLOCK-----",
+            r"-----BEGIN PGP PRIVATE KEY BLOCK-----",  # pragma: allowlist secret
             SecretType.PRIVATE_KEY,
             SecretSeverity.CRITICAL,
             0.99,
