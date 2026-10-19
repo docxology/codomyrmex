@@ -6,8 +6,8 @@ In-memory and SSE stream backends.
 
 import asyncio
 import threading
-from collections import deque
 from abc import ABC, abstractmethod
+from collections import deque
 from collections.abc import AsyncIterator, Callable
 
 from codomyrmex.logging_monitoring import get_logger
