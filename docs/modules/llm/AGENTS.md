@@ -9,6 +9,8 @@ Documentation tooling, generated references, and publishing assets for Llm.
 ## Active Components
 
 - `mlx-profiling-study.md` – Portable configuration study methodology and evidence boundaries
+- `mlx-profiling-replication-20261019.json` – Path-minimized raw replication evidence and exact collection driver
+- `mlx-profiling-replication-20261019.svg` – Configuration-only paired raw-sample visualization
 - `API_SPECIFICATION.md` – Project file
 - `MCP_TOOL_SPECIFICATION.md` – Project file
 - `PAI.md` – Project file
@@ -22,6 +24,9 @@ Documentation tooling, generated references, and publishing assets for Llm.
   and KIVI are scholarly background, not native MLX algorithm or replication claims.
 - Preserve central manuscript/tokenized artifacts; the profiler's companion
   manuscript belongs only to its separate output bundle. Publish no unmeasured results.
+- Distinguish independently audited same-host fresh-process runs from
+  independent-host replication. Compare only compatible source/runtime/dependency
+  evidence; retain historical provenance gaps rather than inferring speedups.
 - Maintain alignment between code, documentation, and configured workflows.
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.

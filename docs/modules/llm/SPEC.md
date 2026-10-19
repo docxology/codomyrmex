@@ -93,6 +93,20 @@ The codebase utilizes modern Python features (version 3.10+) to provide a clean,
 
 ## Testing
 
+### Configuration profiling evidence
+
+The [MLX study](mlx-profiling-study.md) records configuration setup only, with
+native inference explicitly not run and Metal memory not measured. Its
+[replication JSON](mlx-profiling-replication-20261019.json) preserves raw timing
+samples, full dependency versions, imported source hashes and the collection
+driver; the [paired SVG](mlx-profiling-replication-20261019.svg) shows individual
+samples and median/MAD without significance or causal performance claims.
+The complete source archive and unredacted execution receipts remain in the
+local hash-bound bundle. Same-host repeatability does not close independent-host,
+production inference, attention/recall or Metal-memory research tasks.
+
+### Module tests
+
 ```bash
 uv run python -m pytest tests/ -k llm -v
 ```

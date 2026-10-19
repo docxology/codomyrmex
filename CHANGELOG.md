@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### MLX configuration replication evidence (2026-10-19)
+
+- Retain two fresh-process Python 3.15 configuration-only runs against frozen,
+  clean post-#598 source, with raw samples, complete dependency versions, source
+  archive/import hashes, execution receipts, and bundle manifests. Publish a
+  path-minimized JSON receipt and paired raw-sample/median/MAD visualization.
+- Document source freezing, isolated-environment reproduction, manifest checking,
+  and historical comparison exclusions. Same-host variation is not a speedup or
+  independent-host replication; inference, recall and Metal memory remain untested
+  by this study. No runtime code or conservative cache/prefill policies change.
+
 ### Queue maintenance and scanner alignment
 
 - Use deques for retained messages, per-agent inboxes, behavioral sample
