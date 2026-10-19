@@ -4,137 +4,42 @@
   "driver_sha256": "4e380c084da6e41081a73bc6d22773822cb6360e7023ade6eaa8d7da3871d52f",
   "executions": [
     {
-      "argv": [
-        "output/mlx-replication-20261019/collect.py",
-        "run-a"
-      ],
+      "argv": ["output/mlx-replication-20261019/collect.py", "run-a"],
       "dependencies": [
-        [
-          "PyYAML",
-          "6.0.3"
-        ],
-        [
-          "Pygments",
-          "2.21.0"
-        ],
-        [
-          "aiohappyeyeballs",
-          "2.7.1"
-        ],
-        [
-          "aiohttp",
-          "3.14.5"
-        ],
-        [
-          "aiosignal",
-          "1.4.0"
-        ],
-        [
-          "annotated-types",
-          "0.8.0"
-        ],
-        [
-          "attrs",
-          "26.1.0"
-        ],
-        [
-          "certifi",
-          "2026.10.18"
-        ],
-        [
-          "charset-normalizer",
-          "3.5.2"
-        ],
-        [
-          "frozenlist",
-          "1.8.0"
-        ],
-        [
-          "idna",
-          "3.20"
-        ],
-        [
-          "jsonschema",
-          "4.26.0"
-        ],
-        [
-          "jsonschema-specifications",
-          "2025.9.1"
-        ],
-        [
-          "markdown-it-py",
-          "4.2.0"
-        ],
-        [
-          "mdurl",
-          "0.1.2"
-        ],
-        [
-          "multidict",
-          "7.1.0"
-        ],
-        [
-          "propcache",
-          "0.5.4"
-        ],
-        [
-          "pydantic",
-          "2.14.1"
-        ],
-        [
-          "pydantic_core",
-          "2.50.1"
-        ],
-        [
-          "python-dotenv",
-          "1.2.4"
-        ],
-        [
-          "referencing",
-          "0.37.0"
-        ],
-        [
-          "requests",
-          "2.34.2"
-        ],
-        [
-          "rich",
-          "15.0.0"
-        ],
-        [
-          "rpds-py",
-          "2026.9.1"
-        ],
-        [
-          "typing-inspection",
-          "0.4.4"
-        ],
-        [
-          "typing_extensions",
-          "4.16.0"
-        ],
-        [
-          "urllib3",
-          "2.8.0"
-        ],
-        [
-          "yarl",
-          "1.25.1"
-        ]
+        ["PyYAML", "6.0.3"],
+        ["Pygments", "2.21.0"],
+        ["aiohappyeyeballs", "2.7.1"],
+        ["aiohttp", "3.14.5"],
+        ["aiosignal", "1.4.0"],
+        ["annotated-types", "0.8.0"],
+        ["attrs", "26.1.0"],
+        ["certifi", "2026.10.18"],
+        ["charset-normalizer", "3.5.2"],
+        ["frozenlist", "1.8.0"],
+        ["idna", "3.20"],
+        ["jsonschema", "4.26.0"],
+        ["jsonschema-specifications", "2025.9.1"],
+        ["markdown-it-py", "4.2.0"],
+        ["mdurl", "0.1.2"],
+        ["multidict", "7.1.0"],
+        ["propcache", "0.5.4"],
+        ["pydantic", "2.14.1"],
+        ["pydantic_core", "2.50.1"],
+        ["python-dotenv", "1.2.4"],
+        ["referencing", "0.37.0"],
+        ["requests", "2.34.2"],
+        ["rich", "15.0.0"],
+        ["rpds-py", "2026.9.1"],
+        ["typing-inspection", "0.4.4"],
+        ["typing_extensions", "4.16.0"],
+        ["urllib3", "2.8.0"],
+        ["yarl", "1.25.1"]
       ],
       "finished_at": "2026-10-19T15:27:16.375458+00:00",
       "host_conditions": "Shared host; GitVault and other project activity ongoing; thermal state uncontrolled; no affinity or frequency controls.",
       "isolated_flag": 1,
-      "load_average_after": [
-        35.32568359375,
-        31.65625,
-        18.55712890625
-      ],
-      "load_average_before": [
-        35.42724609375,
-        31.5576171875,
-        18.369140625
-      ],
+      "load_average_after": [35.32568359375, 31.65625, 18.55712890625],
+      "load_average_before": [35.42724609375, 31.5576171875, 18.369140625],
       "loaded_source_sha256": {
         "src/codomyrmex/__init__.py": "2f017627e1a72b3ff00b095ab06ee864fd55d33195671f63cc5157bdfda90117",
         "src/codomyrmex/config_management/__init__.py": "c7740771df4d31153e56baefe9fba30eaafaf955ff87701f9ed888e5bb180336",
@@ -257,137 +162,42 @@
       "started_at": "2026-10-19T15:27:04.551181+00:00"
     },
     {
-      "argv": [
-        "output/mlx-replication-20261019/collect.py",
-        "run-b"
-      ],
+      "argv": ["output/mlx-replication-20261019/collect.py", "run-b"],
       "dependencies": [
-        [
-          "PyYAML",
-          "6.0.3"
-        ],
-        [
-          "Pygments",
-          "2.21.0"
-        ],
-        [
-          "aiohappyeyeballs",
-          "2.7.1"
-        ],
-        [
-          "aiohttp",
-          "3.14.5"
-        ],
-        [
-          "aiosignal",
-          "1.4.0"
-        ],
-        [
-          "annotated-types",
-          "0.8.0"
-        ],
-        [
-          "attrs",
-          "26.1.0"
-        ],
-        [
-          "certifi",
-          "2026.10.18"
-        ],
-        [
-          "charset-normalizer",
-          "3.5.2"
-        ],
-        [
-          "frozenlist",
-          "1.8.0"
-        ],
-        [
-          "idna",
-          "3.20"
-        ],
-        [
-          "jsonschema",
-          "4.26.0"
-        ],
-        [
-          "jsonschema-specifications",
-          "2025.9.1"
-        ],
-        [
-          "markdown-it-py",
-          "4.2.0"
-        ],
-        [
-          "mdurl",
-          "0.1.2"
-        ],
-        [
-          "multidict",
-          "7.1.0"
-        ],
-        [
-          "propcache",
-          "0.5.4"
-        ],
-        [
-          "pydantic",
-          "2.14.1"
-        ],
-        [
-          "pydantic_core",
-          "2.50.1"
-        ],
-        [
-          "python-dotenv",
-          "1.2.4"
-        ],
-        [
-          "referencing",
-          "0.37.0"
-        ],
-        [
-          "requests",
-          "2.34.2"
-        ],
-        [
-          "rich",
-          "15.0.0"
-        ],
-        [
-          "rpds-py",
-          "2026.9.1"
-        ],
-        [
-          "typing-inspection",
-          "0.4.4"
-        ],
-        [
-          "typing_extensions",
-          "4.16.0"
-        ],
-        [
-          "urllib3",
-          "2.8.0"
-        ],
-        [
-          "yarl",
-          "1.25.1"
-        ]
+        ["PyYAML", "6.0.3"],
+        ["Pygments", "2.21.0"],
+        ["aiohappyeyeballs", "2.7.1"],
+        ["aiohttp", "3.14.5"],
+        ["aiosignal", "1.4.0"],
+        ["annotated-types", "0.8.0"],
+        ["attrs", "26.1.0"],
+        ["certifi", "2026.10.18"],
+        ["charset-normalizer", "3.5.2"],
+        ["frozenlist", "1.8.0"],
+        ["idna", "3.20"],
+        ["jsonschema", "4.26.0"],
+        ["jsonschema-specifications", "2025.9.1"],
+        ["markdown-it-py", "4.2.0"],
+        ["mdurl", "0.1.2"],
+        ["multidict", "7.1.0"],
+        ["propcache", "0.5.4"],
+        ["pydantic", "2.14.1"],
+        ["pydantic_core", "2.50.1"],
+        ["python-dotenv", "1.2.4"],
+        ["referencing", "0.37.0"],
+        ["requests", "2.34.2"],
+        ["rich", "15.0.0"],
+        ["rpds-py", "2026.9.1"],
+        ["typing-inspection", "0.4.4"],
+        ["typing_extensions", "4.16.0"],
+        ["urllib3", "2.8.0"],
+        ["yarl", "1.25.1"]
       ],
       "finished_at": "2026-10-19T15:27:28.412960+00:00",
       "host_conditions": "Shared host; GitVault and other project activity ongoing; thermal state uncontrolled; no affinity or frequency controls.",
       "isolated_flag": 1,
-      "load_average_after": [
-        33.1640625,
-        31.31982421875,
-        18.5908203125
-      ],
-      "load_average_before": [
-        35.32568359375,
-        31.65625,
-        18.55712890625
-      ],
+      "load_average_after": [33.1640625, 31.31982421875, 18.5908203125],
+      "load_average_before": [35.32568359375, 31.65625, 18.55712890625],
       "loaded_source_sha256": {
         "src/codomyrmex/__init__.py": "2f017627e1a72b3ff00b095ab06ee864fd55d33195671f63cc5157bdfda90117",
         "src/codomyrmex/config_management/__init__.py": "c7740771df4d31153e56baefe9fba30eaafaf955ff87701f9ed888e5bb180336",
@@ -519,7 +329,7 @@
     {
       "created_at": "2026-10-19T15:27:16.340367+00:00",
       "environment": {
-        "clock_resolution_seconds": 4.166666666666666e-08,
+        "clock_resolution_seconds": 4.166666666666666e-8,
         "dependencies": {
           "aiohttp": "3.14.5",
           "jsonschema": "4.26.0",
@@ -719,21 +529,21 @@
               "total_calls": 50000
             },
             {
-              "cumulative_seconds": 2.025e-05,
+              "cumulative_seconds": 2.025e-5,
               "file": "__init__.py",
               "function": "__exit__",
               "line": 134,
               "primitive_calls": 1,
-              "self_seconds": 3.75e-06,
+              "self_seconds": 3.75e-6,
               "total_calls": 1
             },
             {
-              "cumulative_seconds": 1.65e-05,
+              "cumulative_seconds": 1.65e-5,
               "file": "~",
               "function": "<method 'disable' of '_lsprof.Profiler' objects>",
               "line": 0,
               "primitive_calls": 1,
-              "self_seconds": 1.65e-05,
+              "self_seconds": 1.65e-5,
               "total_calls": 1
             }
           ],
@@ -743,27 +553,10 @@
           "python_peak_bytes": 1494,
           "python_retained_bytes": 0,
           "timing_ns_per_operation": [
-            2370.6275,
-            2475.89334,
-            2485.0825,
-            2240.63168,
-            2267.74,
-            2394.42582,
-            2493.1675,
-            2358.02084,
-            2375.45166,
-            2405.32166,
-            2425.635,
-            2411.56582,
-            2281.36418,
-            2343.45084,
-            2366.01416,
-            2348.735,
-            2335.89916,
-            2272.58,
-            2220.7575,
-            2329.385,
-            2549.06334
+            2370.6275, 2475.89334, 2485.0825, 2240.63168, 2267.74, 2394.42582,
+            2493.1675, 2358.02084, 2375.45166, 2405.32166, 2425.635, 2411.56582,
+            2281.36418, 2343.45084, 2366.01416, 2348.735, 2335.89916, 2272.58,
+            2220.7575, 2329.385, 2549.06334
           ]
         },
         {
@@ -931,21 +724,21 @@
               "total_calls": 50000
             },
             {
-              "cumulative_seconds": 2.2542000000000002e-05,
+              "cumulative_seconds": 2.2542000000000002e-5,
               "file": "__init__.py",
               "function": "__exit__",
               "line": 134,
               "primitive_calls": 1,
-              "self_seconds": 4.2510000000000005e-06,
+              "self_seconds": 4.2510000000000005e-6,
               "total_calls": 1
             },
             {
-              "cumulative_seconds": 1.8291e-05,
+              "cumulative_seconds": 1.8291e-5,
               "file": "~",
               "function": "<method 'disable' of '_lsprof.Profiler' objects>",
               "line": 0,
               "primitive_calls": 1,
-              "self_seconds": 1.8291e-05,
+              "self_seconds": 1.8291e-5,
               "total_calls": 1
             }
           ],
@@ -955,27 +748,10 @@
           "python_peak_bytes": 1742,
           "python_retained_bytes": 240,
           "timing_ns_per_operation": [
-            2118.57668,
-            2114.75084,
-            1951.4275,
-            1964.02,
-            2114.79418,
-            1947.30166,
-            2175.6425,
-            2103.51084,
-            2027.92584,
-            2040.50082,
-            2152.7425,
-            2086.05,
-            2125.09916,
-            2057.15666,
-            1862.67168,
-            2000.33166,
-            2063.21332,
-            2061.6325,
-            1971.22916,
-            2063.9975,
-            2184.78168
+            2118.57668, 2114.75084, 1951.4275, 1964.02, 2114.79418, 1947.30166,
+            2175.6425, 2103.51084, 2027.92584, 2040.50082, 2152.7425, 2086.05,
+            2125.09916, 2057.15666, 1862.67168, 2000.33166, 2063.21332,
+            2061.6325, 1971.22916, 2063.9975, 2184.78168
           ]
         },
         {
@@ -1154,21 +930,21 @@
               "total_calls": 50000
             },
             {
-              "cumulative_seconds": 1.8375000000000003e-05,
+              "cumulative_seconds": 1.8375000000000003e-5,
               "file": "__init__.py",
               "function": "__exit__",
               "line": 134,
               "primitive_calls": 1,
-              "self_seconds": 4.25e-06,
+              "self_seconds": 4.25e-6,
               "total_calls": 1
             },
             {
-              "cumulative_seconds": 1.4125000000000001e-05,
+              "cumulative_seconds": 1.4125000000000001e-5,
               "file": "~",
               "function": "<method 'disable' of '_lsprof.Profiler' objects>",
               "line": 0,
               "primitive_calls": 1,
-              "self_seconds": 1.4125000000000001e-05,
+              "self_seconds": 1.4125000000000001e-5,
               "total_calls": 1
             }
           ],
@@ -1178,27 +954,10 @@
           "python_peak_bytes": 1742,
           "python_retained_bytes": 240,
           "timing_ns_per_operation": [
-            2142.27334,
-            2181.10166,
-            2340.09916,
-            2110.25584,
-            2164.69916,
-            2002.73418,
-            2110.19084,
-            2148.83666,
-            2176.76916,
-            2053.64334,
-            2159.82166,
-            2159.91416,
-            2116.61084,
-            2090.12584,
-            2124.795,
-            2040.25832,
-            2045.75332,
-            2119.13084,
-            2143.14332,
-            2092.035,
-            2243.165
+            2142.27334, 2181.10166, 2340.09916, 2110.25584, 2164.69916,
+            2002.73418, 2110.19084, 2148.83666, 2176.76916, 2053.64334,
+            2159.82166, 2159.91416, 2116.61084, 2090.12584, 2124.795,
+            2040.25832, 2045.75332, 2119.13084, 2143.14332, 2092.035, 2243.165
           ]
         },
         {
@@ -1377,21 +1136,21 @@
               "total_calls": 50000
             },
             {
-              "cumulative_seconds": 2.0625e-05,
+              "cumulative_seconds": 2.0625e-5,
               "file": "__init__.py",
               "function": "__exit__",
               "line": 134,
               "primitive_calls": 1,
-              "self_seconds": 4.916e-06,
+              "self_seconds": 4.916e-6,
               "total_calls": 1
             },
             {
-              "cumulative_seconds": 1.5709e-05,
+              "cumulative_seconds": 1.5709e-5,
               "file": "~",
               "function": "<method 'disable' of '_lsprof.Profiler' objects>",
               "line": 0,
               "primitive_calls": 1,
-              "self_seconds": 1.5709e-05,
+              "self_seconds": 1.5709e-5,
               "total_calls": 1
             }
           ],
@@ -1401,27 +1160,10 @@
           "python_peak_bytes": 1742,
           "python_retained_bytes": 240,
           "timing_ns_per_operation": [
-            2106.46668,
-            2181.435,
-            2150.95916,
-            1995.69418,
-            2158.995,
-            2041.10668,
-            2308.17166,
-            2112.64666,
-            2191.89416,
-            2133.8675,
-            2205.27084,
-            2206.20084,
-            2140.29166,
-            2105.39584,
-            2133.26332,
-            2134.47166,
-            2146.11082,
-            2160.2425,
-            2048.73,
-            2120.71334,
-            2188.53916
+            2106.46668, 2181.435, 2150.95916, 1995.69418, 2158.995, 2041.10668,
+            2308.17166, 2112.64666, 2191.89416, 2133.8675, 2205.27084,
+            2206.20084, 2140.29166, 2105.39584, 2133.26332, 2134.47166,
+            2146.11082, 2160.2425, 2048.73, 2120.71334, 2188.53916
           ]
         }
       ],
@@ -1431,7 +1173,7 @@
     {
       "created_at": "2026-10-19T15:27:28.394286+00:00",
       "environment": {
-        "clock_resolution_seconds": 4.166666666666666e-08,
+        "clock_resolution_seconds": 4.166666666666666e-8,
         "dependencies": {
           "aiohttp": "3.14.5",
           "jsonschema": "4.26.0",
@@ -1631,21 +1373,21 @@
               "total_calls": 50000
             },
             {
-              "cumulative_seconds": 2.4792000000000003e-05,
+              "cumulative_seconds": 2.4792000000000003e-5,
               "file": "__init__.py",
               "function": "__exit__",
               "line": 134,
               "primitive_calls": 1,
-              "self_seconds": 5.042e-06,
+              "self_seconds": 5.042e-6,
               "total_calls": 1
             },
             {
-              "cumulative_seconds": 1.9750000000000002e-05,
+              "cumulative_seconds": 1.9750000000000002e-5,
               "file": "~",
               "function": "<method 'disable' of '_lsprof.Profiler' objects>",
               "line": 0,
               "primitive_calls": 1,
-              "self_seconds": 1.9750000000000002e-05,
+              "self_seconds": 1.9750000000000002e-5,
               "total_calls": 1
             }
           ],
@@ -1655,27 +1397,10 @@
           "python_peak_bytes": 1494,
           "python_retained_bytes": 0,
           "timing_ns_per_operation": [
-            2221.39418,
-            2273.46168,
-            2197.2825,
-            2207.42082,
-            2386.52666,
-            2311.46166,
-            2312.5275,
-            2362.30416,
-            2315.98334,
-            2523.055,
-            2349.82666,
-            2306.32084,
-            2362.74666,
-            2682.73166,
-            2219.42584,
-            2222.71,
-            2253.4425,
-            2243.7875,
-            2232.5525,
-            2275.32416,
-            2247.52082
+            2221.39418, 2273.46168, 2197.2825, 2207.42082, 2386.52666,
+            2311.46166, 2312.5275, 2362.30416, 2315.98334, 2523.055, 2349.82666,
+            2306.32084, 2362.74666, 2682.73166, 2219.42584, 2222.71, 2253.4425,
+            2243.7875, 2232.5525, 2275.32416, 2247.52082
           ]
         },
         {
@@ -1843,21 +1568,21 @@
               "total_calls": 50000
             },
             {
-              "cumulative_seconds": 3.2875e-05,
+              "cumulative_seconds": 3.2875e-5,
               "file": "__init__.py",
               "function": "__exit__",
               "line": 134,
               "primitive_calls": 1,
-              "self_seconds": 3.4590000000000003e-06,
+              "self_seconds": 3.4590000000000003e-6,
               "total_calls": 1
             },
             {
-              "cumulative_seconds": 2.9416e-05,
+              "cumulative_seconds": 2.9416e-5,
               "file": "~",
               "function": "<method 'disable' of '_lsprof.Profiler' objects>",
               "line": 0,
               "primitive_calls": 1,
-              "self_seconds": 2.9416e-05,
+              "self_seconds": 2.9416e-5,
               "total_calls": 1
             }
           ],
@@ -1867,27 +1592,10 @@
           "python_peak_bytes": 1742,
           "python_retained_bytes": 240,
           "timing_ns_per_operation": [
-            2015.87666,
-            2033.1025,
-            1831.95416,
-            1939.21832,
-            1995.80584,
-            2028.99916,
-            2062.19084,
-            2187.44,
-            2045.29584,
-            2113.59334,
-            2066.245,
-            2069.1475,
-            2125.86582,
-            2057.02832,
-            1980.9475,
-            1999.23584,
-            1924.8275,
-            2005.18084,
-            1921.89666,
-            2015.6975,
-            1866.515
+            2015.87666, 2033.1025, 1831.95416, 1939.21832, 1995.80584,
+            2028.99916, 2062.19084, 2187.44, 2045.29584, 2113.59334, 2066.245,
+            2069.1475, 2125.86582, 2057.02832, 1980.9475, 1999.23584, 1924.8275,
+            2005.18084, 1921.89666, 2015.6975, 1866.515
           ]
         },
         {
@@ -2066,21 +1774,21 @@
               "total_calls": 50000
             },
             {
-              "cumulative_seconds": 1.8167e-05,
+              "cumulative_seconds": 1.8167e-5,
               "file": "__init__.py",
               "function": "__exit__",
               "line": 134,
               "primitive_calls": 1,
-              "self_seconds": 4.126e-06,
+              "self_seconds": 4.126e-6,
               "total_calls": 1
             },
             {
-              "cumulative_seconds": 1.4041000000000002e-05,
+              "cumulative_seconds": 1.4041000000000002e-5,
               "file": "~",
               "function": "<method 'disable' of '_lsprof.Profiler' objects>",
               "line": 0,
               "primitive_calls": 1,
-              "self_seconds": 1.4041000000000002e-05,
+              "self_seconds": 1.4041000000000002e-5,
               "total_calls": 1
             }
           ],
@@ -2090,27 +1798,10 @@
           "python_peak_bytes": 1742,
           "python_retained_bytes": 240,
           "timing_ns_per_operation": [
-            2105.73166,
-            1932.76082,
-            2053.87834,
-            2200.62332,
-            2122.34834,
-            2234.585,
-            2059.1825,
-            2135.57832,
-            2180.09416,
-            2186.90834,
-            2242.2425,
-            2137.51,
-            2114.43832,
-            2108.445,
-            2088.42834,
-            2022.30918,
-            2054.30166,
-            2058.295,
-            2036.1625,
-            1997.79834,
-            1981.85
+            2105.73166, 1932.76082, 2053.87834, 2200.62332, 2122.34834,
+            2234.585, 2059.1825, 2135.57832, 2180.09416, 2186.90834, 2242.2425,
+            2137.51, 2114.43832, 2108.445, 2088.42834, 2022.30918, 2054.30166,
+            2058.295, 2036.1625, 1997.79834, 1981.85
           ]
         },
         {
@@ -2289,21 +1980,21 @@
               "total_calls": 50000
             },
             {
-              "cumulative_seconds": 2.0584e-05,
+              "cumulative_seconds": 2.0584e-5,
               "file": "__init__.py",
               "function": "__exit__",
               "line": 134,
               "primitive_calls": 1,
-              "self_seconds": 4.0420000000000004e-06,
+              "self_seconds": 4.0420000000000004e-6,
               "total_calls": 1
             },
             {
-              "cumulative_seconds": 1.6542000000000002e-05,
+              "cumulative_seconds": 1.6542000000000002e-5,
               "file": "~",
               "function": "<method 'disable' of '_lsprof.Profiler' objects>",
               "line": 0,
               "primitive_calls": 1,
-              "self_seconds": 1.6542000000000002e-05,
+              "self_seconds": 1.6542000000000002e-5,
               "total_calls": 1
             }
           ],
@@ -2313,27 +2004,10 @@
           "python_peak_bytes": 1742,
           "python_retained_bytes": 240,
           "timing_ns_per_operation": [
-            2051.90084,
-            2048.02916,
-            2001.2225,
-            2031.03582,
-            2038.84,
-            2120.28,
-            2082.89582,
-            2123.30418,
-            2252.1125,
-            2160.08166,
-            2208.24832,
-            2112.16918,
-            2123.865,
-            2184.235,
-            2075.79166,
-            2009.0,
-            1999.22916,
-            2128.19334,
-            1978.6075,
-            2145.17334,
-            1952.2375
+            2051.90084, 2048.02916, 2001.2225, 2031.03582, 2038.84, 2120.28,
+            2082.89582, 2123.30418, 2252.1125, 2160.08166, 2208.24832,
+            2112.16918, 2123.865, 2184.235, 2075.79166, 2009.0, 1999.22916,
+            2128.19334, 1978.6075, 2145.17334, 1952.2375
           ]
         }
       ],

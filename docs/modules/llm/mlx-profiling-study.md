@@ -79,6 +79,23 @@ receipts, exact **34 MiB** source archive, extracted source and installed enviro
 remain local; the archive can be reconstructed from the recorded Git revision.
 The bundle is not a wheel archive or hermetic operating-system image.
 
+The public JSON uses the repository's Prettier hook formatting; formatting does
+not change parsed measurements, embedded collection code, or provenance values.
+The root `.secrets.baseline` records 140 individually audited detector findings
+in this receipt only: 139 public SHA-256 digests and the measured Git revision.
+It does not exclude the receipt from scanning or suppress arbitrary digest-shaped
+strings. New findings still fail the existing secret-detection hook; baseline
+updates require explicit review rather than automatic acceptance. The retained
+local evidence bundle and its manifest remain byte-for-byte unchanged.
+
+Baseline loading in detect-secrets 1.5.0 has a separate metadata exception:
+files with the basename `.secrets.baseline`, including nested files, are not
+scanned. Keep that name reserved for reviewed detector metadata, never other
+content. Review both plugin/filter settings and individual entries when changing
+the baseline; it is not a security boundary against an untrusted contributor
+who can edit scanner configuration. This uses the detector's standard baseline
+mechanism rather than introducing a custom scanning wrapper.
+
 ![Configuration-only paired runs: individual samples, median and MAD; no inference or Metal measurements](mlx-profiling-replication-20261019.svg)
 
 | Requested configuration | Run A, median ± MAD (µs/op) | Run B, median ± MAD (µs/op) | Traced Python batch peak, both runs |
