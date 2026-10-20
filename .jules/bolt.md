@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2026-10-20 - O(1) Queue for BFS Traversals
+**Learning:** Using `list.pop(0)` as a queue for BFS or time-windowed calculations degrades performance to O(N) because it requires shifting all subsequent elements. Furthermore, `deque` lacks O(1) random access, so binary search operations like `bisect` on `deque` degrade to O(N log N).
+**Action:** Always use `collections.deque` with `.popleft()` for strictly O(1) queue removals. Avoid `bisect` on `deque`; stick to a `while` loop with `popleft()` for O(K) where K is the number of elements removed.
