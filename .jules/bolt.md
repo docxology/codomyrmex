@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2025-10-21 - Replace O(N) list.pop(0) with O(1) collections.deque
+**Learning:** In python, `list.pop(0)` takes O(N) time since all subsequent elements have to be shifted. When maintaining a bounded window of records (e.g. log records with max size), doing this leads to degraded O(N) insertion performance for every element.
+**Action:** Use `collections.deque` initialized with `maxlen=N` which gives O(1) appends and automatic eviction without needing `len()` checks.
