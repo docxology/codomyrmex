@@ -44,3 +44,8 @@ icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
+
+## 2026-10-21 - [Icon-only buttons missing aria-labels]
+
+**Learning:** Found several icon-only buttons across mission_control/app components (pipeline-tab.tsx, terminal-toolbar.tsx, etc.) missing aria-labels, making them inaccessible to screen readers.
+**Action:** Applied aria-labels to all identified icon-only buttons. Always ensure buttons without visible text have an aria-label attribute.
