@@ -191,7 +191,10 @@ class LogAggregator:
 
     def tail(self, n: int = 20) -> list[LogRecord]:
         """Return the most recent n records."""
-        return [self._records[i] for i in range(max(0, len(self._records) - n), len(self._records))]
+        return [
+            self._records[i]
+            for i in range(max(0, len(self._records) - n), len(self._records))
+        ]
 
     def clear(self) -> None:
         """Remove all stored records."""
