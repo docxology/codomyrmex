@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2026-10-22 - O(1) Sliding Window Eviction with Deque
+**Learning:** `LogAggregator` was using `list.pop(0)` for eviction when the max records limit was reached, resulting in an O(N) penalty for every log ingestion operation when the log fills up.
+**Action:** Use `collections.deque(maxlen=N)` for automatic O(1) sliding window retention instead of manually checking length and calling `list.pop(0)`.
