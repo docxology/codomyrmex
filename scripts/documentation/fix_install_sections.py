@@ -56,6 +56,3 @@ for d in sorted(os.listdir(SRC)):
         fixed += 1
 
 print(f"Fixed {fixed} Installation sections")
-
-
-

@@ -159,7 +159,7 @@ class DocumentationFixer(ScriptBase):
                  return
 
         module_name = path.name
-        
+
         # Files to check/generate
         generators = {
             "PAI.md": self.generate_pai,
@@ -167,21 +167,21 @@ class DocumentationFixer(ScriptBase):
             "AGENTS.md": self.generate_agents,
             "README.md": self.generate_readme
         }
-        
+
         for filename, generator in generators.items():
             file_path = path / filename
             content = generator(module_name)
-            
+
             should_write = False
             action = ""
-            
+
             if not file_path.exists():
                 should_write = True
                 action = "Created"
             elif filename == "README.md" and file_path.stat().st_size < self.stub_threshold:
                 should_write = True
                 action = "Upgraded Stub"
-                
+
             if should_write:
                 if self.config and self.config.dry_run:
                     self.log_info(f"[DRY RUN] Would write {file_path}")
@@ -197,7 +197,7 @@ class DocumentationFixer(ScriptBase):
         for root, dirs, files in os.walk(self.target_dir):
             path = Path(root)
             self.fix_directory(path)
-            
+
         return {"status": "completed"}
 
 if __name__ == "__main__":
