@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2026-10-23 - O(1) eviction for bounded queues
+**Learning:** A queue bound by a maximum size that uses a list and removes the oldest item via `list.pop(0)` suffers from O(N) operations, deteriorating the application performance as the length approaches `N`.
+**Action:** Replace `list` bounded queues with `collections.deque(maxlen=N)` to obtain an O(1) eviction policy, avoiding N memory shifts per operation. Keep in mind that `deque`s do not support slicing, requiring conversion to list first: `list(my_deque)[-n:]`.
