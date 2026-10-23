@@ -37,6 +37,7 @@ merge history.
    allocates/compiles today.
 
 **Retired topics (do not re-propose; representative already merged):**
+
 InMemoryCache OrderedDict eviction (merged #488, applied via #283 stats fix),
 `cache/policies.py` monotonic clocks (#483 family), TTLPolicy O(1) (#470),
 InferenceCache LRU (#485), `validation.py` `_TYPE_MAP` (#410), module-level
