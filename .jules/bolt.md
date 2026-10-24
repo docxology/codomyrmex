@@ -42,3 +42,8 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2024-10-24 - O(1) Sliding Window Logs using deque
+
+**Learning:** `LogAggregator` was using a standard `list` with manual bounds checking and `.pop(0)` to evict the oldest log records. `list.pop(0)` degrades performance to $O(N)$ for every insertion once the list hits maximum capacity.
+**Action:** Replaced the `list` with a `collections.deque(maxlen=N)`. This completely eliminates manual boundary checking and changes eviction complexity to $O(1)$. When using `deque` internally but exposing it publicly or via APIs requiring a list (e.g. `tail()` using slicing), remember to coerce it back using `list()`.
