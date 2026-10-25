@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2026-10-25 - Use collections.deque for sliding window logs
+**Learning:** `list.pop(0)` is an O(N) operation in Python. When maintaining a bounded history (sliding window) of log events (like `LogAggregator` max_records eviction) using `list.pop(0)`, it results in severe performance degradation as the history grows large.
+**Action:** Use `collections.deque(maxlen=N)` for automatic O(1) sliding window retention without manual length checks. Be careful when fetching slices as deque doesn't support list-like slicing; instead, use `itertools.islice`.
