@@ -186,6 +186,7 @@ class LogAggregator:
     def tail(self, n: int = 20) -> list[LogRecord]:
         """Return the most recent n records."""
         import itertools
+
         start = max(0, len(self._records) - n)
         return list(itertools.islice(self._records, start, len(self._records)))
 
