@@ -44,3 +44,8 @@ icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
+
+## 2025-02-23 - Missing aria-label on dynamically rendered attachment remove buttons
+
+**Learning:** Icon-only remove buttons rendered dynamically inside mapped lists (like chat attachments) are frequently missed during static accessibility reviews because they only appear after drag-and-drop actions.
+**Action:** When adding or reviewing dynamically injected UI elements with icon-only controls, always manually verify screen reader labels are present.
