@@ -44,3 +44,6 @@ icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
+## 2026-10-23 - Added missing aria-labels for various icon-only buttons
+**Learning:** Found multiple icon-only buttons (close, expand/collapse, etc.) in the mission control app components missing `aria-label` attributes which breaks screen reader accessibility.
+**Action:** Consistently added descriptive `aria-label` attributes to these buttons (e.g. `aria-label="Remove widget"`, `aria-label="Gateway connected"`) and ensure they clearly describe the action to take.
