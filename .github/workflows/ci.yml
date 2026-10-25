@@ -16,8 +16,8 @@ permissions: {}
 
 env:
   PYTHON_VERSION: "3.11"
-  UV_VERSION: "0.10.8"
-  NODE_VERSION: "20"
+  UV_VERSION: "0.13.5"
+  NODE_VERSION: "22"
   PYTHONUTF8: "1"
   PYTHONIOENCODING: "utf-8"
   # Hypothesis's pytest plugin imports before conftest; conftest cannot set this in time.

@@ -81,7 +81,7 @@ documentation, benchmarks, PR automation, and repository maintenance. 37 workflo
 ## Critical Design Decisions
 
 - All workflows have `permissions: {}` at top-level (deny-all default)
-- `astral-sh/setup-uv@v5` is the standard for all UV installations
+- `astral-sh/setup-uv@v7` is the standard for all UV installations
 - CI runs Ubuntu/Python 3.11 plus Windows/Python 3.11 on PRs. Main pushes run
   the full suite on Ubuntu and macOS across Python 3.11–3.13, plus the blocking
   Windows portability contract across the same Python versions.

@@ -26,8 +26,8 @@ permissions: {}
 
 env:
   PYTHON_VERSION: "3.11"
-  UV_VERSION: "0.10.8"
-  NODE_VERSION: "20"
+  UV_VERSION: "0.13.5"
+  NODE_VERSION: "22"
 
 jobs:
   changes:

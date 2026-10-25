@@ -67,7 +67,7 @@ PAI uses project templates when creating issues and PRs:
 Workflow modifications require a feature branch and human review:
 
 - **Never modify workflows directly on `main`** -- always use a feature branch + PR
-- **Pin action versions** to specific tags (e.g., `actions/checkout@v4`)
+- **Pin action versions** to specific tags (e.g., `actions/checkout@v7`)
 - **Declare `permissions: {}`** at workflow top level; grant per-job as needed
 
 ### EXECUTE Phase

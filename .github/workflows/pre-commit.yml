@@ -14,7 +14,7 @@ permissions: {}
 
 env:
   PYTHON_VERSION: "3.11"
-  UV_VERSION: "0.10.8"
+  UV_VERSION: "0.13.5"
 
 jobs:
   pre-commit:

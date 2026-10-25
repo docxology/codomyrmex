@@ -7,7 +7,7 @@
 ## Design Principles
 
 1. **Deny-all permissions by default**: `permissions: {}` at top level; jobs grant only what they need
-2. **Reproducible builds**: `uv.lock` pinned; `setup-uv@v5` pinned to stable major
+2. **Reproducible builds**: `uv.lock` pinned; `setup-uv@v7` pinned to stable major
 3. **Fast feedback**: cache restore before `uv sync`; `fail-fast: false` on matrices
 4. **Security coverage**: SAST (bandit, semgrep), SCA (safety scan), secrets (trufflehog)
 5. **Observability**: all workflow runs update the status dashboard
@@ -25,13 +25,13 @@
   terminal, structure, and real temporary-Git workflows. Live-provider and
   benchmark lanes are explicitly opt-in.
 - Artifacts: coverage.xml, junit-*.xml
-- Codecov upload: `codecov/codecov-action@v5` with OIDC token
+- Codecov upload: `codecov/codecov-action@v7` with `token: ${{ secrets.CODECOV_TOKEN }}`
 
 ### security.yml
 
 - Triggers: daily schedule + push to `main`/`develop` when `pyproject.toml` or `uv.lock` changes
 - Scans: bandit (SAST), safety scan (SCA), semgrep (SAST), trufflehog (secrets), license check
-- Auto-PR: opens PR for dependency updates via `peter-evans/create-pull-request@v7`
+- Auto-PR: opens PR for dependency updates via `peter-evans/create-pull-request@v8`
 - TruffleHog scan range: push → `event.before`..`sha`; PR → base.sha..head.sha
 
 ### release.yml
@@ -51,8 +51,8 @@
 
 | Action | Version | Notes |
 |--------|---------|-------|
-| `astral-sh/setup-uv` | `@v5` | Upgrade from v3 — all workflows |
-| `actions/checkout` | `@v4` | Standard across all jobs |
-| `codecov/codecov-action` | `@v5` | Token in `with:`, not `env:` |
-| `peter-evans/create-pull-request` | `@v7` | For automated dependency and release-documentation PRs |
-| `actions/setup-python` | `@v5` | Only in release verify job |
+| `astral-sh/setup-uv` | `@v7` | All UV installations; version from `UV_VERSION` |
+| `actions/checkout` | `@v7` | Standard across all jobs |
+| `codecov/codecov-action` | `@v7` | Token in `with:`, not `env:` |
+| `peter-evans/create-pull-request` | `@v8` | For automated dependency and release-documentation PRs |
+| `actions/setup-python` | `@v7` | Jobs needing an exact interpreter (integration, docs deploy, release, SBOM, Lighthouse) |

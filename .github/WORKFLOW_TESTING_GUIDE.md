@@ -266,7 +266,7 @@ gh secret set CODECOV_TOKEN --body="your-codecov-token"
 **Solution**: Check Node.js and dependency installation
 ```yaml
 # Ensure Node.js version is correct
-node-version: '20'
+node-version: '22'
 ```
 
 #### Issue: "Pre-commit hook timeout"
