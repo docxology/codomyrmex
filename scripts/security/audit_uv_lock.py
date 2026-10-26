@@ -41,429 +41,428 @@ SCOPED_IGNORES: tuple[ScopedIgnore, ...] = (
         advisory="CVE-2026-112940",
         package="filelock",
         version="3.32.3",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112913",
         package="filelock",
         version="3.32.3",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112907",
         package="filelock",
         version="3.32.3",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-114145",
         package="gitpython",
         version="3.1.60",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-114603",
         package="opentelemetry-api",
         version="1.40.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112895",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112400",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112397",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112896",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112897",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112395",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112404",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112899",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112402",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112900",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112893",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112392",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112891",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112405",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112390",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112401",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112901",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112391",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112894",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112406",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112399",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112892",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112393",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112396",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-96638",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-96641",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-96640",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-96642",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-96639",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-96643",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-96637",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-96644",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-96778",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-96636",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="GHSA-78g4-xqwv-q3g8",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-114501",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-112398",
         package="pillow",
         version="12.3.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-113792",
         package="pypdf",
         version="6.19.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-113795",
         package="pypdf",
         version="6.19.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-113793",
         package="pypdf",
         version="6.19.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-113794",
         package="pypdf",
         version="6.19.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-113786",
         package="pypdf",
         version="6.19.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-113791",
         package="pypdf",
         version="6.19.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-113790",
         package="pypdf",
         version="6.19.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-113789",
         package="pypdf",
         version="6.19.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-115572",
         package="pypdf",
         version="6.19.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-115585",
         package="pypdf",
         version="6.19.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-115580",
         package="pypdf",
         version="6.19.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="GHSA-xmj3-9gf7-h52w",
         package="setuptools",
         version="83.0.0",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-113725",
         package="virtualenv",
         version="21.14.5",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-113722",
         package="virtualenv",
         version="21.14.5",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-113714",
         package="virtualenv",
         version="21.14.5",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-113723",
         package="virtualenv",
         version="21.14.5",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-113715",
         package="virtualenv",
         version="21.14.5",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-113720",
         package="virtualenv",
         version="21.14.5",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-113717",
         package="virtualenv",
         version="21.14.5",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-113718",
         package="virtualenv",
         version="21.14.5",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-111064",
         package="aiohttp",
         version="3.14.3",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="GHSA-2g87-pp6c-29x5",
         package="aiohttp",
         version="3.14.3",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-111063",
         package="aiohttp",
         version="3.14.3",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-111750",
         package="aiohttp",
         version="3.14.3",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-111066",
         package="aiohttp",
         version="3.14.3",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-111749",
         package="aiohttp",
         version="3.14.3",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-111065",
         package="aiohttp",
         version="3.14.3",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="CVE-2026-111748",
         package="aiohttp",
         version="3.14.3",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
     ScopedIgnore(
         advisory="PYSEC-2026-4320",
         package="certifi",
         version="2026.2.25",
-        justification="Required for other deps, waiting for upstream fix."
+        justification="Required for other deps, waiting for upstream fix.",
     ),
-
     ScopedIgnore(
         advisory="PYSEC-2026-151",
         package="wasmtime",
