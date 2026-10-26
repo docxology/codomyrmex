@@ -7,6 +7,7 @@ import asyncio
 import inspect
 import uuid
 from collections.abc import Awaitable, Callable
+from collections import deque
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
@@ -52,8 +53,9 @@ class DirectMessenger:
         self._handlers: dict[str, Callable[[AgentMessage], Awaitable[Any]]] = {}
         self._pending_requests: dict[str, PendingRequest] = {}
         self._default_timeout = default_timeout
-        self._message_log: list[AgentMessage] = []
         self._max_log_size = 1000
+        # Use deque with maxlen for O(1) sliding window retention
+        self._message_log: deque[AgentMessage] = deque(maxlen=self._max_log_size)
 
     def register_handler(
         self,
@@ -232,8 +234,6 @@ class DirectMessenger:
     def _log_message(self, message: AgentMessage) -> None:
         """Log a message for auditing."""
         self._message_log.append(message)
-        if len(self._message_log) > self._max_log_size:
-            self._message_log.pop(0)
 
     def get_message_log(
         self,
@@ -250,7 +250,7 @@ class DirectMessenger:
             list of messages, most recent first.
 
         """
-        messages = self._message_log
+        messages = list(self._message_log)
 
         if agent_id:
             messages = [m for m in messages if agent_id in (m.sender_id, m.receiver_id)]

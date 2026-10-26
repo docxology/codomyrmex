@@ -17,6 +17,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any
+from collections import deque
 
 from codomyrmex.agents.core.base import (
     AgentCapabilities,
@@ -80,7 +81,7 @@ class ThinkingAgent(AgentInterface):
         self._context = ContextManager(
             max_tokens=self._thinking_config.max_context_tokens,
         )
-        self._traces: list[ReasoningTrace] = []
+        self._traces: deque[ReasoningTrace] = deque(maxlen=self._thinking_config.max_traces)
         self._last_trace: ReasoningTrace | None = None
         self._knowledge_retriever = knowledge_retriever
 
@@ -322,8 +323,6 @@ class ThinkingAgent(AgentInterface):
         """Store a trace, respecting the max_traces limit."""
         self._traces.append(trace)
         self._last_trace = trace
-        while len(self._traces) > self._thinking_config.max_traces:
-            self._traces.pop(0)
 
 
 __all__ = [

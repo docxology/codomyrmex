@@ -8,6 +8,7 @@ Uses a directed graph (dict-of-sets) so we have zero dependency on
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
+from collections import deque
 
 if TYPE_CHECKING:
     from codomyrmex.agentic_memory.obsidian.models import Note, Wikilink
@@ -241,10 +242,10 @@ def get_shortest_path(
         return [source]
 
     visited: set[str] = {source}
-    queue: list[list[str]] = [[source]]
+    queue: deque[list[str]] = deque([[source]])
 
     while queue:
-        path = queue.pop(0)
+        path = queue.popleft()
         current = path[-1]
         neighbors = set(g.successors(current)) | set(g.predecessors(current))
         for neighbor in neighbors:

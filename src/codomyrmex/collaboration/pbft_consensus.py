@@ -5,7 +5,7 @@ agent collaboration networks, allowing them to agree on shared states
 even when a subset of nodes are faulty or malicious.
 """
 
-from collections import defaultdict
+from collections import defaultdict, deque
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any
@@ -149,7 +149,7 @@ class PBFTNetwork:
         # Primary leader is node_0 (view 0)
         self.primary_id = "node_0"
 
-        self.message_queue: list[Message] = []
+        self.message_queue: deque[Message] = deque()
 
     def broadcast(self, message: Message) -> None:
         """Enqueue a message to be processed by all nodes."""
@@ -158,7 +158,7 @@ class PBFTNetwork:
     def process_queue(self) -> None:
         """Process all pending messages in the network."""
         while self.message_queue:
-            msg = self.message_queue.pop(0)
+            msg = self.message_queue.popleft()
             for node in self.nodes.values():
                 node.receive(msg)
 
