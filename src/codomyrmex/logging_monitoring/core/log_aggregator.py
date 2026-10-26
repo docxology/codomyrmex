@@ -6,8 +6,8 @@ range, and basic log analytics (rate, error ratio, top modules).
 
 from __future__ import annotations
 
-import time
 import itertools
+import time
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from typing import Any

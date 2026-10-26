@@ -15,9 +15,9 @@ All traces are stored for later retrieval, distillation, or debugging.
 
 from __future__ import annotations
 
+from collections import deque
 from dataclasses import dataclass
 from typing import Any
-from collections import deque
 
 from codomyrmex.agents.core.base import (
     AgentCapabilities,
@@ -81,7 +81,9 @@ class ThinkingAgent(AgentInterface):
         self._context = ContextManager(
             max_tokens=self._thinking_config.max_context_tokens,
         )
-        self._traces: deque[ReasoningTrace] = deque(maxlen=self._thinking_config.max_traces)
+        self._traces: deque[ReasoningTrace] = deque(
+            maxlen=self._thinking_config.max_traces
+        )
         self._last_trace: ReasoningTrace | None = None
         self._knowledge_retriever = knowledge_retriever
 

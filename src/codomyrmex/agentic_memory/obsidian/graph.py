@@ -7,8 +7,8 @@ Uses a directed graph (dict-of-sets) so we have zero dependency on
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
 from collections import deque
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from codomyrmex.agentic_memory.obsidian.models import Note, Wikilink
