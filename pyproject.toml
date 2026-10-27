@@ -211,7 +211,7 @@ crypto = [
 
 documents = [
     "chardet>=5.0.0",
-    "pypdf>=6.15.0",
+    "pypdf>=6.21.2",
 ]
 
 audio = [
