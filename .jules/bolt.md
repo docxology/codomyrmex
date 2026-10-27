@@ -42,3 +42,6 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+## 2026-10-12 - O(1) Sliding Window Retention with Deque
+**Learning:** Using `list.pop(0)` for sliding windows causes O(N) performance degradation as the list grows, especially for high-volume logs.
+**Action:** Replace `list` with `collections.deque(maxlen=N)` for automatic O(1) eviction without manual length checks. Note that `deque` doesn't support slicing, so use `itertools.islice` with `list()` coercion to maintain return types.
