@@ -62,7 +62,15 @@ class DependencyMapper:
     def _extract_imports(self, filepath: Path) -> list[str]:
         """Extract codomyrmex imports from a Python file."""
         try:
-            tree = ast.parse(filepath.read_text(errors="replace"))
+            content = filepath.read_text(errors="replace")
+        except Exception:
+            return []
+
+        if "codomyrmex" not in content:
+            return []
+
+        try:
+            tree = ast.parse(content)
         except Exception:
             return []
 
