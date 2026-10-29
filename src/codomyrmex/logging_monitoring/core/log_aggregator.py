@@ -10,6 +10,8 @@ import time
 from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Any
+import collections
+import itertools
 
 __all__ = ["LogAggregator", "LogQuery", "LogRecord", "LogStats"]
 
@@ -97,7 +99,7 @@ class LogAggregator:
     """
 
     def __init__(self, max_records: int = 100_000) -> None:
-        self._records: list[LogRecord] = []
+        self._records: collections.deque[LogRecord] = collections.deque(maxlen=max_records)
         self._max_records = max_records
 
     @property
@@ -107,8 +109,7 @@ class LogAggregator:
 
     def add(self, record: LogRecord) -> None:
         """Add a log record."""
-        if len(self._records) >= self._max_records:
-            self._records.pop(0)
+        pass
         self._records.append(record)
 
     def add_many(self, records: list[LogRecord]) -> None:
@@ -187,7 +188,7 @@ class LogAggregator:
 
     def tail(self, n: int = 20) -> list[LogRecord]:
         """Return the most recent n records."""
-        return list(self._records[-n:])
+        return list(itertools.islice(self._records, max(0, len(self._records) - n), len(self._records)))
 
     def clear(self) -> None:
         """Remove all stored records."""

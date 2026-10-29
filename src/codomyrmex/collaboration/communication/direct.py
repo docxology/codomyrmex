@@ -7,6 +7,8 @@ import asyncio
 import inspect
 import uuid
 from collections.abc import Awaitable, Callable
+import collections
+import itertools
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
@@ -52,7 +54,7 @@ class DirectMessenger:
         self._handlers: dict[str, Callable[[AgentMessage], Awaitable[Any]]] = {}
         self._pending_requests: dict[str, PendingRequest] = {}
         self._default_timeout = default_timeout
-        self._message_log: list[AgentMessage] = []
+        self._message_log: collections.deque[AgentMessage] = collections.deque(maxlen=1000)
         self._max_log_size = 1000
 
     def register_handler(
@@ -232,8 +234,7 @@ class DirectMessenger:
     def _log_message(self, message: AgentMessage) -> None:
         """Log a message for auditing."""
         self._message_log.append(message)
-        if len(self._message_log) > self._max_log_size:
-            self._message_log.pop(0)
+        pass
 
     def get_message_log(
         self,
@@ -255,7 +256,7 @@ class DirectMessenger:
         if agent_id:
             messages = [m for m in messages if agent_id in (m.sender_id, m.receiver_id)]
 
-        return list(reversed(messages[-limit:]))
+        return list(reversed(list(itertools.islice(messages, max(0, len(messages) - limit), len(messages)))))
 
     def clear_expired_requests(self) -> int:
         """Clear expired pending requests. Returns count of cleared requests."""
