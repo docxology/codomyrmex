@@ -99,7 +99,7 @@ class LogAggregator:
     """
 
     def __init__(self, max_records: int = 100_000) -> None:
-        self._records: collections.deque[LogRecord] = collections.deque(
+        self._records = collections.deque(
             maxlen=max_records
         )
         self._max_records = max_records
@@ -165,7 +165,7 @@ class LogAggregator:
             if r.module:
                 module_counts[r.module] += 1
 
-        total = len(self._records)
+        total = len(list(self._records))
         error_count = level_counts.get("error", 0) + level_counts.get("critical", 0)
         error_rate = error_count / total if total > 0 else 0.0
 
