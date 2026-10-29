@@ -99,7 +99,9 @@ class LogAggregator:
     """
 
     def __init__(self, max_records: int = 100_000) -> None:
-        self._records: collections.deque[LogRecord] = collections.deque(maxlen=max_records)
+        self._records: collections.deque[LogRecord] = collections.deque(
+            maxlen=max_records
+        )
         self._max_records = max_records
 
     @property
@@ -187,7 +189,11 @@ class LogAggregator:
 
     def tail(self, n: int = 20) -> list[LogRecord]:
         """Return the most recent n records."""
-        return list(itertools.islice(self._records, max(0, len(self._records) - n), len(self._records)))
+        return list(
+            itertools.islice(
+                self._records, max(0, len(self._records) - n), len(self._records)
+            )
+        )
 
     def clear(self) -> None:
         """Remove all stored records."""

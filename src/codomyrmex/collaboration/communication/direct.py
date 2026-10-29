@@ -54,7 +54,9 @@ class DirectMessenger:
         self._handlers: dict[str, Callable[[AgentMessage], Awaitable[Any]]] = {}
         self._pending_requests: dict[str, PendingRequest] = {}
         self._default_timeout = default_timeout
-        self._message_log: collections.deque[AgentMessage] = collections.deque(maxlen=1000)
+        self._message_log: collections.deque[AgentMessage] = collections.deque(
+            maxlen=1000
+        )
         self._max_log_size = 1000
 
     def register_handler(
@@ -255,7 +257,15 @@ class DirectMessenger:
         if agent_id:
             messages = [m for m in messages if agent_id in (m.sender_id, m.receiver_id)]
 
-        return list(reversed(list(itertools.islice(messages, max(0, len(messages) - limit), len(messages)))))
+        return list(
+            reversed(
+                list(
+                    itertools.islice(
+                        messages, max(0, len(messages) - limit), len(messages)
+                    )
+                )
+            )
+        )
 
     def clear_expired_requests(self) -> int:
         """Clear expired pending requests. Returns count of cleared requests."""
