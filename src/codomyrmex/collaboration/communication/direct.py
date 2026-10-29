@@ -4,11 +4,11 @@ Provides request-response patterns and direct agent-to-agent messaging.
 """
 
 import asyncio
+import collections
 import inspect
+import itertools
 import uuid
 from collections.abc import Awaitable, Callable
-import collections
-import itertools
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
@@ -234,7 +234,6 @@ class DirectMessenger:
     def _log_message(self, message: AgentMessage) -> None:
         """Log a message for auditing."""
         self._message_log.append(message)
-        pass
 
     def get_message_log(
         self,

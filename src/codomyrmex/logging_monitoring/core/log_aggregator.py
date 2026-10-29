@@ -6,12 +6,12 @@ range, and basic log analytics (rate, error ratio, top modules).
 
 from __future__ import annotations
 
+import collections
+import itertools
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Any
-import collections
-import itertools
 
 __all__ = ["LogAggregator", "LogQuery", "LogRecord", "LogStats"]
 
@@ -109,7 +109,6 @@ class LogAggregator:
 
     def add(self, record: LogRecord) -> None:
         """Add a log record."""
-        pass
         self._records.append(record)
 
     def add_many(self, records: list[LogRecord]) -> None:

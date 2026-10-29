@@ -5,10 +5,10 @@ agent collaboration networks, allowing them to agree on shared states
 even when a subset of nodes are faulty or malicious.
 """
 
+import collections
 from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
-import collections
 from typing import Any
 
 
