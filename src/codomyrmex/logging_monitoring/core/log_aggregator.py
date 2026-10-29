@@ -99,9 +99,7 @@ class LogAggregator:
     """
 
     def __init__(self, max_records: int = 100_000) -> None:
-        self._records = collections.deque(
-            maxlen=max_records
-        )
+        self._records = collections.deque(maxlen=max_records)
         self._max_records = max_records
 
     @property
