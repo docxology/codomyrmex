@@ -6,6 +6,8 @@ range, and basic log analytics (rate, error ratio, top modules).
 
 from __future__ import annotations
 
+import collections
+import itertools
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -97,7 +99,7 @@ class LogAggregator:
     """
 
     def __init__(self, max_records: int = 100_000) -> None:
-        self._records: list[LogRecord] = []
+        self._records = collections.deque(maxlen=max_records)
         self._max_records = max_records
 
     @property
@@ -107,8 +109,6 @@ class LogAggregator:
 
     def add(self, record: LogRecord) -> None:
         """Add a log record."""
-        if len(self._records) >= self._max_records:
-            self._records.pop(0)
         self._records.append(record)
 
     def add_many(self, records: list[LogRecord]) -> None:
@@ -163,7 +163,7 @@ class LogAggregator:
             if r.module:
                 module_counts[r.module] += 1
 
-        total = len(self._records)
+        total = len(list(self._records))
         error_count = level_counts.get("error", 0) + level_counts.get("critical", 0)
         error_rate = error_count / total if total > 0 else 0.0
 
@@ -187,7 +187,11 @@ class LogAggregator:
 
     def tail(self, n: int = 20) -> list[LogRecord]:
         """Return the most recent n records."""
-        return list(self._records[-n:])
+        return list(
+            itertools.islice(
+                self._records, max(0, len(self._records) - n), len(self._records)
+            )
+        )
 
     def clear(self) -> None:
         """Remove all stored records."""
