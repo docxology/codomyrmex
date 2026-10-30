@@ -115,7 +115,6 @@ SCOPED_IGNORES: tuple[ScopedIgnore, ...] = (
         version="3.32.7",
         justification="filelock is required by safety to be < 4.0; waiting on upstream for compatibility",
     ),
-
     ScopedIgnore(
         advisory="PYSEC-2026-151",
         package="wasmtime",
