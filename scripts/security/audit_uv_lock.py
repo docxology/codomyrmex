@@ -38,6 +38,85 @@ class ScopedIgnore:
 
 SCOPED_IGNORES: tuple[ScopedIgnore, ...] = (
     ScopedIgnore(
+        advisory="CVE-2026-112940",
+        package="filelock",
+        version="3.32.7",
+        justification="filelock is required by safety to be < 4.0; waiting on upstream for compatibility",
+    ),
+    ScopedIgnore(
+        advisory="CVE-2026-112913",
+        package="filelock",
+        version="3.32.7",
+        justification="filelock is required by safety to be < 4.0; waiting on upstream for compatibility",
+    ),
+    ScopedIgnore(
+        advisory="CVE-2026-112907",
+        package="filelock",
+        version="3.32.7",
+        justification="filelock is required by safety to be < 4.0; waiting on upstream for compatibility",
+    ),
+    ScopedIgnore(
+        advisory="CVE-2026-112938",
+        package="filelock",
+        version="3.32.7",
+        justification="filelock is required by safety to be < 4.0; waiting on upstream for compatibility",
+    ),
+    ScopedIgnore(
+        advisory="CVE-2026-112936",
+        package="filelock",
+        version="3.32.7",
+        justification="filelock is required by safety to be < 4.0; waiting on upstream for compatibility",
+    ),
+    ScopedIgnore(
+        advisory="CVE-2026-112910",
+        package="filelock",
+        version="3.32.7",
+        justification="filelock is required by safety to be < 4.0; waiting on upstream for compatibility",
+    ),
+    ScopedIgnore(
+        advisory="CVE-2026-112909",
+        package="filelock",
+        version="3.32.7",
+        justification="filelock is required by safety to be < 4.0; waiting on upstream for compatibility",
+    ),
+    ScopedIgnore(
+        advisory="CVE-2026-112911",
+        package="filelock",
+        version="3.32.7",
+        justification="filelock is required by safety to be < 4.0; waiting on upstream for compatibility",
+    ),
+    ScopedIgnore(
+        advisory="CVE-2026-112939",
+        package="filelock",
+        version="3.32.7",
+        justification="filelock is required by safety to be < 4.0; waiting on upstream for compatibility",
+    ),
+    ScopedIgnore(
+        advisory="CVE-2026-112915",
+        package="filelock",
+        version="3.32.7",
+        justification="filelock is required by safety to be < 4.0; waiting on upstream for compatibility",
+    ),
+    ScopedIgnore(
+        advisory="CVE-2026-112935",
+        package="filelock",
+        version="3.32.7",
+        justification="filelock is required by safety to be < 4.0; waiting on upstream for compatibility",
+    ),
+    ScopedIgnore(
+        advisory="CVE-2026-112912",
+        package="filelock",
+        version="3.32.7",
+        justification="filelock is required by safety to be < 4.0; waiting on upstream for compatibility",
+    ),
+    ScopedIgnore(
+        advisory="CVE-2026-112908",
+        package="filelock",
+        version="3.32.7",
+        justification="filelock is required by safety to be < 4.0; waiting on upstream for compatibility",
+    ),
+
+    ScopedIgnore(
         advisory="PYSEC-2026-151",
         package="wasmtime",
         version="42.0.0",
