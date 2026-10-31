@@ -42,3 +42,6 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+## 2026-10-31 - Replace list with collections.deque for Sliding Window Buffers
+**Learning:** Using `list.pop(0)` to evict oldest entries from full log buffers creates O(N) overhead per append operation, severely degrading performance for large collections like LogAggregator.
+**Action:** Use `collections.deque(maxlen=N)` for automatic O(1) eviction of the oldest elements without manual length checks. Note that since `deque` does not support slice notation like `[-n:]`, use `itertools.islice` for operations requiring slicing.
