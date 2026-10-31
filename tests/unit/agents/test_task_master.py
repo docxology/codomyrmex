@@ -11,6 +11,7 @@ import os
 
 import pytest
 
+pytest.importorskip('anthropic')
 from codomyrmex.agents.ai_code_editing.claude_task_master import (
     DEFAULT_MODEL,
     DEFAULT_TEMPERATURE,
