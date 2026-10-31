@@ -43,7 +43,9 @@ def master_no_key():
 @pytest.fixture
 def master_fake_key():
     """ClaudeTaskMaster initialized with a dummy key (never calls API)."""
-    return ClaudeTaskMaster(api_key="sk-test-fake-key-for-unit-tests")
+    return ClaudeTaskMaster(
+        api_key="sk-test-fake-key-for-unit-tests",  # pragma: allowlist secret
+    )  # pragma: allowlist secret
 
 
 # ---------------------------------------------------------------------------
@@ -254,7 +256,7 @@ class TestClaudeTaskMasterInit:
 
     def test_custom_model_and_retries(self):
         m = ClaudeTaskMaster(
-            api_key="sk-test",
+            api_key="sk-test",  # pragma: allowlist secret
             model="claude-3-opus-20240229",
             max_retries=5,
         )
@@ -283,19 +285,28 @@ class TestCalculateCost:
         assert master_fake_key._calculate_cost(0, 0) == 0.0
 
     def test_known_model_pricing(self):
-        m = ClaudeTaskMaster(api_key="sk-test", model="claude-sonnet-4-20250514")
+        m = ClaudeTaskMaster(
+            api_key="sk-test",  # pragma: allowlist secret
+            model="claude-sonnet-4-20250514",
+        )  # pragma: allowlist secret
         # 1M input tokens @ $3, 1M output tokens @ $15 = $18
         cost = m._calculate_cost(1_000_000, 1_000_000)
         assert cost == 18.0
 
     def test_fractional_tokens(self):
-        m = ClaudeTaskMaster(api_key="sk-test", model="claude-sonnet-4-20250514")
+        m = ClaudeTaskMaster(
+            api_key="sk-test",  # pragma: allowlist secret
+            model="claude-sonnet-4-20250514",
+        )  # pragma: allowlist secret
         # 1000 input @ $3/1M = $0.003, 500 output @ $15/1M = $0.0075
         cost = m._calculate_cost(1000, 500)
         assert abs(cost - 0.0105) < 1e-6
 
     def test_unknown_model_uses_default_pricing(self):
-        m = ClaudeTaskMaster(api_key="sk-test", model="claude-future-99")
+        m = ClaudeTaskMaster(
+            api_key="sk-test",  # pragma: allowlist secret
+            model="claude-future-99",
+        )  # pragma: allowlist secret
         # Default pricing: input $3/1M, output $15/1M
         cost = m._calculate_cost(1_000_000, 1_000_000)
         assert cost == 18.0
@@ -312,7 +323,10 @@ class TestCalculateCost:
     def test_model_specific_rates(
         self, model, expected_input_rate, expected_output_rate
     ):
-        m = ClaudeTaskMaster(api_key="sk-test", model=model)
+        m = ClaudeTaskMaster(
+            api_key="sk-test",  # pragma: allowlist secret
+            model=model,
+        )
         cost = m._calculate_cost(1_000_000, 1_000_000)
         expected = expected_input_rate + expected_output_rate
         assert abs(cost - expected) < 1e-6
