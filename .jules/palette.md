@@ -44,3 +44,6 @@ icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
+## 2024-03-24 - Accessibility improvements for close buttons
+**Learning:** Several custom panels in this application use raw `x` characters for closing tabs, modal popups, and searching/removing tags, without proper `aria-label` attributes to signify their function for screen readers, or outline styling to denote focus states for keyboard navigation.
+**Action:** Always ensure that icon-only buttons (like `x` for close or remove) have descriptive `aria-label` attributes (e.g., `aria-label={t('close')}`) and `focus-visible:ring-1` tailwind utility classes for keyboard accessibility.
