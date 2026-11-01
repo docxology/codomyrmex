@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2024-11-01 - O(1) Log Aggregation Buffer Eviction
+**Learning:** `LogAggregator` was using a standard Python `list` to store logs with `pop(0)` for eviction, causing $O(N)$ operations on every new log once the buffer filled up.
+**Action:** Use `collections.deque(maxlen=max_records)` for fixed-size sliding window buffering, providing $O(1)$ amortized append/eviction. For slicing equivalent, use `itertools.islice(my_deque, len(my_deque)-n, len(my_deque))`.
