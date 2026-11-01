@@ -316,7 +316,7 @@ jobs:
           ls -la dist/
 
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # pypa/gh-action-pypi-publish@v1.14.3
         with:
           repository-url: https://upload.pypi.org/legacy/
           print-hash: true
@@ -346,7 +346,7 @@ jobs:
           ls -la dist/
 
       - name: Publish to Test PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # pypa/gh-action-pypi-publish@v1.14.3
         with:
           repository-url: https://test.pypi.org/legacy/
           print-hash: true
