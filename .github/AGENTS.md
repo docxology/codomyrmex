@@ -8,7 +8,7 @@ This directory holds GitHub-specific configuration: CI/CD workflows, issue/PR te
 Dependabot config, CODEOWNERS, Gemini AI command configs, and multi-agent infrastructure.
 This document tells AI agents what they need to know to operate safely within this directory.
 
-**Workflow YAML count:** 37 files under `.github/workflows/` (align with root `README.md` and [docs/reference/inventory.md](../docs/reference/inventory.md); refresh via `uv run python scripts/doc_inventory.py`).
+**Workflow YAML count:** 38 files under `.github/workflows/` (align with root `README.md` and [docs/reference/inventory.md](../docs/reference/inventory.md); refresh via `uv run python scripts/doc_inventory.py`).
 
 ## Directory Contents
 
@@ -92,7 +92,7 @@ This document tells AI agents what they need to know to operate safely within th
 1. Read the target workflow file fully before editing
 2. Preserve all `permissions:` blocks (deny-all default + job-level grants)
 3. Keep `concurrency:` groups intact
-4. Pin action versions to stable tags (`@v4`, `@v5`)
+4. Pin action versions to a full commit SHA with a trailing comment naming the release, e.g. `uses: actions/checkout@<40-char sha> # actions/checkout@vX.Y.Z` (CUR-4, CUR-5)
 5. Use `uv` (not pip/poetry) for Python dependency management
 6. Test workflow changes on a feature branch before merging to main
 7. Validate YAML: `python3 -c "import yaml; yaml.safe_load(open('file.yml'))"`
@@ -125,12 +125,17 @@ gh workflow run jules-dispatch.yml -f modules=all -f task_template=docstrings-mc
 | --- | --- |
 | Workflow top-level permissions | Must be `permissions: {}` (deny-all) |
 | Job-level permissions | Grant only what the job needs |
-| Action pinning | Pin to specific tags, never `@main` or `@latest` |
+| Action pinning | Full commit SHA with a trailing comment naming the release; never a tag, `@main` or `@latest` (CUR-4, CUR-5) |
 | Concurrency | Every workflow must have a `concurrency:` block |
 | Python tooling | Use `uv` for all dependency management |
 | Test coverage | CI enforces **60%** minimum (`pyproject.toml`) |
 | Security scanning | 6 independent scanners must remain active |
 | Agent PR handling | Auto-label → CI → auto-merge pipeline |
+
+## Currency and supply chain
+
+Account rules CUR-1..CUR-16 are authoritative for this repository; where this
+file and those rules disagree, the rules win.
 
 ## Navigation
 

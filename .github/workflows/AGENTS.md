@@ -7,7 +7,7 @@
 ## Purpose
 
 GitHub Actions workflow definitions for CI/CD, security, multi-agent infrastructure,
-documentation, benchmarks, PR automation, and repository maintenance. 37 workflows total.
+documentation, benchmarks, PR automation, and repository maintenance. 38 workflows total.
 
 ## Workflow Inventory
 
@@ -80,8 +80,8 @@ documentation, benchmarks, PR automation, and repository maintenance. 37 workflo
 
 ## Critical Design Decisions
 
-- All workflows have `permissions: {}` at top-level (deny-all default)
-- `astral-sh/setup-uv@v7` is the standard for all UV installations
+- Workflows declare a top-level `permissions:` block. 32 of 38 do today (12 of them `permissions: {}`); the 6 without one inherit the repository default and need a block.
+- `astral-sh/setup-uv` is the standard for all UV installations, pinned by full commit SHA with the release named in a trailing comment.
 - CI runs Ubuntu/Python 3.11 plus Windows/Python 3.11 on PRs. Main pushes run
   the full suite on Ubuntu and macOS across Python 3.11–3.13, plus the blocking
   Windows portability contract across the same Python versions.
@@ -120,3 +120,8 @@ documentation, benchmarks, PR automation, and repository maintenance. 37 workflo
   the underlying failure result and be enforced by their final status job.
 - `if: always()` on summary jobs ensures they run after failures
 - `continue-on-error: true` on lint/format steps for agent flexibility
+
+## Currency and supply chain
+
+Account rules CUR-1..CUR-16 are authoritative for this repository; where this
+file and those rules disagree, the rules win.
