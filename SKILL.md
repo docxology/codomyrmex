@@ -13,9 +13,8 @@ Full-spectrum coding workspace skill providing 627 production `@mcp_tool` lines 
 ## Installation
 
 ```bash
-pip install codomyrmex
-# or
-uv add codomyrmex
+# codomyrmex is not published on PyPI; install it from a checkout
+uv sync
 ```
 
 ## Quick Start

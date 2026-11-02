@@ -31,7 +31,7 @@ response = client.execute(AgentRequest(prompt="Analyze the parser module"))
 **Required**: `pi` CLI installed via npm.
 
 ```bash
-npm install -g @anthropic/pi-coding-agent
+# pi is not distributed on npm under this name; see https://pi.dev/
 ```
 
 ## Source Module
