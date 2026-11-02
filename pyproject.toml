@@ -72,7 +72,7 @@ dependencies = [
     "cryptography>=50.0.0",
     # For templating module
     "mako>=1.2.0",
-    "aiohttp>=3.13.3",
+    "aiohttp>=3.14.4",
     # numpy, scipy, networkx → uv sync --extra scientific
     # fastapi, uvicorn       → uv sync --extra api
     # paramiko               → uv sync --extra deployment
@@ -211,7 +211,7 @@ crypto = [
 
 documents = [
     "chardet>=5.0.0",
-    "pypdf>=6.15.0",
+    "pypdf>=6.21.2",
 ]
 
 audio = [
@@ -351,6 +351,7 @@ dev = [
     {include-group = "lint"},
     {include-group = "test"},
     "pre-commit>=4.0.0",
+    "virtualenv>=21.14.9",
     "hypothesis>=6.151.9",
     "sarif-tools>=3.0.0",
     "desloppify[full]>=0.9.14",
