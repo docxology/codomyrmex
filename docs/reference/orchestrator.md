@@ -168,11 +168,11 @@ Deep technical analysis:
 
 ```
 start_here.sh (Main Orchestrator)
-├── system_discovery/
+├── src/codomyrmex/system_discovery/
 │   ├── discovery_engine.py      # Main discovery logic
 │   ├── status_reporter.py       # Health checks and reporting
 │   └── capability_scanner.py    # Deep code analysis
-└── terminal_interface/
+└── src/codomyrmex/terminal_interface/
     ├── interactive_shell.py     # Epistemic forager shell
     └── terminal_utils.py        # Beautiful terminal formatting
 ```
