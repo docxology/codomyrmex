@@ -22,16 +22,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
-try:
-    from anthropic import Anthropic
-except ImportError:
-
-    class Anthropic:
-        def __init__(self, *args, **kwargs):
-            raise ImportError(
-                "Anthropic package not installed. Install with: pip install anthropic"
-            )
-
+from anthropic import Anthropic
 
 from codomyrmex.logging_monitoring import get_logger
 

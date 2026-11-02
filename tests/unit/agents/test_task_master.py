@@ -581,12 +581,7 @@ class TestIsAvailable:
     def test_available_with_fake_key(self, master_fake_key):
         # With a key present, _get_client() will construct the Anthropic object,
         # so is_available returns True as long as the anthropic package is installed.
-        import pytest
-        try:
-            import anthropic
-            assert master_fake_key.is_available() is True
-        except ImportError:
-            pytest.skip("Anthropic not installed")
+        assert master_fake_key.is_available() is True
 
 
 # ---------------------------------------------------------------------------
