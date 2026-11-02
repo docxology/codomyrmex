@@ -21,7 +21,7 @@ Open-source AI coding CLI built with a client/server architecture. Features cont
 ## Installation
 
 ```bash
-npm install -g opencode
+npm install -g opencode-ai
 ```
 
 ## CLI Commands

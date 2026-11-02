@@ -22,7 +22,7 @@ Mistral's open-source AI coding CLI powered by Devstral 2 models. Conversational
 
 ```bash
 curl -LsSf https://mistral.ai/vibe/install.sh | bash
-# or: pip install mistral-vibe-cli
+# or: pip install mistral-vibe
 ```
 
 ## CLI Commands
