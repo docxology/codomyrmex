@@ -8,7 +8,7 @@ For the full maintainer guide (environment setup, RASP documentation, AI agent w
 
 ### Prerequisites
 
-- Python 3.11+
+- the bound in `pyproject.toml` or newer
 - [UV](https://github.com/astral-sh/uv) package manager
 - Git
 
