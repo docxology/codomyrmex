@@ -9,8 +9,8 @@ Central hub module for git operations. Re-exports 37 functions from `commands/` 
 
 ## Architecture
 
-```
-git_operations/core/
+```text
+src/codomyrmex/git_operations/core/
 ├── git.py              # Hub: re-exports all 37 functions from commands/
 ├── repository.py       # Repository library and bulk workflows
 ├── metadata.py         # Runtime metadata persistence and enrichment

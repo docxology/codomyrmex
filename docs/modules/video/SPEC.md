@@ -8,8 +8,8 @@ The video module provides video processing, extraction, and analysis capabilitie
 
 ## Architecture
 
-```
-video/
+```text
+src/codomyrmex/video/
 ├── __init__.py              # Main exports, availability flags
 ├── exceptions.py            # Exception hierarchy
 ├── config.py                # Module configuration
