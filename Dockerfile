@@ -1,5 +1,5 @@
 # ── Stage 1: Build ────────────────────────────────────────────────
-FROM python:3.13-slim AS builder
+FROM python:3.13-slim@sha256:ae14d4ce8771606477a81446e7ef429edd6762305fc50c84507c1041fa8285d1 AS builder
 
 WORKDIR /build
 
@@ -14,7 +14,7 @@ COPY src/ src/
 RUN uv sync --frozen --no-dev --no-editable
 
 # ── Stage 2: Runtime ──────────────────────────────────────────────
-FROM python:3.13-slim AS runtime
+FROM python:3.13-slim@sha256:ae14d4ce8771606477a81446e7ef429edd6762305fc50c84507c1041fa8285d1 AS runtime
 
 LABEL maintainer="docxology"
 LABEL org.opencontainers.image.source="https://github.com/docxology/codomyrmex"
