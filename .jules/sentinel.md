@@ -11,6 +11,7 @@ Duplicate definitions across modules (e.g., repeating the `SecretType` definitio
 
 **Prevention:**
 Use descriptive suffixes or alternatives (e.g., changing `"password"` to `"password_type"`) for model or type definitions. Implement robust CI checks to enforce single-source-of-truth patterns rather than duplicating classes.
+
 ## 2026-08-04 - Prevent Command Injection via shell=True
 **Vulnerability:** Command Injection risk from using shell=True in subprocess.run for transcription_tools.py.
 **Learning:** Even when interpolating quoted strings, shell=True exposes the system to injection if templates are misconfigured or arguments leak.
@@ -26,6 +27,7 @@ already list-args without a shell), and "fixing" intentionally shell-based
 executors.
 
 **Action (mandatory, in order):**
+
 1. `gh pr list --state open --search "<callsite>"` and
    `git log --oneline -50 -- <target-file>`; read the callsite on `main`. If
    the injection is already fixed (list args, no shell, parameterized SQL,
@@ -35,6 +37,7 @@ executors.
    `.jules/` journal-only diffs, no test-suite deletions.
 
 **Dispositions (do not re-propose):**
+
 - Interactive shell sessions and agent shell executors (`do_shell`,
   `_shell_session`, `SystemOpsMixin`, OS provider diagnostic commands marked
   `# nosec B602`) are intentional design. Converting them to
@@ -47,6 +50,7 @@ executors.
   (proposals #482/#484 rejected).
 - Transcription/STT command injection was fixed by merged #423 at the live
   call site; the `transcription_tools.py` file does not exist on `main`.
+
 
 ## 2026-09-12 - Update Test Mocks When Refactoring subprocess Calls
 **Vulnerability:** Not a direct vulnerability, but a regression risk when fixing command injection vulnerabilities by replacing `shell=True` (string commands) with `shell=False` (list commands).
