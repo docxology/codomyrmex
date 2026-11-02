@@ -357,7 +357,7 @@ jobs:
         python-version: ["3.11", "3.12", "3.13"]
         exclude:
           - os: ubuntu-latest
-            python-version: "3.11"
+            python-version-file: ".python-version"
 
     steps:
       - name: Checkout code
