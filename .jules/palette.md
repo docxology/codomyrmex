@@ -46,5 +46,6 @@ associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
 
 ## 2024-11-02 - Missing ARIA Labels on Icon-only Buttons
+
 **Learning:** Found an icon-only "remove widget" button in `widget-grid.tsx` that lacked an `aria-label`. This makes it completely inaccessible to screen reader users who wouldn't know what "x" means in this context.
 **Action:** Always add descriptive `aria-label` attributes to icon-only buttons, especially those performing destructive or structural actions like removing items.
