@@ -15,6 +15,7 @@
 
 **Learning:** The `InMemoryCache` was implementing eviction by calling `min()` across all cache keys to find the oldest entry, causing $O(N)$ behavior on every cache insertion once it was full. This creates severe performance degradation for large caches.
 **Action:** Use `collections.OrderedDict` to maintain insertion order, enabling $O(1)$ eviction via `.popitem(last=False)`, and pair it with `.move_to_end(key)` for existing updates. Use `time.monotonic()` for robust timestamp tracking over `time.time()`.
+
 ## 2026-09-11 - Session hygiene: dedupe before optimizing
 
 **Failure mode:** The 2026-09 triage closed 200+ duplicate Bolt PRs. The
@@ -24,6 +25,7 @@ representative was merged, because sessions never checked open PRs or recent
 merge history.
 
 **Action (mandatory, in order):**
+
 1. `gh pr list --state open --search "<symbol or file>"` — an open PR on the
    same file/intent blocks a new PR.
 2. `git log --oneline -50 -- <target-file>` + read the file on `main` — if
@@ -42,3 +44,8 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2024-05-24 - O(1) Queue Eviction using deque
+
+**Learning:** Using a python `list` as a bounded queue with `pop(0)` is an O(N) operation that causes poor performance when the list reaches its capacity and new items are added, which is a common scenario for log aggregators.
+**Action:** Use `collections.deque(maxlen=N)` instead of `list` to automatically provide O(1) eviction for older items without the need for manual length checking and popping. When slicing a deque (like `[-n:]`), use `itertools.islice(d, max(0, len(d) - n), None)` to get the tail elements since `deque` does not support slice notation.
