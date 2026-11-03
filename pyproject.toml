@@ -485,6 +485,7 @@ filterwarnings = [
     # pytest-benchmark disables itself under pytest-xdist and says so with a
     # warning during configure; the CI suites run with xdist (-n auto).
     "ignore:Benchmarks are automatically disabled because xdist plugin is active",
+    "ignore:You are using a Python version.*which Google will stop supporting.*:FutureWarning",
 ]
 
 
