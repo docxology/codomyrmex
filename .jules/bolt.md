@@ -42,3 +42,8 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2024-05-24 - O(1) Queue Eviction using deque
+
+**Learning:** Using a python `list` as a bounded queue with `pop(0)` is an O(N) operation that causes poor performance when the list reaches its capacity and new items are added, which is a common scenario for log aggregators.
+**Action:** Use `collections.deque(maxlen=N)` instead of `list` to automatically provide O(1) eviction for older items without the need for manual length checking and popping. When slicing a deque (like `[-n:]`), use `itertools.islice(d, max(0, len(d) - n), None)` to get the tail elements since `deque` does not support slice notation.
