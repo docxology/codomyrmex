@@ -16,7 +16,7 @@ jobs:
 
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # astral-sh/setup-uv@v10.3.3
         with:
-          python-version-file: ".python-version"
+          python-version: "3.11"
 
       - name: Audit the complete dependency lock
         run: uv run --locked --extra security_audit python scripts/security/audit_uv_lock.py
