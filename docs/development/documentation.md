@@ -13,7 +13,7 @@ claims must be verified against current source or generated receipts.
 | `src/codomyrmex/<module>/` | Module-local API, MCP, PAI, security, and usage documentation |
 | `docs/modules/<module>/` | Reader-oriented mirrors; refresh only through the reviewed module-doc workflow |
 | `scripts/documentation/` | Repository maintenance, auditing, and MkDocs hooks |
-| `src/codomyrmex/documentation/` | Distributable documentation package and legacy Docusaurus assets |
+| `src/codomyrmex/documentation/` | Distributable documentation package; its Docusaurus project builds the site published by `.github/workflows/documentation.yml` |
 | `output/` and `site/` | Generated receipts and builds; never edit as source |
 | Git submodules | Upstream-owned worktrees with their own instructions and history |
 
