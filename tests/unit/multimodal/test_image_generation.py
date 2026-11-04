@@ -45,12 +45,20 @@ class TestImageGenerator:
 
     def test_init_creates_default_client(self):
         """Test that init creates a GeminiClient if none is provided."""
+        pytest.importorskip(
+            "google.genai",
+            reason="the default client requires the google-genai SDK (uv sync --extra llm_providers)",
+        )
         # Note: This checks strictly type, not that it's connected
         generator = ImageGenerator()
         assert isinstance(generator.client, GeminiClient)
 
     def test_init_uses_provided_client(self):
         """Test that init uses the provided client."""
+        pytest.importorskip(
+            "google.genai",
+            reason="constructing GeminiClient requires the google-genai SDK (uv sync --extra llm_providers)",
+        )
         client = GeminiClient()
         generator = ImageGenerator(client=client)
         assert generator.client is client

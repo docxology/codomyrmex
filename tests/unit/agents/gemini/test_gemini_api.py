@@ -22,6 +22,11 @@ except ImportError:
 if not _HAS_AGENTS:
     pytest.skip("agents deps not available", allow_module_level=True)
 
+pytest.importorskip(
+    "google.genai",
+    reason="GeminiClient requires the google-genai SDK (uv sync --extra llm_providers)",
+)
+
 
 # ---------------------------------------------------------------------------
 # Tests that require no API key (structural / init tests)

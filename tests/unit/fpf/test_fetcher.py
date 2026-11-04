@@ -1,9 +1,13 @@
-"""Zero-Mock tests for FPF fetcher — uses real HTTP requests.
+"""Zero-Mock tests for FPF fetcher — the network lane is opt-in.
 
-Tests that require network access are marked with @requires_network
-and will skip if the network is unavailable.
+The fetch tests read ``raw.githubusercontent.com``, so they are marked
+``network`` and skip unless ``RUN_LIVE_FPF=1`` is set. Reachability cannot
+stand in for that opt-in: a host answering a probe is not evidence that an
+authorized, rate-limit-free fetch will succeed, and the probe itself performs
+network I/O during collection. The assertions are unchanged when the lane runs.
 """
 
+import os
 from pathlib import Path
 
 import pytest
@@ -11,16 +15,9 @@ import requests
 
 from codomyrmex.fpf import FPFFetcher
 
-# Check network availability
-try:
-    requests.head("https://api.github.com", timeout=3)
-    _HAS_NETWORK = True
-except Exception:
-    _HAS_NETWORK = False
-
 requires_network = pytest.mark.skipif(
-    not _HAS_NETWORK,
-    reason="Network unavailable",
+    os.environ.get("RUN_LIVE_FPF") != "1",
+    reason="live GitHub fetch requires RUN_LIVE_FPF=1",
 )
 
 
@@ -32,6 +29,7 @@ def test_fetcher_initialization(tmp_path):
     assert fetcher.cache_dir.exists()
 
 
+@pytest.mark.network
 @requires_network
 def test_fetch_latest(tmp_path):
     """Test fetching latest from GitHub with a real HTTP request."""
@@ -51,6 +49,7 @@ def test_cache_spec(tmp_path):
     assert cache_path.read_text() == content
 
 
+@pytest.mark.network
 @requires_network
 def test_fetch_latest_error_handling(tmp_path):
     """Test error handling when fetching from a non-existent repo."""
@@ -67,6 +66,7 @@ def test_check_for_updates_nonexistent_file(tmp_path):
     assert result is True
 
 
+@pytest.mark.network
 @requires_network
 def test_check_for_updates_no_changes(tmp_path):
     """Test checking updates when content matches remote."""
@@ -82,6 +82,7 @@ def test_check_for_updates_no_changes(tmp_path):
     assert result is False
 
 
+@pytest.mark.network
 @requires_network
 def test_get_version_info(tmp_path):
     """Test getting version info with a real API call."""

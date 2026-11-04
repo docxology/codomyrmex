@@ -28,6 +28,11 @@ _EXPECTED_DEFAULT_GEMINI_MODEL = next(
     f.default for f in dataclasses.fields(AgentConfig) if f.name == "gemini_model"
 )
 
+pytest.importorskip(
+    "google.genai",
+    reason="GeminiClient requires the google-genai SDK (uv sync --extra llm_providers)",
+)
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -143,7 +148,7 @@ class TestGeminiClientInit:
             gc = GeminiClient(config={"gemini_api_key": "test-key-not-real"})
             # If the SDK accepted the key without a network call, client might be set
             # Either way, the key should be stored
-            assert gc.api_key == "test-key-not-real"
+            assert gc.api_key == "test-key-not-real"  # pragma: allowlist secret
         except GeminiError:
             # Expected: SDK may fail to init with a fake key
             pass

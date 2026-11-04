@@ -9,6 +9,10 @@ import os
 
 import pytest
 
+# Placeholder credential for construction-only tests: no call ever reaches an
+# API, and a real key must never appear in this tree.
+_FAKE_CLAUDE_API_KEY = "sk-ant-test-key"  # pragma: allowlist secret
+
 try:
     from codomyrmex.agents.claude import (
         CLAUDE_PRICING,
@@ -27,6 +31,18 @@ except ImportError:
 
 if not _HAS_CLAUDE:
     pytest.skip("claude agent deps not available", allow_module_level=True)
+
+try:
+    import anthropic
+
+    _HAS_ANTHROPIC_SDK = True
+except ImportError:
+    _HAS_ANTHROPIC_SDK = False
+
+_requires_anthropic_sdk = pytest.mark.skipif(
+    not _HAS_ANTHROPIC_SDK,
+    reason="ClaudeClient requires the anthropic SDK (uv sync --extra llm_providers)",
+)
 
 _HAS_API_KEY = os.environ.get("RUN_LIVE_ANTHROPIC") == "1" and bool(
     os.environ.get("ANTHROPIC_API_KEY")
@@ -104,17 +120,18 @@ class TestModuleExports:
 # =========================================================================
 
 
+@_requires_anthropic_sdk
 class TestClaudeClientInstantiation:
     """Test client instantiation behaviour — does NOT require an API key."""
 
     def test_instantiation_with_explicit_key(self):
         """Client can be created with an explicit API key."""
-        client = ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
+        client = ClaudeClient(config={"claude_api_key": _FAKE_CLAUDE_API_KEY})
         assert client is not None
         assert client.name == "claude"
 
     def test_default_capabilities(self):
-        client = ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
+        client = ClaudeClient(config={"claude_api_key": _FAKE_CLAUDE_API_KEY})
         caps = client.capabilities
         assert AgentCapabilities.CODE_GENERATION in caps
         assert AgentCapabilities.TEXT_COMPLETION in caps
@@ -122,7 +139,7 @@ class TestClaudeClientInstantiation:
     def test_custom_model_config(self):
         client = ClaudeClient(
             config={
-                "claude_api_key": "sk-ant-test-key",
+                "claude_api_key": _FAKE_CLAUDE_API_KEY,
                 "claude_model": "claude-3-5-haiku-20241022",
                 "claude_temperature": 0.5,
             }
@@ -131,13 +148,13 @@ class TestClaudeClientInstantiation:
         assert client.temperature == 0.5
 
     def test_default_retry_settings(self):
-        client = ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
+        client = ClaudeClient(config={"claude_api_key": _FAKE_CLAUDE_API_KEY})
         assert client.initial_retry_delay == ClaudeClient.DEFAULT_INITIAL_DELAY
 
     def test_custom_retry_settings(self):
         client = ClaudeClient(
             config={
-                "claude_api_key": "sk-ant-test-key",
+                "claude_api_key": _FAKE_CLAUDE_API_KEY,
                 "initial_retry_delay": 2.0,
             }
         )
@@ -149,12 +166,13 @@ class TestClaudeClientInstantiation:
 # =========================================================================
 
 
+@_requires_anthropic_sdk
 class TestClaudeToolRegistration:
     """Test tool registration and retrieval."""
 
     @pytest.fixture
     def client(self):
-        return ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
+        return ClaudeClient(config={"claude_api_key": _FAKE_CLAUDE_API_KEY})
 
     def test_register_tool(self, client):
         client.register_tool(
@@ -201,13 +219,14 @@ class TestClaudeToolRegistration:
 # =========================================================================
 
 
+@_requires_anthropic_sdk
 class TestClaudeSessionManagement:
     """Test session creation and management."""
 
     @pytest.fixture
     def client(self):
         return ClaudeClient(
-            config={"claude_api_key": "sk-ant-test-key"},
+            config={"claude_api_key": _FAKE_CLAUDE_API_KEY},
             session_manager=SessionManager(),
         )
 
@@ -231,12 +250,13 @@ class TestClaudeSessionManagement:
 # =========================================================================
 
 
+@_requires_anthropic_sdk
 class TestClaudeCostCalculation:
     """Test the internal cost calculation method."""
 
     @pytest.fixture
     def client(self):
-        return ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
+        return ClaudeClient(config={"claude_api_key": _FAKE_CLAUDE_API_KEY})
 
     def test_cost_calculation_known_model(self, client):
         cost = client._calculate_cost(1_000_000, 1_000_000)
@@ -257,16 +277,17 @@ class TestClaudeCostCalculation:
 # =========================================================================
 
 
+@_requires_anthropic_sdk
 class TestClaudeIntegrationAdapter:
     """Test adapter instantiation (no API call)."""
 
     def test_adapter_creation(self):
-        client = ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
+        client = ClaudeClient(config={"claude_api_key": _FAKE_CLAUDE_API_KEY})
         adapter = ClaudeIntegrationAdapter(client)
         assert adapter is not None
 
     def test_adapter_has_required_methods(self):
-        client = ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
+        client = ClaudeClient(config={"claude_api_key": _FAKE_CLAUDE_API_KEY})
         adapter = ClaudeIntegrationAdapter(client)
         assert hasattr(adapter, "adapt_for_ai_code_editing")
         assert hasattr(adapter, "adapt_for_llm")
