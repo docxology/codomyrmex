@@ -21,11 +21,16 @@ deployed site.
   `docusaurus.config.js` and theme options first.
 - Eject (`--eject`), never wrap, when the point is to remove an upstream import
   or dependency. Swizzle with
-  `node node_modules/@docusaurus/core/bin/docusaurus.mjs swizzle @docusaurus/theme-classic <component> --eject --javascript --danger`
-  from the docs project root.
-- Keep the upstream source path in a comment and diff against it after a
-  `@docusaurus/theme-classic` upgrade; a stale copy silently wins over the fixed
-  upstream version.
+  `node node_modules/@docusaurus/core/bin/docusaurus.mjs swizzle @docusaurus/theme-classic <component> --eject --javascript`
+  from the docs project root; add `--danger` only when the theme marks the
+  component's eject unsafe.
+- Diff the copy against the upstream source after a `@docusaurus/theme-classic`
+  upgrade: a stale copy silently wins over the fixed upstream version. For
+  `prism-include-languages`, upstream marks eject safe and wrap forbidden ("Not
+  a component!" — `getSwizzleConfig.js`) and describes the file as "Meant to be
+  ejected"; its body changed once between 3.5.2 and 3.7.0 and not again through
+  3.10.2. Drop the copy entirely if upstream stops bundling the language
+  registry.
 - Verify bundle effects with a build: `npm run build`, then compare
   `build/assets/js/main.*.js` raw and gzip sizes before and after.
 - Markdown files in this tree are documentation only; Docusaurus does not read
