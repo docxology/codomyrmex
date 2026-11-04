@@ -432,6 +432,66 @@ jobs:
           path: junit-*.xml
           retention-days: 30
 
+  # TEMPORARY control, remove before merge. Two legs of the same interpreter on
+  # the same commit: one restores the shared uv cache entry that 3.12/3.13/3.14
+  # were failing from, one runs with the cache disabled. If the uncached leg is
+  # green while the shared-cache leg reproduces the byte-identical 133 failures,
+  # the cache is the cause and the key change above is the fix; if both fail, the
+  # cache was a confound and the missing-files slate has another origin.
+  matrix-cache-control:
+    name: Cache control
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    needs: lint-and-format
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - control: shared-cache
+            enable-cache: true
+            cache-dependency-glob: "**/*requirements*.txt"
+            cache-suffix: ""
+          - control: no-cache
+            enable-cache: false
+            cache-dependency-glob: "uv.lock"
+            cache-suffix: "control-no-cache"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # astral-sh/setup-uv@v10.3.3
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: ${{ matrix.enable-cache }}
+          cache-dependency-glob: ${{ matrix.cache-dependency-glob }}
+          cache-suffix: ${{ matrix.cache-suffix }}
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync --locked --python 3.12 --group docs --all-extras --dev
+
+      - name: Run test suite
+        run: >-
+          uv run --no-sync --python 3.12
+          pytest tests/ -q --tb=no -n auto
+          -m "not performance and not benchmark and not bench"
+          --junit-xml=junit-control-${{ matrix.control }}.xml
+
+      - name: Upload control evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # actions/upload-artifact@v7.0.2
+        with:
+          name: control-${{ matrix.control }}-3.12
+          path: junit-control-${{ matrix.control }}.xml
+          retention-days: 7
+          if-no-files-found: warn
+
   windows-portability:
     name: Windows Portability
     runs-on: windows-latest
