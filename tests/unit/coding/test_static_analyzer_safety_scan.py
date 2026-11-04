@@ -151,6 +151,9 @@ class TestSafetyPayloadReading:
         assert finding.rule_id == "SAFETY"
         assert finding.category == "security"
         assert "urllib3" in finding.message
+        assert finding.suggestion is not None, (
+            "parsing a 1.1 report must name the fixed version"
+        )
         assert "1.26.19" in finding.suggestion
         assert finding.severity == SeverityLevel.ERROR
 
@@ -172,6 +175,9 @@ class TestSafetyPayloadReading:
         assert reason is None
         assert len(findings) == 1
         assert "urllib3" in findings[0].message
+        assert findings[0].suggestion is not None, (
+            "parsing a 0.5 report must name the safe version"
+        )
         assert "1.26.19" in findings[0].suggestion
 
     def test_empty_report_is_clean_not_unavailable(self):
