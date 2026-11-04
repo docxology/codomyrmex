@@ -159,10 +159,10 @@ class TestAgentConfigComplex:
         config = AgentConfig(
             jules_command="jules-cmd",
             jules_timeout=30,
-            claude_api_key="claude-key",
+            claude_api_key="claude-key",  # pragma: allowlist secret
             claude_model="claude-model",
             claude_timeout=90,
-            codex_api_key="codex-key",
+            codex_api_key="codex-key",  # pragma: allowlist secret
             codex_model="codex-model",
             opencode_command="opencode-cmd",
             opencode_timeout=120,
@@ -172,9 +172,9 @@ class TestAgentConfigComplex:
 
         # Verify all configurations are set
         assert config.jules_command == "jules-cmd"
-        assert config.claude_api_key == "claude-key"
+        assert config.claude_api_key == "claude-key"  # pragma: allowlist secret
         assert config.claude_model == "claude-model"
-        assert config.codex_api_key == "codex-key"
+        assert config.codex_api_key == "codex-key"  # pragma: allowlist secret
         assert config.opencode_command == "opencode-cmd"
         assert config.opencode_timeout == 120
         assert config.gemini_command == "gemini-cmd"
@@ -219,9 +219,9 @@ class TestAgentConfigComplex:
         """Test converting configuration to dictionary."""
         config = AgentConfig(
             jules_command="test-jules",
-            claude_api_key="secret-key",
+            claude_api_key="secret-key",  # pragma: allowlist secret
             opencode_timeout=90,
-            gemini_api_key="gemini-secret",
+            gemini_api_key="gemini-secret",  # pragma: allowlist secret
         )
 
         config_dict = config.to_dict()
@@ -323,13 +323,13 @@ class TestAgentConfigComplex:
             jules_timeout=30,
             jules_working_dir="/jules",
             # Claude
-            claude_api_key="claude-key",
+            claude_api_key="claude-key",  # pragma: allowlist secret
             claude_model="claude-model",
             claude_timeout=60,
             claude_max_tokens=8192,
             claude_temperature=0.8,
             # Codex
-            codex_api_key="codex-key",
+            codex_api_key="codex-key",  # pragma: allowlist secret
             codex_model="codex-model",
             codex_timeout=60,
             codex_max_tokens=4096,
@@ -338,12 +338,12 @@ class TestAgentConfigComplex:
             opencode_command="opencode",
             opencode_timeout=60,
             opencode_working_dir="/opencode",
-            opencode_api_key="opencode-key",
+            opencode_api_key="opencode-key",  # pragma: allowlist secret
             # Gemini
             gemini_command="gemini",
             gemini_timeout=60,
             gemini_working_dir="/gemini",
-            gemini_api_key="gemini-key",
+            gemini_api_key="gemini-key",  # pragma: allowlist secret
             gemini_auth_method="api_key",
             # General
             default_timeout=30,
@@ -353,10 +353,10 @@ class TestAgentConfigComplex:
 
         # Verify all are set correctly
         assert config.jules_command == "jules"
-        assert config.claude_api_key == "claude-key"
-        assert config.codex_api_key == "codex-key"
-        assert config.opencode_api_key == "opencode-key"
-        assert config.gemini_api_key == "gemini-key"
+        assert config.claude_api_key == "claude-key"  # pragma: allowlist secret
+        assert config.codex_api_key == "codex-key"  # pragma: allowlist secret
+        assert config.opencode_api_key == "opencode-key"  # pragma: allowlist secret
+        assert config.gemini_api_key == "gemini-key"  # pragma: allowlist secret
         assert config.gemini_auth_method == "api_key"
         assert config.default_timeout == 30
 

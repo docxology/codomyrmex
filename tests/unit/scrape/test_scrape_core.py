@@ -641,9 +641,9 @@ class TestScrapeConfig:
 
         original = os.environ.pop("FIRECRAWL_API_KEY", None)
         try:
-            os.environ["FIRECRAWL_API_KEY"] = "env-test-key"
+            os.environ["FIRECRAWL_API_KEY"] = "env-test-key"  # pragma: allowlist secret
             cfg = ScrapeConfig.from_env()
-            assert cfg.api_key == "env-test-key"
+            assert cfg.api_key == "env-test-key"  # pragma: allowlist secret
         finally:
             os.environ.pop("FIRECRAWL_API_KEY", None)
             if original is not None:
@@ -679,7 +679,7 @@ class TestScrapeConfig:
         cfg = ScrapeConfig(api_key="set-test")
         set_config(cfg)
         fetched = get_config()
-        assert fetched.api_key == "set-test"
+        assert fetched.api_key == "set-test"  # pragma: allowlist secret
         reset_config()
         # After reset, get_config reads from env (key may or may not be set)
         new_cfg = get_config()
