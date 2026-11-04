@@ -4,14 +4,16 @@
 
 `codomyrmex.documentation` provides documentation analysis, generation,
 maintenance, MCP, and website-building components. Repository-wide editorial
-policy and the canonical MkDocs build live outside this package under `docs/`
-and `scripts/documentation/`.
+policy lives outside this package under `docs/` and `scripts/documentation/`,
+where `mkdocs build --strict` runs as the documentation gate. The site served at
+`https://docxology.github.io/codomyrmex/` is this package's Docusaurus project,
+built and deployed by `.github/workflows/documentation.yml`.
 
 ## Public boundary
 
 Use public exports from `codomyrmex.documentation` and documented submodules.
-Do not treat the legacy Docusaurus source or its generated `.docusaurus/` tree
-as the canonical Codomyrmex documentation site.
+The Docusaurus project under this package is the source of the published site;
+its `build/` tree is generated output, not source, and is not edited by hand.
 
 Key surfaces:
 
@@ -23,7 +25,7 @@ Key surfaces:
 | `quality/` | Documentation quality models and checks |
 | `education/` | Documentation education helpers |
 | `scripts/` | Package-native scanners and generators |
-| `docs/`, `src/`, `static/` | Legacy Docusaurus source and assets |
+| `docs/`, `src/`, `static/` | Docusaurus source, pages, and assets for the published site (generated output lands in `build/`) |
 | `API_SPECIFICATION.md` | Public Python interface |
 | `MCP_TOOL_SPECIFICATION.md` | MCP schemas and behavior |
 | `SPEC.md` | Normative package design |
