@@ -46,7 +46,7 @@
         "chromeFlags": "--no-sandbox --headless"
       },
       "url": ["http://127.0.0.1:4173/codomyrmex/"],
-      "numberOfRuns": 3
+      "numberOfRuns": 5
     }
   }
 }

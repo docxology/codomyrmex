@@ -1,16 +1,28 @@
 /**
  * Assert the medians Lighthouse CI does not.
  *
- * `lhci assert` evaluates one representative run out of the configured
- * `numberOfRuns`. With three runs of the same artifact measuring LCP 2,333 /
- * 2,935 / 2,931 ms, that reported "found: 2332.9" and passed a 2,500 ms
- * ceiling the median misses by 431 ms. A budget that can pass on the luckiest
- * of three runs is not a budget, so this step reads every run and reports the
- * median it actually observed.
+ * `lhci assert` evaluates one run out of the configured `numberOfRuns`, and the
+ * run it picks is the most favourable. Two CI measurements of this budget:
  *
- * Performance is an error below the floor (it is the gate); LCP is a warning
- * because the site breaches it today and the check is not meant to block the
- * default branch until that is decided.
+ *   * LCP 3,445 / 2,549 / 2,527 ms — reported `found: 2527.09`, the lowest of the
+ *     three, passing a ceiling the median misses.
+ *   * LCP 2,333 / 2,935 / 2,931 ms — reported `found: 2332.9`, same shape, missing
+ *     the ceiling by 431 ms.
+ *
+ * A tool that answers "did the best of three runs pass?" is answering a different
+ * question than a budget asks, and the best of three is not a result. So this step
+ * is the gate: it reads every run and asserts the medians that were observed.
+ * `lhci assert`, configured in `.github/lighthouse-ci.json`, stays as evidence of
+ * the single run it reads — not as the assertion of record.
+ *
+ * Thresholds:
+ *   - performance below the floor is an error (it is the gate);
+ *   - CLS above 0.1 is an error;
+ *   - LCP is a warning, because the same bytes disagree about it by more than any
+ *     change we would make. Measured LCP on one artifact: 2,412-3,445 ms across
+ *     CI runners, 978-2,987 ms across three live passes, median 2,439 ms. Until
+ *     several `main` runs agree the ceiling is met, a red gate here would report
+ *     the runner, not the site.
  */
 const fs = require("fs");
 const path = require("path");

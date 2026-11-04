@@ -55,8 +55,10 @@ jobs:
           # score for a page that shipped no CSS or JavaScript.
 
       - name: Report medians across the runs
-        # lhci asserts one representative run of the three. This step reads all
-        # of them, because a budget that passes on the luckiest run is not one.
+        # The assertion of record. `lhci assert` reports the most favourable run
+        # of the set (`found: 2527.09` against LCP 3,445 / 2,549 / 2,527 ms), so
+        # a site that breaches two runs in three reads green there. This step
+        # asserts the medians every run actually measured.
         run: node .github/scripts/check_lighthouse_medians.js .lighthouseci 90 2500
 
       - name: Comment results on PR
