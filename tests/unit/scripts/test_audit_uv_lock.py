@@ -55,11 +55,11 @@ def test_locked_version_does_not_match_name_prefixes(audit) -> None:
 @pytest.mark.unit
 def test_ignores_apply_only_to_exact_reviewed_versions(audit) -> None:
     applied = {i.advisory for i in audit.applicable_ignores(EXPORT)}
-    assert applied == {"PYSEC-2026-151", "PYSEC-2026-3740"}
-
-    bumped = EXPORT.replace("nltk==3.10.3", "nltk==3.10.4")
-    applied = {i.advisory for i in audit.applicable_ignores(bumped)}
     assert applied == {"PYSEC-2026-151"}
+
+    bumped = EXPORT.replace("wasmtime==42.0.0", "wasmtime==43.0.0")
+    applied = {i.advisory for i in audit.applicable_ignores(bumped)}
+    assert applied == set()
 
 
 @pytest.mark.unit
