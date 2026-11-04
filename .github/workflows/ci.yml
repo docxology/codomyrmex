@@ -503,8 +503,32 @@ jobs:
       - name: Check dependency consistency
         run: |
           uv sync --locked --all-extras --dev
-          # Check for dependency conflicts — fail CI on conflicts
-          uv pip check
+
+          # Fail CI on dependency conflicts, with exactly one permitted
+          # exception. `[tool.uv] override-dependencies` pins filelock to
+          # >=4.2.1 so its advisories stay fixed, while the `safety` audit tool
+          # declares `filelock<4.0`; safety 3.8.1 is the newest release and
+          # still carries that cap, so no bump can lift it. An override does
+          # not rewrite the installed distribution's `Requires-Dist`, so
+          # `uv pip check` reports that one pair by design. Exactly that line is
+          # tolerated and printed; every other conflict fails the job.
+          uv pip check > "$RUNNER_TEMP/pip-check.txt" 2>&1 || true
+          cat "$RUNNER_TEMP/pip-check.txt"
+
+          permitted='^The package `safety` requires `filelock>=3\.16\.1,<4\.0`, but .* is installed$'
+          summary='^(Checked [0-9]+ packages in .*|Found [0-9]+ incompatibilit.*|All installed packages are compatible)$'
+
+          unexpected="$(grep -vE "$summary" "$RUNNER_TEMP/pip-check.txt" | grep -vE "$permitted" || true)"
+          if [ -n "$unexpected" ]; then
+            echo "::error::uv pip check reported conflicts other than the documented filelock override:"
+            printf '%s\n' "$unexpected"
+            exit 1
+          fi
+
+          if grep -qE "$permitted" "$RUNNER_TEMP/pip-check.txt"; then
+            echo "Permitted exception (deliberate): $(grep -E "$permitted" "$RUNNER_TEMP/pip-check.txt")"
+            echo "Reason: [tool.uv] override-dependencies pins filelock>=4.2.1 to clear its advisories; safety 3.8.1 is the newest release and still declares filelock<4.0, so the cap cannot be lifted by a bump."
+          fi
 
       - name: Generate dependency tree
         run: |
