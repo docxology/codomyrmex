@@ -19,6 +19,9 @@ import os
 import sys
 
 import pytest
+from tests.support.git_temp_repository import (
+    initialize_repository,
+)
 
 # Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
 
@@ -115,7 +118,7 @@ class TestGitOperationsComprehensive:
         assert not is_git_repository(self.test_dir)
 
         # Test 2: Initialize repository and test detection
-        assert initialize_git_repository(self.repo_dir)
+        assert initialize_repository(self.repo_dir)
         assert is_git_repository(self.repo_dir)
 
         # Test 3: Test with None path (current directory)
@@ -137,7 +140,7 @@ class TestGitOperationsComprehensive:
     def test_initialize_git_repository_comprehensive(self):
         """Test Git repository initialization with various scenarios."""
         # Test 1: Basic initialization with initial commit
-        result = initialize_git_repository(self.repo_dir, initial_commit=True)
+        result = initialize_repository(self.repo_dir, initial_commit=True)
         assert result
         assert is_git_repository(self.repo_dir)
 
@@ -153,7 +156,7 @@ class TestGitOperationsComprehensive:
         # Test 2: Initialize without initial commit
         repo_dir2 = os.path.join(self.test_dir, "test_repo2")
         os.makedirs(repo_dir2)
-        result = initialize_git_repository(repo_dir2, initial_commit=False)
+        result = initialize_repository(repo_dir2, initial_commit=False)
         assert result
         assert is_git_repository(repo_dir2)
 
@@ -162,13 +165,13 @@ class TestGitOperationsComprehensive:
         assert len(commits) == 0
 
         # Test 3: Initialize already existing repository
-        result = initialize_git_repository(self.repo_dir, initial_commit=True)
+        result = initialize_repository(self.repo_dir, initial_commit=True)
         # Should still succeed (Git init is idempotent)
         assert result
 
         # Test 4: Initialize with invalid path
         invalid_path = "/invalid/path/that/does/not/exist"
-        result = initialize_git_repository(invalid_path)
+        result = initialize_repository(invalid_path)
         assert not result
 
     # ==================== BRANCH MANAGEMENT TESTS ====================
@@ -176,7 +179,7 @@ class TestGitOperationsComprehensive:
     def test_branch_operations_comprehensive(self):
         """Test comprehensive branch operations."""
         # Setup: Initialize repository
-        assert initialize_git_repository(self.repo_dir)
+        assert initialize_repository(self.repo_dir)
 
         # Test 1: Get current branch (should be main or master)
         current_branch = get_current_branch(self.repo_dir)
@@ -224,7 +227,7 @@ class TestGitOperationsComprehensive:
     def test_file_operations_comprehensive(self):
         """Test comprehensive file operations (add, commit)."""
         # Setup: Initialize repository
-        assert initialize_git_repository(self.repo_dir)
+        assert initialize_repository(self.repo_dir)
 
         # Test 1: Add single file
         test_file1 = os.path.join(self.repo_dir, "test1.txt")
@@ -279,7 +282,7 @@ class TestGitOperationsComprehensive:
     def test_status_operations_comprehensive(self):
         """Test comprehensive status operations."""
         # Setup: Initialize repository
-        assert initialize_git_repository(self.repo_dir)
+        assert initialize_repository(self.repo_dir)
 
         # Test 1: Clean repository status
         status = get_status(self.repo_dir)
@@ -322,7 +325,7 @@ class TestGitOperationsComprehensive:
     def test_commit_history_comprehensive(self):
         """Test comprehensive commit history operations."""
         # Setup: Initialize repository with multiple commits
-        assert initialize_git_repository(self.repo_dir)
+        assert initialize_repository(self.repo_dir)
 
         # Create multiple commits
         for i in range(5):
@@ -360,7 +363,7 @@ class TestGitOperationsComprehensive:
     def test_remote_operations_comprehensive(self):
         """Test comprehensive remote operations (push/pull simulation)."""
         # Setup: Initialize repository
-        assert initialize_git_repository(self.repo_dir)
+        assert initialize_repository(self.repo_dir)
 
         # Test 1: Push without remote (should fail gracefully)
         result = push_changes(repository_path=self.repo_dir)
@@ -438,7 +441,7 @@ class TestGitOperationsComprehensive:
         # Test complete workflow: init -> add -> commit -> branch -> merge simulation
 
         # Step 1: Initialize repository
-        assert initialize_git_repository(self.repo_dir)
+        assert initialize_repository(self.repo_dir)
 
         # Step 2: Create and add initial files
         for i in range(3):
@@ -476,7 +479,7 @@ class TestGitOperationsComprehensive:
     def test_performance_with_many_files(self):
         """Test performance with many files (stress test)."""
         # Setup: Initialize repository
-        assert initialize_git_repository(self.repo_dir)
+        assert initialize_repository(self.repo_dir)
 
         # Create many files
         file_count = 50  # Reasonable number for testing
@@ -512,7 +515,7 @@ class TestGitOperationsComprehensive:
     def test_input_validation_and_security(self):
         """Test input validation and security measures."""
         # Setup: Initialize repository
-        assert initialize_git_repository(self.repo_dir)
+        assert initialize_repository(self.repo_dir)
 
         # Test 1: Branch names with special characters
         special_branch_names = [
@@ -622,7 +625,8 @@ class TestGitCoreDeep:
         f.write_text("init")
         subprocess.run(["git", "-C", str(tmp_path), "add", "."], capture_output=True)
         subprocess.run(
-            ["git", "-C", str(tmp_path), "commit", "-m", "init"], capture_output=True
+            ["git", "-C", str(tmp_path), "commit", "-m", "init"],
+            capture_output=True,
         )
         from codomyrmex.git_operations.core.git import create_branch
 
@@ -635,7 +639,8 @@ class TestGitCoreDeep:
         f.write_text("init")
         subprocess.run(["git", "-C", str(tmp_path), "add", "."], capture_output=True)
         subprocess.run(
-            ["git", "-C", str(tmp_path), "commit", "-m", "init"], capture_output=True
+            ["git", "-C", str(tmp_path), "commit", "-m", "init"],
+            capture_output=True,
         )
         from codomyrmex.git_operations.core.git import list_branches
 
@@ -675,7 +680,8 @@ class TestGitCoreDeep:
         f.write_text("v1")
         subprocess.run(["git", "-C", str(tmp_path), "add", "."], capture_output=True)
         subprocess.run(
-            ["git", "-C", str(tmp_path), "commit", "-m", "v1"], capture_output=True
+            ["git", "-C", str(tmp_path), "commit", "-m", "v1"],
+            capture_output=True,
         )
         from codomyrmex.git_operations.core.git import get_blame
 
@@ -696,7 +702,8 @@ class TestGitCoreDeep:
         f.write_text("initial")
         subprocess.run(["git", "-C", str(tmp_path), "add", "."], capture_output=True)
         subprocess.run(
-            ["git", "-C", str(tmp_path), "commit", "-m", "init"], capture_output=True
+            ["git", "-C", str(tmp_path), "commit", "-m", "init"],
+            capture_output=True,
         )
         f.write_text("modified")
         from codomyrmex.git_operations.core.git import stash_changes

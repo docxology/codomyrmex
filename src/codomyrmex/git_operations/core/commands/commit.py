@@ -45,6 +45,25 @@ def _build_author_arg(
     return []
 
 
+def _build_config_user_flags(
+    author_name: str | None,
+    author_email: str | None,
+) -> list[str]:
+    """Build ``-c user.*`` flags so a commit carries the identity the caller asked for.
+
+    ``--author`` only sets the author; the committer still comes from configuration,
+    so a caller that passes an identity and no configured user gets a commit made by
+    whatever ambient identity the process inherited. Config flags cover both, and they
+    travel with the command instead of the environment, so nothing outlives the call.
+    """
+    flags: list[str] = []
+    if author_name:
+        flags.extend(["-c", f"user.name={author_name}"])
+    if author_email:
+        flags.extend(["-c", f"user.email={author_email}"])
+    return flags
+
+
 def _stage_files_for_commit(
     file_paths: list[str] | None,
     stage_all: bool,
@@ -112,6 +131,7 @@ def commit_changes(
             return None
         cmd = [
             "git",
+            *_build_config_user_flags(author_name, author_email),
             "commit",
             *_build_author_arg(author_name, author_email, repository_path),
         ]

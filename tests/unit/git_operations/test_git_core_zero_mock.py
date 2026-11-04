@@ -6,6 +6,7 @@ These tests use real temporary Git repositories to verify functionality.
 import subprocess
 
 import pytest
+from tests.support.git_temp_repository import initialize_repository
 
 from codomyrmex.git_operations.core.git import (
     add_files,
@@ -31,7 +32,7 @@ def repo_path(tmp_path):
     path.mkdir()
 
     # Initialize the repo
-    initialize_git_repository(str(path), initial_commit=False)
+    initialize_repository(str(path), initial_commit=False)
 
     # Configure git user for the temp repo
     subprocess.run(

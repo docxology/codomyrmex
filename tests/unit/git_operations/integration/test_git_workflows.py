@@ -5,6 +5,7 @@ Integration tests for complete Git workflows.
 import os
 
 import pytest
+from tests.support.git_temp_repository import initialize_repository
 
 from codomyrmex.git_operations import (
     add_files,
@@ -143,7 +144,7 @@ class TestCompleteWorkflow:
         os.makedirs(repo_path, exist_ok=True)
 
         # Initialize with initial commit
-        assert initialize_git_repository(repo_path, initial_commit=True) is True
+        assert initialize_repository(repo_path, initial_commit=True) is True
 
         # Verify it's a Git repository
         from codomyrmex.git_operations import is_git_repository
@@ -165,7 +166,7 @@ class TestCompleteWorkflow:
         os.makedirs(repo_path, exist_ok=True)
 
         # Initialize without initial commit
-        assert initialize_git_repository(repo_path, initial_commit=False) is True
+        assert initialize_repository(repo_path, initial_commit=False) is True
 
         # Verify it's a Git repository
         from codomyrmex.git_operations import is_git_repository
