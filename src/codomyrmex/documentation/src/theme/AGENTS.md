@@ -24,13 +24,15 @@ deployed site.
   `node node_modules/@docusaurus/core/bin/docusaurus.mjs swizzle @docusaurus/theme-classic <component> --eject --javascript`
   from the docs project root; add `--danger` only when the theme marks the
   component's eject unsafe.
-- Diff the copy against the upstream source after a `@docusaurus/theme-classic`
-  upgrade: a stale copy silently wins over the fixed upstream version. For
-  `prism-include-languages`, upstream marks eject safe and wrap forbidden ("Not
-  a component!" — `getSwizzleConfig.js`) and describes the file as "Meant to be
-  ejected"; its body changed once between 3.5.2 and 3.7.0 and not again through
-  3.10.2. Drop the copy entirely if upstream stops bundling the language
-  registry.
+- Owning a copy here is a maintenance term, not a fork: 65 lines against
+  upstream's 34, a body upstream changed once between 3.5.2 and 3.7.0 and not
+  again through 3.10.2, and a diff against
+  `@docusaurus/theme-classic/lib/theme/prism-include-languages.js` due at every
+  theme upgrade, since a stale copy silently wins over the fixed upstream
+  version. For this file upstream marks eject safe and wrap forbidden ("Not a
+  component!" — `getSwizzleConfig.js`) and calls it "Meant to be ejected", so
+  no lighter mechanism exists. Drop the copy entirely once upstream stops
+  bundling the language registry.
 - Verify bundle effects with a build: `npm run build`, then compare
   `build/assets/js/main.*.js` raw and gzip sizes before and after.
 - Markdown files in this tree are documentation only; Docusaurus does not read
