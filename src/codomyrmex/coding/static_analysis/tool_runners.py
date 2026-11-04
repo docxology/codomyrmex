@@ -5,6 +5,7 @@ Each method runs a specific external analysis tool and converts its output
 into a list of AnalysisResult objects.
 """
 
+import fnmatch
 import json
 import os
 import re
@@ -38,6 +39,42 @@ _PYREFLY_SEVERITY_MAP = {
     "warning": SeverityLevel.WARNING,
     "info": SeverityLevel.INFO,
 }
+
+#: Requirement and build files `safety check --file` can actually read. These are
+#: matched as globs against the file name.
+_REQUIREMENTS_PATTERNS = (
+    "requirements*.txt",
+    "requirements*.in",
+    "Pipfile",
+    "pyproject.toml",
+    "setup.py",
+)
+
+#: Generated or third-party trees that never hold the project's own requirement
+#: files. Walking them costs one `safety check` subprocess per match, and an
+#: installed environment supplies dozens of matches on its own.
+_GENERATED_DIRS = frozenset(
+    {
+        ".cache",
+        ".eggs",
+        ".git",
+        ".hypothesis",
+        ".mypy_cache",
+        ".nox",
+        ".pytest_cache",
+        ".ruff_cache",
+        ".tox",
+        ".venv",
+        "__pycache__",
+        "build",
+        "dist",
+        "env",
+        "htmlcov",
+        "node_modules",
+        "site-packages",
+        "venv",
+    }
+)
 
 _ESLINT_SEVERITY_MAP = {
     1: SeverityLevel.WARNING,
@@ -349,15 +386,24 @@ class ToolRunner:
         return results
 
     def _find_requirements_files(self) -> list[str]:
-        """Find requirements files in the project."""
-        req_files = []
-        req_patterns = ["requirements*.txt", "Pipfile", "pyproject.toml", "setup.py"]
+        """Find the project's own requirement and build files.
 
-        for pattern in req_patterns:
-            for root, _dirs, files in os.walk(self.project_root):
-                for file in files:
-                    if file == pattern or file.startswith("requirements"):
-                        req_files.append(os.path.join(root, file))
+        ``run_safety`` runs one ``safety check --file`` subprocess per file this
+        returns, so the walk stays out of generated and third-party trees and
+        matches real file names: a file that merely *starts with*
+        ``requirements`` (``requirements.py``, a ``.pyc``) is not a requirement
+        file.
+        """
+        req_files = []
+        for root, dirs, files in os.walk(self.project_root):
+            dirs[:] = [
+                d
+                for d in dirs
+                if d not in _GENERATED_DIRS and not d.endswith(".egg-info")
+            ]
+            for file in files:
+                if any(fnmatch.fnmatch(file, p) for p in _REQUIREMENTS_PATTERNS):
+                    req_files.append(os.path.join(root, file))
 
         return req_files
 

@@ -38,12 +38,12 @@ dependencies = [
     # For schema validation (used in model_context_protocol)
     "jsonschema>=4.23.0",
     # For static analysis
-    "pylint>=3.0.0",
+    "pylint>=4.0.9",
     "bandit>=1.9.4",
     "radon>=6.0.0",
     "lizard>=1.17.0",
     # For git operations
-    "GitPython>=3.1.58",
+    "GitPython>=3.2.0",
     # For specific tutorials/recipes
     "unidiff>=0.7.0",
     "requests>=2.31.0",
@@ -72,7 +72,7 @@ dependencies = [
     "cryptography>=50.0.0",
     # For templating module
     "mako>=1.2.0",
-    "aiohttp>=3.13.3",
+    "aiohttp>=3.14.4",
     # numpy, scipy, networkx → uv sync --extra scientific
     # fastapi, uvicorn       → uv sync --extra api
     # paramiko               → uv sync --extra deployment
@@ -119,7 +119,7 @@ code_review = [
 
 language_models = [
 
-    "certifi>=2022.0.0",
+    "certifi>=2026.10.18",
     "typing-extensions>=4.0.0",
     "urllib3>=1.26.0",
 ]
@@ -137,7 +137,7 @@ serialization = [
     "pandas>=2.0.0",
     "pyarrow>=12.0.0",
     "fastavro>=1.12.1",
-    "msgpack>=1.1.2",
+    "msgpack>=1.2.3",
 ]
 
 parsing = [
@@ -147,7 +147,7 @@ parsing = [
 
 modeling_3d = [
     "moderngl>=5.6.0",
-    "pillow>=12.3.0",
+    "pillow>=13.0.0",
     # NOTE: pyarfoundation and pyvr are not available in PyPI - commented out
     # "pyarfoundation>=0.1.0",
     "pygame>=2.0.0",
@@ -163,7 +163,7 @@ performance = [
 ]
 
 observability = [
-    "opentelemetry-api>=1.20.0",
+    "opentelemetry-api>=1.45.1",
     "opentelemetry-sdk>=1.20.0",
     "opentelemetry-exporter-otlp>=1.20.0",
     "prometheus-client>=0.17.0",
@@ -200,18 +200,18 @@ scrape = [
 ]
 
 fpf = [
-    "pillow>=12.3.0",
+    "pillow>=13.0.0",
 ]
 
 crypto = [
-    "pillow>=12.3.0",
+    "pillow>=13.0.0",
     "mnemonic>=0.21",
     "pycryptodome>=3.21.0",  # Keccak-256 for correct Ethereum address derivation
 ]
 
 documents = [
     "chardet>=5.0.0",
-    "pypdf>=6.15.0",
+    "pypdf>=6.21.4",
 ]
 
 audio = [
@@ -224,12 +224,12 @@ audio = [
 
 video = [
     "opencv-python>=4.13.0.92",  # Frame extraction, analysis
-    "pillow>=12.3.0",         # Image processing (security-patched baseline)
+    "pillow>=13.0.0",         # Image processing (security-patched baseline)
 ]
 
 dark = [
     "PyMuPDF>=1.23.0",        # PDF rendering and page extraction
-    "pillow>=12.3.0",         # Image processing for filters
+    "pillow>=13.0.0",         # Image processing for filters
 ]
 
 formal_verification = [
@@ -312,6 +312,12 @@ Changelog = "https://github.com/docxology/codomyrmex/blob/main/CHANGELOG.md"
 
 [tool.uv]
 default-groups = ["dev"]
+# filelock needs >=4.2.1 for its advisories, but the `safety` audit tool
+# (extras: code_review, security_audit) caps it at `filelock<4.0`. safety 3.8.1 is
+# the newest release and still carries that cap, so it cannot be raised by moving
+# anything. safety runs correctly against filelock 4.x, so the cap is conservative:
+# override it rather than drop the tool.
+override-dependencies = ["filelock>=4.2.1"]
 
 [tool.uv.build-backend]
 module-root = "src"

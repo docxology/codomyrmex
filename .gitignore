@@ -37,7 +37,6 @@ ENV/
 .ENV/
 
 # Python tools
-.python-version
 Pipfile.lock
 poetry.lock
 .pdm.toml
