@@ -122,12 +122,16 @@ class TestClaudeClientInstantiation:
 
     def test_instantiation_with_explicit_key(self):
         """Client can be created with an explicit API key."""
-        client = ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
+        client = ClaudeClient(
+            config={"claude_api_key": "sk-ant-test-key"}
+        )  # pragma: allowlist secret
         assert client is not None
         assert client.name == "claude"
 
     def test_default_capabilities(self):
-        client = ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
+        client = ClaudeClient(
+            config={"claude_api_key": "sk-ant-test-key"}
+        )  # pragma: allowlist secret
         caps = client.capabilities
         assert AgentCapabilities.CODE_GENERATION in caps
         assert AgentCapabilities.TEXT_COMPLETION in caps
@@ -135,7 +139,7 @@ class TestClaudeClientInstantiation:
     def test_custom_model_config(self):
         client = ClaudeClient(
             config={
-                "claude_api_key": "sk-ant-test-key",
+                "claude_api_key": "sk-ant-test-key",  # pragma: allowlist secret
                 "claude_model": "claude-3-5-haiku-20241022",
                 "claude_temperature": 0.5,
             }
@@ -144,13 +148,15 @@ class TestClaudeClientInstantiation:
         assert client.temperature == 0.5
 
     def test_default_retry_settings(self):
-        client = ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
+        client = ClaudeClient(
+            config={"claude_api_key": "sk-ant-test-key"}
+        )  # pragma: allowlist secret
         assert client.initial_retry_delay == ClaudeClient.DEFAULT_INITIAL_DELAY
 
     def test_custom_retry_settings(self):
         client = ClaudeClient(
             config={
-                "claude_api_key": "sk-ant-test-key",
+                "claude_api_key": "sk-ant-test-key",  # pragma: allowlist secret
                 "initial_retry_delay": 2.0,
             }
         )
@@ -168,7 +174,9 @@ class TestClaudeToolRegistration:
 
     @pytest.fixture
     def client(self):
-        return ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
+        return ClaudeClient(
+            config={"claude_api_key": "sk-ant-test-key"}
+        )  # pragma: allowlist secret
 
     def test_register_tool(self, client):
         client.register_tool(
@@ -222,7 +230,7 @@ class TestClaudeSessionManagement:
     @pytest.fixture
     def client(self):
         return ClaudeClient(
-            config={"claude_api_key": "sk-ant-test-key"},
+            config={"claude_api_key": "sk-ant-test-key"},  # pragma: allowlist secret
             session_manager=SessionManager(),
         )
 
@@ -252,7 +260,9 @@ class TestClaudeCostCalculation:
 
     @pytest.fixture
     def client(self):
-        return ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
+        return ClaudeClient(
+            config={"claude_api_key": "sk-ant-test-key"}
+        )  # pragma: allowlist secret
 
     def test_cost_calculation_known_model(self, client):
         cost = client._calculate_cost(1_000_000, 1_000_000)
@@ -278,12 +288,16 @@ class TestClaudeIntegrationAdapter:
     """Test adapter instantiation (no API call)."""
 
     def test_adapter_creation(self):
-        client = ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
+        client = ClaudeClient(
+            config={"claude_api_key": "sk-ant-test-key"}
+        )  # pragma: allowlist secret
         adapter = ClaudeIntegrationAdapter(client)
         assert adapter is not None
 
     def test_adapter_has_required_methods(self):
-        client = ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
+        client = ClaudeClient(
+            config={"claude_api_key": "sk-ant-test-key"}
+        )  # pragma: allowlist secret
         adapter = ClaudeIntegrationAdapter(client)
         assert hasattr(adapter, "adapt_for_ai_code_editing")
         assert hasattr(adapter, "adapt_for_llm")

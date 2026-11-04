@@ -122,9 +122,9 @@ class TestCLIOutputFormatting:
     def test_sensitive_data_masking(self):
         """Test that sensitive data is masked in output."""
         config = AgentConfig(
-            claude_api_key="secret-key",
-            codex_api_key="another-secret",
-            opencode_api_key="opencode-secret",
+            claude_api_key="secret-key",  # pragma: allowlist secret
+            codex_api_key="another-secret",  # pragma: allowlist secret
+            opencode_api_key="opencode-secret",  # pragma: allowlist secret
         )
 
         config_dict = config.to_dict()

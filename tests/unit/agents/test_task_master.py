@@ -48,7 +48,9 @@ def master_no_key():
 @pytest.fixture
 def master_fake_key():
     """ClaudeTaskMaster initialized with a dummy key (never calls API)."""
-    return ClaudeTaskMaster(api_key="sk-test-fake-key-for-unit-tests")
+    return ClaudeTaskMaster(
+        api_key="sk-test-fake-key-for-unit-tests"  # pragma: allowlist secret
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -259,7 +261,7 @@ class TestClaudeTaskMasterInit:
 
     def test_custom_model_and_retries(self):
         m = ClaudeTaskMaster(
-            api_key="sk-test",
+            api_key="sk-test",  # pragma: allowlist secret
             model="claude-3-opus-20240229",
             max_retries=5,
         )
