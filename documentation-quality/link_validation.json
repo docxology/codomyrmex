@@ -26538,64 +26538,71 @@
   },
   {
     "file": "src/codomyrmex/documentation/README.md",
+    "link": "https://docxology.github.io/codomyrmex/`",
+    "line": 9,
+    "status": "external",
+    "message": "External link (not validated)"
+  },
+  {
+    "file": "src/codomyrmex/documentation/README.md",
     "link": "scripts/AGENTS.md",
-    "line": 50,
+    "line": 52,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/documentation/README.md",
     "link": "AGENTS.md",
-    "line": 58,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/documentation/README.md",
-    "link": "SPEC.md",
-    "line": 59,
-    "status": "ok",
-    "message": "File exists"
-  },
-  {
-    "file": "src/codomyrmex/documentation/README.md",
-    "link": "API_SPECIFICATION.md",
     "line": 60,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/documentation/README.md",
-    "link": "MCP_TOOL_SPECIFICATION.md",
+    "link": "SPEC.md",
     "line": 61,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/documentation/README.md",
-    "link": "scripts/AGENTS.md",
+    "link": "API_SPECIFICATION.md",
     "line": 62,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/documentation/README.md",
-    "link": "../../../docs/development/documentation.md",
+    "link": "MCP_TOOL_SPECIFICATION.md",
     "line": 63,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/documentation/README.md",
-    "link": "../README.md",
+    "link": "scripts/AGENTS.md",
     "line": 64,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/documentation/README.md",
-    "link": "../../../README.md",
+    "link": "../../../docs/development/documentation.md",
     "line": 65,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/documentation/README.md",
+    "link": "../README.md",
+    "line": 66,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/documentation/README.md",
+    "link": "../../../README.md",
+    "line": 67,
     "status": "ok",
     "message": "File exists"
   },
