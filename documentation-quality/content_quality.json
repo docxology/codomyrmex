@@ -15384,6 +15384,30 @@
     }
   },
   {
+    "file": "src/codomyrmex/documentation/src/theme/AGENTS.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 5,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 275,
+      "link_count": 3
+    }
+  },
+  {
+    "file": "src/codomyrmex/documentation/src/theme/README.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 1,
+      "placeholder_count": 0,
+      "code_block_count": 0,
+      "word_count": 123,
+      "link_count": 1
+    }
+  },
+  {
     "file": "src/codomyrmex/documentation/src/css/SPEC.md",
     "score": 100,
     "issues": [],

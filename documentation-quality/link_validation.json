@@ -37478,6 +37478,34 @@
     "message": "File exists"
   },
   {
+    "file": "src/codomyrmex/documentation/src/theme/AGENTS.md",
+    "link": "prism-include-languages.js",
+    "line": 12,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/documentation/src/theme/AGENTS.md",
+    "link": "../AGENTS.md",
+    "line": 46,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/documentation/src/theme/AGENTS.md",
+    "link": "../../../../AGENTS.md",
+    "line": 47,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
+    "file": "src/codomyrmex/documentation/src/theme/README.md",
+    "link": "../css/custom.css",
+    "line": 17,
+    "status": "ok",
+    "message": "File exists"
+  },
+  {
     "file": "src/codomyrmex/documentation/src/css/AGENTS.md",
     "link": "../README.md",
     "line": 36,
