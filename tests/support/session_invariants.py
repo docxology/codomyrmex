@@ -39,7 +39,9 @@ class SessionInvariantPlugin:
 
     def pytest_sessionstart(self, session):
         self.site_packages = {
-            entry for entry in sys.path if "site-packages" in entry or "dist-packages" in entry
+            entry
+            for entry in sys.path
+            if "site-packages" in entry or "dist-packages" in entry
         }
         self.report.append(f"sessionstart site-packages: {sorted(self.site_packages)}")
         for name in WATCH:
@@ -74,11 +76,7 @@ class SessionInvariantPlugin:
         elif added:
             self.report.append(f"{item.nodeid} added sys.path entries: {added}")
 
-        lost = [
-            entry
-            for entry in self.site_packages
-            if entry not in current
-        ]
+        lost = [entry for entry in self.site_packages if entry not in current]
         if lost:
             problems.append(f"site-packages dropped from sys.path: {lost}")
 
@@ -94,15 +92,21 @@ class SessionInvariantPlugin:
             problems.append(f"modules dropped from sys.modules: {dropped}")
 
         if problems:
-            raise AssertionError(f"{item.nodeid} mutated import state: {'; '.join(problems)}")
+            raise AssertionError(
+                f"{item.nodeid} mutated import state: {'; '.join(problems)}"
+            )
 
 
 def pytest_configure(config):
-    config.pluginmanager.register(SessionInvariantPlugin(), "codomyrmex-session-invariants")
+    config.pluginmanager.register(
+        SessionInvariantPlugin(), "codomyrmex-session-invariants"
+    )
 
 
 def pytest_terminal_summary(terminalreporter):
-    plugin = terminalreporter.config.pluginmanager.get_plugin("codomyrmex-session-invariants")
+    plugin = terminalreporter.config.pluginmanager.get_plugin(
+        "codomyrmex-session-invariants"
+    )
     if plugin is None:
         return
     terminalreporter.write_sep("=", "session invariants")
