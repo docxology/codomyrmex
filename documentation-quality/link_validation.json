@@ -26770,21 +26770,21 @@
   {
     "file": "src/codomyrmex/documentation/SECURITY.md",
     "link": "../../../SECURITY.md",
-    "line": 69,
+    "line": 93,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/documentation/SECURITY.md",
     "link": "SPEC.md",
-    "line": 70,
+    "line": 94,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "src/codomyrmex/documentation/SECURITY.md",
     "link": "MCP_TOOL_SPECIFICATION.md",
-    "line": 71,
+    "line": 95,
     "status": "ok",
     "message": "File exists"
   },
