@@ -54,6 +54,11 @@ jobs:
           # build at the server root makes every asset 404 and reports a perfect
           # score for a page that shipped no CSS or JavaScript.
 
+      - name: Report medians across the runs
+        # lhci asserts one representative run of the three. This step reads all
+        # of them, because a budget that passes on the luckiest run is not one.
+        run: node .github/scripts/check_lighthouse_medians.js .lighthouseci 90 2500
+
       - name: Comment results on PR
         if: github.event_name == 'pull_request'
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # actions/github-script@v9.0.0
