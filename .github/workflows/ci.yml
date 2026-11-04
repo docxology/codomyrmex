@@ -359,9 +359,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         # 3.14 is classified in pyproject.toml and no leg tested it. It cannot
-        # install the modeling-3d extra: pygame 2.6.1 publishes no cp314 wheel
-        # and its source build fails on the runner, so that one extra is
-        # excluded for this version.
+        # install the modeling-3d extra: no released pygame (2.6.1 is the newest)
+        # publishes a cp314 wheel, and its source build fails on the runner. That
+        # one extra is excluded for this version. pygame-ce 2.5.8 does publish
+        # cp314 wheels, so replacing pygame is the real fix, and that belongs in
+        # pyproject.toml rather than here.
         #
         # 3.15 is deliberately absent, and its blockers are wheels rather than
         # tests: ctranslate2 (cp315 arrived in 4.8.5), onnxruntime 1.24.4 (no
@@ -590,11 +592,25 @@ jobs:
 
           # Sum JUnit XML attributes using grep + awk (avoids multi-line Python in YAML)
           # coverage-gate runs the same tests/ suite as the ubuntu 3.11 matrix leg under
-          # its own artifact name, so count that duplicate once, not twice.
-          junit_files() {
-            find test-results -type f -name 'junit-*.xml' \
-              -not -path 'test-results/test-results-ubuntu-latest-3.11/*' "$@"
+          # its own artifact name. When the matrix ran, drop that duplicate; when it did
+          # not (pull requests skip it), the coverage copy is the only Full Test Suite
+          # evidence there is, so keep it instead of counting nothing.
+          all_junit() {
+            find test-results -type f -name 'junit-*.xml' "$@"
           }
+          matrix_junit() {
+            find test-results -type f -name 'junit-*.xml' \
+              -path 'test-results/test-results-matrix-*' "$@"
+          }
+          if [ -n "$(matrix_junit)" ]; then
+            junit_files() {
+              all_junit -not -path 'test-results/test-results-ubuntu-latest-3.11/*' "$@"
+            }
+          else
+            junit_files() {
+              all_junit "$@"
+            }
+          fi
           junit_count=$(junit_files | wc -l | tr -d ' ')
           if [ "$junit_count" -eq 0 ]; then
             echo "No JUnit evidence was downloaded; refusing to summarize test status."
