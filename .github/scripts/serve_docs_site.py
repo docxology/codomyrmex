@@ -26,7 +26,7 @@ class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=ROOT, **kwargs)
 
-    def do_GET(self):  # noqa: N802 - http.server API
+    def do_GET(self):
         path = self.translate_path(urlsplit(self.path).path)
         if os.path.isdir(path):
             path = os.path.join(path, "index.html")
