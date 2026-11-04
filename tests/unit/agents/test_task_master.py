@@ -11,6 +11,11 @@ import os
 
 import pytest
 
+pytest.importorskip(
+    "anthropic",
+    reason="claude_task_master imports the anthropic SDK at module scope (uv sync --extra llm_providers)",
+)
+
 from codomyrmex.agents.ai_code_editing.claude_task_master import (
     DEFAULT_MODEL,
     DEFAULT_TEMPERATURE,

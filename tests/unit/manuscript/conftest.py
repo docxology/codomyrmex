@@ -21,6 +21,13 @@ def generated_manuscript_snapshot(tmp_path_factory) -> Path:
     project deliberately has no adjacent template and exercises the documented
     strict successor, without consulting an operator's sibling checkout.
     """
+    pytest.importorskip(
+        "z3",
+        reason=(
+            "manuscript generation runs a ty gate over colony_kernel/formal.py, "
+            "which imports z3 (uv sync --extra formal_verification)"
+        ),
+    )
     source = Path(__file__).resolve().parents[3]
     project = tmp_path_factory.mktemp("manuscript-project")
     # Select public index inputs, excluding personal/untracked configuration and

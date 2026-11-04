@@ -28,6 +28,18 @@ except ImportError:
 if not _HAS_CLAUDE:
     pytest.skip("claude agent deps not available", allow_module_level=True)
 
+try:
+    import anthropic
+
+    _HAS_ANTHROPIC_SDK = True
+except ImportError:
+    _HAS_ANTHROPIC_SDK = False
+
+_requires_anthropic_sdk = pytest.mark.skipif(
+    not _HAS_ANTHROPIC_SDK,
+    reason="ClaudeClient requires the anthropic SDK (uv sync --extra llm_providers)",
+)
+
 _HAS_API_KEY = os.environ.get("RUN_LIVE_ANTHROPIC") == "1" and bool(
     os.environ.get("ANTHROPIC_API_KEY")
 )
@@ -104,6 +116,7 @@ class TestModuleExports:
 # =========================================================================
 
 
+@_requires_anthropic_sdk
 class TestClaudeClientInstantiation:
     """Test client instantiation behaviour — does NOT require an API key."""
 
@@ -149,6 +162,7 @@ class TestClaudeClientInstantiation:
 # =========================================================================
 
 
+@_requires_anthropic_sdk
 class TestClaudeToolRegistration:
     """Test tool registration and retrieval."""
 
@@ -201,6 +215,7 @@ class TestClaudeToolRegistration:
 # =========================================================================
 
 
+@_requires_anthropic_sdk
 class TestClaudeSessionManagement:
     """Test session creation and management."""
 
@@ -231,6 +246,7 @@ class TestClaudeSessionManagement:
 # =========================================================================
 
 
+@_requires_anthropic_sdk
 class TestClaudeCostCalculation:
     """Test the internal cost calculation method."""
 
@@ -257,6 +273,7 @@ class TestClaudeCostCalculation:
 # =========================================================================
 
 
+@_requires_anthropic_sdk
 class TestClaudeIntegrationAdapter:
     """Test adapter instantiation (no API call)."""
 

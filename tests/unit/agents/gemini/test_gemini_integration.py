@@ -12,6 +12,11 @@ from codomyrmex.agents.core import AgentRequest
 from codomyrmex.agents.gemini import GeminiClient, GeminiIntegrationAdapter
 from codomyrmex.agents.generic import AgentOrchestrator
 
+pytest.importorskip(
+    "google.genai",
+    reason="GeminiClient requires the google-genai SDK (uv sync --extra llm_providers)",
+)
+
 
 class TestGeminiIntegrationAdapter:
     """Test GeminiIntegrationAdapter functionality."""

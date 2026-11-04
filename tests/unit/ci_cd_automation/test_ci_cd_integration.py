@@ -319,20 +319,21 @@ class TestDeploymentOrchestrator:
 
     def test_deploy_to_development_docker(self):
         """Test deployment to development environment with real Docker."""
+        if not DOCKER_AVAILABLE:
+            pytest.skip("docker Python client not installed")
+
         docker_cli = shutil.which("docker")
         if not docker_cli:
-            DOCKER_AVAILABLE = False
-        else:
-            probe = subprocess.run(
-                [docker_cli, "info", "--format", "{{.ServerVersion}}"],
-                capture_output=True,
-                text=True,
-                timeout=5,
-            )
-            DOCKER_AVAILABLE = probe.returncode == 0
+            pytest.skip("docker CLI not available")
 
-        if not DOCKER_AVAILABLE:
-            pytest.skip("Docker not available")
+        probe = subprocess.run(
+            [docker_cli, "info", "--format", "{{.ServerVersion}}"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        if probe.returncode != 0:
+            pytest.skip("docker daemon not reachable")
 
         client = docker.from_env(version=os.environ.get("DOCKER_API_VERSION", "1.41"))
         client.close()

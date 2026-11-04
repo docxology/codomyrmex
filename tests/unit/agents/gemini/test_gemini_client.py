@@ -28,6 +28,11 @@ _EXPECTED_DEFAULT_GEMINI_MODEL = next(
     f.default for f in dataclasses.fields(AgentConfig) if f.name == "gemini_model"
 )
 
+pytest.importorskip(
+    "google.genai",
+    reason="GeminiClient requires the google-genai SDK (uv sync --extra llm_providers)",
+)
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------

@@ -5,6 +5,11 @@ from __future__ import annotations
 import httpx
 import pytest
 
+pytest.importorskip(
+    "fastapi",
+    reason="the HTTP app boundary requires fastapi (uv sync --extra api)",
+)
+
 from codomyrmex.model_context_protocol.transport.server import MCPServer
 
 
