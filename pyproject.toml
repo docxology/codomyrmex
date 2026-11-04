@@ -147,7 +147,7 @@ parsing = [
 
 modeling_3d = [
     "moderngl>=5.6.0",
-    "pillow>=12.3.0",
+    "pillow>=13.0.0",
     # NOTE: pyarfoundation and pyvr are not available in PyPI - commented out
     # "pyarfoundation>=0.1.0",
     "pygame>=2.0.0",
@@ -200,11 +200,11 @@ scrape = [
 ]
 
 fpf = [
-    "pillow>=12.3.0",
+    "pillow>=13.0.0",
 ]
 
 crypto = [
-    "pillow>=12.3.0",
+    "pillow>=13.0.0",
     "mnemonic>=0.21",
     "pycryptodome>=3.21.0",  # Keccak-256 for correct Ethereum address derivation
 ]
@@ -224,12 +224,12 @@ audio = [
 
 video = [
     "opencv-python>=4.13.0.92",  # Frame extraction, analysis
-    "pillow>=12.3.0",         # Image processing (security-patched baseline)
+    "pillow>=13.0.0",         # Image processing (security-patched baseline)
 ]
 
 dark = [
     "PyMuPDF>=1.23.0",        # PDF rendering and page extraction
-    "pillow>=12.3.0",         # Image processing for filters
+    "pillow>=13.0.0",         # Image processing for filters
 ]
 
 formal_verification = [
