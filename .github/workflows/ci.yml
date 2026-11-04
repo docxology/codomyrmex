@@ -385,16 +385,6 @@ jobs:
         uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # astral-sh/setup-uv@v10.3.3
         with:
           version: ${{ env.UV_VERSION }}
-          # The default cache key rests on **/*requirements*.txt, and this repository
-          # has none, so every leg restored one shared entry. With the interpreter
-          # pinned, 3.12/3.13/3.14 came out of that entry with files missing from
-          # otherwise installed wheels — pandas submodules, hypothesis internals,
-          # fastapi.middleware.cors, fitz, codomyrmex's own .dist-info — at the same
-          # locked versions the green 3.11 leg used, while a local build of the same
-          # lock was complete. Key on the lock and the interpreter so one incomplete
-          # extraction cannot cross legs.
-          cache-dependency-glob: "uv.lock"
-          cache-suffix: "py${{ matrix.python-version }}"
 
       - name: Set up Python
         run: uv python install ${{ matrix.python-version }}
@@ -432,30 +422,18 @@ jobs:
           path: junit-*.xml
           retention-days: 30
 
-  # TEMPORARY control, remove before merge. Two legs of the same interpreter on
-  # the same commit: one restores the shared uv cache entry that 3.12/3.13/3.14
-  # were failing from, one runs with the cache disabled. If the uncached leg is
-  # green while the shared-cache leg reproduces the byte-identical 133 failures,
-  # the cache is the cause and the key change above is the fix; if both fail, the
-  # cache was a confound and the missing-files slate has another origin.
-  matrix-cache-control:
-    name: Cache control
+  # TEMPORARY probe, remove before merge. The pinned interpreter is enough to
+  # collect the whole suite, but 3.12/3.13/3.14 then report files missing from
+  # wheels that are installed, while 3.11 is green and a local build of the same
+  # lock is complete. This job prints what the test process actually sees and then
+  # runs the suite twice, so the log says whether the environment or the run is at
+  # fault instead of leaving it to inference.
+  interpreter-probe:
+    name: Interpreter probe
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     needs: lint-and-format
-    timeout-minutes: 60
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - control: shared-cache
-            enable-cache: true
-            cache-dependency-glob: "**/*requirements*.txt"
-            cache-suffix: ""
-          - control: no-cache
-            enable-cache: false
-            cache-dependency-glob: "uv.lock"
-            cache-suffix: "control-no-cache"
+    timeout-minutes: 90
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # actions/checkout@v7.0.1
@@ -466,9 +444,6 @@ jobs:
         uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # astral-sh/setup-uv@v10.3.3
         with:
           version: ${{ env.UV_VERSION }}
-          enable-cache: ${{ matrix.enable-cache }}
-          cache-dependency-glob: ${{ matrix.cache-dependency-glob }}
-          cache-suffix: ${{ matrix.cache-suffix }}
 
       - name: Set up Python
         run: uv python install 3.12
@@ -476,19 +451,58 @@ jobs:
       - name: Install dependencies
         run: uv sync --locked --python 3.12 --group docs --all-extras --dev
 
-      - name: Run test suite
-        run: >-
-          uv run --no-sync --python 3.12
-          pytest tests/ -q --tb=no -n auto
-          -m "not performance and not benchmark and not bench"
-          --junit-xml=junit-control-${{ matrix.control }}.xml
+      - name: Report the environment the tests will see
+        run: |
+          set -x
+          nproc
+          uv --version
+          df -h .
+          du -sh .venv
+          uv run --no-sync --python 3.12 python - <<'PY'
+          import importlib.metadata as md
+          import importlib.util
+          import sys
 
-      - name: Upload control evidence
+          print("executable:", sys.executable)
+          print("version:", sys.version)
+          print("sys.path:", sys.path)
+          for dist in ("codomyrmex", "pytest", "pandas", "matplotlib", "fastapi", "hypothesis", "pymupdf"):
+              try:
+                  print("dist", dist, md.version(dist))
+              except Exception as exc:
+                  print("dist", dist, "MISSING", type(exc).__name__)
+          for mod in (
+              "pandas.api.internals",
+              "pandas.core.methods.to_dict",
+              "matplotlib.backends.backend_svg",
+              "fastapi.middleware.cors",
+              "fitz",
+              "hypothesis.internal.conjecture.optimiser",
+          ):
+              try:
+                  print("spec", mod, importlib.util.find_spec(mod))
+              except Exception as exc:
+                  print("spec", mod, "ERROR", type(exc).__name__, exc)
+          PY
+          ls -la .venv/lib/python3.12/site-packages/pandas/api/ | head -20
+          ls -la .venv/lib/python3.12/site-packages/hypothesis/internal/conjecture/ | head -20
+          ls -la .venv/lib/python3.12/site-packages/matplotlib/backends/backend_svg.py
+          ls -d .venv/lib/python3.12/site-packages/fitz* .venv/lib/python3.12/site-packages/*.dist-info/codomyrmex* || true
+
+      - name: Run A, no --locked
+        run: |
+          uv run --no-sync --python 3.12 pytest tests/ -q --tb=line -n auto             -m "not performance and not benchmark and not bench"             --junit-xml=junit-probe-a.xml | tail -40 || true
+
+      - name: Run B, --locked
+        run: |
+          uv run --locked --python 3.12 pytest tests/ -q --tb=line -n auto             -m "not performance and not benchmark and not bench"             --junit-xml=junit-probe-b.xml | tail -40 || true
+
+      - name: Upload probe evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # actions/upload-artifact@v7.0.2
         with:
-          name: control-${{ matrix.control }}-3.12
-          path: junit-control-${{ matrix.control }}.xml
+          name: probe-interpreter-3.12
+          path: junit-probe-*.xml
           retention-days: 7
           if-no-files-found: warn
 
