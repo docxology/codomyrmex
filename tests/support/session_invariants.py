@@ -37,7 +37,7 @@ class SessionInvariantPlugin:
         self.baseline_modules: dict[str, int] = {}
         self.report: list[str] = []
 
-    def pytest_sessionstart(self, session):  # noqa: ARG002
+    def pytest_sessionstart(self, session):
         self.site_packages = {
             entry for entry in sys.path if "site-packages" in entry or "dist-packages" in entry
         }
@@ -45,11 +45,11 @@ class SessionInvariantPlugin:
         for name in WATCH:
             try:
                 found = importlib.util.find_spec(name) is not None
-            except Exception as exc:  # noqa: BLE001 - diagnosis only
+            except Exception as exc:
                 found = f"ERROR {type(exc).__name__}"
             self.report.append(f"sessionstart spec {name}: {found}")
 
-    def pytest_runtest_teardown(self, item, nextitem):  # noqa: ARG002
+    def pytest_runtest_teardown(self, item, nextitem):
         if self.baseline_path is None:
             # Collection has finished and one test has run: this is the settled
             # baseline, so collection-time insertions are not reported as a change.
