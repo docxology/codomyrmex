@@ -582,7 +582,11 @@ def test_release_and_ci_workflows_use_blocking_evidence_paths():
     assert "--coverage-report coverage.xml" in release_workflow
     assert "--coverage-floor 60" in release_workflow
     assert "release-test-evidence.json" in release_workflow
-    assert "skipped_tests=$(grep -roh" in ci_workflow
+    # The summary derives every count from the downloaded JUnit attributes and
+    # computes passed by subtraction. The helper name tracks the shell spelling;
+    # the grep and the subtraction are what make the evidence blocking.
+    assert "skipped_tests=$(sum_attr skipped)" in ci_workflow
+    assert r'grep -oh "$1=\"[0-9]*\""' in ci_workflow
     assert "passed=$((total_tests - failed_tests - error_tests - skipped_tests))" in (
         ci_workflow
     )
