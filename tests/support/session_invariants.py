@@ -11,6 +11,7 @@ Loaded with ``-p tests.support.session_invariants``. Diagnosis only.
 
 from __future__ import annotations
 
+import importlib
 import importlib.util
 import os
 import sys
@@ -68,6 +69,24 @@ def _machinery(label: str) -> None:
             _emit(f"{label} PathFinder.fit[{entry}] ERROR {type(exc).__name__}: {exc}")
 
 
+def _after_invalidate(label: str) -> None:
+    """Rebuild the finder caches and ask again: stale cache or genuinely absent?"""
+    try:
+        importlib.invalidate_caches()
+    except Exception as exc:  # diagnosis only
+        _emit(f"{label} invalidate_caches ERROR {type(exc).__name__}: {exc}")
+        return
+    for name in ("fitz", "bs4", "pandas.api.internals", "fastapi.middleware.cors"):
+        _emit(f"{label} after_invalidate {_state(name)}")
+    for entry, finder in list(sys.path_importer_cache.items()):
+        if (
+            finder is not None
+            and type(finder).__name__ != "FileFinder"
+            and type(finder).__name__ != "zipimporter"
+        ):
+            _emit(f"{label} odd_finder[{entry}]={type(finder).__name__}")
+
+
 def _snapshot(label: str) -> None:
     _emit(f"{label} cwd={os.getcwd()} executable={sys.executable}")
     _emit(f"{label} site-packages={[p for p in sys.path if 'site-packages' in p]}")
@@ -76,6 +95,7 @@ def _snapshot(label: str) -> None:
     for name in WATCH:
         _emit(f"{label} {_state(name)}")
     _machinery(label)
+    _after_invalidate(label)
 
 
 class MissingModulePlugin:
