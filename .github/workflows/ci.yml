@@ -343,8 +343,12 @@ jobs:
             output/figures/figure_registry.json
 
   test-matrix:
-    # Cross-platform / cross-version confirmation on main. Pull requests rely
-    # on coverage-gate (ubuntu, 3.11), which runs the identical suite.
+    # Cross-platform / cross-version confirmation, on push to main and on
+    # manual dispatch; pull requests skip it and rely on coverage-gate
+    # (ubuntu, 3.11) alone. Runs the same tests/ selection and the same -m
+    # filter as coverage-gate, without --cov and without that job's native
+    # prerequisites (espeak-ng, the python:3.9-slim and bash:5.1 images, the
+    # Hugging Face model cache).
     name: Full Test Suite
     if: github.event_name != 'pull_request'
     runs-on: ${{ matrix.os }}
@@ -354,7 +358,22 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: ["3.11", "3.12", "3.13", "3.15" ]
+        # 3.14 is classified in pyproject.toml and no leg tested it. It cannot
+        # install the modeling-3d extra: no released pygame (2.6.1 is the newest)
+        # publishes a cp314 wheel, and its source build fails on the runner. That
+        # one extra is excluded for this version. pygame-ce 2.5.8 does publish
+        # cp314 wheels, so replacing pygame is the real fix, and that belongs in
+        # pyproject.toml rather than here.
+        #
+        # 3.15 is deliberately absent, and its blockers are wheels rather than
+        # tests: ctranslate2 (cp315 arrived in 4.8.5), onnxruntime 1.24.4 (no
+        # cp315 wheel through 1.31.1) and torch 2.13.0 (none either). A 3.15 leg
+        # would fail in "Install dependencies" without running a test. Add it
+        # back when all three publish cp315 wheels.
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
+        include:
+          - python-version: "3.14"
+            sync-args: "--no-extra modeling-3d"
 
     steps:
       - name: Checkout code
@@ -372,15 +391,22 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --locked --python ${{ matrix.python-version }} --group docs --all-extras --dev
+          uv sync --locked --python ${{ matrix.python-version }} --group docs --all-extras --dev ${{ matrix.sync-args }}
 
       - name: Create output directory
         run: |
           mkdir -p output
 
       - name: Run test suite
+        # `uv run` with no --python reads .python-version (3.11) and rebuilds
+        # .venv at that version with the default dependency set, discarding
+        # both the matrix interpreter and the extras installed above. --no-sync
+        # keeps this job's synced environment; --python states which
+        # interpreter it must be, so uv warns (rather than silently rebuilding)
+        # if .venv ever stops matching the matrix.
         run: >-
-          uv run pytest tests/ -q --tb=short
+          uv run --no-sync --python ${{ matrix.python-version }}
+          pytest tests/ -q --tb=short
           -n auto
           -m "not performance and not benchmark and not bench"
           --junit-xml=junit-unit-${{ matrix.os }}-${{ matrix.python-version }}.xml
@@ -389,7 +415,10 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # actions/upload-artifact@v7.0.2
         if: always()
         with:
-          name: test-results-${{ matrix.os }}-${{ matrix.python-version }}
+          # Prefixed so this name cannot collide with coverage-gate's
+          # test-results-ubuntu-latest-3.11 artifact, which upload-artifact
+          # refuses as a duplicate inside one run.
+          name: test-results-matrix-${{ matrix.os }}-${{ matrix.python-version }}
           path: junit-*.xml
           retention-days: 30
 
@@ -562,15 +591,39 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
 
           # Sum JUnit XML attributes using grep + awk (avoids multi-line Python in YAML)
-          junit_count=$(find test-results -type f -name 'junit-*.xml' | wc -l | tr -d ' ')
+          # coverage-gate runs the same tests/ suite as the ubuntu 3.11 matrix leg under
+          # its own artifact name. When the matrix ran, drop that duplicate; when it did
+          # not (pull requests skip it), the coverage copy is the only Full Test Suite
+          # evidence there is, so keep it instead of counting nothing.
+          all_junit() {
+            find test-results -type f -name 'junit-*.xml' "$@"
+          }
+          matrix_junit() {
+            find test-results -type f -name 'junit-*.xml' \
+              -path 'test-results/test-results-matrix-*' "$@"
+          }
+          if [ -n "$(matrix_junit)" ]; then
+            junit_files() {
+              all_junit -not -path 'test-results/test-results-ubuntu-latest-3.11/*' "$@"
+            }
+          else
+            junit_files() {
+              all_junit "$@"
+            }
+          fi
+          junit_count=$(junit_files | wc -l | tr -d ' ')
           if [ "$junit_count" -eq 0 ]; then
             echo "No JUnit evidence was downloaded; refusing to summarize test status."
             exit 1
           fi
-          total_tests=$(grep -roh 'tests="[0-9]*"' test-results/ 2>/dev/null | sed 's/tests="//;s/"//' | awk '{s+=$1} END {print s+0}')
-          failed_tests=$(grep -roh 'failures="[0-9]*"' test-results/ 2>/dev/null | sed 's/failures="//;s/"//' | awk '{s+=$1} END {print s+0}')
-          error_tests=$(grep -roh 'errors="[0-9]*"' test-results/ 2>/dev/null | sed 's/errors="//;s/"//' | awk '{s+=$1} END {print s+0}')
-          skipped_tests=$(grep -roh 'skipped="[0-9]*"' test-results/ 2>/dev/null | sed 's/skipped="//;s/"//' | awk '{s+=$1} END {print s+0}')
+          sum_attr() {
+            junit_files -print0 | xargs -0 grep -oh "$1=\"[0-9]*\"" \
+              | sed "s/$1=\"//;s/\"//" | awk '{s+=$1} END {print s+0}'
+          }
+          total_tests=$(sum_attr tests)
+          failed_tests=$(sum_attr failures)
+          error_tests=$(sum_attr errors)
+          skipped_tests=$(sum_attr skipped)
           passed=$((total_tests - failed_tests - error_tests - skipped_tests))
 
           echo "| Metric | Count |" >> $GITHUB_STEP_SUMMARY

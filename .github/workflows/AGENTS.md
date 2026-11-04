@@ -83,8 +83,8 @@ documentation, benchmarks, PR automation, and repository maintenance. 37 workflo
 - Workflows declare a top-level `permissions:` block. 31 of 37 do today (12 of them `permissions: {}`); the 6 without one inherit the repository default and need a block.
 - `astral-sh/setup-uv` is the standard for all UV installations, pinned by full commit SHA with the release named in a trailing comment.
 - CI runs Ubuntu/Python 3.11 plus Windows/Python 3.11 on PRs. Main pushes run
-  the full suite on Ubuntu and macOS across Python 3.11–3.13, plus the blocking
-  Windows portability contract across the same Python versions.
+  the full suite on Ubuntu and macOS across Python 3.11–3.14, plus the blocking
+  Windows portability contract across Python 3.11–3.13.
 - Ruff, ty, import layering, package build, dependency validation, and the
   primary test/coverage gates are authoritative. Optional PR commentary and
   benchmark/health reporting jobs remain informational.
