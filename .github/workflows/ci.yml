@@ -385,6 +385,16 @@ jobs:
         uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # astral-sh/setup-uv@v10.3.3
         with:
           version: ${{ env.UV_VERSION }}
+          # The default cache key rests on **/*requirements*.txt, and this repository
+          # has none, so every leg restored one shared entry. With the interpreter
+          # pinned, 3.12/3.13/3.14 came out of that entry with files missing from
+          # otherwise installed wheels — pandas submodules, hypothesis internals,
+          # fastapi.middleware.cors, fitz, codomyrmex's own .dist-info — at the same
+          # locked versions the green 3.11 leg used, while a local build of the same
+          # lock was complete. Key on the lock and the interpreter so one incomplete
+          # extraction cannot cross legs.
+          cache-dependency-glob: "uv.lock"
+          cache-suffix: "py${{ matrix.python-version }}"
 
       - name: Set up Python
         run: uv python install ${{ matrix.python-version }}
