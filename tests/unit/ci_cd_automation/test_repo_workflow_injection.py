@@ -84,19 +84,49 @@ def test_no_untrusted_event_text_in_run_or_script() -> None:
     )
 
 
+SHA_REF = re.compile(r"^[0-9a-f]{40}$")
+TRUFFLEHOG_PIN = re.compile(
+    r"trufflesecurity/trufflehog@(?P<ref>[^\s#]+)"
+    r"(?:\s*#\s*\S*?@(?P<recorded>v?\d[\w.]*))?"
+)
+
+
 def _version(ref: str) -> tuple[int, ...]:
     return tuple(int(part) for part in ref.lstrip("v").split("."))
 
 
+def _trufflehog_pins() -> list[tuple[str, str, str | None]]:
+    """Every trufflehog pin, as (workflow, ref, recorded version).
+
+    The ref is a version tag or a full commit SHA. A SHA records its version
+    only in the trailing comment, and that comment has to be read from the raw
+    file: ``_steps()`` parses YAML, which discards comments, so a SHA pin
+    reaches the assertion with no version attached.
+    """
+    pins = []
+    for path in sorted(WORKFLOWS.glob("*.y*ml")):
+        for line in path.read_text(encoding="utf-8").splitlines():
+            match = TRUFFLEHOG_PIN.search(line)
+            if match:
+                pins.append((path.name, match.group("ref"), match.group("recorded")))
+    return pins
+
+
 @pytest.mark.unit
 def test_trufflehog_action_does_not_inline_commit_messages() -> None:
-    refs = [
-        step["uses"].split("@", 1)[1]
-        for _, _, _, step in _steps()
-        if str(step.get("uses", "")).startswith("trufflesecurity/trufflehog@")
-    ]
-    assert refs, "secret scanning step not found"
-    for ref in refs:
-        assert _version(ref) >= (3, 97, 4), (
-            f"trufflehog@{ref} expands commit messages into its shell script"
+    pins = _trufflehog_pins()
+    assert pins, "secret scanning step not found"
+    for workflow, ref, recorded in pins:
+        if SHA_REF.match(ref):
+            assert recorded, (
+                f"{workflow}: trufflehog@{ref} is pinned by SHA with no version "
+                f"comment, so it cannot be compared against the 3.97.4 boundary "
+                f"offline; pin by tag, or record the version in a comment"
+            )
+            version = recorded
+        else:
+            version = ref
+        assert _version(version) >= (3, 97, 4), (
+            f"{workflow}: trufflehog@{ref} (recorded {version}) expands commit "
+            f"messages into its shell script"
         )
