@@ -68,7 +68,7 @@ class TestPiConfig(unittest.TestCase):
 
     def test_env_dict(self):
         cfg = PiConfig(env={"ANTHROPIC_API_KEY": "test-key"})
-        assert cfg.env["ANTHROPIC_API_KEY"] == "test-key"
+        assert cfg.env["ANTHROPIC_API_KEY"] == "test-key"  # pragma: allowlist secret
 
     def test_pi_bin_override(self):
         cfg = PiConfig(pi_bin="/usr/local/bin/pi")
@@ -89,7 +89,7 @@ class TestPiConfig(unittest.TestCase):
 
     def test_api_key(self):
         cfg = PiConfig(api_key="sk-test-123")
-        assert cfg.api_key == "sk-test-123"
+        assert cfg.api_key == "sk-test-123"  # pragma: allowlist secret
 
 
 # ---------------------------------------------------------------------------
@@ -175,7 +175,7 @@ class TestPiCommandConstruction(unittest.TestCase):
 
     def test_api_key_arg(self):
         cfg = PiConfig(api_key="test-key-123")
-        assert cfg.api_key == "test-key-123"
+        assert cfg.api_key == "test-key-123"  # pragma: allowlist secret
 
 
 # ---------------------------------------------------------------------------

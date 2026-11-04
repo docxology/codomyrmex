@@ -82,7 +82,7 @@ class TestOpenGaussConfig:
         monkeypatch.setenv("OPENROUTER_API_KEY", "test-key-123")
         monkeypatch.setenv("GAUSS_HOME", str(demo_home))
         cfg = OpenGaussConfig.from_env()
-        assert cfg.openrouter_api_key == "test-key-123"
+        assert cfg.openrouter_api_key == "test-key-123"  # pragma: allowlist secret
 
     def test_from_env_respects_default_model(self, demo_home, monkeypatch):
         monkeypatch.setenv("GAUSS_DEFAULT_MODEL", "openrouter/my-custom-model")
@@ -116,7 +116,7 @@ class TestOpenGaussConfig:
         cfg.default_model = "test"
         cfg.default_source = "test"
         cfg.max_sessions_per_export = 10
-        cfg.openrouter_api_key = "key"
+        cfg.openrouter_api_key = "key"  # pragma: allowlist secret
         cfg.log_level = "INFO"
         with pytest.raises(ValueError, match="does not exist"):
             cfg.validate()
@@ -132,7 +132,7 @@ class TestOpenGaussConfig:
         assert d["api_endpoints"]["openrouter_base"].startswith("https://openrouter.ai")
 
     def test_to_dict_masks_api_key(self, cfg):
-        cfg.openrouter_api_key = "secret-key"
+        cfg.openrouter_api_key = "secret-key"  # pragma: allowlist secret
         d = cfg.to_dict()
         # Should only expose boolean, not the actual key
         assert d["has_openrouter_key"] is True
@@ -398,7 +398,9 @@ class TestDotenvLoading:
 
     def test_ensure_api_key_from_dotenv_file(self, tmp_path, monkeypatch):
         monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
-        (tmp_path / ".env").write_text("OPENROUTER_API_KEY=sk-from-file\n")
+        (tmp_path / ".env").write_text(
+            "OPENROUTER_API_KEY=sk-from-file\n"  # pragma: allowlist secret
+        )  # pragma: allowlist secret
         key = _ensure_api_key(tmp_path, interactive=False)
         assert key == "sk-from-file"
 
@@ -411,6 +413,8 @@ class TestDotenvLoading:
 
     def test_from_env_loads_dotenv_file(self, tmp_path, monkeypatch):
         monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
-        (tmp_path / ".env").write_text("OPENROUTER_API_KEY=sk-dotenv-123\n")
+        (tmp_path / ".env").write_text(
+            "OPENROUTER_API_KEY=sk-dotenv-123\n"  # pragma: allowlist secret
+        )  # pragma: allowlist secret
         cfg = OpenGaussConfig.from_env(gauss_home=str(tmp_path), interactive=False)
-        assert cfg.openrouter_api_key == "sk-dotenv-123"
+        assert cfg.openrouter_api_key == "sk-dotenv-123"  # pragma: allowlist secret

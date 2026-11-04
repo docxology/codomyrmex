@@ -154,7 +154,7 @@ class TestEnvironmentSetupComprehensive:
 
         original_val = os.environ.get("MY_TEST_API_KEY")
         try:
-            os.environ["MY_TEST_API_KEY"] = "sk-test"
+            os.environ["MY_TEST_API_KEY"] = "sk-test"  # pragma: allowlist secret
             report = check_api_keys(["MY_TEST_API_KEY", "NONEXISTENT_KEY"])
 
             assert report.all_present is False
