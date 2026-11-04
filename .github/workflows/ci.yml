@@ -343,8 +343,12 @@ jobs:
             output/figures/figure_registry.json
 
   test-matrix:
-    # Cross-platform / cross-version confirmation on main. Pull requests rely
-    # on coverage-gate (ubuntu, 3.11), which runs the identical suite.
+    # Cross-platform / cross-version confirmation, on push to main and on
+    # manual dispatch; pull requests skip it and rely on coverage-gate
+    # (ubuntu, 3.11) alone. Runs the same tests/ selection and the same -m
+    # filter as coverage-gate, without --cov and without that job's native
+    # prerequisites (espeak-ng, the python:3.9-slim and bash:5.1 images, the
+    # Hugging Face model cache).
     name: Full Test Suite
     if: github.event_name != 'pull_request'
     runs-on: ${{ matrix.os }}
@@ -354,7 +358,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: ["3.11", "3.12", "3.13", "3.15" ]
+        # 3.14 is classified in pyproject.toml and no leg tested it. 3.15 was
+        # uninstallable for a while: ctranslate2 4.7.1 published no cp315 wheel.
+        # The lock carries 4.8.5 (#665), which does, so this leg installs and
+        # runs tests rather than failing in "Install dependencies".
+        python-version: ["3.11", "3.12", "3.13", "3.14", "3.15"]
 
     steps:
       - name: Checkout code
@@ -379,8 +387,15 @@ jobs:
           mkdir -p output
 
       - name: Run test suite
+        # `uv run` with no --python reads .python-version (3.11) and rebuilds
+        # .venv at that version with the default dependency set, discarding
+        # both the matrix interpreter and the extras installed above. --no-sync
+        # keeps this job's synced environment; --python states which
+        # interpreter it must be, so uv warns (rather than silently rebuilding)
+        # if .venv ever stops matching the matrix.
         run: >-
-          uv run pytest tests/ -q --tb=short
+          uv run --no-sync --python ${{ matrix.python-version }}
+          pytest tests/ -q --tb=short
           -n auto
           -m "not performance and not benchmark and not bench"
           --junit-xml=junit-unit-${{ matrix.os }}-${{ matrix.python-version }}.xml
