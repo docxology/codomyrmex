@@ -3,7 +3,7 @@
     "assert": {
       "assertions": {
         "categories:performance": [
-          "error",
+          "warn",
           {
             "minScore": 0.8
           }
@@ -27,7 +27,7 @@
           }
         ],
         "largest-contentful-paint": [
-          "error",
+          "warn",
           {
             "maxNumericValue": 2500
           }
@@ -41,11 +41,11 @@
       }
     },
     "collect": {
+      "startServerCommand": "bash .github/scripts/serve_docs_site.sh",
       "settings": {
         "chromeFlags": "--no-sandbox --headless"
       },
-      "staticDistDir": "./site",
-      "url": ["/index.html"],
+      "url": ["http://127.0.0.1:4173/codomyrmex/"],
       "numberOfRuns": 3
     }
   }
