@@ -49,6 +49,7 @@ documentation, benchmarks, PR automation, and repository maintenance. 37 workflo
 |------|---------|---------|
 | `documentation.yml` | doc file changes | Build and deploy to GitHub Pages |
 | `documentation-validation.yml` | PR + weekly | Link check, structure validation |
+| `docs-deploy.yml` | tag `v*`, manual | Strict MkDocs build only, no publication: GitHub Pages belongs to `documentation.yml`. `make docs-check` runs the same `mkdocs build --strict` on PRs |
 
 ### Repository Health
 
