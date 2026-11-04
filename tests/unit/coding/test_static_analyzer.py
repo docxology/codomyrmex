@@ -28,6 +28,7 @@ from codomyrmex.coding.static_analysis.static_analyzer import (
 from codomyrmex.coding.static_analysis.static_analyzer import (
     analyze_project as module_analyze_project,
 )
+from codomyrmex.coding.static_analysis.tool_runners import SAFETY_UNAVAILABLE_RULE_ID
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -1139,7 +1140,15 @@ class TestConvenienceFunctions:
 class TestAnalyzePythonFileDispatch:
     """Test that _analyze_python_file respects tool availability and analysis types."""
 
-    def test_no_tools_returns_empty(self, analyzer, simple_python_file):
+    def test_no_tools_reports_only_the_unavailable_scanner(
+        self, analyzer, simple_python_file
+    ):
+        """With every tool off, the only result is the dependency scan's absence.
+
+        Returning nothing for a `SECURITY` analysis is the defect this guards: a
+        dependency scan that never ran has to leave a typed result behind, not an
+        empty list that reads as a clean scan.
+        """
         # Force all tools to be unavailable
         for tool in analyzer.tools_available:
             analyzer.tools_available[tool] = False
@@ -1152,7 +1161,8 @@ class TestAnalyzePythonFileDispatch:
                 AnalysisType.COMPLEXITY,
             ],
         )
-        assert results == []
+        assert [r.rule_id for r in results] == [SAFETY_UNAVAILABLE_RULE_ID]
+        assert results[0].category == "security"
 
     def test_only_complexity_type(self, analyzer, simple_python_file):
         # Only COMPLEXITY type should only trigger radon
