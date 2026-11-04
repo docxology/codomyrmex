@@ -8,7 +8,7 @@ This directory holds GitHub-specific configuration: CI/CD workflows, issue/PR te
 Dependabot config, CODEOWNERS, Gemini AI command configs, and multi-agent infrastructure.
 This document tells AI agents what they need to know to operate safely within this directory.
 
-**Workflow YAML count:** 38 files under `.github/workflows/` (align with root `README.md` and [docs/reference/inventory.md](../docs/reference/inventory.md); refresh via `uv run python scripts/doc_inventory.py`).
+**Workflow YAML count:** 37 files under `.github/workflows/` (align with root `README.md` and [docs/reference/inventory.md](../docs/reference/inventory.md); refresh via `uv run python scripts/doc_inventory.py`).
 
 ## Directory Contents
 
