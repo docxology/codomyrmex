@@ -457,7 +457,9 @@ jobs:
           nproc
           uv --version
           df -h .
+          df -i .
           du -sh .venv
+          find .venv -type f | wc -l
           uv run --no-sync --python 3.12 python - <<'PY'
           import importlib.metadata as md
           import importlib.util
@@ -488,6 +490,23 @@ jobs:
           ls -la .venv/lib/python3.12/site-packages/hypothesis/internal/conjecture/ | head -20
           ls -la .venv/lib/python3.12/site-packages/matplotlib/backends/backend_svg.py
           ls -d .venv/lib/python3.12/site-packages/fitz* .venv/lib/python3.12/site-packages/*.dist-info/codomyrmex* || true
+
+      - name: Compare with a 3.11 environment
+        # A truncated install and a mutated environment look identical in a
+        # traceback and completely different in a file count, so build the same
+        # 324-package environment for the green interpreter beside it and print
+        # both. Nothing here runs tests.
+        run: |
+          set -x
+          UV_PROJECT_ENVIRONMENT=/tmp/venv311 uv sync --locked --python 3.11 --group docs --all-extras --dev
+          du -sh .venv /tmp/venv311
+          find .venv -type f | wc -l
+          find /tmp/venv311 -type f | wc -l
+          du -sh .venv/lib/python3.12/site-packages/pandas /tmp/venv311/lib/python3.11/site-packages/pandas
+          du -sh .venv/lib/python3.12/site-packages/hypothesis /tmp/venv311/lib/python3.11/site-packages/hypothesis
+          ls /tmp/venv311/lib/python3.11/site-packages/pandas/api/ | head -20
+          ls /tmp/venv311/lib/python3.11/site-packages/hypothesis/internal/conjecture/ | head -20
+          ls -d /tmp/venv311/lib/python3.11/site-packages/fitz* || true
 
       - name: Run A, no --locked
         run: |
