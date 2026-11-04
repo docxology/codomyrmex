@@ -4,11 +4,11 @@
 
 We actively support the following versions of Codomyrmex with security updates (current release: **v1.3.0** — see [pyproject.toml](pyproject.toml) and [CHANGELOG.md](CHANGELOG.md)):
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 1.3.x   | :white_check_mark: |
+| Version | Supported                        |
+| ------- | -------------------------------- |
+| 1.3.x   | :white_check_mark:               |
 | 1.2.x   | :white_check_mark: (best-effort) |
-| < 1.1   | :x:                |
+| < 1.1   | :x:                              |
 
 ## Reporting a Vulnerability
 
@@ -50,7 +50,7 @@ We take the security of Codomyrmex seriously. If you discover a security vulnera
 - **Mitigation**: Docker isolation, resource limits, network restrictions
 - [Module Security Details](src/codomyrmex/coding/SECURITY.md)
 
-#### **ai_code_editing**  
+#### **ai_code_editing**
 
 - Processes external AI API responses
 - **Risk**: Prompt injection, malicious code generation
@@ -100,7 +100,7 @@ We take the security of Codomyrmex seriously. If you discover a security vulnera
    - **Mitigation**: Sandboxing, input validation, output sanitization
 
 2. **API Abuse**
-   - **Target**: AI services, external integrations  
+   - **Target**: AI services, external integrations
    - **Mitigation**: Rate limiting, authentication, input validation
 
 3. **File System Access**
@@ -115,12 +115,16 @@ We take the security of Codomyrmex seriously. If you discover a security vulnera
 
 - **Authentication**: API key validation for external services
 - **Authorization**: Least-privilege access patterns
-- **Input Validation**: Comprehensive input sanitization  
+- **Input Validation**: Comprehensive input sanitization
 - **Output Encoding**: Safe handling of generated content
 - **Error Handling**: Secure error messages without information disclosure
 - **Logging**: Security event logging without sensitive data exposure
 
 ## Security Testing
+
+### 🏷️ Placeholder Credentials in Test Fixtures
+
+Placeholder credentials in tests carry an inline `# pragma: allowlist secret` on the line that holds the value, because `detect-secrets` scans every file a pull request touches and the pragma states at the point of use that the fake is deliberate, where a `.secrets.baseline` entry would put the suppression somewhere a reviewer never looks.
 
 ### 🧪 Automated Security Testing
 
@@ -150,7 +154,7 @@ pylint --load-plugins=pylint_security src/codomyrmex/
 In case of a confirmed security incident:
 
 1. **Immediate Response**: Contain the threat and assess scope
-2. **Investigation**: Determine root cause and affected systems  
+2. **Investigation**: Determine root cause and affected systems
 3. **Remediation**: Implement fixes and deploy patches
 4. **Communication**: Notify affected users and stakeholders
 5. **Post-Incident**: Conduct post-mortem and improve security measures
@@ -169,7 +173,7 @@ Security updates are distributed through:
 Codomyrmex follows these security standards and practices:
 
 - **OWASP Top 10**: Addressing common web application security risks
-- **CWE/SANS Top 25**: Mitigating most dangerous software weaknesses  
+- **CWE/SANS Top 25**: Mitigating most dangerous software weaknesses
 - **NIST Cybersecurity Framework**: Identify, Protect, Detect, Respond, Recover
 - **Secure Development Lifecycle**: Security integrated throughout development
 

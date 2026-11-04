@@ -122,9 +122,9 @@ class TestCLIOutputFormatting:
     def test_sensitive_data_masking(self):
         """Test that sensitive data is masked in output."""
         config = AgentConfig(
-            claude_api_key="secret-key",
-            codex_api_key="another-secret",
-            opencode_api_key="opencode-secret",
+            claude_api_key="secret-key",  # pragma: allowlist secret
+            codex_api_key="another-secret",  # pragma: allowlist secret
+            opencode_api_key="opencode-secret",  # pragma: allowlist secret
         )
 
         config_dict = config.to_dict()
@@ -227,6 +227,10 @@ class TestClaudeCommands:
 
     def test_claude_execute_request(self):
         """Test claude execute request structure."""
+        pytest.importorskip(
+            "anthropic",
+            reason="ClaudeClient requires the anthropic SDK (uv sync --extra llm_providers)",
+        )
         from codomyrmex.agents.claude import ClaudeClient
 
         client = ClaudeClient(config={"claude_api_key": "test-key"})
@@ -250,6 +254,10 @@ class TestCodexCommands:
 
     def test_codex_execute_request(self):
         """Test codex execute request structure."""
+        pytest.importorskip(
+            "openai",
+            reason="CodexClient requires the openai SDK (uv sync --extra llm_providers)",
+        )
         from codomyrmex.agents.codex import CodexClient
 
         client = CodexClient(config={"codex_api_key": "test-key"})
@@ -295,6 +303,10 @@ class TestGeminiCommands:
 
     def test_gemini_check_availability(self):
         """Test gemini client availability check."""
+        pytest.importorskip(
+            "google.genai",
+            reason="GeminiClient requires the google-genai SDK (uv sync --extra llm_providers)",
+        )
         from codomyrmex.agents.gemini import GeminiClient
 
         client = GeminiClient()
@@ -311,6 +323,10 @@ class TestGeminiCommands:
 
     def test_gemini_chat_operations(self):
         """Test gemini chat operations structure."""
+        pytest.importorskip(
+            "google.genai",
+            reason="GeminiClient requires the google-genai SDK (uv sync --extra llm_providers)",
+        )
         from codomyrmex.agents.core.exceptions import GeminiError
         from codomyrmex.agents.gemini import GeminiClient
 

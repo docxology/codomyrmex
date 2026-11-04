@@ -4,6 +4,11 @@ import asyncio
 
 import pytest
 
+pytest.importorskip(
+    "websockets",
+    reason="WebSocketClient requires the websockets SDK (uv sync --extra physical_management)",
+)
+
 from codomyrmex.networking.websocket_client import WebSocketClient
 
 
