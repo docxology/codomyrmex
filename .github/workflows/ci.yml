@@ -509,21 +509,23 @@ jobs:
           ls -d /tmp/venv311/lib/python3.11/site-packages/fitz* || true
 
       - name: Run with session invariants
-        # -n 2 matches the matrix legs' worker count; the invariant plugin fails the
-        # test whose teardown finds sys.path or a watched module changed, so the log
-        # names the mutating test instead of listing its victims.
+        # -n 2 matches the matrix legs' worker count. The plugin writes the import
+        # state of the failing worker to a file, because the terminal summary is
+        # printed before the tracebacks and the step tails its output.
         run: |
-          PYTHONPATH=. uv run --no-sync --python 3.12 pytest tests/ -q --tb=long -n 2 \
+          PYTHONPATH=. uv run --no-sync --python 3.12 pytest tests/ -q --tb=line -n 2 \
             -m "not performance and not benchmark and not bench" \
             -p tests.support.session_invariants \
-            --junit-xml=junit-invariant.xml 2>&1 | tail -150 || true
+            --junit-xml=junit-invariant.xml 2>&1 | tail -60 || true
 
       - name: Upload probe evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # actions/upload-artifact@v7.0.2
         with:
           name: probe-session-invariants-3.12
-          path: junit-invariant.xml
+          path: |
+            junit-invariant.xml
+            session-invariants.log
           retention-days: 7
           if-no-files-found: warn
 
