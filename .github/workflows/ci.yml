@@ -413,7 +413,10 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # actions/upload-artifact@v7.0.2
         if: always()
         with:
-          name: test-results-${{ matrix.os }}-${{ matrix.python-version }}
+          # Prefixed so this name cannot collide with coverage-gate's
+          # test-results-ubuntu-latest-3.11 artifact, which upload-artifact
+          # refuses as a duplicate inside one run.
+          name: test-results-matrix-${{ matrix.os }}-${{ matrix.python-version }}
           path: junit-*.xml
           retention-days: 30
 
@@ -586,15 +589,25 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
 
           # Sum JUnit XML attributes using grep + awk (avoids multi-line Python in YAML)
-          junit_count=$(find test-results -type f -name 'junit-*.xml' | wc -l | tr -d ' ')
+          # coverage-gate runs the same tests/ suite as the ubuntu 3.11 matrix leg under
+          # its own artifact name, so count that duplicate once, not twice.
+          junit_files() {
+            find test-results -type f -name 'junit-*.xml' \
+              -not -path 'test-results/test-results-ubuntu-latest-3.11/*' "$@"
+          }
+          junit_count=$(junit_files | wc -l | tr -d ' ')
           if [ "$junit_count" -eq 0 ]; then
             echo "No JUnit evidence was downloaded; refusing to summarize test status."
             exit 1
           fi
-          total_tests=$(grep -roh 'tests="[0-9]*"' test-results/ 2>/dev/null | sed 's/tests="//;s/"//' | awk '{s+=$1} END {print s+0}')
-          failed_tests=$(grep -roh 'failures="[0-9]*"' test-results/ 2>/dev/null | sed 's/failures="//;s/"//' | awk '{s+=$1} END {print s+0}')
-          error_tests=$(grep -roh 'errors="[0-9]*"' test-results/ 2>/dev/null | sed 's/errors="//;s/"//' | awk '{s+=$1} END {print s+0}')
-          skipped_tests=$(grep -roh 'skipped="[0-9]*"' test-results/ 2>/dev/null | sed 's/skipped="//;s/"//' | awk '{s+=$1} END {print s+0}')
+          sum_attr() {
+            junit_files -print0 | xargs -0 grep -oh "$1=\"[0-9]*\"" \
+              | sed "s/$1=\"//;s/\"//" | awk '{s+=$1} END {print s+0}'
+          }
+          total_tests=$(sum_attr tests)
+          failed_tests=$(sum_attr failures)
+          error_tests=$(sum_attr errors)
+          skipped_tests=$(sum_attr skipped)
           passed=$((total_tests - failed_tests - error_tests - skipped_tests))
 
           echo "| Metric | Count |" >> $GITHUB_STEP_SUMMARY
