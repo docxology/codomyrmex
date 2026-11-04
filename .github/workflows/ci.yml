@@ -358,11 +358,20 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-        # 3.14 is classified in pyproject.toml and no leg tested it. 3.15 was
-        # uninstallable for a while: ctranslate2 4.7.1 published no cp315 wheel.
-        # The lock carries 4.8.5 (#665), which does, so this leg installs and
-        # runs tests rather than failing in "Install dependencies".
-        python-version: ["3.11", "3.12", "3.13", "3.14", "3.15"]
+        # 3.14 is classified in pyproject.toml and no leg tested it. It cannot
+        # install the modeling-3d extra: pygame 2.6.1 publishes no cp314 wheel
+        # and its source build fails on the runner, so that one extra is
+        # excluded for this version.
+        #
+        # 3.15 is deliberately absent, and its blockers are wheels rather than
+        # tests: ctranslate2 (cp315 arrived in 4.8.5), onnxruntime 1.24.4 (no
+        # cp315 wheel through 1.31.1) and torch 2.13.0 (none either). A 3.15 leg
+        # would fail in "Install dependencies" without running a test. Add it
+        # back when all three publish cp315 wheels.
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
+        include:
+          - python-version: "3.14"
+            sync-args: "--no-extra modeling-3d"
 
     steps:
       - name: Checkout code
@@ -380,7 +389,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --locked --python ${{ matrix.python-version }} --group docs --all-extras --dev
+          uv sync --locked --python ${{ matrix.python-version }} --group docs --all-extras --dev ${{ matrix.sync-args }}
 
       - name: Create output directory
         run: |
