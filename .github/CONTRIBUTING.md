@@ -126,8 +126,6 @@ This project enforces a **strict zero-mock policy** against behavior faking:
 
 The distinction: environment isolation (`monkeypatch.setenv`) doesn't change the code's behavior — it controls inputs. Behavior mocking (`mock.patch`) does change behavior and is the actual hazard. See [docs/development/testing-strategy.md § Zero-Mock Policy (clarified)](../docs/development/testing-strategy.md#zero-mock-policy-clarified) for the full rationale.
 
-**Placeholder credentials in tests** carry an inline `# pragma: allowlist secret` on the line that holds the value: `detect-secrets` scans every file a pull request touches, so the pragma says at the point of use that the fake is deliberate, where a `.secrets.baseline` entry would put the suppression somewhere a reviewer never looks.
-
 ```python
 # ✅ Correct: real implementation with test data
 class FakeClient(BaseClient):
