@@ -1,5 +1,22 @@
 # Dependabot configuration for Codomyrmex
 # See: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+#
+# Two things this file has to get right for Python, and both fail silently:
+#
+# 1. `uv.lock` belongs to the `uv` ecosystem, not `pip`. The `pip` ecosystem
+#    reads `requirements*.txt` and PEP 621 `pyproject.toml` only, so a `pip`
+#    block here updated `pyproject.toml` declarations and never wrote either
+#    lock. This matches the repository's own rule in `.github/AGENTS.md`
+#    ("Use `uv` (not pip/poetry) for Python dependency management").
+# 2. `directory` (singular) matches one path and does not recurse. Covering
+#    both locks needs `directories` (plural) with every path named; this
+#    repository has /uv.lock and /projects/test_project/uv.lock.
+#
+# Security alerts and security-update PRs do not depend on this file -- GitHub
+# raises the first from the dependency graph and opens the second from the
+# alert. Only *version* updates come from here. So a missing coverage path does
+# not surface as an error; it surfaces as an untouched lock and a growing alert
+# count, which is exactly how this file went stale.
 
 version: 2
 
@@ -37,9 +54,14 @@ updates:
     assignees:
       - "docxology"
 
-  # Python dependencies (using uv.lock)
-  - package-ecosystem: "pip"
-    directory: "/"
+  # Python dependencies
+  - package-ecosystem: "uv"
+    # Every uv.lock in the repository, named explicitly. `directory` (singular)
+    # matches one path only and does not recurse, so "/" alone left
+    # /projects/test_project/uv.lock with no version-update coverage at all.
+    directories:
+      - "/"
+      - "/projects/test_project"
     schedule:
       interval: "weekly"
       day: "monday"
