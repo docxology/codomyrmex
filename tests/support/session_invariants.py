@@ -46,6 +46,28 @@ def _state(module: str) -> str:
     return f"{base}: {detail} find_spec={spec_text}"
 
 
+def _machinery(label: str) -> None:
+    """Dump the parts of the import system a test can replace."""
+    _emit(f"{label} meta_path={[type(f).__name__ for f in sys.meta_path]}")
+    _emit(
+        f"{label} path_hooks={[getattr(h, '__name__', type(h).__name__) for h in sys.path_hooks]}"
+    )
+    for entry in sys.path:
+        if "site-packages" not in entry:
+            continue
+        cached = sys.path_importer_cache.get(entry)
+        _emit(
+            f"{label} importer_cache[{entry}]={type(cached).__name__ if cached else cached!r}"
+        )
+        try:
+            from importlib.machinery import PathFinder
+
+            spec = PathFinder.find_spec("fitz", [entry])
+            _emit(f"{label} PathFinder.fit[{entry}]={getattr(spec, 'origin', spec)}")
+        except Exception as exc:  # diagnosis only
+            _emit(f"{label} PathFinder.fit[{entry}] ERROR {type(exc).__name__}: {exc}")
+
+
 def _snapshot(label: str) -> None:
     _emit(f"{label} cwd={os.getcwd()} executable={sys.executable}")
     _emit(f"{label} site-packages={[p for p in sys.path if 'site-packages' in p]}")
@@ -53,6 +75,7 @@ def _snapshot(label: str) -> None:
     _emit(f"{label} modules_loaded={len(sys.modules)}")
     for name in WATCH:
         _emit(f"{label} {_state(name)}")
+    _machinery(label)
 
 
 class MissingModulePlugin:
