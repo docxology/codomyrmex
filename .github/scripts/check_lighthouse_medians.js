@@ -20,9 +20,12 @@
  *   - CLS above 0.1 is an error;
  *   - LCP is a warning, because the same bytes disagree about it by more than any
  *     change we would make. Measured LCP on one artifact: 2,412-3,445 ms across
- *     CI runners, 978-2,987 ms across three live passes, median 2,439 ms. Until
- *     several `main` runs agree the ceiling is met, a red gate here would report
- *     the runner, not the site.
+ *     CI runners, 978-2,987 ms across three live passes, median 2,439 ms. Three
+ *     dispatches on `main` put the median at 2,421 ms, 2,673 ms and 2,974 ms; the
+ *     last of them saw passes from 2,329 ms to 2,979 ms on identical bytes. Two of
+ *     the three medians miss the ceiling, so it still describes the runner as much
+ *     as the site. Until several `main` runs agree the ceiling is met, a red gate
+ *     here would report the runner, not the site.
  */
 const fs = require("fs");
 const path = require("path");
