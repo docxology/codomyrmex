@@ -97,7 +97,9 @@ class LogAggregator:
     """
 
     def __init__(self, max_records: int = 100_000) -> None:
-        self._records: list[LogRecord] = []
+        from collections import deque
+
+        self._records: deque[LogRecord] = deque(maxlen=max_records)
         self._max_records = max_records
 
     @property
@@ -107,8 +109,6 @@ class LogAggregator:
 
     def add(self, record: LogRecord) -> None:
         """Add a log record."""
-        if len(self._records) >= self._max_records:
-            self._records.pop(0)
         self._records.append(record)
 
     def add_many(self, records: list[LogRecord]) -> None:
@@ -187,7 +187,11 @@ class LogAggregator:
 
     def tail(self, n: int = 20) -> list[LogRecord]:
         """Return the most recent n records."""
-        return list(self._records[-n:])
+        from itertools import islice
+
+        if n >= len(self._records):
+            return list(self._records)
+        return list(islice(self._records, len(self._records) - n, len(self._records)))
 
     def clear(self) -> None:
         """Remove all stored records."""
