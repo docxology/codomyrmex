@@ -37,3 +37,11 @@ Validation coverage, fixtures, and regression checks for Networking.
 Default tests use an explicit temporary `known_hosts_file`, real local Paramiko objects, and `RejectPolicy`; they do not discover operator SSH keys, load personal trust stores, or probe a daemon during collection.
 
 Credentialed SSH execution requires `CODOMYRMEX_RUN_LIVE_SSH_TESTS=1` plus explicit `CODOMYRMEX_TEST_SSH_KEY`, `CODOMYRMEX_TEST_SSH_KNOWN_HOSTS`, and `CODOMYRMEX_TEST_SSH_USER`. Optional `CODOMYRMEX_TEST_SSH_HOST` and `CODOMYRMEX_TEST_SSH_PORT` select the authorized endpoint (defaults: localhost, 22). Missing configuration fails an opted-in test; ordinary runs skip only the two live account tests.
+
+## Public-only HTTP policy
+
+`test_http_public_policy.py` checks public/non-public and IPv6 transition address
+classification, complete mixed DNS-answer rejection, real localhost resolution in
+HTTP and HTTPS connectors, URL/Host restrictions, proxy controls, and TLS verification
+requirements. Real loopback servers verify default local access and protected-mode
+rejection without contact. It uses no external requests or patched network methods.

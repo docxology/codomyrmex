@@ -22,6 +22,12 @@ This file tracks open research items, formal gaps, and architectural improvement
 
 ## Maintenance
 
+- **Delegated URL consumers:** Before exposing video transcription or webhook
+  registration to untrusted callers, establish and test destination/redirect
+  controls in the actual downloader or delivery service. The opt-in
+  `HTTPClient(public_only=True)` policy protects that client only; it does not
+  constrain external yt-dlp processes or AgentMail delivery infrastructure.
+
 - **Portable MLX configuration study:** Two fresh-process Python 3.15 runs now
   retain raw samples, exact source archive/import hashes, full dependency freeze,
   revision/dirty state, and bundle manifests; see the
