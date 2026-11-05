@@ -8,33 +8,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- 
+
+- Default-deny MCP URL delegation with strict per-tool operator enablement for video downloads and AgentMail webhooks.
+- Validated MCP behavior annotations on tool decorators, discovery, server listings, and PAI manifests, with explicit conservative defaults independent of authorization.
 
 ### Changed
-- 
+
+-
 
 ### Deprecated
-- 
+
+-
 
 ### Removed
-- 
+
+-
 
 ### Fixed
-- 
+
+-
 
 ### Security
-- 
+
+-
 
 ## [Version X.Y.Z] - YYYY-MM-DD
 
 ### Added
+
 - Feature A.
 
 ### Changed
+
 - Enhancement B.
 
 ### Fixed
-- Bug C. 
+
+- Bug C.
+
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)
@@ -44,26 +55,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Detailed Architecture and Implementation
 
-
-
 ### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+
+1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
+2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
+3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
+4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
 
 ### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
 
-## Detailed Architecture and Implementation
-
-
-
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
 The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.

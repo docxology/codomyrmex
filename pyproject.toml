@@ -752,8 +752,15 @@ docstring-code-format = true
 # Repository type checker: ty (from Astral)
 [tool.ty.environment]
 python-version = "3.11"
-# Helpers that scripts/review/*.py import as siblings (they run as files).
-extra-paths = ["scripts/review"]
+# File-launched scripts resolve siblings from their script directories; cloud
+# tests add their fixture-helper directory to sys.path in conftest.py.
+extra-paths = [
+    "scripts/review",
+    "scripts/agents",
+    "scripts/agents/hermes",
+    "scripts/maintenance",
+    "tests/unit/cloud",
+]
 
 [tool.ty.analysis]
 # Only packages that no extra installs may be unresolved; any other unresolved

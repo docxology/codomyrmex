@@ -56,7 +56,7 @@ class Response:
 
 
 class HTTPClient:
-    """HTTP client with retry and timeout support."""
+    """HTTP client with retries and optional public-address restrictions."""
 
     def __init__(
         self,
@@ -64,6 +64,7 @@ class HTTPClient:
         max_retries: int = 3,
         retry_backoff: float = 1.0,
         headers: dict[str, str] | None = None,
+        public_only: bool = False,
     ):
         """Initialize HTTP client.
 
@@ -72,20 +73,30 @@ class HTTPClient:
             max_retries: Maximum number of retries
             retry_backoff: Backoff factor for retries
             headers: Default headers
+            public_only: Restrict direct HTTP(S) connections to public IPs.
+                Defaults to False so explicitly configured local services work.
         """
         self.timeout = timeout
         self.max_retries = max_retries
         self.retry_backoff = retry_backoff
         self.default_headers = headers or {}
+        self.public_only = public_only
 
         # Create session with retry strategy
         self.session = requests.Session()
+        if public_only:
+            self.session.trust_env = False
         retry_strategy = Retry(
             total=max_retries,
             backoff_factor=retry_backoff,
             status_forcelist=[429, 500, 502, 503, 504],
         )
-        adapter = HTTPAdapter(max_retries=retry_strategy)
+        if public_only:
+            from ._http_security import PublicHTTPAdapter
+
+            adapter = PublicHTTPAdapter(max_retries=retry_strategy)
+        else:
+            adapter = HTTPAdapter(max_retries=retry_strategy)
         self.session.mount("http://", adapter)
         self.session.mount("https://", adapter)
 

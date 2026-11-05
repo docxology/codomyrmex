@@ -35,51 +35,51 @@ This security policy applies to the Model Context Protocol specification, its me
 
 The Model Context Protocol facilitates communication; therefore, security relies heavily on the secure implementation of both the AI agents consuming MCP and the tools exposing functionality via MCP.
 
-1.  **Data Validation is Critical**: 
-    *   **Strict Schema Adherence**: All systems sending or receiving MCP messages **must** strictly validate these messages against the defined JSON Schemas (for Tool Calls, Tool Results, and Error Objects as outlined in `docs/technical_overview.md`). Reject any messages that do not conform. This is the first line of defense against malformed or malicious payloads.
-    *   **Secure Schema Parsing**: Agents or systems that dynamically load or parse JSON Schema definitions from `MCP_TOOL_SPECIFICATION.md` files must do so securely. Malformed or overly complex schemas could be a vector for denial-of-service or other attacks against the parsing system.
+1. **Data Validation is Critical**:
+    - **Strict Schema Adherence**: All systems sending or receiving MCP messages **must** strictly validate these messages against the defined JSON Schemas (for Tool Calls, Tool Results, and Error Objects as outlined in `docs/technical_overview.md`). Reject any messages that do not conform. This is the first line of defense against malformed or malicious payloads.
+    - **Secure Schema Parsing**: Agents or systems that dynamically load or parse JSON Schema definitions from `MCP_TOOL_SPECIFICATION.md` files must do so securely. Malformed or overly complex schemas could be a vector for denial-of-service or other attacks against the parsing system.
 
-2.  **Authentication and Authorization of Tool Calls**: 
-    *   **MCP is a Protocol, Not an Auth System**: MCP messages themselves do not inherently carry authenticated user identity or authorization tokens. 
-    *   **Responsibility of the Tool Hosting Environment**: The system or service that receives an MCP Tool Call message and dispatches it to the actual tool implementation is **solely responsible** for: 
-        *   **Authentication**: Verifying the identity of the source of the MCP message (e.g., the AI agent or the user on whose behalf the agent is acting).
-        *   **Authorization**: Ensuring the authenticated identity has the explicit permission to invoke the specified `tool_name` with the provided `arguments`. This includes checks against access control lists (ACLs), roles, or other permission models.
-    *   Authorization should be granular, considering not just the tool, but potentially the specific resources or actions the tool might take based on its arguments.
+2. **Authentication and Authorization of Tool Calls**:
+    - **MCP is a Protocol, Not an Auth System**: MCP messages themselves do not inherently carry authenticated user identity or authorization tokens.
+    - **Responsibility of the Tool Hosting Environment**: The system or service that receives an MCP Tool Call message and dispatches it to the actual tool implementation is **solely responsible** for:
+        - **Authentication**: Verifying the identity of the source of the MCP message (e.g., the AI agent or the user on whose behalf the agent is acting).
+        - **Authorization**: Ensuring the authenticated identity has the explicit permission to invoke the specified `tool_name` with the provided `arguments`. This includes checks against access control lists (ACLs), roles, or other permission models.
+    - Authorization should be granular, considering not just the tool, but potentially the specific resources or actions the tool might take based on its arguments.
 
-3.  **Input Sanitization and Parameter Handling by Tools**: 
-    *   Even if an MCP Tool Call message validates against its schema, the *values* within the `arguments` object might originate from untrusted sources (e.g., user input to an LLM).
-    *   Individual tool implementations **must** treat all incoming parameters as potentially unsafe and perform appropriate sanitization and validation before using them in security-sensitive operations (e.g., OS commands, file paths, database queries, HTML rendering, external API calls).
-    *   Apply the principle of least privilege: if a tool parameter is used to construct a file path, ensure it cannot be used for directory traversal.
+3. **Input Sanitization and Parameter Handling by Tools**:
+    - Even if an MCP Tool Call message validates against its schema, the *values* within the `arguments` object might originate from untrusted sources (e.g., user input to an LLM).
+    - Individual tool implementations **must** treat all incoming parameters as potentially unsafe and perform appropriate sanitization and validation before using them in security-sensitive operations (e.g., OS commands, file paths, database queries, HTML rendering, external API calls).
+    - Apply the principle of least privilege: if a tool parameter is used to construct a file path, ensure it cannot be used for directory traversal.
 
-4.  **Secure Tool Design (`MCP_TOOL_SPECIFICATION.md` and Implementation)**:
-    *   **Truth in Advertising**: A tool's `MCP_TOOL_SPECIFICATION.md` must accurately represent its behavior, especially its security considerations. Misleading specifications can lead to agents misusing tools.
-    *   **Integrity of Specifications**: Protect `MCP_TOOL_SPECIFICATION.md` files from unauthorized modification. If an attacker can alter a tool specification, they might trick an agent into performing unintended actions.
-    *   **Principle of Least Privilege**: Tools should be designed to operate with the minimum permissions necessary to perform their stated function.
+4. **Secure Tool Design (`MCP_TOOL_SPECIFICATION.md` and Implementation)**:
+    - **Truth in Advertising**: A tool's `MCP_TOOL_SPECIFICATION.md` must accurately represent its behavior, especially its security considerations. Misleading specifications can lead to agents misusing tools.
+    - **Integrity of Specifications**: Protect `MCP_TOOL_SPECIFICATION.md` files from unauthorized modification. If an attacker can alter a tool specification, they might trick an agent into performing unintended actions.
+    - **Principle of Least Privilege**: Tools should be designed to operate with the minimum permissions necessary to perform their stated function.
 
-5.  **Confidentiality and Integrity of MCP Messages**: 
-    *   If MCP messages (Tool Calls or Tool Results) carry sensitive information, the transport mechanism used (e.g., inter-process communication, network protocols) **must** ensure:
-        *   **Confidentiality**: Encryption in transit to prevent eavesdropping (e.g., using TLS for network communication).
-        *   **Integrity**: Mechanisms to prevent tampering with messages in transit (e.g., MACs, digital signatures if appropriate for the transport).
+5. **Confidentiality and Integrity of MCP Messages**:
+    - If MCP messages (Tool Calls or Tool Results) carry sensitive information, the transport mechanism used (e.g., inter-process communication, network protocols) **must** ensure:
+        - **Confidentiality**: Encryption in transit to prevent eavesdropping (e.g., using TLS for network communication).
+        - **Integrity**: Mechanisms to prevent tampering with messages in transit (e.g., MACs, digital signatures if appropriate for the transport).
 
-6.  **Error Handling and Information Disclosure**: 
-    *   Error messages returned in MCP Tool Result messages should be informative but **must not** leak sensitive internal system details, stack traces, or private data that could aid an attacker.
-    *   Use the structured error format (with `error_type`, `error_message`, `error_details`) to provide clear, actionable error information without verbosity that might compromise security.
+6. **Error Handling and Information Disclosure**:
+    - Error messages returned in MCP Tool Result messages should be informative but **must not** leak sensitive internal system details, stack traces, or private data that could aid an attacker.
+    - Use the structured error format (with `error_type`, `error_message`, `error_details`) to provide clear, actionable error information without verbosity that might compromise security.
 
-7.  **Rate Limiting and Resource Management**: 
-    *   Systems exposing tools via MCP should implement rate limiting on tool invocations to prevent abuse, brute-forcing of parameters, or denial-of-service (DoS) attacks against the tools or underlying resources.
-    *   Monitor resource consumption by tools. Implement safeguards against tools that might be triggered (intentionally or unintentionally) in ways that lead to excessive CPU, memory, network, or disk usage.
+7. **Rate Limiting and Resource Management**:
+    - Systems exposing tools via MCP should implement rate limiting on tool invocations to prevent abuse, brute-forcing of parameters, or denial-of-service (DoS) attacks against the tools or underlying resources.
+    - Monitor resource consumption by tools. Implement safeguards against tools that might be triggered (intentionally or unintentionally) in ways that lead to excessive CPU, memory, network, or disk usage.
 
-8.  **Logging and Monitoring**: 
-    *   Maintain detailed logs of MCP tool calls and results, including the `tool_name`, key arguments (potentially scrubbed of sensitive data), and the `status` of the operation.
-    *   Regularly review these logs for suspicious activity, repeated errors, or patterns indicative of attempted abuse.
+8. **Logging and Monitoring**:
+    - Maintain detailed logs of MCP tool calls and results, including the `tool_name`, key arguments (potentially scrubbed of sensitive data), and the `status` of the operation.
+    - Regularly review these logs for suspicious activity, repeated errors, or patterns indicative of attempted abuse.
 
-9.  **Dependencies and Supply Chain**: 
-    *   Be mindful of the security of libraries used in this `model_context_protocol` module (e.g., `jsonschema`) and in any tool implementations. Keep dependencies up to date.
+9. **Dependencies and Supply Chain**:
+    - Be mindful of the security of libraries used in this `model_context_protocol` module (e.g., `jsonschema`) and in any tool implementations. Keep dependencies up to date.
 
 ## Security of this Module (`model_context_protocol`)
 
--   This module primarily provides specifications, templates (../../../src/codomyrmex/module_template/MCP_TOOL_SPECIFICATION.md), and potentially schema validation utilities.
--   If this module provides Python-based validation utilities (e.g., using `jsonschema` as listed in `pyproject.toml`), vulnerabilities in those libraries could affect systems using these utilities. Keep these dependencies updated.
+- This module primarily provides specifications, templates (../../../src/codomyrmex/module_template/MCP_TOOL_SPECIFICATION.md), and potentially schema validation utilities.
+- If this module provides Python-based validation utilities (e.g., using `jsonschema` as listed in `pyproject.toml`), vulnerabilities in those libraries could affect systems using these utilities. Keep these dependencies updated.
 
 ### HTTP transport requirements
 
@@ -91,7 +91,63 @@ The HTTP runner is a network boundary around tools and must be treated according
 - CORS has no allowed origins by default. Configure exact origins with `--cors-origin`; wildcard CORS is not supported by the runner.
 - HTTP does not provide TLS. Put remotely exposed deployments behind TLS and an additional authenticated reverse proxy, and do not place secrets in command history or source control.
 
-Thank you for helping keep Codomyrmex and the Model Context Protocol secure. 
+## Delegated URL tools
+
+The MCP tools `codomyrmex.video_transcribe_url` and
+`codomyrmex.agentmail_create_webhook` deny backend delegation by default. Each
+handler enforces this policy before constructing its backend/provider, including
+when registered directly with `MCPServer` without a PAI trust wrapper. Denied calls
+return `status="error"` and a stable `error_code`: `DELEGATED_URL_DISABLED` or
+`DELEGATED_URL_POLICY_INVALID` for malformed operator configuration. The raw MCP
+transport maps only these reviewed denials from these exact tools to
+`code="ACCESS_DENIED"`, with the policy code in the existing `module` field.
+Unrelated error classifications and error-detail disclosure remain unchanged.
+
+Only the host operator can enable either tool through
+`CODOMYRMEX_MCP_DELEGATED_URL_TOOLS`. Its nonempty value is a comma-separated list
+of unique canonical names from this exact set:
+
+- `codomyrmex.video_transcribe_url`
+- `codomyrmex.agentmail_create_webhook`
+
+Surrounding whitespace is ignored. Wildcards, bare names, unknown names, duplicate
+names, empty list entries, and values longer than 1024 characters invalidate the
+whole configuration. The raw 1024-character limit is checked before whitespace
+stripping, so oversized whitespace-only values are invalid. Missing or bounded
+whitespace-only configuration denies both tools.
+Each invocation rereads the configuration; granting one tool never grants the
+other. Tool arguments, behavior annotations, and PAI trust promotion cannot supply
+this operator grant.
+
+### Deployment requirements
+
+Leave this variable unset unless the actual downstream execution environment is
+separately contained. For an intentionally contained video backend, the operator
+can enable that tool alone in the MCP server's launch environment:
+
+```sh
+export CODOMYRMEX_MCP_DELEGATED_URL_TOOLS=codomyrmex.video_transcribe_url
+```
+
+The grant authorizes delegation; it does not implement a destination/CIDR filter
+in the external backend. Video URLs are processed by an external yt-dlp/ffmpeg
+pipeline or a configured REST service. AgentMail receives callback URLs and its
+service performs later delivery. Before exposing an enabled tool to lower-trust
+callers, enforce and test destination, DNS, redirect, proxy, IPv4/IPv6, and metadata
+restrictions in that downloader or delivery service. Do not give a contained video
+backend unrelated browser/session secrets. If those external controls cannot be
+established, leave the corresponding tool disabled.
+
+Existing transport authentication, readonly profiles, and PAI trust/confirmation
+requirements still apply; this grant does not replace them. The ordinary HTTP
+client's optional `public_only` adapter does not constrain these external engines.
+Direct Python `VideoTranscriber` and `AgentMailProvider` APIs retain their trusted
+caller contracts, including explicitly configured local APIs. Package initialization
+may import optional modules; the denial guarantee is no backend construction or URL
+delegation by the refused invocation.
+
+Thank you for helping keep Codomyrmex and the Model Context Protocol secure.
+
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

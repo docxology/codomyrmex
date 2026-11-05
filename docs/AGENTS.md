@@ -9,7 +9,7 @@ Agent coordination document for the `docs/` directory. Guides AI agents navigati
 ## Key Files
 
 | Path | Role |
-|:---|:---|
+| :--- | :--- |
 | [reference/inventory.md](reference/inventory.md) | Canonical counts (modules, tests, MCP decorators, workflows) |
 | [development/documentation.md](development/documentation.md) | Authoring policy, Mermaid, bootstrap vs hand-edit |
 | [modules/AGENTS.md](modules/AGENTS.md) | Module doc ownership (`enrich_module_docs` vs `src/`) |
@@ -20,10 +20,10 @@ Agent coordination document for the `docs/` directory. Guides AI agents navigati
 
 - **Source of truth**: `src/codomyrmex/` and root `SPEC.md` / `AGENTS.md`; this tree explains and links, it does not replace code.
 - **Authoritative numbers**: volatile counts (tests, MCP tools, gate weights) live in `docs/manuscript/config.yaml` and `docs/reference/inventory.md` — never hard-code them in prose.
-  - Gate weights: `docs/manuscript/config.yaml` → `experiment.gate_score_weights` (budget: 0.30 / risk: 0.30 / trust: 0.25 / completeness: 0.15)
-  - Colony kernel subsystems: 8 — PheromoneStore, ResourceLedger, ActuationGate, ConsequenceMemory, RoleAdapter, PruningDaemon, FalsificationWorker, ColonyKernel (coordinator); sources: standalone modules under `src/codomyrmex/colony_kernel/` plus `kernel.py`
-  - MCP tools: 8 exposed by the colony control plane; source: `src/codomyrmex/colony_kernel/mcp_tools.py`
-  - Attack vectors: `CIRCULAR_ARCHITECTURE` (not `CIRCULAR_DEPS`) — see `src/codomyrmex/colony_kernel/falsification/worker.py`
+    - Gate weights: `docs/manuscript/config.yaml` → `experiment.gate_score_weights` (budget: 0.30 / risk: 0.30 / trust: 0.25 / completeness: 0.15)
+    - Colony kernel subsystems: 8 — PheromoneStore, ResourceLedger, ActuationGate, ConsequenceMemory, RoleAdapter, PruningDaemon, FalsificationWorker, ColonyKernel (coordinator); sources: standalone modules under `src/codomyrmex/colony_kernel/` plus `kernel.py`
+    - MCP tools: 8 exposed by the colony control plane; source: `src/codomyrmex/colony_kernel/mcp_tools.py`
+    - Attack vectors: `CIRCULAR_ARCHITECTURE` (not `CIRCULAR_DEPS`) — see `src/codomyrmex/colony_kernel/falsification/worker.py`
 - **Tooling**: `uv` for scripts (`scripts/doc_inventory.py`, `scripts/documentation/validate_agents_structure.py`); optional site build per `pyproject.toml` / Docusaurus under `src/codomyrmex/documentation/` when publishing.
 
 ## Development Guidelines
@@ -34,12 +34,12 @@ Agent coordination document for the `docs/` directory. Guides AI agents navigati
 
 ## Documentation Architecture
 
-The `docs/` directory is organized into **21 thematic sections** containing **1,204 Markdown files** ([reference/inventory.md](reference/inventory.md)):
+The `docs/` directory is organized into **21 thematic sections** containing **1,218 Markdown files** ([reference/inventory.md](reference/inventory.md)):
 
 ### Core references (top level)
 
 | File | Purpose |
-|:---|:---|
+| :--- | :--- |
 | `ARCHITECTURE.md` | System architecture, layers, module graph |
 | `DEPENDENCIES.md` | Dependency compatibility guide |
 | `PAI.md` | Personal AI Infrastructure hub |
@@ -52,8 +52,8 @@ Volatile counts (modules, MCP tools, tests) live in [reference/inventory.md](ref
 ### Thematic Sections
 
 | Section | Focus | Key Content |
-|:---|:---|:---|
-| `agents/` | AI agent integrations | 41 packages mirror `src/codomyrmex/agents/` (+ [`agents/rules/`](agents/rules/) docs-only); Hermes: [agents/hermes/AGENTS.md](agents/hermes/AGENTS.md), [skills.md](agents/hermes/skills.md) |
+| :--- | :--- | :--- |
+| `agents/` | AI agent integrations | 40 packages plus the `open_gauss` submodule mirror `src/codomyrmex/agents/` (+ [`agents/rules/`](agents/rules/) docs-only); Hermes: [agents/hermes/AGENTS.md](agents/hermes/AGENTS.md), [skills.md](agents/hermes/skills.md) |
 | `agi/` | AGI theory | Essays on emergence, category theory, agency |
 | `bio/` | Biological simulation | BioSimulator, genetic algorithms |
 | `cognitive/` | Cognitive systems | Cerebrum, Bayesian networks, active inference |
@@ -64,7 +64,7 @@ Volatile counts (modules, MCP tools, tests) live in [reference/inventory.md](ref
 | `getting-started/` | Onboarding | Quickstart, installation, learning path |
 | `integration/` | Cross-module | Integration patterns, MCP bridges |
 | `manuscript/` | Manuscript | Colony Kernel paper source, tokens, and rendering pipeline |
-| `modules/` | Module docs | **130** top-level packages; ownership hub [modules/AGENTS.md](modules/AGENTS.md) (see [reference/inventory.md](reference/inventory.md)) |
+| `modules/` | Module docs | **132** top-level packages; ownership hub [modules/AGENTS.md](modules/AGENTS.md) (see [reference/inventory.md](reference/inventory.md)) |
 | `pai/` | PAI system | Dashboard, skills, memory, dispatch |
 | `plans/` | Roadmap | Release plans, version targets |
 | `project/` | Standards | Contributing, architecture, coding style |
