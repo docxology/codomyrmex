@@ -422,6 +422,35 @@ jobs:
           path: junit-*.xml
           retention-days: 30
 
+      # TEMPORARY DIAGNOSTIC — remove before merge. Records the state of the
+      # environment *after* the suite ran, so a rebuild during the run is
+      # visible as a different interpreter directory than the matrix named.
+      - name: Probe environment after the run
+        if: always()
+        run: |
+          echo "expected interpreter: ${{ matrix.python-version }}"
+          echo "=== interpreter directories under .venv/lib:"
+          ls .venv/lib || true
+          echo "=== pyvenv.cfg:"
+          grep -E "version_info|uv =" .venv/pyvenv.cfg || true
+          echo "=== site-packages entry count:"
+          ls .venv/lib/python*/site-packages 2>/dev/null | wc -l
+          echo "=== key packages present:"
+          for pkg in _pytest pytest mkdocs pandas hypothesis fitz; do
+            for base in .venv/lib/python*/site-packages; do
+              [ -e "$base/$pkg" ] && echo "present: $base/$pkg" \
+                || echo "absent:  $base/$pkg"
+            done
+          done
+          echo "=== what a fresh interpreter resolves:"
+          .venv/bin/python - <<'PY' || true
+          import importlib.util, sys
+          print("version:", sys.version.split()[0])
+          print("executable:", sys.executable)
+          for name in ("_pytest", "pytest", "mkdocs", "pandas", "hypothesis"):
+              print(f"{name}: {importlib.util.find_spec(name)}")
+          PY
+
   windows-portability:
     name: Windows Portability
     runs-on: windows-latest
