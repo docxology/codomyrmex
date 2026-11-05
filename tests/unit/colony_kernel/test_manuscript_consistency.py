@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import importlib.util
+import os
 import re
 import subprocess
 import sys
@@ -1280,6 +1281,20 @@ def test_root_package_scripts_point_to_live_documentation_surface() -> None:
         pytest.skip(
             "mkdocs is not installed in this interpreter; sync the docs group "
             "with `uv sync --group docs` to run the documented serve command"
+        )
+    project_environment = os.environ.get("UV_PROJECT_ENVIRONMENT")
+    environment_present = (
+        Path(project_environment).is_dir()
+        if project_environment
+        else (REPO_ROOT / ".venv").is_dir()
+    )
+    if not environment_present:
+        # Without a synced project environment `uv run` would create one. That is
+        # the same defect this check avoids one flag at a time: a test may read
+        # the shared environment, never provision it.
+        pytest.skip(
+            "no synced project environment at .venv (or UV_PROJECT_ENVIRONMENT); "
+            "`uv run --no-sync` would create one, so the serve command is not checked"
         )
 
     # `uv run` without `--no-sync` re-resolves the project environment against
