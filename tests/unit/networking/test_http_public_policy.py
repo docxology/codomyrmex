@@ -171,7 +171,7 @@ def test_both_connection_schemes_reject_real_localhost_dns(
 @pytest.mark.parametrize(
     ("url", "headers"),
     [
-        ("https://user:password@8.8.8.8/", {}),
+        ("https://user:password@8.8.8.8/", {}),  # pragma: allowlist secret
         ("http://8.8.8.8/", {"hOsT": "internal.example"}),
         ("http://127.0.0.1/", {}),
         ("http://[::ffff:127.0.0.1]/", {}),
