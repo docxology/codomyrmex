@@ -20,6 +20,8 @@ import sys
 
 import pytest
 from tests.support.git_temp_repository import (
+    TEST_IDENTITY_EMAIL,
+    TEST_IDENTITY_NAME,
     initialize_repository,
 )
 
@@ -618,30 +620,48 @@ class TestGitCoreDeep:
         branch = get_current_branch(repository_path=str(tmp_path))
         assert isinstance(branch, str)
 
-    def test_create_branch(self, tmp_path):
-        subprocess.run(["git", "init", str(tmp_path)], capture_output=True)
-        # Need initial commit
-        f = tmp_path / "init.txt"
-        f.write_text("init")
-        subprocess.run(["git", "-C", str(tmp_path), "add", "."], capture_output=True)
+    def _commit_initial(self, tmp_path) -> None:
+        """Create the first commit with an identity the repository owns.
+
+        A raw `git commit` whose identity git cannot infer fails with "Author
+        identity unknown", and the branch then does not exist — which is how
+        `test_list_branches` reported an empty list in CI and passed on a
+        machine where git could infer one. Naming the identity makes the test
+        independent of the machine, and `check=True` makes the precondition fail
+        loudly instead of letting a later assertion read the consequence.
+        """
+        subprocess.run(["git", "init", str(tmp_path)], capture_output=True, check=True)
+        (tmp_path / "init.txt").write_text("init")
         subprocess.run(
-            ["git", "-C", str(tmp_path), "commit", "-m", "init"],
-            capture_output=True,
+            ["git", "-C", str(tmp_path), "add", "."], capture_output=True, check=True
         )
+        subprocess.run(
+            [
+                "git",
+                "-c",
+                f"user.name={TEST_IDENTITY_NAME}",
+                "-c",
+                f"user.email={TEST_IDENTITY_EMAIL}",
+                "-C",
+                str(tmp_path),
+                "commit",
+                "-m",
+                "init",
+            ],
+            capture_output=True,
+            check=True,
+        )
+
+    def test_create_branch(self, tmp_path):
+        self._commit_initial(tmp_path)
         from codomyrmex.git_operations.core.git import create_branch
 
         result = create_branch("test-branch", repository_path=str(tmp_path))
         assert isinstance(result, bool)
+        assert result is True
 
     def test_list_branches(self, tmp_path):
-        subprocess.run(["git", "init", str(tmp_path)], capture_output=True)
-        f = tmp_path / "init.txt"
-        f.write_text("init")
-        subprocess.run(["git", "-C", str(tmp_path), "add", "."], capture_output=True)
-        subprocess.run(
-            ["git", "-C", str(tmp_path), "commit", "-m", "init"],
-            capture_output=True,
-        )
+        self._commit_initial(tmp_path)
         from codomyrmex.git_operations.core.git import list_branches
 
         branches = list_branches(repository_path=str(tmp_path))
