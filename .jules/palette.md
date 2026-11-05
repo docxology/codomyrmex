@@ -44,3 +44,6 @@ icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
+## 2024-10-29 - Missing ARIA Labels on Icon-Only Buttons
+**Learning:** Found multiple close (x) buttons in the modal overlays missing ARIA labels, a common pattern that impacts screen reader accessibility for interactive dismiss elements.
+**Action:** Next time inspecting modal components, proactively verify that icon-only buttons include `aria-label` or equivalent text descriptors.
