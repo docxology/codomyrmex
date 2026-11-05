@@ -109867,28 +109867,28 @@
   {
     "file": "tests/SPEC.md",
     "link": "README.md",
-    "line": 151,
+    "line": 177,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "tests/SPEC.md",
     "link": "AGENTS.md",
-    "line": 152,
+    "line": 178,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "tests/SPEC.md",
     "link": "../README.md",
-    "line": 153,
+    "line": 179,
     "status": "ok",
     "message": "File exists"
   },
   {
     "file": "tests/SPEC.md",
     "link": "../SPEC.md",
-    "line": 154,
+    "line": 180,
     "status": "ok",
     "message": "File exists"
   },
