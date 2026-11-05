@@ -208,19 +208,19 @@ FORBIDDEN_CLAIMS = {
     ): "full-suite collection count must match the current inventory snapshot",
     re.compile(
         r"\b1,191\b"
-    ): "docs inventory is currently 1,202 Markdown files under docs/",
+    ): "docs inventory must match the measured snapshot in docs/reference/inventory.md",
     re.compile(
         r"\b1,192\b"
-    ): "docs inventory is currently 1,202 Markdown files under docs/",
+    ): "docs inventory must match the measured snapshot in docs/reference/inventory.md",
     re.compile(
         r"\b1,193\b"
-    ): "docs inventory is currently 1,202 Markdown files under docs/",
+    ): "docs inventory must match the measured snapshot in docs/reference/inventory.md",
     re.compile(
         r"\b1,194\b"
-    ): "docs inventory is currently 1,202 Markdown files under docs/",
+    ): "docs inventory must match the measured snapshot in docs/reference/inventory.md",
     re.compile(
         r"\b1,195\b"
-    ): "docs inventory is currently 1,202 Markdown files under docs/",
+    ): "docs inventory must match the measured snapshot in docs/reference/inventory.md",
     re.compile(
         r"\b35,122\b"
     ): "full-suite collection count must match the current inventory snapshot",
