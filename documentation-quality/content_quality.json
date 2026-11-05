@@ -16,11 +16,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 165,
+      "heading_count": 166,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 11355,
-      "link_count": 4
+      "word_count": 11473,
+      "link_count": 5
     }
   },
   {
@@ -187,8 +187,8 @@
       "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 577,
-      "link_count": 2
+      "word_count": 649,
+      "link_count": 3
     }
   },
   {
@@ -15181,10 +15181,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 19,
+      "heading_count": 16,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 297,
+      "word_count": 231,
       "link_count": 6
     }
   },
@@ -15205,11 +15205,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 11,
+      "heading_count": 13,
       "placeholder_count": 0,
       "code_block_count": 6,
-      "word_count": 877,
-      "link_count": 4
+      "word_count": 1182,
+      "link_count": 5
     }
   },
   {
@@ -15229,10 +15229,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 8,
+      "heading_count": 10,
       "placeholder_count": 0,
-      "code_block_count": 0,
-      "word_count": 1226,
+      "code_block_count": 1,
+      "word_count": 1600,
       "link_count": 4
     }
   },
@@ -15265,11 +15265,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 11,
+      "heading_count": 13,
       "placeholder_count": 0,
-      "code_block_count": 3,
-      "word_count": 1341,
-      "link_count": 6
+      "code_block_count": 5,
+      "word_count": 1566,
+      "link_count": 7
     }
   },
   {
@@ -26331,11 +26331,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 30,
+      "heading_count": 31,
       "placeholder_count": 0,
-      "code_block_count": 18,
-      "word_count": 1024,
-      "link_count": 0
+      "code_block_count": 19,
+      "word_count": 1160,
+      "link_count": 1
     }
   },
   {
@@ -29112,8 +29112,8 @@
       "heading_count": 39,
       "placeholder_count": 0,
       "code_block_count": 13,
-      "word_count": 1148,
-      "link_count": 0
+      "word_count": 1317,
+      "link_count": 1
     }
   },
   {
@@ -32189,9 +32189,9 @@
     "metrics": {
       "heading_count": 32,
       "placeholder_count": 0,
-      "code_block_count": 20,
-      "word_count": 740,
-      "link_count": 7
+      "code_block_count": 21,
+      "word_count": 885,
+      "link_count": 8
     }
   },
   {
@@ -32211,11 +32211,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 13,
+      "heading_count": 14,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 775,
-      "link_count": 0
+      "word_count": 1140,
+      "link_count": 1
     }
   },
   {
@@ -47322,7 +47322,7 @@
       "heading_count": 11,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 729,
+      "word_count": 747,
       "link_count": 20
     }
   },
@@ -47994,7 +47994,7 @@
       "heading_count": 5,
       "placeholder_count": 0,
       "code_block_count": 2,
-      "word_count": 609,
+      "word_count": 653,
       "link_count": 5
     }
   },
@@ -53837,10 +53837,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 19,
+      "heading_count": 16,
       "placeholder_count": 0,
       "code_block_count": 0,
-      "word_count": 297,
+      "word_count": 231,
       "link_count": 6
     }
   },
@@ -53873,11 +53873,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 11,
+      "heading_count": 13,
       "placeholder_count": 0,
       "code_block_count": 6,
-      "word_count": 877,
-      "link_count": 4
+      "word_count": 1182,
+      "link_count": 5
     }
   },
   {
@@ -53909,10 +53909,10 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 7,
+      "heading_count": 9,
       "placeholder_count": 0,
-      "code_block_count": 0,
-      "word_count": 1089,
+      "code_block_count": 1,
+      "word_count": 1463,
       "link_count": 4
     }
   },
@@ -53945,11 +53945,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 11,
+      "heading_count": 13,
       "placeholder_count": 0,
-      "code_block_count": 3,
-      "word_count": 1341,
-      "link_count": 6
+      "code_block_count": 5,
+      "word_count": 1566,
+      "link_count": 7
     }
   },
   {
@@ -56787,11 +56787,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 30,
+      "heading_count": 31,
       "placeholder_count": 0,
-      "code_block_count": 18,
-      "word_count": 1024,
-      "link_count": 0
+      "code_block_count": 19,
+      "word_count": 1160,
+      "link_count": 1
     }
   },
   {
@@ -57565,6 +57565,18 @@
     }
   },
   {
+    "file": "docs/modules/email/MCP_TOOL_SPECIFICATION.md",
+    "score": 100,
+    "issues": [],
+    "metrics": {
+      "heading_count": 39,
+      "placeholder_count": 0,
+      "code_block_count": 13,
+      "word_count": 1317,
+      "link_count": 1
+    }
+  },
+  {
     "file": "docs/modules/calendar_integration/AGENTS.md",
     "score": 100,
     "issues": [],
@@ -58219,11 +58231,11 @@
     "score": 100,
     "issues": [],
     "metrics": {
-      "heading_count": 13,
+      "heading_count": 14,
       "placeholder_count": 0,
       "code_block_count": 1,
-      "word_count": 695,
-      "link_count": 0
+      "word_count": 1067,
+      "link_count": 1
     }
   },
   {
