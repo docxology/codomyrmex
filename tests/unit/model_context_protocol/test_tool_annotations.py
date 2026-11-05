@@ -6,7 +6,12 @@ from types import ModuleType
 import pytest
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
-from codomyrmex.model_context_protocol.discovery import MCPDiscovery
+from codomyrmex.model_context_protocol.discovery import (
+    MCPDiscovery,
+)
+from codomyrmex.model_context_protocol.discovery import (
+    mcp_tool as discovery_mcp_tool,
+)
 from codomyrmex.model_context_protocol.schemas.mcp_schemas import (
     MCPRegistrationError,
     MCPToolRegistry,
@@ -158,3 +163,72 @@ def test_http_discovery_preserves_hints() -> None:
         response = client.get("/tools")
         assert response.status_code == 200
         assert response.json()["tools"][0]["annotations"] == READ_ONLY
+
+
+def test_discovery_decorator_retains_hints_and_existing_metadata() -> None:
+    # Given explicit hints and the discovery decorator's existing metadata.
+    @discovery_mcp_tool(
+        name="lookup",
+        annotations=READ_ONLY,
+        requires=["os"],
+        version="2.1",
+        destructive=True,
+    )
+    def lookup(value: str) -> str:
+        return value
+
+    module = ModuleType("annotation_discovery_variant")
+    module.lookup = lookup
+    # When discovery reads the decorated handler.
+    tools = MCPDiscovery()._scan_module(module)
+    # Then hints and requirements survive without changing the trust marker.
+    assert len(tools) == 1
+    assert tools[0].to_mcp_schema()["annotations"] == READ_ONLY
+    assert tools[0].requires == ["os"]
+    assert tools[0].version == "2.1"
+    assert tools[0].available is True
+    assert lookup._mcp_tool_meta["destructive"] is True
+
+
+def test_discovery_decorator_defaults_are_conservative() -> None:
+    # Given a legacy caller with an independent destructive marker.
+    @discovery_mcp_tool(destructive=False)
+    def lookup() -> str:
+        return "ok"
+
+    # When reading its behavior hints, then omission retains cautious defaults.
+    assert lookup._mcp_tool_meta["annotations"] == DEFAULTS
+    assert lookup._mcp_tool_meta["destructive"] is False
+
+
+def test_discovery_decorator_copies_declared_hints() -> None:
+    # Given a decorated handler whose caller retains the original dictionary.
+    declared = dict(READ_ONLY)
+
+    @discovery_mcp_tool(annotations=declared)
+    def lookup() -> str:
+        return "ok"
+
+    # When the caller later edits that dictionary.
+    declared["readOnlyHint"] = False
+    # Then the handler retains its original declaration.
+    assert lookup._mcp_tool_meta["annotations"] == READ_ONLY
+
+
+@pytest.mark.parametrize(
+    "annotations",
+    [
+        {"readOnlyHint": "false"},
+        {"destructiveHint": 0},
+        {"idempotentHint": 1},
+        {"openWorldHint": "true"},
+        {"readonlyHint": True},
+        {"title": False},
+    ],
+)
+def test_discovery_decorator_rejects_invalid_hints(
+    annotations: dict[str, str | int | bool],
+) -> None:
+    # Given invalid hints; when decorating a handler; then fail explicitly.
+    with pytest.raises(ValueError):
+        discovery_mcp_tool(annotations=annotations)(lambda: None)
