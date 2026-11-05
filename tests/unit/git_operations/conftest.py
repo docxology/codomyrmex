@@ -39,7 +39,7 @@ def temp_dir() -> Generator[str, None, None]:
 
 
 @pytest.fixture
-def temp_git_repo(temp_dir: str) -> Generator[str, None, None]:
+def temp_git_repo(temp_dir: str) -> str:
     """Create a temporary Git repository for tests."""
     repo_path = os.path.join(temp_dir, "test_repo")
     os.makedirs(repo_path, exist_ok=True)
@@ -57,7 +57,7 @@ def temp_git_repo(temp_dir: str) -> Generator[str, None, None]:
 
 
 @pytest.fixture
-def temp_git_repo_no_commit(temp_dir: str) -> Generator[str, None, None]:
+def temp_git_repo_no_commit(temp_dir: str) -> str:
     """Create a temporary Git repository without initial commit."""
     repo_path = os.path.join(temp_dir, "test_repo_no_commit")
     os.makedirs(repo_path, exist_ok=True)
@@ -70,7 +70,7 @@ def temp_git_repo_no_commit(temp_dir: str) -> Generator[str, None, None]:
 
 
 @pytest.fixture
-def sample_file(temp_git_repo: str) -> Generator[str, None, None]:
+def sample_file(temp_git_repo: str) -> str:
     """Create a sample file in the test repository."""
     file_path = os.path.join(temp_git_repo, "test_file.txt")
     with open(file_path, "w") as f:
