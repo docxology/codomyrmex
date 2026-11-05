@@ -3,12 +3,20 @@ name: Lighthouse CI
 on:
   pull_request:
     branches: [main]
+    # Every file the instrument is made of, not only the ones the site is built
+    # from. An edit to the serving wrapper, the gzip server, the artifact checks,
+    # the median assertion or the budget config changes the answer this workflow
+    # gives, so each of them has to run it: a budget whose own rule can change
+    # without being applied is not a gate. `.github/scripts/AGENTS.md` names the
+    # invariant for the next file added here.
     paths:
       - 'src/codomyrmex/documentation/**'
       - 'docs/**'
       - '.github/lighthouse-ci.json'
       - '.github/scripts/serve_docs_site.sh'
+      - '.github/scripts/serve_docs_site.py'
       - '.github/scripts/verify_docs_site.py'
+      - '.github/scripts/check_lighthouse_medians.js'
       - '.github/workflows/lighthouse-ci.yml'
   workflow_dispatch:
 

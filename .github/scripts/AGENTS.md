@@ -46,6 +46,12 @@ GitHub Pages compresses it.
 - **Print the readiness line last and only after the assertions pass.** LHCI starts
   counting when `startServerCommand` prints; a line emitted before the port answers
   becomes a startup timeout.
+- **Every script in this directory is a trigger path in `lighthouse-ci.yml`.** The
+  budget's inputs are the serving wrapper, the gzip server, the artifact checks, the
+  median assertion and `.github/lighthouse-ci.json`; a change to any of them changes
+  the answer the audit gives, so each has to run it. `check_lighthouse_medians.js` is
+  the assertion of record and `serve_docs_site.py` produces its subject — a PR that
+  edits either now runs the workflow that applies it. Add the path when you add a file.
 - **Assert medians here, not through `lhci assert`.** `lhci assert` evaluates a single
   run out of the set and reports the most favourable: with LCP 3,445 / 2,549 / 2,527 ms
   it printed `found: 2527.09`, and with 2,333 / 2,935 / 2,931 ms it printed `found:
