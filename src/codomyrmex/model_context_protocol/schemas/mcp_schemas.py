@@ -10,6 +10,7 @@ from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.quality.validation import (
     validate_tool_arguments,
 )
+from codomyrmex.model_context_protocol.tool_annotations import annotated_tool_schema
 
 logger = get_logger(__name__)
 
@@ -178,6 +179,11 @@ class MCPToolRegistry:
             raise MCPRegistrationError("tool schema must be a dictionary")
         if handler is not None and not callable(handler):
             raise MCPRegistrationError("tool handler must be callable or None")
+
+        try:
+            schema = annotated_tool_schema(schema, handler)
+        except ValueError as exc:
+            raise MCPRegistrationError(str(exc)) from exc
 
         existing = self._tools.get(tool_name)
         if existing is not None:

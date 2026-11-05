@@ -120,3 +120,31 @@ As the Model Context Protocol and the Codomyrmex project evolve, the canonical t
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
+
+## Behavior annotations in tool listings
+
+Tool definitions returned by JSON-RPC `tools/list`, HTTP `/tools`, discovery,
+and PAI manifests include an `annotations` object. Legacy tools receive these
+conservative defaults:
+
+```json
+{"readOnlyHint": false, "destructiveHint": true, "idempotentHint": false, "openWorldHint": true}
+```
+
+Tool authors can opt into accurate behavior hints independently of the PAI
+trust gateway:
+
+```python
+@mcp_tool(annotations={
+    "readOnlyHint": True,
+    "destructiveHint": False,
+    "idempotentHint": True,
+    "openWorldHint": False,
+})
+def add(a: int, b: int) -> int:
+    return a + b
+```
+
+MCP annotations are optional under the protocol. Publishing explicit defaults
+does not certify registry compliance or grant permission to execute a tool.
+Clients must continue to treat annotations as untrusted descriptive metadata.

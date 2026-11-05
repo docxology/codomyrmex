@@ -135,3 +135,23 @@ Not applicable to these Pydantic models.
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
+
+## Tool behavior annotations
+
+`mcp_tool(..., annotations={...})`, `MCPServer.tool(..., annotations={...})`,
+and `MCPServer.register_tool(..., annotations={...})` accept MCP behavior hints.
+The four boolean hints are `readOnlyHint`, `destructiveHint`, `idempotentHint`,
+and `openWorldHint`; `title` may also be supplied as a string. Boolean values
+are strict: strings and integers are rejected. Unknown annotation keys are
+rejected to catch spelling errors.
+
+Registration and discovery publish all four hints. Omitted values default to
+`false`, `true`, `false`, and `true`, respectively. Explicit schema annotations
+take precedence over handler decorator metadata. The metadata is copied at
+registration and when returned to callers. PAI registry and skill manifests
+retain the same hints.
+
+These are descriptive client hints, not authorization. They do not change
+PAI trust levels or the separate `destructive` decorator marker. Tool authors
+must review actual behavior before declaring safer hints; names and categories
+are not used to infer safety.

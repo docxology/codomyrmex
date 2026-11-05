@@ -7,6 +7,7 @@ from copy import deepcopy
 from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.model_context_protocol.tool_annotations import annotated_tool_schema
 from codomyrmex.model_context_protocol.tool_tagging import manifest_tags
 
 from .definitions import PROMPT_DEFINITIONS, RESOURCE_DEFINITIONS, TOOL_DEFINITIONS
@@ -28,6 +29,7 @@ class _ToolRegistry:
         self._tools: dict[str, dict[str, Any]] = {}
 
     def register(self, *, tool_name: str, schema: dict[str, Any], handler: Any) -> None:
+        schema = annotated_tool_schema(schema, handler)
         existing = self._tools.get(tool_name)
         if existing is not None:
             # Static definitions are the compatibility contract. Dynamic
@@ -342,6 +344,7 @@ def get_skill_manifest() -> dict[str, Any]:
                 "category": cat,
                 "input_schema": t[3],
                 "tags": manifest_tags(category=cat, explicit=None),
+                "annotations": annotated_tool_schema({}, t[2])["annotations"],
             }
         )
 
@@ -369,6 +372,7 @@ def get_skill_manifest() -> dict[str, Any]:
                 "category": category,
                 "input_schema": input_schema,
                 "tags": manifest_tags(category=category, explicit=explicit_tags),
+                "annotations": annotated_tool_schema({}, handler)["annotations"],
             }
         )
 

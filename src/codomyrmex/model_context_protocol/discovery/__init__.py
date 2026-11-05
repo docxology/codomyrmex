@@ -21,6 +21,9 @@ from types import ModuleType
 from typing import TYPE_CHECKING, Any
 
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.model_context_protocol.tool_annotations import (
+    normalize_tool_annotations,
+)
 from codomyrmex.model_context_protocol.tool_tagging import manifest_tags
 
 if TYPE_CHECKING:
@@ -61,6 +64,7 @@ class DiscoveredTool:
     available: bool = True
     unavailable_reason: str | None = None
     handler: Callable[..., Any] | None = None
+    annotations: dict[str, Any] = field(default_factory=dict)
 
     def to_mcp_schema(self) -> dict[str, Any]:
         """Convert to MCP tool schema format."""
@@ -69,6 +73,7 @@ class DiscoveredTool:
             "description": self.description,
             "inputSchema": self.parameters,
             "tags": self.tags,
+            "annotations": normalize_tool_annotations(self.annotations),
             "x-codomyrmex": {
                 "module": self.module_path,
                 "callable": self.callable_name,
@@ -337,6 +342,7 @@ class MCPDiscovery:
                     available=available,
                     unavailable_reason=unavailable_reason,
                     handler=obj,
+                    annotations=normalize_tool_annotations(meta.get("annotations")),
                 )
                 tools.append(tool)
 

@@ -146,6 +146,7 @@ class MCPServer:
         description: str | None = None,
         title: str | None = None,
         output_schema: dict[str, Any] | None = None,
+        annotations: dict[str, Any] | None = None,
     ) -> Callable[..., Any]:
         """Decorator to register a tool.
 
@@ -154,6 +155,7 @@ class MCPServer:
             description: Tool description for the model.
             title: Human-friendly display name (MCP 2025-06-18).
             output_schema: JSON Schema for structured output (MCP 2025-06-18).
+            annotations: MCP behavior hints, independent of authorization.
         """
 
         def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
@@ -192,6 +194,8 @@ class MCPServer:
                     "required": required,
                 },
             }
+            if annotations is not None:
+                schema["annotations"] = annotations
 
             # MCP 2025-06-18: human-friendly display name
             if title:
@@ -213,6 +217,7 @@ class MCPServer:
         handler: Callable[..., Any],
         title: str | None = None,
         output_schema: dict[str, Any] | None = None,
+        annotations: dict[str, Any] | None = None,
     ) -> None:
         """Register a tool manually.
 
@@ -222,11 +227,14 @@ class MCPServer:
             handler: Callable that implements the tool.
             title: Human-friendly display name (MCP 2025-06-18).
             output_schema: JSON Schema for structured output (MCP 2025-06-18).
+            annotations: MCP behavior hints, independent of authorization.
         """
         if title:
             schema["title"] = title
         if output_schema:
             schema["outputSchema"] = output_schema
+        if annotations is not None:
+            schema = {**schema, "annotations": annotations}
         self._tool_registry.register(name, schema, handler)
 
     # =========================================================================
