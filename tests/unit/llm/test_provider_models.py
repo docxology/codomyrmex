@@ -372,7 +372,7 @@ class TestProviderConfigDataclass:
 
     def test_api_key_stored(self):
         cfg = ProviderConfig(api_key="sk-test")
-        assert cfg.api_key == "sk-test"
+        assert cfg.api_key == "sk-test"  # pragma: allowlist secret
 
     def test_base_url_stored(self):
         cfg = ProviderConfig(base_url="https://api.openai.com/v1")

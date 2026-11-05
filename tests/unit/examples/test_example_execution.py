@@ -7,6 +7,7 @@ and follow consistent patterns.
 
 import json
 import subprocess
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -31,7 +32,11 @@ class TestExampleExecution:
         """Run an example script and return exit code, stdout, stderr."""
         try:
             result = subprocess.run(
-                ["python", str(script_path)],
+                # The interpreter under test, not whatever `python` PATH resolves
+                # to: a bare name can be a different version with different
+                # installed extras, and on a 3.12+ job it can even be a venv the
+                # runner never synced.
+                [sys.executable, str(script_path)],
                 cwd=script_path.parent,
                 capture_output=True,
                 text=True,

@@ -183,7 +183,7 @@ class TestSecretScanner:
         scanner = SecretScanner()
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
-            f.write('api_key = "AKIAIOSFODNN7EXAMPLE"\n')
+            f.write('api_key = "AKIAIOSFODNN7EXAMPLE"\n')  # pragma: allowlist secret
             f.flush()
             result = scanner.scan_file(f.name)
 
@@ -204,7 +204,7 @@ class TestSecretScanner:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             (Path(tmpdir) / "config.py").write_text(
-                'api_key = "AKIAIOSFODNN7EXAMPLE"\n'
+                'api_key = "AKIAIOSFODNN7EXAMPLE"\n'  # pragma: allowlist secret
             )
             (Path(tmpdir) / "clean.py").write_text("x = 1\n")
 
@@ -298,7 +298,7 @@ class TestHelperFunctions:
 
     def test_get_secret_from_env(self):
         """Should get secret from environment."""
-        os.environ["TEST_SECRET_KEY_XYZ"] = "test_value"
+        os.environ["TEST_SECRET_KEY_XYZ"] = "test_value"  # pragma: allowlist secret
         try:
             assert get_secret_from_env("TEST_SECRET_KEY_XYZ") == "test_value"
         finally:

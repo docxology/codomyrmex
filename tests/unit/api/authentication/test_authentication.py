@@ -59,11 +59,11 @@ class TestAuthCredentials:
         creds = AuthCredentials(
             auth_type=AuthType.API_KEY,
             identifier="user-123",
-            secret="s3cret",
+            secret="s3cret",  # pragma: allowlist secret
         )
         assert creds.auth_type == AuthType.API_KEY
         assert creds.identifier == "user-123"
-        assert creds.secret == "s3cret"
+        assert creds.secret == "s3cret"  # pragma: allowlist secret
         assert creds.metadata == {}
 
     def test_metadata_default_is_empty_dict(self):
@@ -130,7 +130,10 @@ class TestAPIKeyAuthenticator:
     def test_authenticate_success_via_query_param(self):
         auth = APIKeyAuthenticator(query_param="api_key")
         auth.register_key("qk_1", identity="web")
-        request = {"headers": {}, "query": {"api_key": "qk_1"}}
+        request = {
+            "headers": {},
+            "query": {"api_key": "qk_1"},  # pragma: allowlist secret
+        }  # pragma: allowlist secret
         result = auth.authenticate(request)
         assert result.authenticated is True
         assert result.identity == "web"
@@ -280,7 +283,7 @@ class TestHMACAuthenticator:
     def setup_method(self):
         self.auth = HMACAuthenticator(max_age_seconds=60)
         self.client_id = "client-a"
-        self.secret = "super-secret-key"
+        self.secret = "super-secret-key"  # pragma: allowlist secret
         self.auth.register_client(self.client_id, self.secret, scopes=["webhook"])
 
     def _signed_request(self, body="payload", ts=None):

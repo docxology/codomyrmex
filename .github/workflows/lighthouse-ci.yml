@@ -3,14 +3,30 @@ name: Lighthouse CI
 on:
   pull_request:
     branches: [main]
+    # Every file the instrument is made of, not only the ones the site is built
+    # from. An edit to the serving wrapper, the gzip server, the artifact checks,
+    # the median assertion or the budget config changes the answer this workflow
+    # gives, so each of them has to run it: a budget whose own rule can change
+    # without being applied is not a gate. `.github/scripts/AGENTS.md` names the
+    # invariant for the next file added here.
     paths:
+      - 'src/codomyrmex/documentation/**'
       - 'docs/**'
-      - 'mkdocs.yml'
+      - '.github/lighthouse-ci.json'
+      - '.github/scripts/serve_docs_site.sh'
+      - '.github/scripts/serve_docs_site.py'
+      - '.github/scripts/verify_docs_site.py'
+      - '.github/scripts/check_lighthouse_medians.js'
+      - '.github/workflows/lighthouse-ci.yml'
   workflow_dispatch:
 
 permissions:
   contents: read
   pull-requests: write
+
+concurrency:
+  group: lighthouse-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   lighthouse:
@@ -21,22 +37,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # actions/checkout@v7.0.1
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # astral-sh/setup-uv@v10.3.3
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # actions/setup-node@v7.1.0
         with:
-          version: "0.13.5"
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: src/codomyrmex/documentation/package-lock.json
 
-      - name: Set up Python
-        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # actions/setup-python@v7.1.0
-        with:
-          python-version: "3.11"
+      - name: Install documentation dependencies
+        working-directory: src/codomyrmex/documentation
+        run: npm ci
 
-      - name: Install dependencies
-        run: |
-          uv sync --locked --group docs --all-extras
+      - name: Build the deployed documentation site
+        working-directory: src/codomyrmex/documentation
+        run: npm run build
 
-      - name: Build docs
-        run: uv run mkdocs build --strict
+      - name: Verify the artifact the audit will measure
+        # LHCI starts the server itself and captures its stdout, so the checks
+        # that stop this harness measuring the wrong page are invisible in a
+        # green run. This step serves the same build under /codomyrmex/, runs
+        # the same assertions (.github/scripts/verify_docs_site.py), and prints
+        # what each one measured. A failure here is the same failure that would
+        # kill the server below, with its numbers attached.
+        run: bash .github/scripts/serve_docs_site.sh --check
 
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # treosh/lighthouse-ci-action@12.6.2
@@ -44,8 +67,17 @@ jobs:
           configPath: .github/lighthouse-ci.json
           uploadArtifacts: true
           temporaryPublicStorage: true
-          # Lighthouse rejects file:// URLs (INVALID_URL). The config's
-          # staticDistDir makes LHCI serve ./site over a local HTTP server.
+          # The config starts .github/scripts/serve_docs_site.sh, which serves the
+          # build under /codomyrmex/ exactly as GitHub Pages does. Serving the
+          # build at the server root makes every asset 404 and reports a perfect
+          # score for a page that shipped no CSS or JavaScript.
+
+      - name: Report medians across the runs
+        # The assertion of record. `lhci assert` reports the most favourable run
+        # of the set (`found: 2527.09` against LCP 3,445 / 2,549 / 2,527 ms), so
+        # a site that breaches two runs in three reads green there. This step
+        # asserts the medians every run actually measured.
+        run: node .github/scripts/check_lighthouse_medians.js .lighthouseci 90 2500
 
       - name: Comment results on PR
         if: github.event_name == 'pull_request'
@@ -59,7 +91,8 @@ jobs:
             const a11y = Math.round(lhr.categories.accessibility.score * 100);
             const bp = Math.round(lhr.categories['best-practices'].score * 100);
             const seo = Math.round(lhr.categories.seo.score * 100);
-            const body = `## 🏠 Lighthouse Results\n\n| Metric | Score |\n|--------|-------|\n| Performance | ${perf} |\n| Accessibility | ${a11y} |\n| Best Practices | ${bp} |\n| SEO | ${seo} |`;
+            const lcp = Math.round(lhr.audits['largest-contentful-paint'].numericValue);
+            const body = `## Lighthouse Results (deployed build)\n\n| Metric | Score |\n|--------|-------|\n| Performance | ${perf} |\n| Accessibility | ${a11y} |\n| Best Practices | ${bp} |\n| SEO | ${seo} |\n| LCP | ${lcp} ms |`;
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,

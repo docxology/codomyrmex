@@ -5,7 +5,7 @@
         "categories:performance": [
           "error",
           {
-            "minScore": 0.8
+            "minScore": 0.9
           }
         ],
         "categories:accessibility": [
@@ -27,7 +27,7 @@
           }
         ],
         "largest-contentful-paint": [
-          "error",
+          "warn",
           {
             "maxNumericValue": 2500
           }
@@ -41,12 +41,12 @@
       }
     },
     "collect": {
+      "startServerCommand": "bash .github/scripts/serve_docs_site.sh",
       "settings": {
         "chromeFlags": "--no-sandbox --headless"
       },
-      "staticDistDir": "./site",
-      "url": ["/index.html"],
-      "numberOfRuns": 3
+      "url": ["http://127.0.0.1:4173/codomyrmex/"],
+      "numberOfRuns": 5
     }
   }
 }

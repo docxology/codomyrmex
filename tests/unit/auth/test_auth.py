@@ -125,7 +125,7 @@ class TestTokenManager:
     @pytest.fixture
     def manager(self):
         """Create a fresh TokenManager for each test."""
-        return TokenManager(secret="test-secret")
+        return TokenManager(secret="test-secret")  # pragma: allowlist secret
 
     def test_create_token(self, manager):
         """Test basic token creation."""
@@ -352,7 +352,7 @@ class TestTokenValidator:
     @pytest.fixture
     def validator(self):
         """Create a fresh TokenValidator for each test."""
-        return TokenValidator(secret="test-secret-key")
+        return TokenValidator(secret="test-secret-key")  # pragma: allowlist secret
 
     def test_sign_and_validate_token(self, validator):
         """Test token signing and validation roundtrip."""
@@ -468,7 +468,7 @@ class TestAuthenticator:
         authenticator.register_user("testuser", "testpass")
 
         token = authenticator.authenticate(
-            {"username": "testuser", "password": "testpass"}
+            {"username": "testuser", "password": "testpass"}  # pragma: allowlist secret
         )
         assert token is not None
         assert token.user_id == "testuser"
@@ -478,14 +478,20 @@ class TestAuthenticator:
         authenticator.register_user("testuser", "testpass")
 
         token = authenticator.authenticate(
-            {"username": "testuser", "password": "wrongpass"}
+            {
+                "username": "testuser",
+                "password": "wrongpass",  # pragma: allowlist secret
+            }  # pragma: allowlist secret
         )
         assert token is None
 
     def test_authenticate_with_nonexistent_user(self, authenticator):
         """Test authentication fails with nonexistent user."""
         token = authenticator.authenticate(
-            {"username": "nonexistent", "password": "anypass"}
+            {
+                "username": "nonexistent",
+                "password": "anypass",  # pragma: allowlist secret
+            }  # pragma: allowlist secret
         )
         assert token is None
 

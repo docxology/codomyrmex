@@ -144,7 +144,7 @@ class TestAiderConfig:
     def test_has_anthropic_key_true(self):
         """has_anthropic_key must be True when ANTHROPIC_API_KEY is set."""
         saved = os.environ.get("ANTHROPIC_API_KEY")
-        os.environ["ANTHROPIC_API_KEY"] = "sk-test-key"
+        os.environ["ANTHROPIC_API_KEY"] = "sk-test-key"  # pragma: allowlist secret
         try:
             cfg = AiderConfig()
             assert cfg.has_anthropic_key is True
@@ -167,7 +167,7 @@ class TestAiderConfig:
     def test_has_openai_key_true(self):
         """has_openai_key must be True when OPENAI_API_KEY is set."""
         saved = os.environ.get("OPENAI_API_KEY")
-        os.environ["OPENAI_API_KEY"] = "sk-test-key"
+        os.environ["OPENAI_API_KEY"] = "sk-test-key"  # pragma: allowlist secret
         try:
             cfg = AiderConfig()
             assert cfg.has_openai_key is True
@@ -191,7 +191,7 @@ class TestAiderConfig:
         """has_any_key must be True when at least anthropic key is set."""
         saved_a = os.environ.get("ANTHROPIC_API_KEY")
         saved_o = os.environ.pop("OPENAI_API_KEY", None)
-        os.environ["ANTHROPIC_API_KEY"] = "sk-test"
+        os.environ["ANTHROPIC_API_KEY"] = "sk-test"  # pragma: allowlist secret
         try:
             cfg = AiderConfig()
             assert cfg.has_any_key is True

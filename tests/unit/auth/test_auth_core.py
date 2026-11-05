@@ -247,7 +247,7 @@ class TestTokenManagerUnit:
     """Tests for the TokenManager class."""
 
     def _make_manager(self):
-        return TokenManager(secret="test-secret-123")
+        return TokenManager(secret="test-secret-123")  # pragma: allowlist secret
 
     def test_create_token_basic(self):
         """create_token returns a token with correct user_id."""
