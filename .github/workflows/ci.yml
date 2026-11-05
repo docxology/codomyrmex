@@ -234,32 +234,6 @@ jobs:
         run: |
           mkdir -p output
 
-      # TEMPORARY DIAGNOSTIC — remove before merge. A pytest plugin sees only
-      # the process that runs pytest; a `uv` spawn inside a CLI entry point
-      # started as a child process never passes through it. This shim sits first
-      # on PATH for every later step, records the spawn and execs the real uv.
-      - name: Install a uv shim
-        run: |
-          set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/uv-shim"
-          REAL_UV="$(command -v uv)"
-          echo "shim in front of: $REAL_UV"
-          {
-            echo '#!/usr/bin/env bash'
-            echo 'log="${UV_PROBE_LOG:-uv-shim.log}"'
-            echo '{'
-            echo '  printf "%s pid=%s cwd=%s argv=" "$(date +%H:%M:%S)" "$$" "$PWD"'
-            echo '  printf "%q " "$@"'
-            echo '  printf " uv_env="'
-            echo '  env | grep -E "^UV_" | tr "\n" " " || true'
-            echo '  printf "\n"'
-            echo "} >> \"\$log\" 2>/dev/null || true"
-            echo "exec \"$REAL_UV\" \"\$@\""
-          } > "$RUNNER_TEMP/uv-shim/uv"
-          chmod +x "$RUNNER_TEMP/uv-shim/uv"
-          echo "$RUNNER_TEMP/uv-shim" >> "$GITHUB_PATH"
-          head -20 "$RUNNER_TEMP/uv-shim/uv"
-
       - name: Install native integration prerequisites
         # A stalled mirror or registry used to hang the job until its 60 min limit.
         timeout-minutes: 10
@@ -430,14 +404,9 @@ jobs:
         # keeps this job's synced environment; --python states which
         # interpreter it must be, so uv warns (rather than silently rebuilding)
         # if .venv ever stops matching the matrix.
-        env:
-          # TEMPORARY: lets `-p uv_probe` import; removed with the probe.
-          PYTHONPATH: ${{ github.workspace }}
-          UV_PROBE_LOG: ${{ github.workspace }}/uv-probe.log
         run: >-
           uv run --no-sync --python ${{ matrix.python-version }}
           pytest tests/ -q --tb=short
-          -p uv_probe
           -n auto
           -m "not performance and not benchmark and not bench"
           --junit-xml=junit-unit-${{ matrix.os }}-${{ matrix.python-version }}.xml
@@ -452,46 +421,6 @@ jobs:
           name: test-results-matrix-${{ matrix.os }}-${{ matrix.python-version }}
           path: junit-*.xml
           retention-days: 30
-
-      # TEMPORARY DIAGNOSTIC — remove before merge. Records the state of the
-      # environment *after* the suite ran, so a rebuild during the run is
-      # visible as a different interpreter directory than the matrix named.
-      - name: Upload the process probe (temporary diagnostic)
-        if: always()
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # actions/upload-artifact@v7.0.2
-        with:
-          name: uv-probe-${{ matrix.os }}-${{ matrix.python-version }}
-          path: uv-probe.log
-          if-no-files-found: ignore
-          retention-days: 30
-
-      - name: Probe environment after the run
-        if: always()
-        run: |
-          echo "expected interpreter: ${{ matrix.python-version }}"
-          echo "=== interpreter directories under .venv/lib:"
-          ls .venv/lib || true
-          echo "=== pyvenv.cfg:"
-          grep -E "version_info|uv =" .venv/pyvenv.cfg || true
-          echo "=== site-packages entry count:"
-          ls .venv/lib/python*/site-packages 2>/dev/null | wc -l
-          echo "=== key packages present:"
-          for pkg in _pytest pytest mkdocs pandas hypothesis fitz; do
-            for base in .venv/lib/python*/site-packages; do
-              [ -e "$base/$pkg" ] && echo "present: $base/$pkg" \
-                || echo "absent:  $base/$pkg"
-            done
-          done
-          echo "=== working tree after the run:"
-          git status --short || true
-          echo "=== what a fresh interpreter resolves:"
-          .venv/bin/python - <<'PY' || true
-          import importlib.util, sys
-          print("version:", sys.version.split()[0])
-          print("executable:", sys.executable)
-          for name in ("_pytest", "pytest", "mkdocs", "pandas", "hypothesis"):
-              print(f"{name}: {importlib.util.find_spec(name)}")
-          PY
 
   windows-portability:
     name: Windows Portability

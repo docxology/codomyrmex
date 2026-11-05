@@ -36,6 +36,7 @@ pytestmark = pytest.mark.unit
 TESTS_ROOT = Path(__file__).resolve().parents[2]
 
 SUBPROCESS_FUNCTIONS = frozenset({"run", "Popen", "check_output", "check_call", "call"})
+MUTATING_VERBS = frozenset({"add", "remove", "lock", "sync"})
 BARE_INTERPRETERS = frozenset({"python", "python3", "py"})
 EXECUTABLE_TOKEN = "@sys.executable"
 
@@ -137,10 +138,23 @@ def _is_bare_python(program: str) -> bool:
     )
 
 
+def _verb(argv: tuple[str, ...]) -> str:
+    for token in argv[1:]:
+        if not token.startswith("-"):
+            return token
+    return ""
+
+
 def _judge(argv: tuple[str, ...]) -> list[str]:
     """Return the reasons this argv is unsafe; empty when it is safe."""
     reasons: list[str] = []
     program = Path(argv[0]).name if argv else ""
+
+    if program == "uv" and _verb(argv) in MUTATING_VERBS:
+        reasons.append(
+            f"`uv {_verb(argv)}` rewrites pyproject.toml and the lockfile and "
+            "re-resolves the shared environment; no test may run it"
+        )
 
     if program == "uv" and ("run" in argv or "sync" in argv):
         if "--no-sync" not in argv:
@@ -216,6 +230,44 @@ def test_no_test_module_mutates_the_project_environment() -> None:
     )
 
 
+def test_the_runtime_guard_classifies_the_same_shapes(tmp_path: Path) -> None:
+    """The spawn-time guard must refuse what the static gate refuses.
+
+    The static scan cannot see a spawn production code performs on a test's
+    behalf (`HermesClient._heal_environment` runs `uv add <pkg>` in the process
+    working directory), so `tests/support/uv_spawns.py` re-checks at the spawn.
+    Its classifier is pure, so the shapes are testable without spawning uv.
+    """
+    from tests.support.uv_spawns import violation_for
+
+    repo = tmp_path / "repo"
+    (repo / ".venv").mkdir(parents=True)
+    inside = repo
+    outside = tmp_path / "elsewhere"
+    outside.mkdir()
+
+    refused = [
+        (("uv", "add", "requests"), inside),
+        (("uv", "remove", "requests"), inside),
+        (("uv", "sync"), inside),
+        (("uv", "lock"), outside),
+        (("uv", "run", "pytest"), inside),
+    ]
+    for argv, cwd in refused:
+        assert violation_for(argv, cwd, repo) is not None, argv
+
+    allowed = [
+        (("uv", "run", "--no-sync", "--python", "x", "pytest"), inside),
+        (("uv", "run", "pytest"), outside),
+        (("uv", "build", "--out-dir", "dist"), inside),
+        (("uv", "init"), inside),
+        (("uv", "--version"), inside),
+        (("git", "status"), inside),
+    ]
+    for argv, cwd in allowed:
+        assert violation_for(argv, cwd, repo) is None, argv
+
+
 def test_the_gate_scans_the_real_population() -> None:
     """A gate over an empty or wrong population would pass for the wrong reason."""
     modules = _test_modules()
@@ -239,7 +291,9 @@ def test_the_gate_scans_the_real_population() -> None:
             2,
         ),
         # `sync` is refused for the same reason.
-        ('subprocess.run(["uv", "sync", "--locked"])', 1),
+        ('subprocess.run(["uv", "sync", "--locked"])', 2),
+        ('subprocess.run(["uv", "add", "requests"])', 1),
+        ('subprocess.run(["uv", "lock", "--check"])', 1),
         # argv assembled in a variable is still read.
         (
             'cmd = ["uv", "run", "pytest"]\nsubprocess.run(cmd)',
