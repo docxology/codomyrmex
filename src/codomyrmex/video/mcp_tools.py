@@ -10,6 +10,10 @@ from collections.abc import Sequence
 from typing import Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
+from codomyrmex.model_context_protocol.delegated_url_policy import (
+    DelegatedURLPolicyError,
+    require_delegated_url_tool,
+)
 
 
 def _get_config():
@@ -114,8 +118,10 @@ def video_check_availability() -> dict[str, Any]:
         "Transcribe any video URL to timestamped text using the "
         "nativ3ai/universal-video-transcriber pipeline: "
         "URL → yt-dlp → ffmpeg → faster-whisper → JSON. "
-        "Supports YouTube, X/Twitter, Vimeo, Reddit, and any yt-dlp-compatible site."
+        "Supports YouTube, X/Twitter, Vimeo, Reddit, and any yt-dlp-compatible site. "
+        "Disabled unless the operator explicitly enables this delegated URL tool."
     ),
+    destructive=True,
 )
 def video_transcribe_url(
     url: str,
@@ -126,7 +132,12 @@ def video_transcribe_url(
     cookies_from_browser: str | None = None,
     mode: str = "auto",
 ) -> dict[str, Any]:
-    """Transcribe a video URL.
+    """Transcribe a video URL after an explicit operator delegation grant.
+
+    Disabled by default. The host must enable the canonical tool name through
+    ``CODOMYRMEX_MCP_DELEGATED_URL_TOOLS`` for a separately contained backend.
+    Tool arguments cannot enable delegation. Direct VideoTranscriber APIs are
+    unaffected by this MCP-specific policy.
 
     Args:
         url: Any URL resolvable by yt-dlp (YouTube, X, Vimeo, etc.).
@@ -144,6 +155,7 @@ def video_transcribe_url(
         duration_sec, language, transcript, segments, metadata, status.
     """
     try:
+        require_delegated_url_tool("codomyrmex.video_transcribe_url")
         from codomyrmex.video.transcription import VideoTranscriber
 
         t = VideoTranscriber(mode=mode)
@@ -155,6 +167,13 @@ def video_transcribe_url(
             persist_media=persist_media,
             cookies_from_browser=cookies_from_browser,
         )
+    except DelegatedURLPolicyError as exc:
+        return {
+            "status": "error",
+            "source_url": url,
+            "error_code": exc.code,
+            "message": str(exc),
+        }
     except Exception as exc:
         return {"status": "error", "source_url": url, "message": str(exc)}
 

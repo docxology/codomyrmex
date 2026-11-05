@@ -149,9 +149,14 @@ The networking MCP tools do not expose arbitrary HTTP requests. The video
 transcriber passes caller URLs to an external CLI or REST pipeline; its configured
 REST API intentionally defaults to loopback. AgentMail webhook registration submits
 callback URLs to the AgentMail SDK, whose service performs later delivery. Neither
-path uses this HTTP client, so `public_only` does not establish an SSRF boundary for
-those backends. Their DNS, redirects, proxies, and actual destinations remain the
-responsibility of those execution environments.
+path uses this HTTP client. Their MCP wrappers instead deny delegation by default
+and require an explicit per-tool host grant through
+`CODOMYRMEX_MCP_DELEGATED_URL_TOOLS` before constructing a backend/provider. See the
+[delegated URL deployment policy](../model_context_protocol/SECURITY.md#delegated-url-tools).
+Enabling a wrapper trusts a separately contained execution environment; it does not
+make this HTTP client responsible for the external backend's DNS, redirects, proxies,
+or actual destinations. Direct trusted Python backend APIs retain local-service
+compatibility.
 
 ## Security Audit Checklist
 

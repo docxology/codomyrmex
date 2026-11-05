@@ -569,11 +569,31 @@ class MCPServer:
             if err_type in {"SecurityError", "AccessDeniedError", "TrustError"}
             else MCPErrorCode.EXECUTION_ERROR
         )
+        # Only reviewed delegated-URL denials receive policy classification.
+        # Never forward arbitrary tool error_details into the wire response.
+        from codomyrmex.model_context_protocol.delegated_url_policy import (
+            DELEGATED_URL_TOOLS,
+        )
+
+        error_module = err_type
+        details = result.error.error_details if result.error else None
+        if (
+            tool_name in DELEGATED_URL_TOOLS
+            and err_type == "ToolResultError"
+            and isinstance(details, dict)
+        ):
+            policy_code = details.get("error_code")
+            if isinstance(policy_code, str) and policy_code in {
+                "DELEGATED_URL_DISABLED",
+                "DELEGATED_URL_POLICY_INVALID",
+            }:
+                error_code = MCPErrorCode.ACCESS_DENIED
+                error_module = policy_code
         return MCPToolError(
             code=error_code,
             message=err_msg,
             tool_name=tool_name,
-            module=err_type,
+            module=error_module,
         ).to_mcp_response()
 
     async def _list_resources(self, params: dict[str, Any]) -> dict[str, Any]:

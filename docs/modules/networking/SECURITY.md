@@ -108,6 +108,50 @@ except NetworkError as e:
     logger.error(f"Network request failed: {e}")
 ```
 
+## Public-only HTTP clients
+
+`HTTPClient(public_only=True)` is an opt-in boundary for a Python caller that
+accepts untrusted HTTP(S) destination URLs. The default remains unrestricted for
+backward compatibility with intentionally configured local services.
+
+The protected adapter validates each prepared request, including redirect hops.
+It rejects URL credentials, `Host` header overrides, explicit proxies, and disabled
+TLS certificate verification. It ignores environment proxies and netrc credentials.
+Both HTTP and HTTPS connections resolve the hostname at socket creation, reject an
+empty answer or any non-public address in the complete answer, and connect directly
+to a validated numeric sockaddr without a second hostname resolution. Every new
+connection, including a retry, repeats that resolution and validation. Existing
+pooled sockets retain the public peer to which they were connected. Original host
+names remain intact for the HTTP `Host` header, TLS SNI, and certificate checks.
+
+Non-public includes loopback, private, link-local/metadata, shared-address,
+unspecified, multicast, reserved, and documentation ranges. Scoped IPv6, IPv4-mapped
+IPv6, NAT64 well-known/local-use prefixes, 6to4, Teredo, and IPv4-compatible IPv6 are
+refused rather than inferred safe from their enclosing IPv6 range.
+
+This boundary depends on the requests/urllib3 connection extension API. The locked
+dependency versions are the validation target; upgrades need the focused networking
+checks. Configure certificate paths explicitly when an environment normally supplies
+them. The protected session's adapters must not be replaced by callers.
+
+This option does not authorize outbound access or restrict traffic to approved
+public services. It cannot certify host routing, deployment-specific translation
+prefixes, public relays, or what a remote server does with received data. Deployments
+requiring an enforceable egress boundary should apply network controls too.
+
+The networking MCP tools do not expose arbitrary HTTP requests. The video
+transcriber passes caller URLs to an external CLI or REST pipeline; its configured
+REST API intentionally defaults to loopback. AgentMail webhook registration submits
+callback URLs to the AgentMail SDK, whose service performs later delivery. Neither
+path uses this HTTP client. Their MCP wrappers instead deny delegation by default
+and require an explicit per-tool host grant through
+`CODOMYRMEX_MCP_DELEGATED_URL_TOOLS` before constructing a backend/provider. See the
+[delegated URL deployment policy](../model_context_protocol/SECURITY.md#delegated-url-tools).
+Enabling a wrapper trusts a separately contained execution environment; it does not
+make this HTTP client responsible for the external backend's DNS, redirects, proxies,
+or actual destinations. Direct trusted Python backend APIs retain local-service
+compatibility.
+
 ## Security Audit Checklist
 
 - [ ] TLS 1.2+ is enforced for all connections

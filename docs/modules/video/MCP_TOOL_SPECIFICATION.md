@@ -79,6 +79,7 @@ Process a video with various operations.
 #### Examples
 
 **Resize:**
+
 ```json
 {
   "name": "video_process",
@@ -92,6 +93,7 @@ Process a video with various operations.
 ```
 
 **Trim:**
+
 ```json
 {
   "name": "video_process",
@@ -447,7 +449,7 @@ Validate a video file.
 ### Error Types
 
 | Error Type | Description |
-|------------|-------------|
+| ------------ | ------------- |
 | VideoReadError | Cannot read video file |
 | VideoWriteError | Cannot write output file |
 | VideoProcessingError | Processing operation failed |
@@ -499,3 +501,31 @@ Validate a video file.
   }
 ]
 ```
+
+## `video_transcribe_url`
+
+Transcribe a URL through the external CLI/REST pipeline. This destructive MCP
+tool is disabled unless `CODOMYRMEX_MCP_DELEGATED_URL_TOOLS` explicitly includes
+`codomyrmex.video_transcribe_url`. Tool arguments cannot enable it. A denied
+invocation constructs no backend and returns `status="error"`, `source_url`,
+`message`, and `error_code="DELEGATED_URL_DISABLED"` or
+`"DELEGATED_URL_POLICY_INVALID"`. Raw MCP transport reports `ACCESS_DENIED` with
+that policy code in `module`.
+
+```python
+video_transcribe_url(
+    url: str,
+    model_size: str = "small",
+    language: str | None = None,
+    word_timestamps: bool = True,
+    persist_media: bool = False,
+    cookies_from_browser: str | None = None,
+    mode: str = "auto",
+) -> dict[str, Any]
+```
+
+The operator grant trusts a separately contained downloader; it does not impose
+this process's HTTP address policy on yt-dlp, ffmpeg, or a REST backend. Follow the
+[delegated URL deployment policy](../model_context_protocol/SECURITY.md#delegated-url-tools).
+Direct Python `VideoTranscriber` methods retain their trusted-caller contract,
+including configured local REST services.
