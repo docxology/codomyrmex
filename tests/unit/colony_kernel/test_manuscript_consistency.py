@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import importlib.util
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -1274,10 +1276,24 @@ def test_root_package_scripts_point_to_live_documentation_surface() -> None:
     assert "mkdocs" in " ".join(scripts.values())
     assert "documentation &&" not in " ".join(scripts.values())
 
+    if importlib.util.find_spec("mkdocs") is None:
+        pytest.skip(
+            "mkdocs is not installed in this interpreter; sync the docs group "
+            "with `uv sync --group docs` to run the documented serve command"
+        )
+
+    # `uv run` without `--no-sync` re-resolves the project environment against
+    # `.python-version` and rebuilds `.venv` when the interpreter differs. From
+    # inside a 3.12/3.13/3.14 session that deletes the environment the rest of
+    # the suite is importing from, so this must never sync and must name the
+    # interpreter that is already running.
     mkdocs_version = subprocess.run(
         [
             "uv",
             "run",
+            "--no-sync",
+            "--python",
+            sys.executable,
             "--locked",
             "--group",
             "docs",
