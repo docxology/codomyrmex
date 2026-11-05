@@ -15,8 +15,9 @@ GitHub Pages compresses it.
 
 | File | Called by | Purpose |
 | --- | --- | --- |
-| `serve_docs_site.sh` | `lighthouse-ci.yml` (`startServerCommand`) | Symlink the build as `codomyrmex/` in a temporary root, start the server, **assert the served artifact**, then print one readiness line |
+| `serve_docs_site.sh` | `lighthouse-ci.yml` (`startServerCommand`, plus a `--check` step) | Symlink the build as `codomyrmex/` in a temporary root, start the server, **assert the served artifact**, then print one readiness line (or, with `--check`, print the assertions to the run log and stop without measuring) |
 | `serve_docs_site.py` | `serve_docs_site.sh` | `ThreadingHTTPServer` that gzips HTML, JS, CSS, JSON, SVG, XML, text and source maps |
+| `verify_docs_site.py` | `serve_docs_site.sh` | The three artifact assertions, each printing the value it measured; exit 1 on any failure |
 | `check_lighthouse_medians.js` | `lighthouse-ci.yml` | The assertion of record: read every run LHCI wrote, assert median performance and CLS, warn when the median LCP exceeds its ceiling |
 
 ## Development Guidelines
@@ -29,12 +30,19 @@ GitHub Pages compresses it.
   Without it the emulated link measures compressibility instead of the site — the same
   artifact reads 337 KB compressed and 1,759 KB uncompressed (live Pages measures
   332 KB, so the local figure is faithful).
-- **The harness asserts the artifact before reporting a number.** `serve_docs_site.sh`
+- **The harness asserts the artifact before reporting a number.** `verify_docs_site.py`
   requires the served HTML to be byte-identical to `build/index.html`, every JS/CSS
   asset the page references to return 200 under the base path, and a text asset to come
   back gzip-encoded. Each of those three failures has produced a published number once;
   now they exit non-zero instead. Treat the assertions as the fix for that class of
   error, not as decoration — removing one re-opens the hazard.
+- **A green run has to show what it verified.** LHCI captures the server's stdout, so
+  the assertion lines never reach a run log; `serve_docs_site.sh --check` re-serves the
+  build, prints each check with its measured value (HTML size and digest, assets
+  resolved, gzip header and wire size), and exits. Both paths call the same
+  `verify_docs_site.py`, so a red step and a red audit fail on the same check. Keep the
+  two in one implementation: a second copy of the assertions is a second thing to
+  drift.
 - **Print the readiness line last and only after the assertions pass.** LHCI starts
   counting when `startServerCommand` prints; a line emitted before the port answers
   becomes a startup timeout.
@@ -58,6 +66,12 @@ node .github/scripts/check_lighthouse_medians.js .lighthouseci 90 2500
 
 # Server: the readiness line names the URL to request
 bash .github/scripts/serve_docs_site.sh
+
+# Artifact checks printed to the log, nothing measured (what the workflow step runs)
+bash .github/scripts/serve_docs_site.sh --check
+
+# The checks alone, against a server that is already running
+python3 .github/scripts/verify_docs_site.py --base-url http://127.0.0.1:4173/codomyrmex/
 ```
 
 ## Navigation

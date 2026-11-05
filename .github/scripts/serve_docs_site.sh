@@ -16,7 +16,20 @@
 # every asset the page references must return 200 under the base path, and a text
 # asset must come back gzip-encoded. Any failure exits non-zero instead of
 # producing a score.
+#
+# Those three checks live in verify_docs_site.py and print what they measured.
+# LHCI captures this script's stdout only while it runs, so the lines never reach
+# the run log; the workflow also runs this script with --check, which serves the
+# build, prints the same lines to the log, and exits without measuring anything.
 set -euo pipefail
+mode="${1:-serve}"
+case "$mode" in
+  serve | --check) ;;
+  *)
+    echo "serve_docs_site: unknown argument: ${mode}" >&2
+    exit 2
+    ;;
+esac
 port="${PORT:-4173}"
 root="$(mktemp -d)"
 build="$(pwd)/src/codomyrmex/documentation/build"
@@ -41,40 +54,20 @@ if [ "$ready" -ne 1 ]; then
   exit 1
 fi
 
-# 1. The document under the base path is the build's own index.html.
-if ! curl -sf "$url" | cmp -s - "$build/index.html"; then
-  echo "serve_docs_site: served HTML is not byte-identical to build/index.html" >&2
-  echo "serve_docs_site: refusing to measure an unknown page" >&2
-  exit 1
-fi
+# 1-3. The served document, its assets, and gzip. The checks live in
+# verify_docs_site.py so that this server and the workflow step which prints
+# them run the same code and fail for the same reasons.
+python3 "$(pwd)/.github/scripts/verify_docs_site.py" --base-url "$url" --build-dir "$build"
 
-html="$(curl -sf "$url")"
-js="$(printf '%s' "$html" | grep -o -m1 '/codomyrmex/assets/js/[^"]*\.js' || true)"
-css="$(printf '%s' "$html" | grep -o -m1 '/codomyrmex/assets/css/[^"]*\.css' || true)"
-if [ -z "$js" ] || [ -z "$css" ]; then
-  echo "serve_docs_site: index.html references no JS/CSS asset under /codomyrmex/" >&2
-  exit 1
-fi
-
-# 2. The assets the page references resolve under the base path.
-for asset in "$js" "$css"; do
-  code="$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:${port}${asset}")"
-  if [ "$code" != "200" ]; then
-    echo "serve_docs_site: ${asset} returned HTTP ${code}; assets are not resolving" >&2
-    exit 1
-  fi
-done
-
-# 3. Text responses are compressed, as GitHub Pages compresses them.
-if ! curl -s -o /dev/null -D - -H 'Accept-Encoding: gzip' "http://127.0.0.1:${port}${js}" \
-  | tr -d '\r' | grep -qi '^content-encoding: gzip'; then
-  echo "serve_docs_site: ${js} was served without gzip" >&2
-  exit 1
+if [ "$mode" = "--check" ]; then
+  # The workflow step: print the checks to the run log, stop the server, and
+  # leave the measurement to LHCI, which starts its own server.
+  echo "serve_docs_site: --check complete; server stopped, no measurement taken"
+  exit 0
 fi
 
 # The readiness line stays last: LHCI starts counting when startServerCommand
 # prints it, and a line emitted before the port answers becomes a startup timeout.
 echo "listening on ${url} (gzip)"
-echo "serve_docs_site: artifact verified (index.html byte-identical, assets resolve, gzip on)"
 
 wait "$server_pid"

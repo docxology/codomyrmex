@@ -8,6 +8,7 @@ on:
       - 'docs/**'
       - '.github/lighthouse-ci.json'
       - '.github/scripts/serve_docs_site.sh'
+      - '.github/scripts/verify_docs_site.py'
       - '.github/workflows/lighthouse-ci.yml'
   workflow_dispatch:
 
@@ -42,6 +43,15 @@ jobs:
       - name: Build the deployed documentation site
         working-directory: src/codomyrmex/documentation
         run: npm run build
+
+      - name: Verify the artifact the audit will measure
+        # LHCI starts the server itself and captures its stdout, so the checks
+        # that stop this harness measuring the wrong page are invisible in a
+        # green run. This step serves the same build under /codomyrmex/, runs
+        # the same assertions (.github/scripts/verify_docs_site.py), and prints
+        # what each one measured. A failure here is the same failure that would
+        # kill the server below, with its numbers attached.
+        run: bash .github/scripts/serve_docs_site.sh --check
 
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # treosh/lighthouse-ci-action@12.6.2
