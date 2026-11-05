@@ -404,9 +404,14 @@ jobs:
         # keeps this job's synced environment; --python states which
         # interpreter it must be, so uv warns (rather than silently rebuilding)
         # if .venv ever stops matching the matrix.
+        env:
+          # TEMPORARY: lets `-p uv_probe` import; removed with the probe.
+          PYTHONPATH: ${{ github.workspace }}
+          UV_PROBE_LOG: ${{ github.workspace }}/uv-probe.log
         run: >-
           uv run --no-sync --python ${{ matrix.python-version }}
           pytest tests/ -q --tb=short
+          -p uv_probe
           -n auto
           -m "not performance and not benchmark and not bench"
           --junit-xml=junit-unit-${{ matrix.os }}-${{ matrix.python-version }}.xml
@@ -425,6 +430,15 @@ jobs:
       # TEMPORARY DIAGNOSTIC — remove before merge. Records the state of the
       # environment *after* the suite ran, so a rebuild during the run is
       # visible as a different interpreter directory than the matrix named.
+      - name: Upload the process probe (temporary diagnostic)
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # actions/upload-artifact@v7.0.2
+        with:
+          name: uv-probe-${{ matrix.os }}-${{ matrix.python-version }}
+          path: uv-probe.log
+          if-no-files-found: ignore
+          retention-days: 30
+
       - name: Probe environment after the run
         if: always()
         run: |
@@ -442,6 +456,8 @@ jobs:
                 || echo "absent:  $base/$pkg"
             done
           done
+          echo "=== working tree after the run:"
+          git status --short || true
           echo "=== what a fresh interpreter resolves:"
           .venv/bin/python - <<'PY' || true
           import importlib.util, sys
