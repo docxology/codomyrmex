@@ -37,7 +37,7 @@ ln -s "$build" "$root/codomyrmex"
 
 python3 "$(pwd)/.github/scripts/serve_docs_site.py" "$root" "$port" &
 server_pid=$!
-trap 'kill "$server_pid" 2>/dev/null' EXIT
+trap 'kill "$server_pid" 2>/dev/null || true' EXIT
 
 url="http://127.0.0.1:${port}/codomyrmex/"
 
@@ -61,7 +61,11 @@ python3 "$(pwd)/.github/scripts/verify_docs_site.py" --base-url "$url" --build-d
 
 if [ "$mode" = "--check" ]; then
   # The workflow step: print the checks to the run log, stop the server, and
-  # leave the measurement to LHCI, which starts its own server.
+  # leave the measurement to LHCI, which starts its own server. Stopping means
+  # waiting for the process to go, so the port this server holds is free before
+  # the next step binds it.
+  kill "$server_pid" 2>/dev/null
+  wait "$server_pid" 2>/dev/null || true
   echo "serve_docs_site: --check complete; server stopped, no measurement taken"
   exit 0
 fi
