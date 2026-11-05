@@ -26,6 +26,8 @@ import pytest
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "src"))
 
+from tests.support.git_temp_repository import initialize_repository
+
 from codomyrmex.git_operations.core.git import (
     # File operations
     add_files,
@@ -80,7 +82,7 @@ class TestAdvancedGitOperations:
         self.original_dir = os.getcwd()
 
         # Initialize repository for most tests
-        assert initialize_git_repository(self.repo_dir)
+        assert initialize_repository(self.repo_dir)
 
         # Ensure we are on 'main' regardless of system default (master vs main)
         subprocess.run(
