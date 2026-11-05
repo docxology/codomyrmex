@@ -234,6 +234,32 @@ jobs:
         run: |
           mkdir -p output
 
+      # TEMPORARY DIAGNOSTIC — remove before merge. A pytest plugin sees only
+      # the process that runs pytest; a `uv` spawn inside a CLI entry point
+      # started as a child process never passes through it. This shim sits first
+      # on PATH for every later step, records the spawn and execs the real uv.
+      - name: Install a uv shim
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/uv-shim"
+          REAL_UV="$(command -v uv)"
+          echo "shim in front of: $REAL_UV"
+          {
+            echo '#!/usr/bin/env bash'
+            echo 'log="${UV_PROBE_LOG:-uv-shim.log}"'
+            echo '{'
+            echo '  printf "%s pid=%s cwd=%s argv=" "$(date +%H:%M:%S)" "$$" "$PWD"'
+            echo '  printf "%q " "$@"'
+            echo '  printf " uv_env="'
+            echo '  env | grep -E "^UV_" | tr "\n" " " || true'
+            echo '  printf "\n"'
+            echo "} >> \"\$log\" 2>/dev/null || true"
+            echo "exec \"$REAL_UV\" \"\$@\""
+          } > "$RUNNER_TEMP/uv-shim/uv"
+          chmod +x "$RUNNER_TEMP/uv-shim/uv"
+          echo "$RUNNER_TEMP/uv-shim" >> "$GITHUB_PATH"
+          head -20 "$RUNNER_TEMP/uv-shim/uv"
+
       - name: Install native integration prerequisites
         # A stalled mirror or registry used to hang the job until its 60 min limit.
         timeout-minutes: 10
