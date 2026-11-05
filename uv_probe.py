@@ -27,8 +27,7 @@ def _caller() -> str:
     frames = [
         f"{Path(frame.filename).name}:{frame.lineno} in {frame.name}"
         for frame in traceback.extract_stack()
-        if "uv_probe" not in frame.filename
-        and "subprocess.py" not in frame.filename
+        if "uv_probe" not in frame.filename and "subprocess.py" not in frame.filename
     ]
     return " <- ".join(reversed(frames[-4:]))
 
