@@ -32,10 +32,8 @@ merge history.
 2. `git log --oneline -50 -- <target-file>` + read the file on `main` — if
    the optimization is already applied (module-level map, compiled regex,
    `move_to_end`, frozenset, batching), the task is DONE. Do not open a PR.
-
 3. One logical change = one PR. No formatter churn, no unrelated files, no
    CI/workflow edits, no `.jules/` journal-only diffs.
-
 4. Cite `file:line` on `main` in the PR body proving the hot path still
    allocates/compiles today.
 
