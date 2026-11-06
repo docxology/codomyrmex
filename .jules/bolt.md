@@ -42,3 +42,8 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2026-11-06 - O(1) Sliding Window using collections.deque
+
+**Learning:** `LogAggregator` was using a standard python `list` to store logs, and implementing size limitations via `self._records.pop(0)`. In Python, `list.pop(0)` is an O(N) operation since it shifts all subsequent elements left. For a log aggregator buffering up to 100,000 records, this causes extreme performance degradation under high throughput.
+**Action:** Replace `list` with `collections.deque(maxlen=max_records)` for sliding windows and message buffers. `deque` provides automatic O(1) truncation and O(1) appends, dramatically improving throughput for large buffers. Note that since `deque` does not support list-style slicing, `itertools.islice` must be used for subset retrieval (e.g. `itertools.islice(d, start, stop)`).
