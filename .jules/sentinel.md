@@ -47,3 +47,8 @@ executors.
   (proposals #482/#484 rejected).
 - Transcription/STT command injection was fixed by merged #423 at the live
   call site; the `transcription_tools.py` file does not exist on `main`.
+
+## 2025-01-01 - Command Injection Vulnerability Fix
+**Vulnerability:** Command injection risk via shell=True in _transcribe_local_command
+**Learning:** Formatting command strings and passing to shell=True allows injection if any variable can be manipulated, even when partially quoted.
+**Prevention:** Always use shell=False and pass arguments as a list. When refactoring strings to lists, use shlex.split to safely tokenize the formatted command string while preserving intended argument grouping. Update any test mocks that previously relied on isinstance(cmd, list) to distinguish between commands by inspecting list elements (e.g., cmd[0].endswith('ffmpeg')).
