@@ -88,6 +88,7 @@ dependencies = [
     "agent-client-protocol>=0.8.0",
     # For language detection module
     "langdetect>=1.0.9",
+    "oauthlib>=4.0.1",
 ]
 
 [project.optional-dependencies]
