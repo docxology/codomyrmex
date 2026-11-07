@@ -44,3 +44,6 @@ icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
+## 2024-11-07 - Add accessible labels to icon-only buttons
+**Learning:** Many icon-only and abbreviation buttons (like layout toggles and mode selectors) lack descriptive aria-labels, which makes them inaccessible to screen readers.
+**Action:** Always ensure that any button without clear text content has a descriptive aria-label and title for hover context.
