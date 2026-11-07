@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2026-11-04 - O(1) Sliding Window with Deque
+**Learning:** Using `list.pop(0)` for bounding an in-memory buffer (like a log aggregator) turns append operations into O(N), severely impacting performance at large capacities (e.g., 100k items).
+**Action:** Use `collections.deque(maxlen=N)` for automatic O(1) sliding window behavior, and use `itertools.islice(deque, start, stop)` for slicing operations since deques do not support standard list slicing.
