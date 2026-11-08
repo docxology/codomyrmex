@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2024-11-08 - Optimize LogAggregator Buffer Appends
+**Learning:** Found an `O(N)` list.pop(0) anti-pattern in `src/codomyrmex/logging_monitoring/core/log_aggregator.py` when sliding the in-memory window. Using `collections.deque(maxlen=N)` offers an `O(1)` implicit sliding window and significantly speeds up appends when the buffer hits its maximum capacity.
+**Action:** Replace `list` queues/buffers with `collections.deque(maxlen=N)` when doing FIFO operations and length checks.

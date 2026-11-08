@@ -6,8 +6,9 @@ range, and basic log analytics (rate, error ratio, top modules).
 
 from __future__ import annotations
 
+import itertools
 import time
-from collections import defaultdict
+from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -97,7 +98,7 @@ class LogAggregator:
     """
 
     def __init__(self, max_records: int = 100_000) -> None:
-        self._records: list[LogRecord] = []
+        self._records: deque[LogRecord] = deque(maxlen=max_records)
         self._max_records = max_records
 
     @property
@@ -107,14 +108,13 @@ class LogAggregator:
 
     def add(self, record: LogRecord) -> None:
         """Add a log record."""
-        if len(self._records) >= self._max_records:
-            self._records.pop(0)
+        # OPTIMIZATION: Using deque with maxlen provides O(1) sliding window retention,
+        # avoiding the O(N) cost of list.pop(0) when the buffer is full.
         self._records.append(record)
 
     def add_many(self, records: list[LogRecord]) -> None:
         """Add multiple log records."""
-        for r in records:
-            self.add(r)
+        self._records.extend(records)
 
     def search(self, query: LogQuery) -> list[LogRecord]:
         """Search logs matching the query criteria.
@@ -187,7 +187,10 @@ class LogAggregator:
 
     def tail(self, n: int = 20) -> list[LogRecord]:
         """Return the most recent n records."""
-        return list(self._records[-n:])
+        if n <= 0:
+            return []
+        start_idx = max(0, len(self._records) - n)
+        return list(itertools.islice(self._records, start_idx, len(self._records)))
 
     def clear(self) -> None:
         """Remove all stored records."""
