@@ -44,3 +44,6 @@ icon-only button labels in `spa/index.html` (merged #418 + applied #217),
 `role="alert"` Ollama banners in `chat.html` (applied #149), dispatch label
 associations (merged #322), or any element whose selector already carries the
 proposed attribute on `main`.
+## 2024-05-14 - Missing ARIA labels on Icon-only buttons
+**Learning:** Found a recurring pattern in the codebase where icon-only buttons (like the `WidgetGrid` controls and `ProjectManagerModal` close button) lacked `aria-label`s, rendering them inaccessible to screen readers. Focus states for keyboard navigation were also occasionally missing.
+**Action:** Always verify that interactive elements containing only visual icons or symbols include descriptive `aria-label`s and `title` attributes. Ensure `focus-visible` styles are present for keyboard accessibility.
