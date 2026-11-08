@@ -11,7 +11,9 @@ Duplicate definitions across modules (e.g., repeating the `SecretType` definitio
 
 **Prevention:**
 Use descriptive suffixes or alternatives (e.g., changing `"password"` to `"password_type"`) for model or type definitions. Implement robust CI checks to enforce single-source-of-truth patterns rather than duplicating classes.
+
 ## 2026-08-04 - Prevent Command Injection via shell=True
+
 **Vulnerability:** Command Injection risk from using shell=True in subprocess.run for transcription_tools.py.
 **Learning:** Even when interpolating quoted strings, shell=True exposes the system to injection if templates are misconfigured or arguments leak.
 **Prevention:** Use shell=False combined with shlex.split() to safely tokenize commands while maintaining argument grouping.
@@ -26,6 +28,7 @@ already list-args without a shell), and "fixing" intentionally shell-based
 executors.
 
 **Action (mandatory, in order):**
+
 1. `gh pr list --state open --search "<callsite>"` and
    `git log --oneline -50 -- <target-file>`; read the callsite on `main`. If
    the injection is already fixed (list args, no shell, parameterized SQL,
@@ -35,6 +38,7 @@ executors.
    `.jules/` journal-only diffs, no test-suite deletions.
 
 **Dispositions (do not re-propose):**
+
 - Interactive shell sessions and agent shell executors (`do_shell`,
   `_shell_session`, `SystemOpsMixin`, OS provider diagnostic commands marked
   `# nosec B602`) are intentional design. Converting them to
@@ -49,11 +53,7 @@ executors.
   call site; the `transcription_tools.py` file does not exist on `main`.
 
 ## 2026-11-08 - Unsafe Subprocess Execution in Submodules
-**Vulnerability:** A command injection vulnerability existed in `_transcribe_local_command` due to `shell=True` and string concatenation of user-provided paths and arguments in `subprocess.run()`.
-**Learning:** Even internal tool commands (like calling a local whisper binary) require defensive coding. Using `shell=True` alongside `.format()` string interpolation for system commands bypasses argument tokenization and creates immediate command injection risks if the inputs (like audio file paths) are not perfectly sanitized. Additionally, when patching vulnerabilities in Git submodules, the commit must be correctly executed inside the submodule directory, and the resulting pointer update must be separately staged and committed in the parent repository. Temporary files used during the patching process must also be strictly removed to avoid polluting the git history.
-**Prevention:** Always use `shell=False` combined with `shlex.split()` or explicit argument lists when invoking `subprocess.run()`. Treat any path or argument string that may incorporate user-provided data as tainted. Ensure git workflows explicitly separate submodule commits from parent pointer updates and enforce a clean working tree prior to commit.
 
-## 2026-11-08 - Unsafe Subprocess Execution in Submodules
 **Vulnerability:** A command injection vulnerability existed in `_transcribe_local_command` due to `shell=True` and string concatenation of user-provided paths and arguments in `subprocess.run()`.
 **Learning:** Even internal tool commands (like calling a local whisper binary) require defensive coding. Using `shell=True` alongside `.format()` string interpolation for system commands bypasses argument tokenization and creates immediate command injection risks if the inputs (like audio file paths) are not perfectly sanitized. Additionally, when patching vulnerabilities in Git submodules, the commit must be correctly executed inside the submodule directory, and the resulting pointer update must be separately staged and committed in the parent repository. Temporary files used during the patching process must also be strictly removed to avoid polluting the git history.
 **Prevention:** Always use `shell=False` combined with `shlex.split()` or explicit argument lists when invoking `subprocess.run()`. Treat any path or argument string that may incorporate user-provided data as tainted. Ensure git workflows explicitly separate submodule commits from parent pointer updates and enforce a clean working tree prior to commit.
