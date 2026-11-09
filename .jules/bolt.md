@@ -42,3 +42,8 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2024-12-14 - Avoid O(N) list.pop(0) for message queues
+
+**Learning:** Using `list.pop(0)` for FIFO message queues creates severe O(N) performance degradation as the queue grows, since all elements must shift down.
+**Action:** Use `collections.deque` paired with `.popleft()` for robust O(1) removal at the beginning of the queue.
