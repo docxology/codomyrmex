@@ -199,7 +199,7 @@ jobs:
           fi
 
       - name: Upload Bandit results to GitHub Security
-        uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # github/codeql-action@v4.39.1
+        uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # github/codeql-action@v4.39.3
         if: always()
         with:
           sarif_file: bandit-results.sarif
@@ -270,7 +270,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # actions/checkout@v7.0.1
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # github/codeql-action@v4.39.1
+        uses: github/codeql-action/init@33d7b85da1a04171e211befe2c739303b9a4c066 # github/codeql-action@v4.39.3
         with:
           languages: ${{ matrix.language }}
           queries: security-extended
@@ -288,7 +288,7 @@ jobs:
           uv sync --locked --all-groups --all-extras
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # github/codeql-action@v4.39.1
+        uses: github/codeql-action/analyze@33d7b85da1a04171e211befe2c739303b9a4c066 # github/codeql-action@v4.39.3
         with:
           category: "/language:${{ matrix.language }}"
 
@@ -382,7 +382,7 @@ jobs:
       - name: Run TruffleHog
         # v3.63.7 expanded commit messages into its bash script (shell
         # injection on push); v3.97.4+ passes commit IDs through env.
-        uses: trufflesecurity/trufflehog@31ce31ee1abbcc7dc8eee5764c17121c3044c8b2 # trufflesecurity/trufflehog@v3.99.7
+        uses: trufflesecurity/trufflehog@ea68ca03c865c5f324e86e849ced20ed3cf9dbbb # trufflesecurity/trufflehog@v3.99.8
         with:
           path: ./
           version: 3.99.2
@@ -451,7 +451,7 @@ jobs:
 
       - name: Create Pull Request
         if: steps.check_updates.outputs.updates_available == 'true'
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # peter-evans/create-pull-request@v8.1.1
+        uses: peter-evans/create-pull-request@15733dbdfeedb4f7fdb73d13c6f5ac83b710fab8 # peter-evans/create-pull-request@v8.1.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "chore: update dependencies"
