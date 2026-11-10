@@ -38,7 +38,7 @@ When working within this module, pay close attention to:
 -   **`env_checker.py`**:
     -   Manually test `env_checker.py` under various conditions: missing dependencies, missing `.env` file, existing `.env` file, incorrect project root (if that part of the script is modified).
     -   Unit tests (in `tests/`) should cover the logic of `ensure_dependencies_installed` and `check_and_setup_env_vars`, using real file system operations with temp directories (Zero-Mock policy).
--   **Documentation**: 
+-   **Documentation**:
     -   Manually walk through setup instructions in `README.md` and troubleshooting steps on different OS (if feasible) to verify accuracy.
     -   Check for clarity and completeness of explanations.
 

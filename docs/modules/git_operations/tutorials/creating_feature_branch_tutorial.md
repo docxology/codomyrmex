@@ -38,7 +38,7 @@ Let's assume the Git Operations module will provide a function like this (detail
 
 ### Step 1: Identify Your Task and Choose a Branch Name
 
-Suppose you are about to work on a new feature to add a "user profile display". 
+Suppose you are about to work on a new feature to add a "user profile display".
 According to common conventions, a good branch name might be:
 - `feature/user-profile-display`
 - `feat/user-profile`
@@ -60,7 +60,7 @@ create_feature_branch("feature/user-login", "main")
 def create_feature_branch(repo_path: str, branch_name: str, base_branch: str = "main", checkout: bool = True):
     print(f"Simulating: Creating branch '{branch_name}' from '{base_branch}' in '{repo_path}'. Checkout: {checkout}")
     # In a real scenario, this would pull base_branch first to ensure it's up-to-date
-    # pull_changes(repo_path, branch_name=base_branch) 
+    # pull_changes(repo_path, branch_name=base_branch)
     # Then create and checkout the new branch
     print(f"Branch '{branch_name}' created and checked out.")
     return True
@@ -128,7 +128,7 @@ Using a dedicated function from the `git_operations` module (once implemented) w
 Once your feature branch is created:
 - Start developing your feature, making regular commits.
 - Refer to `CONTRIBUTING.md` for guidelines on commit messages and the Pull Request process.
-- Explore other (future) tools from the `git_operations` module for tasks like validating commit messages or automating PR creation. 
+- Explore other (future) tools from the `git_operations` module for tasks like validating commit messages or automating PR creation.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

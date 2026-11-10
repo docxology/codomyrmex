@@ -130,7 +130,7 @@ The Codomyrmex project employs a multi-layered testing approach:
 - This testing strategy will be reviewed periodically and updated as the project evolves.
 - Feedback from the development team will be incorporated to improve testing practices.
 
-By adhering to this testing strategy, the Codomyrmex project aims to deliver high-quality, robust, and reliable software. 
+By adhering to this testing strategy, the Codomyrmex project aims to deliver high-quality, robust, and reliable software.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

@@ -2,7 +2,7 @@
 
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
-**Module**: `codomyrmex.prompt_engineering`  
+**Module**: `codomyrmex.prompt_engineering`
 **Status**: Active
 
 ## 1. Overview

@@ -38,7 +38,7 @@ graph TD
     subgraph "Infomaniak Module"
         Init[__init__.py]
         Auth[auth.py]
-        
+
         Compute[compute/] --> Nova[Nova API]
         BlockStorage[block_storage/] --> Cinder[Cinder API]
         Network[network/] --> Neutron[Neutron API]
@@ -49,7 +49,7 @@ graph TD
         Orch[orchestration/] --> Heat[Heat API]
         Meter[metering/] --> Aggregation[Resource Aggregation]
     end
-    
+
     Auth --> Init
     openstack[openstacksdk] -.-> Compute & BlockStorage & Network & ObjStorage & Identity & DNS & Orch & Meter
     boto3[boto3] -.-> S3

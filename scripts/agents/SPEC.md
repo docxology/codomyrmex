@@ -30,7 +30,7 @@ python run_all_agents.py
 
 ```bash
 python claude_code_demo.py
-# Demonstrates: edit_file, create_file, review_code, scan_directory, 
+# Demonstrates: edit_file, create_file, review_code, scan_directory,
 #               generate_diff, run_command, explain_code, suggest_tests
 ```
 

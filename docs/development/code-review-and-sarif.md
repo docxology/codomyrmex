@@ -81,6 +81,6 @@ Dedupe uses `ruleId`, artifact URI, and `startLine` when fingerprints are absent
 
 ## Navigation
 
-- **Parent**: [development/](README.md) — developer guides  
-- **Contributing**: [../project/contributing.md](../project/contributing.md)  
+- **Parent**: [development/](README.md) — developer guides
+- **Contributing**: [../project/contributing.md](../project/contributing.md)
 - **Security workflow**: [../../.github/workflows/security.yml](../../.github/workflows/security.yml)

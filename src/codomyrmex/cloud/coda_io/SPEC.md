@@ -41,11 +41,11 @@ graph TD
         Models[models.py]
         Exceptions[exceptions.py]
     end
-    
+
     Client -->|uses| Models
     Client -->|raises| Exceptions
     Client -->|HTTP| API[Coda API v1]
-    
+
     subgraph "CodaClient Methods"
         Docs[Docs API]
         Pages[Pages API]
@@ -54,7 +54,7 @@ graph TD
         Perms[Permissions API]
         Other[Other APIs]
     end
-    
+
     Client --> Docs
     Client --> Pages
     Client --> Tables

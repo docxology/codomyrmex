@@ -52,7 +52,7 @@ graph TD
     A[Application Main Script] -- Calls --> S(codomyrmex.logging_monitoring.setup_logging);
     ENV[.env File] -- Loaded by --> S;
     S -- Configures --> PLS[Python Logging System (Root Logger, Handlers, Formatters)];
-    
+
     M1[Module A] -- Calls --> GL(codomyrmex.logging_monitoring.get_logger);
     GL -- Returns Logger Instance --> M1;
     M1 -- Logs Message --> PLS;
@@ -110,7 +110,7 @@ Configuration is primarily through the following environment variables, typicall
 - **Asynchronous Logging**: For high-throughput applications, an option to perform logging I/O operations asynchronously to minimize impact on application performance.
 - **Log Rotation Configuration**: Basic built-in support for log rotation if `CODOMYRMEX_LOG_FILE` is used, though often this is handled by external tools (like `logrotate` on Linux).
 - **Configuration from a file**: Allow loading configuration from a dedicated logging config file (e.g., YAML or JSON) in addition to environment variables.
-- **More granular control over third-party library logging**: Potentially a mechanism to easily set log levels for specific external libraries via configuration. 
+- **More granular control over third-party library logging**: Potentially a mechanism to easily set log levels for specific external libraries via configuration.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

@@ -26,7 +26,7 @@ The architecture centers around a Python wrapper layer that interacts with the s
   6. Parsed output is transformed into Python objects (e.g., dictionaries for status, lists for commit history) or simple types (e.g., boolean for success/failure, string for branch name).
   7. Results or error indicators are returned to the caller. Errors are logged via the `logging_monitoring` module.
 
-- **Core Algorithms/Logic**: 
+- **Core Algorithms/Logic**:
     - Parsing `git` command output: Logic to reliably parse text output from commands like `git status --porcelain`, `git branch -a`, `git log --pretty=...` into structured data.
     - Error detection and handling: Interpreting `git` exit codes and stderr messages to return appropriate error indicators (False, None, empty collections) and log errors.
     - Argument mapping: Translating Python function arguments into `git` CLI flags and options, ensuring all arguments are passed as list elements to prevent command injection.
@@ -53,7 +53,7 @@ flowchart TD
 
 ## 3. Design Decisions and Rationale
 
-- **Choice of Python Wrapper over Direct CLI in consuming code**: 
+- **Choice of Python Wrapper over Direct CLI in consuming code**:
     - **Abstraction & Simplicity**: Provides a cleaner, Pythonic API, abstracting away the raw `git` commands and their varied output formats.
     - **Error Handling**: Centralizes error handling and parsing of `git` errors, translating them into consistent return value patterns.
     - **Testability**: Easier to unit test wrapper functions by mocking `subprocess.run()` calls, rather than each consuming script trying to test raw `git` interactions.

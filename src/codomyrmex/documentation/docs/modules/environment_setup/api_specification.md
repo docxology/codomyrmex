@@ -16,7 +16,7 @@ These functions are primarily sourced from the `env_checker.py` script.
 - **Path**: N/A (Importable function)
 - **Parameters/Arguments**: None.
 - **Request Body**: N/A
-- **Returns/Response**: None. 
+- **Returns/Response**: None.
   - **Side Effects**: Prints messages to `stderr` and may terminate the calling script via `sys.exit(1)` if essential dependencies are missing.
 - **Events Emitted**: N/A
 
@@ -89,7 +89,7 @@ N/A.
 
 ## Versioning
 
-These functions will be versioned as part of the `environment_setup` module, following the overall project's semantic versioning. Changes to function signatures or core behavior will be noted in the module's `CHANGELOG.md`. 
+These functions will be versioned as part of the `environment_setup` module, following the overall project's semantic versioning. Changes to function signatures or core behavior will be noted in the module's `CHANGELOG.md`.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

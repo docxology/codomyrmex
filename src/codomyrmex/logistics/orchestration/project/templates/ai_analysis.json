@@ -12,30 +12,17 @@
     ".codomyrmex/"
   ],
   "template_files": {},
-  "workflows": [
-    "ai-analysis",
-    "build-and-test"
-  ],
+  "workflows": ["ai-analysis", "build-and-test"],
   "required_modules": [
     "ai_code_editing",
     "static_analysis",
     "data_visualization"
   ],
-  "optional_modules": [
-    "git_operations",
-    "documentation"
-  ],
+  "optional_modules": ["git_operations", "documentation"],
   "default_config": {
     "analysis": {
-      "include_patterns": [
-        "*.py",
-        "*.js",
-        "*.ts"
-      ],
-      "exclude_patterns": [
-        "*/node_modules/*",
-        "*/__pycache__/*"
-      ],
+      "include_patterns": ["*.py", "*.js", "*.ts"],
+      "exclude_patterns": ["*/node_modules/*", "*/__pycache__/*"],
       "max_file_size": "1MB"
     },
     "ai": {
@@ -43,22 +30,12 @@
       "model": "gpt-3.5-turbo"
     },
     "output": {
-      "formats": [
-        "json",
-        "html",
-        "pdf"
-      ],
+      "formats": ["json", "html", "pdf"],
       "include_visualizations": true
     }
   },
   "documentation_config": {
-    "nested_docs": [
-      "src/",
-      "config/",
-      "data/",
-      "output/",
-      "reports/"
-    ],
+    "nested_docs": ["src/", "config/", "data/", "output/", "reports/"],
     "doc_links": {
       "enabled": true,
       "parent_link": true,

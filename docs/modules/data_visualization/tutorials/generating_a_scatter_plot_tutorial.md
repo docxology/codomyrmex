@@ -95,7 +95,7 @@ Refer to `data_visualization/API_SPECIFICATION.md` for a full list of parameters
 ## 5. Troubleshooting
 
 - **`ModuleNotFoundError`**: Ensure `matplotlib`, `seaborn`, `numpy` are installed in your active Python environment.
-- **`FileNotFoundError` or `PermissionError` when saving**: 
+- **`FileNotFoundError` or `PermissionError` when saving**:
     - Check that the directory specified in `output_path` (e.g., `./my_scatter_plots/`) exists and is writable.
     - Ensure the filename in `output_path` is valid.
 - **Data Mismatch Errors** (e.g., `ValueError: x and y must be the same size`):
@@ -106,7 +106,7 @@ Refer to `data_visualization/API_SPECIFICATION.md` for a full list of parameters
 - Experiment with other parameters of `create_scatter_plot` like different `dot_color` values or `alpha` levels.
 - Try plotting different datasets to explore relationships.
 - Explore other plotting functions from the `data_visualization` module, such as `create_bar_chart` or `create_histogram`.
-- Consider using this function for visualizing correlations or distributions in your Codomyrmex projects. 
+- Consider using this function for visualizing correlations or distributions in your Codomyrmex projects.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

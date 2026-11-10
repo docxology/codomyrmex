@@ -48,7 +48,7 @@ graph TD
     Container --> Monitor[Monitoring Submodule]
     Venv --> Monitor
     Monitor --> Result[Execution Result]
-    
+
     Result -->|Failure| Debugger[Debugging Submodule]
     Debugger --> ErrorAnalyzer[Error Analyzer]
     ErrorAnalyzer --> PatchGen[Patch Generator]

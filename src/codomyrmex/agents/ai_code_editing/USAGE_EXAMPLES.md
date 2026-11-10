@@ -180,36 +180,36 @@ from ai_code_editing import generate_code_snippet, refactor_code_snippet
 def complete_coding_task(task_description, language):
     """Generates, refactors, and outputs code for a task."""
     print(f"Task: {task_description}")
-    
+
     # Step 1: Generate initial code
     gen_result = generate_code_snippet(
         prompt=task_description,
         language=language
     )
-    
+
     if gen_result["status"] != "success":
         return f"Failed to generate code: {gen_result['error_message']}"
-    
+
     initial_code = gen_result["generated_code"]
     print("
 Initial code generated:")
     print(initial_code)
-    
+
     # Step 2: Refactor for best practices
     refactor_result = refactor_code_snippet(
         code_snippet=initial_code,
         refactoring_instruction=f"Optimize this {language} code following best practices, ensure error handling, and add detailed comments",
         language=language
     )
-    
+
     if refactor_result["status"] not in ["success", "no_change_needed"]:
         return f"Failed to refactor code: {refactor_result['error_message']}"
-    
+
     final_code = refactor_result["refactored_code"]
     print("
 Final optimized code:")
     print(final_code)
-    
+
     return final_code
 
 # Example usage

@@ -72,7 +72,7 @@ This is a crucial step to bring all documentation into the Docusaurus build proc
     ```bash
     # Ensure GIT_USER is set if deploying to a different user/org repo
     # Example: GIT_USER=<YourGitHubUsername> npm run deploy
-    
+
     npm run deploy
     # OR
     # yarn deploy
@@ -92,7 +92,7 @@ This is a crucial step to bring all documentation into the Docusaurus build proc
 -   Ensure the `documentation_website.py` script is maintained if new Docusaurus commands or project structures emerge.
 -   Regularly review and improve the content aggregation process, aiming for full automation.
 
-This pipeline ensures that the Codomyrmex documentation remains current, consistent, and easily accessible. 
+This pipeline ensures that the Codomyrmex documentation remains current, consistent, and easily accessible.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

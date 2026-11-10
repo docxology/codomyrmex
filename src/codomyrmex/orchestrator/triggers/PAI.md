@@ -2,7 +2,7 @@
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-**Module**: `codomyrmex.orchestrator.triggers`  
+**Module**: `codomyrmex.orchestrator.triggers`
 **Status**: Active
 
 ## Context

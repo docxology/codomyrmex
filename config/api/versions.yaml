@@ -5,9 +5,7 @@ versions:
   supported:
     - "v1"
   default: "v1"
-  
+
   deprecation:
     enabled: true
     notice_period_days: 90
-
-

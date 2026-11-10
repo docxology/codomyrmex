@@ -41,7 +41,7 @@ This security policy applies only to the `Ai Code Editing` module within the Cod
 - **Resource Limits**: Be mindful of the complexity and length of code submitted for refactoring or analysis, as complex operations could consume significant resources.
 - Regularly review configurations and logs for suspicious activity.
 
-Thank you for helping keep Codomyrmex and the Ai Code Editing module secure. 
+Thank you for helping keep Codomyrmex and the Ai Code Editing module secure.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

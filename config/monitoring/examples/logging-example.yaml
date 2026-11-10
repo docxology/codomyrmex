@@ -5,7 +5,7 @@ logging:
   level: "DEBUG"
   format: "TEXT"
   text_format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-  
+
   outputs:
     - type: "console"
       enabled: true
@@ -17,7 +17,7 @@ logging:
 
 rotation:
   enabled: true
-  max_file_size: 10485760  # 10MB
+  max_file_size: 10485760 # 10MB
   backup_count: 5
 
 modules:
@@ -25,5 +25,3 @@ modules:
     level: "INFO"
   codomyrmex.llm:
     level: "DEBUG"
-
-

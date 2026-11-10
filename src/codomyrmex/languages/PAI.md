@@ -48,7 +48,7 @@ def check_language_installed(language: str) -> dict:
 def get_installation_instructions(language: str, platform: str = "auto") -> str:
     """Get platform-specific installation instructions for a language."""
 
-@mcp_tool  
+@mcp_tool
 def list_supported_languages() -> list[str]:
     """List all supported programming languages."""
 ```

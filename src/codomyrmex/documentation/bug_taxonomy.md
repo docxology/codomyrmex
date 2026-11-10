@@ -296,7 +296,7 @@ graph TD
     subgraph CodomyrmexAssistedSolution
         L_Dev -- `ai_code_editing` (Design & Simplification) --> L_BetterCode[Simpler/Clearer Code];
         L_BetterCode -- `static_analysis` (Complexity & Pattern Checks) --> L_Warn[Warnings on Risky Logic];
-        
+
         L_Code -- `code_execution_sandbox` (Automated & Generated Tests) --> L_Fail[Test Fails];
         L_Fail -- `data_visualization` / `ai_code_editing` (Debug & Explain) --> L_Insight[Insight into Flaw];
         L_Insight -- `ai_code_editing` (Suggest & Implement Fix) --> L_Fix[Corrected Code];
@@ -306,7 +306,7 @@ graph TD
         L_Insight -- `model_context_protocol` (Error Signature Learning) --> L_Learn[System Learns Pattern];
         L_Learn -- `ai_code_editing` / `static_analysis` (Proactive Guidance) --> L_FuturePrevent[Future Prevention Enhanced];
     end
-    
+
     style L_BetterCode fill:#e6ffe6,stroke:#333,stroke-width:2px
     style L_Fix fill:#e6ffe6,stroke:#333,stroke-width:2px
     style L_Deploy fill:#d1f0ff,stroke:#333,stroke-width:2px
@@ -400,7 +400,7 @@ graph TD
     subgraph With Codomyrmex
         Input -- `static_analysis` (Suggests Checks) / `ai_code_editing` (Adds Asserts) --> IU_Func_C[Function Call with Preconditions];
         IU_Func_C -- `documentation` (Clear Contract) --> IU_Caller[Caller Aware of Expectations];
-        
+
         IU_Func_C --> IU_Validation{Explicit Validation};
         IU_Validation -- Valid --> IU_Logic_C[Function Logic];
         IU_Logic_C --> IU_SafeOutput[Safe Output];
@@ -635,7 +635,7 @@ graph TD
     subgraph CodomyrmexIntervention
         Dev[Developer Coding Concurrency] -- `ai_code_editing` (Safe Patterns) --> SafeCode[Safer Concurrent Code];
         SafeCode -- `static_analysis` (Race/Deadlock Check) --> StaticWarn[Potential Issues Flagged];
-        
+
         App[Application Running] -- `code_execution_sandbox` with TSan --> TSanReport[TSan Race Report];
         TSanReport -- `logging_monitoring` & `ai_code_editing` --> Diagnosis[Root Cause Diagnosis];
         Diagnosis -- `ai_code_editing` (Synchronization Fix) --> PatchedCode[Patched Concurrent Code];
@@ -782,7 +782,7 @@ Did I forget your favorite kind of bug or your favorite debugging technique? Let
 
 This comprehensive overview demonstrates how Codomyrmex, through its integrated suite of modules, aims to provide robust support across the entire lifecycle of bug management, from prevention and early detection to efficient fixing and continuous improvement of software quality and security. By leveraging static analysis, AI-powered code editing, controlled execution environments, advanced logging and monitoring, and more, Codomyrmex empowers developers to build more reliable and secure software.
 
-</rewritten_file> 
+</rewritten_file>
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

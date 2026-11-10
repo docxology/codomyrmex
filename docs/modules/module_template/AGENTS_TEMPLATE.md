@@ -45,4 +45,3 @@
 - **Parent Directory**: [codomyrmex](../README.md) - Package overview
 - **Project Root**: [README](../../README.md) - Main project documentation
 - **Source Root**: [src/README](../../../src/README.md) - Source code index
-

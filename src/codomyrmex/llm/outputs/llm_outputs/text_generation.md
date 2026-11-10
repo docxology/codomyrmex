@@ -37,4 +37,3 @@ print("Hello, World!")
 ## Model
 
 llama3.1:latest
-

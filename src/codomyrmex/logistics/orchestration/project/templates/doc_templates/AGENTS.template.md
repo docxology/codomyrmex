@@ -15,4 +15,3 @@
 - [ ] Confirm AGENTS.md reflects the current module purpose.
 - [ ] Verify logging and telemetry hooks for this directory's agents.
 - [ ] Sync automation scripts or TODO entries after modifications.
-

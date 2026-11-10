@@ -13,7 +13,7 @@ TELOS files live in `~/.claude/USER/` and are loaded by PAI agents at session st
 ```mermaid
 graph TD
     TELOS["TELOS System<br/>(~/.claude/USER/)"]
-    
+
     subgraph Identity["Identity & Purpose"]
         MISSION["MISSION.md<br/>(Core life purpose)"]
         GOALS["GOALS.md<br/>(Active objectives)"]

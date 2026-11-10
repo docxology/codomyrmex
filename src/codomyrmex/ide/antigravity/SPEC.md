@@ -36,17 +36,17 @@ graph TD
         Artifacts[ArtifactManager]
         Session[SessionManager]
     end
-    
+
     subgraph "Antigravity IDE"
         API[Antigravity API]
         Browser[Browser Context]
         Memory[Conversation Memory]
     end
-    
+
     Client --> Session
     Client --> Tools
     Client --> Artifacts
-    
+
     Session --> API
     Tools --> API
     Artifacts --> Memory
@@ -131,7 +131,7 @@ class AntigravityClient(IDEClient):
     def get_active_file(self) -> Optional[str]: ...
     def open_file(self, path: str) -> bool: ...
     def get_open_files(self) -> List[str]: ...
-    
+
     # Antigravity-specific methods
     def get_conversation_id(self) -> Optional[str]: ...
     def get_context(self) -> Optional[ConversationContext]: ...

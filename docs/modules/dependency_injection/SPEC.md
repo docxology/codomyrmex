@@ -2,7 +2,7 @@
 
 **Version**: v1.3.0 | **Status**: Active | **Last Updated**: March 2026
 
-**Module**: `codomyrmex.dependency_injection`  
+**Module**: `codomyrmex.dependency_injection`
 **Status**: Active
 
 ## 1. Overview

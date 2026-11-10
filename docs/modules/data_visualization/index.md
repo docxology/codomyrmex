@@ -18,7 +18,7 @@ The main `documentation/` module of the Codomyrmex project may compile this cont
 
 - Start with the [Technical Overview](./technical_overview.md) for a high-level understanding of the module's architecture.
 - Refer to the [API Specification](../../../src/codomyrmex/data_visualization/API_SPECIFICATION.md) for details on how to interact with the module programmatically.
-- Explore the [Usage Examples](../../../src/codomyrmex/data_visualization/USAGE_EXAMPLES.md) and [Tutorials](./tutorials/) to see the module in action. 
+- Explore the [Usage Examples](../../../src/codomyrmex/data_visualization/USAGE_EXAMPLES.md) and [Tutorials](./tutorials/) to see the module in action.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

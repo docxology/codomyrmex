@@ -429,4 +429,3 @@ Configuration for CEREBRUM engine.
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
-

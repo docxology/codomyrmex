@@ -87,14 +87,14 @@ The `generate_code_snippet` tool, guided by your prompt, instructed the configur
 
 - **Error: `LLM API request failed.` / `"status": "error"` with an API error message**
   - **Cause**: Invalid/missing API key, network issues, LLM provider outage, insufficient credits, or a prompt that violates content policies.
-  - **Solution**: 
+  - **Solution**:
     1. Verify your LLM API key (e.g., `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`) is correctly set in your environment and is active with available funds/quota.
     2. Check your internet connectivity.
     3. Check the status page of your LLM provider (e.g., OpenAI Status).
     4. Try a simpler prompt to isolate the issue.
 - **Output code is incorrect, incomplete, or doesn't meet requirements**:
   - **Cause**: The prompt might lack clarity or specificity. LLMs can also produce suboptimal results.
-  - **Solution**: 
+  - **Solution**:
     1. **Refine the Prompt**: Make your `prompt` more detailed. Specify constraints, edge cases, or desired coding style.
     2. **Provide `context_code`**: If the function should interact with existing code, provide that code via the `context_code` parameter. This helps the LLM understand the surrounding environment.
     3. **Try a Different Model**: If your setup allows, try specifying a more capable `model_name` (e.g., "gpt-4" if you were using "gpt-3.5-turbo").
@@ -111,7 +111,7 @@ Now you can try:
 - Generating code in different programming languages.
 - Using the `context_code` parameter to generate code that fits into an existing script or class.
 - Exploring more complex prompts, like asking for classes or functions with specific error handling.
-- Reviewing the `agents/MCP_TOOL_SPECIFICATION.md` for all available parameters and options for `generate_code_snippet`. 
+- Reviewing the `agents/MCP_TOOL_SPECIFICATION.md` for all available parameters and options for `generate_code_snippet`.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

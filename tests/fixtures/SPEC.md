@@ -6,7 +6,7 @@
 
 ## Purpose
 
-This directory contains test fixtures, data factories, and mock data generation utilities for the Codomyrmex testing suite. It provides realistic test data and controlled environments for 
+This directory contains test fixtures, data factories, and mock data generation utilities for the Codomyrmex testing suite. It provides realistic test data and controlled environments for
 
 ## Design Principles
 

@@ -34,7 +34,7 @@ import os
 import sys
 
 # Determine the project root path (adjust if your script is nested differently)
-# This example assumes your_script.py is one level inside a module directory, 
+# This example assumes your_script.py is one level inside a module directory,
 # and the module directory is at the project root.
 # For example: codomyrmex/your_module/your_script.py
 # then project_root should be codomyrmex/
@@ -49,7 +49,7 @@ try:
         # Fallback or raise error if heuristic fails
         print("Error: Could not reliably determine project root for env_checker.py. Please ensure your script correctly identifies it.", file=sys.stderr)
         # As a simple fallback, assuming script is run from somewhere within project:
-        project_root = os.getcwd() 
+        project_root = os.getcwd()
         print(f"Attempting to use current working directory as project root: {project_root}", file=sys.stderr)
 
 except NameError: # __file__ is not defined (e.g. in an interactive session)
@@ -205,7 +205,7 @@ While Codomyrmex aims for a unified base setup, a specific module might have an 
 
 ## Module-Specific Setup
 
-1.  **Install System Driver**: 
+1.  **Install System Driver**:
     ```bash
     # (Instructions for installing the XYZ driver for your OS)
     # sudo apt-get install xyz-driver # Example for Debian/Ubuntu
@@ -214,7 +214,7 @@ While Codomyrmex aims for a unified base setup, a specific module might have an 
     ```bash
     uv pip install git+https://example.com/vendor/special_xyz_python_lib.git#egg=special_xyz
     ```
-3.  **Verify**: 
+3.  **Verify**:
     Run the module's verification script (if provided):
     ```bash
     python special_hardware_interface/verify_setup.py

@@ -53,7 +53,7 @@ graph TD
     RedisQueue[Redis Queue]
     JobScheduler[Job Scheduler]
     QueueManager[Queue Manager]
-    
+
     QueueInterface --> InMemoryQueue
     QueueInterface --> RedisQueue
     JobScheduler --> QueueInterface

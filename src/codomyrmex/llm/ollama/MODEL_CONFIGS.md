@@ -4,7 +4,7 @@ This document provides model-specific configuration examples and recommendations
 
 ## rnj-1:8b
 
-**Context Window**: 32K tokens  
+**Context Window**: 32K tokens
 **Recommended Use**: General purpose, code generation, analysis
 
 ### Basic Configuration

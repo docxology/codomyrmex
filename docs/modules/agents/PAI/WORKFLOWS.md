@@ -155,7 +155,7 @@ Technical details are stored in `dispatch_context` within YAML files:
 ```mermaid
 graph TD
     subgraph PAI_Dispatch["PAI Dispatch Actions"]
-        D1["Analyze"] 
+        D1["Analyze"]
         D2["Implement"]
         D3["Review"]
         D4["Test"]
@@ -184,18 +184,18 @@ sequenceDiagram
     participant A as PAI Agent
     participant M as MCPBridge
     participant T as TrustGateway
-    
+
     Note over A,T: Workflow: analyze_and_test
 
     A->>M: call_tool("codomyrmex.list_modules")
     M-->>A: Module list
-    
+
     A->>M: call_tool("codomyrmex.module_info", module="coding")
     M-->>A: Module details
-    
+
     A->>M: call_tool("codomyrmex.analyze_python", path="...")
     M-->>A: Analysis results
-    
+
     A->>T: trusted_call_tool("codomyrmex.run_tests", module="coding")
     T->>T: Check TRUSTED (destructive)
     T->>M: call_tool("codomyrmex.run_tests", module="coding")

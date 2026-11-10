@@ -35,7 +35,7 @@ graph TD
     CronScheduler[Cron Scheduler]
     RecurringScheduler[Recurring Scheduler]
     TimezoneManager[Timezone Manager]
-    
+
     ScheduleManager --> CronScheduler
     ScheduleManager --> RecurringScheduler
     CronScheduler --> TimezoneManager

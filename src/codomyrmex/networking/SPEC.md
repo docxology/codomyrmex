@@ -53,7 +53,7 @@ graph TD
     WebSocketClient[WebSocket Client]
     APIClientGenerator[API Client Generator]
     NetworkManager[Network Manager]
-    
+
     ClientInterface --> HTTPClient
     ClientInterface --> WebSocketClient
     APIClientGenerator --> ClientInterface

@@ -123,5 +123,3 @@ provider_parameters:
   google:
     candidate_count: 1
     stop_sequences: []
-
-

@@ -38,4 +38,4 @@ This security policy applies only to the `[Module Name]` module within the Codom
 - Follow the principle of least privilege when configuring access or permissions related to this module.
 - Regularly review configurations and logs for suspicious activity.
 
-Thank you for helping keep Codomyrmex and the [Module Name] module secure. 
+Thank you for helping keep Codomyrmex and the [Module Name] module secure.

@@ -56,7 +56,7 @@ Our testing strategy incorporates multiple levels of testing to cover different 
 
 *   **Goal**: To identify potential issues, enforce coding standards, and improve code quality without executing the code.
 *   **Scope**: Entire codebase.
-*   **Tools**: 
+*   **Tools**:
     *   `pylint` for general Python linting.
     *   `ruff` for style, import ordering, and formatting enforcement.
     *   `bandit` for security vulnerability scanning.
@@ -98,7 +98,7 @@ Each module should have a `tests/README.md` file detailing:
 *   Any module-specific testing tools or libraries used.
 *   Guidance on how to add new tests for the module.
 
-This project-wide strategy provides a baseline, and modules may extend it with more specific approaches as needed, documenting these in their respective `tests/README.md` files. 
+This project-wide strategy provides a baseline, and modules may extend it with more specific approaches as needed, documenting these in their respective `tests/README.md` files.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

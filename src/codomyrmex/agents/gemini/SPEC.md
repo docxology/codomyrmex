@@ -15,7 +15,7 @@ The Gemini Agent provides a standardized interface to Google's Gemini models, su
     - SDK Client Initialization.
     - Request validation.
     - Method mapping (generate, stream, embed, files, cache).
-  
+
 - **`GeminiCLIWrapper`** (extends `BaseAgent`)
   - **Responsibilities**:
     - CLI subprocess wrapper.

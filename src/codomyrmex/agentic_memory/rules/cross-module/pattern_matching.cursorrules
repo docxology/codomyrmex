@@ -44,4 +44,3 @@ When working within this module, pay close attention to:
 -   Ensure defined patterns are accurate and achieve their intended matching logic.
 -   Verify that analysis scripts like `run_codomyrmex_analysis.py` run correctly and produce meaningful output.
 -   Confirm that documentation clearly explains how to use the pattern matching features and interpret results.
-

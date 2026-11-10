@@ -126,7 +126,7 @@ version 2.1, available at
 [homepage]: https://www.contributor-covenant.org
 [v2.1]: https://www.contributor-covenant.org/version/2/1/code_of_conduct.html
 
-(Remember to replace `blanket@activeinference.institute` with an actual email address or contact point for reporting violations.) 
+(Remember to replace `blanket@activeinference.institute` with an actual email address or contact point for reporting violations.)
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

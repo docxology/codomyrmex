@@ -125,7 +125,7 @@ Refer to `data_visualization/API_SPECIFICATION.md` for a full list of parameters
 
 - Experiment with different `bar_color` options or providing a list of colors for `bar_color`.
 - Plot different categorical datasets.
-- Explore other plotting functions like `create_pie_chart` for proportional data or `create_histogram` for distributions. 
+- Explore other plotting functions like `create_pie_chart` for proportional data or `create_histogram` for distributions.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

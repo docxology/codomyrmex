@@ -1,7 +1,7 @@
 # Soul — Functional Specification
 
-**Module**: `codomyrmex.soul`  
-**Version**: v0.1.0  
+**Module**: `codomyrmex.soul`
+**Version**: v0.1.0
 **Status**: Active
 
 ## 1. Overview

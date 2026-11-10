@@ -14,19 +14,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Established connection to LLM providers (OpenAI, Anthropic) with API key management via `environment_setup`.
 
 ### Changed
-- 
+-
 
 ### Deprecated
-- 
+-
 
 ### Removed
-- 
+-
 
 ### Fixed
-- 
+-
 
 ### Security
-- 
+-
 
 ## [Version X.Y.Z] - YYYY-MM-DD
 
@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhancement B.
 
 ### Fixed
-- Bug C. 
+- Bug C.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

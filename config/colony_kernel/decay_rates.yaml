@@ -11,7 +11,7 @@
 #   - Manuscript:  docs/manuscript/config.yaml §experiment.decay_rates
 #
 
-FAST: 3.0    # multiplier on base evaporation
+FAST: 3.0 # multiplier on base evaporation
 NORMAL: 1.0
 SLOW: 0.2
 

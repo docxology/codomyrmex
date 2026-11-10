@@ -120,7 +120,7 @@ Refer to `data_visualization/API_SPECIFICATION.md` for a full list of parameters
 - Experiment with different numbers of `bins` or binning strategies (e.g., providing a sequence of bin edges).
 - Plot distributions of different datasets from your projects.
 - Explore using the `density=True` option to compare the shape of distributions regardless of sample size.
-- Try other visualization functions like `create_box_plot` (if available) or `create_violin_plot` (if available) for alternative ways to see distributions. 
+- Try other visualization functions like `create_box_plot` (if available) or `create_violin_plot` (if available) for alternative ways to see distributions.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

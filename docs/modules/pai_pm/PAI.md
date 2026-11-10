@@ -1,6 +1,6 @@
 # PAI — pai_pm
 
-**Status**: Active  
+**Status**: Active
 **Last Updated**: April 2026
 
 ## AI Capabilities

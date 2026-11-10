@@ -36,7 +36,7 @@ fi
 if [ ! -d "$PROJECT_HOOKS_DIR" ]; then
     echo_info "Creating directory for project Git hooks: '$PROJECT_HOOKS_DIR'"
     mkdir -p "$PROJECT_HOOKS_DIR"
-    
+
     # Only create sample hook if no hooks exist
     if [ -z "$(ls -A "$PROJECT_HOOKS_DIR" 2>/dev/null)" ]; then
         echo_info "No hooks found. Creating sample pre-commit hook..."
@@ -96,4 +96,4 @@ else
 fi
 
 echo_info "Git Hooks Installation finished."
-echo_info "Ensure your hook scripts in '$PROJECT_HOOKS_DIR' are executable (chmod +x <script_name>)." 
+echo_info "Ensure your hook scripts in '$PROJECT_HOOKS_DIR' are executable (chmod +x <script_name>)."

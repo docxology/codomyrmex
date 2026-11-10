@@ -2,7 +2,7 @@
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-**Module**: cloud/common  
+**Module**: cloud/common
 **Status**: Active
 
 ## Context
@@ -18,7 +18,7 @@ from codomyrmex.cloud.common import CloudConfig, CloudProvider
 
 config = CloudConfig.from_env()
 available_providers = [
-    p for p in CloudProvider 
+    p for p in CloudProvider
     if config.has_provider(p)
 ]
 ```

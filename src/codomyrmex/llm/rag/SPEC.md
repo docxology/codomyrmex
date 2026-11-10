@@ -2,7 +2,7 @@
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-**Module**: `codomyrmex.llm.rag`  
+**Module**: `codomyrmex.llm.rag`
 **Last Updated**: 2026-01-29
 
 ## 1. Purpose

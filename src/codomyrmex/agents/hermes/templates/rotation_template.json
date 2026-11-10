@@ -26,9 +26,5 @@
       "cooldown_seconds": 60
     }
   ],
-  "ollama_models": [
-    "hermes3",
-    "llama3.2",
-    "phi3"
-  ]
+  "ollama_models": ["hermes3", "llama3.2", "phi3"]
 }
