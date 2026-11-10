@@ -2,12 +2,12 @@
 const config = {
   title: 'Codomyrmex Documentation',
   tagline: 'Modular, Extensible Coding Workspace',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/logo.svg',
 
-  url: 'https://ActiveInference.github.io',
+  url: 'https://docxology.github.io',
   baseUrl: '/codomyrmex/',
 
-  organizationName: 'ActiveInference',
+  organizationName: 'docxology',
   projectName: 'codomyrmex',
 
   onBrokenLinks: 'warn',
@@ -29,7 +29,7 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-          editUrl: 'https://github.com/ActiveInference/codomyrmex/tree/main/',
+          editUrl: 'https://github.com/docxology/codomyrmex/tree/main/src/codomyrmex/documentation/',
           routeBasePath: '/',
         },
         blog: false,
@@ -43,7 +43,6 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      image: 'img/docusaurus-social-card.jpg',
       navbar: {
         title: 'Codomyrmex',
         logo: {
@@ -58,7 +57,7 @@ const config = {
             label: 'Documentation',
           },
           {
-            href: 'https://github.com/ActiveInference/codomyrmex',
+            href: 'https://github.com/docxology/codomyrmex',
             label: 'GitHub',
             position: 'right',
           },
@@ -81,7 +80,7 @@ const config = {
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/ActiveInference/codomyrmex',
+                href: 'https://github.com/docxology/codomyrmex',
               },
             ],
           },
