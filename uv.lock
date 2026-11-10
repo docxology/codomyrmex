@@ -1126,7 +1126,7 @@ requires-dist = [
     { name = "pylint", specifier = ">=3.0.0" },
     { name = "pymupdf", marker = "extra == 'dark'", specifier = ">=1.23.0" },
     { name = "pyopengl", marker = "extra == 'modeling-3d'", specifier = ">=3.1.0" },
-    { name = "pypdf", marker = "extra == 'documents'", specifier = ">=6.21.2" },
+    { name = "pypdf", marker = "extra == 'documents'", specifier = ">=6.21.4" },
     { name = "pyrefly", marker = "extra == 'static-analysis'", specifier = ">=0.16.0" },
     { name = "pyrr", marker = "extra == 'modeling-3d'", specifier = ">=0.10.3" },
     { name = "pyserial", marker = "extra == 'physical-management'", specifier = ">=3.5" },
@@ -8304,11 +8304,11 @@ wheels = [
 
 [[package]]
 name = "pypdf"
-version = "6.21.2"
+version = "7.0.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/06/28/081f1cbcca7042441dafc8de00f48ba60853f89e5bff92c5f26477346d81/pypdf-6.21.2.tar.gz", hash = "sha256:0a3e1c5c886a1be03646c16a04827cc166c2a0575c971b26a4bf89686551c2d4", size = 7144571, upload-time = "2026-10-21T16:44:55.272Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/01/19/3e8223d0618bd441eb2b3e105de83ce4187e76f5823d876f60a109ee9072/pypdf-7.0.0.tar.gz", hash = "sha256:061aa78dec270854c912dde80c6bc060486fa955399d643da27ea30afeb6571b", size = 7201622, upload-time = "2026-11-06T12:10:03.447Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1b/4d/c9d2d67f204eff463237a1a8f5e25a6923b7b1043982b91fcaf104c8ef60/pypdf-6.21.2-py3-none-any.whl", hash = "sha256:1d44d1a3a200f25062adff0085b02040e4646431ac2ccac22e42679e91466084", size = 407766, upload-time = "2026-10-21T16:44:53.626Z" },
+    { url = "https://files.pythonhosted.org/packages/8a/21/e83122a25e334c718a4da67004fa94acd7215fe9f8e63a9d7c7f979eb52b/pypdf-7.0.0-py3-none-any.whl", hash = "sha256:112a2c7cbabefd8dfe498f7a13977e575e762d58cdb0d832acb8886922602c6f", size = 413949, upload-time = "2026-11-06T12:10:01.205Z" },
 ]
 
 [[package]]
