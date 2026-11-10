@@ -170,8 +170,11 @@ async def receive_pai_event(request: Request, event: PAIEvent) -> PAIEventRespon
                 metadata={"pai_event_type": event.event_type},
             )
         )
+        # event_type comes from the request body; neutralise CR/LF so a client
+        # cannot forge extra log lines.
+        safe_event_type = event.event_type.replace("\r", "\\r").replace("\n", "\\n")
         logger.info(
-            "PAI event %s dispatched to EventBus: %s", event_id, event.event_type
+            "PAI event %s dispatched to EventBus: %s", event_id, safe_event_type
         )
     except Exception as exc:
         logger.warning("EventBus dispatch failed (non-fatal): %s", exc)
