@@ -45,15 +45,11 @@
 
 The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
 
-## Detailed Architecture and Implementation
+## Delegated URL admission
 
-### Design Principles
-
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+`test_delegated_url_policy.py` exercises strict per-tool operator grants, actual
+handler refusal before backend setup, and raw MCP dispatch without a PAI wrapper.
+A fresh Python process points video REST configuration at a real loopback trap and
+checks that a denied call never contacts it. Positive tests check authorization
+only; they do not transcribe media, send email, or create webhooks. No external
+service, credential, or patched network method is used.

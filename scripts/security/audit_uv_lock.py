@@ -46,17 +46,6 @@ SCOPED_IGNORES: tuple[ScopedIgnore, ...] = (
             "RustSec record marks versions below 43.0.0 unaffected"
         ),
     ),
-    ScopedIgnore(
-        advisory="PYSEC-2026-3740",
-        package="nltk",
-        version="3.10.3",
-        justification=(
-            "no patched release exists; nltk is only a transitive dependency of "
-            "the `safety` audit tool, Codomyrmex never imports nltk, and the "
-            "advisory needs pathsec-enforced model save/load on attacker-chosen "
-            "paths (GHSA-8mgp-746c-j5xp)"
-        ),
-    ),
 )
 
 

@@ -40,7 +40,7 @@ jobs:
       benchmark-enabled: ${{ steps.check-benchmarks.outputs.enabled }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # actions/checkout@v7.0.1
 
       - name: Check if benchmarks exist
         id: check-benchmarks
@@ -62,10 +62,10 @@ jobs:
     if: needs.benchmark-setup.outputs.benchmark-enabled == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # actions/checkout@v7.0.1
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # astral-sh/setup-uv@v10.3.3
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -109,7 +109,7 @@ jobs:
           fi
 
       - name: Upload unit benchmark results
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # actions/upload-artifact@v7.0.2
         with:
           name: unit-benchmark-results
           path: benchmarks/results/
@@ -121,10 +121,10 @@ jobs:
     if: needs.benchmark-setup.outputs.benchmark-enabled == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # actions/checkout@v7.0.1
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # astral-sh/setup-uv@v10.3.3
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -163,7 +163,7 @@ jobs:
           fi
 
       - name: Upload integration benchmark results
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # actions/upload-artifact@v7.0.2
         with:
           name: integration-benchmark-results
           path: benchmarks/results/
@@ -175,10 +175,10 @@ jobs:
     if: needs.benchmark-setup.outputs.benchmark-enabled == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # actions/checkout@v7.0.1
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # astral-sh/setup-uv@v10.3.3
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -257,7 +257,7 @@ jobs:
           echo '```' >> benchmarks/results/memory-report.md
 
       - name: Upload memory benchmark results
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # actions/upload-artifact@v7.0.2
         with:
           name: memory-benchmark-results
           path: benchmarks/results/
@@ -269,7 +269,7 @@ jobs:
     if: always()
     steps:
       - name: Download all benchmark results
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # actions/download-artifact@v8.0.2
         with:
           path: ./benchmark-artifacts
 
@@ -306,7 +306,7 @@ jobs:
           echo "3. Consider optimization for functions showing high resource usage" >> comprehensive-benchmark-report.md
 
       - name: Upload comprehensive benchmark report
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # actions/upload-artifact@v7.0.2
         with:
           name: comprehensive-benchmark-report
           path: comprehensive-benchmark-report.md

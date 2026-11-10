@@ -235,7 +235,7 @@ class TestEncryptorRSA:
 
     def test_key_pair_pem_format(self, enc, keypair):
         priv, pub = keypair
-        assert b"BEGIN PRIVATE KEY" in priv
+        assert b"BEGIN PRIVATE KEY" in priv  # pragma: allowlist secret
         assert b"BEGIN PUBLIC KEY" in pub
 
     def test_different_key_sizes(self, enc):
@@ -247,7 +247,7 @@ class TestEncryptorRSA:
 
     def test_generate_key_returns_pem(self, enc):
         key = enc.generate_key()
-        assert b"BEGIN PRIVATE KEY" in key
+        assert b"BEGIN PRIVATE KEY" in key  # pragma: allowlist secret
 
     def test_cross_keypair_decryption_fails(self, enc):
         """Ciphertext from one key pair cannot be decrypted by another."""
@@ -568,7 +568,10 @@ class TestHashing:
 
     def test_empty_data(self):
         h = Encryptor.hash_data(b"", "sha256")
-        assert h == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        assert (
+            h
+            == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"  # pragma: allowlist secret
+        )  # pragma: allowlist secret
 
     def test_invalid_algorithm_raises(self):
         with pytest.raises(ValueError, match="Unknown hash algorithm"):

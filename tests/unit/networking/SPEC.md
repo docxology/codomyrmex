@@ -11,3 +11,12 @@ Run `.venv/bin/python -m pytest -q tests/unit/networking` from the repository ro
 - [README.md](README.md)
 - [AGENTS.md](AGENTS.md)
 - [Parent directory](../README.md)
+
+## Public-only HTTP policy
+
+The focused suite uses explicit address data, actual localhost DNS, real requests
+objects, and isolated ephemeral loopback servers. It does not resolve public names
+or contact external services. It proves classification and negative admission plus
+legacy local compatibility. A successful public HTTP/TLS connection, external
+redirect chain, and adversarial DNS rebinding sequence require a separately
+controlled integration environment; the offline suite does not claim those results.

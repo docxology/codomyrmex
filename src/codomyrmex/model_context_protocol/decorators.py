@@ -13,6 +13,9 @@ from collections.abc import Callable
 from typing import Any, Union, get_args, get_origin, get_type_hints
 
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.model_context_protocol.tool_annotations import (
+    normalize_tool_annotations,
+)
 
 logger = get_logger(__name__)
 
@@ -26,6 +29,7 @@ def mcp_tool(
     version: str | None = None,
     deprecated_in: str | None = None,
     destructive: bool | None = None,
+    annotations: dict[str, Any] | None = None,
 ) -> Callable[..., Any]:
     """
     Decorator to mark a function as an MCP tool.
@@ -41,6 +45,8 @@ def mcp_tool(
                        If set, calling the tool emits a DeprecationWarning.
         destructive: Whether the tool can produce side effects (write/execute).
                      ``None`` = use default classification from trust_metadata.
+        annotations: MCP behavior hints. Omitted hints use conservative defaults;
+                     these hints do not change trust-gateway authorization.
 
     Usage:
         @mcp_tool(category="math", version="2.0")
@@ -74,6 +80,7 @@ def mcp_tool(
             "version": version or "1.0",
             "deprecated_in": deprecated_in,
             "destructive": destructive,
+            "annotations": normalize_tool_annotations(annotations),
         }
         func._mcp_tool_meta = tool_meta
         func._mcp_tool = tool_meta

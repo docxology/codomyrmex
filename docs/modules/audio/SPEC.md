@@ -12,8 +12,8 @@ The audio module provides speech-to-text (STT) and text-to-speech (TTS) capabili
 
 Both STT and TTS follow a provider pattern:
 
-```
-audio/
+```text
+src/codomyrmex/audio/
 ├── speech_to_text/
 │   ├── transcriber.py      # High-level interface
 │   ├── models.py           # Data models

@@ -15,6 +15,7 @@
 
 **Learning:** The `InMemoryCache` was implementing eviction by calling `min()` across all cache keys to find the oldest entry, causing $O(N)$ behavior on every cache insertion once it was full. This creates severe performance degradation for large caches.
 **Action:** Use `collections.OrderedDict` to maintain insertion order, enabling $O(1)$ eviction via `.popitem(last=False)`, and pair it with `.move_to_end(key)` for existing updates. Use `time.monotonic()` for robust timestamp tracking over `time.time()`.
+
 ## 2026-09-11 - Session hygiene: dedupe before optimizing
 
 **Failure mode:** The 2026-09 triage closed 200+ duplicate Bolt PRs. The
@@ -24,6 +25,7 @@ representative was merged, because sessions never checked open PRs or recent
 merge history.
 
 **Action (mandatory, in order):**
+
 1. `gh pr list --state open --search "<symbol or file>"` — an open PR on the
    same file/intent blocks a new PR.
 2. `git log --oneline -50 -- <target-file>` + read the file on `main` — if
@@ -47,3 +49,8 @@ EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
 
 **Learning:** `ast.parse` is extremely expensive when applied to thousands of files during operations like dependency graph building. Many source files may not even contain the target patterns you are looking for (e.g., specific imports).
 **Action:** Implement a fast-path substring check (e.g., `if "codomyrmex" not in content`) before passing the file content to `ast.parse`. This avoids AST generation overhead for files that couldn't possibly yield any matches, yielding ~50% speedups for large scale repository analysis.
+
+## 2025-01-20 - O(N) list.pop(0) replaced with O(1) deque.popleft()
+
+**Learning:** Using `list.pop(0)` in BFS-like graph traversal algorithms leads to O(N) time complexity for each pop operation, resulting in significant performance degradation for large graphs.
+**Action:** Always use `collections.deque` with `popleft()` for queues, message buffers, or sliding windows to guarantee O(1) removal, improving overall algorithm efficiency to O(V + E) instead of O(V^2 + E).

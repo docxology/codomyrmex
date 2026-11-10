@@ -19,7 +19,7 @@ Structured index and HTTP client for the [public-apis](https://github.com/public
 No extra packages required. Already part of the `codomyrmex.api` module.
 
 ```bash
-uv sync   # or: pip install codomyrmex
+uv sync   # the package is not a published distribution; install from a checkout
 ```
 
 ## Quick start

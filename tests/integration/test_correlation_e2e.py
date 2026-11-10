@@ -10,6 +10,12 @@ MagicMock, or @patch usage.
 import json
 
 import pytest
+
+pytest.importorskip(
+    "fastapi",
+    reason="the MCP HTTP transport requires fastapi (uv sync --extra api)",
+)
+
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.testclient import TestClient

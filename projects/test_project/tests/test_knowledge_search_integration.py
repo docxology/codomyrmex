@@ -82,11 +82,24 @@ class TestScrapeImports:
         assert ScrapeFormat is not None
         assert ScrapeFormat.MARKDOWN is not None
 
-    def test_import_scrape_error(self):
-        """ScrapeError exception is importable."""
-        from codomyrmex.scrape import ScrapeError
+    def test_import_scraping_error(self):
+        """ScrapingError and its documented subclasses are importable."""
+        from codomyrmex.scrape import (
+            FirecrawlError,
+            ScrapeConnectionError,
+            ScrapeTimeoutError,
+            ScrapeValidationError,
+            ScrapingError,
+        )
 
-        assert issubclass(ScrapeError, Exception)
+        assert issubclass(ScrapingError, Exception)
+        for error in (
+            ScrapeConnectionError,
+            ScrapeTimeoutError,
+            ScrapeValidationError,
+            FirecrawlError,
+        ):
+            assert issubclass(error, ScrapingError)
 
 
 class TestFormalVerificationImports:

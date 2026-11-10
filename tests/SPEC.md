@@ -96,6 +96,32 @@ graph TD
 - Independent test execution
 - Fast test execution
 
+### A test may not mutate the environment it runs in
+
+The suite shares one virtual environment, so a test that rebuilds it destroys the
+interpreter every other test is importing from. `uv run` re-resolves the project
+environment against `.python-version`, and when the running interpreter differs it
+**deletes and recreates `.venv`**. Measured on a 3.12 environment: 970 site-packages
+entries became 165 and `lib/python3.12` was gone. A destructive test passes (its
+command exits 0) and the failures land later, in unrelated modules, as
+`ModuleNotFoundError` — which is what produced roughly 130 failures per 3.12+ CI leg
+while 3.11 stayed green.
+
+Two shapes are refused, and a subprocess is the only place they occur:
+
+- `uv run` / `uv sync` without `--no-sync`, and `uv run` without `--python
+  <sys.executable>` — say which interpreter you mean and do not let `.python-version`
+  choose one.
+- A bare interpreter name (`python`, `python3`, `python3.12`, …) as argv[0]. It runs
+  whatever `PATH` resolves: a different version, a different set of extras, or on a
+  fresh runner a venv nothing synced.
+
+`tests/unit/release/test_environment_safety.py` enforces this by parsing every test
+module with `ast` — a comment or docstring mentioning `--no-sync` cannot satisfy it —
+and carries negative controls for each shape so the gate is shown to refuse. When a
+test needs a tool from another dependency group, skip with the reason (as the
+documented `mkdocs` check does) instead of syncing it.
+
 ## Quality Standards
 
 ### Test Quality

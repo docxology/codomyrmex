@@ -287,10 +287,20 @@ class TestHermesClientAdvancedOperations:
         except Exception:
             pass
 
-    def test_heal_environment(self) -> None:
+    def test_heal_environment_refuses_packages_outside_the_allowlist(self) -> None:
+        """The refusal path is the only one a test may take.
+
+        The allowlisted path runs a real `uv add <pkg>` in the process working
+        directory. From the suite that is the repository root, where `uv add`
+        re-resolves the project environment against `.python-version` and
+        deletes and recreates `.venv` while every other test imports from it.
+        Measured on the 3.12 matrix leg before this check existed: `.venv`
+        finished the run as a 3.11 environment holding 165 packages, and 109
+        tests failed in unrelated modules. The unlisted path decides before any
+        subprocess starts, so it is both safe and the contract worth asserting.
+        """
         client = HermesClient()
-        try:
-            res = client._heal_environment("requests")
-            assert isinstance(res, dict)
-        except Exception:
-            pass
+        result = client._heal_environment("surely-not-allowlisted-pkg")
+        assert result["success"] is False
+        assert "not in auto-heal allowlist" in result["output"]
+        assert "surely-not-allowlisted-pkg" in result["output"]

@@ -23,7 +23,8 @@ HTTPClient(
     timeout: int = 30,
     max_retries: int = 3,
     retry_backoff: float = 1.0,
-    headers: Optional[Dict[str, str]] = None
+    headers: Optional[Dict[str, str]] = None,
+    public_only: bool = False
 )
 ```
 
@@ -33,6 +34,27 @@ HTTPClient(
 | `max_retries` | `int` | `3` | Maximum retry attempts |
 | `retry_backoff` | `float` | `1.0` | Backoff factor between retries |
 | `headers` | `Dict[str, str]` | `None` | Default headers for all requests |
+| `public_only` | `bool` | `False` | Opt in to direct public-address HTTP(S) connections |
+
+For URLs supplied by an untrusted source, opt in explicitly:
+
+```python
+client = HTTPClient(public_only=True)
+response = client.get("https://example.com/data")
+```
+
+This mode rejects non-public IPs, mixed public/private DNS answers, mapped or
+transition IPv6 addresses, URL credentials, explicit proxies, custom `Host`
+headers, and disabled TLS verification. DNS is resolved once per fresh TCP
+connection; the socket connects directly to the validated address. Retries and
+redirects use the same policy. Environment proxies and netrc authentication are
+ignored (`Session.trust_env=False`); configure certificate paths explicitly if
+needed. Policy violations surface as `NetworkingError` through `HTTPClient`.
+
+The default retains normal requests behavior, including access to local APIs.
+This option controls only this client's adapters, not other network libraries,
+video download subprocesses, or third-party webhook delivery. Do not replace the
+protected session's adapters. See [security scope](SECURITY.md#public-only-http-clients).
 
 #### Methods
 

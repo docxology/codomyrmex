@@ -34,7 +34,6 @@ documentation, benchmarks, PR automation, and repository maintenance. 37 workflo
 | `agent-welcome.yml` | PR opened | Agent-specific welcome message + checklist |
 | `agent-metrics.yml` | weekly Monday | Agent PR/issue/workflow health dashboard |
 | `jules-dispatch.yml` | workflow_dispatch | Batch create Jules task issues |
-| `dependabot-auto-approve.yml`| PR opened | Auto-approve Dependabot PRs to unblock auto-merge |
 
 ### Community & Release Automation
 
@@ -50,6 +49,7 @@ documentation, benchmarks, PR automation, and repository maintenance. 37 workflo
 |------|---------|---------|
 | `documentation.yml` | doc file changes | Build and deploy to GitHub Pages |
 | `documentation-validation.yml` | PR + weekly | Link check, structure validation |
+| `docs-deploy.yml` | tag `v*`, manual | Strict MkDocs build only, no publication: GitHub Pages belongs to `documentation.yml`. `make docs-check` runs the same `mkdocs build --strict` on PRs |
 
 ### Repository Health
 
@@ -80,11 +80,11 @@ documentation, benchmarks, PR automation, and repository maintenance. 37 workflo
 
 ## Critical Design Decisions
 
-- All workflows have `permissions: {}` at top-level (deny-all default)
-- `astral-sh/setup-uv@v7` is the standard for all UV installations
+- Workflows declare a top-level `permissions:` block. 31 of 37 do today (12 of them `permissions: {}`); the 6 without one inherit the repository default and need a block.
+- `astral-sh/setup-uv` is the standard for all UV installations, pinned by full commit SHA with the release named in a trailing comment.
 - CI runs Ubuntu/Python 3.11 plus Windows/Python 3.11 on PRs. Main pushes run
-  the full suite on Ubuntu and macOS across Python 3.11–3.13, plus the blocking
-  Windows portability contract across the same Python versions.
+  the full suite on Ubuntu and macOS across Python 3.11–3.14, plus the blocking
+  Windows portability contract across Python 3.11–3.13.
 - Ruff, ty, import layering, package build, dependency validation, and the
   primary test/coverage gates are authoritative. Optional PR commentary and
   benchmark/health reporting jobs remain informational.
@@ -120,3 +120,8 @@ documentation, benchmarks, PR automation, and repository maintenance. 37 workflo
   the underlying failure result and be enforced by their final status job.
 - `if: always()` on summary jobs ensures they run after failures
 - `continue-on-error: true` on lint/format steps for agent flexibility
+
+## Currency and supply chain
+
+Account rules CUR-1..CUR-16 are authoritative for this repository; where this
+file and those rules disagree, the rules win.

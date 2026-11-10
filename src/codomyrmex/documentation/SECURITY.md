@@ -21,6 +21,30 @@ servers, and can open a browser. Relevant risks include:
 - dependency and supply-chain compromise in Node and Python build tools;
 - serving internal documentation on a network-visible interface.
 
+## Dependency overrides
+
+`package.json` pins three transitive packages with npm `overrides`, because the
+advisories live in packages pinned by `@docusaurus/core` and its webpack plugins
+rather than in our own direct dependencies:
+
+| Package | Pinned | Pulled in by | Advisory |
+| :--- | :--- | :--- | :--- |
+| `serialize-javascript` | 7.1.4 | `copy-webpack-plugin`, `css-minimizer-webpack-plugin` | `GHSA-m5mm-p8h7-m29v`, `GHSA-qj8w-gfj5-8c6v`, `GHSA-5c6j-r48x-rmvq` (3 alerts) |
+| `tinypool` | 2.2.0 | `@docusaurus/core`'s own worker pool | `GHSA-85c8-ppgw-ccpr`, `GHSA-5gmw-xhrv-c9v3` (2 alerts) |
+| `uuid` | 11.1.1 | `sockjs`, via `webpack-dev-server` (development only) | `GHSA-w5hq-g745-h8pq` |
+
+Docusaurus 3.10.2 is the newest published release, so no upstream upgrade fixes
+these; drop an override when its parent declares the patched range. Verified
+before landing: `npm ci`, `npm run build` (unchanged artifact size and file
+count), and `docusaurus start` — the `uuid` consumer is CommonJS and 11.1.1
+still ships a `require` entry point, but that was tested rather than assumed.
+
+## Known unpatched advisories
+
+| Advisory | Package | Status |
+| :--- | :--- | :--- |
+| `GHSA-gcqx-w48m-w2h4` | `deepmerge` 4.3.1, via `@svgr/plugin-svgo` | **No patched release exists** — 4.3.1 is the latest published version. `mergeObject()` prototype poisoning needs attacker-controlled merge keys, while this tree merges build configuration and SVG metadata. Leave the Dependabot alert open as an upstream wait and re-check when `deepmerge` publishes; do not re-triage it each quarter. |
+
 ## Required controls
 
 - Validate module identifiers before path construction and resolve targets

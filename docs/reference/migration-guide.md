@@ -147,7 +147,7 @@ uv venv venv_codomyrmex_1.0
 source venv_codomyrmex_1.0/bin/activate
 
 # Install new version
-uv pip install codomyrmex==1.0.0
+uv sync   # codomyrmex is not published on PyPI; install from a checkout
 ```
 
 ##### **Step 3: Configuration Migration**
@@ -683,14 +683,14 @@ codomyrmex rollback --to-backup /path/to/backup
 
 # Or manually restore from backup
 cp -r /path/to/backup/* ./
-uv pip install codomyrmex==$(previous_version)
+uv sync   # not a published distribution; restore the backup checkout
 ```
 
 ### **Manual Rollback Steps**
 
 1. **Stop all Codomyrmex processes**
 2. **Restore code from backup**
-3. **Downgrade package**: `uv pip install codomyrmex==0.1.x`
+3. **Downgrade package**: `uv sync` (not a published distribution; restore the backup checkout)
 4. **Restore configuration**
 5. **Validate rollback**: `codomyrmex check --all`
 

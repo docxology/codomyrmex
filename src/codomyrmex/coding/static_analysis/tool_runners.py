@@ -5,6 +5,7 @@ Each method runs a specific external analysis tool and converts its output
 into a list of AnalysisResult objects.
 """
 
+import fnmatch
 import json
 import os
 import re
@@ -39,6 +40,57 @@ _PYREFLY_SEVERITY_MAP = {
     "info": SeverityLevel.INFO,
 }
 
+#: Reported when the dependency scan could not be performed, so that an absent or
+#: failed scanner is never mistaken for a clean one. Callers and reports can match
+#: on this rule id instead of reading the message text.
+SAFETY_UNAVAILABLE_RULE_ID = "SAFETY-UNAVAILABLE"
+
+#: `severity` as it appears in a safety payload, mapped to this module's levels.
+#: Anything unrecognised, including a missing value, keeps the previous default.
+_SAFETY_SEVERITY_MAP = {
+    "critical": SeverityLevel.CRITICAL,
+    "high": SeverityLevel.ERROR,
+    "medium": SeverityLevel.WARNING,
+    "moderate": SeverityLevel.WARNING,
+    "low": SeverityLevel.INFO,
+}
+
+#: Requirement and build files `safety check --file` can actually read. These are
+#: matched as globs against the file name.
+_REQUIREMENTS_PATTERNS = (
+    "requirements*.txt",
+    "requirements*.in",
+    "Pipfile",
+    "pyproject.toml",
+    "setup.py",
+)
+
+#: Generated or third-party trees that never hold the project's own requirement
+#: files. Walking them costs one `safety check` subprocess per match, and an
+#: installed environment supplies dozens of matches on its own.
+_GENERATED_DIRS = frozenset(
+    {
+        ".cache",
+        ".eggs",
+        ".git",
+        ".hypothesis",
+        ".mypy_cache",
+        ".nox",
+        ".pytest_cache",
+        ".ruff_cache",
+        ".tox",
+        ".venv",
+        "__pycache__",
+        "build",
+        "dist",
+        "env",
+        "htmlcov",
+        "node_modules",
+        "site-packages",
+        "venv",
+    }
+)
+
 _ESLINT_SEVERITY_MAP = {
     1: SeverityLevel.WARNING,
     2: SeverityLevel.ERROR,
@@ -49,6 +101,102 @@ _SPOTBUGS_SEVERITY_MAP = {
     "MEDIUM": SeverityLevel.WARNING,
     "HIGH": SeverityLevel.ERROR,
 }
+
+
+def safety_unavailable_result(source: str, reason: str) -> AnalysisResult:
+    """Record a dependency scan that did not happen.
+
+    The rule id, not the message, is what callers and reports match on, so an
+    absent, failing or unreadable scanner is never mistaken for a clean scan.
+    """
+    return AnalysisResult(
+        file_path=source,
+        line_number=0,
+        column_number=0,
+        severity=SeverityLevel.WARNING,
+        message=f"Dependency scan did not run: {reason}",
+        rule_id=SAFETY_UNAVAILABLE_RULE_ID,
+        category="security",
+        suggestion="Make the safety scanner available and able to run, then re-scan",
+    )
+
+
+def _safety_severity(value: object) -> SeverityLevel:
+    """Map a payload ``severity`` to this module's levels.
+
+    The field is a label in some payloads and a structure in others, so anything
+    unrecognised, including a missing value, keeps the historical default rather
+    than discarding the whole report.
+    """
+    if isinstance(value, dict):
+        value = value.get("severity") or value.get("source")
+    label = str(value or "").rsplit(".", maxsplit=1)[-1].strip().lower()
+    return _SAFETY_SEVERITY_MAP.get(label, SeverityLevel.ERROR)
+
+
+def parse_safety_payload(
+    payload: object, source: str
+) -> tuple[list[AnalysisResult], str | None]:
+    """Read a decoded ``safety check --json`` payload. Pure: no I/O, no state.
+
+    Returns ``(findings, unavailable_reason)``. The reason is None whenever the
+    payload was understood -- including when it reports no vulnerabilities -- and
+    a message whenever it could not be read, so a report that cannot be parsed is
+    never mistaken for a report that found nothing.
+
+    ``safety`` writes the "1.1" format by default: an object with a
+    ``vulnerabilities`` member. The older "0.5" format is a bare list and is
+    still read; anything else is reported as unavailable.
+    """
+    if isinstance(payload, dict):
+        raw = payload.get("vulnerabilities")
+        if raw is None:
+            members = ", ".join(sorted(payload)) or "none"
+            return [], (
+                "the safety JSON report has no 'vulnerabilities' member "
+                f"(members: {members})"
+            )
+        if not isinstance(raw, list):
+            return [], (
+                "the safety JSON report's 'vulnerabilities' member is "
+                f"{type(raw).__name__}, not a list"
+            )
+    elif isinstance(payload, list):
+        raw = payload
+    else:
+        return [], (
+            f"the safety JSON report is {type(payload).__name__}, which is neither "
+            "the 1.1 object nor the 0.5 list"
+        )
+
+    findings = []
+    for entry in raw:
+        if not isinstance(entry, dict):
+            return [], (
+                f"a safety vulnerability entry is {type(entry).__name__}, not an object"
+            )
+
+        name = entry.get("package_name") or entry.get("package") or "unknown"
+        fixed = entry.get("fixed_versions")
+        if isinstance(fixed, (list, tuple, set)):
+            fixed = ", ".join(sorted(str(v) for v in fixed))
+        if not fixed:
+            fixed = entry.get("safe_version") or "latest"
+
+        findings.append(
+            AnalysisResult(
+                file_path=source,
+                line_number=0,
+                column_number=0,
+                severity=_safety_severity(entry.get("severity")),
+                message=f"Vulnerable dependency: {name}",
+                rule_id="SAFETY",
+                category="security",
+                suggestion=f"Update to version {fixed}",
+            )
+        )
+
+    return findings, None
 
 
 class ToolRunner:
@@ -278,34 +426,101 @@ class ToolRunner:
         return results
 
     def run_safety(self, file_path: str) -> list[AnalysisResult]:
-        """Run safety dependency analysis."""
-        results = []
+        """Run safety dependency analysis.
+
+        An unavailable, failing or unreadable scanner yields a typed
+        `SAFETY-UNAVAILABLE` result rather than an empty list, so a dependency
+        scan that did not happen can never read as a scan that found nothing.
+        """
+        if not self.tools_available.get("safety", False):
+            return [
+                safety_unavailable_result(file_path, "the safety tool is not available")
+            ]
+
         try:
             req_files = self._find_requirements_files()
+        except OSError as e:
+            logger.error("Error locating requirements files for safety: %s", e)
+            return [
+                safety_unavailable_result(
+                    file_path, f"requirements files could not be located: {e}"
+                )
+            ]
 
+        if not req_files:
+            return [
+                safety_unavailable_result(
+                    file_path, "no requirements file was found to scan"
+                )
+            ]
+
+        results: list[AnalysisResult] = []
+        try:
             for req_file in req_files:
                 cmd = ["safety", "check", "--json", "--file", req_file]
-                result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-
-                if result.stdout:
-                    safety_results = json.loads(result.stdout)
-
-                    for vuln in safety_results:
-                        results.append(
-                            AnalysisResult(
-                                file_path=req_file,
-                                line_number=0,
-                                column_number=0,
-                                severity=SeverityLevel.ERROR,
-                                message=f"Vulnerable dependency: {vuln.get('package', 'unknown')}",
-                                rule_id="SAFETY",
-                                category="security",
-                                suggestion=f"Update to version {vuln.get('safe_version', 'latest')}",
-                            )
+                try:
+                    completed = subprocess.run(
+                        cmd, capture_output=True, text=True, timeout=30
+                    )
+                except (
+                    subprocess.TimeoutExpired,
+                    OSError,
+                    subprocess.SubprocessError,
+                ) as e:
+                    logger.error("Error running safety on %s: %s", req_file, e)
+                    results.append(
+                        safety_unavailable_result(
+                            req_file, f"the scanner failed to run: {e}"
                         )
+                    )
+                    continue
 
-        except (subprocess.TimeoutExpired, json.JSONDecodeError, Exception) as e:
+                if not completed.stdout.strip():
+                    detail = (completed.stderr or "").strip().splitlines()
+                    reason = (
+                        detail[-1] if detail else f"exit status {completed.returncode}"
+                    )
+                    logger.error(
+                        "safety produced no report for %s: %s", req_file, reason
+                    )
+                    results.append(
+                        safety_unavailable_result(
+                            req_file, f"the scanner produced no report ({reason})"
+                        )
+                    )
+                    continue
+
+                try:
+                    payload = json.loads(completed.stdout)
+                except json.JSONDecodeError as e:
+                    logger.error(
+                        "safety returned unparseable JSON for %s: %s", req_file, e
+                    )
+                    results.append(
+                        safety_unavailable_result(
+                            req_file, "the scanner returned unparseable JSON"
+                        )
+                    )
+                    continue
+
+                findings, reason = parse_safety_payload(payload, req_file)
+                if reason is not None:
+                    logger.error(
+                        "safety report for %s could not be read: %s", req_file, reason
+                    )
+                    results.append(safety_unavailable_result(req_file, reason))
+                    continue
+
+                results.extend(findings)
+
+        # Backstop: anything unexpected still becomes a result, never silence.
+        except Exception as e:
             logger.error("Error running safety: %s", e)
+            results.append(
+                safety_unavailable_result(
+                    file_path, f"the scan raised {type(e).__name__}: {e}"
+                )
+            )
 
         return results
 
@@ -349,15 +564,24 @@ class ToolRunner:
         return results
 
     def _find_requirements_files(self) -> list[str]:
-        """Find requirements files in the project."""
-        req_files = []
-        req_patterns = ["requirements*.txt", "Pipfile", "pyproject.toml", "setup.py"]
+        """Find the project's own requirement and build files.
 
-        for pattern in req_patterns:
-            for root, _dirs, files in os.walk(self.project_root):
-                for file in files:
-                    if file == pattern or file.startswith("requirements"):
-                        req_files.append(os.path.join(root, file))
+        ``run_safety`` runs one ``safety check --file`` subprocess per file this
+        returns, so the walk stays out of generated and third-party trees and
+        matches real file names: a file that merely *starts with*
+        ``requirements`` (``requirements.py``, a ``.pyc``) is not a requirement
+        file.
+        """
+        req_files = []
+        for root, dirs, files in os.walk(self.project_root):
+            dirs[:] = [
+                d
+                for d in dirs
+                if d not in _GENERATED_DIRS and not d.endswith(".egg-info")
+            ]
+            for file in files:
+                if any(fnmatch.fnmatch(file, p) for p in _REQUIREMENTS_PATTERNS):
+                    req_files.append(os.path.join(root, file))
 
         return req_files
 

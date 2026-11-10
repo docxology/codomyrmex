@@ -8,6 +8,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### MCP behavior hints and public HTTP destinations
+
+- Publish validated MCP behavior hints through discovery, server registries,
+  HTTP listings, and PAI manifests. Legacy tools receive conservative defaults;
+  hints remain separate from authorization.
+- Add an opt-in public-only HTTP client policy that checks destinations when
+  opening connections and preserves the default client for trusted local APIs.
+  This policy does not certify external engines or third-party scanner scores.
+- Deny delegated video URL transcription and AgentMail webhook registration in
+  their MCP handlers by default. Require strict, exact per-tool operator grants
+  through `CODOMYRMEX_MCP_DELEGATED_URL_TOOLS`, with stable refusal codes and no
+  caller-argument bypass. Direct Python backend APIs retain local compatibility.
+  Enabled deployments still require independently contained downloader/delivery
+  services; see the [deployment guide](src/codomyrmex/model_context_protocol/SECURITY.md#delegated-url-tools).
+
 ### MLX configuration replication evidence (2026-10-19)
 
 - Retain two fresh-process Python 3.15 configuration-only runs against frozen,

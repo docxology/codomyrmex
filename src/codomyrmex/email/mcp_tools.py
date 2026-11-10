@@ -14,6 +14,10 @@ from __future__ import annotations
 from typing import Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
+from codomyrmex.model_context_protocol.delegated_url_policy import (
+    DelegatedURLPolicyError,
+    require_delegated_url_tool,
+)
 
 
 def _get_provider(inbox_id: str | None = None):
@@ -518,14 +522,23 @@ def gmail_create_draft(
 
 @mcp_tool(
     category="email",
-    description="Register a webhook to receive AgentMail events via HTTP POST.",
+    description=(
+        "Register a webhook to receive AgentMail events via HTTP POST. "
+        "Disabled unless the operator explicitly enables this delegated URL tool."
+    ),
+    destructive=True,
 )
 def agentmail_create_webhook(
     url: str,
     event_types: list[str],
     inbox_ids: list[str] | None = None,
 ) -> dict[str, Any]:
-    """Register a webhook endpoint for AgentMail events.
+    """Register an AgentMail webhook after an explicit operator delegation grant.
+
+    Disabled by default. The host must enable the canonical tool name through
+    ``CODOMYRMEX_MCP_DELEGATED_URL_TOOLS`` for a separately contained delivery
+    service. Tool arguments cannot enable delegation. Direct AgentMailProvider
+    APIs are unaffected by this MCP-specific policy.
 
     Args:
         url: The HTTPS endpoint URL to receive event payloads.
@@ -537,6 +550,7 @@ def agentmail_create_webhook(
         ``{"status": "success", "webhook_id": "...", "url": "..."}`` on success.
     """
     try:
+        require_delegated_url_tool("codomyrmex.agentmail_create_webhook")
         provider = _get_provider()
         webhook = provider.create_webhook(
             url=url, event_types=event_types, inbox_ids=inbox_ids
@@ -548,5 +562,7 @@ def agentmail_create_webhook(
             "event_types": webhook.event_types,
             "inbox_ids": webhook.inbox_ids,
         }
+    except DelegatedURLPolicyError as exc:
+        return {"status": "error", "error_code": exc.code, "message": str(exc)}
     except Exception as exc:
         return {"status": "error", "message": str(exc)}

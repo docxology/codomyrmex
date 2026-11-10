@@ -208,7 +208,9 @@ class StaticAnalyzer:
         if AnalysisType.QUALITY in analysis_types and self.tools_available["vulture"]:
             results.extend(self.tool_runner.run_vulture(file_path))
 
-        if AnalysisType.SECURITY in analysis_types and self.tools_available["safety"]:
+        if AnalysisType.SECURITY in analysis_types:
+            # run_safety reports an unavailable scanner as a typed result instead of
+            # being skipped here, so a scan that did not happen cannot read as clean.
             results.extend(self.tool_runner.run_safety(file_path))
 
         if AnalysisType.QUALITY in analysis_types and self.tools_available["pyrefly"]:

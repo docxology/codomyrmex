@@ -230,13 +230,13 @@ class TestProviderConfig:
     def test_custom_values(self):
         """Custom values are stored correctly."""
         cfg = ProviderConfig(
-            api_key="sk-test",
+            api_key="sk-test",  # pragma: allowlist secret
             base_url="https://example.com",
             timeout=30.0,
             max_retries=1,
             default_model="gpt-4",
         )
-        assert cfg.api_key == "sk-test"
+        assert cfg.api_key == "sk-test"  # pragma: allowlist secret
         assert cfg.base_url == "https://example.com"
         assert cfg.timeout == 30.0
         assert cfg.max_retries == 1
@@ -384,7 +384,7 @@ class TestProviderFactory:
         from codomyrmex.llm.providers.factory import get_provider
 
         provider = get_provider(ProviderType.OPENROUTER, api_key="test-key")
-        assert provider.config.api_key == "test-key"
+        assert provider.config.api_key == "test-key"  # pragma: allowlist secret
 
     def test_openrouter_provider_returned(self):
         """get_provider returns OpenRouterProvider for OPENROUTER type."""
@@ -409,7 +409,7 @@ class TestProviderFactory:
 
         cfg = ProviderConfig(api_key="existing", timeout=45.0)
         provider = get_provider(ProviderType.OPENROUTER, config=cfg)
-        assert provider.config.api_key == "existing"
+        assert provider.config.api_key == "existing"  # pragma: allowlist secret
         assert provider.config.timeout == 45.0
 
 

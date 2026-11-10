@@ -11,30 +11,33 @@ This API specification details these Pydantic models, which constitute the progr
 This module provides Pydantic models for validating and constructing MCP messages.
 
 To use these models, import them into your Python code:
+
 ```python
 from codomyrmex.model_context_protocol import MCPToolCall, MCPToolResult, MCPErrorDetail
 ```
 
 Or from the schemas submodule directly:
+
 ```python
 from codomyrmex.model_context_protocol.schemas.mcp_schemas import MCPToolCall, MCPToolResult, MCPErrorDetail
 ```
 
 ### 1. Pydantic Model: `MCPErrorDetail`
 
--   **Description**: Represents the standard structure for detailed error information within an `MCPToolResult` when a tool execution fails.
--   **Source File**: `model_context_protocol/schemas/mcp_schemas.py`
+- **Description**: Represents the standard structure for detailed error information within an `MCPToolResult` when a tool execution fails.
+- **Source File**: `model_context_protocol/schemas/mcp_schemas.py`
 
--   **Fields**:
-    -   `error_type` (str, required): A unique code or type for the error (e.g., `"ValidationError"`, `"FileNotFoundError"`).
-        -   *Description*: Machine-readable identifier for the category of error.
-    -   `error_message` (str, required): A descriptive message explaining the error.
-        -   *Description*: Human-readable explanation of what went wrong.
-    -   `error_details` (Optional[Union[Dict[str, Any], str]], optional): Provides additional, structured (as a dictionary) or unstructured (as a string) information about the error.
-        -   *Description*: Can contain context-specific details, such as which parameter failed validation or the path of a missing file.
-        -   *Default*: `None`
+- **Fields**:
+    - `error_type` (str, required): A unique code or type for the error (e.g., `"ValidationError"`, `"FileNotFoundError"`).
+        - *Description*: Machine-readable identifier for the category of error.
+    - `error_message` (str, required): A descriptive message explaining the error.
+        - *Description*: Human-readable explanation of what went wrong.
+    - `error_details` (Optional[Union[Dict[str, Any], str]], optional): Provides additional, structured (as a dictionary) or unstructured (as a string) information about the error.
+        - *Description*: Can contain context-specific details, such as which parameter failed validation or the path of a missing file.
+        - *Default*: `None`
 
--   **Example Initialization**:
+- **Example Initialization**:
+
     ```python
     error_info = MCPErrorDetail(
         error_type="ResourceNotFound",
@@ -45,19 +48,20 @@ from codomyrmex.model_context_protocol.schemas.mcp_schemas import MCPToolCall, M
 
 ### 2. Pydantic Model: `MCPToolCall`
 
--   **Description**: Represents an MCP Tool Call message sent by an AI agent to invoke a specific tool.
--   **Source File**: `model_context_protocol/schemas/mcp_schemas.py`
+- **Description**: Represents an MCP Tool Call message sent by an AI agent to invoke a specific tool.
+- **Source File**: `model_context_protocol/schemas/mcp_schemas.py`
 
--   **Fields**:
-    -   `tool_name` (str, required): The unique invocation name of the tool to be called (e.g., `"ai_code_editing.generate_code_snippet"`).
-        -   *Description*: Must match the `Invocation Name` defined in the tool's `MCP_TOOL_SPECIFICATION.md`.
-    -   `arguments` (Dict[str, Any], required): A dictionary containing the parameters for the tool, as specified by the tool's `Input Schema`.
-        -   *Description*: Keys are parameter names, values are the arguments. The structure of this dictionary is tool-specific and should be validated by the tool itself or a tool-specific argument model.
+- **Fields**:
+    - `tool_name` (str, required): The unique invocation name of the tool to be called (e.g., `"ai_code_editing.generate_code_snippet"`).
+        - *Description*: Must match the `Invocation Name` defined in the tool's `MCP_TOOL_SPECIFICATION.md`.
+    - `arguments` (Dict[str, Any], required): A dictionary containing the parameters for the tool, as specified by the tool's `Input Schema`.
+        - *Description*: Keys are parameter names, values are the arguments. The structure of this dictionary is tool-specific and should be validated by the tool itself or a tool-specific argument model.
 
--   **Configuration**:
-    -   `Config.extra = 'allow'`: Allows arbitrary fields within the `arguments` dictionary, as these are tool-specific. Further validation of `arguments` should be performed by the tool based on its own specification.
+- **Configuration**:
+    - `Config.extra = 'allow'`: Allows arbitrary fields within the `arguments` dictionary, as these are tool-specific. Further validation of `arguments` should be performed by the tool based on its own specification.
 
--   **Example Initialization**:
+- **Example Initialization**:
+
     ```python
     tool_call_msg = MCPToolCall(
         tool_name="file_utility.read_file_content",
@@ -70,30 +74,31 @@ from codomyrmex.model_context_protocol.schemas.mcp_schemas import MCPToolCall, M
 
 ### 3. Pydantic Model: `MCPToolResult`
 
--   **Description**: Represents an MCP Tool Result message sent back by a tool to the AI agent after execution.
--   **Source File**: `model_context_protocol/schemas/mcp_schemas.py`
+- **Description**: Represents an MCP Tool Result message sent back by a tool to the AI agent after execution.
+- **Source File**: `model_context_protocol/schemas/mcp_schemas.py`
 
--   **Fields**:
-    -   `status` (str, required): Indicates the outcome of the tool execution.
-        -   *Description*: Common values include `"success"`, `"failure"`, `"no_change_needed"`. Refer to `docs/technical_overview.md` for more details.
-    -   `data` (Optional[Dict[str, Any]], optional): If `status` indicates success, this dictionary contains the primary output of the tool, structured according to the tool's `Output Schema`.
-        -   *Description*: Tool-specific payload on successful execution. Should be `None` or omitted if `status` is `"failure"`.
-        -   *Default*: `None`
-    -   `error` (Optional[`MCPErrorDetail`], optional): If `status` is `"failure"`, this field contains an `MCPErrorDetail` object with details about the error.
-        -   *Description*: Should be populated if execution failed. Should be `None` or omitted if `status` is `"success"` (though warnings could theoretically be placed here if a more nuanced status system is developed).
-        -   *Default*: `None`
-    -   `explanation` (Optional[str], optional): A human-readable explanation of the results or changes made.
-        -   *Description*: Often provided if the tool uses an LLM or if a summary is helpful.
-        -   *Default*: `None`
+- **Fields**:
+    - `status` (str, required): Indicates the outcome of the tool execution.
+        - *Description*: Common values include `"success"`, `"failure"`, `"no_change_needed"`. Refer to `docs/technical_overview.md` for more details.
+    - `data` (Optional[Dict[str, Any]], optional): If `status` indicates success, this dictionary contains the primary output of the tool, structured according to the tool's `Output Schema`.
+        - *Description*: Tool-specific payload on successful execution. Should be `None` or omitted if `status` is `"failure"`.
+        - *Default*: `None`
+    - `error` (Optional[`MCPErrorDetail`], optional): If `status` is `"failure"`, this field contains an `MCPErrorDetail` object with details about the error.
+        - *Description*: Should be populated if execution failed. Should be `None` or omitted if `status` is `"success"` (though warnings could theoretically be placed here if a more nuanced status system is developed).
+        - *Default*: `None`
+    - `explanation` (Optional[str], optional): A human-readable explanation of the results or changes made.
+        - *Description*: Often provided if the tool uses an LLM or if a summary is helpful.
+        - *Default*: `None`
 
--   **Validators**:
-    -   `check_error_if_failed`: Ensures that the `error` field is populated if `status` indicates failure.
-    -   `check_data_if_success`: Ensures that the `data` field is `None` or omitted if `status` indicates failure (data should not be present on failure).
+- **Validators**:
+    - `check_error_if_failed`: Ensures that the `error` field is populated if `status` indicates failure.
+    - `check_data_if_success`: Ensures that the `data` field is `None` or omitted if `status` indicates failure (data should not be present on failure).
 
--   **Configuration**:
-    -   `Config.extra = 'allow'`: Allows additional fields within the `data` dictionary, as the `data` payload is tool-specific. Further validation of `data` should be performed by the consumer based on the tool's `Output Schema`.
+- **Configuration**:
+    - `Config.extra = 'allow'`: Allows additional fields within the `data` dictionary, as the `data` payload is tool-specific. Further validation of `data` should be performed by the consumer based on the tool's `Output Schema`.
 
--   **Example Initialization (Success)**:
+- **Example Initialization (Success)**:
+
     ```python
     success_result = MCPToolResult(
         status="success",
@@ -102,7 +107,8 @@ from codomyrmex.model_context_protocol.schemas.mcp_schemas import MCPToolCall, M
     )
     ```
 
--   **Example Initialization (Failure)**:
+- **Example Initialization (Failure)**:
+
     ```python
     failure_result = MCPToolResult(
         status="failure",
@@ -127,11 +133,56 @@ Not applicable to these Pydantic models.
 
 ## Versioning
 
--   The Pydantic models in `model_context_protocol.mcp_schemas` will be versioned according to the overall version of the `model_context_protocol` module (see `CHANGELOG.md`).
--   Changes to these models (e.g., adding required fields, removing fields, changing types in a non-backward-compatible way) would constitute a breaking change and necessitate a major version increment for the `model_context_protocol` module. 
+- The Pydantic models in `model_context_protocol.mcp_schemas` will be versioned according to the overall version of the `model_context_protocol` module (see `CHANGELOG.md`).
+- Changes to these models (e.g., adding required fields, removing fields, changing types in a non-backward-compatible way) would constitute a breaking change and necessitate a major version increment for the `model_context_protocol` module.
+
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
 - **Documentation**: [Reference Guides](../../../docs/README.md)
 - **Home**: [Root README](../../../README.md)
+
+## Tool behavior annotations
+
+`mcp_tool(..., annotations={...})`, `MCPServer.tool(..., annotations={...})`,
+and `MCPServer.register_tool(..., annotations={...})` accept MCP behavior hints.
+The four boolean hints are `readOnlyHint`, `destructiveHint`, `idempotentHint`,
+and `openWorldHint`; `title` may also be supplied as a string. Boolean values
+are strict: strings and integers are rejected. Unknown annotation keys are
+rejected to catch spelling errors.
+
+Both `codomyrmex.model_context_protocol.decorators.mcp_tool` and
+`codomyrmex.model_context_protocol.discovery.mcp_tool` accept `annotations`.
+The discovery decorator retains its `requires` and `version` arguments.
+
+Registration and discovery publish all four hints. Omitted values default to
+`false`, `true`, `false`, and `true`, respectively. Explicit schema annotations
+take precedence over handler decorator metadata. The metadata is copied at
+registration and when returned to callers. PAI registry and skill manifests
+retain the same hints.
+
+These are descriptive client hints, not authorization. They do not change
+PAI trust levels or the separate `destructive` decorator marker. Tool authors
+must review actual behavior before declaring safer hints; names and categories
+are not used to infer safety.
+
+## Delegated URL tools
+
+The MCP tools `codomyrmex.video_transcribe_url` and `codomyrmex.agentmail_create_webhook` delegate
+URL handling to an external download process or webhook provider. They fail
+closed by default. An operator can enable individual canonical tool names with
+the comma-separated `CODOMYRMEX_MCP_DELEGATED_URL_TOOLS` environment setting.
+Unknown names or malformed settings fail closed; tool arguments cannot opt in.
+Direct tool-result dictionaries use `error_code` values `DELEGATED_URL_DISABLED`
+or `DELEGATED_URL_POLICY_INVALID`. For these two exact tools, the MCP server
+classifies only those reviewed policy failures as `ACCESS_DENIED`, with the
+policy code in the error's `module` field. Unrelated failures keep their normal
+classification, and arbitrary error details are not exposed. Both tools retain
+`destructive=True`.
+
+Enablement requires a separately contained backend whose actual DNS resolution,
+redirects and destination ranges are constrained. The setting does not itself
+enforce external DNS, redirect or CIDR restrictions, and it does not route these
+tools through `HTTPClient(public_only=True)`. Direct Python transcriber/provider
+APIs retain their existing behavior. See [the delegated URL security policy](SECURITY.md#delegated-url-tools).

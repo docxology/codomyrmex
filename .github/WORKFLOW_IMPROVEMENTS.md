@@ -2,7 +2,7 @@
 
 **Last Updated**: March 2026
 
-## Current State: 36 Active Workflows
+## Current State: 37 Active Workflows
 
 ### Core CI/CD & Security (5)
 
@@ -14,7 +14,7 @@
 | 4 | Dependency Review | `dependency-review.yml` | ✅ |
 | 5 | Release & PyPI | `release.yml` | ✅ |
 
-### PR Automation & Agent Infrastructure (12)
+### PR Automation & Agent Infrastructure (11)
 
 | # | Workflow | File | Status |
 | :---: | --- | --- | :---: |
@@ -23,13 +23,12 @@
 | 8 | PR Title Semantic Check | `pr-title-check.yml` | ✅ |
 | 9 | PR Auto-Assigner | `auto-assign.yml` | ✅ |
 | 10 | PR Conflict Checker | `pr-conflict-check.yml` | ✅ |
-| 11 | Dependabot Auto-Approve | `dependabot-auto-approve.yml` | ✅ |
-| 12 | Agent PR Welcome | `agent-welcome.yml` | ✅ |
-| 13 | PR Linter Comments | `pr-linter-comments.yml` | ✅ |
-| 14 | Post Coverage Comment | `pr-coverage-comment.yml` | ✅ |
-| 15 | Agent Metrics Dashboard | `agent-metrics.yml` | ✅ |
-| 16 | Jules Batch Dispatch | `jules-dispatch.yml` | ✅ |
-| 17 | First Interaction Greeter | `first-interaction.yml` | ✅ |
+| 11 | Agent PR Welcome | `agent-welcome.yml` | ✅ |
+| 12 | PR Linter Comments | `pr-linter-comments.yml` | ✅ |
+| 13 | Post Coverage Comment | `pr-coverage-comment.yml` | ✅ |
+| 14 | Agent Metrics Dashboard | `agent-metrics.yml` | ✅ |
+| 15 | Jules Batch Dispatch | `jules-dispatch.yml` | ✅ |
+| 16 | First Interaction Greeter | `first-interaction.yml` | ✅ |
 
 ### Documentation (2)
 
@@ -87,7 +86,6 @@ PR Opened (by Jules/Dependabot/Gemini/Human)
   ├─ pr-conflict-check.yml → Labels 'conflict' if conflicting (every 6h)
   │
   └─ auto-merge.yml ────────→ Squash-merge execution when all gates clear
-          ↑ (Approved instantly by `dependabot-auto-approve.yml` for bots)
 
 PR Merged to `main`
   │

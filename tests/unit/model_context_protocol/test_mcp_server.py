@@ -626,7 +626,14 @@ class TestHTTPTransport:
         assert "content" in data
 
     def test_production_http_routes_reject_malformed_json(self, server):
-        from starlette.testclient import TestClient
+        pytest.importorskip(
+            "fastapi",
+            reason="the MCP HTTP app requires fastapi (uv sync --extra api)",
+        )
+        TestClient = pytest.importorskip(
+            "starlette.testclient",
+            reason="HTTP transport tests require starlette (uv sync --extra api)",
+        ).TestClient
 
         production_client = TestClient(server._create_http_app())
         rest = production_client.post(
@@ -701,7 +708,14 @@ class TestHTTPTransport:
         )
 
     def test_http_cors_requires_explicit_origin(self, server):
-        from starlette.testclient import TestClient
+        pytest.importorskip(
+            "fastapi",
+            reason="the MCP HTTP app requires fastapi (uv sync --extra api)",
+        )
+        TestClient = pytest.importorskip(
+            "starlette.testclient",
+            reason="HTTP transport tests require starlette (uv sync --extra api)",
+        ).TestClient
 
         default_client = TestClient(server._create_http_app())
         default_response = default_client.get(

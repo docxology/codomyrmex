@@ -34,6 +34,18 @@ try:
 except ImportError:
     HAS_QWEN_AGENT = False
 
+try:
+    import openai
+
+    _HAS_OPENAI_SDK = True
+except ImportError:
+    _HAS_OPENAI_SDK = False
+
+_requires_openai_sdk = pytest.mark.skipif(
+    not _HAS_OPENAI_SDK,
+    reason="QwenClient requires the openai SDK (uv sync --extra llm_providers)",
+)
+
 
 # ============================================================================
 # Model Registry
@@ -105,6 +117,7 @@ class TestQwenModelRegistry:
 # ============================================================================
 
 
+@_requires_openai_sdk
 class TestQwenClientConstruction:
     """Tests for QwenClient initialization (uses dummy API key)."""
 

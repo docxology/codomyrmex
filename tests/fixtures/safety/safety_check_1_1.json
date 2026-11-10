@@ -1,0 +1,72 @@
+{
+  "report_meta": {
+    "scan_target": "",
+    "scanned": [],
+    "scanned_full_path": [],
+    "target_languages": ["python"],
+    "policy_file": null,
+    "policy_file_source": "local",
+    "audit_and_monitor": false,
+    "api_key": false,
+    "account": null,
+    "local_database_path": null,
+    "safety_version": "3.8.1",
+    "timestamp": "2026-11-04 09:39:45",
+    "packages_found": 0,
+    "vulnerabilities_found": 1,
+    "vulnerabilities_ignored": 0,
+    "remediations_recommended": 0,
+    "telemetry": {
+      "safety_options": {},
+      "safety_version": "3.8.1",
+      "safety_source": "code",
+      "os_type": "Darwin",
+      "os_release": "27.2.0",
+      "os_description": "macOS-27.2-arm64-arm-64bit",
+      "python_version": "3.11.17",
+      "safety_command": null
+    },
+    "git": {
+      "branch": "fix/python-version-file-missing",
+      "tag": "",
+      "commit": "",
+      "dirty": "False",
+      "origin": "https://github.com/docxology/codomyrmex.git"
+    },
+    "project": null,
+    "json_version": "1.1"
+  },
+  "scanned_packages": {},
+  "affected_packages": {
+    "urllib3": {
+      "name": "urllib3",
+      "version": "1.26.5"
+    }
+  },
+  "announcements": [],
+  "vulnerabilities": [
+    {
+      "vulnerability_id": "PYSEC-2023-245",
+      "package_name": "urllib3",
+      "ignored": false,
+      "ignored_reason": null,
+      "ignored_expires": null,
+      "vulnerable_spec": ">=1.0,<1.26.19",
+      "all_vulnerable_specs": [">=1.0,<1.26.19"],
+      "analyzed_version": "1.26.5",
+      "analyzed_requirement": "urllib3==1.26.5",
+      "advisory": "urllib3 before 1.26.19 allows CRLF injection.",
+      "is_transitive": false,
+      "published_date": null,
+      "fixed_versions": ["1.26.19"],
+      "closest_versions_without_known_vulnerabilities": [],
+      "resources": [],
+      "CVE": null,
+      "severity": "high",
+      "affected_versions": [],
+      "more_info_url": "https://example.invalid/advisory"
+    }
+  ],
+  "ignored_vulnerabilities": [],
+  "remediations": {}
+}

@@ -22,7 +22,7 @@ never modifies them autonomously on `main`.
 
 ## Key Behaviors
 
-- All 38 workflows have `permissions: {}` top-level (deny-all default)
+- All 37 workflows have `permissions: {}` top-level (deny-all default)
 - `astral-sh/setup-uv@v7` is the standard across all workflows
 - Cache restore step precedes `uv sync` in every job for maximum hit rate
 - The blocking Windows lane is an explicit portability contract; it uses

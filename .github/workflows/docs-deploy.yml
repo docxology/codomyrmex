@@ -1,4 +1,17 @@
-name: Deploy Documentation
+# MkDocs strict build.
+#
+# GitHub Pages belongs to `.github/workflows/documentation.yml`, which builds the
+# Docusaurus site under `src/codomyrmex/documentation` and publishes it; that is the
+# only workflow that should hold `pages: write`.
+#
+# This workflow used to publish a second, different site — the MkDocs output in
+# `site/` — on version tags. The deploy was refused on every tag because the
+# `github-pages` environment's branch policy admits only `main`, but
+# `workflow_dispatch` from `main` satisfied that policy, so a single manual run would
+# have replaced the live site with this artifact and *succeeded*, leaving no failed
+# run to notice. The strict build stays, as the release-time check it was; nothing
+# here can publish.
+name: Documentation (MkDocs strict build)
 
 on:
   push:
@@ -7,31 +20,30 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  group: mkdocs-strict-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
-    name: Build Documentation
+    name: Build Documentation (MkDocs)
+
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # actions/checkout@v7.0.1
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # astral-sh/setup-uv@v10.3.3
         with:
           version: "latest"
 
       - name: Set up Python
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # actions/setup-python@v7.1.0
         with:
-          python-version: "3.13"
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
@@ -40,21 +52,3 @@ jobs:
 
       - name: Build docs
         run: uv run mkdocs build --strict
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v5
-        with:
-          path: site/
-
-  deploy:
-    name: Deploy to GitHub Pages
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5

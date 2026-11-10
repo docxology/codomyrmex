@@ -28,6 +28,7 @@ from codomyrmex.coding.static_analysis.static_analyzer import (
 from codomyrmex.coding.static_analysis.static_analyzer import (
     analyze_project as module_analyze_project,
 )
+from codomyrmex.coding.static_analysis.tool_runners import SAFETY_UNAVAILABLE_RULE_ID
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -1041,6 +1042,70 @@ class TestFindRequirementsFiles:
         found = analyzer.tool_runner._find_requirements_files()
         assert found == []
 
+    def test_ignores_generated_and_dependency_trees(self, tmp_path):
+        """Every generated tree contributes only cost, never this project's files.
+
+        `run_safety` runs one `safety check --file` subprocess per returned path,
+        so matching an installed environment's metadata is what made `analyze_file`
+        take 137s instead of a fraction of a second.
+        """
+        for name in (
+            ".venv",
+            "venv",
+            "node_modules",
+            "__pycache__",
+            "site-packages",
+            ".git",
+        ):
+            generated = tmp_path / name / "pkg"
+            generated.mkdir(parents=True)
+            (generated / "requirements.txt").write_text("flask\n", encoding="utf-8")
+        (tmp_path / "requirements.txt").write_text("flask\n", encoding="utf-8")
+
+        analyzer = StaticAnalyzer(project_root=str(tmp_path))
+        found = analyzer.tool_runner._find_requirements_files()
+
+        assert found == [str(tmp_path / "requirements.txt")]
+
+    def test_ignores_egg_info_directories(self, tmp_path):
+        egg_info = tmp_path / "codomyrmex.egg-info"
+        egg_info.mkdir()
+        (egg_info / "requirements.txt").write_text("flask\n", encoding="utf-8")
+
+        analyzer = StaticAnalyzer(project_root=str(tmp_path))
+        found = analyzer.tool_runner._find_requirements_files()
+
+        assert found == []
+
+    def test_does_not_match_names_starting_with_requirements(self, tmp_path):
+        """A module named like a requirements file is not a requirements file."""
+        (tmp_path / "requirements.py").write_text(
+            "REQUIREMENTS = []\n", encoding="utf-8"
+        )
+        (tmp_path / "requirements.cpython-311.pyc").write_text("x", encoding="utf-8")
+        (tmp_path / "requirements_helper.py").write_text("X = 1\n", encoding="utf-8")
+
+        analyzer = StaticAnalyzer(project_root=str(tmp_path))
+        found = analyzer.tool_runner._find_requirements_files()
+
+        assert found == []
+
+    def test_finds_nested_requirement_files(self, tmp_path):
+        nested = tmp_path / "services" / "api"
+        nested.mkdir(parents=True)
+        (nested / "requirements-dev.txt").write_text("pytest\n", encoding="utf-8")
+        (nested / "requirements.in").write_text("flask\n", encoding="utf-8")
+
+        analyzer = StaticAnalyzer(project_root=str(tmp_path))
+        found = analyzer.tool_runner._find_requirements_files()
+
+        assert sorted(found) == sorted(
+            [
+                str(nested / "requirements-dev.txt"),
+                str(nested / "requirements.in"),
+            ]
+        )
+
 
 # ===========================================================================
 # Module-level convenience function tests
@@ -1075,7 +1140,15 @@ class TestConvenienceFunctions:
 class TestAnalyzePythonFileDispatch:
     """Test that _analyze_python_file respects tool availability and analysis types."""
 
-    def test_no_tools_returns_empty(self, analyzer, simple_python_file):
+    def test_no_tools_reports_only_the_unavailable_scanner(
+        self, analyzer, simple_python_file
+    ):
+        """With every tool off, the only result is the dependency scan's absence.
+
+        Returning nothing for a `SECURITY` analysis is the defect this guards: a
+        dependency scan that never ran has to leave a typed result behind, not an
+        empty list that reads as a clean scan.
+        """
         # Force all tools to be unavailable
         for tool in analyzer.tools_available:
             analyzer.tools_available[tool] = False
@@ -1088,7 +1161,8 @@ class TestAnalyzePythonFileDispatch:
                 AnalysisType.COMPLEXITY,
             ],
         )
-        assert results == []
+        assert [r.rule_id for r in results] == [SAFETY_UNAVAILABLE_RULE_ID]
+        assert results[0].category == "security"
 
     def test_only_complexity_type(self, analyzer, simple_python_file):
         # Only COMPLEXITY type should only trigger radon

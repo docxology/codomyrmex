@@ -103,6 +103,7 @@ import yaml
 
 from codomyrmex.logging_monitoring import get_logger, setup_logging
 from tests.support.stray_paths import StrayPathPlugin, guard_mode
+from tests.support.uv_spawns import UvSpawnGuard
 
 
 def pytest_configure(config):
@@ -121,6 +122,7 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "benchmark: Opt-in pytest-benchmark tests")
     config.addinivalue_line("markers", "performance: Performance test suite")
     _register_stray_path_guard(config)
+    _register_uv_spawn_guard(config)
 
 
 def _register_stray_path_guard(config: pytest.Config) -> None:
@@ -133,6 +135,20 @@ def _register_stray_path_guard(config: pytest.Config) -> None:
         return
     config.pluginmanager.register(
         StrayPathPlugin(config, _TESTS_ROOT.parent, mode), "codomyrmex-stray-paths"
+    )
+
+
+def _register_uv_spawn_guard(config: pytest.Config) -> None:
+    """Fail a test that spawns an environment-mutating uv command.
+
+    The suite shares one virtual environment; `uv add`/`sync`/`lock`/`remove`
+    rebuild it against `.python-version` while the session imports from it. The
+    static gate reads argv from the test tree, which cannot see a spawn that
+    production code performs on a test's behalf, so the rule is enforced at the
+    spawn as well (tests/support/uv_spawns.py).
+    """
+    config.pluginmanager.register(
+        UvSpawnGuard(config, _TESTS_ROOT.parent), "codomyrmex-uv-spawns"
     )
 
 

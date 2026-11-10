@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import importlib.util
+import os
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -208,19 +211,19 @@ FORBIDDEN_CLAIMS = {
     ): "full-suite collection count must match the current inventory snapshot",
     re.compile(
         r"\b1,191\b"
-    ): "docs inventory is currently 1,202 Markdown files under docs/",
+    ): "docs inventory must match the measured snapshot in docs/reference/inventory.md",
     re.compile(
         r"\b1,192\b"
-    ): "docs inventory is currently 1,202 Markdown files under docs/",
+    ): "docs inventory must match the measured snapshot in docs/reference/inventory.md",
     re.compile(
         r"\b1,193\b"
-    ): "docs inventory is currently 1,202 Markdown files under docs/",
+    ): "docs inventory must match the measured snapshot in docs/reference/inventory.md",
     re.compile(
         r"\b1,194\b"
-    ): "docs inventory is currently 1,202 Markdown files under docs/",
+    ): "docs inventory must match the measured snapshot in docs/reference/inventory.md",
     re.compile(
         r"\b1,195\b"
-    ): "docs inventory is currently 1,202 Markdown files under docs/",
+    ): "docs inventory must match the measured snapshot in docs/reference/inventory.md",
     re.compile(
         r"\b35,122\b"
     ): "full-suite collection count must match the current inventory snapshot",
@@ -1274,10 +1277,38 @@ def test_root_package_scripts_point_to_live_documentation_surface() -> None:
     assert "mkdocs" in " ".join(scripts.values())
     assert "documentation &&" not in " ".join(scripts.values())
 
+    if importlib.util.find_spec("mkdocs") is None:
+        pytest.skip(
+            "mkdocs is not installed in this interpreter; sync the docs group "
+            "with `uv sync --group docs` to run the documented serve command"
+        )
+    project_environment = os.environ.get("UV_PROJECT_ENVIRONMENT")
+    environment_present = (
+        Path(project_environment).is_dir()
+        if project_environment
+        else (REPO_ROOT / ".venv").is_dir()
+    )
+    if not environment_present:
+        # Without a synced project environment `uv run` would create one. That is
+        # the same defect this check avoids one flag at a time: a test may read
+        # the shared environment, never provision it.
+        pytest.skip(
+            "no synced project environment at .venv (or UV_PROJECT_ENVIRONMENT); "
+            "`uv run --no-sync` would create one, so the serve command is not checked"
+        )
+
+    # `uv run` without `--no-sync` re-resolves the project environment against
+    # `.python-version` and rebuilds `.venv` when the interpreter differs. From
+    # inside a 3.12/3.13/3.14 session that deletes the environment the rest of
+    # the suite is importing from, so this must never sync and must name the
+    # interpreter that is already running.
     mkdocs_version = subprocess.run(
         [
             "uv",
             "run",
+            "--no-sync",
+            "--python",
+            sys.executable,
             "--locked",
             "--group",
             "docs",

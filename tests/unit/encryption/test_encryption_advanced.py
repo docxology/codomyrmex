@@ -160,7 +160,7 @@ class TestSecureDataContainer:
         container1 = SecureDataContainer(key1)
         container2 = SecureDataContainer(key2)
 
-        data = {"secret": "value"}
+        data = {"secret": "value"}  # pragma: allowlist secret
         packed = container1.pack(data)
 
         with pytest.raises(EncryptionError):
@@ -519,7 +519,10 @@ class TestEdgeCases:
         h = Encryptor.hash_data(b"", "sha256")
         assert len(h) == 64
         # Well-known SHA-256 of empty string
-        assert h == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        assert (
+            h
+            == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"  # pragma: allowlist secret
+        )  # pragma: allowlist secret
 
     def test_aes_cbc_deprecation_warning(self):
         """Test that AES-CBC emits a DeprecationWarning."""
@@ -584,7 +587,7 @@ class TestEncryptionIntegration:
         salt = Encryptor.generate_salt()
         key = enc.derive_key("my-password", salt)
         container = SecureDataContainer(key)
-        data = {"secret": "derived-key-test"}
+        data = {"secret": "derived-key-test"}  # pragma: allowlist secret
         packed = container.pack(data)
         unpacked = container.unpack(packed)
         assert unpacked["data"] == data

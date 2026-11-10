@@ -5,6 +5,7 @@ In-memory knowledge graph for entity and relationship storage.
 """
 
 import threading
+from collections import deque
 
 from .models import Entity, EntityType, Relationship
 
@@ -108,10 +109,10 @@ class KnowledgeGraph:
             return [start_id]
 
         visited = {start_id}
-        queue = [[start_id]]
+        queue = deque([[start_id]])
 
         while queue:
-            path = queue.pop(0)
+            path = queue.popleft()
             if len(path) > max_depth:
                 break
 
