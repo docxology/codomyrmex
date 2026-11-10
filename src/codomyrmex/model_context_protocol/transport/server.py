@@ -365,9 +365,13 @@ class MCPServer:
                 # Log the full error server-side for debugging.
                 import logging
 
+                # request_id is client-supplied; neutralise CR/LF before logging.
+                safe_request_id = (
+                    str(request_id).replace("\r", "\\r").replace("\n", "\\n")
+                )
                 logging.getLogger(__name__).error(
                     "Internal error processing request %s: %s",
-                    request_id,
+                    safe_request_id,
                     e,
                     exc_info=True,
                 )
