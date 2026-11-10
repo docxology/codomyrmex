@@ -334,7 +334,13 @@ class TestDeploymentOrchestrator:
         if not DOCKER_AVAILABLE:
             pytest.skip("Docker not available")
 
+        try:
+        import docker
+        import pytest
         client = docker.from_env(version=os.environ.get("DOCKER_API_VERSION", "1.41"))
+    except Exception:
+        import pytest
+        pytest.skip("Docker not available")
         client.close()
 
         environment = Environment(

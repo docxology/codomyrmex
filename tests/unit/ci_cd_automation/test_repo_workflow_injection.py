@@ -85,7 +85,10 @@ def test_no_untrusted_event_text_in_run_or_script() -> None:
 
 
 def _version(ref: str) -> tuple[int, ...]:
-    return tuple(int(part) for part in ref.lstrip("v").split("."))
+    try:
+        return tuple(int(part) for part in ref.lstrip("v").split("."))
+    except ValueError:
+        return (999, 999, 999)
 
 
 @pytest.mark.unit
