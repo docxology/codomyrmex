@@ -42,3 +42,7 @@ type maps in the config/metrics/validation trio (#420 + applied #441/#425),
 templating regex precompile (#397/#402 family), `config_loader` env regex
 (#401/#381), safety scanner regexes (#379), MinHash int extraction (#219),
 EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
+
+## 2025-01-20 - O(N) list.pop(0) replaced with O(1) deque.popleft()
+**Learning:** Using `list.pop(0)` in BFS-like graph traversal algorithms leads to O(N) time complexity for each pop operation, resulting in significant performance degradation for large graphs.
+**Action:** Always use `collections.deque` with `popleft()` for queues, message buffers, or sliding windows to guarantee O(1) removal, improving overall algorithm efficiency to O(V + E) instead of O(V^2 + E).

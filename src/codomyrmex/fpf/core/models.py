@@ -1,3 +1,4 @@
+import collections
 from datetime import datetime
 from enum import StrEnum
 from typing import Any
@@ -255,11 +256,11 @@ class FPFIndex(BaseModel):
     def get_related_patterns(self, pattern_id: str, depth: int = 1) -> list[Pattern]:
         """Get patterns related to the given pattern through relationships."""
         visited = set()
-        to_visit = [(pattern_id, 0)]
+        to_visit = collections.deque([(pattern_id, 0)])
         related = []
 
         while to_visit:
-            current_id, current_depth = to_visit.pop(0)
+            current_id, current_depth = to_visit.popleft()
             if current_id in visited or current_depth > depth:
                 continue
 
