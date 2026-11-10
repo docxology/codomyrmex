@@ -7,6 +7,7 @@ Uses a directed graph (dict-of-sets) so we have zero dependency on
 
 from __future__ import annotations
 
+from collections import deque
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
@@ -241,10 +242,10 @@ def get_shortest_path(
         return [source]
 
     visited: set[str] = {source}
-    queue: list[list[str]] = [[source]]
+    queue: deque[list[str]] = deque([[source]])
 
     while queue:
-        path = queue.pop(0)
+        path = queue.popleft()
         current = path[-1]
         neighbors = set(g.successors(current)) | set(g.predecessors(current))
         for neighbor in neighbors:
