@@ -47,3 +47,8 @@ executors.
   (proposals #482/#484 rejected).
 - Transcription/STT command injection was fixed by merged #423 at the live
   call site; the `transcription_tools.py` file does not exist on `main`.
+
+## 2024-05-15 - Refactoring shell=True in Subprocess Mocks
+**Vulnerability:** Command Injection Risk via shell=True in `subprocess.run`
+**Learning:** When refactoring `subprocess.run` calls from strings (`shell=True`) to lists (`shell=False`), tests relying on `isinstance(cmd, list)` to mock specific calls (e.g., `ffmpeg`) fail because the newly refactored commands are also lists.
+**Prevention:** Always update test mocks to inspect actual list elements (e.g., `cmd[0].endswith('ffmpeg')`) to correctly differentiate between system commands instead of relying on the command's type alone.
