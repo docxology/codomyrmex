@@ -56,5 +56,6 @@ EventBus pattern precompile (#151), ConsistentHash rebuild (#146).
 **Action:** Always use `collections.deque` with `popleft()` for queues, message buffers, or sliding windows to guarantee O(1) removal, improving overall algorithm efficiency to O(V + E) instead of O(V^2 + E).
 
 ## 2024-11-20 - O(N) Queue Operations in BFS
+
 **Learning:** The codebase frequently uses `list.pop(0)` for BFS queues and message buffers (e.g., in `PhysicalObjectManager.find_path_through_network`), which degrades to O(N) time complexity per removal and causes significant overhead for large graphs.
 **Action:** Always use `collections.deque` with `.popleft()` for O(1) removals when implementing queues or sliding windows in Python components.
