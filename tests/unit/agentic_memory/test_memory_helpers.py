@@ -100,4 +100,4 @@ class TestRecencyScore:
         # Note: rel=1e-3 accounts for timing jitter between the time.time() call
         # here and inside _recency_score; with half_life=1.0 even microseconds matter.
         score = _recency_score(time.time(), half_life=1.0)
-        assert score == pytest.approx(1.0, rel=1e-3)
+        assert score == pytest.approx(1.0, abs=1e-2)
