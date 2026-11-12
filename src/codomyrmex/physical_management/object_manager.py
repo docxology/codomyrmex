@@ -11,7 +11,7 @@ alongside the manager for a single module-level integration surface.
 import json
 import threading
 import time
-from collections import defaultdict
+from collections import defaultdict, deque
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
@@ -285,10 +285,10 @@ class ObjectRegistry:
             return [start_id]
 
         visited: set[str] = set()
-        queue: list[tuple[str, list[str]]] = [(start_id, [start_id])]
+        queue: deque[tuple[str, list[str]]] = deque([(start_id, [start_id])])
 
         while queue:
-            current_id, path = queue.pop(0)
+            current_id, path = queue.popleft()
 
             if len(path) > max_hops:
                 continue
