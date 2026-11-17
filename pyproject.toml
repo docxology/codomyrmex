@@ -7,7 +7,7 @@ name = "codomyrmex"
 version = "1.3.0"
 description = "A Modular, Extensible Coding Workspace"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11.5"
 license = {file = "LICENSE"}
 authors = [
     {name = "Codomyrmex Contributors"}
@@ -491,6 +491,9 @@ filterwarnings = [
     # pytest-benchmark disables itself under pytest-xdist and says so with a
     # warning during configure; the CI suites run with xdist (-n auto).
     "ignore:Benchmarks are automatically disabled because xdist plugin is active",
+    # matplotlib 3.11 marks Colormap.set_bad as pending deprecation; seaborn
+    # 0.13.2 (newest release) still calls it inside heatmap(), not here.
+    "ignore:The set_bad function will be deprecated:PendingDeprecationWarning",
 ]
 
 
