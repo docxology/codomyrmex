@@ -310,16 +310,12 @@ class TestMissionControlURLBuilding:
 
 def _server_available() -> bool:
     """Check if Mission Control is running on localhost:3000."""
-    import urllib.error
-    import urllib.request
-
     try:
-        with urllib.request.urlopen("http://localhost:3000/api/auth/me", timeout=3):
-            pass
+        import urllib.request
+
+        urllib.request.urlopen("http://localhost:3000/api/auth/me", timeout=3)
         return True
-    except Exception as exc:
-        if isinstance(exc, urllib.error.HTTPError):
-            exc.close()  # urlopen raised before the response could be closed
+    except Exception:
         return False
 
 
