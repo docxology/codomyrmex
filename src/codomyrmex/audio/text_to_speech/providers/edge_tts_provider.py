@@ -15,8 +15,10 @@ Requirements:
 """
 
 import asyncio
+import functools
 import math
 import socket
+import sys
 import time
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -46,6 +48,36 @@ try:
     EDGE_TTS_AVAILABLE = True
 except ImportError:
     EDGE_TTS_AVAILABLE = False
+
+# CPython leaked the socket under a closing SSL transport when its loop closed
+# first (python/cpython#118960, fixed in 3.12.8 and 3.13.1). aiohttp tracks and
+# aborts those transports only when ``enable_cleanup_closed`` is set, and warns
+# when it is set on an interpreter that already has the fix.
+SSL_TRANSPORTS_NEED_CLEANUP = sys.version_info < (3, 12, 8) or (
+    (3, 13, 0) <= sys.version_info < (3, 13, 1)
+)
+
+
+@functools.cache
+def _provider_connector_class():
+    """Return a ``TCPConnector`` that library sessions borrow but cannot close.
+
+    ``edge-tts`` opens one ``aiohttp.ClientSession`` per text chunk and another
+    for its 403 recovery, and each session closes the connector it was given.
+    Sessions therefore borrow this connector: their ``close`` is ignored and the
+    provider closes it once with :meth:`release` before its event loop ends.
+    """
+    import aiohttp
+
+    class ProviderOwnedTCPConnector(aiohttp.TCPConnector):
+        async def close(self, *, abort_ssl: bool = False) -> None:
+            """Ignore a borrowing session's close; the provider releases it."""
+
+        async def release(self) -> None:
+            """Close every pooled and closing transport now."""
+            await super().close(abort_ssl=True)
+
+    return ProviderOwnedTCPConnector
 
 
 class EdgeTTSProvider(TTSProvider):
@@ -102,35 +134,42 @@ class EdgeTTSProvider(TTSProvider):
 
     @staticmethod
     def _new_http_connector():
-        """Create a voice-inventory connector with drainable socket cleanup.
+        """Create the provider-owned connector that library sessions borrow.
 
         ``edge-tts`` delegates connection setup to ``aiohttp``. On macOS,
         Happy-Eyeballs can leave an in-flight IPv6 transport behind when the
         remote service is unavailable; the transport is then reported as an
         unclosed resource when ``asyncio.run`` closes the loop. The service
         supports IPv4, so using an explicit IPv4 connector avoids that
-        platform-specific leak while retaining normal proxy support.
+        platform-specific leak while retaining normal proxy support. On
+        interpreters with the closing-SSL-transport leak the connector also
+        tracks closed TLS transports so :meth:`_close_http_connector` can abort
+        them before the loop closes.
         """
-        import aiohttp
-
-        return aiohttp.TCPConnector(family=socket.AF_INET)
+        return _provider_connector_class()(
+            family=socket.AF_INET,
+            enable_cleanup_closed=SSL_TRANSPORTS_NEED_CLEANUP,
+        )
 
     @staticmethod
     async def _close_http_connector(connector) -> None:
-        """Close a connector and give SSL transports time to finish closing."""
-        await connector.close(abort_ssl=True)
+        """Release a connector and give SSL transports time to finish closing."""
+        await connector.release()
         # aiohttp documents a short event-loop drain after SSL session close;
         # without it asyncio.run can report transports during loop teardown.
         await asyncio.sleep(0.25)
 
     @staticmethod
-    def _new_communicate(text: str, voice: str, config: TTSConfig) -> "Communicate":
-        """Let each library stream session own its connector.
+    def _new_communicate(
+        text: str, voice: str, config: TTSConfig, connector=None
+    ) -> "Communicate":
+        """Build the library request; its sessions borrow ``connector``.
 
         The Edge library opens separate sessions for chunks and its built-in
-        403 recovery. A supplied connector is closed by the first session and
-        cannot be reused by a later session. Per-session defaults retain the
-        library's finite socket connect/read timeouts without shared ownership.
+        403 recovery. Pass a connector from :meth:`_new_http_connector`, which
+        those sessions cannot close, and release it with
+        :meth:`_close_http_connector` after the stream ends. ``None`` lets each
+        session create and close its own default connector.
         """
         for name in ("rate", "pitch", "volume"):
             value = getattr(config, name)
@@ -162,6 +201,7 @@ class EdgeTTSProvider(TTSProvider):
             volume=f"{volume:+d}%",
             connect_timeout=10,
             receive_timeout=60,
+            connector=connector,
         )
 
     async def _load_voices(self) -> None:
@@ -266,14 +306,18 @@ class EdgeTTSProvider(TTSProvider):
                 )
 
         try:
-            communicate = self._new_communicate(text, voice, config)
+            connector = self._new_http_connector()
+            try:
+                communicate = self._new_communicate(text, voice, config, connector)
 
-            # Collect audio data
-            audio_chunks: list[bytes] = []
+                # Collect audio data
+                audio_chunks: list[bytes] = []
 
-            async for chunk in communicate.stream():
-                if chunk["type"] == "audio":
-                    audio_chunks.append(chunk["data"])
+                async for chunk in communicate.stream():
+                    if chunk["type"] == "audio":
+                        audio_chunks.append(chunk["data"])
+            finally:
+                await self._close_http_connector(connector)
 
             if not audio_chunks:
                 raise SynthesisError("No audio data generated")
@@ -332,8 +376,12 @@ class EdgeTTSProvider(TTSProvider):
 
         voice = config.voice or self.default_voice
 
-        communicate = self._new_communicate(text, voice, config)
-        await communicate.save(str(output_path))
+        connector = self._new_http_connector()
+        try:
+            communicate = self._new_communicate(text, voice, config, connector)
+            await communicate.save(str(output_path))
+        finally:
+            await self._close_http_connector(connector)
         return output_path
 
     def list_voices(

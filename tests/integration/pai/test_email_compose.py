@@ -74,7 +74,8 @@ def _post(path: str, body: dict, timeout: int = 120) -> dict | None:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             return json.loads(resp.read().decode())
     except urllib.error.HTTPError as e:
-        body_text = e.read().decode() if e.fp else "no body"
+        with e:  # urlopen raised before the response could be closed
+            body_text = e.read().decode() if e.fp else "no body"
         print(f"  ✗ POST {path} → HTTP {e.code}: {body_text[:200]}")
         return None
     except Exception as e:

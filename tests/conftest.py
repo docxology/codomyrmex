@@ -10,6 +10,7 @@ import os
 import sys
 import tempfile
 import weakref
+from collections.abc import Iterator
 from pathlib import Path
 
 # Hypothesis seeds NumPy's RNG when available; on some Python/NumPy combos that
@@ -102,6 +103,8 @@ import pytest
 import yaml
 
 from codomyrmex.logging_monitoring import get_logger, setup_logging
+from tests.support.event_loop import ensure_current_event_loop
+from tests.support.figures import close_loaded_figures
 from tests.support.stray_paths import StrayPathPlugin, guard_mode
 from tests.support.uv_spawns import UvSpawnGuard
 
@@ -110,11 +113,7 @@ def pytest_configure(config):
     """Register custom pytest markers."""
     os.environ["HYPOTHESIS_NO_NPY"] = "1"
     global _TEST_BOOTSTRAP_LOOP
-    try:
-        asyncio.get_event_loop()
-    except RuntimeError:
-        _TEST_BOOTSTRAP_LOOP = asyncio.new_event_loop()
-        asyncio.set_event_loop(_TEST_BOOTSTRAP_LOOP)
+    _TEST_BOOTSTRAP_LOOP = ensure_current_event_loop()
     config.addinivalue_line("markers", "unit: Unit tests")
     config.addinivalue_line("markers", "integration: Integration tests")
     config.addinivalue_line("markers", "slow: Slow running tests")
@@ -312,6 +311,19 @@ def login(username, pwd):
 """
     code_file.write_text(code_content, encoding="utf-8")
     return code_file
+
+
+@pytest.fixture(autouse=True)
+def isolate_matplotlib_figures() -> Iterator[None]:
+    """Keep pyplot's figure registry from leaking between tests on a worker.
+
+    Leaked figures accumulate per xdist worker until matplotlib's
+    20-open-figures RuntimeWarning (an error here) fails an unrelated later
+    test (tests/support/figures.py).
+    """
+    close_loaded_figures()
+    yield
+    close_loaded_figures()
 
 
 @pytest.fixture(autouse=True)

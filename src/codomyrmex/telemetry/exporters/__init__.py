@@ -227,9 +227,10 @@ class OTLPExporter(SpanExporter):
 
     def export(self, spans: list[SpanData]) -> bool:
         """Export."""
-        try:
-            import urllib.request
+        import urllib.error
+        import urllib.request
 
+        try:
             payload = self._convert_to_otlp_format(spans)
             data = json.dumps(payload).encode("utf-8")
 
@@ -252,6 +253,8 @@ class OTLPExporter(SpanExporter):
                 return response.status == 200
 
         except Exception as e:
+            if isinstance(e, urllib.error.HTTPError):
+                e.close()  # urlopen raised before the response could be closed
             logger.warning(
                 "OTLPExporter failed to export spans to %s: %s", self.endpoint, e
             )

@@ -104,6 +104,8 @@ class PaiPmServerManager:
             with urllib.request.urlopen(url, timeout=2) as resp:
                 return resp.status == 200
         except Exception as _exc:
+            if isinstance(_exc, urllib.error.HTTPError):
+                _exc.close()  # urlopen raised before the response could be closed
             return False
 
     def start(self) -> dict[str, object]:

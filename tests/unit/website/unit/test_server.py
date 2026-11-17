@@ -130,11 +130,14 @@ class _LiveServer:
         url = f"{self.base}{path}"
         try:
             # Initial MCP discovery can scan optional modules on a cold process.
-            resp = urlopen(url, timeout=30)
-            body = resp.read().decode()
-            return resp.status, json.loads(body)
+            with urlopen(url, timeout=30) as resp:
+                body = resp.read().decode()
+                status = resp.status
+            return status, json.loads(body)
         except HTTPError as e:
-            body = e.read().decode()
+            # urlopen raised before any with-block could close the response.
+            with e:
+                body = e.read().decode()
             try:
                 return e.code, json.loads(body)
             except json.JSONDecodeError:
@@ -481,10 +484,11 @@ class TestPOSTErrorHandling:
         req.add_header("Content-Type", "application/json")
         req.add_header("Origin", "http://127.0.0.1:8787")
         try:
-            resp = urlopen(req, timeout=10)
-            status = resp.status
+            with urlopen(req, timeout=10) as resp:
+                status = resp.status
         except HTTPError as e:
-            status = e.code
+            with e:
+                status = e.code
         assert status == 400
 
     def test_chat_missing_content_returns_400(self, live_server):
@@ -498,10 +502,11 @@ class TestPOSTErrorHandling:
         req.add_header("Content-Length", "0")
         req.add_header("Origin", "http://127.0.0.1:8787")
         try:
-            resp = urlopen(req, timeout=10)
-            status = resp.status
+            with urlopen(req, timeout=10) as resp:
+                status = resp.status
         except HTTPError as e:
-            status = e.code
+            with e:
+                status = e.code
         assert status == 400
 
 
@@ -642,10 +647,11 @@ class TestAwarenessSummary:
         req.add_header("Content-Length", "0")
         req.add_header("Origin", "http://127.0.0.1:8787")
         try:
-            resp = urlopen(req, timeout=10)
-            status = resp.status
+            with urlopen(req, timeout=10) as resp:
+                status = resp.status
         except HTTPError as e:
-            status = e.code
+            with e:
+                status = e.code
         assert status == 400
 
 

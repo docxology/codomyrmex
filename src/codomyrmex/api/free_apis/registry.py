@@ -92,12 +92,16 @@ class FreeAPIRegistry:
             entries = self._fetch_from_json_api()
             self._entries = entries
             self._source = APISource.JSON_API
-        except Exception:
+        except Exception as json_api_exc:
+            if isinstance(json_api_exc, urllib.error.HTTPError):
+                json_api_exc.close()  # urlopen raised before the response could be closed
             try:
                 entries = self._fetch_from_github_readme()
                 self._entries = entries
                 self._source = APISource.GITHUB_README
             except Exception as exc:
+                if isinstance(exc, urllib.error.HTTPError):
+                    exc.close()  # urlopen raised before the response could be closed
                 raise RuntimeError(
                     "Failed to fetch API entries from both JSON API and GitHub README"
                 ) from exc

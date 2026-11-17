@@ -126,6 +126,8 @@ class ModelContextRegistry:
                     )
                     return context
         except urllib.error.HTTPError as e:
+            # urlopen raised before the ``with`` above could close the response.
+            e.close()
             if e.code == 404:
                 logger.debug("Model %s not found in OpenRouter registry", model_id)
         except Exception as exc:

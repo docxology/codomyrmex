@@ -127,6 +127,7 @@ class GeminiMediaMixin:
                 if v_bytes:
                     outputs.append({"video_bytes": v_bytes})
                 elif v_uri:
+                    import urllib.error
                     import urllib.request
                     from urllib.parse import urlparse
 
@@ -137,6 +138,8 @@ class GeminiMediaMixin:
                         with urllib.request.urlopen(v_uri, timeout=30) as req:
                             outputs.append({"video_bytes": req.read()})
                     except Exception as e:
+                        if isinstance(e, urllib.error.HTTPError):
+                            e.close()  # urlopen raised before the response could be closed
                         logger.warning("Failed to download video URI %s: %s", v_uri, e)
                         outputs.append({"uri": v_uri})
 

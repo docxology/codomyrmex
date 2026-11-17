@@ -17,6 +17,17 @@ from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
+
+def _close_http_error(exc: BaseException) -> None:
+    """Close the response an ``HTTPError`` carries when ``urlopen`` raised it.
+
+    ``urlopen`` raises before its ``with`` block can close the response, and
+    Python 3.14 reports an unclosed ``HTTPError`` as a ResourceWarning.
+    """
+    if isinstance(exc, urllib.error.HTTPError):
+        exc.close()
+
+
 _OLLAMA_ALLOWED_PREFIXES = (
     "http://localhost:",
     "http://127.0.0.1:",
@@ -63,6 +74,7 @@ class OllamaClient:
                     return data.get("message", {}).get("content", ""), None
                 return "", f"Ollama returned {response.status}"
         except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+            _close_http_error(e)
             try:
                 with urllib.request.urlopen(
                     f"{self.base_url}/api/tags", timeout=1.0
@@ -78,6 +90,7 @@ class OllamaClient:
                 OSError,
                 TypeError,
             ) as debug_err:
+                _close_http_error(debug_err)
                 logger.debug(
                     "Failed to list available Ollama models for debug: %s", debug_err
                 )
