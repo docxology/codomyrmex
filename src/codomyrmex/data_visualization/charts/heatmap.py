@@ -85,7 +85,8 @@ def create_heatmap(
         np_data = np.array(data)
         for i in range(np_data.shape[0]):
             for j in range(np_data.shape[1]):
-                text_color = "black" if im.norm(np_data[i, j]) > 0.5 else "white"
+                normalized = np.asarray(im.norm(np_data[i, j])).item()
+                text_color = "black" if normalized > 0.5 else "white"
                 ax.text(
                     j,
                     i,
