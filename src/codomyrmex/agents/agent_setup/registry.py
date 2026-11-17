@@ -142,6 +142,8 @@ def _probe_ollama(base_url: str = "") -> ProbeResult:
             latency_ms=round(elapsed, 2),
         )
     except (urllib.error.URLError, OSError, Exception) as exc:
+        if isinstance(exc, urllib.error.HTTPError):
+            exc.close()  # urlopen raised before the response could be closed
         elapsed = (time.time() - start) * 1000
         return ProbeResult(
             name="ollama",

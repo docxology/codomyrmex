@@ -308,16 +308,20 @@ class VideoTranscriber:
                 doctor_output = f"Script not found at {self._script}"
         else:
             # REST mode — ping the API
-            try:
-                import urllib.request
+            import urllib.error
+            import urllib.request
 
+            try:
                 req = urllib.request.Request(
                     self._api_url.rstrip("/") + "/health", method="GET"
                 )
-                urllib.request.urlopen(req, timeout=3)
+                with urllib.request.urlopen(req, timeout=3):
+                    pass
                 deps["api_reachable"] = True
                 doctor_output = f"REST API reachable at {self._api_url}"
             except Exception as exc:
+                if isinstance(exc, urllib.error.HTTPError):
+                    exc.close()  # urlopen raised before the response could be closed
                 deps["api_reachable"] = False
                 doctor_output = f"REST API unreachable: {exc}"
 
@@ -488,6 +492,7 @@ class VideoTranscriber:
         timeout: int,
     ) -> TranscriptionResult:
         """Call the REST API and parse the JSON response."""
+        import urllib.error
         import urllib.request
 
         payload = {
@@ -509,6 +514,8 @@ class VideoTranscriber:
             with urllib.request.urlopen(req, timeout=timeout) as resp:
                 raw = resp.read().decode()
         except Exception as exc:
+            if isinstance(exc, urllib.error.HTTPError):
+                exc.close()  # urlopen raised before the response could be closed
             return TranscriptionResult(source_url=url, status="error", error=str(exc))
         return self._parse_json_output(raw, url)
 

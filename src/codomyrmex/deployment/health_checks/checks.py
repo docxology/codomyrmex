@@ -54,6 +54,7 @@ class HTTPHealthCheck(HealthCheck):
 
     def check(self) -> HealthCheckResult:
         """Perform HTTP request and validate status/body."""
+        import urllib.error
         import urllib.request
 
         start = time.time()
@@ -89,6 +90,8 @@ class HTTPHealthCheck(HealthCheck):
                     details={"status_code": code},
                 )
         except Exception as e:
+            if isinstance(e, urllib.error.HTTPError):
+                e.close()  # urlopen raised before the response could be closed
             latency_ms = (time.time() - start) * 1000
             logger.debug("HTTP health check failed for %s: %s", self.url, e)
             return HealthCheckResult(

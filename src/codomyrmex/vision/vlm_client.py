@@ -57,9 +57,10 @@ class VLMClient:
         Returns:
             ``True`` if the server responds and the model is available.
         """
-        try:
-            import urllib.request
+        import urllib.error
+        import urllib.request
 
+        try:
             req = urllib.request.Request(f"{self.base_url}/api/tags")
             with urllib.request.urlopen(req, timeout=5) as resp:
                 data = json.loads(resp.read())
@@ -68,6 +69,8 @@ class VLMClient:
                 ]
                 return self._config.model_name in models
         except Exception as _exc:
+            if isinstance(_exc, urllib.error.HTTPError):
+                _exc.close()  # urlopen raised before the response could be closed
             return False
 
     def analyze_image(
@@ -155,6 +158,7 @@ class VLMClient:
         Raises:
             RuntimeError: If the request fails.
         """
+        import urllib.error
         import urllib.request
 
         payload: dict[str, Any] = {
@@ -189,6 +193,8 @@ class VLMClient:
                     },
                 )
         except Exception as exc:
+            if isinstance(exc, urllib.error.HTTPError):
+                exc.close()  # urlopen raised before the response could be closed
             msg = f"Ollama request failed: {exc}"
             raise RuntimeError(msg) from exc
 
