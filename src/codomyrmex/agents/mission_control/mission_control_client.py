@@ -155,10 +155,11 @@ class MissionControlClient:
                 return json.loads(raw)
         except urllib.error.HTTPError as exc:
             body_text = ""
-            try:
-                body_text = exc.read().decode("utf-8", errors="replace")
-            except Exception:
-                pass
+            with exc:  # urlopen raised before the response could be closed
+                try:
+                    body_text = exc.read().decode("utf-8", errors="replace")
+                except Exception:
+                    pass
             raise MissionControlError(
                 f"HTTP {exc.code} {exc.reason} on {method} {path}: {body_text}"
             ) from exc

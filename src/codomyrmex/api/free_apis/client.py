@@ -70,7 +70,8 @@ def _execute_request(
                 body_text=resp.read().decode("utf-8", errors="replace"),
             )
     except urllib.error.HTTPError as exc:
-        body_text = exc.read().decode("utf-8", errors="replace") if exc.fp else ""
+        with exc:  # urlopen raised before the response could be closed
+            body_text = exc.read().decode("utf-8", errors="replace") if exc.fp else ""
         return APICallResult(
             url=full_url,
             method=method.upper(),

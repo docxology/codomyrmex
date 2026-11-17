@@ -1,6 +1,7 @@
 """Lifecycle checks for the optional Edge TTS transport."""
 
 import socket
+import warnings
 from pathlib import Path
 
 import pytest
@@ -9,6 +10,7 @@ from codomyrmex.audio.exceptions import SynthesisError
 from codomyrmex.audio.text_to_speech.models import TTSConfig
 from codomyrmex.audio.text_to_speech.providers import EDGE_TTS_AVAILABLE
 from codomyrmex.audio.text_to_speech.providers.edge_tts_provider import (
+    SSL_TRANSPORTS_NEED_CLEANUP,
     EdgeTTSProvider,
 )
 
@@ -19,7 +21,7 @@ pytestmark = pytest.mark.skipif(
 
 
 class TestEdgeTTSConnectorLifecycle:
-    """Voice-list connectors are explicit; stream sessions own theirs."""
+    """Library sessions borrow one provider connector that the provider releases."""
 
     @pytest.mark.asyncio
     async def test_connector_is_ipv4_only(self) -> None:
@@ -38,33 +40,51 @@ class TestEdgeTTSConnectorLifecycle:
         assert connector.closed
 
     @pytest.mark.asyncio
-    async def test_synthesis_sessions_have_independent_connector_lifetimes(
-        self,
-    ) -> None:
-        """Real library configuration allows later sessions after one closes."""
+    async def test_synthesis_sessions_borrow_one_provider_connector(self) -> None:
+        """Chunk and 403-retry sessions reuse the connector until release."""
         import aiohttp
 
+        connector = EdgeTTSProvider._new_http_connector()
         communicate = EdgeTTSProvider._new_communicate(
-            "A sentence. " * 1000, "en-US-AriaNeural", TTSConfig()
+            "A sentence. " * 1000, "en-US-AriaNeural", TTSConfig(), connector
         )
         assert len(list(communicate.texts)) > 1
-        assert communicate.connector is None
+        assert communicate.connector is connector
         assert communicate.session_timeout.sock_connect == 10
         assert communicate.session_timeout.sock_read == 60
-        connectors = []
-        # The installed Edge implementation opens a ClientSession for each
-        # chunk/403 recovery. Exercise those actual ownership semantics without
-        # replacing methods or depending on Microsoft's remote availability.
-        for _ in range(2):
-            async with aiohttp.ClientSession(
-                connector=communicate.connector, timeout=communicate.session_timeout
-            ) as session:
-                connector = session.connector
-                assert connector is not None
+        try:
+            # The installed Edge implementation opens a ClientSession for each
+            # chunk/403 recovery. Exercise those actual ownership semantics
+            # without replacing methods or depending on Microsoft's service.
+            for _ in range(2):
+                async with aiohttp.ClientSession(
+                    connector=communicate.connector,
+                    timeout=communicate.session_timeout,
+                ) as session:
+                    assert session.connector is connector
                 assert not connector.closed
-                connectors.append(connector)
-            assert connector.closed
-        assert connectors[0] is not connectors[1]
+        finally:
+            await EdgeTTSProvider._close_http_connector(connector)
+        assert connector.closed
+
+    @pytest.mark.asyncio
+    async def test_closed_tls_transports_are_tracked_only_where_leaked(
+        self,
+    ) -> None:
+        """Interpreters with python/cpython#118960 abort closing TLS transports.
+
+        aiohttp warns when cleanup is requested on a fixed interpreter, so the
+        connector must request it exactly where the leak exists.
+        """
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            connector = EdgeTTSProvider._new_http_connector()
+        try:
+            assert connector._cleanup_closed_disabled is (
+                not SSL_TRANSPORTS_NEED_CLEANUP
+            )
+        finally:
+            await EdgeTTSProvider._close_http_connector(connector)
 
     @pytest.mark.parametrize(
         ("config", "rate", "pitch", "volume"),

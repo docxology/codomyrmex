@@ -132,6 +132,8 @@ class WebhookProvider(NotificationProvider):
                 status_code = response.status
                 response_body = response.read(65536).decode("utf-8", errors="replace")
         except urllib.error.HTTPError as e:
+            # urlopen raised before the ``with`` above could close the response.
+            e.close()
             return NotificationResult(
                 notification_id=notification.id,
                 status=NotificationStatus.FAILED,

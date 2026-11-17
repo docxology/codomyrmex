@@ -10,6 +10,8 @@ Shared test-support helpers for the top-level `tests/` suite.
 - `permissions.py` — `RUNNING_AS_ROOT` and the `requires_permission_enforcement` skip marker for tests that rely on chmod denying access.
 - `isolated_git.py` — `isolated_git_repo(tmp_path, monkeypatch)` creates a one-commit repository, chdirs into it and points `HOME`/`USERPROFILE` at `tmp_path`; use it for anything that runs `git worktree`/`git branch` so tests never touch the developer's clone.
 - `git_temp_repository.py` — `initialize_repository(path, root=tmp_path)` initialises a throwaway repository and writes the test identity into **its own** `.git/config`; `assert_contained(path, root)` refuses a target outside the test's own tree. Use it instead of a session-wide commit identity, which reaches every Git process the suite starts.
+- `event_loop.py` — `ensure_current_event_loop()` for the session bootstrap loop; probes Python 3.12–3.14 consistently without leaking `DeprecationWarning` into pytest's configure-time warning filters.
+- `figures.py` — `close_loaded_figures()`; the root `isolate_matplotlib_figures` autouse fixture uses it around every test. Do not add per-directory copies.
 
 ## Gotchas
 

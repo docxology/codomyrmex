@@ -94,10 +94,11 @@ class PaperclipAPIClient:
                 return json.loads(raw)
         except urllib.error.HTTPError as exc:
             error_body = ""
-            try:
-                error_body = exc.read().decode("utf-8")
-            except Exception:
-                pass
+            with exc:  # urlopen raised before the response could be closed
+                try:
+                    error_body = exc.read().decode("utf-8")
+                except Exception:
+                    pass
             logger.error(
                 "Paperclip API HTTP error: %s %s → %d",
                 method,
