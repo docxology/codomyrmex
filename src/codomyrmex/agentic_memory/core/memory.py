@@ -456,6 +456,7 @@ class KnowledgeMemory:
         try:
             import json as _json
             import os as _os
+            import urllib.error as _err
             import urllib.request as _req
 
             _ollama_base = _os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
@@ -468,8 +469,12 @@ class KnowledgeMemory:
                     headers={"Content-Type": "application/json"},
                     method="POST",
                 )
-                with _req.urlopen(request, timeout=2.0) as resp:
-                    data = _json.loads(resp.read())
+                try:
+                    with _req.urlopen(request, timeout=2.0) as resp:
+                        data = _json.loads(resp.read())
+                except _err.HTTPError as exc:
+                    exc.close()  # urlopen raised before the response could be closed
+                    raise
                 return data["embeddings"][0]
 
             def _cosine(a: list[float], b: list[float]) -> float:

@@ -5,7 +5,11 @@ Zero-mock: uses InMemoryStore (the real in-memory backend) directly.
 
 from __future__ import annotations
 
+import gc
+import threading
 import time
+from collections.abc import Iterator
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import pytest
 
@@ -69,6 +73,55 @@ def test_recall_respects_limit(km: KnowledgeMemory) -> None:
         km.store(title=f"Topic {i}", body=f"Detail about topic {i}.")
     results = km.recall("topic detail", k=3)
     assert len(results) <= 3
+
+
+class _MissingEmbedModelHandler(BaseHTTPRequestHandler):
+    """Answer like a local Ollama server without the requested embed model."""
+
+    def do_POST(self) -> None:
+        self.rfile.read(int(self.headers.get("Content-Length", 0)))
+        body = b'{"error": "model not found"}'
+        self.send_response(404)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def log_message(self, format: str, *args: object) -> None:
+        pass
+
+
+@pytest.fixture
+def ollama_without_embed_model(monkeypatch: pytest.MonkeyPatch) -> Iterator[None]:
+    server = ThreadingHTTPServer(("127.0.0.1", 0), _MissingEmbedModelHandler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    monkeypatch.setenv(
+        "OLLAMA_BASE_URL", f"http://127.0.0.1:{server.server_address[1]}"
+    )
+    try:
+        yield
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=5)
+
+
+@pytest.mark.usefixtures("ollama_without_embed_model")
+def test_recall_falls_back_and_closes_http_errors(km: KnowledgeMemory) -> None:
+    """A 404 from Ollama falls back to token ranking without leaking its response.
+
+    Python 3.14 reports an unclosed ``HTTPError`` as an unraisable
+    ResourceWarning when it is collected, which fails this test.
+    """
+    km.store(title="BM25 Ranking", body="BM25 is a ranking function.")
+
+    results = km.recall("BM25 ranking", k=1)
+    gc.collect()
+
+    assert [r.memory.content for r in results] == [
+        "BM25 Ranking\n\nBM25 is a ranking function."
+    ]
 
 
 def test_recall_empty_store_returns_empty(km: KnowledgeMemory) -> None:
