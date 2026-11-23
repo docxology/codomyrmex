@@ -622,7 +622,7 @@ dev = [
     { name = "pytest-timeout", specifier = ">=2.1.0" },
     { name = "pytest-xdist", specifier = ">=3.0.0" },
     { name = "pyyaml", specifier = ">=6.0.2" },
-    { name = "ruff", specifier = "==0.17.6" },
+    { name = "ruff", specifier = "==0.15.7" },
     { name = "sarif-tools", specifier = ">=3.0.0" },
     { name = "ty" },
 ]
@@ -635,7 +635,7 @@ docs = [
     { name = "qrcode", extras = ["pil"], specifier = ">=8.0" },
 ]
 lint = [
-    { name = "ruff", specifier = "==0.17.6" },
+    { name = "ruff", specifier = "==0.15.7" },
     { name = "ty" },
 ]
 test = [
