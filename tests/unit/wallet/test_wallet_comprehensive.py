@@ -24,6 +24,13 @@ from codomyrmex.wallet import (
 )
 from codomyrmex.wallet.wallet import Wallet
 
+
+@pytest.fixture(autouse=True)
+def isolated_temp_directory(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Isolate the default key directory used by each wallet test."""
+    monkeypatch.setattr(tempfile, "tempdir", str(tmp_path))
+
+
 # ---------------------------------------------------------------------------
 # WalletManager Tests
 # ---------------------------------------------------------------------------
