@@ -372,7 +372,7 @@ docs = [
 ]
 # Manuscript metrics require zero findings under the reviewed Ruff ruleset.
 # Upgrade Ruff with a dedicated lint and manuscript validation pass.
-lint = ["ruff==0.15.7", "ty"]
+lint = ["ruff==0.17.6", "ty"]
 test = [
     "pytest>=8.0.0",
     "pytest-cov>=4.0.0",
