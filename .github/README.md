@@ -2,22 +2,26 @@
 
 # Codomyrmex
 
-Codomyrmex is a modular Python workspace for software engineering and agent research. Start with the [project overview and setup](../README.md#-quick-start) or the [documentation index](../docs/README.md). The [technical report](../docs/manuscript/README.md) records the research methods, controlled fixtures, and evidence limits. Current scope and measured inventory are maintained in the [repository inventory](../docs/reference/inventory.md).
+Codomyrmex is a modular Python workspace for software engineering and agent research. Developers can use individual utilities, while researchers can inspect the implementation and evidence behind the project's control-plane design. The [repository inventory](../docs/reference/inventory.md) explains how module, tool, and test counts are measured.
 
-## GitHub directory
+## Start with a local example
 
-GitHub displays this file on the repository landing page. The root README contains the full project overview. This directory owns GitHub templates, settings, and version-controlled workflow definitions.
+The [dependency-ordering walkthrough](../docs/verification/README.md) uses a fictional publishing checklist. Read the guide and its retained figure first. To reproduce the result locally, follow its sparse-checkout instructions. The replay uses Python, pytest, and Matplotlib 3.11.2, and checks that prerequisites come before dependent tasks and that a cycle is rejected. The example runs without service accounts or API keys.
 
-| Need | Where to go |
+For the broader Python package, the [root quick start](../README.md#-quick-start) uses Git, uv, and Python 3.11.5 or newer. It explains how to install the locked base environment and check the installed package version. The [setup guide](../docs/getting-started/setup.md) covers dependencies and configuration for individual features.
+
+## Documentation and research
+
+| If you want to… | Start here |
 | --- | --- |
-| Contribute or propose a change | [Contributor guide](CONTRIBUTING.md), [issue templates](ISSUE_TEMPLATE/), or [PR template](PULL_REQUEST_TEMPLATE.md) |
-| Review workflow definitions or current runs | [Workflow directory](workflows/) and [GitHub Actions](https://github.com/docxology/codomyrmex/actions) |
-| Review documentation builds | [Documentation workflow](workflows/documentation.yml) builds the package-local Docusaurus site and checks internal links |
-| Work on GitHub configuration | [Agent instructions](AGENTS.md) and [directory specification](SPEC.md) |
-| Check ownership or dependency configuration | [CODEOWNERS](CODEOWNERS) and [Dependabot configuration](dependabot.yml) |
+| Understand the project or choose a module | [Project overview](../README.md) and [documentation index](../docs/README.md) |
+| Find a Python interface | [API reference](../docs/reference/api.md) and [modules](../src/codomyrmex/) |
+| Read the research and its evidence limits | [Technical report source and build guide](../docs/manuscript/README.md) and [archived report edition](https://doi.org/10.5281/zenodo.21750801) |
+| Contribute or report an issue | [Contributor guide](CONTRIBUTING.md), [issue templates](ISSUE_TEMPLATE/), and [PR template](PULL_REQUEST_TEMPLATE.md) |
+| Inspect GitHub configuration or check status | [Workflow definitions](workflows/), [Actions](https://github.com/docxology/codomyrmex/actions), and [agent instructions](AGENTS.md) |
 
-Workflow YAML documents configured entry points. The Actions tab shows which workflows are enabled and which jobs ran on a particular commit.
+The technical report describes implementation contracts and controlled fixtures. External effectiveness and production safety remain open questions.
 
-## Navigation
+## Source, citation, and license
 
-[Root README](../README.md) · [Documentation](../docs/README.md) · [License](../LICENSE)
+The implementation is in [`src/codomyrmex/`](../src/codomyrmex/). Use [CITATION.cff](../CITATION.cff) to cite the software, or the archived edition DOI above to cite the report. Codomyrmex is licensed under the [MIT License](../LICENSE).
