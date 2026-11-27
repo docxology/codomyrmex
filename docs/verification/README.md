@@ -26,7 +26,9 @@ PATHS
 git -C "$proof" checkout --detach HEAD
 ```
 
-Use Python with pytest and Matplotlib 3.11.2 for the figure comparison. Run the native tests and the replay from the isolated checkout. Use a new directory named `codomyrmex` outside the checkout for the disposable project.
+The graph tests check ordering and cycle rejection. The replay also checks the PNG byte for byte. Font rasterization and compression can affect its bytes across environments. The retained PNG was reproduced on Linux x86_64 with Python 3.14.10, Matplotlib 3.11.2 (Agg, FreeType 2.14.3), NumPy 2.5.5, and Pillow 13.0.0. The native tests passed with pytest 9.2.0.
+
+Run the native tests and replay from the isolated checkout. Use a new directory named `codomyrmex` outside the checkout for the disposable project. If the graph tests pass but the replay reports a figure mismatch, compare the rendering environment with the one above. The checked-in PNG remains the reference figure.
 
 ```bash
 project=/absolute/path/to/disposable/codomyrmex
