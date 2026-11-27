@@ -1,13 +1,10 @@
 <!-- markdownlint-disable MD033 MD041 MD060 -->
 <p align="center">
-  <a href="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/docxology/codomyrmex/actions/workflows/security.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/security.yml/badge.svg" alt="Security"></a>
-  <a href="https://github.com/docxology/codomyrmex/actions/workflows/auto-merge.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/auto-merge.yml/badge.svg" alt="Auto-Merge"></a>
+  <a href="https://github.com/docxology/codomyrmex/actions/workflows/documentation.yml"><img src="https://github.com/docxology/codomyrmex/actions/workflows/documentation.yml/badge.svg" alt="Documentation"></a>
   <br>
   <img src="https://img.shields.io/badge/Codomyrmex-v1.3.0-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Modules-132-green?style=for-the-badge" alt="Modules">
   <img src="https://img.shields.io/badge/MCP_Runtime-622-orange?style=for-the-badge" alt="MCP runtime tools">
-  <img src="https://img.shields.io/badge/Workflows-37-purple?style=for-the-badge" alt="Workflows">
   <img src="https://img.shields.io/badge/Zero--Mock-policy-brightgreen?style=for-the-badge" alt="Zero Mock policy">
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License">
   <br>
@@ -26,20 +23,13 @@
 
 > **A comprehensive, modular, agentic Python ecosystem for software engineering, personal AI infrastructure, and multi-agent orchestration.**
 
-Codomyrmex is a modular library of **132 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more. The count is honest (every directory has an `__init__.py`) — roughly **25 modules are substantial production surfaces** (agents, llm, cloud, security, coding, documentation, orchestrator, etc.), **~75 are legitimate but narrower utilities**, and **~30 are teaching/exploratory modules** (dpo, nas, ssm, softmax_opt, etc.) that demonstrate techniques rather than ship production workflows. A documented **Zero-Mock** policy governs the active test suites, while the measured quality gates and inventory describe what was actually checked in a given run; they do not imply that every method is complete or production-safe. In the complete locked dependency profile, the ecosystem exposes **622** runtime MCP tools in the generated manifest and **632** production `@mcp_tool` decorator lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **37,248** collected tests (`uv run --locked --all-extras --group docs python scripts/doc_inventory.py --pytest`), **1,218** Markdown files under `docs/`, and **37** GitHub Actions workflows (`.github/workflows/*.yml`). These are measured snapshot values for that dependency profile; refresh the linked inventory before treating them as current.
+Codomyrmex is a modular library of **132 top-level modules** under `src/codomyrmex/` spanning AI agents, cloud infrastructure, security, finance, multimedia, and more. The count is honest (every directory has an `__init__.py`) — roughly **25 modules are substantial production surfaces** (agents, llm, cloud, security, coding, documentation, orchestrator, etc.), **~75 are legitimate but narrower utilities**, and **~30 are teaching/exploratory modules** (dpo, nas, ssm, softmax_opt, etc.) that demonstrate techniques rather than ship production workflows. A documented **Zero-Mock** policy governs the active test suites, while the measured quality gates and inventory describe what was actually checked in a given run; they do not imply that every method is complete or production-safe. In the complete locked dependency profile, the ecosystem exposes **622** runtime MCP tools in the generated manifest and **632** production `@mcp_tool` decorator lines in Python sources for Claude, Gemini, GPT, and any Model Context Protocol client ([docs/reference/inventory.md](docs/reference/inventory.md)). It includes **3,000+ Python files**, **37,248** collected tests (`uv run --locked --all-extras --group docs python scripts/doc_inventory.py --pytest`), **1,218** Markdown files under `docs/`, and **37** tracked workflow definitions (`.github/workflows/*.yml`). These are measured snapshot values for that dependency profile; refresh the linked inventory before treating them as current.
 
 ## Technical report
 
 The source-bound Codomyrmex v1.3.0 technical report is archived as a Zenodo record family: [concept DOI 10.5281/zenodo.21750800](https://doi.org/10.5281/zenodo.21750800), [version DOI 10.5281/zenodo.21750801](https://doi.org/10.5281/zenodo.21750801), and [GitHub release `v1.3.0-paper`](https://github.com/docxology/codomyrmex/releases/tag/v1.3.0-paper). The report documents implementation contracts and controlled fixtures; it does not claim external effectiveness, calibration, or production safety.
 
-```bash
-# Install
-git clone https://github.com/docxology/codomyrmex.git && cd codomyrmex
-uv sync --locked --all-groups
-
-# Verify
-uv run codomyrmex doctor --all
-```
+[Quick start](#-quick-start) · [Documentation](docs/README.md) · [Local graph verification](docs/verification/README.md)
 
 ---
 
@@ -76,7 +66,7 @@ uv run codomyrmex doctor --all
 | 🔬 **ML Research Ready** | LoRA, RLHF, DPO, distillation, quantization, NAS, Mamba SSM, autograd |
 | 🏠 **Personal AI Infrastructure** | Email, calendar, finance, wallet, dashboard — full PAI toolbox |
 | 📦 **PyPI Ready** | `uv build` + `twine check` verified, Python 3.11–3.14 |
-| 🦎 **Zero Config to Start** | `uv sync` → `codomyrmex doctor` → done |
+| **Local setup** | Install the locked base environment and check its package metadata before choosing feature-specific dependencies |
 
 ---
 
@@ -736,38 +726,16 @@ graph LR
 
 ## ⚡ Quick Start
 
+Install Git, [uv](https://docs.astral.sh/uv/getting-started/installation/), and Python 3.11.5 or later, then run:
+
 ```bash
-# 1. Clone
-git clone https://github.com/docxology/codomyrmex.git && cd codomyrmex
-
-# 2. Install (all dev dependencies via uv)
-uv sync --locked --all-groups
-
-# 3. Configure environment
-cp .env.example .env   # Add GEMINI_API_KEY, ANTHROPIC_API_KEY, etc.
-
-# 4. Verify installation
-uv run codomyrmex doctor --all
-
-# 5. Explore
-uv run codomyrmex --help
-uv run codomyrmex modules        # List all top-level modules
-uv run codomyrmex status         # Live system status
-
-# 6. Run tests (`make test` for coverage + 60% gate; optional `just test` if you use just)
-uv run pytest tests/ -v --tb=short
-
-# 7. Lint & type-check
-uv run ruff check . && uv run ruff format . && uv run ty check --output-format concise src/ scripts/ tests/
-
-# 8. Start PAI dashboard
-uv run python scripts/pai/dashboard.py
-
-# 9. Dispatch AI agents
-uv run python scripts/agents/jules/mega_swarm_dispatcher.py
+git clone https://github.com/docxology/codomyrmex.git
+cd codomyrmex
+uv sync --locked --no-default-groups
+uv run --no-sync python -c "from importlib.metadata import version; print(version('codomyrmex'))"
 ```
 
-> **New here?** Start with the [Quick Start Guide](docs/getting-started/quickstart.md) or dive into [Agent Operations](docs/getting-started/GETTING_STARTED_WITH_AGENTS.md).
+This verifies that the package is installed in the local environment. The [setup guide](docs/getting-started/setup.md) covers feature-specific dependencies and configuration. For a bounded example, follow the [local dependency-ordering check](docs/verification/README.md). The [testing guide](docs/development/testing-strategy.md) describes how to select a test scope.
 
 **Containers:** [Dockerfile](Dockerfile) and [docker-compose.yml](docker-compose.yml). **Static site entry:** [index.html](index.html) at the repo root redirects to `/output/website/index.html` once the website build has populated `output/website/`. **Bun** lockfiles belong next to Bun `package.json` files (for example `src/codomyrmex/pai_pm/server/`); the repository root uses npm via [package.json](package.json).
 

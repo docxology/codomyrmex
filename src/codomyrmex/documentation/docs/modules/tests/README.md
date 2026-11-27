@@ -1,12 +1,12 @@
-<!-- readme: generated -->
+<!-- readme: curated -->
 
 # tests
 
-**Version**: v1.3.0 | **Status**: Active | **Source**: `src/codomyrmex/tests/`
+**Version**: v1.3.0 | **Status**: Active | **Source**: `tests/`
 
 ## Overview
 
-Module `tests` of the Codomyrmex workspace. See the source package and its documentation files for details.
+The repository-level test suite contains unit and integration checks for the Codomyrmex workspace.
 
 ## Module Documentation
 
@@ -17,4 +17,4 @@ Module `tests` of the Codomyrmex workspace. See the source package and its docum
 ## Navigation
 
 - **All modules**: [../README.md](../README.md)
-- **Source package**: [../../../../tests/](../../../../tests/)
+- **Test suite**: [Repository tests](https://github.com/docxology/codomyrmex/tree/main/tests)
