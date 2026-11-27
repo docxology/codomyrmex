@@ -29,7 +29,7 @@ Codomyrmex is a modular library of **132 top-level modules** under `src/codomyrm
 
 The source-bound Codomyrmex v1.3.0 technical report is archived as a Zenodo record family: [concept DOI 10.5281/zenodo.21750800](https://doi.org/10.5281/zenodo.21750800), [version DOI 10.5281/zenodo.21750801](https://doi.org/10.5281/zenodo.21750801), and [GitHub release `v1.3.0-paper`](https://github.com/docxology/codomyrmex/releases/tag/v1.3.0-paper). The report documents implementation contracts and controlled fixtures; it does not claim external effectiveness, calibration, or production safety.
 
-[Quick start](#-quick-start) · [Documentation](docs/README.md) · [Local graph verification](docs/verification/README.md)
+[Quick start](#-quick-start) · [Documentation](docs/README.md) · [Local graph verification](docs/verification/README.md) · [GitHub landing guide](.github/README.md)
 
 ---
 
