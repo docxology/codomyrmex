@@ -1,0 +1,17 @@
+paper:
+  title: "Local Verification of Dependency Ordering in Codomyrmex"
+  subtitle: "A fictional publishing checklist"
+authors:
+  - name: "Codomyrmex contributors"
+publication:
+  repository_url: "https://github.com/docxology/codomyrmex"
+  repository_label: "Source repository"
+metadata:
+  language: en
+render:
+  formats:
+    pdf: true
+    html: true
+    slides: false
+    docx: false
+    epub: false

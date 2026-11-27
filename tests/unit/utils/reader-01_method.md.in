@@ -1,0 +1,5 @@
+# Method
+
+The utility implements Kahn's topological sorting algorithm [@kahn1962]. It counts the known prerequisites of each identifier. It places identifiers with no remaining prerequisites in a queue and removes them in order, reducing the prerequisite counts of their dependents. If any identifiers remain unprocessed after the queue empties, the function raises `ValueError`. The module's stated contract ignores dependencies outside the supplied identifier set. Its native tests cover that case and disconnected components.
+
+The fixture starts with a draft, followed by copyediting and illustration. Each requires the draft. Final assembly requires both. The replay verifies that all identifiers appear exactly once and checks the ordering of each prerequisite pair. A separate pair of tasks depends on each other to test cycle rejection.

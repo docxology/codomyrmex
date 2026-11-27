@@ -1,0 +1,3 @@
+# Abstract
+
+The Codomyrmex graph utility orders a finite set of identifiers given a list of prerequisites for each. This verification note checks its documented behavior on a fictional publishing checklist. The replay confirms that prerequisites occur first, records one valid order, and verifies that the utility rejects a cyclic dependency. The utility returns a list of labels, and the fixture never executes tasks represented by those labels.

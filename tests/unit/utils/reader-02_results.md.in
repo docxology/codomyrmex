@@ -1,0 +1,7 @@
+# Results and scope
+
+The fixture returned draft, copyedit, illustrate, then assemble. The alternative order with illustration first is valid after drafting because the two tasks are independent. The cyclic pair raised `ValueError`. The replay writes the order and cycle result to a local JSON record and draws the order shown below.
+
+![One valid ordering of a fictional publishing checklist.](../../output/figures/publishing_order.png){#fig:publishing-order}
+
+The results describe the graph utility on this fixture. They give no evidence about task execution, an external service, or the behavior of a larger workflow.
