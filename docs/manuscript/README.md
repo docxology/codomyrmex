@@ -15,7 +15,7 @@ This manuscript presents **Codomyrmex**, an agentic software-development framewo
 
 ## Manuscript Structure
 
-The `manuscript/` directory contains raw Markdown files rendered by `scripts/compile_manuscript.py` into the final academic PDF and HTML artifacts:
+The `docs/manuscript/` directory contains the authored Markdown files. `scripts/compile_manuscript.py` uses them to build the PDF and HTML:
 
 - `00_00_cover.md` — Cover page source; renders cover art, automatic date, ORCID, DOI status, repository, and version metadata.
 - `00_01_contents.md` — Generated under `output/manuscript/` by `scripts/compile_manuscript.py`; PDF uses LaTeX `\tableofcontents`, HTML uses `nav#TOC`.
@@ -51,8 +51,8 @@ The numbered Markdown files and `preamble.md` are Pandoc inputs, not MkDocs
 pages, so `mkdocs.yml` excludes them from site rendering. A strict site build
 requires `output/paper.html`, validates its semantic figure relationships, and
 installs that generated artifact at
-`manuscript/technical-report.html`. The checked-in HTML file at that path is
-only a source-tree signpost; the generated report replaces it in `site/`.
+`site/manuscript/technical-report.html`. The checked-in
+`docs/manuscript/technical-report.html` is a signpost for the generated report.
 
 ## Architecture
 
