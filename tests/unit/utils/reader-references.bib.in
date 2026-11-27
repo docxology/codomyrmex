@@ -1,0 +1,10 @@
+@article{kahn1962,
+  author = {Kahn, Arthur B.},
+  title = {Topological Sorting of Large Networks},
+  journal = {Communications of the ACM},
+  year = {1962},
+  volume = {5},
+  number = {11},
+  pages = {558--562},
+  doi = {10.1145/368996.369025}
+}
