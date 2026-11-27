@@ -28,7 +28,8 @@ The repository is organized into distinct surfaces, each with specific responsib
 ## Key Files
 
 - `TODO.md` - Authoritative backlog: single source of truth for open work and next actions
-- `README.md` - Primary entry point for users and contributors
+- [`.github/README.md`](.github/README.md) - GitHub repository landing page
+- [`README.md`](README.md) - Full project overview and base setup
 - `AGENTS.md` - This file: agent coordination and navigation
 - `scripts/rasp_gap_report.py` — regenerates [docs/plans/agents-readme-gap-report.md](docs/plans/agents-readme-gap-report.md) (scoped `AGENTS.md` / `README.md` presence under `src/codomyrmex/`, `docs/`, `projects/`, `scripts/`, `config/`, `.github/`; see script docstring for excludes)
 - `scripts/doc_inventory.py` — prints repo doc metrics (module counts, workflows, optional pytest collect); output summarized in [docs/reference/inventory.md](docs/reference/inventory.md)

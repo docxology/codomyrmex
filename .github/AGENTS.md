@@ -8,7 +8,7 @@ This directory holds GitHub-specific configuration: CI/CD workflows, issue/PR te
 Dependabot config, CODEOWNERS, Gemini AI command configs, and multi-agent infrastructure.
 This document tells AI agents what they need to know to operate safely within this directory.
 
-**Workflow YAML count:** 37 files under `.github/workflows/` (align with root `README.md` and [docs/reference/inventory.md](../docs/reference/inventory.md); refresh via `uv run python scripts/doc_inventory.py`).
+[README.md](README.md) is the file GitHub selects for the repository landing page. Keep its overview short and route project setup to the root README. The [repository inventory](../docs/reference/inventory.md) counts tracked workflow definitions. Check the [Actions tab](https://github.com/docxology/codomyrmex/actions) for live availability and run status.
 
 ## Directory Contents
 
@@ -40,7 +40,7 @@ This document tells AI agents what they need to know to operate safely within th
 | `dependabot.yml` | Automated dependency update configuration (3 ecosystems) |
 | `PULL_REQUEST_TEMPLATE.md` | Concise agent-friendly PR template (27 lines) |
 
-## Agent-Specific Infrastructure
+## Configured Agent Infrastructure
 
 ### Jules AI Agent
 
@@ -97,27 +97,9 @@ This document tells AI agents what they need to know to operate safely within th
 6. Test workflow changes on a feature branch before merging to main
 7. Validate YAML: `python3 -c "import yaml; yaml.safe_load(open('file.yml'))"`
 
-## CI Quick Commands
+## Check availability
 
-```bash
-# List recent CI runs
-gh run list --workflow=ci.yml --limit=5
-
-# Check auto-merge status
-gh run list --workflow=auto-merge.yml --limit=3
-
-# List agent PRs
-gh pr list --label=jules --state=open
-
-# List conflicting PRs
-gh pr list --label=conflict --state=open
-
-# View agent metrics (latest run)
-gh run list --workflow=agent-metrics.yml --limit=1
-
-# Trigger Jules batch dispatch
-gh workflow run jules-dispatch.yml -f modules=all -f task_template=docstrings-mcp-tests
-```
+Review configured workflows in [workflows/](workflows/). GitHub displays enabled state in Actions. The [documentation workflow](workflows/documentation.yml) checks the package-local site on relevant pull requests and main pushes.
 
 ## Operating Contracts
 
@@ -129,8 +111,8 @@ gh workflow run jules-dispatch.yml -f modules=all -f task_template=docstrings-mc
 | Concurrency | Every workflow must have a `concurrency:` block |
 | Python tooling | Use `uv` for all dependency management |
 | Test coverage | CI enforces **60%** minimum (`pyproject.toml`) |
-| Security scanning | 6 independent scanners must remain active |
-| Agent PR handling | Auto-label → CI → auto-merge pipeline |
+| Security scanning | Check the workflow definition and current Actions availability before reporting scanner coverage |
+| Agent PR handling | Check current PR policy and enabled workflows before reporting automation |
 
 ## Currency and supply chain
 
