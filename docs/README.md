@@ -38,6 +38,7 @@ Volatile counts (module totals, MCP decorators, and test collection) are kept in
 | [examples/](examples/) | Executable examples and tutorials | Example walkthroughs |
 | [getting-started/](getting-started/) | Quick start, installation, first steps | User onboarding |
 | [integration/](integration/) | Cross-module integration patterns | Integration guidance |
+| [manuscript/](manuscript/README.md) | Technical report source and build guide | Authored sections, configuration, preamble, and bibliography |
 | [modules/](modules/) | Module-level documentation for top-level packages under `src/codomyrmex/` | Mirrors source modules; see [modules/AGENTS.md](modules/AGENTS.md) |
 | [pai/](pai/) | PAI infrastructure, dashboard, skills, memory | PAI guides and references |
 | [plans/](plans/) | Project roadmap and release plans | Planning records |
